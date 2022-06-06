@@ -19,20 +19,6 @@ const routes: Routes = [
             '../ke-hoach/giao-ke-hoach-va-du-toan/giao-ke-hoach-va-du-toan.module'
           ).then((m) => m.GiaoKeHoachVaDuToanModule),
       },
-      {
-        path: 'chi-tieu-ke-hoach-nam',
-        loadChildren: () =>
-          import(
-            './giao-ke-hoach-va-du-toan/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
-      },
-      {
-        path: 'chi-tieu-ke-hoach-nam/thong-tin-chi-tieu-ke-hoach-nam/:id',
-        loadChildren: () =>
-          import(
-            './giao-ke-hoach-va-du-toan/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
-      },
     ],
   },
 ];

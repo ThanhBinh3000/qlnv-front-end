@@ -1,25 +1,21 @@
-import { UserService } from '../../../../services/user.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { cloneDeep } from 'lodash';
-import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DonviService } from 'src/app/services/donvi.service';
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import {
-  CHI_TIEU_KE_HOACH_NAM,
-  MAIN_ROUTE_KE_HOACH,
-  THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
-} from '../../ke-hoach.constant';
+
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
