@@ -1,3 +1,44 @@
-<p>
-  nhap-kho works!
-</p>
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <nz-tab [nzTitle]="title_tat_ca">
+    <ng-template #title_tat_ca>
+      Tất cả
+      (<span class="number-title-tab">10</span>)
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_thoc">
+    <ng-template #title_thoc>
+      Thóc
+      (<span class="number-title-tab">3</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-chuc-nang-nhap-kho typeVthh="thoc"></app-chuc-nang-nhap-kho>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_gao">
+    <ng-template #title_gao>
+      Gạo
+      (<span class="number-title-tab">3</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-chuc-nang-nhap-kho typeVthh="gao"></app-chuc-nang-nhap-kho>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_muoi">
+    <ng-template #title_muoi>
+      Muối
+      (<span class="number-title-tab">4</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-chuc-nang-nhap-kho typeVthh="muoi"></app-chuc-nang-nhap-kho>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_vat_tu">
+    <ng-template #title_vat_tu>
+      Vật tư, thiết bị
+      (<span class="number-title-tab">4</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-chuc-nang-nhap-kho typeVthh="vat-tu"></app-chuc-nang-nhap-kho>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

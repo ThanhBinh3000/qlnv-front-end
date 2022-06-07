@@ -1,27 +1,44 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-2">
-  <nz-tab [nzTitle]="'Phiếu kiểm tra chất lượng'">
-    <ng-template nz-tab>
-      <quan-ly-phieu-kiem-tra-chat-luong-hang [typeVthh]="typeVthh"></quan-ly-phieu-kiem-tra-chat-luong-hang>
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <nz-tab [nzTitle]="title_tat_ca">
+    <ng-template #title_tat_ca>
+      Tất cả
+      (<span class="number-title-tab">10</span>)
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Biên bản nghiệm thu bảo quản lần đầu'">
+  <nz-tab [nzTitle]="title_thoc">
+    <ng-template #title_thoc>
+      Thóc
+      (<span class="number-title-tab">3</span>)
+    </ng-template>
     <ng-template nz-tab>
-      <app-lap-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-lap-bien-ban-nghiem-thu-bao-quan>
+      <app-chuc-nang-kiem-tra typeVthh="thoc"></app-chuc-nang-kiem-tra>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Biên bản lấy mẫu'">
+  <nz-tab [nzTitle]="title_gao">
+    <ng-template #title_gao>
+      Gạo
+      (<span class="number-title-tab">3</span>)
+    </ng-template>
     <ng-template nz-tab>
-      <quan-ly-bien-ban-lay-mau></quan-ly-bien-ban-lay-mau>
+      <app-chuc-nang-kiem-tra typeVthh="gao"></app-chuc-nang-kiem-tra>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Biên bản bàn giao mẫu'">
+  <nz-tab [nzTitle]="title_muoi">
+    <ng-template #title_muoi>
+      Muối
+      (<span class="number-title-tab">4</span>)
+    </ng-template>
     <ng-template nz-tab>
-      <quan-ly-bien-ban-ban-giao-mau></quan-ly-bien-ban-ban-giao-mau>
+      <app-chuc-nang-kiem-tra typeVthh="muoi"></app-chuc-nang-kiem-tra>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Lập và ký phiếu kiểm nghiệm chất lượng'">
+  <nz-tab [nzTitle]="title_vat_tu">
+    <ng-template #title_vat_tu>
+      Vật tư, thiết bị
+      (<span class="number-title-tab">4</span>)
+    </ng-template>
     <ng-template nz-tab>
-      <quan-ly-phieu-kiem-nghiem-chat-luong-thoc></quan-ly-phieu-kiem-nghiem-chat-luong-thoc>
+      <app-chuc-nang-kiem-tra typeVthh="vat-tu"></app-chuc-nang-kiem-tra>
     </ng-template>
   </nz-tab>
 </nz-tabset>
