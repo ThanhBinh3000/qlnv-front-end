@@ -454,6 +454,7 @@ export class BaoCaoComponent implements OnInit {
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
 			congVan: this.congVan,
+			thuyetMinh: this.thuyetMinh,
 			tongHopTuIds: tongHopTuIds,
 		}));
 		//get file cong van url
@@ -464,20 +465,14 @@ export class BaoCaoComponent implements OnInit {
 
 		//call service them moi
 		this.spinner.show();
-		if (this.id == null) {
+		if (!this.id) {
 			this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-						if (!this.id) {
-							this.router.navigate([
-								'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + this.loai + "/" + data.data.id,
-							])
-						}
-						else {
-							await this.getDetailReport();
-							this.getStatusButton();
-						}
+						this.router.navigate([
+							'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + this.loai + "/" + data.data.id,
+						])
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
@@ -605,6 +600,7 @@ export class BaoCaoComponent implements OnInit {
 					this.congVan = data.data.congVan;
 					this.lyDoTuChoi = data.data.lyDoTuChoi;
 					this.giaoSoTranChiId = data.data.giaoSoTranChiId;
+					this.thuyetMinh = data.data.thuyetMinh;
 					this.lstDviTrucThuoc.forEach(item => {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -812,9 +808,9 @@ export class BaoCaoComponent implements OnInit {
 
 	xemSoKiemTra() {
 		if (this.capDvi == Utils.TONG_CUC) {
-			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc' + this.giaoSoTranChiId]);
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/' + this.giaoSoTranChiId]);
 		} else {
-			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn' + this.giaoSoTranChiId]);
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn/' + this.giaoSoTranChiId]);
 		}
 	}
 

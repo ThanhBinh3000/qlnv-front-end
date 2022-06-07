@@ -67,7 +67,7 @@
 						<tr>
 							<ng-container *ngIf="giaoSoTranChiId">
 								<ng-container *ngIf="capDvi == '1'; else tranChi">
-									<th>Phương án <br/> giao từ BTC</th>
+									<th>Phương án <br /> giao từ BTC</th>
 								</ng-container>
 								<ng-template #tranChi>
 									<th>Số kiểm tra <br /> trần chi</th>
@@ -89,7 +89,9 @@
 					<tbody>
 						<tr>
 							<ng-container *ngIf="giaoSoTranChiId">
-								<a (click)="xemSoKiemTra()">Xem</a>
+								<td>
+									<a (click)="xemSoKiemTra()" style="color: #1890ff;">Xem</a>
+								</td>
 							</ng-container>
 							<td>{{maBaoCao}}</td>
 							<td>{{namHienHanh}}</td>

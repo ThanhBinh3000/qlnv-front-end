@@ -2,18 +2,16 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzResultUnauthorizedComponent } from 'ng-zorro-antd/result/partial/unauthorized';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
 import * as fileSaver from 'file-saver';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
-import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 export class ItemCongVan {
     fileName: string;
@@ -31,14 +29,15 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     loai: any;
     //thong tin tim kiem
     searchFilter = {
+        loaiTimKiem: "",
         namPa: null,
         tuNgay: "",
         denNgay: "",
         donViTao: "",
-        loai: null,
         trangThai: "",
         maBaoCao: "",
         maPa: "",
+        maPaBtc: "",
     };
     //danh muc
     danhSachBaoCao: any = [];
@@ -99,8 +98,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         if (this.loai == "0") {
             this.status = true;
+            this.searchFilter.loaiTimKiem = "1";
         } else {
             this.status = false;
+            this.searchFilter.loaiTimKiem = "0";
         }
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
@@ -167,12 +168,14 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             }
         }
         let requestReport = {
+            loaiTimKiem: this.searchFilter.loaiTimKiem,
             maDviTao: this.searchFilter.donViTao,
             maPa: this.searchFilter.maPa,
+            maPaBtc: this.searchFilter.maPaBtc,
             namPa: this.searchFilter.namPa,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            maBaoCao: this.searchFilter.maBaoCao,
+            maBcao: this.searchFilter.maBaoCao,
             str: null,
             trangThai: this.searchFilter.trangThai,
             paggingReq: {
@@ -232,9 +235,15 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     xemChiTiet(id: string) {
-        this.router.navigate([
-            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + id,
-        ])
+        if (this.loai == "0"){
+            this.router.navigate([
+                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/' + id,
+            ])
+        } else {
+            this.router.navigate([
+                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + id,
+            ])
+        }
     }
 
     async checkMaBcao() {
@@ -272,5 +281,35 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     getUnitName(maDvi: string) {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
+
+    checkDeleteReport(item: any): boolean{
+		var check: boolean = false;
+        if (this.userInfo?.username == item.nguoiTao){
+            if (this.status){
+                check = true;
+            } else {
+                if (item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8){
+                    check = true;
+                }
+            }
+        }
+		return check;
+	}
+
+    xoaPA(id: any){
+		this.quanLyVonPhiService.xoaPhuongAn(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0){
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
 
 }

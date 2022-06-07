@@ -4,7 +4,20 @@
 			aria-labelledby="banhanh-tab">
 			<div class="trai">
 			</div>
+			
 			<div class="canphai phai action-top">
+				<a class="btn btn-main" [hidden]="statusBtnEx">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Chính xác</span>
+				</a>
+				<button class="btn btn-main" (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
+					<i class="icon htvbdh_tcdt_guiduyet"></i>
+					<span>Tạo mới phương án</span>
+				</button>
+				<button class="btn btn-main" (click)="sua()" [hidden]="statusBtnEdit">
+					<i class="icon htvbdh_tcdt_guiduyet"></i>
+					<span>Sửa</span>
+				</button>
 				<button nz-button type="button" class="search__button--clear" (click)="redirectkehoachvonphi()">
 					<i nz-icon nzType="close"></i>
 					<span>Đóng</span>

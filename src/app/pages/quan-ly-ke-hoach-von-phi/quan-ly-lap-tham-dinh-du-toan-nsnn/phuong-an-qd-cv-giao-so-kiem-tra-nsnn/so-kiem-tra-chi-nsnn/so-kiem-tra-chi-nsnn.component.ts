@@ -2,16 +2,15 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import * as fileSaver from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, KHOAN_MUC, LA_MA, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+import { DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
     id: any;
@@ -41,6 +40,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     maBaoCao: string;
     soQdCv: ItemCongVan;
     maDviTao: string;
+    maDviNhan: string;
     maPa: string;
     maGiao: string;
     trangThai: string;
@@ -50,12 +50,17 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     //danh muc
     donViTiens: any[] = DON_VI_TIEN;
     lstCtietBcao: ItemData[] = [];
+    lstBcao: any[] = [];
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO;
     noiDungs: any[] = KHOAN_MUC;
     soLaMa: any[] = LA_MA;
     //file
     fileDetail: NzUploadFile;
+    //trang thai
+    statusBtnEdit: boolean;
+    statusBtnNew: boolean;
+    statusBtnEx: boolean;
 
     constructor(
         private userService: UserService,
@@ -88,11 +93,43 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        await this.getDetailReport();
 
-        if (this.id){
-            this.getDetailReport();
-        }
+        await this.quanLyVonPhiService.danhSachBaoCaoTongHop(this.maBaoCao).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstBcao = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    return;
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                return;
+            }
+        );
+
         
+        this.getStatusButtom();
+    }
+
+    getStatusButtom() {
+        if (this.maDviNhan == this.userInfo?.dvql) {
+            this.statusBtnEx = false;
+            if (this.lstBcao.length == 0) {
+                this.statusBtnEdit = false;
+                this.statusBtnNew = true;
+            } else {
+                this.statusBtnEdit = true;
+                this.statusBtnNew = false;
+            }
+        } else {
+            this.statusBtnEx = true;
+            this.statusBtnEdit = true;
+            this.statusBtnNew = true;
+        }
+
     }
 
     //get user info
@@ -139,11 +176,13 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                     this.lstCtietBcao = data.data.listCtiet;
                     this.sortByIndex();
                     this.maBaoCao = data.data.maBcao;
+                    this.maDviTien = data.data.maDviTien;
                     this.soQdCv = data.data.fileSoQdCv;
                     this.maPa = data.data.maPa;
                     this.maGiao = data.data.maGiao;
                     this.namGiao = data.data.namGiao;
-                    this.ngayNhap =this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+                    this.maDviNhan = data.data.maDviNhan;
+                    this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.maDviTao = data.data.maDviGui;
                     this.trangThai = data.data.trangThai;
                 } else {
@@ -158,10 +197,10 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     }
 
     redirectkehoachvonphi() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-so-kiem-tra-chi-nsnn']);
+        this.location.back();
     }
 
-    
+
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
@@ -247,5 +286,109 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
+    async taoMoiPhuongAn() {
+        let listCtietDvi: any[] = [];
+        let listTtCtiet: any[] = [];
+        await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.maPa = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                    return;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                return;
+            },
+        );
 
+        this.lstBcao.forEach(item => {
+            listCtietDvi.push({
+                id: null,
+                maKhuVuc: item.maDvi,
+                soTranChi: 0,
+                maBcao: item.maBcao,
+            })
+            listTtCtiet.push({
+                id: null,
+                maBcao: item.maBcao,
+                trangThai: "0",
+            })
+        })
+        let lstCtietBcaoTemp: any[] = [];
+        // gui du lieu trinh duyet len server
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                maNhom: item.maNoiDung,
+                tongSo: mulMoney(item.soTien, this.maDviTien),
+                listCtietDvi: listCtietDvi,
+                id: null,
+            })
+        })
+
+        lstCtietBcaoTemp.forEach(item => {
+            if (item.id?.length == 38) {
+                item.id = null;
+            }
+        });
+
+        // gui du lieu trinh duyet len server
+        let request = {
+            id: null,
+            fileDinhKems: [],
+            listIdDeleteFiles: [],
+            listCtiet: lstCtietBcaoTemp,
+            listTtCtiet: listTtCtiet,
+            maDvi: this.maDviNhan,
+            maDviTien: this.maDviTien,
+            maPa: this.maPa,
+            maPaBtc: "",
+            namPa: this.newDate.getFullYear(),
+            maBcao: this.maBaoCao,
+            trangThai: "1",
+            thuyetMinh: "",
+        };
+        this.spinner.show();
+        this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    this.router.navigate([
+                        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
+                    ])
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
+    }
+
+    sua() {
+        let request = {
+            id: this.id,
+            maBcao: this.maBaoCao,
+        }
+        this.quanLyVonPhiService.suaBcao(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.router.navigate([
+                        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + data.data.id,
+                    ])
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
 }
