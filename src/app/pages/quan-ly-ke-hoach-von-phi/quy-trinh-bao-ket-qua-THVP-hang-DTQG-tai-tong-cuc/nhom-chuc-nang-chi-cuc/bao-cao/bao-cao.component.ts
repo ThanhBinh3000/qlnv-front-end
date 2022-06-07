@@ -88,7 +88,7 @@ export class ItemDataMau02 {
   thGiaMuaTd: any;
   thTtien: any;
   ghiChu: any;
-  maVtuHeader: any;
+  header: any;
   loai: any;
   checked!: boolean;
 }
@@ -107,7 +107,7 @@ export class ItemDataMau03 {
   ttGiaBanTte: any;
   ttClechGiaTteVaGiaHtoan: number;
   ghiChu: any;
-  maVtuHeader: any;
+  header: any;
   loai: any;
   checked!: boolean;
 }
@@ -446,7 +446,7 @@ export class BaoCaoComponent implements OnInit {
   addListVatTu(listVattu) {
     listVattu.forEach(item => {
       this.lstVatTuFull.push(item);
-      if(item.child){
+      if (item.child) {
         this.addListVatTu(item.child);
       }
     });
@@ -649,9 +649,6 @@ export class BaoCaoComponent implements OnInit {
     this.listColTrongDot4an = [];
     this.listColTrongDot4bx = [];
     this.listColTrongDot05 = [];
-    this.updateEditCache02();
-    this.updateAllChecked03();
-    this.updateEditCache();
   }
 
   //nhóm chức năng phụ vụ cho table biểu mẫu (phụ lục) ------------------------------------------
@@ -673,8 +670,10 @@ export class BaoCaoComponent implements OnInit {
     return TRANG_THAI_PHU_LUC.find(item => item.id == Status)?.ten;
   }
 
-  changeTab(maPhuLuc, trangThaiChiTiet) {
+  async changeTab(maPhuLuc, trangThaiChiTiet) {
     let checkSaveEdit;
+    await this.saveMau02();
+    await this.saveMau03();
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
@@ -707,7 +706,6 @@ export class BaoCaoComponent implements OnInit {
     this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
     this.tuNgay = lstBcaosTemp?.tuNgay;
     this.denNgay = lstBcaosTemp?.denNgay;
-    this.listIdDelete = [];
     this.trangThaiChiTiet = trangThaiChiTiet;
     ////////////////////////////////////////
     this.resetList();
@@ -716,7 +714,7 @@ export class BaoCaoComponent implements OnInit {
       // bm 02
       case BAO_CAO_NHAP_HANG_DTQG:
         this.lstCTietBaoCaoTemp?.filter(data => {
-          if (data.maVtuHeader == '1') {
+          if (data.header == '1') {
             this.lstCtietBcao021.push(data);
           } else {
             this.lstCtietBcao022.push(data);
@@ -727,11 +725,9 @@ export class BaoCaoComponent implements OnInit {
 
       case BAO_CAO_XUAT_HANG_DTQG:
         this.lstCTietBaoCaoTemp?.filter(data => {
-
-
-          if (data.maVtuHeader == '1') {
+          if (data.header == '1') {
             this.lstCtietBcao031.push(data);
-          } else if (data.maVtuHeader == '2') {
+          } else if (data.header == '2') {
             this.lstCtietBcao032.push(data);
           } else {
             this.lstCtietBcao033.push(data);
@@ -1053,12 +1049,8 @@ export class BaoCaoComponent implements OnInit {
 
   //luu chi tiet phu luc
   async saveAppendix(maChucNang: string) {
-
-    if (this.tabSelected == BAO_CAO_NHAP_HANG_DTQG) {
-      await this.saveMau02();
-    } else if (this.tabSelected == BAO_CAO_XUAT_HANG_DTQG) {
-      await this.saveMau03();
-    }
+    await this.saveMau02();
+    await this.saveMau03();
     let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
 
@@ -1811,7 +1803,7 @@ export class BaoCaoComponent implements OnInit {
       thGiaMuaTd: null,
       thTtien: null,
       ghiChu: null,
-      maVtuHeader: parentID,
+      header: parentID,
       loai: loaiDonVi,
       checked!: false,
     };
@@ -1908,13 +1900,15 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async saveMau02() {
-    this.lstCTietBaoCaoTemp = [];
-    await this.lstCtietBcao021.forEach(e => {
-      this.lstCTietBaoCaoTemp.push(e);
-    })
-    await this.lstCtietBcao022.forEach(e => {
-      this.lstCTietBaoCaoTemp.push(e);
-    })
+    if (this.tabSelected == BAO_CAO_NHAP_HANG_DTQG) {
+      this.lstCTietBaoCaoTemp = [];
+      await this.lstCtietBcao021.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao022.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+    }
   }
 
   updateEditCache02(): void {
@@ -1991,7 +1985,7 @@ export class BaoCaoComponent implements OnInit {
       ttGiaBanTte: 0,
       ttClechGiaTteVaGiaHtoan: 0,
       ghiChu: 0,
-      maVtuHeader: parentId,
+      header: parentId,
       loai: loai,
       checked: false,
     };
@@ -2142,16 +2136,18 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async saveMau03() {
-    this.lstCTietBaoCaoTemp = [];
-    await this.lstCtietBcao031.forEach(e => {
-      this.lstCTietBaoCaoTemp.push(e);
-    })
-    await this.lstCtietBcao032.forEach(e => {
-      this.lstCTietBaoCaoTemp.push(e);
-    })
-    await this.lstCtietBcao033.forEach(e => {
-      this.lstCTietBaoCaoTemp.push(e);
-    })
+    if (this.tabSelected == BAO_CAO_XUAT_HANG_DTQG) {
+      this.lstCTietBaoCaoTemp = [];
+      await this.lstCtietBcao031.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao032.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao033.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+    }
   }
 
 
@@ -3299,10 +3295,5 @@ export class BaoCaoComponent implements OnInit {
 
   }
 
-  date = null;
-
-  onChange(result: Date[]): void {
-    console.log('onChange: ', result);
-    console.log(this.date);
-  }
+  
 }
