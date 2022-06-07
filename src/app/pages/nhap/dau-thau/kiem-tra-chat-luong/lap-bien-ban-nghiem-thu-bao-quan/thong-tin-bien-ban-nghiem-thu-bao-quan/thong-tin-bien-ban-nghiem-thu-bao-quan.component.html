@@ -7,27 +7,27 @@
         </div>
         <div class="canphai phai" *ngIf="!viewChiTiet">
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="detail.trangThai == '00' || id == 0">
+            *ngIf="(detail.trangThai == '00' || id == 0) && !viewChiTiet">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '00' || id == 0" (click)="guiDuyet()">
+            *ngIf="(detail.trangThai == '00' || id == 0) && !viewChiTiet" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
             <span>Trình duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '01'"
-            (click)="hoanThanh()">
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
+            *ngIf="detail.trangThai == '01' && !viewChiTiet" (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
             <span>Hoàn thành phiếu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
-            (click)="pheDuyet()">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="detail.trangThai == '04' && !viewChiTiet" (click)="pheDuyet()">
             <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="detail.trangThai == '04'">
+            *ngIf="detail.trangThai == '04' && !viewChiTiet">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>

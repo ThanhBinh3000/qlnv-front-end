@@ -1,29 +1,9 @@
-<div class="luong-thuc__danh-sach">
-    <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+<div class="luong-thuc__danh-sach chi-tiet-phu-luc">
+    <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
         <div class="tab-content tab-menu" id="myTabContent">
             <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
                 aria-labelledby="banhanh-tab">
                 <div class="trai">
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" href="javascript: history.go(-1)">
-                        <i class="fa fa-arrow-circle-left"></i>
-                    </a>
-                    <nz-breadcrumb>
-                        <nz-breadcrumb-item>
-                            <a [routerLink]="">Mua</a>
-                        </nz-breadcrumb-item>
-                        <nz-breadcrumb-item>
-                            <a [routerLink]="">Cục</a>
-                        </nz-breadcrumb-item>
-                        <nz-breadcrumb-item>
-                            <a [routerLink]="">Ký hợp đồng</a>
-                        </nz-breadcrumb-item>
-                        <nz-breadcrumb-item>
-                            <a [routerLink]="">Lương thực</a>
-                        </nz-breadcrumb-item>
-                        <nz-breadcrumb-item>
-                            <a [routerLink]="" class="last-breadcrumb">Phụ lục hợp đồng</a>
-                        </nz-breadcrumb-item>
-                    </nz-breadcrumb>
                 </div>
                 <div class="canphai phai">
                     <button class="btn btn-main btn-sm waves-effect waves-light">
@@ -38,7 +18,7 @@
                         <i class="icon  htvbdh_da-xu-ly"></i>
                         <span>Hoàn thành phiếu</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
                         <i class="icon htvbdh_dakyduyet"></i>
                         <span>Quay lại hợp đồng</span>
                     </button>
@@ -49,7 +29,7 @@
     <div class="contentBor chi-tieu__body">
         <div class="contentDetail">
             <div class="main-content">
-                <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+                <nz-card class="flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[18, 12]">
                         <div nz-col nzSpan="6">
                             <label class="search__label">Phụ lục số</label>
@@ -80,8 +60,8 @@
                         </div>
                     </div>
                 </nz-card>
-                <p class="mt-16 title-ky-hop-dong">ĐIỀU CHỈNH THỜI GIAN THỰC HIỆN</p>
-                <nz-tabset nzType="card" class="tab__container">
+                <p class="mt-16 title-ky-hop-dong pd-10">ĐIỀU CHỈNH THỜI GIAN THỰC HIỆN</p>
+                <nz-tabset nzType="card" class="tab-level-3 pd-10">
                     <nz-tab [nzTitle]="'Điều chỉnh thời gian thực hiện'">
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="6">
@@ -115,8 +95,7 @@
                         </div>
                     </nz-tab>
                     <nz-tab [nzTitle]="'Điều chỉnh địa diểm nhập'">
-                        <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-                            class="mt-16">
+                        <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                             <thead>
                                 <tr>
                                     <th class="text-center" width="60px">STT</th>
@@ -127,7 +106,7 @@
                                     <th width="175px">Thuế</th>
                                     <th width="175px">Giá trước thuế</th>
                                     <th width="175px">Giá sau thuế</th>
-                                    <th width="175px"></th>
+                                    <th width="175px" class="text-right"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -140,7 +119,7 @@
                                     <td>5%</td>
                                     <td>17.000.000.000</td>
                                     <td>17.316.600.000</td>
-                                    <td class="text-center">
+                                    <td class="text-right">
                                         <a (click)="thongTinPhuLuc()">
                                             <i class="fa fa-pencil"></i>
                                         </a>
@@ -172,7 +151,7 @@
                         </div>
                     </nz-tab>
                 </nz-tabset>
-                <nz-form-item class="display-block">
+                <nz-form-item class="display-block pd-10">
                     <nz-form-label nzRequired [nzNoColon]="true">
                         Ghi chú
                     </nz-form-label>

@@ -26,13 +26,6 @@ const routes: Routes = [
                         (m) => m.MuaTrucTiepModule,
                     ),
             },
-            {
-                path: 'hop-dong/:type',
-                loadChildren: () =>
-                    import('../mua-hang/hop-dong/hop-dong.module').then(
-                        (m) => m.HopDongModule,
-                    ),
-            },
         ],
     },
 ];

@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { convertTenVthh } from 'src/app/shared/commonFunction';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -19,8 +19,11 @@ import * as dayjs from 'dayjs';
   styleUrls: ['./danh-sach-hop-dong.component.scss']
 })
 export class DanhSachHopDongComponent implements OnInit {
+  @Input()
+  typeVthh: string;
+
   loaiVthh: string;
-  loaiStr: string;
+  loaiStr: string = "";
   maVthh: string;
   ngayKy: string;
   soHd: string;
@@ -37,6 +40,10 @@ export class DanhSachHopDongComponent implements OnInit {
   optionsDonViShow: any[] = [];
   selectedDonVi: any = {};
 
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isView: boolean = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -47,17 +54,14 @@ export class DanhSachHopDongComponent implements OnInit {
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
   }
 
   async ngOnInit() {
     this.spinner.show();
-    this.userInfo = this.userService.getUserLogin();
-    await this.loadDonVi();
-
     try {
+      this.userInfo = this.userService.getUserLogin();
+      await this.loadDonVi();
+      this.getTitleVthh();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -187,22 +191,22 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
+    if (this.typeVthh == "thoc") {
       this.loaiStr = "Thóc";
       this.loaiVthh = "01";
       this.maVthh = "0101";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
+    } else if (this.typeVthh == "gao") {
       this.loaiStr = "Gạo";
       this.loaiVthh = "00";
       this.maVthh = "0102";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
+    } else if (this.typeVthh == "muoi") {
       this.loaiStr = "Muối";
       this.loaiVthh = "02";
       this.maVthh = "04";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
+    } else if (this.typeVthh == "vat-tu") {
       this.loaiStr = "Vật tư";
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';
@@ -210,14 +214,13 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id,]);
-    }
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   exportData() {

@@ -1,0 +1,33 @@
+::ng-deep {
+  .title-ky-hop-dong {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-transform: uppercase;
+    color: #828282;
+  }
+
+  .download-file {
+    background: #e3f9f9;
+    border: 0.5px solid #4e5484;
+    border-radius: 0px;
+    color: #4e5484;
+    margin-left: 16px;
+  }
+
+  .tl-dk {
+    margin-left: 8px;
+  }
+
+  .chi-tiet-phu-luc {
+    .dieu-chinh-button {
+      top: 30px;
+      right: 0;
+    }
+
+    .contentBor {
+      margin-top: 10px;
+    }
+  }
+}
