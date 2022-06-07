@@ -25,7 +25,7 @@ export class DialogLuaChonThemDonViComponent implements OnInit {
     }
 
     handleOk() {
-        this._modalRef.close(this.donVis);
+        this._modalRef.close(this.donVis.filter(item => item.status == true));
     }
 
     handleCancel() {
