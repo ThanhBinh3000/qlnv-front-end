@@ -81,6 +81,7 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
+							<th>Mã đơn vị nhận</th>
 							<th>Mã phương án</th>
 							<th>Mã báo cáo</th>
 							<th>Ngày lập</th>
@@ -92,6 +93,9 @@
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+							<td>
+								{{getUnitName(item.maDviNhan)}}
+							</td>
 							<td>
 								{{ item.maPa}}
 							</td>
@@ -136,10 +140,10 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
+				<!-- <button type="button" class="btn btn-main" (click)="taoMoi()">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
-				</button>
+				</button> -->
 			</ng-template>
 		</div>
 	</div>

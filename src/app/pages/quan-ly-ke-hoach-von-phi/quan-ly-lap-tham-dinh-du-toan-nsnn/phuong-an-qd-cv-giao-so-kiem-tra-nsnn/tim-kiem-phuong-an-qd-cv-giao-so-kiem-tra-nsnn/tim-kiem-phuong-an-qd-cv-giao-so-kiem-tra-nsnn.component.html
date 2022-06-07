@@ -5,7 +5,6 @@
 			<div class="trai">
 			</div>
 			<div class="canphai phai action-top">
-
 				<button nz-button class="search__button--search" routerLink="../">
 					<i nz-icon nzType="stop"></i>
 					Đóng
@@ -15,10 +14,6 @@
 					<i nz-icon nzType="search"></i>
 					Tìm kiếm
 				</button>
-				<!-- <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
-					<i nz-icon nzType="close"></i>
-					Xóa điều kiện
-				</button> -->
 			</div>
 		</div>
 	</div>
@@ -37,7 +32,7 @@
 					<div nz-col nzSpan="6" [hidden]="!status">
 						<label class="search__label">Mã báo cáo</label>
 						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBaoCao"
-						[class]="statusBtnBcao || searchFilter.maBaoCao ? '' : 'input-error-validate'"/>
+							[class]="statusBtnBcao || searchFilter.maBaoCao ? '' : 'input-error-validate'" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
@@ -57,9 +52,13 @@
 							</nz-option>
 						</nz-select>
 					</div>
-					<div nz-col nzSpan="6">
+					<div nz-col nzSpan="6" [hidden]="status">
 						<label class="search__label">Mã PA</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"/>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
+					</div>
+					<div nz-col nzSpan="6" [hidden]="!status">
+						<label class="search__label">Mã PA</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPaBtc" />
 					</div>
 				</div>
 			</nz-card>
@@ -79,14 +78,20 @@
 							<th>Ngày tạo</th>
 							<th>Năm phương án</th>
 							<th [hidden]="status">Trạng thái</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-							<td>
+							<td [hidden]="status">
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 									{{ item.maPa}}
+								</a>
+							</td>
+							<td [hidden]="!status">
+								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+									{{ item.maPaBtc}}
 								</a>
 							</td>
 							<td [hidden]="!status">
@@ -95,12 +100,21 @@
 							<td>
 								{{item.ngayTao}}
 							</td>
-							
+
 							<td>
 								{{item.namPa}}
 							</td>
 							<td [hidden]="status">
 								{{getStatusName(item.trangThai)}}
+								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5'">
+									<br />
+									Lý do: {{item.lyDoTuChoi}}
+								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<i class="fa fa-trash-o do" (click)="xoaPA(item.id)"></i>
+								</ng-container>
 							</td>
 						</tr>
 					</tbody>

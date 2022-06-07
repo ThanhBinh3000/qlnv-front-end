@@ -16,14 +16,14 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+				<!-- <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Từ chối</span>
 				</a>
 				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Duyệt</span>
-				</button>
+				</button> -->
 				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
@@ -65,7 +65,7 @@
 						<tr>
 							<th>Mã đề nghị</th>
 							<th>Quyết định chỉ tiêu</th>
-							<th>Quyết định trúng thầu</th>
+							<th>Căn cứ giá</th>
 							<th>Loại đề nghị</th>
 							<th>Công văn</th>
 							<th>Ngày lập</th>
@@ -78,8 +78,20 @@
 						<tr>
 							<td>{{maDeNghi}}</td>
 							<td>{{qdChiTieu}}</td>
-							<td>{{qdTrungThau}}</td>
-							<td>{{loaiDn}}</td>
+							<td>
+								<ng-container *ngFor="let item of canCuGias">
+									<ng-container *ngIf="canCuGia == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngFor="let item of loaiDns">
+									<ng-container *ngIf="loaiDn == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
@@ -96,13 +108,7 @@
 							<td>{{ngayTrinhDuyet}}</td>
 							<td>{{ngayPheDuyet}}</td>
 							<td>
-								<ng-container
-									*ngIf="trangThai == '3' || trangThai == '5' || trangThai == '8'; else chapnhan">
-									{{getStatusName()}} - {{lyDoTuChoi}}
-								</ng-container>
-								<ng-template #chapnhan>
-									{{getStatusName()}}
-								</ng-template>
+									{{getStatusName(trangThai)}}
 							</td>
 						</tr>
 					</tbody>
@@ -183,7 +189,7 @@
 												{{data.soLuong}}
 											</td>
 											<td>
-												{{data.donGia}}
+												{{data.donGiaMua}}
 											</td>
 											<td>
 												{{data.thanhTien}}
@@ -207,7 +213,14 @@
 										<ng-template #editTemplate>
 											<td>{{ i + 1 }}</td>
 											<td>
-												{{editCache[data.id].data.maHang}}
+												<nz-select nzShowSearch nzAllowClear
+													[class]="editCache[data.id].data.maHang ?'' : 'input-error-validate' "
+													nzPlaceHolder="Chọn loại mặt hàng"
+													[(ngModel)]="editCache[data.id].data.maHang">
+													<nz-option *ngFor="let item of vatTus" [nzValue]="item.ma"
+														[nzLabel]="item.ten">
+													</nz-option>
+												</nz-select>
 											</td>
 											<td>
 												<nz-select nzShowSearch nzAllowClear
@@ -228,8 +241,8 @@
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.donGia || editCache[data.id].data.donGia === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.donGia"
+													[class]="editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.donGiaMua"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>

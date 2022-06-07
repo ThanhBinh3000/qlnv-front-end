@@ -14,8 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM } from "../../../../../Utility/utils";
-import { Role } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constant';
 
 

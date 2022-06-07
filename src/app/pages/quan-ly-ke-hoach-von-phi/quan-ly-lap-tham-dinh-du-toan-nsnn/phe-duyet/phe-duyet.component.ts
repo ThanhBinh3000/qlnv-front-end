@@ -7,10 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({
 	selector: 'app-phe-duyet',
@@ -81,7 +80,10 @@ export class PheDuyetComponent implements OnInit {
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
 			this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
-			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
+			this.trangThais.push({
+				id: Utils.TT_BC_7,
+				tenDm: "Mới",
+			});
 			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
 			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
 		} else {

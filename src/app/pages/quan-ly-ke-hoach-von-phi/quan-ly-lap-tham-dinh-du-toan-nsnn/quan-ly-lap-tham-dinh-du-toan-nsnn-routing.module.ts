@@ -78,6 +78,13 @@ const routes: Routes = [
         './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/tim-kiem-so-kiem-tra-chi-nsnn/tim-kiem-so-kiem-tra-chi-nsnn.module'
       ).then((m) => m.TimKiemSoKiemTraChiNsnnModule),
   },
+  {
+    path: 'nhan-so-kiem-tra-chi-nsnn',
+    loadChildren: () =>
+      import(
+        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/nhan-so-kiem-tra-chi-nsnn/nhan-so-kiem-tra-chi-nsnn.module'
+      ).then((m) => m.NhanSoKiemTraChiNsnnModule),
+  },
   //bao cao lap tham dinh
   {
     path: 'bao-cao',

@@ -68,7 +68,40 @@ export class BaoCaoComponent implements OnInit {
 	donVis: any[] = [];
 	tabs: any[] = [];
 	lstDviTrucThuoc: any[] = [];
-	trangThaiBaoCaos: any[] = TRANG_THAI_TIM_KIEM;
+	trangThaiBaoCaos: any[] = [
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_3,
+			tenDm: "Trưởng BP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trưởng BP chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_8,
+			tenDm: "Từ chối",
+		},
+		{
+			id: Utils.TT_BC_9,
+			tenDm: "Tiếp nhận",
+		},
+	];
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[] = [
 		{
@@ -232,7 +265,7 @@ export class BaoCaoComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
 					this.donVis.forEach(e => {
-						if (e.maDvi == this.userInfo?.dvql){
+						if (e.maDvi == this.userInfo?.dvql) {
 							this.capDvi = e.capDvi;
 						}
 					})
@@ -365,20 +398,20 @@ export class BaoCaoComponent implements OnInit {
 	//download file về máy tính
 	async downloadFileCv() {
 		if (this.congVan?.fileUrl) {
-		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
-			(data) => {
-			  fileSaver.saveAs(data, this.congVan?.fileName);
-			},
-			err => {
-			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		  );
+			await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+				(data) => {
+					fileSaver.saveAs(data, this.congVan?.fileName);
+				},
+				err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
 		} else {
-		  let file: any = this.fileDetail;
-		  const blob = new Blob([file], { type: "application/octet-stream" });
-		  fileSaver.saveAs(blob, file.name);
+			let file: any = this.fileDetail;
+			const blob = new Blob([file], { type: "application/octet-stream" });
+			fileSaver.saveAs(blob, file.name);
 		}
-	  }
+	}
 
 	// luu
 	async save() {
@@ -421,30 +454,25 @@ export class BaoCaoComponent implements OnInit {
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
 			congVan: this.congVan,
+			thuyetMinh: this.thuyetMinh,
 			tongHopTuIds: tongHopTuIds,
-		})) ;
+		}));
 		//get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
-		  request.congVan = await this.uploadFile(file);
+			request.congVan = await this.uploadFile(file);
 		}
 
 		//call service them moi
 		this.spinner.show();
-		if (this.id == null) {
+		if (!this.id) {
 			this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-						if (!this.id) {
-							this.router.navigate([
-								'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/'+ this.loai+ "/" + data.data.id,
-							])
-						}
-						else {
-							await this.getDetailReport();
-							this.getStatusButton();
-						}
+						this.router.navigate([
+							'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + this.loai + "/" + data.data.id,
+						])
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
@@ -572,6 +600,7 @@ export class BaoCaoComponent implements OnInit {
 					this.congVan = data.data.congVan;
 					this.lyDoTuChoi = data.data.lyDoTuChoi;
 					this.giaoSoTranChiId = data.data.giaoSoTranChiId;
+					this.thuyetMinh = data.data.thuyetMinh;
 					this.lstDviTrucThuoc.forEach(item => {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -769,7 +798,7 @@ export class BaoCaoComponent implements OnInit {
 		if (this.loai == "0") {
 			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
 		} else {
-			if (this.loai == "1"){
+			if (this.loai == "1") {
 				this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop']);
 			} else {
 				this.location.back();
@@ -777,11 +806,74 @@ export class BaoCaoComponent implements OnInit {
 		}
 	}
 
-	xemSoKiemTra(){
-		if (this.capDvi == Utils.TONG_CUC){
-			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc' + this.giaoSoTranChiId]);
+	xemSoKiemTra() {
+		if (this.capDvi == Utils.TONG_CUC) {
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/' + this.giaoSoTranChiId]);
 		} else {
-			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn' + this.giaoSoTranChiId]);
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn/' + this.giaoSoTranChiId]);
 		}
+	}
+
+	async doCopy() {
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					maBcaoNew = data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return;
+			}
+		);
+		let lstLapThamDinhTemps: any[] = [];
+		this.lstLapThamDinhs.forEach(data => {
+			let lstCtietTemp: any[] = [];
+			data.lstCtietLapThamDinhs.forEach(item => {
+				lstCtietTemp.push({
+					...item,
+					id: null,
+				})
+			})
+			lstLapThamDinhTemps.push({
+				...data,
+				nguoiBcao: this.userInfo?.username,
+				lstCtietLapThamDinhs: lstCtietTemp,
+				id: null,
+			})
+		})
+		let request = {
+			id: null,
+			fileDinhKems: [],
+			listIdDeleteFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstLapThamDinhs: lstLapThamDinhTemps,
+			maBcao: maBcaoNew,
+			maDvi: this.maDviTao,
+			namBcao: this.namHienHanh,
+			namHienHanh: this.namHienHanh,
+			congVan: null,
+			tongHopTuIds: [],
+		};
+
+		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.router.navigate([
+						'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + data.data.id,
+					])
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+
 	}
 }

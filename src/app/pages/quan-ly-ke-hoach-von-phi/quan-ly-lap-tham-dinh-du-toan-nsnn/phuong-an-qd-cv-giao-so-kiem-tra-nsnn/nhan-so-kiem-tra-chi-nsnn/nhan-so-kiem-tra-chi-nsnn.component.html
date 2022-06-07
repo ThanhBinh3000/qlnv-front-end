@@ -15,6 +15,10 @@
 					<i nz-icon nzType="search"></i>
 					Tìm kiếm
 				</button>
+				<!-- <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+					<i nz-icon nzType="close"></i>
+					Xóa điều kiện
+				</button> -->
 			</div>
 		</div>
 	</div>
@@ -25,16 +29,10 @@
 			<nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
-						<label class="search__label">Mã</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDn" />
-					</div>
-					<div nz-col nzSpan="6">
-						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-							[(ngModel)]="searchFilter.trangThai">
-							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-							</nz-option>
-						</nz-select>
+						<label class="search__label">Năm giao</label>
+						<nz-input-number [nzSize]="'small'"
+							[class]="searchFilter.namGiao >= 1000 &&  searchFilter.namGiao <= 2999 || !searchFilter.namGiao && this.searchFilter.namGiao !== 0 ?'' : 'input-error-validate'"
+							[(ngModel)]="searchFilter.namGiao"></nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
@@ -47,32 +45,25 @@
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Quyết định chỉ tiêu</label>
-						<input class="search__input" nz-input
-							[class]="statusBtnNew || searchFilter.qdChiTieu ?'' : 'input-error-validate'"
-							[(ngModel)]="searchFilter.qdChiTieu" />
-					</div>
-					<div nz-col nzSpan="6">
-						<label class="search__label">Căn cứ về giá</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
-							[class]="statusBtnNew || searchFilter.canCuGia ?'' : 'input-error-validate'"
-							[(ngModel)]="searchFilter.canCuGia">
-							<nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+						<label class="search__label">Trạng thái</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+							[(ngModel)]="searchFilter.trangThai">
+							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Loại đề nghị</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị"
-							[class]="statusBtnNew || searchFilter.loaiDn ?'' : 'input-error-validate'"
-							[(ngModel)]="searchFilter.loaiDn">
-							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
-							</nz-option>
-						</nz-select>
+						<label class="search__label">Mã phương án</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Mã báo cáo</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBcao" />
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="Danh sách đề nghị cấp vốn" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="DANH SÁCH PHƯƠNG ÁN GIAO SỐ KIỂM TRA NSNN" [nzExtra]="tableCard1"
+				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
@@ -82,61 +73,37 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
-							<th>Mã đề nghị</th>
-							<th>Quyết định chỉ tiêu</th>
-							<th>Căn cứ giá</th>
-							<th>Loại đề nghị</th>
+							<th>Mã phương án</th>
+							<th>Mã báo cáo</th>
 							<th>Ngày lập</th>
-							<th>Ngày trình duyệt</th>
-							<th>Ngày phê duyệt</th>
+							<th>Năm giao</th>
 							<th>Trạng thái</th>
-							<!-- <th></th> -->
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
+							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
-								{{ (i + 1) + (pages.page - 1)*pages.size }}
+								{{ item.maPa}}
 							</td>
 							<td>
-								<a (click)="xemChiTiet(item)" style="color: #1890ff;">
-									{{ item.maDnghi}}
-								</a>
-							</td>
-							<td>
-								{{item.soQdChiTieu}}
-							</td>
-							<td>
-								<div *ngFor="let e of canCuGias">
-									<div *ngIf="item.canCuVeGia == e.id">
-										{{e.tenDm}}
-									</div>
-								</div>
-							</td>
-							<td>
-								<div *ngFor="let e of loaiDns">
-									<div *ngIf="item.loaiDnghi == e.id">
-										{{e.tenDm}}
-									</div>
-								</div>
+								{{item.maBcao}}
 							</td>
 							<td>
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayTrinh}}
-							</td>
-							<td>
-								{{item.ngayPheDuyet}}
+								{{item.namGiao}}
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
 							</td>
-							<!-- <td> -->
-								<!-- <ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
-								</ng-container> -->
-							<!-- </td> -->
+							<td>
+								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+									Xem
+								</a>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
@@ -161,11 +128,12 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
+				<!-- <button type="button" class="btn btn-main" (click)="taoMoi()">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
-				</button>
+				</button> -->
 			</ng-template>
 		</div>
 	</div>
 </div>
+

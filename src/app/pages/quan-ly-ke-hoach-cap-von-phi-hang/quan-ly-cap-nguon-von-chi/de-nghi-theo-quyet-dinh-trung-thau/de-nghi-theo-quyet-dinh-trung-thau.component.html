@@ -18,14 +18,14 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+				<!-- <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Từ chối</span>
 				</a>
 				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Duyệt</span>
-				</button>
+				</button> -->
 				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
@@ -67,7 +67,7 @@
 						<tr>
 							<th>Mã đề nghị</th>
 							<th>Quyết định chỉ tiêu</th>
-							<th>Quyết định trúng thầu</th>
+							<th>Căn cứ giá</th>
 							<th>Loại đề nghị</th>
 							<th>Công văn</th>
 							<th>Ngày lập</th>
@@ -80,8 +80,20 @@
 						<tr>
 							<td>{{maDeNghi}}</td>
 							<td>{{qdChiTieu}}</td>
-							<td>{{qdTrungThau}}</td>
-							<td>{{loaiDn}}</td>
+							<td>
+								<ng-container *ngFor="let item of canCuGias">
+									<ng-container *ngIf="canCuGia == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngFor="let item of loaiDns">
+									<ng-container *ngIf="loaiDn == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
@@ -132,13 +144,13 @@
 									<tr *ngFor="let data of lstCtietBcao; let i = index">
 										<td>{{ i + 1 }}</td>
 										<td>
-											{{data.maHopDong}}
+											{{data.maHdong}}
 										</td>
 										<td>
-											{{data.tenHang}}
+											{{data.maHang}}
 										</td>
 										<td>
-											{{data.soLuong}}
+											{{data.sl}}
 										</td>
 										<td>
 											<div *ngFor="let item of dviTinhs">
@@ -148,17 +160,17 @@
 											</div>
 										</td>
 										<td>
-											{{data.donGia}}
+											{{data.donGiaMua}}
 										</td>
 										<td>
-											{{data.donVi}}
+											{{data.dviDonGia}}
 										</td>
 										<td>
 											{{data.thanhTien}}
 										</td>
 										<td>
 											<div *ngFor="let item of dviTiens">
-												<div *ngIf="item.id == data.maDviTien">
+												<div *ngIf="item.id == data.dviThanhTien">
 													{{item.tenDm}}
 												</div>
 											</div>

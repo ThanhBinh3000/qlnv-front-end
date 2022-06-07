@@ -7,7 +7,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -17,7 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { ItemCongVan, ItemDataMau02 } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 
 export class ItemData {
@@ -60,7 +59,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
     soLaMa: any[] = LA_MA;
-    lstBcao: any [] = [];
+    lstBcao: any[] = [];
     //trang thai cac nut
     status: boolean = false;
     statusBtnSave: boolean;
@@ -83,6 +82,17 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
+        return false;
+    };
+
+    // before uploaf file
+    beforeUploadCV = (file: NzUploadFile): boolean => {
+        this.fileDetail = file;
+        this.soQdCv = {
+            fileName: file.name,
+            fileSize: null,
+            fileUrl: null,
+        };
         return false;
     };
 
@@ -114,10 +124,11 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBcao');
-        
+
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
+        this.maDonViTao = this.userInfo?.dvql;
 
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -216,11 +227,11 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         if (this.id) {
             this.statusBtnSave = true;
         }
-        if (!this.id){
+        if (!this.id) {
             this.statusBtnNew = true;
             this.statusBtnEdit = true;
         } else {
-            if (this.lstBcao.length > 0){
+            if (this.lstBcao.length > 0) {
                 this.statusBtnNew = false;
                 this.statusBtnEdit = true;
             } else {
@@ -237,7 +248,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.maDonViTao + '/' + this.maPa);
+        upfile.append('folder', this.maDonViTao + '/' + this.maPaBtc);
         let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 let objfile = {
@@ -311,6 +322,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.id = data.data.id;
                     this.lstCtietBcao = data.data.listCtiet;
                     this.maDviTien = data.data.maDviTien;
+                    this.lstFiles = data.data.lstFiles;
+					this.listFile = [];
                     this.sortByIndex();
                     this.maDviTien = data.data.maDviTien;
                     this.lstCtietBcao.forEach(item => {
@@ -438,7 +451,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             listFile.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
-        let request = {
+        let request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: this.lstFiles,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -450,9 +463,15 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             maPaBtc: this.maPaBtc,
             namPa: this.namPa,
             maBcao: this.maBaoCao,
+            soQdCv: this.soQdCv,
             trangThai: this.trangThaiBanGhi,
             thuyetMinh: this.thuyetMinh,
-        };
+        }));
+
+        let file: any = this.fileDetail;
+        if (file) {
+            request.soQdCv = await this.uploadFile(file);
+        }
         this.spinner.show();
         if (!this.id) {
             this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
@@ -822,7 +841,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.editCache[id].data.tongSo = Number(this.editCache[id].data.nguonNsnn) + Number(this.editCache[id].data.nguonKhac);
     }
     close() {
-        this.location.back();
+        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/0']);
     }
 
     async taoMoiPhuongAn() {
@@ -910,7 +929,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.spinner.hide();
     }
 
-    sua(){
+    sua() {
         let request = {
             id: this.id,
             maBcao: this.maBaoCao,
