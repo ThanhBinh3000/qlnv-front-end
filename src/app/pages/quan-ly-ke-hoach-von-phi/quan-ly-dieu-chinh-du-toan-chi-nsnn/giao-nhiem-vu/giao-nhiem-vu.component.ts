@@ -63,7 +63,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	namHienHanh!: number;
 	ngayNhap!: string;
 	nguoiNhap!: string;
-	congVan: ItemCongVan = new ItemCongVan();
+	soQd: ItemCongVan = new ItemCongVan();
 	ngayTrinhDuyet!: string;
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
@@ -130,7 +130,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// before uploaf file
 	beforeUploadCV = (file: NzUploadFile): boolean => {
 		this.fileDetail = file;
-		this.congVan = {
+		this.soQd = {
 		  fileName: file.name,
 		  fileSize: null,
 		  fileUrl: null,
@@ -294,38 +294,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 		}
 	}
 
-  // getStatusButtonOk() {
-  //   const utils = new Utils();
-  //   let checkParent = false;
-  //   let checkChirld = false;
-  //   let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-  //   if (dVi && dVi.maDvi == this.userInfo.dvql) {
-  //     checkChirld = true;
-  //   }
-  //   if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
-  //     checkParent = true;
-  //   }
-
-  //   let roleNguoiTao = this.userInfo?.roles[0]?.code;
-  //   let trangThaiBaoCao = this.trangThaiBaoCao;
-  //   if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else {
-  //     this.statusBtnOk = true;
-  //   }
-
-  //   if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
-  //     && roleNguoiTao == '3' && checkChirld) {
-  //     this.statusBtnFinish = false;
-  //   } else {
-  //     this.statusBtnFinish = true;
-  //   }
-  // }
-
 	//get user info
 	async getUserInfo(username: string) {
 		await this.userService.getUserInfo(username).toPromise().then(
@@ -396,10 +364,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	//download file về máy tính
 	async downloadFileCv() {
-		if (this.congVan?.fileUrl) {
-		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+		if (this.soQd?.fileUrl) {
+		  await this.quanLyVonPhiService.downloadFile(this.soQd?.fileUrl).toPromise().then(
 			(data) => {
-			  fileSaver.saveAs(data, this.congVan?.fileName);
+			  fileSaver.saveAs(data, this.soQd?.fileName);
 			},
 			err => {
 			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -443,6 +411,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
 		})
+
 		let request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: listFile,
@@ -453,13 +422,13 @@ export class GiaoNhiemVuComponent implements OnInit {
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
       dotBcao: this.dotBcao,
-      congVan: this.congVan,
+      soQd: this.soQd,
 			tongHopTuIds: tongHopTuIds,
 		}));
     //get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
-		  request.congVan = await this.uploadFile(file);
+		  request.soQd = await this.uploadFile(file);
 		}
 		//call service them moi
 		this.spinner.show();
@@ -600,7 +569,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 					this.ngayDuyetTBP = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-					this.congVan = data.data.congVan;
+					this.soQd = data.data.soQd;
 					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
 						this.trangThaiBaoCao == Utils.TT_BC_3 ||
 						this.trangThaiBaoCao == Utils.TT_BC_5 ||
