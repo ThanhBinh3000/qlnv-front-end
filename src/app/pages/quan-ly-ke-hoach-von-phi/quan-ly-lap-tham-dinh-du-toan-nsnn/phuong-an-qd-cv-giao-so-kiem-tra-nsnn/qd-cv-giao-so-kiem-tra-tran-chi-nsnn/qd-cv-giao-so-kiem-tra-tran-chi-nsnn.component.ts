@@ -222,7 +222,11 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     //luu
     async luu() {
-        if (!this.soQdCv.fileName || !this.maPa) {
+        if (this.namGiao >= 3000 || this.namGiao < 1000){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.INVALIDFORMAT);
+            return;
+        }
+        if (!this.soQdCv?.fileName || !this.maPa) {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập đầy số QĐ/CV và mã phương án");
             return;
         }
@@ -265,12 +269,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     }
 
-
-
-
     dong() {
-        // this.router.navigate(['/'])
-        this.location.back()
+        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
     }
 
 }

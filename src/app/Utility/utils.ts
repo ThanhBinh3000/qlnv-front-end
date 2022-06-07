@@ -49,10 +49,13 @@ export class Utils {
     //loai de nghi
     public static MUA_THOC = "0";
     public static MUA_GAO = "1";
-    public static MUA_LTHUC = "2";
+    public static MUA_MUOI = "2";
     public static MUA_VTU = "3";
     public static THOP_TU_CUC_KV = "4";
     public static THOP_TAI_TC = "5";
+    //can cu gia
+    public static HD_TRUNG_THAU = "0";
+    public static QD_DON_GIA = "1";
 
     //role xoa
     public static btnRoleDel = {
@@ -634,7 +637,7 @@ export const TRANG_THAI_TIM_KIEM = [
     },
     {
         id: "9",
-        tenDm: 'Chấp nhận'
+        tenDm: 'Tiếp nhận'
     },
     // {
     //     id: "10",
@@ -1102,8 +1105,8 @@ export const LOAI_DE_NGHI = [
         tenDm: "Mua thóc",
     },
     {
-        id: Utils.MUA_LTHUC,
-        tenDm: "Mua lương thực",
+        id: Utils.MUA_MUOI,
+        tenDm: "Mua muối",
     },
     {
         id: Utils.MUA_VTU,
@@ -1120,4 +1123,15 @@ export const NGUON_BAO_CAO = [
             id: Utils.THOP_TAI_TC,
             tenDm: "Tổng hợp tại tổng cục",
         },
+]
+
+export const CAN_CU_GIA = [
+    {
+        id: Utils.HD_TRUNG_THAU,
+        tenDm: "Hợp đồng trúng thầu",
+    },
+    {
+        id: Utils.QD_DON_GIA,
+        tenDm: "Quyết định đơn giá mua",
+    }
 ]

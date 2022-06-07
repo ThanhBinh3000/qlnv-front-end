@@ -13,11 +13,11 @@ import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.servic
 import { MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc.constant';
 
 @Component({
-    selector: 'app-tim-kiem-so-kiem-tra-chi-nsnn',
-    templateUrl: './tim-kiem-so-kiem-tra-chi-nsnn.component.html',
-    styleUrls: ['./tim-kiem-so-kiem-tra-chi-nsnn.component.scss'],
+    selector: 'app-nhan-so-kiem-tra-chi-nsnn',
+    templateUrl: './nhan-so-kiem-tra-chi-nsnn.component.html',
+    styleUrls: ['./nhan-so-kiem-tra-chi-nsnn.component.scss'],
 })
-export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
+export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
     userInfo: any;
     //thong tin tim kiem
@@ -58,7 +58,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     async ngOnInit() {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
-        this.searchFilter.maDviTao = this.userInfo?.dvql;
+        this.searchFilter.maDviNhan = this.userInfo?.dvql;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
@@ -93,20 +93,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
-    }
-
-    redirectThongTinTimKiem() {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            0,
-        ]);
-    }
-
-    redirectSuaThongTinTimKiem(id) {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            id,
-        ]);
     }
 
     //search list bao cao theo tieu chi
