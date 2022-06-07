@@ -119,7 +119,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         }
         let requestReport = {
             maDviNhan: this.searchFilter.maDviNhan,
-            maDviTao: this.searchFilter.maDviTao,
+            maDviGui: this.searchFilter.maDviTao,
             maPa: this.searchFilter.maPa,
             namGiao: this.searchFilter.namGiao,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
@@ -164,15 +164,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         this.pages.size = size;
         this.onSubmit();
     }
-    // xoaDieuKien() {
-    //     this.searchFilter.nam = null
-    //     this.searchFilter.tuNgay = null
-    //     this.searchFilter.denNgay = null
-    //     this.searchFilter.maBaoCao = null
-    //     this.searchFilter.donViTao = null
-    //     this.searchFilter.loaiBaoCao = null
-    //     this.searchFilter.trangThai = null
-    // }
 
     taoMoi() {
         this.router.navigate([

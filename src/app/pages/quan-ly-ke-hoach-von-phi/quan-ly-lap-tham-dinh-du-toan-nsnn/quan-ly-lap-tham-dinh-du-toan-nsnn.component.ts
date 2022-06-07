@@ -73,12 +73,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
-					this.donVis.forEach(item => {
-						if (item.maDvi == this.userInfo?.dvql) {
-							this.capDvi = item.capDvi;
-							return;
-						}
-					})
+					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}

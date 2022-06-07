@@ -29,6 +29,10 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 		maBaoCao: "",
 		donViTao: "",
 		trangThai: "",
+    paggingReq: {
+      limit: 10,
+      page: 1
+    },
 	};
 	//danh muc
 	danhSachDieuChinh: any[] = [];
@@ -100,6 +104,10 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 				return;
 			}
 		}
+    let trangThais = [];
+		if (this.searchFilter.trangThai){
+			trangThais = [this.searchFilter.trangThai];
+		}
 		let requestReport = {
       dotBcao: this.searchFilter.dotBcao,
 			loaiTimKiem: "0",
@@ -112,8 +120,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: [],
-      trangThai: this.searchFilter.trangThai
+			trangThais: trangThais,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
@@ -140,16 +147,16 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
 	//doi so trang
-	onPageIndexChange(page) {
-		this.pages.page = page;
-		this.onSubmit();
-	}
+  onPageIndexChange(page) {
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
+  }
 
-	//doi so luong phan tu tren 1 trang
-	onPageSizeChange(size) {
-		this.pages.size = size;
-		this.onSubmit();
-	}
+  //doi so luong phan tu tren 1 trang
+  onPageSizeChange(size) {
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
+  }
 	xoaDieuKien() {
 		this.searchFilter.nam = null
 		this.searchFilter.tuNgay = null

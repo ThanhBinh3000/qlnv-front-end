@@ -7,6 +7,7 @@ const routes: Routes = [
 		path: '',
 		component: QuanLyCapNguonVonChiNSNNComponent,
 	},
+	//tim kiem danh sach
 	{
 		path: 'tim-kiem',
 		loadChildren: () =>
@@ -43,14 +44,28 @@ const routes: Routes = [
 			).then((m) => m.TonghopModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-trung-thau',
+		path: 'de-nghi-theo-quyet-dinh-trung-thau/:loaiDn/:qdChiTieu',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-trung-thau/de-nghi-theo-quyet-dinh-trung-thau.module'
 			).then((m) => m.DeNghiTheoQuyetDinhTrungThauModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-don-gia-mua',
+		path: 'de-nghi-theo-quyet-dinh-trung-thau/:id',
+		loadChildren: () =>
+			import(
+				'./de-nghi-theo-quyet-dinh-trung-thau/de-nghi-theo-quyet-dinh-trung-thau.module'
+			).then((m) => m.DeNghiTheoQuyetDinhTrungThauModule),
+	},
+	{
+		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/:loaiDn/:qdChiTieu',
+		loadChildren: () =>
+			import(
+				'./de-nghi-theo-quyet-dinh-don-gia-mua/de-nghi-theo-quyet-dinh-don-gia-mua.module'
+			).then((m) => m.DeNghiTheoQuyetDinhDonGiaMuaModule),
+	},
+	{
+		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/:id',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-don-gia-mua/de-nghi-theo-quyet-dinh-don-gia-mua.module'
