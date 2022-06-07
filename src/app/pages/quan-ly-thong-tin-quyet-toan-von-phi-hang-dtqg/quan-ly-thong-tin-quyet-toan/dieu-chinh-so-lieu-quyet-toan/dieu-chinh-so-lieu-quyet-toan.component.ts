@@ -18,8 +18,7 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../Utility/utils";
 import { TRANG_THAI_TIM_KIEM, Utils } from './../../../../Utility/utils';
-// import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
-import { NOI_DUNG } from './them-moi-bao-cao-quyet-toan.constant';
+import { NOI_DUNG } from './dieu-chinh-so-lieu-quyet-toan.constant';
 
 export class ItemData {
   id!: any;
@@ -40,11 +39,11 @@ export class ItemCongVan {
 }
 
 @Component({
-  selector: 'app-them-moi-bao-cao-quyet-toan',
-  templateUrl: './them-moi-bao-cao-quyet-toan.component.html',
-  styleUrls: ['./them-moi-bao-cao-quyet-toan.component.scss']
+  selector: 'app-dieu-chinh-so-lieu-quyet-toan',
+  templateUrl: './dieu-chinh-so-lieu-quyet-toan.component.html',
+  styleUrls: ['./dieu-chinh-so-lieu-quyet-toan.component.scss']
 })
-export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
+export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   //danh muc
   donVis: any = [];
   noiDungs: any[] = NOI_DUNG;
@@ -82,7 +81,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   thuyetMinh: string;
   maDviTien: any;
   listIdDelete: string = "";
-  maPhanBcao: string = "1";
+  maPhanBcao: string = "2";
   namQtoan!: number;
   ngayTao!: string;
   ngayTrinh!: string;
@@ -183,6 +182,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         (data) => {
           if (data.statusCode == 0) {
             this.maBcao = data.data;
+            this.maBcao = this.maBcao.substring(0, 2) + "ĐC" + this.maBcao.substring(2)
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -399,7 +399,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             if (!this.id) {
               this.router.navigate([
-                '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan/' + data.data.id,
+                '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan/' + data.data.id,
               ])
             }
             else {

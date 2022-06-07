@@ -11,17 +11,17 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({
-  selector: 'app-danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
-  templateUrl: './danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.component.html',
-  styleUrls: ['./danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.component.scss']
+  selector: 'app-danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG',
+  templateUrl: './danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG.component.html',
+  styleUrls: ['./danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG.component.scss']
 })
-export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
+export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements OnInit {
   //thong tin dang nhap
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
     maBcao: null,
-    maPhanBcao: '1',
+    maPhanBcao: '2',
     namQtoan: null,
     ngayTaoDen: "",
     ngayTaoTu: "",
@@ -160,13 +160,13 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
 
   taoMoi() {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan',
+      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan',
     ])
   }
 
   xemChiTiet(id: string) {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan/' + id,
+      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan/' + id,
     ])
   }
 
