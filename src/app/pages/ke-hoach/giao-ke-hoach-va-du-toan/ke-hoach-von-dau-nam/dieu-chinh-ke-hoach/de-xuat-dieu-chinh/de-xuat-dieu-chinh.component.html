@@ -10,7 +10,7 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="5">
-            <label class="search__label">Số QĐ giao chỉ tiêu kế hoạch năm</label>
+            <label class="search__label">Số văn bản đề xuất</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
           </div>
           <div nz-col nzSpan="6">
@@ -18,21 +18,8 @@
             <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="10">
-            <label class="search__label">Trích yếu QĐ giao chỉ tiêu kế hoạch năm</label>
-            <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
-          </div>
-
-          <div nz-col nzSpan="5">
-            <label class="search__label">Số văn bản đề xuất</label>
-            <input class="search__input" nz-input [(ngModel)]="soQDDieuChinh" />
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ký</label>
-            <nz-range-picker [(ngModel)]="ngayKyDC" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </div>
-          <div nz-col nzSpan="13">
             <label class="search__label">Trích yếu văn bản đề xuất</label>
-            <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
+            <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
         </div>
         <div class="cangiua group-button-search">
@@ -54,33 +41,98 @@
               <thead>
                 <tr>
                   <th width="45px">
-                    <label nz-checkbox></label>
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      [nzIndeterminate]="indeterminate"></label>
                   </th>
                   <th>STT</th>
-                  <th>Số văn bản</th>
+                  <th>Số vb đề xuất</th>
+                  <th *ngIf="userService.isTongCuc()">Đơn vị</th>
+                  <th>Ngày ký</th>
+                  <th>Trích yếu</th>
+                  <th>Số QĐ giao chỉ tiêu</th>
                   <th>Năm kế hoạch</th>
-                  <th>Ngày hiệu lực</th>
-                  <th *ngIf="userService.isTongCuc()">Đơn vị đề xuất</th>
-                  <th>Số quyết định</th>
-                  <th>Nguyên nhân</th>
-                  <th>Nội dung</th>
-                  <th>Trạng thái</th>
+                  <th *ngIf="userService.isCuc()">Trạng thái của đề xuất</th>
+                  <th>Trạng thái xử lý của TC</th>
                   <th width="90" class="text-right">Hoạt động</th>
                 </tr>
               </thead>
               <tbody>
+                <tr class="search-table">
+                  <th></th>
+                  <th></th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th *ngIf="userService.isTongCuc()">
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
+                  <th *ngIf="userService.isCuc()"></th>
+                  <th></th>
+                  <th></th>
+                </tr>
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <th width="45px">
-                    <label nz-checkbox></label>
+                    <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                      [nzDisabled]="data.trangThai != '00'"></label>
                   </th>
                   <td class="text-center">{{ (page - 1) * pageSize + i + 1 }}</td>
                   <td>{{data.soVanBan}}</td>
-                  <td>{{data.namKeHoach}}</td>
-                  <td>{{data.ngayHieuLuc}}</td>
                   <td *ngIf="userService.isTongCuc()">{{data.tenDonVi}}</td>
+                  <td>{{data.ngayKy}}</td>
+                  <td>{{data.trichYeu}}</td>
                   <td>{{data.soQdKeHoachNam}}</td>
-                  <td>{{data.nguyenNhan}}</td>
-                  <td>{{data.noiDung}}</td>
+                  <td>{{data.namKeHoach}}</td>
+                  <td *ngIf="userService.isCuc()">{{data.tenTrangThai}}</td>
                   <td>{{data.trangThaiDuyet}}</td>
                   <td class="text-right">
                     <a *ngIf="!userService.isTongCuc()" (click)="redirectToChiTiet(data.id)">
@@ -89,7 +141,7 @@
                     <a *ngIf="userService.isTongCuc()" (click)="redirectToChiTiet(data.id)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
-                    <a *ngIf="data.trangThai != '02' && !userService.isTongCuc()" (click)="xoaItem(data)">
+                    <a *ngIf="data.trangThai == '00' && !userService.isTongCuc()" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -115,13 +167,21 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
+          <button type="button" class="btn btn-main" (click)="redirectToDieuChinh(0)" *ngIf="userService.isTongCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Tạo QĐ điều chỉnh</span>
+          </button>
+          <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
           </button>
         </div>
       </div>

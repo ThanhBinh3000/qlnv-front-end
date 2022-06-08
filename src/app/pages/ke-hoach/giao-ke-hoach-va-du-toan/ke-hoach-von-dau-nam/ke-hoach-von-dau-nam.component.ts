@@ -3,6 +3,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { GiaoKeHoachVonDauNamService } from 'src/app/services/giaoKeHoachVonDauNam.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-ke-hoach-von-dau-nam',
@@ -19,6 +20,7 @@ export class KeHoachVonDauNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private giaoKeHoachVonDauNamService: GiaoKeHoachVonDauNamService,
     private notification: NzNotificationService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {

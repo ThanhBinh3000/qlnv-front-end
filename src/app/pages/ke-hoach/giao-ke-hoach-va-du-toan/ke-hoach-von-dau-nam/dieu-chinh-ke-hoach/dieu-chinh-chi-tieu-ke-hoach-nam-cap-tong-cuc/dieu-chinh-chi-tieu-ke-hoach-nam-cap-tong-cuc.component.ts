@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
@@ -22,6 +22,13 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
 })
 export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
+  @Input()
+  isDetail: boolean = false;
+  @Input()
+  selectedId: number = 0;
+  @Input()
+  isView: boolean = false;
+
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
 
   namKeHoach: number = null;
@@ -52,10 +59,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
 
   titleCard: string = '';
-
-  isDetail: boolean = false;
-  selectedId: number = 0;
-  isView: boolean = false;
 
   constructor(
     private router: Router,

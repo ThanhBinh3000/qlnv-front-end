@@ -1961,4 +1961,10 @@ td.action.ant-table-cell {
   input {
     border-radius: 0 !important;
   }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #353a64 !important;
+  }
+
+  .search-table {}
 }
