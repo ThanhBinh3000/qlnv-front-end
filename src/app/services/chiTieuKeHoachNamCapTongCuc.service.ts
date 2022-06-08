@@ -97,4 +97,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/download`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }

@@ -34,6 +34,15 @@ export class MultipleTagComponent implements OnInit {
     this.removeDataEvent.emit(item);
   }
   downloadFile() {
+    if (
+      this.type == 'file' ||
+      this.trangThai === this.globals.prop.BAN_HANH ||
+      this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      this.trangThai === 'view-detail'
+    ) {
+      return;
+    }
     this.downloadFileEvent.emit(this.typeFile);
   }
 
@@ -42,7 +51,8 @@ export class MultipleTagComponent implements OnInit {
       this.type == 'file' ||
       this.trangThai === this.globals.prop.BAN_HANH ||
       this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      this.trangThai === 'view-detail'
     ) {
       return;
     }

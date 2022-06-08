@@ -145,7 +145,7 @@
       position: absolute;
       top: 4px;
       height: 20px;
-      left: 666px;
+      left: 666px !important;
       color: #7a8eff;
       white-space: nowrap;
       overflow: hidden;
@@ -243,6 +243,7 @@
       .title-chi-tieu {
         display: flex;
         align-items: center;
+        padding-left: 0px !important;
 
         .du-thao-va-lanh-dao-duyet {
           color: #ff4d4f;
