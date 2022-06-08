@@ -971,13 +971,11 @@
                   {{getChiMuc(data.stt,'4')}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn đơn vị - nội dung"
-                    [class]="editCache[data.id].data.maNdung ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maNdung">
-                    <nz-option *ngFor="let itemDetail of data.lstKm" [nzValue]="itemDetail.id"
-                      [nzLabel]="itemDetail.tenDm">
-                    </nz-option>
-                  </nz-select>
+                  <div *ngFor="let itemDetail of noiDungs">
+                    <div *ngIf="itemDetail.id == data.maNdung">
+                      {{itemDetail.tenDm}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   {{editCache[data.id].data.kphiSdungTcong}}
