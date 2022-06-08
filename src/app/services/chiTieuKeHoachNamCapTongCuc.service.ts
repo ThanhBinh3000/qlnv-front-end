@@ -93,4 +93,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
     return this.httpClient.post(url, null, { responseType: 'blob' });
   }
+  downloadFileKeHoach(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/download`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
 }

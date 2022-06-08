@@ -29,8 +29,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <span>Quay về</span>
         </a>
       </div>
@@ -131,7 +130,8 @@
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
                   [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
-                  (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
+                  (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)"
+                  (downloadFileEvent)="downloadFileKeHoach($event)" typeFile="can-cu">
                 </multiple-tag>
               </nz-form-control>
               <!-- </nz-form-item> -->
@@ -143,7 +143,8 @@
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
                   [data]="taiLieuDinhKemList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
-                  (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                  (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"
+                  (downloadFileEvent)="downloadFileKeHoach($event)" typeFile="tai-lieu-dinh-kem">
                 </multiple-tag>
               </nz-form-control>
               <!-- </nz-form-item> -->

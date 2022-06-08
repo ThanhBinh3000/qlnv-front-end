@@ -8,7 +8,7 @@
                     *ngIf="!disable &&( !trangThai || trangThai === globals.prop.DU_THAO || trangThai === globals.prop.DU_THAO_TRINH_DUYET)"></i>
             </div>
         </div>
-        <div class="download-file">
+        <div class="download-file" (click)="downloadFile()">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Tải về văn bản</span>
         </div>

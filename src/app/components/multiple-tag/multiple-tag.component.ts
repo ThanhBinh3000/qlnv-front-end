@@ -15,12 +15,15 @@ export class MultipleTagComponent implements OnInit {
   @Input() type: string;
   @Input() trangThai: string;
   @Input() disable: boolean;
+  @Input() typeFile: string;
 
   @Output()
   selectDataEvent = new EventEmitter<any>();
 
   @Output()
   removeDataEvent = new EventEmitter<any>();
+  @Output()
+  downloadFileEvent = new EventEmitter<any>();
   nameFile: string;
   constructor(public globals: Globals) { }
 
@@ -29,6 +32,9 @@ export class MultipleTagComponent implements OnInit {
 
   removeData(item: any) {
     this.removeDataEvent.emit(item);
+  }
+  downloadFile() {
+    this.downloadFileEvent.emit(this.typeFile);
   }
 
   selectData() {
