@@ -46,8 +46,10 @@ import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 })
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
+  @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+
 
   listThoc: any[] = [];
   listMuoi: any[] = [];
@@ -1372,7 +1374,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     );
 
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
-      delete muoi.maDonVi;
+      // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
       delete muoi.tkdnMuoi;
       delete muoi.tkcnTongSoMuoi;
@@ -2500,7 +2502,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0
+      this.id === 0 || this.isViewDetail
     );
   }
   selectDonViKeyDown(event, type) {
@@ -2530,6 +2532,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.globals.prop.LANH_DAO_DUYET ||
       this.thongTinChiTieuKeHoachNam.trangThai ===
       this.globals.prop.DU_THAO_TRINH_DUYET
+      || this.isViewDetail
     );
   }
   downloadFileKeHoach(event) {

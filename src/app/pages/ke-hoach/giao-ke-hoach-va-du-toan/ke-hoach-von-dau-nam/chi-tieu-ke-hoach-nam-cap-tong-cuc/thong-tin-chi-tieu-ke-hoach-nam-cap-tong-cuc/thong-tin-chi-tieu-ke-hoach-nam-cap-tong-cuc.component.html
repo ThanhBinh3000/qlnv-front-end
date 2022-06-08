@@ -5,12 +5,12 @@
       </div>
       <div class="canphai phai">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
-          [disabled]="!formData.valid || canCuList.length === 0" *ngIf="disableBanHanh()">
+          [disabled]="!formData.valid || canCuList.length === 0" *ngIf="!this.isViewDetail">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="disableBanHanh()" [disabled]="!formData.valid">
+          *ngIf="!this.isViewDetail" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
@@ -129,8 +129,8 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
-                  [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
-                  (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)"
+                  [data]="canCuList" [trangThai]="isViewDetail ? 'view-detail' :  thongTinChiTieuKeHoachNam.trangThai"
+                  type="file" (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)"
                   (downloadFileEvent)="downloadFileKeHoach($event)" typeFile="can-cu">
                 </multiple-tag>
               </nz-form-control>
@@ -142,7 +142,8 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                  [data]="taiLieuDinhKemList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
+                  [data]="taiLieuDinhKemList"
+                  [trangThai]="isViewDetail ? 'view-detail' : thongTinChiTieuKeHoachNam.trangThai" type="file"
                   (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"
                   (downloadFileEvent)="downloadFileKeHoach($event)" typeFile="tai-lieu-dinh-kem">
                 </multiple-tag>
@@ -287,7 +288,7 @@
                   ( 31/12/{{yearNow}})
                 </th>
                 <!-- <th rowspan="4">Trạng thái</th> -->
-                <th rowspan="4" *ngIf="disableBanHanh()" class="text-right" width="90px" nzRight>Hành động</th>
+                <th rowspan="4" *ngIf="!this.isViewDetail" class="text-right" width="90px" nzRight>Hành động</th>
               </tr>
               <tr>
                 <th rowspan="3" class="text-center">
@@ -342,7 +343,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="disableBanHanhLanhDaoDuyet() ? 'row-disabled' : ''">
+              <tr
+                [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -420,7 +422,7 @@
                 <td class="text-right">{{calculatortkcnTongThocCreate()}}</td>
                 <td class="text-right">{{calculatortkcnTongGaoCreate()}}</td>
                 <!-- <td class="background-last-row"></td> -->
-                <td class="background-last-row text-right" *ngIf="disableBanHanh()" nzRight>
+                <td class="background-last-row text-right" *ngIf="!this.isViewDetail" nzRight>
                   <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -487,8 +489,7 @@
                   <td class="text-right">{{data.tkcnTongGao | number: '1.0-1'}}
                   </td>
                   <!-- <td>{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 " class="text-right"
-                    nzRight>
+                  <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                     <a (click)="startEdit(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -578,7 +579,7 @@
                     {{calculatortkcnTongGao(i)}}
                   </td>
                   <!-- <td></td> -->
-                  <td class="text-right" nzRight>
+                  <td class="text-right" nzRight *ngIf="!this.isViewDetail">
                     <a (click)="saveEdit(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -707,8 +708,8 @@
             <thead>
               <tr>
                 <th rowspan="3" class="text-center" width="40px">STT</th>
-                <th rowspan="3" class="text-center" width="330px">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI
-                  CỤC KHU VỰC'}}
+                <th rowspan="3" class="text-center" width="330px">
+                  {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
                 </th>
                 <th colspan="4" class="text-center" width="480px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                 <th class="text-center" width="150px">Nhập trong năm (2)</th>
@@ -719,8 +720,7 @@
                 </th>
                 <!-- <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Trạng thái</th> -->
-                <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" class="text-right" width="90px" nzRight>
+                <th rowspan="3" *ngIf="!this.isViewDetail" class="text-right" width="90px" nzRight>
                   Hành động</th>
               </tr>
               <tr>
@@ -749,8 +749,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
+              <tr
+                [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -803,10 +803,9 @@
                   </nz-input-number>
                 </td>
                 <td class="text-right">{{calculatortkcnTongMuoiCreate()}}</td>
-                <!-- <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                <!--<td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td> -->
-                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" class="text-right" nzRight>
+                <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                   <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -843,7 +842,7 @@
                   <td class="text-right">{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
                   <!-- <td *ngIf="disableBanHanh()">{{
                     convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
+                  <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                     <a (click)="startEditMuoi(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -890,7 +889,7 @@
                   </td>
                   <td class="text-right">{{calculatortkcnTongSoMuoi(i)}}</td>
                   <!-- <td *ngIf="disableBanHanh()"></td> -->
-                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
+                  <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                     <a (click)="saveEditMuoi(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -954,7 +953,7 @@
                   '1.0-1'}}
                 </td>
                 <!-- <td class="background-last-row" *ngIf="disableBanHanh()"></td> -->
-                <td class="background-last-row" *ngIf="disableBanHanh()" nzRight></td>
+                <td class="background-last-row" *ngIf="!this.isViewDetail" nzRight></td>
               </tr>
             </tbody>
           </nz-table>
@@ -981,8 +980,8 @@
             <thead>
               <tr>
                 <th rowspan="3" class="text-center" width="40px">STT</th>
-                <th rowspan="3" class="text-center" width="330px">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI
-                  CỤC KHU VỰC'}}
+                <th rowspan="3" class="text-center" width="330px">
+                  {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
                 </th>
                 <th rowspan="3" class="text-center" width="330px">Mã hàng</th>
                 <th rowspan="3" class="text-center" width="330px">Ký hiệu</th>
@@ -990,7 +989,7 @@
                 <th rowspan="3" class="text-center" width="330px">Chủng loại hàng</th>
                 <th rowspan="3" class="text-center" width="330px">ĐƠN VỊ TÍNH</th>
                 <th colspan="6" class="text-center" width="800px">CHỈ TIÊU NHẬP TRONG NĂM KẾ HOẠCH NĂM</th>
-                <th rowspan="3" *ngIf="disableBanHanh()" class="text-right" width="90px" nzRight>HÀNH ĐỘNG</th>
+                <th rowspan="3" *ngIf="!this.isViewDetail" class="text-right" width="90px" nzRight>HÀNH ĐỘNG</th>
               </tr>
               <tr>
                 <th rowspan="2" class="text-center">
@@ -1009,7 +1008,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="disableBanHanh() ? '' : 'row-disabled'">
+              <tr
+                [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -1096,7 +1096,7 @@
                     [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam"
                     (input)="calculatorTongChiTieuNtn()" />
                 </td>
-                <td *ngIf="disableBanHanh()" class="text-right" nzRight>
+                <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                   <a class="save" (click)="themMoiVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -1120,7 +1120,7 @@
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[1]?.soLuong | number: '1.0-1'}}</td>
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[2]?.soLuong | number: '1.0-1'}}</td>
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.nhapTrongNam | number: '1.0-1'}}</td>
-                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
+                  <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                     <a (click)="startEditVatTu(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -1149,7 +1149,7 @@
                     <input class="w-120" nz-input nzSize="small" appNumberOnly
                       [(ngModel)]="dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam" />
                   </td>
-                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
+                  <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                     <a (click)="saveEditVatTu(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -1195,7 +1195,7 @@
                   0 |
                   number: '1.0-1'}}
                 </td>
-                <td class="background-last-row" *ngIf="disableBanHanh()" nzRight>
+                <td class="background-last-row" *ngIf="!this.isViewDetail" nzRight>
                 </td>
               </tr>
             </tbody>
@@ -1227,8 +1227,7 @@
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button> -->
-          <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai === globals.prop.TU_CHOI">
+          <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')" *ngIf="!this.isViewDetail">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
