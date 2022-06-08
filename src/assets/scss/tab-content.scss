@@ -348,4 +348,10 @@
         }
     }
 
+    .no-scroll {
+        .ant-tabs-content-holder {
+            max-height: unset !important;
+        }
+    }
+
 }

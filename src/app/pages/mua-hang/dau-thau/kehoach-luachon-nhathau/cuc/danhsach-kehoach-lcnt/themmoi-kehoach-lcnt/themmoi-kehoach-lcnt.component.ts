@@ -31,6 +31,8 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { ObservableService } from 'src/app/services/observable.service';
 import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+
 
 interface ItemData {
   id: string;
@@ -41,6 +43,17 @@ interface ItemData {
   donGia: string;
   thanhTien: string;
   bangChu: string;
+}
+
+export interface TreeNodeInterface {
+  key: string;
+  name: string;
+  age?: number;
+  level?: number;
+  expand?: boolean;
+  address?: string;
+  children?: TreeNodeInterface[];
+  parent?: TreeNodeInterface;
 }
 @Component({
   selector: 'app-themmoi-kehoach-lcnt',
@@ -85,7 +98,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listNam: any[] = [];
-  listVthh: any[] = [];
+  listLoaiVthh: any[] = [];
+  listCLoaiVthh: any[] = [];
+  listHangHoa: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
@@ -128,14 +143,18 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         id: [],
         soQd: [, [Validators.required]],
         soDxuat: [null, [Validators.required]],
-        maHangHoa: [null],
         trichYeu: [null],
         ghiChu: [null, [Validators.required]],
         namKhoach: [, [Validators.required]],
         loaiVthh: [, [Validators.required]],
+        tenVthh: [, [Validators.required]],
         ngayKy: [null, [Validators.required]],
         trangThai: [''],
-        maDvi: []
+        maDvi: [],
+        cloaiVthh: [, [Validators.required]],
+        tenCloaiVthh: [, [Validators.required]],
+        maVtu: [],
+        tenVtu: []
       }
     );
     this.formThongTinChung = this.fb.group(
@@ -161,6 +180,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     );
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
     this.ktDiemKho = JSON.parse(sessionStorage.getItem('ktDiemKho'));
+    this.loaiVTHHGetAll();
   }
 
   startEdit(index: number): void {
@@ -185,10 +205,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userInfo = this.userService.getUserLogin();
-    this.maTrinh = this.userInfo.MA_TR;
-    console.log(this.id, this.loaiVthh);
 
+    this.userInfo = this.userService.getUserLogin();
+    this.maTrinh = '/' + this.userInfo.MA_TR;
 
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -196,16 +215,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
     this.loadDonVi();
-
     if (this.id > 0) {
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.id);
     } else {
       this.initForm();
     }
-    this.loadDanhMucHang();
+    this.listOfMapData2.forEach(item => {
+      this.mapOfExpandedData2[item.key] = this.convertTreeToList(item);
+    });
     Promise.all([
+      this.loaiVTHHGetAll(),
       this.nguonVonGetAll(),
       this.phuongThucDauThauGetAll(),
       this.hinhThucDauThauGetAll(),
@@ -214,20 +234,23 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm(dataDetail?) {
-    let vthh = this.router.url.split('/')[4];
     this.formData.patchValue(
       {
         id: dataDetail ? dataDetail.id : null,
         soQd: dataDetail ? dataDetail.soQd : null,
         soDxuat: dataDetail ? dataDetail.soDxuat.split('/')[0] : null,
-        maHangHoa: dataDetail ? dataDetail.maHangHoa : null,
         trichYeu: dataDetail ? dataDetail.trichYeu : null,
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
         namKhoach: dataDetail ? dataDetail.namKhoach : dayjs().get('year'),
-        loaiVthh: dataDetail ? dataDetail.loaiVthh : convertVthhToId(vthh),
+        loaiVthh: dataDetail ? dataDetail.loaiVthh : this.loaiVthh,
+        tenVthh: dataDetail ? dataDetail.tenVthh : null,
         ngayKy: dataDetail ? dataDetail.ngayKy : null,
         trangThai: dataDetail ? dataDetail.trangThai : '',
-        maDvi: this.userInfo.MA_DVI
+        maDvi: this.userInfo.MA_DVI,
+        cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
+        tenCloaiVthh: dataDetail ? dataDetail.tenCloaiVthh : null,
+        maVtu: dataDetail ? dataDetail.maVtu : null,
+        tenVtu: dataDetail ? dataDetail.tenVtu : null,
       }
     );
     this.formThongTinChung.patchValue(
@@ -336,6 +359,59 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           'text': res.data[i].tenDvi
         };
         this.listChiCuc.push(item);
+      }
+    }
+  }
+
+  selectHangHoa() {
+    let data = this.loaiVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  bindingDataHangHoa(data) {
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      this.formData.patchValue({
+        maVtu: null,
+        tenVtu: null,
+        cloaiVthh: data.ma,
+        tenCloaiVthh: data.ten,
+        loaiVthh: data.parent.ma,
+        tenVthh: data.parent.ten
+      })
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        this.formData.patchValue({
+          maVtu: data.ma,
+          tenVtu: data.ten,
+          cloaiVthh: data.parent.ma,
+          tenCloaiVthh: data.parent.ten,
+          loaiVthh: data.parent.parent.ma,
+          tenVthh: data.parent.parent.ten
+        })
+      }
+      if (data.cap == "2") {
+        this.formData.patchValue({
+          maVtu: null,
+          tenVtu: null,
+          cloaiVthh: data.ma,
+          tenCloaiVthh: data.ten,
+          loaiVthh: data.parent.ma,
+          tenVthh: data.parent.ten
+        })
       }
     }
   }
@@ -454,7 +530,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         thongtinDauThau: data,
@@ -493,9 +569,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     this.helperService.markFormGroupTouched(this.formThongTinChung);
     if (this.formData.invalid) {
+      console.log("Invalid");
       return;
     }
     if (this.formThongTinChung.invalid) {
+      console.log("Invalid");
       return;
     }
     if (this.listOfData.length == 0) {
@@ -503,7 +581,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soDxuat = body.soDxuat + "/" + this.maTrinh;
+    body.soDxuat = body.soDxuat + this.maTrinh;
     body.children = this.fileDinhKem;
     body.children1 = this.formThongTinChung.value;
     body.children2 = this.listOfData;
@@ -520,15 +598,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
-      this.initForm(res.data);
+      this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
-    console.log(this.formData.get('trangThai').value)
-    if (this.formData.get('trangThai').value != '00' && this.formData.get('trangThai').value != '03') {
+    if (this.formData.get('trangThai').value != '00' && this.formData.get('trangThai').value != '03' && this.formData.get('trangThai').value != '') {
       return;
     }
     const modalQD = this.modal.create({
@@ -557,6 +634,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
+
   async nguonVonGetAll() {
     this.listNguonVon = [];
     let res = await this.danhMucService.nguonVonGetAll();
@@ -570,6 +648,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let res = await this.danhMucService.hinhThucDauThauGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHinhThucDauThau = res.data;
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    this.listLoaiVthh = [];
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiVthh = res.data;
     }
   }
 
@@ -594,82 +680,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
   }
 
-  convertTreeToList(root: VatTu): VatTu[] {
-    const stack: VatTu[] = [];
-    const array: VatTu[] = [];
-    const hashMap = {};
-    stack.push({ ...root, level: 0, expand: false });
-    while (stack.length !== 0) {
-      const node = stack.pop()!;
-      this.visitNode(node, hashMap, array);
-      if (node.child) {
-        for (let i = node.child.length - 1; i >= 0; i--) {
-          stack.push({
-            ...node.child[i],
-            level: node.level! + 1,
-            expand: false,
-            parent: node,
-          });
-        }
-      }
-    }
-    return array;
-  }
-
-  visitNode(
-    node: VatTu,
-    hashMap: { [id: string]: boolean },
-    array: VatTu[],
-  ): void {
-    if (!hashMap[node.id]) {
-      hashMap[node.id] = true;
-      array.push(node);
-    }
-  }
-
-  collapse(array: VatTu[], data: VatTu, $event: boolean): void {
-    if (!$event) {
-      if (data.child) {
-        data.child.forEach((d) => {
-          const target = array.find((a) => a.id === d.id)!;
-          target.expand = false;
-          this.collapse(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
-
-  searchHangHoa(e: Event) {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.listOfMapData = this.listOfMapDataClone;
-    } else {
-      this.listOfMapData = this.listOfMapDataClone.filter(
-        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  selectHangHoa(vatTu: any) {
-    this.formData.patchValue({
-      hangHoa: vatTu.ten,
-      maHangHoa: vatTu.ma,
-    });
-  }
-
-  loadDanhMucHang() {
-    this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        this.listOfMapData = hangHoa.data;
-        this.listOfMapDataClone = [...this.listOfMapData];
-        this.listOfMapData.forEach((item) => {
-          this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-        });
-      }
-    });
-  }
 
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
@@ -679,10 +689,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.uploadFileService.downloadFile(taiLieu.fileUrl).subscribe((blob) => {
       saveAs(blob, taiLieu.fileName);
     });
-  }
-
-  calclatorThanhTien() {
-    // this.editCache[data.id].data.soLuong
   }
 
   deleteTaiLieu(index: number, table: string) {
@@ -698,19 +704,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   quayLai() {
-    // this.modal.confirm({
-    //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: 'Bạn có chắc chắn muốn quay lại ?',
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 350,
-    //   nzOnOk: async () => {
-    //     let loatVthh = this.router.url.split('/')[4]
-    //     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
-    //   },
-    // });
     this.showListEvent.emit();
   }
 
@@ -745,7 +738,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             }
           }
           let res = await this.dauThauService.updateStatus(body);
-          this.initForm(res.data);
+          this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -778,8 +771,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           const res = await this.dauThauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
-            let loatVthh = this.router.url.split('/')[4]
-            this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -870,6 +862,113 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         );
       }
       XLSX.writeFile(workbook, 'can-cu-xac-dinh.xlsx');
+    }
+  }
+
+  listOfMapData2: TreeNodeInterface[] = [
+    {
+      key: `1`,
+      name: 'John Brown sr.',
+      age: 60,
+      address: 'New York No. 1 Lake Park',
+      children: [
+        {
+          key: `1-1`,
+          name: 'John Brown',
+          age: 42,
+          address: 'New York No. 2 Lake Park'
+        },
+        {
+          key: `1-2`,
+          name: 'John Brown jr.',
+          age: 30,
+          address: 'New York No. 3 Lake Park',
+          children: [
+            {
+              key: `1-2-1`,
+              name: 'Jimmy Brown',
+              age: 16,
+              address: 'New York No. 3 Lake Park'
+            }
+          ]
+        },
+        {
+          key: `1-3`,
+          name: 'Jim Green sr.',
+          age: 72,
+          address: 'London No. 1 Lake Park',
+          children: [
+            {
+              key: `1-3-1`,
+              name: 'Jim Green',
+              age: 42,
+              address: 'London No. 2 Lake Park',
+              children: [
+                {
+                  key: `1-3-1-1`,
+                  name: 'Jim Green jr.',
+                  age: 25,
+                  address: 'London No. 3 Lake Park'
+                },
+                {
+                  key: `1-3-1-2`,
+                  name: 'Jimmy Green sr.',
+                  age: 18,
+                  address: 'London No. 4 Lake Park'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      key: `2`,
+      name: 'Joe Black',
+      age: 32,
+      address: 'Sidney No. 1 Lake Park'
+    }
+  ];
+
+  mapOfExpandedData2: { [key: string]: TreeNodeInterface[] } = {};
+
+  collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.key === d.key)!;
+          target.expand = false;
+          this.collapse(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  convertTreeToList(root: TreeNodeInterface): TreeNodeInterface[] {
+    const stack: TreeNodeInterface[] = [];
+    const array: TreeNodeInterface[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+
+    while (stack.length !== 0) {
+      const node = stack.pop()!;
+      this.visitNode(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+        }
+      }
+    }
+
+    return array;
+  }
+
+  visitNode(node: TreeNodeInterface, hashMap: { [key: string]: boolean }, array: TreeNodeInterface[]): void {
+    if (!hashMap[node.key]) {
+      hashMap[node.key] = true;
+      array.push(node);
     }
   }
 }

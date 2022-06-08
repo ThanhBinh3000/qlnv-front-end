@@ -37,6 +37,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     trangThai: null,
     veViec: null
   };
+  isDetail: boolean = false;
+  selectedId: number = 0;
   listVthh: any;
   listNam: any[] = [];
   startValue: Date | null = null;
@@ -79,7 +81,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     try {
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
       });
@@ -90,6 +91,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         });
       }
       this.loadDanhMucHang();
+      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
       await this.search();
       this.spinner.hide();
     }
@@ -113,18 +115,13 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   insert() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/them-moi']);
-  }
-
-  edit(data) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/chinh-sua', data.id]);
+    this.isDetail = true;
+    this.selectedId = null;
   }
 
   detail(data) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/chi-tiet', data.id]);
+    this.isDetail = true;
+    this.selectedId = data.id;
   }
 
   delete(data?) {
@@ -210,11 +207,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
-  }
-
   searchHangHoa(e: Event) {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
@@ -231,10 +223,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   clearFilter() {
-    // this.searchFilter = {
-    //   soQD: null,
-    //   namKeHoach: this.yearNow
-    // };
     this.startValue = null;
     this.endValue = null;
     this.selectHang = { ten: "" };
@@ -260,6 +248,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     body.namKhoach = body.namKh;
     let res;
     if (this.tabSelected == 'quyet-dinh') {
+      body.trangThai = null;
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     } else {
       body.trangThai = '00';
@@ -308,60 +297,14 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(_) {
 
+  showList() {
+    this.isDetail = false;
+    this.search();
   }
-
-  convertDay(ngayTao?) {
-
-  }
-
-  disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endValue) {
-      return false;
-    }
-    return startValue.getTime() > this.endValue.getTime();
-  };
-
-  disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startValue) {
-      return false;
-    }
-    return endValue.getTime() <= this.startValue.getTime();
-  };
-
-  handleStartOpenChange(open: boolean): void {
-    if (!open) {
-      this.endDatePicker.open();
-    }
-  }
-
-  handleEndOpenChange(open: boolean): void {
-    console.log('handleEndOpenChange', open);
-  }
-
-  redirectChiTiet(id: number) {
-    this.router.navigate([
-      '/nhap/dau-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/',
-      id,
-    ]);
-  }
-
-  // convertTrangThai(status: string) {
-  //   if (status == '01') {
-  //     return "Đã duyệt";
-  //   }
-  //   else {
-  //     return "Chưa duyệt";
-  //   }
-  // }
 
   convertTrangThaiTable(status: string) {
     return convertTrangThai(status);
-  }
-
-  xoaItem(item: any) {
-
   }
 
   exportData() {

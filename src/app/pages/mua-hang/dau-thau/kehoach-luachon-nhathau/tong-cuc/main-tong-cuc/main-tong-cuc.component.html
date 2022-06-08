@@ -1,7 +1,12 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-2">
+<nz-tabset nzType="card" class="mt-16 tab-level-2 no-scroll">
     <nz-tab [nzTitle]="'Tổng hợp kế hoạch lựa chọn nhà thầu'">
         <ng-template nz-tab>
             <app-tong-hop-khlcnt [loaiVthh]="loaiVthh"></app-tong-hop-khlcnt>
+        </ng-template>
+    </nz-tab>
+    <nz-tab [nzTitle]="'Kế hoạch lựa chọn nhà thầu'">
+        <ng-template nz-tab>
+            <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
         </ng-template>
     </nz-tab>
     <nz-tab [nzTitle]="'Quyết định phê duyệt kế hoạch lựa chọn nhà thầu'">

@@ -1,9 +1,9 @@
-<div class="contentBor chi-tieu__body">
+<div class="contentBor them-moi-nhap-xuat-hang__body">
   <div class="contentDetail">
-    <div class="main-content thong-tin-de-xuat-khlcnt">
-      <nz-card nzTitle="{{titleStatus}} Thông tin quản lý quyết định" class="mt16 flex-card p-lr16"
+    <div class="main-content">
+      <nz-card nzTitle="{{titleStatus}} Thông tin quản lý quyết định" class="mt16 flex-card p-lr16 mb16"
         [nzExtra]="tableCard1">
-        <form nz-form nzLayout="vertical" [formGroup]="formData" class="mt-16">
+        <form nz-form nzLayout="vertical" [formGroup]="formData" class="mt-16 ">
           <div nz-row nzGutter="24">
             <div nz-col [nzSpan]="6">
               <nz-form-item>
@@ -22,7 +22,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfter="/DX-TCDT">
+                  <nz-input-group nzAddOnAfter="/{{maQd}}">
                     <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                       [nzSize]="'small'"
                       [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
@@ -73,40 +73,42 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
-              <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
-                (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"
-                nzAccept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                <button class="btn btn-tep btn-sm waves-effect waves-light mt-1">
+            <div nz-col [nzSpan]="6" class="btn-tep">
+              <nz-form-control>
+                <button class="btn btn-sm waves-effect waves-light" (click)="taiLieuDinhKem()"
+                  [disabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                   <i class="icon htvbdh_tcdt_tep"></i>
-                  <span>File đính kèm</span>
+                  <span>Tài liệu đính kèm</span>
                 </button>
-                <ng-template #fileListTpl let-list>
-                  <nz-list>
-                    <nz-list-item *ngFor="let item of list">
-                      <div class="trai">
-                        {{ item.name }}
-                      </div>
-                      <div class="phai">
-                        <a (click)="xoaFile(item)">
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </div>
-                    </nz-list-item>
-                  </nz-list>
-                </ng-template>
-              </nz-upload>
+              </nz-form-control>
+              <nz-list>
+                <nz-list-item *ngFor="let item of fileDinhKem, let i = index">
+                  <div class="trai">
+                    {{ item.fileName }}
+                  </div>
+                  <div class="phai">
+                    <a (click)="downloadFile(item)">
+                      <i class="icon htvbdh_tcdt_import"></i>
+                    </a>
+                    &nbsp;
+                    <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                      (click)="deleteTaiLieu(i)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </div>
+                </nz-list-item>
+              </nz-list>
             </div>
           </div>
+          <br />
         </form>
       </nz-card>
-      <div class="tab__luong-thuc">
-        <nz-tabset nzType="card" class="tab__container">
+      <div class="tab-padding-10">
+        <nz-tabset nzType="card" class="tab-level-3">
           <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
             <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
               <div nz-col [nzSpan]="12">
-                <form nzLayout="vertical" nz-form [formGroup]="formThongTinDX" class="mt-16">
+                <form nzLayout="vertical" nz-form [formGroup]="formThongTinDX">
                   <div nz-row [nzGutter]="24" class="bgXam">
                     <div nz-col [nzSpan]="24">
                       <nz-form-item class="display-block">
@@ -212,7 +214,7 @@
                 </form>
               </div>
               <div nz-col [nzSpan]="12">
-                <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">
+                <form nzLayout="vertical" nz-form [formGroup]="formData">
                   <div nz-row [nzGutter]="24" class="bgTrang">
                     <div nz-col [nzSpan]="24">
                       <nz-form-item>
@@ -369,7 +371,7 @@
             </div>
           </nz-tab>
           <nz-tab [nzTitle]="'Thông tin chi tiết đề xuất của CỤC DTNN KV'" class="ds-goi-thau__container">
-            <nz-card class="mt16 flex-card p-lr16">
+            <nz-card class="mt16 flex-card p-lr16 card-table">
               <nz-table #editRowTable nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
                 <thead>
@@ -408,48 +410,47 @@
               </nz-table>
             </nz-card>
           </nz-tab>
+          <ng-template #tableCard1>
+            <button *ngIf="formData.value.trangThai == ''" type="button" class="btn btn-main" (click)="save()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button *ngIf="formData.value.trangThai == '00'|| formData.value.trangThai == '03'" type="button"
+              class="btn btn-main" (click)="save()">
+              <i class="icon htvbdh_tcdt_save"></i>
+              <span>Lưu</span>
+            </button>
+            <button
+              *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03'"
+              type="button" class="btn btn-main" (click)="guiDuyet()">
+              <i class="icon {{iconButtonDuyet}}"></i>
+              <span>{{titleButtonDuyet}}</span>
+            </button>
+            <button *ngIf="formData.value.trangThai == '01'" type="button" class="btn btn-sub" (click)="tuChoi()">
+              <i class="icon htvbdh_tcdt_tuchoi do"></i>
+              <span>Từ chối</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="quayLai()">
+              <i class="fa fa-arrow-left"></i>
+              <span>Quay lại</span>
+            </button>
+          </ng-template>
         </nz-tabset>
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Ghi chú
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="ghiChuErr">
+              <textarea nz-input [rows]="3" formControlName="ghiChu"
+                [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
+              <ng-template #ghiChuErr let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
       </div>
-      <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">
-        <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true">
-            Ghi chú
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="ghiChuErr">
-            <textarea nz-input [rows]="3" formControlName="ghiChu"
-              [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
-            <ng-template #ghiChuErr let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
     </div>
-    <ng-template #tableCard1>
-      <button *ngIf="formData.value.trangThai == ''" type="button" class="btn btn-main" (click)="save()">
-        <i class="icon htvbdh_dau-cong"></i>
-        <span>Thêm</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '00'|| formData.value.trangThai == '03'" type="button"
-        class="btn btn-main" (click)="save()">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-      <!-- 00 : Tạo mới , 01 Gửi duyệt chờ TP duyệt , 03 : Từ chối , 09 TP duyệt chờ LĐ duyệt -->
-      <button
-        *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03'"
-        type="button" class="btn btn-main" (click)="guiDuyet()">
-        <i class="icon {{iconButtonDuyet}}"></i>
-        <span>{{titleButtonDuyet}}</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '01'" type="button" class="btn btn-sub" (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button type="button" class="btn btn-sub" (click)="quayLai()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-    </ng-template>
   </div>
 </div>

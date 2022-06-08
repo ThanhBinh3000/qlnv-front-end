@@ -37,6 +37,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
   @Input()
   loaiVthh: string;
+  @Input()
+  loaiVthhCache: string;
 
   isDetail: boolean = false;
   listNam: any[] = [];
@@ -56,9 +58,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   userInfo: UserLogin;
   selectedId: number = 0;
-
+  isTongCuc: boolean = false;
+  isCuc: boolean = false;
   async ngOnInit() {
     try {
+      this.isTongCuc = this.userService.isTongCuc();
+      this.isCuc = this.userService.isCuc();
       this.userInfo = this.userService.getUserLogin();
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
@@ -68,7 +73,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
+      this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
     }
     catch (e) {
@@ -140,6 +145,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   themMoi() {
     this.isDetail = true;
     this.selectedId = null;
+    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -150,6 +156,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   detail(data?) {
     this.selectedId = data.id;
     this.isDetail = true;
+    this.loaiVthh = data.loaiVthh;
   }
 
   clearFilter() {

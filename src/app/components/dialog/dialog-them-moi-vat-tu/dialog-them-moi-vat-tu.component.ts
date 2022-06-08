@@ -33,6 +33,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.listOfData.push(new DanhSachGoiThau);
+    this.updateEditCache();
   }
 
   save() {
@@ -121,6 +123,38 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
+    });
+  }
+
+  editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
+  listOfData: DanhSachGoiThau[] = [];
+
+  startEdit(index: number): void {
+    this.editCache[index].edit = true;
+  }
+
+  cancelEdit(index: number): void {
+    this.editCache[index].edit = false;
+  }
+
+  saveEdit(index: number): void {
+    Object.assign(
+      this.listOfData[index],
+      this.editCache[index].data,
+    );
+    this.editCache[index].edit = false;
+  }
+
+  deleteRow(i: number): void {
+    this.listOfData = this.listOfData.filter((d, index) => index !== i);
+  }
+
+  updateEditCache(): void {
+    this.listOfData.forEach(item => {
+      this.editCache[item.id] = {
+        edit: true,
+        data: { ...item }
+      };
     });
   }
 }

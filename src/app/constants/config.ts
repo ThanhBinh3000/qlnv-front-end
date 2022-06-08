@@ -190,19 +190,23 @@ export const LEVEL_USER = {
 export const LIST_VAT_TU_HANG_HOA = [
   {
     value: LOAI_HANG_DTQG.THOC,
-    text: 'Thóc'
+    text: 'Thóc',
+    title: 'Thóc'
   },
   {
     value: LOAI_HANG_DTQG.GAO,
-    text: 'Gạo'
+    text: 'Gạo',
+    title: 'Gạo'
   },
   {
     value: LOAI_HANG_DTQG.MUOI,
-    text: 'Muối'
+    text: 'Muối',
+    title: 'Muối'
   },
   {
     value: LOAI_HANG_DTQG.VAT_TU,
-    text: 'Vật tư'
+    text: 'Vật tư',
+    title: 'Vật tư'
   }
 ]
 

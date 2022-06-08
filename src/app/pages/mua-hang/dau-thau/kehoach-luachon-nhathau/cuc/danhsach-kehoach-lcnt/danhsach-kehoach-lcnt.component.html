@@ -14,25 +14,25 @@
               <label class="search__label">Số tờ trình</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
             </div>
-            <div nz-col nzSpan="9">
+            <div nz-col nzSpan="14">
               <label class="search__label">Trích yếu</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
             </div>
-            <div nz-col nzSpan="5">
+            <div nz-col nzSpan="4">
               <label class="search__label">Ngày ký</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
-            <div nz-col class="cangiua group-button-search-center">
-              <div>
-                <button nz-button class="search__button--search" (click)="search()">
-                  <i nz-icon nzType="search"></i>
-                  Tìm kiếm
-                </button>
-                <button nz-button class="search__button--clear" (click)="clearFilter()">
-                  <i nz-icon nzType="close"></i>
-                  Xóa điều kiện
-                </button>
-              </div>
+          </div>
+          <div nz-col class="cangiua group-button-search-center">
+            <div>
+              <button nz-button class="search__button--clear" (click)="clearFilter()">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+                Xóa điều kiện
+              </button>
+              <button nz-button class="search__button--search" (click)="search()">
+                <i nz-icon nzType="search"></i>
+                Tìm kiếm
+              </button>
             </div>
           </div>
         </nz-card>
@@ -44,21 +44,31 @@
                 <thead>
                   <tr>
                     <th width="60px" class="text-center">STT</th>
-                    <th width="130px" class="text-center">Số tờ trình</th>
-                    <th width="175px" class="text-center">Ngày ký</th>
+                    <th width="" class="text-center">Số tờ trình</th>
+                    <th *ngIf="isTongCuc" width="" class="text-center">Đơn vị</th>
+                    <th width="" class="text-center">Ngày ký</th>
                     <th width="">Trích yếu</th>
-                    <th width="175px" class="text-center">Năm kế hoạch</th>
-                    <th width="175px" class="text-center">Trạng thái</th>
-                    <th width="100px" class="text-center">Thao tác</th>
+                    <th width="" class="text-center">Năm kế hoạch</th>
+                    <th width="" class="text-center">Số QĐ giao chỉ tiêu</th>
+                    <th width="" class="text-center">Loại hàng hóa</th>
+                    <th *ngIf="isCuc" width="" class="text-center">Chủng loại hàng hóa</th>
+                    <th width="" class="text-center">Số gói thầu</th>
+                    <th width="" class="text-center">Trạng thái</th>
+                    <th width="80" class="text-center">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td class="text-center">{{ data.soDxuat }}</td>
+                    <td *ngIf="isTongCuc" width="" class="text-center">{{data.tenDvi}}</td>
                     <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
                     <td class="text-center">{{ data.namKhoach }}</td>
+                    <td class="text-center">{{ data.soQd }}</td>
+                    <td class="text-center">{{ data.tenVthh }}</td>
+                    <td *ngIf="isCuc" class="text-center">{{ data.tenCloaiVthh }}</td>
+                    <td class="text-center">{{ data.children2.length }}</td>
                     <td class="text-center">{{ convertTrangThai(data.trangThai) }}</td>
                     <td class="text-left">
                       <span>
@@ -101,13 +111,13 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
             <button type="button" class="btn btn-main" (click)="themMoi()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
-            </button>
-            <button type="button" class="btn btn-sub">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
             </button>
           </ng-template>
         </div>
