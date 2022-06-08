@@ -2,7 +2,7 @@
   <nz-tab [nzTitle]="title_QD">
     <ng-template #title_QD>
       Quyết định
-      (<span class="number-title-tab">10</span>)
+      (<span class="number-title-tab">{{countQuyetDinh}}</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-quyet-dinh></app-quyet-dinh>
@@ -11,7 +11,7 @@
   <nz-tab [nzTitle]="title_chi_tieu_kh">
     <ng-template #title_chi_tieu_kh>
       Chỉ tiêu kế hoạch
-      (<span class="number-title-tab">3</span>)
+      (<span class="number-title-tab">{{countChiTieu}}</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
@@ -20,7 +20,7 @@
   <nz-tab [nzTitle]="title_dc_chi_tieu_kh" class="vat-tu__container">
     <ng-template #title_dc_chi_tieu_kh>
       Điều chỉnh chỉ tiêu KH
-      (<span class="number-title-tab">3</span>)
+      (<span class="number-title-tab">{{countDieuChinh}}</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
@@ -29,7 +29,7 @@
   <nz-tab [nzTitle]="title_du_toan_nsnn" class="vat-tu__container">
     <ng-template #title_du_toan_nsnn>
       Dự toán NSNN
-      (<span class="number-title-tab">4</span>)
+      (<span class="number-title-tab">{{countDuToan}}</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-du-toan-nsnn></app-du-toan-nsnn>
