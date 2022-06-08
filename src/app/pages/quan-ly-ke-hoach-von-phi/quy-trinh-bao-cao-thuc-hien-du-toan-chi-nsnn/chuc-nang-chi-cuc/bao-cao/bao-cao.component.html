@@ -1188,7 +1188,7 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'12')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id,'11')" class="save">Lưu</a>
+                  <a (click)="saveEdit(data.id,'12')" class="save">Lưu</a>
                 </td>
                 <td [hidden]="status">
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -1448,11 +1448,11 @@
                   {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[data.id].data.maNdung ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maNdung">
-                    <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let item of noiDungs">
+                    <div *ngIf="item.id == data.maNdung">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
                 </td>
 
                 <td>
@@ -2011,11 +2011,11 @@
                   {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[data.id].data.maDan ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maDan">
-                    <nz-option *ngFor="let item of maDans" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let item of maDans">
+                    <div *ngIf="item.id == data.maDan">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
