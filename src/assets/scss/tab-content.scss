@@ -4,7 +4,7 @@
     }
 
     .giao-ke-hoach {
-        padding: 0px 50px;
+        padding: 0px 10px;
         margin-top: 10px;
     }
 
@@ -305,6 +305,16 @@
     }
 
     .chi-tiet {
+        .dieu-chinh-button {
+            position: absolute;
+            top: 55px;
+            right: 25px;
+
+            .tab-menu.tab-content {
+                border-bottom: none !important;
+            }
+        }
+
         .main-content {
             padding-top: 10px;
             padding-bottom: 10px;
