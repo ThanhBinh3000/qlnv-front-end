@@ -19,7 +19,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     },
     {
         icon: 'htvbdh_tcdt_kynhay',
-        title: 'Ký hợp đồng',
+        title: 'Quản lý hợp đồng',
         url: `/hop-dong`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',

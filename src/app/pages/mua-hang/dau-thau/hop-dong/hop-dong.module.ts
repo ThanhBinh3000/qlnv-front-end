@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 import { DanhSachHopDongComponent } from './danh-sach-hop-dong/danh-sach-hop-dong.component';
 import { PhuLucComponent } from './danh-sach-hop-dong/phu-luc/phu-luc.component';
 import { ThongTinComponent } from './danh-sach-hop-dong/thong-tin/thong-tin.component';
-import { HopDongRoutingModule } from './hop-dong-routing.module';
 import { HopDongComponent } from './hop-dong.component';
 
 
@@ -15,6 +15,14 @@ import { HopDongComponent } from './hop-dong.component';
     ThongTinComponent,
     PhuLucComponent,
   ],
-  imports: [CommonModule, HopDongRoutingModule, ComponentsModule],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    DirectivesModule,
+  ],
+  exports: [
+    HopDongComponent,
+    DanhSachHopDongComponent,
+  ]
 })
 export class HopDongModule { }

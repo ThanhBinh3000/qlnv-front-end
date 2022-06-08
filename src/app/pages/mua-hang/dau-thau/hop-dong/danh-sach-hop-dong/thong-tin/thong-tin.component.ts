@@ -1,20 +1,19 @@
-import { LEVEL } from 'src/app/constants/config';
-import { cloneDeep } from 'lodash';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuKQLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
 import { DialogThongTinPhuLucBangGiaHopDongComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-thong-tin',
@@ -22,12 +21,17 @@ import * as dayjs from 'dayjs';
   styleUrls: ['./thong-tin.component.scss']
 })
 export class ThongTinComponent implements OnInit {
+  @Input() id: number;
+  @Input() isView: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   loaiVthh: string;
   loaiStr: string;
   maVthh: string;
   routerVthh: string;
   userInfo: UserLogin;
-  id: number = 0;
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
 
@@ -41,6 +45,9 @@ export class ThongTinComponent implements OnInit {
   optionsDonViShow: any[] = [];
 
   listLoaiHopDong: any[] = [];
+
+  isViewPhuLuc: boolean = false;
+  idPhuLuc: number = 0;
 
   constructor(
     private router: Router,
@@ -63,7 +70,6 @@ export class ThongTinComponent implements OnInit {
     this.detailDviCungCap.type = 'B';
     this.detail.bangGia = [];
     this.userInfo = this.userService.getUserLogin();
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
     await this.loadChiTiet(this.id);
     await Promise.all([
       this.loadDonVi(),
@@ -278,13 +284,13 @@ export class ThongTinComponent implements OnInit {
   }
 
   redirectPhuLuc(id) {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index) + "/phu-luc";
-        this.router.navigate([url, id]);
-      }
-    }
+    this.isViewPhuLuc = true;
+    this.id = id;
+  }
+
+  showChiTiet() {
+    this.isViewPhuLuc = false;
+    this.tabSelected = 'thong-tin-chung';
   }
 
   openDialogBang(data) {
@@ -354,12 +360,6 @@ export class ThongTinComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    this.showListEvent.emit();
   }
 }

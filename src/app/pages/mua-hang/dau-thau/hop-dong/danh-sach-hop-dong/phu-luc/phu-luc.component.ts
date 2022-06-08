@@ -1,6 +1,6 @@
-import { DialogThongTinPhuLucHopDongMuaComponent } from './../../../../../components/dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogThongTinPhuLucHopDongMuaComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
 
 @Component({
   selector: 'app-phu-luc',
@@ -8,6 +8,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./phu-luc.component.scss']
 })
 export class PhuLucComponent implements OnInit {
+  @Input() idPhuLuc: number;
+  @Input() isViewPhuLuc: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showChiTietEvent = new EventEmitter<any>();
 
   constructor(private modal: NzModalService) { }
 
@@ -25,5 +30,9 @@ export class PhuLucComponent implements OnInit {
       nzComponentParams: {},
     });
     modal.afterClose.subscribe((res) => { });
+  }
+
+  back() {
+    this.showChiTietEvent.emit();
   }
 }

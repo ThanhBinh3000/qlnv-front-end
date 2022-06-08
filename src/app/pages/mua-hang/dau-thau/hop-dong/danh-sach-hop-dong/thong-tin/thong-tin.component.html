@@ -1,31 +1,12 @@
-<div>
-  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+<div class="luong-thuc__danh-sach chi-tiet-hop-dong" *ngIf="!isViewPhuLuc">
+  <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
     <div class="contentBor chi-tieu__body">
       <div class="contentDetail">
-        <div class="main-content thong-tin-de-xuat-khlcnt">
+        <div class="thong-tin-de-xuat-khlcnt">
           <div class="tab-content tab-menu" id="myTabContent">
             <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
               aria-labelledby="banhanh-tab">
               <div class="trai">
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-                  <i class="fa fa-arrow-circle-left"></i>
-                </a>
-                <nz-breadcrumb>
-                  <nz-breadcrumb-item>
-                    <a [routerLink]="">Mua</a>
-                  </nz-breadcrumb-item>
-                  <nz-breadcrumb-item>
-                    <a [routerLink]="">{{userService.isTongCuc() ? 'Tổng cục' : 'Cục'}}</a>
-                  </nz-breadcrumb-item>
-                  <nz-breadcrumb-item>
-                    <a [routerLink]="">Ký hợp đồng</a>
-                  </nz-breadcrumb-item>
-                  <nz-breadcrumb-item>
-                    <a [routerLink]="">{{loaiStr}}</a>
-                  </nz-breadcrumb-item>
-                  <nz-breadcrumb-item class="last-breadcrumb">{{id == 0 ? 'Thêm mới' : 'Thông tin'}}
-                  </nz-breadcrumb-item>
-                </nz-breadcrumb>
               </div>
               <div class="canphai phai">
                 <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
@@ -55,6 +36,9 @@
                   <i class="icon htvbdh_tcdt_delete"></i>
                   <span>Hủy bỏ</span>
                 </a>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+                  <span>Quay về</span>
+                </a>
               </div>
             </div>
           </div>
@@ -70,7 +54,7 @@
             <span [ngClass]="thongTinTrangThai(detail.trangThai)">Dự thảo</span>
             <span>Căn cứ kết quả LCNT</span>
           </div>
-          <div class="mt16 flex-card p-lr16">
+          <div class="flex-card p-lr16">
             <div nz-row [nzGutter]="[16, 12]">
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
@@ -122,7 +106,7 @@
           </div>
         </div>
         <div class="tab__luong-thuc">
-          <nz-tabset nzType="card" class="tab__container">
+          <nz-tabset nzType="card" class="tab-level-3">
             <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container"
               (nzClick)="tabSelected = 'thong-tin-chung'">
               <div nz-row [nzGutter]="[16, 6]">
@@ -327,7 +311,7 @@
             </nz-tab>
             <nz-tab [nzTitle]="'Bảng giá chi tiết hợp đồng'" class="ds-goi-thau__container"
               (nzClick)="tabSelected = 'bang-gia'">
-              <nz-card class="mt16 flex-card p-lr16">
+              <nz-card class="flex-card p-lr16">
                 <nz-table #editRowTable nzBordered [nzData]="detail?.bangGia" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
                   <thead>
@@ -340,7 +324,7 @@
                       <th width="175px">Thuế</th>
                       <th width="175px">Giá trước thuế</th>
                       <th width="175px">Giá sau thuế</th>
-                      <th width="175px"></th>
+                      <th width="175px" class="text-right"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -353,7 +337,7 @@
                       <td>{{ data.vat | number: '1.0-1' }}</td>
                       <td>{{ data.giaTruocVat | number: '1.0-1' }}</td>
                       <td>{{ data.giaSauVat | number: '1.0-1' }}</td>
-                      <td>
+                      <td class="text-right">
                         <a (click)="openDialogBang(data)">
                           <i class="fa fa-pencil"></i>
                         </a>
@@ -379,7 +363,7 @@
                       <th width="300px">Thời gian hết hiệu lực</th>
                       <th width="300px">Giá tri phụ lục</th>
                       <th width="300px">Trạng thái</th>
-                      <th width="175px"></th>
+                      <th width="175px" class="text-right"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -390,7 +374,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>
+                      <td class="text-right">
                         <a (click)="redirectPhuLuc(data.id)">
                           <i class="fa fa-pencil"></i>
                         </a>
@@ -421,4 +405,8 @@
       </div>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isViewPhuLuc">
+  <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [typeVthh]="typeVthh"
+    (showChiTietEvent)="showChiTiet()"></app-phu-luc>
 </div>

@@ -19,6 +19,7 @@ import { ThemmoiPhuonganKhlcntComponent } from './kehoach-luachon-nhathau/tong-c
 import { ThemmoiQuyetdinhKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/themmoi-quyetdinh-khlcnt.component';
 import { ThemmoiKehoachLcntComponent } from './kehoach-luachon-nhathau/cuc/danhsach-kehoach-lcnt/themmoi-kehoach-lcnt/themmoi-kehoach-lcnt.component';
 import { MainTongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/main-tong-cuc/main-tong-cuc.component';
+import { HopDongModule } from './hop-dong/hop-dong.module';
 
 
 @NgModule({
@@ -45,6 +46,8 @@ import { MainTongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/main-to
   imports: [
     CommonModule,
     DauThauRoutingModule,
-    ComponentsModule],
+    ComponentsModule,
+    HopDongModule,
+  ],
 })
 export class DauThauModule { }
