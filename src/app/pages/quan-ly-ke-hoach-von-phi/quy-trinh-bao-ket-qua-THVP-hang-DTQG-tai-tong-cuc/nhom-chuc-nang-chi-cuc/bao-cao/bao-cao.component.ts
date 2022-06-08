@@ -2159,12 +2159,12 @@ export class BaoCaoComponent implements OnInit {
           || KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG == this.tabSelected) {
           index = hunghixhix.findIndex(e => e.maNdungChi == res.maKhoanMuc);
         }
-    
         if (index == -1) {
           let data: any = {
             ...dataPL,
             maNdungChi: res.maKhoanMuc,
             maVtu: res.maKhoanMuc,
+            maDviTinh:this.listDonvitinh[0].id,
             level: lstKmTemp.find(e => e.id == maKm)?.level,
           };
           if (hunghixhix.length == 0) {
@@ -2185,6 +2185,7 @@ export class BaoCaoComponent implements OnInit {
             ...dataPL,
             maNdungChi: item.id,
             maVtu: item.id,
+            maDviTinh:this.listDonvitinh[0].id,
             level: item.level,
           };
           this.addLow(id, data, phuLuc);
