@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -42,6 +43,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
@@ -52,6 +54,17 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+
+  filterTable: any = {
+    soVanBan: '',
+    tenDonVi: '',
+    ngayKy: '',
+    trichYeu: '',
+    soQdKeHoachNam: '',
+    namKeHoach: '',
+    tenHangHoa: '',
+    tenTrangThai: '',
+  };
 
   constructor(
     private router: Router,
@@ -248,7 +261,9 @@ export class DeXuatDieuChinhComponent implements OnInit {
           item.checked = false;
         });
       }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
+      this.clearFilterTable();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -377,10 +392,11 @@ export class DeXuatDieuChinhComponent implements OnInit {
           try {
             let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.error(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
+            this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
             this.spinner.hide();
@@ -391,6 +407,37 @@ export class DeXuatDieuChinhComponent implements OnInit {
     }
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soVanBan: '',
+      tenDonVi: '',
+      ngayKy: '',
+      trichYeu: '',
+      soQdKeHoachNam: '',
+      namKeHoach: '',
+      tenHangHoa: '',
+      tenTrangThai: '',
     }
   }
 }

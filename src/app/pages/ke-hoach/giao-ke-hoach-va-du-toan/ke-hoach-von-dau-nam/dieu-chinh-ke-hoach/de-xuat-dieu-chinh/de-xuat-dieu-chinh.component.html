@@ -51,6 +51,7 @@
                   <th>Trích yếu</th>
                   <th>Số QĐ giao chỉ tiêu</th>
                   <th>Năm kế hoạch</th>
+                  <th>Tên hàng hóa</th>
                   <th *ngIf="userService.isCuc()">Trạng thái của đề xuất</th>
                   <th>Trạng thái xử lý của TC</th>
                   <th width="90" class="text-right">Hoạt động</th>
@@ -62,7 +63,8 @@
                   <th></th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soVanBan"
+                        (input)="filterInTable('soVanBan',filterTable.soVanBan)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -70,7 +72,8 @@
                   </th>
                   <th *ngIf="userService.isTongCuc()">
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDonVi"
+                        (input)="filterInTable('tenDonVi',filterTable.tenDonVi)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -78,7 +81,8 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
+                        (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -86,7 +90,8 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                        (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -94,7 +99,8 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKeHoachNam"
+                        (input)="filterInTable('soQdKeHoachNam',filterTable.soQdKeHoachNam)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -102,7 +108,8 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
+                        (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -110,13 +117,22 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHangHoa"
+                        (input)="filterInTable('tenHangHoa',filterTable.tenHangHoa)" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                   </th>
-                  <th *ngIf="userService.isCuc()"></th>
+                  <th *ngIf="userService.isCuc()">
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                        (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -132,6 +148,7 @@
                   <td>{{data.trichYeu}}</td>
                   <td>{{data.soQdKeHoachNam}}</td>
                   <td>{{data.namKeHoach}}</td>
+                  <td>{{data.tenHangHoa}}</td>
                   <td *ngIf="userService.isCuc()">{{data.tenTrangThai}}</td>
                   <td>{{data.trangThaiDuyet}}</td>
                   <td class="text-right">

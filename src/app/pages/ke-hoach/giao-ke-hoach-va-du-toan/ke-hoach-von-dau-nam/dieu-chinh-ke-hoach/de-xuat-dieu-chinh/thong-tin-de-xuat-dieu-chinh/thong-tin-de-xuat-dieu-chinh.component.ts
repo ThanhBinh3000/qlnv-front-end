@@ -116,6 +116,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       trichYeu: [null],
       nguyenNhan: [null],
       noiDung: [null],
+      loaiHangHoa: [this.tabSelected]
     });
     this.deXuatDieuChinh.trangThai = '00';
     if (id > 0) {
@@ -421,7 +422,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     if (this.formData.valid) {
       this.spinner.show();
       try {
-
         this.deXuatDieuChinh.id = this.id;
         this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value + '/' + this.qdTCDT;
         this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
@@ -432,7 +432,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
 
         let dxDcLtVtReqList = [];
-        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0 && this.tabSelected == 'luongThuc') {
           this.deXuatDieuChinh.dxDcltList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -456,7 +456,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(itemGao);
           });
         }
-        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0 && this.tabSelected == 'muoi') {
           this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -470,7 +470,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0 && this.tabSelected == 'vatTu') {
           this.deXuatDieuChinh.dxDcVtList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -938,5 +938,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       data,
     ];
     this.updateEditVatTuCache();
+  }
+
+  changeLoaiHangHoa() {
+    this.tabSelected = this.formData.get('loaiHangHoa').value;
   }
 }
