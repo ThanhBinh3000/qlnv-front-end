@@ -1,0 +1,194 @@
+<div>
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai pd-r-46">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Kết xuất Excel</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Phê duyệt</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thêm mới phiếu nhập kho tạm gửi" class="mt16 flex-card p-lr16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Số phiếu</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input name="donVi" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày lập </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" name="ngayLap">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Theo hợp đồng mua bán </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6"></div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Bên nhận </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="18"></div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đại diện bên nhận </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Chức vụ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đại diện bên nhận</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Chức vụ</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Bên giao
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="18"></div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đại diện bên giao
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Chức vụ</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" (click)="selectHangHoa()">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Đại diện bên giao</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Chức vụ</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" (click)="selectMaNganKho()">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Mã hàng hóa</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Tên hàng hóa</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Thời gian gửi hàng</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Số lượng giao nhận</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Ghi chú</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <textarea rows="3" class="search__input" nz-input></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+</div>

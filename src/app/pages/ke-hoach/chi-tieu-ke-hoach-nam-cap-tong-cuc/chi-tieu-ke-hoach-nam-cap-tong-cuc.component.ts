@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -97,8 +98,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   async search() {
     let maDonVi = null;
     let tenDvi = null;
-    this.dataTable = [];
-
+    let donviId = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(
         (x) => x.labelDonVi == this.inputDonVi,
@@ -106,6 +106,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       if (getDonVi && getDonVi.length > 0) {
         maDonVi = getDonVi[0].maDvi;
         tenDvi = getDonVi[0].tenDvi;
+        donviId = getDonVi[0].id;
       }
     }
     let body = {
@@ -113,7 +114,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
       id: 0,
-      donViId: maDonVi,
+      donViId: donviId,
       tenDvi: tenDvi,
       pageNumber: this.page,
       pageSize: this.pageSize,
@@ -123,14 +124,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    this.totalRecord = 0;
-
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -187,14 +184,11 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
+    this.search();
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
-      return 'Đã duyệt';
-    } else {
-      return 'Chưa duyệt';
-    }
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
@@ -209,8 +203,16 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.chiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-            await this.search();
+          this.chiTieuKeHoachNamService.deleteData(item.id).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           });
         } catch (e) {
@@ -226,8 +228,34 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
+        let maDonVi = null;
+        let tenDvi = null;
+        if (this.inputDonVi && this.inputDonVi.length > 0) {
+          let getDonVi = this.optionsDonVi.filter(
+            (x) => x.labelDonVi == this.inputDonVi,
+          );
+          if (getDonVi && getDonVi.length > 0) {
+            maDonVi = getDonVi[0].maDvi;
+            tenDvi = getDonVi[0].tenDvi;
+          }
+        }
+        let body = {
+          ngayKyDenNgay: this.endValue
+            ? dayjs(this.endValue).format('YYYY-MM-DD')
+            : null,
+          id: 0,
+          donViId: maDonVi,
+          tenDvi: tenDvi,
+          pageNumber: null,
+          pageSize: null,
+          soQD: this.searchFilter.soQD,
+          trichYeu: this.searchFilter.trichYeu,
+          ngayKyTuNgay: this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+        };
         this.chiTieuKeHoachNamService
-          .exportList()
+          .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
           );
@@ -237,6 +265,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  onCurrentPageDataChange() {}
 }

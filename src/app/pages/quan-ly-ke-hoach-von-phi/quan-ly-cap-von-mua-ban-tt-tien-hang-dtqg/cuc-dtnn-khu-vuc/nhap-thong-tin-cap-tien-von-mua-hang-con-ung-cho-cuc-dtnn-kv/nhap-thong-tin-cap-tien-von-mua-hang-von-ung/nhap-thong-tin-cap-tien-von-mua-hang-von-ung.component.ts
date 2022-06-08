@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -44,7 +44,7 @@ export class NhapThongTinCapTienVonMuaHangVonUngComponent implements OnInit {
      nguonVons: any = [];
      chungLoais: any = [];
      dviTinhs: any = [];
-     dviTiens: any = [];
+     dviTiens: any = DON_VI_TIEN;
      ngayNhap!: string;
      nguoiNhap!: string;
      noiLap: string = "Cục TVQT";
@@ -192,19 +192,7 @@ export class NhapThongTinCapTienVonMuaHangVonUngComponent implements OnInit {
                     this.errorMessage = "err.error.message";
                }
           );
-          //lay danh sach danh muc don vi tien
-          this.danhMucService.dMDonViTien().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.dviTiens = data.data?.content;
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    this.errorMessage = "err.error.message";
-               }
-          );
+          
           //lay danh sach danh muc vat tu
           this.danhMucService.dMVatTu().toPromise().then(
                (data) => {
@@ -296,7 +284,7 @@ export class NhapThongTinCapTienVonMuaHangVonUngComponent implements OnInit {
           //           },
           //      );
           // } else {
-          //      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+          //      this.quanLyVonPhiService.updateLapThamDinh(request).subscribe(res => {
           //           if (res.statusCode == 0) {
           //                this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           //           } else {

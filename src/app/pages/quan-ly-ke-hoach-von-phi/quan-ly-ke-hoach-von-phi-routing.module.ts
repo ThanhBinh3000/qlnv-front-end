@@ -54,6 +54,13 @@ const routes: Routes = [
             (m) => m.QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucModule,
           ),
       },
+      {
+        path: 'danh-muc-qlkh-von-phi',
+        loadChildren: () =>
+          import('./danh-muc-qlkh-von-phi/danh-muc-qlkh-von-phi.module').then(
+            (m) => m.DanhMucQlkhVonPhiModule,
+          ),
+      },
     ],
   },
 ];

@@ -30,4 +30,9 @@ export const ROUTE_LIST_KE_HOACH = [
     title: 'Quy trình báo cáo thực hiện dự toán chi NSNN tại Tổng cục DTNN',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn`,
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục quản lý vốn phí',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/danh-muc-qlkh-von-phi`,
+  },
 ];

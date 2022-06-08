@@ -8,64 +8,62 @@ const routes: Routes = [
     component: QuanLyDieuChinhDuToanChiNSNNComponent,
   },
   {
-    path: 'tim-kiem',
+    path: 'tim-kiem-dieu-chinh-du-toan-chi-NSNN',
     loadChildren: () =>
       import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
+        './tim-kiem-dieu-chinh-du-toan-chi-NSNN/tim-kiem-dieu-chinh-du-toan-chi-NSNN.module'
+      ).then((m) => m.TimKiemDieuChinhDuToanChiNSNNModule),
   },
   {
-    path: 'danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
+    path: 'ds-tong-hop-dieu-chinh-du-toan-chi',
     loadChildren: () =>
       import(
-        './danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach/danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach.module'
-      ).then((m) => m.DanhSachDeXuatDieuChinhDuToanChiNganSachModule),
+        './ds-tong-hop-dieu-chinh-du-toan-chi/ds-tong-hop-dieu-chinh-du-toan-chi.module'
+      ).then((m) => m.DsTongHopDieuChinhDuToanChiModule),
   },
   {
-    path: 'danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
+    path: 'tong-hop-dieu-chinh-du-toan-chi-NSNN',
     loadChildren: () =>
       import(
-        './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.module'
-      ).then((m) => m.DanhSachKeHoachPhanBoGiaoDuToanCuaDonViModule),
+        './tong-hop-dieu-chinh-du-toan-chi-NSNN/tong-hop-dieu-chinh-du-toan-chi-NSNN.module'
+      ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
   },
+  {
+    path: 'giao-nhiem-vu',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
+  {
+    path: 'giao-nhiem-vu/:id',
+    loadChildren: () =>
+    import(
+      './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+    },
+    {
+      path: 'giao-nhiem-vu/0/:dotBcao/:namHienHanh/:maDvi',
+      loadChildren: () =>
+        import(
+          './giao-nhiem-vu/giao-nhiem-vu.module'
+        ).then((m) => m.GiaoNhiemVuModule),
+    },
+    {
+      path: 'giao-nhiem-vu/0/:namHienHanh',
+      loadChildren: () =>
+        import(
+          './giao-nhiem-vu/giao-nhiem-vu.module'
+        ).then((m) => m.GiaoNhiemVuModule),
+    },
+    {
+      path: 'phe-duyet-bao-cao-dieu-chinh',
+      loadChildren: () =>
+        import(
+          './phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
+        ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
+    },
 
-  {
-    path: 'chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao',
-    loadChildren: () =>
-      import(
-        './chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao/chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao.module'
-      ).then((m) => m.ChonChiTietCuaPhanBoDuToanChiDaGiaoModule),
-  },
-  {
-    path: 'tong-hop',
-    loadChildren: () =>
-      import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
-  },
-  
-  {
-    path: 'lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
-    loadChildren: () =>
-      import(
-        './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.module'
-      ).then((m) => m.LapBaoCaoDieuChinhDuToanChiNsnnModule),
-  },
-  {
-    path: 'lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/:id',
-    loadChildren: () =>
-      import(
-        './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.module'
-      ).then((m) => m.LapBaoCaoDieuChinhDuToanChiNsnnModule),
-  },
-  
-  {
-    path: 'test-link-list',
-    loadChildren: () =>
-      import(
-        './test-link-list/test-link-list.module'
-      ).then((m) => m.TestLinkListModule),
-  },
 ];
 
 @NgModule({

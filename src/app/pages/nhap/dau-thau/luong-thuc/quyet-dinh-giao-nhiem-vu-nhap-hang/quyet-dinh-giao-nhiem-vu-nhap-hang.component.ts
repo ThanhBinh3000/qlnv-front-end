@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DonviService } from 'src/app/services/donvi.service';
+import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import * as dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { Subject } from 'rxjs';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
@@ -16,42 +18,47 @@ import { Subject } from 'rxjs';
   styleUrls: ['./quyet-dinh-giao-nhiem-vu-nhap-hang.component.scss'],
 })
 export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
-  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
-  searchValue = '';
-  searchFilter = {
-    soDxuat: '',
-    trichYeu: '',
-  };
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
-  errorMessage: string = '';
+
   startValue: Date | null = null;
-  endValue: Date | null = null;
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
+
+  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
+  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
+
+  nhapIdDefault: string = LOAI_QUYET_DINH.NHAP;
+  xuatIdDefault: string = LOAI_QUYET_DINH.XUAT;
+
+  loaiVTHH: string = null;
+  soQD: string = null;
+  canCu: string = null;
+  loaiQd: string = null;
+  soHd: string = null;
+
+  selectedCanCu: any = null;
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
-  ) {}
+    private modal: NzModalService,
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.isVisibleChangeTab$.subscribe((value: boolean) => {
-        this.visibleTab = value;
-      });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
+      if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -71,6 +78,23 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     }
   }
 
+  openDialogHopDong() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin căn cứ trên hợp đồng',
+      nzContent: DialogCanCuHopDongComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.soHd = data.soHdong;
+      }
+    });
+  }
+
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
@@ -82,30 +106,6 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     }
   }
 
-  disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endValue) {
-      return false;
-    }
-    return startValue.getTime() > this.endValue.getTime();
-  };
-
-  disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startValue) {
-      return false;
-    }
-    return endValue.getTime() <= this.startValue.getTime();
-  };
-
-  handleStartOpenChange(open: boolean): void {
-    if (!open) {
-      this.endDatePicker.open();
-    }
-  }
-
-  handleEndOpenChange(open: boolean): void {
-    console.log('handleEndOpenChange', open);
-  }
-
   redirectToChiTiet(id: number) {
     this.router.navigate([
       '/nhap/dau-thau/quyet-dinh-giao-nhiem-vu-nhap-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang',
@@ -114,13 +114,12 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soDxuat: '',
-      trichYeu: '',
-    };
+    this.soQD = null;
     this.startValue = null;
-    this.endValue = null;
-    this.inputDonVi = '';
+    this.canCu = null;
+    this.inputDonVi = null;
+    this.loaiVTHH = null;
+    this.loaiQd = null;
   }
 
   async search() {
@@ -135,27 +134,26 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('DD/MM/YYYY')
+      "loaiQd": this.loaiQd,
+      "maDvi": maDonVi,
+      "maVthh": this.loaiVTHH ?? "00",
+      "ngayQd": this.startValue
+        ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-      id: 0,
-      loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trangThai: '00',
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('DD/MM/YYYY')
-        : null,
+      "soHd": this.soHd,
+      "soQd": this.soQD,
+      "str": null,
+      "trangThai": null
     };
     this.totalRecord = 10;
-    let res = await this.danhSachDauThauService.timKiem(body);
-    if (res.msg == 'Thành công') {
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -193,12 +191,45 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
-      return 'Đã duyệt';
-    } else {
-      return 'Chưa duyệt';
-    }
+    return convertTrangThai(status);
   }
 
-  xoaItem(item: any) {}
+  xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.quyetDinhGiaoNhapHangService
+            .xoa({ id: item.id })
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  export() {
+
+  }
 }

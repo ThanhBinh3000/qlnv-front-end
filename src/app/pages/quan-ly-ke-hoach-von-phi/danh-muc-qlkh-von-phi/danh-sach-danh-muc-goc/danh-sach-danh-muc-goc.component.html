@@ -1,0 +1,80 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+
+        <button nz-button class="search__button--search" routerLink="../">
+          <i nz-icon nzType="stop"></i>
+          Đóng
+        </button>
+        <button nz-button class="search__button--clear">
+          <i nz-icon nzType="close"></i>
+          Xóa điều kiện
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="DANH SÁCH DANH MỤC GỐC" class="mt16 flex-card p-lr16">
+        <div nz-row [nzGutter]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+          style="margin-top: 10px; margin-bottom: 10px;">
+          <div nzSpan="6">
+            <label class="search__label">Tên danh mục:</label>
+            <input type="text" nz-input [(ngModel)]="tenDm">
+          </div>
+          <div nzSpan="6" class="ml-1">
+            <label class="search__label">Loại danh mục:</label>
+            <input type="text" nz-input [(ngModel)]="loaiDm">
+          </div>
+          <div nzSpan="6" class="mt-4">
+            <button type="button" class="btn btn-main" (click)="addDanhMucGoc()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm mới danh mục</span>
+            </button>
+          </div>
+          <div nzSpan="6" class="mt-4">
+            <button type="button" class="btn btn-main" (click)="roleBack()" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Trở lại</span>
+            </button>
+          </div>
+        </div>
+
+        <nz-table nzBordered [nzScroll]="{ x: '1200px', y: '240px' }">
+          <thead>
+            <tr>
+              <th width="10%">STT</th>
+              <th width="30%">Tên danh mục</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of danhMucGocs; let i = index">
+              <td>{{ i + 1}}</td>
+              <td>
+                <div>
+                  {{ item.tenDm }}
+                </div>
+              </td>
+              <td>
+                <a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Chi tiết</a>
+              </td>
+              <td class="text-center">
+                <!-- <a (click)="xoaDanhMuc(item.id)" style="color: #1890ff;">Xóa</a> -->
+                <a nz-popconfirm nzPopconfirmTitle="Xác nhận xóa ?" (nzOnConfirm)="xoaDanhMuc(item.id)" class="save"
+                  style="color: #1890ff">Xóa</a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+</div>

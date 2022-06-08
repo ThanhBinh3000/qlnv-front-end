@@ -27,4 +27,5 @@ export class KeHoachLuongThuc {
   donViId: number;
   khGaoId: number;
   khThocId: number;
+  isEdit: boolean;
 }

@@ -1,135 +1,171 @@
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
-      <div class="trai">
-      </div>
-      <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-        <button nz-button class="search__button--clear">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
-        </button>
-      </div>
-    </div>
-  </div>
+	<div class="tab-content tab-menu" id="myTabContent">
+		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+			aria-labelledby="banhanh-tab">
+			<div class="trai">
+			</div>
+			<div class="canphai phai action-top">
+
+				<button nz-button class="search__button--search" routerLink="../">
+					<i nz-icon nzType="stop"></i>
+					Đóng
+				</button>
+				<button nz-button type="submit" class="search__button--search"
+					(click)="pages.page = 1; pages.size = 10 ;onSubmit()">
+					<i nz-icon nzType="search"></i>
+					Tìm kiếm
+				</button>
+			</div>
+		</div>
+	</div>
 </nz-affix>
 <div class="contentBor chi-tieu__body">
-  <div class="contentDetail">
-    <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+	<div class="contentDetail">
+		<div class="main-content">
+			<nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
+				<div class="search__body" nz-row [nzGutter]="[18, 12]">
+					<div nz-col nzSpan="6">
+						<label class="search__label">Mã</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDn" />
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Trạng thái</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+							[(ngModel)]="searchFilter.trangThai">
+							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							</nz-option>
+						</nz-select>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Ngày lập từ</label>
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">
+						</nz-date-picker>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Đến ngày</label>
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
+						</nz-date-picker>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Quyết định chỉ tiêu</label>
+						<input class="search__input" nz-input
+							[class]="statusBtnNew || searchFilter.qdChiTieu ?'' : 'input-error-validate'"
+							[(ngModel)]="searchFilter.qdChiTieu" />
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Căn cứ về giá</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
+							[class]="statusBtnNew || searchFilter.canCuGia ?'' : 'input-error-validate'"
+							[(ngModel)]="searchFilter.canCuGia">
+							<nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							</nz-option>
+						</nz-select>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Loại đề nghị</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị"
+							[class]="statusBtnNew || searchFilter.loaiDn ?'' : 'input-error-validate'"
+							[(ngModel)]="searchFilter.loaiDn">
+							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							</nz-option>
+						</nz-select>
+					</div>
+				</div>
+			</nz-card>
+			<nz-card nzTitle="Danh sách đề nghị cấp vốn" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+				<div class="row">
+					<div class="col-lg-12 form-group">
+						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
+					</div>
+				</div>
+				<nz-table #basicTable class="nowrap">
+					<thead>
+						<tr>
+							<th width="60px">STT</th>
+							<th>Mã đề nghị</th>
+							<th>Quyết định chỉ tiêu</th>
+							<th>Căn cứ giá</th>
+							<th>Loại đề nghị</th>
+							<th>Ngày lập</th>
+							<th>Ngày trình duyệt</th>
+							<th>Ngày phê duyệt</th>
+							<th>Trạng thái</th>
+							<!-- <th></th> -->
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let item of danhSachBaoCao; let i = index">
+							<td>
+								{{ (i + 1) + (pages.page - 1)*pages.size }}
+							</td>
+							<td>
+								<a (click)="xemChiTiet(item)" style="color: #1890ff;">
+									{{ item.maDnghi}}
+								</a>
+							</td>
+							<td>
+								{{item.soQdChiTieu}}
+							</td>
+							<td>
+								<div *ngFor="let e of canCuGias">
+									<div *ngIf="item.canCuVeGia == e.id">
+										{{e.tenDm}}
+									</div>
+								</div>
+							</td>
+							<td>
+								<div *ngFor="let e of loaiDns">
+									<div *ngIf="item.loaiDnghi == e.id">
+										{{e.tenDm}}
+									</div>
+								</div>
+							</td>
+							<td>
+								{{item.ngayTao}}
+							</td>
+							<td>
+								{{item.ngayTrinh}}
+							</td>
+							<td>
+								{{item.ngayPheDuyet}}
+							</td>
+							<td>
+								{{getStatusName(item.trangThai)}}
+							</td>
+							<!-- <td> -->
+								<!-- <ng-container *ngIf="checkDeleteReport(item)">
+									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
+								</ng-container> -->
+							<!-- </td> -->
+						</tr>
+					</tbody>
+				</nz-table>
+				<div class="tab-content tab-menu" id="myTabContent">
+					<div class="tab-pane fade show active justify-content-between">
+						<div class="trai">
 
-          <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày lập</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person">
-
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Nơi lập</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
-          </div>
-
-          <!-- <div nz-col nzSpan="12">
-            <label class="search__label">Phân loại</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.loaiBaoCao"
-              (ngModelChange)="setUrl($event)">
-              <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-            </nz-select>
-          </div> -->
-        </div>
-      </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
-        class="mt16 flex-card p-lr16">
-        <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
-          <thead>
-            <tr>
-              <th width="1%">
-                STT
-              </th>
-              <th width="14.2%">Ngày lập</th>
-              <th width="14.2%" class="text-center">Nơi lập</th>
-              <th width="14.2%">Số quyết định</th>
-              <th width="14.2%">Ngày quyết định</th>
-              <th width="14.2%">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="14.2%">Căn cứ hợp đồng</th>
-              <th width="14.2%" class="text-center">Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of danhSachCongVan; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{item.ngayTao}}</td>
-              <td class="text-center">{{item.tenDvi}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
-              <td>{{item.namBcao}}</td>
-              <td></td> 
-              <td></td> 
-              <td class="text-center">{{item.tenTrangThai}}</td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <div nz-row>
-          <div nz-col nzSpan="24" style="margin-top: 5px;">
-            <label class="search__label">Lý do từ chối :</label>
-            <input class="search__input" type="text" style="width: 95.9%">
-          </div>
-          <!-- <div nz-col nzSpan="12">
-
-          </div> -->
-          <div nz-col nzSpan="4" style="margin-top: 10px;">
-            <button class="btn btn-main">
-              Phê duyệt
-            </button>
-            <button class="btn btn-main">
-              Từ chối
-            </button>
-          </div>
-        </div>
-
-        <div class="tab-content tab-menu" id="myTabContent">
-          <div class="tab-pane fade show active justify-content-between">
-            <div class="trai">
-
-            </div>
-            <div class="canphai">
-              <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
-                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
-                <ng-template #rangeTemplate let-range="range" let-total>
-                  {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
-                </ng-template>
-              </nz-pagination>
-              <!-- end phân trang  -->
-            </div>
-          </div>
-        </div>
-      </nz-card>
-      <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../lap-de-nghi-cap-von-mua-vat-tu-thiet-bi">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button>
-        <button type="button" class="btn btn-sub">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
-        </button>
-      </ng-template>
-    </div>
-  </div>
+						</div>
+						<div class="canphai">
+							<!-- begin phân trang  -->
+							<nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+								nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+								(nzPageIndexChange)="onPageIndexChange($event)"
+								(nzPageSizeChange)="onPageSizeChange($event)">
+								<ng-template #rangeTemplate let-range="range" let-total>
+									{{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+								</ng-template>
+							</nz-pagination>
+							<!-- end phân trang  -->
+						</div>
+					</div>
+				</div>
+			</nz-card>
+			<ng-template #tableCard1>
+				<button type="button" class="btn btn-main" (click)="taoMoi()">
+					<i class="icon htvbdh_dau-cong"></i>
+					<span>Tạo mới</span>
+				</button>
+			</ng-template>
+		</div>
+	</div>
 </div>

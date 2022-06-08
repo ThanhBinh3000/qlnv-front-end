@@ -1,8 +1,10 @@
+import { ResponseData } from './../interfaces/response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
+import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -29,10 +31,16 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDonVi) + '&';
     if (body.trichYeu)
       url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
-    if (body.pageNumber)
-      url_ += 'pageNumber=' + encodeURIComponent('' + body.pageNumber) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ +=
+        'paggingReq.page=' +
+        encodeURIComponent('' + (body.pageNumber - 1)) +
+        '&';
     if (body.pageSize)
-      url_ += 'pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ +=
+        'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
@@ -54,9 +62,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.put(url, body).toPromise();
   }
 
-  exportList(): Observable<Blob> {
+  exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
-    return this.httpClient.post(url, null, { responseType: 'blob' });
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteData(id: any): Promise<any> {
@@ -72,5 +80,13 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   chinhSuaChiTieuKeHoach(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
+  }
+  tonKhoDauNam(body: any): Promise<ResponseData<Array<TonKhoDauNamLuongThuc>>> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+  downloadFile(): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
+    return this.httpClient.post(url, null, { responseType: 'blob' });
   }
 }
