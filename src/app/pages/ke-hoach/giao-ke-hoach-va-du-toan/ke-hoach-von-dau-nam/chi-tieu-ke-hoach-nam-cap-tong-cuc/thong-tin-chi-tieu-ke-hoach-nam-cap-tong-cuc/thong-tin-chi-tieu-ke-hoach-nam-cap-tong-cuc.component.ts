@@ -2532,4 +2532,32 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.globals.prop.DU_THAO_TRINH_DUYET
     );
   }
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'can-cu':
+        body.dataType = this.thongTinChiTieuKeHoachNam.canCus[0].dataType;
+        body.dataId = this.thongTinChiTieuKeHoachNam.canCus[0].dataId;
+        if (this.canCuList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.thongTinChiTieuKeHoachNam.canCus.length > 1 ? 'Can-cu.zip' : this.thongTinChiTieuKeHoachNam.canCus[0].fileName);
+          });
+        }
+        break;
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataType;
+        body.dataId = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }

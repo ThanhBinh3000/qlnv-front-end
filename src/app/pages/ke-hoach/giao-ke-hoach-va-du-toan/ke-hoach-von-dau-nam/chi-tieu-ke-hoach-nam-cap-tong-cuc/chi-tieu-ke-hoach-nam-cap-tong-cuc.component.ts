@@ -141,8 +141,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     let body = {
-      ngayKyDenNgay: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      ngayKyDenNgay: this.startValue
+        ? dayjs(this.startValue[1]).format('YYYY-MM-DD')
         : null,
       id: 0,
       donViId: donviId ?? this.donViIdSearch,
@@ -153,7 +153,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       trichYeu: this.searchFilter.trichYeu,
       namKeHoach: this.searchFilter.namKeHoach,
       ngayKyTuNgay: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+        ? dayjs(this.startValue[0]).format('YYYY-MM-DD')
         : null,
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
