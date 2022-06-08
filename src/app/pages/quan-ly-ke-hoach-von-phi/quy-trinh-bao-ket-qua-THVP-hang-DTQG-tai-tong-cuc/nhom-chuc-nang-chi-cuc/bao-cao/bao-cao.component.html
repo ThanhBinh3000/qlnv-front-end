@@ -372,8 +372,10 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'21')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
-                </td>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'21')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
+                  </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'21')"></i>
                 </td>
@@ -387,11 +389,11 @@
                   {{getChiMuc(item.stt)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư, hàng hóa"
-                    [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maVtu">
-                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maVtu">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
@@ -500,7 +502,9 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'22')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'22')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'22')"></i>
@@ -515,11 +519,11 @@
                   {{getChiMuc(item.stt)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maVtu">
-                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maVtu">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
@@ -757,7 +761,9 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'31')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'31')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'31')"></i>
@@ -772,11 +778,11 @@
                   {{getChiMuc(item.stt)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maVtu">
-                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maVtu">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
@@ -894,7 +900,9 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'32')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'32')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'32')"></i>
@@ -909,11 +917,11 @@
                   {{getChiMuc(item.stt)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maVtu">
-                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maVtu">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
@@ -1031,7 +1039,9 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'33')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'33')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'33')"></i>
@@ -1046,11 +1056,11 @@
                   {{getChiMuc(item.stt)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maVtu">
-                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maVtu">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
@@ -1322,7 +1332,7 @@
                 <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
                 <td>
                   <div *ngFor="let vtu of lstVatTuFull">
-                    <div *ngIf="vtu.id == item.maVtu">
+                    <div *ngIf="vtu.id == item.maNdungChi">
                       {{vtu.ten}}
                     </div>
                   </div>
@@ -1341,7 +1351,7 @@
                 <td>{{item.luyKeThoc}}</td>
                 <td>{{item.luyKeGao}}</td>
                 <ng-container *ngFor="let e of item.listCtiet">
-                  <ng-container *ngIf="e.loaiMatHang == 0">
+                  <ng-container *ngIf="e.loaiMatHang == 1">
                     <td>
                       {{e.sl}}
                     </td>
@@ -1352,7 +1362,9 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'41')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  <ng-container *ngIf="!getLowStatus(item.stt,'41')">
+                    <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                  </ng-container>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(item.id,'41')"></i>
@@ -1365,12 +1377,11 @@
               <ng-template #editTemplate4ax>
                 <td></td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
-                    [class]="editCache[item.id].data.maNdungChi ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[item.id].data.maNdungChi">
-                    <nz-option *ngFor="let item of item.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                    </nz-option>
-                  </nz-select>
+                  <div *ngFor="let vtu of lstVatTuFull">
+                    <div *ngIf="vtu.id == item.maNdungChi">
+                      {{vtu.ten}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-input-number type="number" class="search__input" nzSize="small"
