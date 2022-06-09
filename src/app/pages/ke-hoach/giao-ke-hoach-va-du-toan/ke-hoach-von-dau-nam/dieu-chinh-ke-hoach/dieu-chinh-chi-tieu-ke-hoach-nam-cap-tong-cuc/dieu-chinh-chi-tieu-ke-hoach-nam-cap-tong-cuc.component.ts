@@ -78,6 +78,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
+  countTuChoi: number = 0;
+  countCuc: number = 0;
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -92,6 +95,19 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.getCount();
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          if (res.data.chiTieuKeHoachNamTongCuc) {
+            this.countTuChoi = res.data.chiTieuKeHoachNamTongCuc;
+          }
+          if (res.data.chiTieuKeHoachNamCuc) {
+            this.countCuc = res.data.chiTieuKeHoachNamCuc;
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
@@ -105,7 +121,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
       }
       let dayNow = dayjs().get('year');
-      // this.namKeHoach = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayNow - i,

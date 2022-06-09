@@ -67,6 +67,11 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
+  getCount(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/count`;
+    return this.httpClient.get(url).toPromise();
+  }
+
   importFile(body: any): Promise<any> {
     const formData = new FormData();
     formData.append('file', body, body.name);

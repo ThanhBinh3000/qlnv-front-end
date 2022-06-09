@@ -38,7 +38,7 @@
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
                 [nzAutocomplete]="auto"
-                [readonly]="userInfo.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
+                [readonly]="userInfo?.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
@@ -64,8 +64,8 @@
       </nz-card>
       <div class="tab-giao-chi-tieu">
         <nz-tabset nzType="card" class="tab-level-3">
-          <nz-tab [nzTitle]="'QĐ điều chỉnh/TB từ chối của TCDTNN (10)'" (nzClick)="selectTab('tu-choi')"
-            *ngIf="!userService.isChiCuc()">
+          <nz-tab [nzTitle]="'QĐ điều chỉnh/TB từ chối của TCDTNN (' + countTuChoi + ')'"
+            (nzClick)="selectTab('tu-choi')" *ngIf="!userService.isChiCuc()">
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
               <thead>
@@ -210,7 +210,7 @@
               </div>
             </div>
           </nz-tab>
-          <nz-tab [nzTitle]="'QĐ điều chỉnh của các cục (10)'" (nzClick)="selectTab('cuc')">
+          <nz-tab [nzTitle]="'QĐ điều chỉnh của các cục (' + countCuc + ')'" (nzClick)="selectTab('cuc')">
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
               <thead>
