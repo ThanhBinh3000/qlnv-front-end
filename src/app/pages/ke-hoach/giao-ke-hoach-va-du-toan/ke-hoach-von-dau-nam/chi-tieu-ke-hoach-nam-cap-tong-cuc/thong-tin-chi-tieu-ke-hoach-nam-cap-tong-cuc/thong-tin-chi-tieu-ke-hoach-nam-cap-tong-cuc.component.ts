@@ -134,6 +134,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
+    if (this.userInfo) {
+      this.qdTCDT = this.userInfo.MA_QD;
+    }
     if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.userService.isChiCuc()) {
@@ -692,6 +695,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
+
+          if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
+            this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
+          }
 
           this.convertKhVatTuList(this.thongTinChiTieuKeHoachNam.khVatTu);
           this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
@@ -1353,7 +1360,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return;
     }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
-      }${this.qdTCDT}`;
+      }/${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;

@@ -45,6 +45,8 @@ import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.const
 })
 export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
+  @Input() deXuatId: number;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -593,7 +595,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectDataMultipleTag(data: any) { }
 
   deleteDataMultipleTag(data: any) {
-    if (this.id == 0) {
+    if (this.id == 0 && !this.isView) {
       this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
       this.selectedCanCu = {};
       this.dieuChinhThongTinChiTieuKHNam.qdGocId = 0;
@@ -1286,6 +1288,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       namKeHoach: [this.yearNow],
       trichYeu: [null],
       ghiChu: [null, [Validators.required]],
+      loaiHangHoa: [this.tabSelected]
     });
     if (id > 0) {
       let res =
@@ -1313,6 +1316,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.controls['soQD'].setValue(
             this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/')[0],
           );
+          if (this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh && this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/').length > 1) {
+            this.qdTCDT = this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/')[1];
+          }
           this.formData.controls['ngayKy'].setValue(
             this.dieuChinhThongTinChiTieuKHNam.ngayKy,
           );
@@ -1583,7 +1589,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
-    if (this.id == 0) {
+    if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
         nzContent: DialogQuyetDinhGiaoChiTieuComponent,
@@ -2640,35 +2646,39 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
-    this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-      (x) => x.id !== data.id,
-    );
-    this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs =
-      this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.filter(
-        (x) => x.idVirtual !== data.id,
+    if (!this.isView) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
       );
+      this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs =
+        this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.filter(
+          (x) => x.idVirtual !== data.id,
+        );
+    }
   }
 
   openFile(event) {
-    let item = {
-      id: new Date().getTime(),
-      text: event.name,
-    };
-    if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-      this.uploadFileService
-        .uploadFile(event.file, event.name)
-        .then((resUpload) => {
-          if (!this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs) {
-            this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs = [];
-          }
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          fileDinhKem.idVirtual = item.id;
-          this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.push(fileDinhKem);
-          this.taiLieuDinhKemList.push(item);
-        });
+    if (!this.isView) {
+      let item = {
+        id: new Date().getTime(),
+        text: event.name,
+      };
+      if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
+        this.uploadFileService
+          .uploadFile(event.file, event.name)
+          .then((resUpload) => {
+            if (!this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs) {
+              this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs = [];
+            }
+            const fileDinhKem = new FileDinhKem();
+            fileDinhKem.fileName = resUpload.filename;
+            fileDinhKem.fileSize = resUpload.size;
+            fileDinhKem.fileUrl = resUpload.url;
+            fileDinhKem.idVirtual = item.id;
+            this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.push(fileDinhKem);
+            this.taiLieuDinhKemList.push(item);
+          });
+      }
     }
   }
 
@@ -2683,5 +2693,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
     }
+  }
+
+  changeLoaiHangHoa() {
+    this.tabSelected = this.formData.get('loaiHangHoa').value;
   }
 }

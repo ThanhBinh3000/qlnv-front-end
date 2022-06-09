@@ -192,7 +192,7 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(true, 0)">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -210,6 +210,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="selectedId" (showListEvent)="showList()">
+  <app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="selectedId" (showListEvent)="showList()"
+    [deXuatId]="deXuatId" [isView]="isView">
   </app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
 </div>

@@ -11,6 +11,7 @@ export class DieuChinhKeHoachComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  deXuatId: number = 0;
 
   constructor(
     public userService: UserService,
@@ -22,7 +23,8 @@ export class DieuChinhKeHoachComponent implements OnInit {
   selectTabDieuChinh(item) {
     this.tabSelect = 1;
     this.isDetail = true;
-    console.log(item);
+    this.isView = item.isView;
+    this.deXuatId = item.deXuatId;
   }
 
 }

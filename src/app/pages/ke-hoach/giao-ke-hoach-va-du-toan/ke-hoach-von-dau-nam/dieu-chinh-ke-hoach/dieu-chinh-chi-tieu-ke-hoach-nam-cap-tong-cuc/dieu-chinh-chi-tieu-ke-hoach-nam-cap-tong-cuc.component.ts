@@ -28,6 +28,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   selectedId: number = 0;
   @Input()
   isView: boolean = false;
+  @Input()
+  deXuatId: number = 0;
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
 

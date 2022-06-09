@@ -54,6 +54,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  isView: boolean = false;
 
   filterTable: any = {
     soVanBan: '',
@@ -203,9 +204,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id) {
+  redirectToChiTiet(isView, id) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isView = isView;
   }
 
   showList() {
@@ -365,8 +367,11 @@ export class DeXuatDieuChinhComponent implements OnInit {
     }
   }
 
-  redirectToDieuChinh(item) {
-    this.showDieuChinhEvent.emit(item);
+  redirectToDieuChinh(isView, id) {
+    this.showDieuChinhEvent.emit({
+      isView: isView,
+      deXuatId: id,
+    });
   }
 
   deleteSelect() {

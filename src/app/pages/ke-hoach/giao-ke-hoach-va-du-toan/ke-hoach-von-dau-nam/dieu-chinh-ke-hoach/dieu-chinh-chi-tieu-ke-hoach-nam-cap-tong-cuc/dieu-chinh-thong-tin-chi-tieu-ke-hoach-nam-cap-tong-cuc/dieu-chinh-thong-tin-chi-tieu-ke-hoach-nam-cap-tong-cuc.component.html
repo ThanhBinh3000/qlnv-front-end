@@ -6,28 +6,28 @@
       </div>
       <div class="canphai phai">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)" [disabled]="!formData.valid"
-          *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
           [disabled]="!formData.valid"
-          *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01' && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -48,16 +48,19 @@
         </div>
         <form nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
-              <input formControlName="namKeHoach" rows="1" nz-input [readonly]="true" />
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </div>
             <div nz-col [nzSpan]="5">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
-              <nz-input-group [nzAddOnAfter]="qdTCDT">
+              <nz-input-group [nzAddOnAfter]="'/' + qdTCDT">
                 <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
-                  [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
+                  [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
                 </nz-input-number>
               </nz-input-group>
             </div>
@@ -66,7 +69,7 @@
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
                 formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)"
-                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
+                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
               </nz-date-picker>
             </div>
             <div nz-col [nzSpan]="5">
@@ -75,16 +78,26 @@
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                 formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
                 (nzOnOpenChange)="handleEndOpenChange($event)"
-                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
+                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
               </nz-date-picker>
+            </div>
+            <div nz-col [nzSpan]="5">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hàng hóa
+              </nz-form-label>
+              <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()"
+                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
+                <nz-option [nzValue]="tab.luongThuc" nzLabel="Điều chỉnh lương thực dự trữ nhà nước"></nz-option>
+                <nz-option [nzValue]="tab.muoi" nzLabel="Điều chỉnh muối dự trữ nhà nước"></nz-option>
+                <nz-option [nzValue]="tab.vatTu" nzLabel="Điều chỉnh nhập vật tư, thiết bị"></nz-option>
+              </nz-select>
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
-                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0)" />
+                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView" />
             </div>
             <div nz-col [nzSpan]="24">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ </nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ theo chỉ tiêu</nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
                 [trangThai]="dieuChinhThongTinChiTieuKHNam.trangThai"
@@ -104,11 +117,13 @@
       </div>
       <div class="tab__container" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
         <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
-          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
+          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)"
+            *ngIf="tabSelected == tab.luongThuc">
           </nz-tab>
-          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"></nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"
+            *ngIf="tabSelected == tab.muoi"></nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh nhập vật tư, thiết bị'" class="vat-tu__container"
-            (nzClick)="selectTabData(tab.vatTu)"></nz-tab>
+            (nzClick)="selectTabData(tab.vatTu)" *ngIf="tabSelected == tab.vatTu"></nz-tab>
         </nz-tabset>
         <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-luong-thuc-tong-hop">
@@ -126,7 +141,7 @@
                     ( 31/12/{{yearNow}})
                   </th>
                   <th width="90px" rowspan="4"
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                     nzRight>
                     Hành động</th>
                 </tr>
@@ -225,7 +240,7 @@
               </thead>
               <tbody>
                 <tr
-                  [ngClass]="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03' ? '' : 'row-disabled'">
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
                   <td></td>
                   <td>
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
@@ -475,7 +490,7 @@
                     <td>{{data?.tkcnTongThoc ?? 0 | number: '1.0-1'}}</td>
                     <td>{{data?.tkcnTongGao ?? 0 | number: '1.0-1'}}</td>
                     <td
-                      *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                      *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                       nzRight>
                       <a (click)="editRowLuongThuc(data.donViId)">
                         <i class="fa fa-pencil"></i>
@@ -800,7 +815,9 @@
                   <th colspan="11" width="1500px">Xuất trong năm (3)</th>
                   <th rowspan="4" class="text-center" width="300px">Tồn kho cuối năm (4) <br> ( 31/12/{{yearNow}})
                   </th>
-                  <th rowspan="4" width="90px" class="text-right" nzRight>Hành động</th>
+                  <th rowspan="4" width="90px" class="text-right" nzRight
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
+                    Hành động</th>
                 </tr>
                 <tr>
                   <th rowspan="3">
@@ -850,7 +867,7 @@
               </thead>
               <tbody>
                 <tr
-                  [ngClass]="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03' ? '' : 'row-disabled'">
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
                   <td></td>
                   <td>
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
@@ -988,7 +1005,7 @@
                     </ng-container>
                     <td>{{dataMuoi.tkcnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                     <td
-                      *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                      *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                       class="text-right" nzRight>
                       <a (click)="editRowMuoi(dataMuoi.donViId)">
                         <i class="fa fa-pencil"></i>
@@ -1166,7 +1183,7 @@
                   <th rowspan="3" width="330px">Điều chỉnh tăng giảm</th>
                   <th colspan="6" width="800px">CHỈ TIÊU NHẬP SAU ĐIỀU CHỈNH</th>
                   <th rowspan="3"
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                     width="90px" class="text-right" nzRight>
                     HÀNH ĐỘNG</th>
                 </tr>
@@ -1191,7 +1208,7 @@
               </thead>
               <tbody>
                 <tr
-                  [ngClass]="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03' ? '' : 'row-disabled'">
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
                   <td></td>
                   <td>
                     <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -1291,7 +1308,7 @@
                   </ng-container>
                   <td>{{keHoachVatTuCreate.vatTuThietBi[0].sdcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
                   <td
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                     class="text-right" nzRight>
                     <a class="save" (click)="themMoiKHVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                       <i class="icon htvbdh_dau-cong"></i>
@@ -1342,7 +1359,7 @@
                     </ng-container>
                     <td>{{itemVatTu.vatTuThietBi[0].sdcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
                     <td
-                      *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                      *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
                       class="text-right" nzRight>
                       <a
                         (click)="editRowVatTu(itemVatTu.donViId, itemVatTu.vatTuThietBi[0].vatTuChaId, itemVatTu.vatTuThietBi[0].vatTuId)">
@@ -1569,7 +1586,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ghiChuError">
               <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
-                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')"
+                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView"
                 placeholder="Ghi chú"></textarea>
               <ng-template #ghiChuError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>

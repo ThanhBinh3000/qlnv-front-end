@@ -152,14 +152,20 @@
                   <td *ngIf="userService.isCuc()">{{data.tenTrangThai}}</td>
                   <td>{{data.trangThaiDuyet}}</td>
                   <td class="text-right">
-                    <a *ngIf="!userService.isTongCuc()" (click)="redirectToChiTiet(data.id)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a *ngIf="userService.isTongCuc()" (click)="redirectToChiTiet(data.id)">
+                    <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
-                    <a *ngIf="data.trangThai == '00' && !userService.isTongCuc()" (click)="xoaItem(data)">
+                    <a *ngIf="userService.isCuc()" (click)="redirectToChiTiet(false, data.id)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a *ngIf="data.trangThai == '00' && userService.isCuc()" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
+                    </a>
+                    <a *ngIf="data.trangThai == '02'" (click)="redirectToDieuChinh(true, data.id)">
+                      <i class="icon htvbdh_tcdt_viewdetail2"></i>
+                    </a>
+                    <a *ngIf="data.trangThai == '01'" (click)="redirectToDieuChinh(false, data.id)">
+                      <i class="icon htvbdh_tcdt_tao-qd"></i>
                     </a>
                   </td>
                 </tr>
@@ -184,7 +190,7 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -192,8 +198,9 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectToDieuChinh(0)" *ngIf="userService.isTongCuc()">
-            <i class="icon htvbdh_dau-cong"></i>
+          <button type="button" class="btn btn-main" (click)="redirectToDieuChinh(false, 0)"
+            *ngIf="userService.isTongCuc()">
+            <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo QĐ điều chỉnh</span>
           </button>
           <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
@@ -206,5 +213,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-de-xuat-dieu-chinh [id]="selectedId" (showListEvent)="showList()"></app-thong-tin-de-xuat-dieu-chinh>
+  <app-thong-tin-de-xuat-dieu-chinh [id]="selectedId" [isView]="isView" (showListEvent)="showList()">
+  </app-thong-tin-de-xuat-dieu-chinh>
 </div>
