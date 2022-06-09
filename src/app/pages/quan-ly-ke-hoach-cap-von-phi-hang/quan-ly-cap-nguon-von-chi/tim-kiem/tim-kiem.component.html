@@ -30,7 +30,7 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="status"
 							[(ngModel)]="searchFilter.trangThai">
 							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
@@ -54,7 +54,7 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Căn cứ về giá</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá" [nzDisabled]="disable"
 							[class]="statusBtnNew || searchFilter.canCuGia ?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.canCuGia">
 							<nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
@@ -63,7 +63,7 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Loại đề nghị</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [nzDisabled]="disable"
 							[class]="statusBtnNew || searchFilter.loaiDn ?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.loaiDn">
 							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
@@ -90,7 +90,7 @@
 							<th>Ngày trình duyệt</th>
 							<th>Ngày phê duyệt</th>
 							<th>Trạng thái</th>
-							<!-- <th></th> -->
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -132,11 +132,19 @@
 							<td>
 								{{getStatusName(item.trangThai)}}
 							</td>
-							<!-- <td> -->
-								<!-- <ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
-								</ng-container> -->
-							<!-- </td> -->
+							<td>
+
+								<ng-container *ngIf="status; else xem">
+									<a (click)="xemChiTiet(item)" style="color: #1890ff;">
+										Phê duyệt
+									</a>
+								</ng-container>
+								<ng-template #xem>
+									<ng-container *ngIf="checkDeleteReport(item)">
+										<i class="fa fa-trash-o do" (click)="xoaDeNghi(item.id)"></i>
+									</ng-container>
+								</ng-template>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>

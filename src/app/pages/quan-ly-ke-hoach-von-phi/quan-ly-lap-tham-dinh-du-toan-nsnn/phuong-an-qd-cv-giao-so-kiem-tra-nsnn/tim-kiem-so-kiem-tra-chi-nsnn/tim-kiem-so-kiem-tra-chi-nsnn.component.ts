@@ -95,20 +95,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         );
     }
 
-    redirectThongTinTimKiem() {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            0,
-        ]);
-    }
-
-    redirectSuaThongTinTimKiem(id) {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            id,
-        ]);
-    }
-
     //search list bao cao theo tieu chi
     async onSubmit() {
         if (this.searchFilter.namGiao || this.searchFilter.namGiao === 0) {
@@ -184,4 +170,8 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     getUnitName(maDvi: string) {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
+
+    close() {
+		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+	}
 }

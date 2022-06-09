@@ -151,9 +151,8 @@ export class TongHopComponent implements OnInit {
 	}
 
 
-	dong() {
-		// this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
-		this.location.back();
+	close() {
+		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
 	}
 
 

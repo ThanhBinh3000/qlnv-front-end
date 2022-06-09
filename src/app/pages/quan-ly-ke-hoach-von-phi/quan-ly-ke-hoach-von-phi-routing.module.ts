@@ -36,8 +36,8 @@ const routes: Routes = [
       {
         path: 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg',
         loadChildren: () =>
-          import('./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
-            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          import('./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.module').then(
+            (m) => m.QuanLyCapVonMuaBanTtTienHangDtqgModule,
           ),
       },
       {
