@@ -128,6 +128,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 ncauChiChiaRaChiTx: divMoney(item.ncauChiChiaRaChiTx, this.maDviTien),
                 ncauChiChiaRaChiCs2: divMoney(item.ncauChiChiaRaChiCs2, this.maDviTien),
                 ncauChiChiaRaChiMoi2: divMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien),
+                checked: false,
             })
         })
         if (this.lstCtietBcao.length > 0){
@@ -527,7 +528,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 this.lstCtietBcao[index].checked = !nho;
                 index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
                 if (index == -1) {
-                    this.allChecked = !nho;
+                    this.allChecked = this.checkAllChild('0');
                     break;
                 }
                 nho = this.lstCtietBcao[index].checked;
@@ -538,7 +539,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     checkAllChild(str: string): boolean {
         var nho: boolean = true;
         this.lstCtietBcao.forEach(item => {
-            if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
+            if ((this.getHead(item.stt) == str) && (!item.checked)) {
                 nho = item.checked;
             }
         })

@@ -44,7 +44,7 @@ const routes: Routes = [
 			).then((m) => m.TongHopTaiTongCucModule),
 	},
 	{
-		path: 'tong-hop-tai-tong-cuc',
+		path: 'tong-hop-tai-tong-cuc/0/:qdChiTieu',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tai-tong-cuc/tong-hop-tai-tong-cuc.module'

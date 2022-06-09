@@ -56,7 +56,9 @@ export class Utils {
     //can cu gia
     public static HD_TRUNG_THAU = "0";
     public static QD_DON_GIA = "1";
-
+    //loai von
+    public static CAP_VON = "1";
+    public static UNG_VON = "2";
     //role xoa
     public static btnRoleDel = {
         "status": ['1', '3', '5', '8', '10'],
@@ -1133,5 +1135,16 @@ export const CAN_CU_GIA = [
     {
         id: Utils.QD_DON_GIA,
         tenDm: "Quyết định đơn giá mua",
+    }
+]
+
+export const LOAI_VON = [
+    {
+        id: Utils.CAP_VON,
+        tenDm: "Cấp vốn",
+    },
+    {
+        id: Utils.UNG_VON,
+        tenDm: "Ứng vốn",
     }
 ]

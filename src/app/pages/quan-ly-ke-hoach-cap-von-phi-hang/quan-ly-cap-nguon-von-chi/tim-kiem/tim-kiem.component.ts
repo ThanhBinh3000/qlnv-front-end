@@ -91,14 +91,26 @@ export class TimKiemComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-		if (this.loai == "0"){
-			this.status = true;
-		} else {
-			this.status = false;
-		}
+		
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
+
+		if (this.loai == "0"){
+			this.status = false;
+		} else {
+			this.status = true;
+			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN){
+				this.searchFilter.trangThai = Utils.TT_BC_6;
+				this.trangThais = [{
+					id: Utils.TT_BC_6,
+					tenDm: "Mới",
+				}]
+			} else {
+				this.searchFilter.trangThai = Utils.TT_BC_4;
+			}
+		}
+
 		await this.danhMuc.dMDonVi().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
@@ -199,16 +211,6 @@ export class TimKiemComponent implements OnInit {
 		this.pages.size = size;
 		this.onSubmit();
 	}
-	// xoaDieuKien() {
-	// 	this.searchFilter.maDn =  null
-	//     this.searchFilter.trangThai = null
-	//     this.searchFilter.tuNgay = null
-	//     this.searchFilter.denNgay = null
-	//     this.searchFilter.qdChiTieu = null
-	//     this.searchFilter.qdTrungThau = null
-	//     this.searchFilter.qdDonGiaMua = null
-	//     this.searchFilter.loaiDn = null
-	// }
 
 	taoMoi() {
 		this.statusBtnNew = false;
@@ -246,30 +248,30 @@ export class TimKiemComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	// xoaBaoCao(id: any) {
-	// 	this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
-	// 		data => {
-	// 			if (data.statusCode == 0) {
-	// 				this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-	// 				this.onSubmit();
-	// 			} else {
-	// 				this.notification.error(MESSAGE.ERROR, data?.msg);
-	// 			}
-	// 		},
-	// 		err => {
-	// 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-	// 		}
-	// 	)
-	// }
+	xoaDeNghi(id: any) {
+		this.quanLyVonPhiService.xoaDeNghi(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
 
-	// checkDeleteReport(item: any): boolean {
-	// 	var check: boolean;
-	// 	if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-	// 		this.userInfo?.username == item.nguoiTao) {
-	// 		check = true;
-	// 	} else {
-	// 		check = false;
-	// 	}
-	// 	return check;
-	// }
+	checkDeleteReport(item: any): boolean {
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			this.userInfo?.username == item.nguoiTao) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
 }

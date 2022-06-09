@@ -139,6 +139,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 tranChiN2: divMoney(item.tranChiN2, this.maDviTien),
                 ncauChiN2: divMoney(item.ncauChiN2, this.maDviTien),
                 clechTranChiVsNcauChiN2: divMoney(item.clechTranChiVsNcauChiN2, this.maDviTien),
+                checked: false,
             })
         })
         if (this.lstCtietBcao.length > 0) {
@@ -539,7 +540,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 this.lstCtietBcao[index].checked = !nho;
                 index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
                 if (index == -1) {
-                    this.allChecked = !nho;
+                    this.allChecked = this.checkAllChild('0');
                     break;
                 }
                 nho = this.lstCtietBcao[index].checked;
@@ -550,7 +551,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     checkAllChild(str: string): boolean {
         var nho: boolean = true;
         this.lstCtietBcao.forEach(item => {
-            if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
+            if ((this.getHead(item.stt) == str) && (!item.checked)) {
                 nho = item.checked;
             }
         })
