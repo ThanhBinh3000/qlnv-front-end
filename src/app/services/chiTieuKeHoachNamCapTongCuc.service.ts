@@ -85,6 +85,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
   }
+
   tonKhoDauNam(body: any): Promise<ResponseData<Array<TonKhoDauNamLuongThuc>>> {
     const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
     return this.httpClient.post(url, body).toPromise();
@@ -100,5 +101,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
+  }
+  getCountChiTieu(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/count`;
+    return this.httpClient.get(url).toPromise();
   }
 }

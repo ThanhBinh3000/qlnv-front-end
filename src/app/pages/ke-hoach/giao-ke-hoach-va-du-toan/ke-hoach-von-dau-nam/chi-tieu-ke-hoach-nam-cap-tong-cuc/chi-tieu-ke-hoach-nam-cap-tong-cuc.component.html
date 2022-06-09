@@ -138,10 +138,10 @@
               </div>
             </div>
           </nz-tab> -->
-          <nz-tab [nzTitle]="title_2">
+          <nz-tab [nzTitle]="title_2" *ngIf="!userService.isChiCuc()" (nzClick)="selectTab('tong-cuc')">
             <ng-template #title_2>
               QĐ giao chỉ tiêu của Tổng Cục
-              (<span class="number-title-tab">100</span>)
+              (<span class="number-title-tab">{{countChiTieu.chiTieuKeHoachNamTongCuc}}</span>)
             </ng-template>
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false" nzBordered>
@@ -188,10 +188,10 @@
                       <i class=" icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO">
+                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO">
+                    <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -214,10 +214,10 @@
               </div>
             </div>
           </nz-tab>
-          <nz-tab [nzTitle]="title_3">
+          <nz-tab [nzTitle]="title_3" (nzClick)="selectTab('cuc')">
             <ng-template #title_3>
               QĐ giao chỉ tiêu của các Cục
-              (<span class="number-title-tab">25</span>)
+              (<span class="number-title-tab">{{countChiTieu.chiTieuKeHoachNamCuc}}</span>)
             </ng-template>
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false" nzBordered>
@@ -264,11 +264,11 @@
                       <i class="icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc()">
+                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc() && !userService.isChiCuc()">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="xoaItem(data)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc()">
+                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc() && !userService.isChiCuc()">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -292,7 +292,7 @@
             </div>
           </nz-tab>
         </nz-tabset>
-        <div class="action-giao-chi-tieu">
+        <div class="action-giao-chi-tieu" *ngIf="!userService.isChiCuc()">
           <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
