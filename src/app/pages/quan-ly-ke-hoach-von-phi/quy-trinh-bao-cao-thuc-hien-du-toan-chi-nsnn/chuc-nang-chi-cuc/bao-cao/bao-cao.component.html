@@ -539,7 +539,7 @@
             <tr *ngFor="let data of danhSachChiTietPhuLuc11Temp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,'4')}}
                 </td>
                 <td>
                   <div *ngFor="let itemDetail of noiDungs">
@@ -609,7 +609,7 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,'4')}}
                 </td>
                 <td>
                   <div *ngFor="let itemDetail of noiDungs">
@@ -898,7 +898,7 @@
             <tr *ngFor="let data of danhSachChiTietPhuLuc12Temp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,'4')}}
                 </td>
                 <td>
                   <div *ngFor="let itemDetail of noiDungs">
@@ -968,16 +968,14 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,'4')}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn đơn vị - nội dung"
-                    [class]="editCache[data.id].data.maNdung ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maNdung">
-                    <nz-option *ngFor="let itemDetail of data.lstKm" [nzValue]="itemDetail.id"
-                      [nzLabel]="itemDetail.tenDm">
-                    </nz-option>
-                  </nz-select>
+                  <div *ngFor="let itemDetail of noiDungs">
+                    <div *ngIf="itemDetail.id == data.maNdung">
+                      {{itemDetail.tenDm}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   {{editCache[data.id].data.kphiSdungTcong}}
@@ -1190,7 +1188,7 @@
                   <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'12')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id,'11')" class="save">Lưu</a>
+                  <a (click)="saveEdit(data.id,'12')" class="save">Lưu</a>
                 </td>
                 <td [hidden]="status">
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -1400,7 +1398,7 @@
             <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
                   <div *ngFor="let item of noiDungs">
@@ -1447,14 +1445,14 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[data.id].data.maNdung ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maNdung">
-                    <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let item of noiDungs">
+                    <div *ngIf="item.id == data.maNdung">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
                 </td>
 
                 <td>
@@ -1930,7 +1928,7 @@
             <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
                   <div *ngFor="let item of maDans">
@@ -2010,14 +2008,14 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+                  {{getChiMuc(data.stt,null)}}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                    [class]="editCache[data.id].data.maDan ? '' : 'input-error-validate' "
-                    [(ngModel)]="editCache[data.id].data.maDan">
-                    <nz-option *ngFor="let item of maDans" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
+                  <div *ngFor="let item of maDans">
+                    <div *ngIf="item.id == data.maDan">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"

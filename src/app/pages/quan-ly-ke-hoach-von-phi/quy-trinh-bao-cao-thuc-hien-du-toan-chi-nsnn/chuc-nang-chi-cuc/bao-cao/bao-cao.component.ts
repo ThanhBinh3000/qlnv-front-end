@@ -35,7 +35,7 @@ export class ItemData {
   lyDoTuChoi!: string;
   lstIdDeletes!: [];
   nguoiBcao!: string;
-  qlnvKhvonphiBcaoId!: string;
+  bcaoId!: string;
 }
 
 export class ItemDanhSach {
@@ -364,7 +364,7 @@ export class BaoCaoComponent implements OnInit {
           lyDoTuChoi: null,
           lstIdDeletes: [],
           nguoiBcao: null,
-          qlnvKhvonphiBcaoId: this.id,
+          bcaoId: this.id,
         });
       })
     }
@@ -706,7 +706,6 @@ export class BaoCaoComponent implements OnInit {
   // doi tab
   changeTab(maPhuLuc, trangThaiChiTiet) {
     this.savePhuLuc1(); // add cac danh sach phu luc 1 con vao danhSachChiTietPhuLucTemp
-    debugger
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
@@ -724,7 +723,9 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { 
+      item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), 
+      item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
     this.tabSelected = maPhuLuc;
     // set listBCaoTemp theo ma phu luc vua chon
     let lstBcaosTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc);
@@ -872,7 +873,7 @@ export class BaoCaoComponent implements OnInit {
               lyDoTuChoi: null,
               lstIdDeletes: [],
               nguoiBcao: null,
-              qlnvKhvonphiBcaoId: this.id,
+              bcaoId: this.id,
             });
           }
         })
@@ -1804,31 +1805,39 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-  getChiMuc(str: string): string {
+  getChiMuc(str: string,dauMuc:string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
     var xau: string = "";
     let chiSo: any = str.split('.');
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
-    if (n == 0) {
-      for (var i = 0; i < this.soLaMa.length; i++) {
-        while (k >= this.soLaMa[i].gTri) {
-          xau += this.soLaMa[i].kyTu;
-          k -= this.soLaMa[i].gTri;
-        }
+    if(dauMuc == '4'){
+      if (n == 0) {
+        xau = "-";
+      }else if (n == 1){
+        xau = "+";
       }
-    };
-    if (n == 1) {
-      xau = chiSo[n];
-    };
-    if (n == 2) {
-      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    };
-    if (n == 3) {
-      xau = String.fromCharCode(k + 96);
-    }
-    if (n == 4) {
-      xau = "-";
+    }else{
+      if (n == 0) {
+        for (var i = 0; i < this.soLaMa.length; i++) {
+          while (k >= this.soLaMa[i].gTri) {
+            xau += this.soLaMa[i].kyTu;
+            k -= this.soLaMa[i].gTri;
+          }
+        }
+      };
+      if (n == 1) {
+        xau = chiSo[n];
+      };
+      if (n == 2) {
+        xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+      };
+      if (n == 3) {
+        xau = String.fromCharCode(k + 96);
+      }
+      if (n == 4) {
+        xau = "-";
+      }
     }
     return xau;
   }
@@ -2013,7 +2022,7 @@ export class BaoCaoComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string, phuLuc: string): void {
-    debugger
+    
     if (this.tabSelected == TAB_SELECTED.phuLuc1) {
       if (!this.editCache[id].data.maNdung) {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
@@ -2065,6 +2074,7 @@ export class BaoCaoComponent implements OnInit {
         nho = phuLucTemp[index].checked;
       }
     }
+    
   }
   //kiểm tra các phần tử con có cùng được đánh dấu hay ko
   checkAllChild(str: string, phuLuc: string): boolean {
@@ -2107,14 +2117,14 @@ export class BaoCaoComponent implements OnInit {
 
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: any, phuLuc: string) {
-    let phuLucTemp;
-    if (phuLuc == '11') {
-      phuLucTemp = this.danhSachChiTietPhuLuc11Temp;
-    } else if (phuLuc == '12') {
-      phuLucTemp = this.danhSachChiTietPhuLuc12Temp;
-    } else {
-      phuLucTemp = this.danhSachChiTietPhuLucTemp;
-    }
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    // if (phuLuc == '11') {
+    //   phuLucTemp = this.danhSachChiTietPhuLuc11Temp;
+    // } else if (phuLuc == '12') {
+    //   phuLucTemp = this.danhSachChiTietPhuLuc12Temp;
+    // } else {
+    //   phuLucTemp = this.danhSachChiTietPhuLucTemp;
+    // }
     let item;
     if (initItem?.id) {
       item = {

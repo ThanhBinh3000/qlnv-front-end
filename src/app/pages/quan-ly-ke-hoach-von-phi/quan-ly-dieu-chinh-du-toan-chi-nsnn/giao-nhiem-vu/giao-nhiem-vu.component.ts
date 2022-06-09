@@ -294,38 +294,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 		}
 	}
 
-  // getStatusButtonOk() {
-  //   const utils = new Utils();
-  //   let checkParent = false;
-  //   let checkChirld = false;
-  //   let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-  //   if (dVi && dVi.maDvi == this.userInfo.dvql) {
-  //     checkChirld = true;
-  //   }
-  //   if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
-  //     checkParent = true;
-  //   }
-
-  //   let roleNguoiTao = this.userInfo?.roles[0]?.code;
-  //   let trangThaiBaoCao = this.trangThaiBaoCao;
-  //   if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
-  //     this.statusBtnOk = false;
-  //   } else {
-  //     this.statusBtnOk = true;
-  //   }
-
-  //   if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
-  //     && roleNguoiTao == '3' && checkChirld) {
-  //     this.statusBtnFinish = false;
-  //   } else {
-  //     this.statusBtnFinish = true;
-  //   }
-  // }
-
 	//get user info
 	async getUserInfo(username: string) {
 		await this.userService.getUserInfo(username).toPromise().then(
@@ -414,23 +382,17 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	// luu
 	async save() {
-		let checkSave = true;
-		//get list file url
-		let listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
-
-		this.lstDieuChinhs.forEach(e => {
-			if (!e.giaoCho) {
-				checkSave = false;
-			}
-		})
-
-		if (!checkSave) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-			return;
-		}
+    // check lưu trong bảng trước khi nhấn lưu
+    let checkSave = true;
+    this.lstDieuChinhs.forEach(e => {
+      if (!e.giaoCho) {
+        checkSave = false;
+      }
+    })
+    if (!checkSave) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
 
 		// replace nhung ban ghi dc them moi id thanh null
 		this.lstDieuChinhs.forEach(item => {
@@ -439,13 +401,21 @@ export class GiaoNhiemVuComponent implements OnInit {
 			}
 		})
 
+    // thêm cac dvi trực thuộc vào danh sách thêm mới sau khi tổng hợp
 		let tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
 		})
+
+    //get list file url
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
+
 		let request = JSON.parse(JSON.stringify({
 			id: this.id,
-			fileDinhKems: listFile,
+			fileDinhKems: this.lstFiles,
 			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstDchinh: this.lstDieuChinhs,
 			maBcao: this.maBaoCao,
@@ -459,7 +429,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     //get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
-		  request.congVan = await this.uploadFile(file);
+			request.congVan = await this.uploadFile(file);
 		}
 		//call service them moi
 		this.spinner.show();
@@ -587,7 +557,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;
 					this.lstDviTrucThuoc = data.data.lstDchinhDviTrucThuocs;
-					this.lstFiles = data.data.lstFiles;
+          this.lstFiles = data.data.lstFiles;
 					this.listFile = [];
 					// set thong tin chung bao cao
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -601,14 +571,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
-					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-						this.trangThaiBaoCao == Utils.TT_BC_3 ||
-						this.trangThaiBaoCao == Utils.TT_BC_5 ||
-						this.trangThaiBaoCao == Utils.TT_BC_8) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
 					this.lstDviTrucThuoc.forEach(item => {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);

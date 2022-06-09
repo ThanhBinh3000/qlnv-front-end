@@ -41,7 +41,8 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   }
   //trang thai
   status: boolean;
-
+  userRole: string;
+  maDviTao: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -56,26 +57,29 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 
   async ngOnInit() {
     let userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.searchFilter.donViTao = this.userInfo?.dvql;
-    if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
-      this.status = false;
-      this.searchFilter.trangThai = Utils.TT_BC_7;
-      this.searchFilter.loaiTimKiem = '1';
-      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
-      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
-      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
-    } else {
-      this.status = true;
-      this.searchFilter.loaiTimKiem = '0';
-      if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
-        this.searchFilter.trangThai = Utils.TT_BC_2;
-        this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
-      } else {
-        this.searchFilter.trangThai = Utils.TT_BC_4;
-        this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
-      }
-    }
+		await this.getUserInfo(userName); //get user info
+		this.maDviTao = this.userInfo?.dvql;
+		this.userRole = this.userInfo?.roles[0].code;
+    if (this.userRole == Utils.NHAN_VIEN) {
+			this.status = false;
+			this.searchFilter.trangThai = Utils.TT_BC_7;
+			this.searchFilter.loaiTimKiem = '1';
+			this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
+		} else {
+			this.status = true;
+			this.searchFilter.loaiTimKiem = '0';
+			this.searchFilter.donViTao = this.maDviTao;
+			if (this.userRole == Utils.TRUONG_BO_PHAN) {
+				this.searchFilter.trangThai = Utils.TT_BC_2;
+				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+			} else {
+				this.searchFilter.trangThai = Utils.TT_BC_4;
+				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+			}
+		}
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {

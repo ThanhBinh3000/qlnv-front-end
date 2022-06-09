@@ -145,14 +145,12 @@
               <td>
                   <nz-input-number class="search__input" nzSize="small"
                       [(ngModel)]="editCache[data.id].data.tdiemBcaoDtoan"
+                      (ngModelChange)="changeModel(data.id)"
                       [class]="editCache[data.id].data.tdiemBcaoDtoan || editCache[data.id].data.tdiemBcaoDtoan ===0?'' : 'input-error-validate'">
                   </nz-input-number>
               </td>
               <td>
-                  <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu"
-                      [class]="editCache[data.id].data.tdiemBcaoCcu || editCache[data.id].data.tdiemBcaoCcu ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                  <input nz-input class="search__input" nzSize="small"  [class]="editCache[data.id].data.tdiemBcaoCcu?'' : 'input-error-validate'" [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu"/>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
@@ -163,6 +161,7 @@
               <td>
                   <nz-input-number class="search__input" nzSize="small"
                       [(ngModel)]="editCache[data.id].data.dkienThienDtoan"
+                      (ngModelChange)="changeModel(data.id)"
                       [class]="editCache[data.id].data.dkienThienDtoan || editCache[data.id].data.dkienThienDtoan ===0?'' : 'input-error-validate'">
                   </nz-input-number>
               </td>
@@ -173,22 +172,25 @@
                   </nz-input-number>
               </td>
               <td>
-                  <nz-input-number class="search__input" nzSize="small"
+                  <!-- <nz-input-number class="search__input" nzSize="small"
                       [(ngModel)]="editCache[data.id].data.tongNcauDtoanN"
                       [class]="editCache[data.id].data.tongNcauDtoanN || editCache[data.id].data.tongNcauDtoanN ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  {{editCache[data.id].data.tongNcauDtoanN}}
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
                       [(ngModel)]="editCache[data.id].data.dtoanLke"
+                      (ngModelChange)="changeModel(data.id)"
                       [class]="editCache[data.id].data.dtoanLke || editCache[data.id].data.dtoanLke ===0?'' : 'input-error-validate'">
                   </nz-input-number>
               </td>
               <td>
-                  <nz-input-number class="search__input" nzSize="small"
+                  <!-- <nz-input-number class="search__input" nzSize="small"
                       [(ngModel)]="editCache[data.id].data.dtoanDchinh"
                       [class]="editCache[data.id].data.dtoanDchinh || editCache[data.id].data.dtoanDchinh ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  {{editCache[data.id].data.dtoanDchinh}}
               </td>
               <td>
                   <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ghiChu"/>

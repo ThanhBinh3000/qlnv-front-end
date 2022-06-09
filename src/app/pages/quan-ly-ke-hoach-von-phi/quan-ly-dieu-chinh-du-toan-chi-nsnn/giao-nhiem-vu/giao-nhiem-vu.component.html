@@ -171,7 +171,8 @@
 									</td>
 									<td>
 										<ng-container *ngIf="data.trangThai == '0'; else ok">
-											{{ getStatusBM(data.trangThai) }} - {{data.lyDoTuChoi}}
+											{{ getStatusBM(data.trangThai) }}<br>
+											Lý do: {{data.lyDoTuChoi}}
 										</ng-container>
 										<ng-template #ok>
 											{{ getStatusBM(data.trangThai) }}
