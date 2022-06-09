@@ -52,6 +52,11 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   isViewDetail: boolean;
+  countChiTieu = {
+    chiTieuKeHoachNamTongCuc: 0,
+    chiTieuKeHoachNamCuc: 0
+  }
+  capDvi: number = 1;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -69,6 +74,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.userService.isChiCuc()) {
       this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      this.capDvi = 2;
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
@@ -93,6 +99,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           this.optionsDonVi.push(item);
         }
         this.options = cloneDeep(this.optionsDonVi);
+        this.getCount();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -144,7 +151,9 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         donviId = getDonVi[0].id;
       }
     }
+
     let body = {
+      capDvi: this.capDvi,
       ngayKyDenNgay: this.startValue
         ? dayjs(this.startValue[1]).format('YYYY-MM-DD')
         : null,
@@ -167,6 +176,24 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async getCount() {
+    try {
+      let res = await this.chiTieuKeHoachNamService.getCountChiTieu();
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.countChiTieu.chiTieuKeHoachNamCuc = res.data.chiTieuKeHoachNamCuc ?? 0;
+          this.countChiTieu.chiTieuKeHoachNamTongCuc = res.data.chiTieuKeHoachNamTongCuc ?? 0;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -387,5 +414,19 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+  selectTab(cap: string) {
+    switch (cap) {
+      case 'tong-cuc':
+        this.capDvi = 1;
+        break;
+      case 'cuc':
+        this.capDvi = 2;
+        break;
+      default:
+        break;
+    }
+    this.clearFilter();
+    this.search();
   }
 }
