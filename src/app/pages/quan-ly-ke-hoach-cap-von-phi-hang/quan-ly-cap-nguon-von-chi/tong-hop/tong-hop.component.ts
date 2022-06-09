@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { NGUON_BAO_CAO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -25,7 +25,7 @@ export class TongHopComponent implements OnInit {
 	searchFilter = {
         loaiTimKiem: '1',
         maDeNghi: "",
-        trangThai: "",
+        trangThai: "2",
         tuNgay: "",
         denNgay: "",
         qdChiTieu: "",
@@ -36,7 +36,7 @@ export class TongHopComponent implements OnInit {
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
 	donVis: any[] = [];
-    loaiDns: any[] = [];
+    loaiDns: any[] = NGUON_BAO_CAO;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -103,26 +103,26 @@ export class TongHopComponent implements OnInit {
 		}
 		let requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
+			maDnghi: this.searchFilter.maDeNghi,
 			maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            qdChiTieu: this.searchFilter.qdChiTieu,
-            loaiDn: this.searchFilter.loaiDn,
+            soQdChiTieu: this.searchFilter.qdChiTieu,
+            loaiDnghi: this.searchFilter.loaiDn,
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: trangThais,
+			trangThais: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
-		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+		await this.quanLyVonPhiService.timKiemDeNghiThop(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = data.data.content;
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
-						e.ngayTrinhDuyet = this.datePipe.transform(e.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
                         e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
@@ -144,6 +144,22 @@ export class TongHopComponent implements OnInit {
 		// this.router.navigate([
 		// 	'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.maDviTao + '/' + this.namHienTai,
 		// ])
+	}
+
+	taoMoi(){
+		if (!this.searchFilter.loaiDn){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC){
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
+			])
+		} else {
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
+			])
+		}
 	}
 
 

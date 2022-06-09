@@ -1805,31 +1805,39 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-  getChiMuc(str: string): string {
+  getChiMuc(str: string,dauMuc:string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
     var xau: string = "";
     let chiSo: any = str.split('.');
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
-    if (n == 0) {
-      for (var i = 0; i < this.soLaMa.length; i++) {
-        while (k >= this.soLaMa[i].gTri) {
-          xau += this.soLaMa[i].kyTu;
-          k -= this.soLaMa[i].gTri;
-        }
+    if(dauMuc == '4'){
+      if (n == 0) {
+        xau = "-";
+      }else if (n == 1){
+        xau = "+";
       }
-    };
-    if (n == 1) {
-      xau = chiSo[n];
-    };
-    if (n == 2) {
-      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    };
-    if (n == 3) {
-      xau = String.fromCharCode(k + 96);
-    }
-    if (n == 4) {
-      xau = "-";
+    }else{
+      if (n == 0) {
+        for (var i = 0; i < this.soLaMa.length; i++) {
+          while (k >= this.soLaMa[i].gTri) {
+            xau += this.soLaMa[i].kyTu;
+            k -= this.soLaMa[i].gTri;
+          }
+        }
+      };
+      if (n == 1) {
+        xau = chiSo[n];
+      };
+      if (n == 2) {
+        xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+      };
+      if (n == 3) {
+        xau = String.fromCharCode(k + 96);
+      }
+      if (n == 4) {
+        xau = "-";
+      }
     }
     return xau;
   }
@@ -2014,7 +2022,7 @@ export class BaoCaoComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string, phuLuc: string): void {
-    debugger
+    
     if (this.tabSelected == TAB_SELECTED.phuLuc1) {
       if (!this.editCache[id].data.maNdung) {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -19,6 +19,7 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
 		maDn: null,
@@ -72,10 +73,13 @@ export class TimKiemComponent implements OnInit {
 	}
 	//trangThai
 	statusBtnNew: boolean = true;
+	status: boolean;
+	disable: boolean;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
+		private routerActive: ActivatedRoute,
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
@@ -86,6 +90,12 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.loai = this.routerActive.snapshot.paramMap.get('loai');
+		if (this.loai == "0"){
+			this.status = true;
+		} else {
+			this.status = false;
+		}
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
@@ -106,8 +116,10 @@ export class TimKiemComponent implements OnInit {
 		if (this.capDvi == Utils.TONG_CUC) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
 			this.searchFilter.loaiDn = Utils.MUA_VTU;
+			this.disable = true;
 		} else {
-			this.loaiDns = this.loaiDns.filter(e => e != Utils.MUA_VTU);
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+			this.disable = false;
 		}
 
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
@@ -151,7 +163,7 @@ export class TimKiemComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: this.searchFilter.trangThai,
+			trangThais: trangThais,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemDeNghi(requestReport).toPromise().then(
