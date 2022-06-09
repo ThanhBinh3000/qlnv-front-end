@@ -9,7 +9,7 @@ const routes: Routes = [
 	},
 	//tim kiem danh sach
 	{
-		path: 'tim-kiem',
+		path: 'tim-kiem/:loai',
 		loadChildren: () =>
 			import(
 				'./tim-kiem/tim-kiem.module'
@@ -23,11 +23,25 @@ const routes: Routes = [
 			).then((m) => m.DanhSachDeNghiTuCucKhuVucModule),
 	},
 	{
-		path: 'tong-hop-tu-cuc-khu-vuc',
+		path: 'tong-hop-tu-cuc-khu-vuc/:id',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tu-cuc-khu-vuc/tong-hop-tu-cuc-khu-vuc.module'
 			).then((m) => m.TongHopTuCucKhuVucModule),
+	},
+	{
+		path: 'tong-hop-tu-cuc-khu-vuc/:maDvi/:soQd',
+		loadChildren: () =>
+			import(
+				'./tong-hop-tu-cuc-khu-vuc/tong-hop-tu-cuc-khu-vuc.module'
+			).then((m) => m.TongHopTuCucKhuVucModule),
+	},
+	{
+		path: 'tong-hop-tai-tong-cuc/:id',
+		loadChildren: () =>
+			import(
+				'./tong-hop-tai-tong-cuc/tong-hop-tai-tong-cuc.module'
+			).then((m) => m.TongHopTaiTongCucModule),
 	},
 	{
 		path: 'tong-hop-tai-tong-cuc',

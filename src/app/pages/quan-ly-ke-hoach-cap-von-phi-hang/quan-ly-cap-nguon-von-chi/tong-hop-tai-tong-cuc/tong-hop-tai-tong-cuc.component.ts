@@ -12,29 +12,29 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { ItemDataMau02 } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
     id: any;
-    stt: string;
-    maCucKhuVuc: string;
+    maCucKv: string;
     vonCapThoc: number;
     vonUngThoc: number;
     tongSoThoc: number;
-    giaoDtoanGao: number;
+    giaoDuToanGao: number;
     vonCapGao: number;
     vonUngGao: number;
     tongSoGao: number;
-    giaoDtoanLthuc: number;
-    vonCapLthuc: number;
-    vonUngLthuc: number;
-    tongSoLthuc: number;
+    giaoDuToanMuoi: number;
+    vonCapMuoi: number;
+    vonUngMuoi: number;
+    tongSoMuoi: number;
     capVonVttb: number;
-    tongGiaoVon: number;
+    tcGiaoVonHoanUngNam: number;
     checked: boolean;
 }
 
@@ -57,7 +57,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
-    nguonBcao: string;
+    nguonBcao: string = Utils.THOP_TAI_TC;
     congVan: ItemCongVan;
     ngayTao: string;
     ngayTrinhDuyet: string;
@@ -71,7 +71,9 @@ export class TongHopTaiTongCucComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
+    cucKhuVucs: any[] = [];
     dviTinhs: any[] = [];
+    nguonBcaos: any[] = NGUON_BAO_CAO;
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     //trang thai cac nut
@@ -148,6 +150,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     this.donVis = res.data;
+                    this.cucKhuVucs = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -161,32 +164,30 @@ export class TongHopTaiTongCucComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
-            this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.donVis.forEach(item => {
+            this.cucKhuVucs.forEach(item => {
                 this.lstCtietBcao.push({
-                    id: uuid.v4() + 'FE',
-                    stt: "",
-                    maCucKhuVuc: item.maDvi,
+                    id: uuid.v4() + "FE",
+                    maCucKv: item.maDvi,
                     vonCapThoc: 0,
                     vonUngThoc: 0,
                     tongSoThoc: 0,
-                    giaoDtoanGao: 0,
+                    giaoDuToanGao: 0,
                     vonCapGao: 0,
                     vonUngGao: 0,
                     tongSoGao: 0,
-                    giaoDtoanLthuc: 0,
-                    vonCapLthuc: 0,
-                    vonUngLthuc: 0,
-                    tongSoLthuc: 0,
+                    giaoDuToanMuoi: 0,
+                    vonCapMuoi: 0,
+                    vonUngMuoi: 0,
+                    tongSoMuoi: 0,
                     capVonVttb: 0,
-                    tongGiaoVon: 0,
+                    tcGiaoVonHoanUngNam: 0,
                     checked: false,
                 })
             })
             this.updateEditCache();
             this.spinner.show();
-            this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
                         this.maDeNghi = res.data;
@@ -329,19 +330,21 @@ export class TongHopTaiTongCucComponent implements OnInit {
     // call chi tiet bao cao
     async getDetailReport() {
         this.spinner.show();
-        await this.quanLyVonPhiService.ctietPhuongAn(this.id).toPromise().then(
+        await this.quanLyVonPhiService.ctietDeNghiThop(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;
-                    this.lstCtietBcao = data.data.listCtiet;
-                    this.maDeNghi = data.data.maDeNghi;
-                    this.qdChiTieu = data.data.qdChiTieu;
-                    this.nguonBcao = data.data.nguonBcao;
+                    this.maDviTao = data.data.maDvi;
+                    this.lstCtietBcao = data.data.thopTcCtiets;
+                    this.updateEditCache();
+                    this.maDeNghi = data.data.maDnghi;
+                    this.qdChiTieu = data.data.soQdChiTieu;
                     this.congVan = data.data.congVan;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
+                    this.thuyetMinh = data.data.thuyetMinh;
                     this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                 } else {
@@ -364,7 +367,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 lyDoTuChoi: lyDoTuChoi,
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).toPromise().then(async (data) => {
+            await this.quanLyVonPhiService.trinhDuyetDeNghiTongHop(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThai = mcn;
                     this.getStatusButton();
@@ -406,6 +409,17 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     // luu
     async save() {
+        let lstCTietBCaoTemp: any[] = [];
+        this.lstCtietBcao.forEach(item => {
+            if (item.id.length == 38){
+                lstCTietBCaoTemp.push({
+                    ...item,
+                    id: null,
+                })
+            } else {
+                lstCTietBCaoTemp.push(item);
+            }
+        })
         //get list file url
         let listFile: any = [];
         for (const iterator of this.listFile) {
@@ -415,9 +429,13 @@ export class TongHopTaiTongCucComponent implements OnInit {
         let request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: [],
-            listCtiet: this.lstCtietBcao,
+            listIdDeleteFiles: this.listIdFilesDelete,
+            thopTcCtiets: lstCTietBCaoTemp,
             maDvi: this.maDviTao,
-            maDeNghi: this.maDeNghi,
+            maDnghi: this.maDeNghi,
+            loaiDnghi: this.nguonBcao,
+            maDviTien: "",
+            soQdChiTieu: "qd123",//this.qdChiTieu,
             trangThai: this.trangThai,
             thuyetMinh: this.thuyetMinh,
         }));
@@ -428,19 +446,28 @@ export class TongHopTaiTongCucComponent implements OnInit {
         }
         this.spinner.show();
         if (!this.id) {
-            this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
+            this.quanLyVonPhiService.themMoiDnghiThop(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        if (!this.id) {
                             this.router.navigate([
-                                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
+                                'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + data.data.id,
                             ])
-                        }
-                        else {
-                            await this.getDetailReport();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            this.quanLyVonPhiService.capNhatDnghiThop(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                            this.getDetailReport();
                             this.getStatusButton();
-                        }
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -506,6 +533,12 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 data: { ...item }
             };
         });
+    }
+
+    changeModel(id: any){
+        this.editCache[id].data.tongSoThoc = Number(this.editCache[id].data.vonCapThoc) + Number(this.editCache[id].data.vonUngThoc);
+        this.editCache[id].data.tongSoGao = Number(this.editCache[id].data.giaoDuToanGao) + Number(this.editCache[id].data.vonCapGao) + Number(this.editCache[id].data.vonUngGao);
+        this.editCache[id].data.tongSoMuoi = Number(this.editCache[id].data.giaoDuToanMuoi) + Number(this.editCache[id].data.vonCapMuoi) + Number(this.editCache[id].data.vonUngMuoi);
     }
 
 

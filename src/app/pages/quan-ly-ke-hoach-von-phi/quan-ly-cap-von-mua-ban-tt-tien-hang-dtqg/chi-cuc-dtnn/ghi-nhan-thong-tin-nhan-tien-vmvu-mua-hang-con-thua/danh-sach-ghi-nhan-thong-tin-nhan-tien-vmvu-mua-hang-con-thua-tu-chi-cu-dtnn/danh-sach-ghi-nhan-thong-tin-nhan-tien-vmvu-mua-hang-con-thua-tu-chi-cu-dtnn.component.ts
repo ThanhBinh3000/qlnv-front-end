@@ -1,1 +1,0 @@
-//giống với ghi nhận thông tin nhận tiền vốn bán hàng

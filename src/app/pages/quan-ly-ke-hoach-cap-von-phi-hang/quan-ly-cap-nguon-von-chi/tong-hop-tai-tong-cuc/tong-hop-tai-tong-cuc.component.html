@@ -77,7 +77,13 @@
 						<tr>
 							<td>{{maDeNghi}}</td>
 							<td>{{qdChiTieu}}</td>
-							<td>{{nguonBcao}}</td>
+							<td>
+								<div *ngFor="let item of nguonBcaos">
+									<div *ngIf="item.id == nguonBcao">
+										{{item.tenDm}}
+									</div>
+								</div>
+							</td>
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
@@ -94,13 +100,7 @@
 							<td>{{ngayTrinhDuyet}}</td>
 							<td>{{ngayPheDuyet}}</td>
 							<td>
-								<ng-container
-									*ngIf="trangThai == '3' || trangThai == '5' || trangThai == '8'; else chapnhan">
-									{{getStatusName()}} - {{lyDoTuChoi}}
-								</ng-container>
-								<ng-template #chapnhan>
-									{{getStatusName()}}
-								</ng-template>
+								{{getStatusName()}}
 							</td>
 						</tr>
 					</tbody>
@@ -183,7 +183,7 @@
 											<td>{{ i + 1 }}</td>
 											<td>
 												<div *ngFor="let item of donVis">
-													<div *ngIf="item.maDvi == data.maCucKhuVuc">
+													<div *ngIf="item.maDvi == data.maCucKv">
 														{{item.tenDvi}}
 													</div>
 												</div>
@@ -198,7 +198,7 @@
 												{{data.tongSoThoc}}
 											</td>
 											<td>
-												{{data.giaoDtoanGao}}
+												{{data.giaoDuToanGao}}
 											</td>
 											<td>
 												{{data.vonCapGao}}
@@ -210,22 +210,22 @@
 												{{data.tongSoGao}}
 											</td>
 											<td>
-												{{data.giaoDtoanLthuc}}
+												{{data.giaoDuToanMuoi}}
 											</td>
 											<td>
-												{{data.vonCapLthuc}}
+												{{data.vonCapMuoi}}
 											</td>
 											<td>
-												{{data.vonUngLthuc}}
+												{{data.vonUngMuoi}}
 											</td>
 											<td>
-												{{data.tongSoLthuc}}
+												{{data.tongSoMuoi}}
 											</td>
 											<td>
 												{{data.capVonVttb}}
 											</td>
 											<td>
-												{{data.tongGiaoVon}}
+												{{data.tcGiaoVonHoanUngNam}}
 											</td>
 											<td [hidden]="status">
 												<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -235,7 +235,7 @@
 											<td>{{ i + 1 }}</td>
 											<td>
 												<div *ngFor="let item of donVis">
-													<div *ngIf="item.maDvi == data.maCucKhuVuc">
+													<div *ngIf="item.maDvi == data.maCucKv">
 														{{item.tenDvi}}
 													</div>
 												</div>
@@ -243,13 +243,15 @@
 											<td>
 												<nz-input-number class="search__input"
 													[class]="editCache[data.id].data.vonCapThoc || editCache[data.id].data.vonCapThoc === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapThoc">
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapThoc"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
 												<nz-input-number class="search__input"
 													[class]="editCache[data.id].data.vonUngThoc || editCache[data.id].data.vonUngThoc === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngThoc">
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngThoc"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
@@ -257,20 +259,23 @@
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.giaoDtoanGao || editCache[data.id].data.giaoDtoanGao === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.giaoDtoanGao">
+													[class]="editCache[data.id].data.giaoDuToanGao || editCache[data.id].data.giaoDuToanGao === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.giaoDuToanGao"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
 												<nz-input-number class="search__input"
 													[class]="editCache[data.id].data.vonCapGao || editCache[data.id].data.vonCapGao === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapGao">
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapGao"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
 												<nz-input-number class="search__input"
 													[class]="editCache[data.id].data.vonUngGao || editCache[data.id].data.vonUngGao === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngGao">
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngGao"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
@@ -278,24 +283,27 @@
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.giaoDtoanLthuc || editCache[data.id].data.giaoDtoanLthuc === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.giaoDtoanLthuc">
+													[class]="editCache[data.id].data.giaoDuToanMuoi || editCache[data.id].data.giaoDuToanMuoi === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.giaoDuToanMuoi"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.vonCapLthuc || editCache[data.id].data.vonCapLthuc === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapLthuc">
+													[class]="editCache[data.id].data.vonCapMuoi || editCache[data.id].data.vonCapMuoi === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapMuoi"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.vonUngLthuc || editCache[data.id].data.vonUngLthuc === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngLthuc">
+													[class]="editCache[data.id].data.vonUngMuoi || editCache[data.id].data.vonUngMuoi === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.vonUngMuoi"
+													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												{{editCache[data.id].data.tongSoLthuc}}
+												{{editCache[data.id].data.tongSoMuoi}}
 											</td>
 											<td>
 												<nz-input-number class="search__input"
@@ -305,8 +313,8 @@
 											</td>
 											<td>
 												<nz-input-number class="search__input"
-													[class]="editCache[data.id].data.tongGiaoVon || editCache[data.id].data.tongGiaoVon === 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.tongGiaoVon">
+													[class]="editCache[data.id].data.tcGiaoVonHoanUngNam || editCache[data.id].data.tcGiaoVonHoanUngNam === 0 ?'' : 'input-error-validate' "
+													nzSize="small" [(ngModel)]="editCache[data.id].data.tcGiaoVonHoanUngNam">
 												</nz-input-number>
 											</td>
 											<td [hidden]="status">

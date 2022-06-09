@@ -79,7 +79,13 @@
 						<tr>
 							<td>{{maDeNghi}}</td>
 							<td>{{qdChiTieu}}</td>
-							<td>{{nguonBcao}}</td>
+							<td>
+								<div *ngFor="let item of nguonBcaos">
+									<div *ngIf="item.id == nguonBcao">
+										{{item.tenDm}}
+									</div>
+								</div>
+							</td>
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
@@ -93,7 +99,7 @@
 								</div>
 							</td>
 							<td>{{ngayTao}}</td>
-							<td>{{ngayTrinhDuyet}}</td>
+							<td>{{ngayTrinh}}</td>
 							<td>{{ngayPheDuyet}}</td>
 							<td>
 								<ng-container
@@ -119,7 +125,7 @@
 										<th rowspan="2">Các cục DTNNKV</th>
 										<th colspan="4">Cấp tiền mua thóc</th>
 										<th colspan="4">Cấp tiền mua gạo</th>
-										<th colspan="4">Cấp tiền mua lương thực</th>
+										<th colspan="4">Cấp tiền mua muối</th>
 									</tr>
                                     <tr>
                                         <th>Kinh phí đã cấp</th>
@@ -156,59 +162,89 @@
                                     <tr>
                                         <td></td>
                                         <td>Tổng số</td>
+                                        <td>
+											{{tong.kphiDaCapThoc}}
+										</td>
+                                        <td>
+											{{tong.ycauCapThemThoc}}
+										</td>
+                                        <td>
+											{{tong.tongTienThoc}}
+										</td>
                                         <td></td>
+                                        <td>
+											{{tong.kphiDaCapGao}}
+										</td>
+                                        <td>
+											{{tong.ycauCapThemGao}}
+										</td>
+                                        <td>
+											{{tong.tongTienGao}}
+										</td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+											{{tong.kphiDaCapMuoi}}
+										</td>
+                                        <td>
+											{{tong.ycauCapThemMuoi}}
+										</td>
+                                        <td>
+											{{tong.tongTienMuoi}}
+										</td>
                                         <td></td>
                                     </tr>
 									<tr *ngFor="let data of lstCtietBcao; let i = index">
 										<td>{{ i + 1 }}</td>
 										<td>
-											{{getUnitName(data.maDvi)}}
+											{{getUnitName(data.maCucKv)}}
 										</td>
 										<td>
-											{{data.kphiCapThoc}}
+											{{data.kphiDaCapThoc}}
 										</td>
 										<td>
-											{{data.yeuCauCapThoc}}
+											{{data.ycauCapThemThoc}}
 										</td>
                                         <td>
                                             {{data.tongTienThoc}}
                                         </td>
                                         <td>
-                                            <a>Xem</a>
+											<ng-container *ngIf="data.idThoc">
+												<a (click)="xemChiTiet(data.idThoc)" style="color: #1890ff;">
+													Xem
+												</a>
+											</ng-container>
                                         </td>
 										<td>
-											{{data.kphiCapGao}}
+											{{data.kphiDaCapGao}}
 										</td>
 										<td>
-											{{data.yeuCauCapGao}}
+											{{data.ycauCapThemGao}}
 										</td>
                                         <td>
                                             {{data.tongTienGao}}
                                         </td>
                                         <td>
-                                            <a>Xem</a>
+                                            <ng-container *ngIf="data.idGao">
+												<a (click)="xemChiTiet(data.idGao)" style="color: #1890ff;">
+													Xem
+												</a>
+											</ng-container>
                                         </td>
                                         <td>
-											{{data.kphiCapLuongThuc}}
+											{{data.kphiDaCapMuoi}}
 										</td>
 										<td>
-											{{data.yeuCauCapLuongThuc}}
+											{{data.ycauCapThemMuoi}}
 										</td>
                                         <td>
-                                            {{data.tongTienLuongThuc}}
+                                            {{data.tongTienMuoi}}
                                         </td>
                                         <td>
-                                            <a>Xem</a>
+                                            <ng-container *ngIf="data.idMuoi">
+												<a (click)="xemChiTiet(data.idMuoi)" style="color: #1890ff;">
+													Xem
+												</a>
+											</ng-container>
                                         </td>
 									</tr>
 								</tbody>
