@@ -187,7 +187,7 @@ export class PhuLuc3Component implements OnInit {
               lyDoTuChoi: lyDoTuChoi,
           };
           this.spinner.show();
-          await this.quanLyVonPhiService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+          await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
               if (data.statusCode == 0) {
                   this.trangThaiPhuLuc = mcn;
                   this.getStatusButton();
