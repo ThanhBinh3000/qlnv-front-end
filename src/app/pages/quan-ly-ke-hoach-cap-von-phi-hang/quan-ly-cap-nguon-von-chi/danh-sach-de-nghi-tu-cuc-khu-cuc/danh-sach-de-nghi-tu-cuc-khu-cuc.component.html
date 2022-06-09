@@ -23,34 +23,34 @@
 					<nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
 						<nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="1">
 							<div *ngFor="let item of trangThais">
-                                <div *ngIf="item.id == searchFilter.trangThai">
-                                    {{item.tenDm}}
-                                </div>
-                            </div>
+								<div *ngIf="item.id == searchFilter.trangThai">
+									{{item.tenDm}}
+								</div>
+							</div>
 						</nz-descriptions-item>
 						<nz-descriptions-item nzTitle="Quyết định chỉ tiêu số" [nzSpan]="1">
-							<input nz-input class="search__input" [(ngModel)]="searchFilter.qdChiTieu"/> 
+							<input nz-input class="search__input" [(ngModel)]="searchFilter.qdChiTieu"
+								[class]="statusBtnNew || searchFilter.qdChiTieu ?'' : 'input-error-validate'" />
 						</nz-descriptions-item>
 						<nz-descriptions-item nzTitle="Đơn vị lập" [nzSpan]="1">
 							<div *ngFor="let item of donVis">
-                                <div *ngIf="item.maDvi == searchFilter.maDviTao">
-                                    {{item.tenDvi}}
-                                </div>
-                            </div>
+								<div *ngIf="item.maDvi == searchFilter.maDviTao">
+									{{item.tenDvi}}
+								</div>
+							</div>
 						</nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Loại đề nghị" [nzSpan]="1">
+						<nz-descriptions-item nzTitle="Loại đề nghị" [nzSpan]="1">
 							<div *ngFor="let item of loaiDns">
-                                <div *ngIf="item.id == searchFilter.loaiDn">
-                                    {{item.tenDm}}
-                                </div>
-                            </div>
+								<div *ngIf="item.id == searchFilter.loaiDn">
+									{{item.tenDm}}
+								</div>
+							</div>
 						</nz-descriptions-item>
 					</nz-descriptions>
 				</div>
 			</nz-card>
 			<div><br /></div>
-			<nz-card nzTitle="Danh sách đề nghị từ cục khu vực" [nzExtra]="tableCard1"
-				class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="Danh sách đề nghị từ cục khu vực" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
@@ -63,35 +63,51 @@
 							<th>Đơn vị lập</th>
 							<th>Mã đề nghị</th>
 							<th>Quyết định chỉ tiêu số</th>
-							<th>Quyết định trúng thầu</th>
-							<th>Quyết định đơn giá mua</th>
 							<th>Loại đề nghị</th>
 							<th>Ngày lập</th>
-                            <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt</th>
-                            <th>Trạng thái</th>
-                            <th></th>
+							<th>Ngày trình duyệt</th>
+							<th>Ngày duyệt</th>
+							<th>Trạng thái</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
-							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-                            <td>{{getUnitName(item.maDvi)}}</td>
+							<td>
+								{{ (i + 1) + (pages.page - 1)*pages.size }}
+							</td>
+							<td>
+								{{getUnitName(item.maDvi)}}
+							</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maDeNghi}}
+									{{ item.maDnghi}}
 								</a>
 							</td>
-							<td>{{item.qdChiTieu}}</td>
-                            <td>{{item.qdTrungThau}}</td>
-                            <td>{{item.qdDonGiaMua}}</td>
-							<td>{{item.loaiDn}}</td>
-							<td>{{item.ngayTao}}</td>
-                            <td>{{item.ngayTrinhDuyet}}</td>
-                            <td>{{item.ngayPheDuyet}}</td>
-							<td>{{getStatusName(item.trangThai)}}</td>
 							<td>
-								
+								{{item.soQdChiTieu}}
+							</td>
+							<td>
+								<div *ngFor="let e of loaiDns">
+									<div *ngIf="item.loaiDnghi == e.id">
+										{{e.tenDm}}
+									</div>
+								</div>
+							</td>
+							<td>
+								{{item.ngayTao}}
+							</td>
+							<td>
+								{{item.ngayTrinh}}
+							</td>
+							<td>
+								{{item.ngayPheDuyet}}
+							</td>
+							<td>
+								{{getStatusName(item.trangThai)}}
+							</td>
+							<td>
+
 							</td>
 						</tr>
 					</tbody>
@@ -111,7 +127,7 @@
 									{{ range[0] }}-{{ range[1] }} of {{totalElements}} items
 								</ng-template>
 							</nz-pagination>
-							<!-- end phân trang  --> 
+							<!-- end phân trang  -->
 						</div>
 					</div>
 				</div>

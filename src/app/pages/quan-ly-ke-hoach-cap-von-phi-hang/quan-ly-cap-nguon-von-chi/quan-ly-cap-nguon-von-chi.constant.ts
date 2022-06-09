@@ -6,7 +6,12 @@ export const QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST: QuanLyCapNguonVonChiNSNN[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Tìm kiếm',
     description: 'Danh sách công văn đề nghị cấp vốn',
-    url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/tim-kiem`,
+    url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/tim-kiem/0`,
   },
-
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Tổng hợp',
+    description: 'Danh sách công văn đề nghị cấp vốn',
+    url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/tong-hop`,
+  },
 ];
