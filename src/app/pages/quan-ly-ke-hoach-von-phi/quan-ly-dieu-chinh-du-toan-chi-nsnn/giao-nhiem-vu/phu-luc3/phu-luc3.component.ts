@@ -25,7 +25,7 @@ export class ItemData {
     khoachLuong: number;
     tdiemBcaoLuong: number;
     tdiemBcaoDtoan: number;
-    tdiemBcaoCcu: number;
+    tdiemBcaoCcu: string;
     dkienThienLuong: number;
     dkienThienDtoan: number;
     dtoanThieuNtruoc: number;
@@ -64,7 +64,7 @@ export class PhuLuc3Component implements OnInit {
       khoachLuong: 0,
       tdiemBcaoLuong: 0,
       tdiemBcaoDtoan: 0,
-      tdiemBcaoCcu: 0,
+      tdiemBcaoCcu: "",
       dkienThienLuong: 0,
       dkienThienDtoan: 0,
       dtoanThieuNtruoc: 0,
@@ -117,14 +117,13 @@ export class PhuLuc3Component implements OnInit {
       this.data?.lstCtietDchinh.forEach(item => {
         this.lstDchinh.push({
           ...item,
-          thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
-          thienSluongTteThien: divMoney(item.thienSluongTteThien, this.maDviTien),
-          thienSluongUocThien: divMoney(item.thienSluongUocThien, this.maDviTien),
-          thienCong: divMoney(item.thienCong, this.maDviTien),
-          thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
-          thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
-          kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
-          ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
+          khoachQdGiaoNvu: divMoney(item.khoachQdGiaoNvu, this.maDviTien),
+          tdiemBcaoDtoan: divMoney(item.tdiemBcaoDtoan, this.maDviTien),
+          dkienThienDtoan: divMoney(item.dkienThienDtoan, this.maDviTien),
+          dtoanThieuNtruoc: divMoney(item.dtoanThieuNtruoc, this.maDviTien),
+          tongNcauDtoanN: divMoney(item.tongNcauDtoanN, this.maDviTien),
+          dtoanLke: divMoney(item.dtoanLke, this.maDviTien),
+          dtoanDchinh: divMoney(item.dtoanDchinh, this.maDviTien),
         })
       })
       this.updateEditCache();
@@ -179,57 +178,57 @@ export class PhuLuc3Component implements OnInit {
       }
     }
 
-     // chuc nang check role
-	async onSubmit(mcn: string, lyDoTuChoi: string) {
-		if (this.id) {
-			const requestGroupButtons = {
-				id: this.id,
-				trangThai: mcn,
-				lyDoTuChoi: lyDoTuChoi,
-			};
-			this.spinner.show();
-			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
-				if (data.statusCode == 0) {
-                    this.trangThaiPhuLuc = mcn;
-					this.getStatusButton();
-                    let obj = {
-                        trangThai : mcn,
-                        lyDoTuChoi: lyDoTuChoi,
-                    }
-                    this.dataChange.emit(obj);
-					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-					// } else {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-					// }
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			}, err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			});
-			this.spinner.hide();
-		} else {
-			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-		}
-	}
+    // chuc nang check role
+    async onSubmit(mcn: string, lyDoTuChoi: string) {
+      if (this.id) {
+          const requestGroupButtons = {
+              id: this.id,
+              trangThai: mcn,
+              lyDoTuChoi: lyDoTuChoi,
+          };
+          this.spinner.show();
+          await this.quanLyVonPhiService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+              if (data.statusCode == 0) {
+                  this.trangThaiPhuLuc = mcn;
+                  this.getStatusButton();
+                  let obj = {
+                      trangThai: mcn,
+                      lyDoTuChoi: lyDoTuChoi,
+                  }
+                  this.dataChange.emit(obj);
+                  if (mcn == '0') {
+                      this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+                  } else {
+                      this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                  }
+              } else {
+                  this.notification.error(MESSAGE.ERROR, data?.msg);
+              }
+          }, err => {
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          });
+          this.spinner.hide();
+      } else {
+          this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+      }
+    }
 
     //show popup tu choi
     tuChoi(mcn: string) {
-      const modalTuChoi = this.modal.create({
-        nzTitle: 'Từ chối',
-        nzContent: DialogTuChoiComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {},
-      });
-      modalTuChoi.afterClose.subscribe(async (text) => {
-        if (text) {
-          this.onSubmit(mcn, text);
-        }
-      });
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Từ chối',
+            nzContent: DialogTuChoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {},
+        });
+        modalTuChoi.afterClose.subscribe(async (text) => {
+            if (text) {
+                this.onSubmit(mcn, text);
+            }
+        });
     }
 
     // them dong moi
@@ -242,7 +241,7 @@ export class PhuLuc3Component implements OnInit {
             khoachLuong: 0,
             tdiemBcaoLuong: 0,
             tdiemBcaoDtoan: 0,
-            tdiemBcaoCcu: 0,
+            tdiemBcaoCcu: "",
             dkienThienLuong: 0,
             dkienThienDtoan: 0,
             dtoanThieuNtruoc: 0,
@@ -326,15 +325,23 @@ export class PhuLuc3Component implements OnInit {
 
     //update khi sửa
     saveEdit(id: string): void {
-        // if (!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChiNsnn
-        //     || (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !== 0)
-        //     || (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !== 0)
-        //     || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)
-        //     || (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !== 0)) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        //     return;
-        // }
-        // this.changeModel(id);
+      if ((!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
+      (!this.editCache[id].data.dkienThienLuong && this.editCache[id].data.dkienThienLuong !== 0) ||
+      (!this.editCache[id].data.dtoanDchinh && this.editCache[id].data.dtoanDchinh !== 0) ||
+      (!this.editCache[id].data.dtoanLke && this.editCache[id].data.dtoanLke !== 0) ||
+      (!this.editCache[id].data.dtoanThieuNtruoc && this.editCache[id].data.dtoanThieuNtruoc !== 0) ||
+      (!this.editCache[id].data.khoachLuong && this.editCache[id].data.khoachLuong !== 0) ||
+      (!this.editCache[id].data.khoachQdGiaoNvu && this.editCache[id].data.khoachQdGiaoNvu !== 0) ||
+      (!this.editCache[id].data.tdiemBcaoCcu) ||
+      (!this.editCache[id].data.maDvi ) ||
+      (!this.editCache[id].data.tdiemBcaoDtoan && this.editCache[id].data.tdiemBcaoDtoan !== 0) ||
+      (!this.editCache[id].data.tdiemBcaoLuong && this.editCache[id].data.tdiemBcaoLuong !== 0) ||
+      (!this.editCache[id].data.tongNcauDtoanN && this.editCache[id].data.tongNcauDtoanN !== 0)
+
+      ) {
+          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+          return;
+        }
         this.editCache[id].data.checked = this.lstDchinh.find(
             (item) => item.id === id,
         ).checked; // set checked editCache = checked lstDchinh
@@ -353,13 +360,12 @@ export class PhuLuc3Component implements OnInit {
         });
     }
 
-    //gia tri cac o input thay doi thi tinh toan lai
-    // changeModel(id: string): void {
-    //     this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-    //     this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
-    //     this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
-    //     this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
-    // }
+    // gia tri cac o input thay doi thi tinh toan lai
+    changeModel(id: string): void {
+        this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan;
+        // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
+        this.editCache[id].data.dtoanDchinh = this.editCache[id].data.tongNcauDtoanN - this.editCache[id].data.dtoanLke;
+    }
 
     // luu
   async save(trangThai: string) {
