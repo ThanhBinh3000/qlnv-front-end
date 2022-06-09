@@ -551,7 +551,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     close() {
-        this.location.back();
+        this.router.navigate([
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop'
+        ])
     }
 
 

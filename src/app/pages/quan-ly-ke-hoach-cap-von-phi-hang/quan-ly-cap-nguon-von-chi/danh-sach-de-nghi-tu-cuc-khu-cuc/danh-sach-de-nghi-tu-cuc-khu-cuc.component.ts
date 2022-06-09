@@ -152,9 +152,11 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	}
 
 
-	dong() {
-		this.location.back();
-	}
+	close() {
+        this.router.navigate([
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop'
+        ])
+    }
 
 
 	xemChiTiet(id: string) {

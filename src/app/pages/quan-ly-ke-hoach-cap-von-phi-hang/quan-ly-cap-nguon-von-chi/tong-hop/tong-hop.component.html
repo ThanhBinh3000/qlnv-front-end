@@ -44,13 +44,14 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Quyết định chỉ tiêu</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu" />
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu" 
+						[class]=" searchFilter.loaiDn == '5' && !searchFilter.qdChiTieu && !statusBtnNew ? 'input-error-validate' : ''"/>
 					</div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Loại đề nghị</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị"
+						<label class="search__label">Nguồn báo cáo</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn báo cáo"
 							[(ngModel)]="searchFilter.loaiDn"
-							[class]="searchFilter.loaiDn ?'' : 'input-error-validate'">
+							[class]="statusBtnNew || searchFilter.loaiDn ?'' : 'input-error-validate'">
 							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>
@@ -69,9 +70,9 @@
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th>mã đề nghị</th>
+							<th>Mã đề nghị</th>
 							<th>Quyết định chỉ tiêu</th>
-							<th>Loại báo cáo</th>
+							<th>Nguồn báo cáo</th>
 							<th>Ngày lập</th>
 							<th>Ngày trình duyệt</th>
 							<th>Ngày lãnh đạo duyệt</th>
@@ -83,7 +84,7 @@
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
-								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+								<a (click)="xemChiTiet(item)" style="color: #1890ff;">
 									{{ item.maDnghi}}
 								</a>
 							</td>
@@ -91,7 +92,7 @@
 							<td>
 								<div *ngFor="let e of loaiDns">
 									<div *ngIf="e.id == item.loaiDnghi">
-										{{item.tenDm}}
+										{{e.tenDm}}
 									</div>
 								</div>
 							</td>
@@ -100,9 +101,9 @@
                             <td>{{item.ngayPheDuyet}}</td>
 							<td>{{getStatusName(item.trangThai)}}</td>
 							<td>
-								<!-- <ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" ></i>
-								</ng-container> -->
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<i class="fa fa-trash-o do" (click)="xoaDeNghi(item.id)" ></i>
+								</ng-container>
 							</td>
 						</tr>
 					</tbody>

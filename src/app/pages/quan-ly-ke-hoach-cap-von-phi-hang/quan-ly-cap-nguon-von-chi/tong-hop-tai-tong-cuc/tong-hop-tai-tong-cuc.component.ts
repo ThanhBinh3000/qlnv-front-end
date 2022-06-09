@@ -142,6 +142,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
+        this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -553,7 +554,9 @@ export class TongHopTaiTongCucComponent implements OnInit {
     }
 
     close() {
-        this.location.back();
+        this.router.navigate([
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop'
+        ])
     }
 
 

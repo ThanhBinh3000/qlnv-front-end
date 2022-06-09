@@ -463,6 +463,11 @@ export class BaoCaoComponent implements OnInit {
 			request.congVan = await this.uploadFile(file);
 		}
 
+		if (!request.congVan.fileName){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
+
 		//call service them moi
 		this.spinner.show();
 		if (!this.id) {
