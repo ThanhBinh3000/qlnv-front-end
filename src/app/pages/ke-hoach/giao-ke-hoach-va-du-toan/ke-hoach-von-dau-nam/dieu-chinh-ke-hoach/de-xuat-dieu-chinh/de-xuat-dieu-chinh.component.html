@@ -155,16 +155,18 @@
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
-                    <a *ngIf="userService.isCuc()" (click)="redirectToChiTiet(false, data.id)">
+                    <a *ngIf="userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI)"
+                      (click)="redirectToChiTiet(false, data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a *ngIf="data.trangThai == '00' && userService.isCuc()" (click)="xoaItem(data)">
+                    <a *ngIf="data.trangThai == globals.prop.DU_THAO && userService.isCuc()" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
-                    <a *ngIf="data.trangThai == '02'" (click)="redirectToDieuChinh(true, data.id)">
+                    <a *ngIf="data.trangThai == globals.prop.BAN_HANH" (click)="redirectToDieuChinh(true, data.id)">
                       <i class="icon htvbdh_tcdt_viewdetail2"></i>
                     </a>
-                    <a *ngIf="data.trangThai == '01'" (click)="redirectToDieuChinh(false, data.id)">
+                    <a *ngIf="data.trangThai == globals.prop.LANH_DAO_DUYET"
+                      (click)="redirectToDieuChinh(false, data.id)">
                       <i class="icon htvbdh_tcdt_tao-qd"></i>
                     </a>
                   </td>

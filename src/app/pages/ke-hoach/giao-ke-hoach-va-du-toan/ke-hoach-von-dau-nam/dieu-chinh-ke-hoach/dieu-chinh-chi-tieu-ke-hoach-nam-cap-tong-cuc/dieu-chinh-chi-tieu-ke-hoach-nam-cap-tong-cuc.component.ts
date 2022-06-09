@@ -51,6 +51,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
@@ -61,6 +62,21 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
 
   titleCard: string = '';
+  tabSelected: string = 'tu-choi';
+
+  filterTable: any = {
+    soQuyetDinh: '',
+    tenDonVi: '',
+    ngayKy: '',
+    trichYeu: '',
+    soQdGoc: '',
+    namKeHoach: '',
+    soVbDeXuat: '',
+    trangThaiDuyet: '',
+  };
+
+  allChecked = false;
+  indeterminate = false;
 
   constructor(
     private router: Router,
@@ -69,7 +85,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
-    private userService: UserService,
+    public userService: UserService,
     public globals: Globals,
   ) { }
 
@@ -77,13 +93,13 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-
       if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
         this.titleCard =
           'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
       } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+        this.tabSelected = 'cuc';
       } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
         this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
@@ -102,6 +118,40 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00' && this.tabSelected == 'tu-choi' && this.userService.isTongCuc()) {
+            item.checked = true;
+          }
+          else if (item.trangThai == '00' && this.tabSelected == 'cuc' && this.userService.isCuc()) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 
@@ -231,20 +281,32 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     this.endValueDc = null;
     this.inputDonVi = '';
     this.selectedDonVi = {};
+    this.ngayKy = null;
   }
 
   async search() {
+    let capDvi = null;
+    let maDvi = null;
+    if (this.tabSelected == 'tu-choi' && !this.userService.isTongCuc()) {
+      capDvi = 1;
+      maDvi = this.userInfo.MA_DVI;
+    } else if (this.tabSelected == 'cuc' && !this.userService.isCuc()) {
+      capDvi = 2;
+      maDvi = this.userInfo.MA_DVI;
+    }
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
+      capDvi: capDvi,
+      maDvi: maDvi,
       namKeHoach: this.namKeHoach,
       soQD: this.soQDDieuChinh,
       trichYeu: this.trichYeuDieuChinh,
-      ngayKyDenNgay: this.endValueDc
-        ? dayjs(this.endValueDc).format('YYYY-MM-DD')
+      ngayKyDenNgay: this.ngayKy && this.ngayKy.length > 1
+        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
         : null,
-      ngayKyTuNgay: this.startValueDc
-        ? dayjs(this.startValueDc).format('YYYY-MM-DD')
+      ngayKyTuNgay: this.ngayKy && this.ngayKy.length > 0
+        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
         : null,
       soCT: this.soQDGiao,
       trichYeuCT: this.trichYeuGiao,
@@ -254,6 +316,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       ngayKyTuNgayCT: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
+      trangThai: this.tabSelected == 'tu-choi' ? this.globals.prop.TU_CHOI : null,
     };
     let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
       param,
@@ -261,7 +324,14 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
+      this.clearFilterTable();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -328,9 +398,20 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
+        let capDvi = null;
+        let maDvi = null;
+        if (this.tabSelected == 'tu-choi' && !this.userService.isTongCuc()) {
+          capDvi = 1;
+          maDvi = this.userInfo.MA_DVI;
+        } else if (this.tabSelected == 'cuc' && !this.userService.isCuc()) {
+          capDvi = 2;
+          maDvi = this.userInfo.MA_DVI;
+        }
         let body = {
           pageSize: null,
           pageNumber: null,
+          capDvi: capDvi,
+          maDvi: maDvi,
           soQD: this.soQDGiao,
           namKeHoach: this.namKeHoach,
           trichYeu: this.trichYeuGiao,
@@ -340,6 +421,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           ngayKyTuNgay: this.startValue
             ? dayjs(this.startValue).format('YYYY-MM-DD')
             : null,
+          trangThai: this.tabSelected == 'tu-choi' ? this.globals.prop.TU_CHOI : null,
         };
         this.quyetDinhDieuChinhChiTieuKeHoachNamService
           .exportList(body)
@@ -356,6 +438,80 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteMultiple(dataDelete);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
 
+  selectTab(tab) {
+    this.tabSelected = tab;
+    this.clearFilter();
+    this.search();
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQuyetDinh: '',
+      tenDonVi: '',
+      ngayKy: '',
+      trichYeu: '',
+      soQdGoc: '',
+      namKeHoach: '',
+      soVbDeXuat: '',
+      trangThaiDuyet: '',
+    }
   }
 }

@@ -88,6 +88,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataTag: any[] = [];
 
   dataGiaoChiTieu: any[] = [];
+  dataDeXuat: any[] = [];
 
   lastBreadcrumb: string;
   trangThai: string = 'Dự thảo';
@@ -142,7 +143,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public globals: Globals,
     private donViService: DonviService,
-    private userService: UserService,
+    public userService: UserService,
     private uploadFileService: UploadFileService,
   ) { }
 
@@ -170,7 +171,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      // this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
       await this.loadDanhMucHang();
       this.loadDefaultLuongThucNew();
@@ -2697,5 +2697,51 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   changeLoaiHangHoa() {
     this.tabSelected = this.formData.get('loaiHangHoa').value;
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].dataType;
+        body.dataId = this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamCapTongCucService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.dieuChinhThongTinChiTieuKHNam.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  openDialogDeXuatCuc() {
+    if (this.id == 0 && !this.isView) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin đề xuất của cục',
+        nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+
+        }
+      });
+    }
+  }
+
+  deleteDataDeXuatCuc(data: any) {
+    if (this.id == 0 && !this.isView) {
+      this.dataDeXuat = this.dataDeXuat.filter((x) => x.id != data.id);
+
+    }
   }
 }

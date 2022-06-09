@@ -13,6 +13,7 @@ import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service
 import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',
@@ -20,8 +21,6 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
   styleUrls: ['./de-xuat-dieu-chinh.component.scss'],
 })
 export class DeXuatDieuChinhComponent implements OnInit {
-  allChecked = false;
-  indeterminate = false;
   @Output()
   showDieuChinhEvent = new EventEmitter<any>();
 
@@ -67,6 +66,9 @@ export class DeXuatDieuChinhComponent implements OnInit {
     tenTrangThai: '',
   };
 
+  allChecked = false;
+  indeterminate = false;
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -75,6 +77,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     private modal: NzModalService,
     private donViService: DonviService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {

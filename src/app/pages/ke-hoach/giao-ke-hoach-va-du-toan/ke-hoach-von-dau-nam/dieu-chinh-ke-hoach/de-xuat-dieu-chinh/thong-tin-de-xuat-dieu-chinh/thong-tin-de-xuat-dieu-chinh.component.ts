@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -74,6 +76,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     private fb: FormBuilder,
     private uploadFileService: UploadFileService,
     private danhMucService: DanhMucService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) { }
 
   async ngOnInit() {
@@ -952,5 +955,25 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   changeLoaiHangHoa() {
     this.tabSelected = this.formData.get('loaiHangHoa').value;
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
+        body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

@@ -16,6 +16,7 @@ export class MultipleTagComponent implements OnInit {
   @Input() trangThai: string;
   @Input() disable: boolean;
   @Input() typeFile: string;
+  @Input() showDowloadFile?: boolean = true;
 
   @Output()
   selectDataEvent = new EventEmitter<any>();

@@ -51,8 +51,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
-              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
-                [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') || userService.isTongCuc() || isView">
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" nzDisabled>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
@@ -90,8 +89,10 @@
             <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ </nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn QĐ giao chỉ tiêu cấp TC"
-                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu" [trangThai]="deXuatDieuChinh.trangThai"
-                (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)">
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
+                [trangThai]="isView ? 'view-detail' : deXuatDieuChinh.trangThai"
+                (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)"
+                [showDowloadFile]="false">
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="24">
@@ -104,7 +105,9 @@
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
                 [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-                [trangThai]="deXuatDieuChinh.trangThai" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                [trangThai]="isView ? 'view-detail' : deXuatDieuChinh.trangThai"
+                (removeDataEvent)="deleteTaiLieuDinhKemTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
+                typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
           </div>
