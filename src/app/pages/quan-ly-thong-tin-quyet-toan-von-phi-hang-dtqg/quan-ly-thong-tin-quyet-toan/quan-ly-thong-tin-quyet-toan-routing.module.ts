@@ -8,46 +8,53 @@ const routes: Routes = [
     component: QuanLyThongTinQuyetToanComponent,
   },
   {
-    path: 'danh-sach-tong-hop-so-lieu-quyet-toan',
+    path: 'danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
     loadChildren: () =>
       import(
-        './danh-sach-tong-hop-so-lieu-quyet-toan/danh-sach-tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.DanhSachTongHopSoLieuQuyetToanModule),
+        './danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.module'
+      ).then((m) => m.DanhSachBaoCaoQuyetToanVonPhiHangDTQGModule),
   },
   {
-    path: 'danh-sach-dieu-chinh-so-lieu-sau-quyet-toan',
+    path: 'them-moi-bao-cao-quyet-toan',
     loadChildren: () =>
       import(
-        './danh-sach-dieu-chinh-so-lieu-sau-quyet-toan/danh-sach-dieu-chinh-so-lieu-sau-quyet-toan.module'
-      ).then((m) => m.DanhSachDieuChinhSoLieuSauQuyetToanModule),
+        './them-moi-bao-cao-quyet-toan/them-moi-bao-cao-quyet-toan.module'
+      ).then((m) => m.ThemMoiBaoCaoQuyetToanModule),
   },
   {
-    path: 'tong-hop-so-lieu-quyet-toan',
+    path: 'dieu-chinh-so-lieu-quyet-toan',
     loadChildren: () =>
       import(
-        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.TongHopSoLieuQuyetToanModule),
+        './dieu-chinh-so-lieu-quyet-toan/dieu-chinh-so-lieu-quyet-toan.module'
+      ).then((m) => m.DieuChinhSoLieuQuyetToanModule),
   },
   {
-    path: 'tong-hop-so-lieu-quyet-toan/:id',
+    path: 'them-moi-bao-cao-quyet-toan/:id',
     loadChildren: () =>
       import(
-        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.TongHopSoLieuQuyetToanModule),
+        './them-moi-bao-cao-quyet-toan/them-moi-bao-cao-quyet-toan.module'
+      ).then((m) => m.ThemMoiBaoCaoQuyetToanModule),
   },
   {
-    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg',
+    path: 'dieu-chinh-so-lieu-quyet-toan/:id',
     loadChildren: () =>
       import(
-        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
-      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
+        './dieu-chinh-so-lieu-quyet-toan/dieu-chinh-so-lieu-quyet-toan.module'
+      ).then((m) => m.DieuChinhSoLieuQuyetToanModule),
   },
   {
-    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg/:id',
+    path: 'duyet-phe-duyet-bao-cao',
     loadChildren: () =>
       import(
-        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
-      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
+        './duyet-phe-duyet-bao-cao/duyet-phe-duyet-bao-cao.module'
+      ).then((m) => m.DuyetPheDuyetBaoCaoModule),
+  },
+  {
+    path: 'danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG',
+    loadChildren: () =>
+      import(
+        './danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG.module'
+      ).then((m) => m.DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGModule),
   },
 ];
 
