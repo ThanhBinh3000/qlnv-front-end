@@ -671,7 +671,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     close() {
-        this.location.back();
+        this.router.navigate([
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/0'
+        ])
     }
 
 

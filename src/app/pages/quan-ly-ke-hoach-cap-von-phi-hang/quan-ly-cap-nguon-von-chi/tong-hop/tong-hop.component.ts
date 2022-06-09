@@ -23,20 +23,45 @@ export class TongHopComponent implements OnInit {
 	userInfo: any;
 	//thong tin tim kiem
 	searchFilter = {
-        loaiTimKiem: '1',
-        maDeNghi: "",
-        trangThai: "2",
-        tuNgay: "",
-        denNgay: "",
-        qdChiTieu: "",
-        loaiDn: "",
-        maDviTao: "",
-    };
+		loaiTimKiem: '0',
+		maDeNghi: "",
+		trangThai: "",
+		tuNgay: "",
+		denNgay: "",
+		qdChiTieu: "",
+		loaiDn: "",
+		maDviTao: "",
+	};
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
+	trangThais: any[] = [
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo duyệt",
+		},
+		{
+			id: Utils.TT_BC_8,
+			tenDm: "Từ chối",
+		},
+		{
+			id: Utils.TT_BC_9,
+			tenDm: "Tiếp nhận",
+		}
+	];
 	donVis: any[] = [];
-    loaiDns: any[] = NGUON_BAO_CAO;
+	loaiDns: any[] = NGUON_BAO_CAO;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -44,6 +69,8 @@ export class TongHopComponent implements OnInit {
 		size: 10,
 		page: 1,
 	}
+	//trang thai
+	statusBtnNew: boolean = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -96,24 +123,20 @@ export class TongHopComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		
-		let trangThais = [];
-		if (this.searchFilter.trangThai){
-			trangThais = [this.searchFilter.trangThai];
-		}
+		this.statusBtnNew = true;
 		let requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDnghi: this.searchFilter.maDeNghi,
 			maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            soQdChiTieu: this.searchFilter.qdChiTieu,
-            loaiDnghi: this.searchFilter.loaiDn,
+			soQdChiTieu: this.searchFilter.qdChiTieu,
+			loaiDnghi: this.searchFilter.loaiDn,
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: this.searchFilter.trangThai,
+			trangThai: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemDeNghiThop(requestReport).toPromise().then(
@@ -123,7 +146,7 @@ export class TongHopComponent implements OnInit {
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
 						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
-                        e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -139,21 +162,21 @@ export class TongHopComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	tongHop() {
-		
-		// this.router.navigate([
-		// 	'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.maDviTao + '/' + this.namHienTai,
-		// ])
-	}
-
-	taoMoi(){
-		if (!this.searchFilter.loaiDn){
+	taoMoi() {
+		this.statusBtnNew = false;
+		if (!this.searchFilter.loaiDn) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC){
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
+			if (!this.searchFilter.qdChiTieu) {
+				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+				return;
+			}
+		}
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/'+this.searchFilter.qdChiTieu
 			])
 		} else {
 			this.router.navigate([
@@ -168,10 +191,16 @@ export class TongHopComponent implements OnInit {
 	}
 
 
-	xemChiTiet(id: string) {
-		// this.router.navigate([
-		// 	'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/1/' + id,
-		// ])
+	xemChiTiet(item: any) {
+		if (item.loaiDnghi == Utils.THOP_TAI_TC){
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/'+item.id
+			])
+		} else {
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + item.id
+			])
+		}
 	}
 
 	//doi so trang
@@ -187,18 +216,34 @@ export class TongHopComponent implements OnInit {
 		this.location.back()
 	}
 
-	getStatusName(trangThai: string){
-		return this.trangThais.find(e => e.id == trangThai)?.ten;
+	getStatusName(trangThai: string) {
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	getUnitName(maDvi: string){
+	getUnitName(maDvi: string) {
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
 
-    checkDeleteReport(item: any): boolean{
+	xoaDeNghi(id: any) {
+		this.quanLyVonPhiService.xoaDeNghiThop(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+	checkDeleteReport(item: any): boolean {
 		var check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;

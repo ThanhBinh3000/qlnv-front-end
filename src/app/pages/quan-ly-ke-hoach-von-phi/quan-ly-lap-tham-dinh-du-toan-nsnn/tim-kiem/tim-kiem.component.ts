@@ -243,4 +243,8 @@ export class TimKiemComponent implements OnInit {
 		}
 		return check;
 	}
+
+	close() {
+		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+	}
 }
