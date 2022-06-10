@@ -46,8 +46,10 @@ import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 })
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
+  @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+
 
   listThoc: any[] = [];
   listMuoi: any[] = [];
@@ -132,6 +134,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
+    if (this.userInfo) {
+      this.qdTCDT = this.userInfo.MA_QD;
+    }
     if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.userService.isChiCuc()) {
@@ -690,6 +695,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
+
+          if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
+            this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
+          }
 
           this.convertKhVatTuList(this.thongTinChiTieuKeHoachNam.khVatTu);
           this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
@@ -1351,7 +1360,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return;
     }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
-      }${this.qdTCDT}`;
+      }/${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1372,7 +1381,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     );
 
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
-      delete muoi.maDonVi;
+      // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
       delete muoi.tkdnMuoi;
       delete muoi.tkcnTongSoMuoi;
@@ -2500,7 +2509,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0
+      this.id === 0 || this.isViewDetail
     );
   }
   selectDonViKeyDown(event, type) {
@@ -2530,6 +2539,35 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.globals.prop.LANH_DAO_DUYET ||
       this.thongTinChiTieuKeHoachNam.trangThai ===
       this.globals.prop.DU_THAO_TRINH_DUYET
+      || this.isViewDetail
     );
+  }
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'can-cu':
+        body.dataType = this.thongTinChiTieuKeHoachNam.canCus[0].dataType;
+        body.dataId = this.thongTinChiTieuKeHoachNam.canCus[0].dataId;
+        if (this.canCuList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.thongTinChiTieuKeHoachNam.canCus.length > 1 ? 'Can-cu.zip' : this.thongTinChiTieuKeHoachNam.canCus[0].fileName);
+          });
+        }
+        break;
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataType;
+        body.dataId = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { cloneDeep } from 'lodash';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
@@ -12,6 +13,7 @@ import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service
 import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',
@@ -19,8 +21,10 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
   styleUrls: ['./de-xuat-dieu-chinh.component.scss'],
 })
 export class DeXuatDieuChinhComponent implements OnInit {
-  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  @Output()
+  showDieuChinhEvent = new EventEmitter<any>();
 
+  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   namKeHoach: number = null;
   soQDGiao: string = null;
   trichYeuGiao: string = null;
@@ -38,6 +42,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
@@ -48,6 +53,21 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  isView: boolean = false;
+
+  filterTable: any = {
+    soVanBan: '',
+    tenDonVi: '',
+    ngayKy: '',
+    trichYeu: '',
+    soQdKeHoachNam: '',
+    namKeHoach: '',
+    tenHangHoa: '',
+    tenTrangThai: '',
+  };
+
+  allChecked = false;
+  indeterminate = false;
 
   constructor(
     private router: Router,
@@ -57,6 +77,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     private modal: NzModalService,
     private donViService: DonviService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -82,6 +103,37 @@ export class DeXuatDieuChinhComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 
@@ -155,9 +207,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id) {
+  redirectToChiTiet(isView, id) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isView = isView;
   }
 
   showList() {
@@ -208,7 +261,14 @@ export class DeXuatDieuChinhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
+      this.clearFilterTable();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -307,6 +367,85 @@ export class DeXuatDieuChinhComponent implements OnInit {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
+    }
+  }
+
+  redirectToDieuChinh(isView, id) {
+    this.showDieuChinhEvent.emit({
+      isView: isView,
+      deXuatId: id,
+    });
+  }
+
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soVanBan: '',
+      tenDonVi: '',
+      ngayKy: '',
+      trichYeu: '',
+      soQdKeHoachNam: '',
+      namKeHoach: '',
+      tenHangHoa: '',
+      tenTrangThai: '',
     }
   }
 }

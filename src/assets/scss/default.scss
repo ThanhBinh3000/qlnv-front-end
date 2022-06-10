@@ -1920,10 +1920,10 @@ td.action.ant-table-cell {
     font-size: 13px;
     padding: 4px;
     border-radius: 0px;
-    border: 1px solid #eaeaea;
+    border: 1px solid #FF9393;
     text-transform: uppercase;
     margin-right: 8px;
-    background: #fff;
+    background-color: #FFF1F1;
   }
 
   .da-ban-hanh {
@@ -1935,7 +1935,7 @@ td.action.ant-table-cell {
     border: 1px solid #24e837;
     text-transform: uppercase;
     margin-right: 8px;
-    background: #efffec;
+    background: #EFFFEC;
   }
 
   &>span:nth-child(2) {
@@ -1960,5 +1960,13 @@ td.action.ant-table-cell {
 
   input {
     border-radius: 0 !important;
+  }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #353a64 !important;
+  }
+
+  .search-table {
+    background: #F3F3F3 !important;
   }
 }

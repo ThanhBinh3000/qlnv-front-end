@@ -45,6 +45,8 @@ import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.const
 })
 export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
+  @Input() deXuatId: number;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -86,6 +88,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataTag: any[] = [];
 
   dataGiaoChiTieu: any[] = [];
+  dataDeXuat: any[] = [];
 
   lastBreadcrumb: string;
   trangThai: string = 'Dự thảo';
@@ -125,6 +128,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   editVatTuCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   titleTable: string = '';
+  namKeHoach: number = 0;
 
   constructor(
     private router: Router,
@@ -140,7 +144,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public globals: Globals,
     private donViService: DonviService,
-    private userService: UserService,
+    public userService: UserService,
     private uploadFileService: UploadFileService,
   ) { }
 
@@ -168,7 +172,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      // this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
       await this.loadDanhMucHang();
       this.loadDefaultLuongThucNew();
@@ -593,7 +596,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectDataMultipleTag(data: any) { }
 
   deleteDataMultipleTag(data: any) {
-    if (this.id == 0) {
+    if (this.id == 0 && !this.isView) {
       this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
       this.selectedCanCu = {};
       this.dieuChinhThongTinChiTieuKHNam.qdGocId = 0;
@@ -1286,6 +1289,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       namKeHoach: [this.yearNow],
       trichYeu: [null],
       ghiChu: [null, [Validators.required]],
+      loaiHangHoa: [this.tabSelected]
     });
     if (id > 0) {
       let res =
@@ -1313,6 +1317,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.controls['soQD'].setValue(
             this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/')[0],
           );
+          if (this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh && this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/').length > 1) {
+            this.qdTCDT = this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh.split('/')[1];
+          }
           this.formData.controls['ngayKy'].setValue(
             this.dieuChinhThongTinChiTieuKHNam.ngayKy,
           );
@@ -1469,6 +1476,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             );
           }
 
+          this.yearNow = this.dieuChinhThongTinChiTieuKHNam.namKeHoach;
+
           this.updateDataVatTu();
           this.loadData();
         }
@@ -1583,7 +1592,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
-    if (this.id == 0) {
+    if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
         nzContent: DialogQuyetDinhGiaoChiTieuComponent,
@@ -1591,7 +1600,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzClosable: false,
         nzWidth: '900px',
         nzFooter: null,
-        nzComponentParams: {},
+        nzComponentParams: {
+          maDVi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+          namKeHoach: this.yearNow
+        },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
@@ -2640,35 +2652,39 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
-    this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-      (x) => x.id !== data.id,
-    );
-    this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs =
-      this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.filter(
-        (x) => x.idVirtual !== data.id,
+    if (!this.isView) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
       );
+      this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs =
+        this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.filter(
+          (x) => x.idVirtual !== data.id,
+        );
+    }
   }
 
   openFile(event) {
-    let item = {
-      id: new Date().getTime(),
-      text: event.name,
-    };
-    if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-      this.uploadFileService
-        .uploadFile(event.file, event.name)
-        .then((resUpload) => {
-          if (!this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs) {
-            this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs = [];
-          }
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          fileDinhKem.idVirtual = item.id;
-          this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.push(fileDinhKem);
-          this.taiLieuDinhKemList.push(item);
-        });
+    if (!this.isView) {
+      let item = {
+        id: new Date().getTime(),
+        text: event.name,
+      };
+      if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
+        this.uploadFileService
+          .uploadFile(event.file, event.name)
+          .then((resUpload) => {
+            if (!this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs) {
+              this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs = [];
+            }
+            const fileDinhKem = new FileDinhKem();
+            fileDinhKem.fileName = resUpload.filename;
+            fileDinhKem.fileSize = resUpload.size;
+            fileDinhKem.fileUrl = resUpload.url;
+            fileDinhKem.idVirtual = item.id;
+            this.dieuChinhThongTinChiTieuKHNam.fileDinhKemReqs.push(fileDinhKem);
+            this.taiLieuDinhKemList.push(item);
+          });
+      }
     }
   }
 
@@ -2682,6 +2698,72 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
+    }
+  }
+
+  changeLoaiHangHoa() {
+    this.tabSelected = this.formData.get('loaiHangHoa').value;
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].dataType;
+        body.dataId = this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamCapTongCucService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.dieuChinhThongTinChiTieuKHNam.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.dieuChinhThongTinChiTieuKHNam.fileDinhKems[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  openDialogDeXuatCuc() {
+    if (this.id == 0 && !this.isView) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin đề xuất của cục',
+        nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          type: 'de-xuat',
+          namKeHoach: this.yearNow
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+          let item = {
+            id: data.id,
+            text: data.soVanBan,
+          };
+          if (this.dataDeXuat && this.dataDeXuat.length > 0) {
+            let findDeXuat = this.dataDeXuat.find(x => x.id == item.id);
+            if (findDeXuat != null && findDeXuat.length > 0) {
+              this.dataDeXuat.push(item);
+            }
+          }
+          else {
+            this.dataDeXuat = [];
+            this.dataDeXuat.push(item);
+          }
+        }
+      });
+    }
+  }
+
+  deleteDataDeXuatCuc(data: any) {
+    if (this.id == 0 && !this.isView) {
+      this.dataDeXuat = this.dataDeXuat.filter((x) => x.id != data.id);
+
     }
   }
 }

@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -26,6 +28,7 @@ import * as XLSX from 'xlsx';
 })
 export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   @Input() id: number;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -73,6 +76,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     private fb: FormBuilder,
     private uploadFileService: UploadFileService,
     private danhMucService: DanhMucService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) { }
 
   async ngOnInit() {
@@ -116,6 +120,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       trichYeu: [null],
       nguyenNhan: [null],
       noiDung: [null],
+      loaiHangHoa: [this.tabSelected]
     });
     this.deXuatDieuChinh.trangThai = '00';
     if (id > 0) {
@@ -140,6 +145,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.formData.controls['soQD'].setValue(
             this.deXuatDieuChinh.soVanBan.split('/')[0],
           );
+          if (this.deXuatDieuChinh.soVanBan && this.deXuatDieuChinh.soVanBan.split('/').length > 1) {
+            this.qdTCDT = this.deXuatDieuChinh.soVanBan.split('/')[1];
+          }
           this.formData.controls['ngayKy'].setValue(
             this.deXuatDieuChinh.ngayKy,
           );
@@ -183,7 +191,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
-    if (this.id == 0) {
+    if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
         nzContent: DialogQuyetDinhGiaoChiTieuComponent,
@@ -348,45 +356,51 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   deleteDataMultipleTag(data: any) {
-    this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
-    this.deXuatDieuChinh.dxDcMuoiList = [];
-    this.deXuatDieuChinh.dxDcVtList = [];
-    this.deXuatDieuChinh.dxDcltList = [];
-    this.deXuatDieuChinh.namKeHoach = 0;
-    this.formData.controls['namKeHoach'].setValue(0);
+    if (!this.isView) {
+      this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
+      this.deXuatDieuChinh.dxDcMuoiList = [];
+      this.deXuatDieuChinh.dxDcVtList = [];
+      this.deXuatDieuChinh.dxDcltList = [];
+      this.deXuatDieuChinh.namKeHoach = 0;
+      this.formData.controls['namKeHoach'].setValue(0);
 
-    this.updateEditLuongThucCache();
-    this.updateEditMuoiCache();
-    this.updateEditVatTuCache();
+      this.updateEditLuongThucCache();
+      this.updateEditMuoiCache();
+      this.updateEditVatTuCache();
+    }
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
-    this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-      (x) => x.id !== data.id,
-    );
-    this.deXuatDieuChinh.fileDinhKemReqs = this.deXuatDieuChinh.fileDinhKemReqs.filter((x) => x.idVirtual !== data.id);
+    if (!this.isView) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
+      );
+      this.deXuatDieuChinh.fileDinhKemReqs = this.deXuatDieuChinh.fileDinhKemReqs.filter((x) => x.idVirtual !== data.id);
+    }
   }
 
   openFile(event) {
-    let item = {
-      id: new Date().getTime(),
-      text: event.name,
-    };
-    if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-      this.uploadFileService
-        .uploadFile(event.file, event.name)
-        .then((resUpload) => {
-          if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-            this.deXuatDieuChinh.fileDinhKemReqs = [];
-          }
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          fileDinhKem.idVirtual = item.id;
-          this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-          this.taiLieuDinhKemList.push(item);
-        });
+    if (!this.isView) {
+      let item = {
+        id: new Date().getTime(),
+        text: event.name,
+      };
+      if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
+        this.uploadFileService
+          .uploadFile(event.file, event.name)
+          .then((resUpload) => {
+            if (!this.deXuatDieuChinh.fileDinhKemReqs) {
+              this.deXuatDieuChinh.fileDinhKemReqs = [];
+            }
+            const fileDinhKem = new FileDinhKem();
+            fileDinhKem.fileName = resUpload.filename;
+            fileDinhKem.fileSize = resUpload.size;
+            fileDinhKem.fileUrl = resUpload.url;
+            fileDinhKem.idVirtual = item.id;
+            this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
+            this.taiLieuDinhKemList.push(item);
+          });
+      }
     }
   }
 
@@ -421,7 +435,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     if (this.formData.valid) {
       this.spinner.show();
       try {
-
         this.deXuatDieuChinh.id = this.id;
         this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value + '/' + this.qdTCDT;
         this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
@@ -432,7 +445,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
 
         let dxDcLtVtReqList = [];
-        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0 && this.tabSelected == 'luongThuc') {
           this.deXuatDieuChinh.dxDcltList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -456,7 +469,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(itemGao);
           });
         }
-        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0 && this.tabSelected == 'muoi') {
           this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -470,7 +483,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
+        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0 && this.tabSelected == 'vatTu') {
           this.deXuatDieuChinh.dxDcVtList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -938,5 +951,29 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       data,
     ];
     this.updateEditVatTuCache();
+  }
+
+  changeLoaiHangHoa() {
+    this.tabSelected = this.formData.get('loaiHangHoa').value;
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
+        body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

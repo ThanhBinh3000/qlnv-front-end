@@ -51,6 +51,7 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
 }
 export class FileDinhKem {
   dataId: number;
+  dataType: string;
   fileName: string;
   fileSize: string;
   fileUrl: string;

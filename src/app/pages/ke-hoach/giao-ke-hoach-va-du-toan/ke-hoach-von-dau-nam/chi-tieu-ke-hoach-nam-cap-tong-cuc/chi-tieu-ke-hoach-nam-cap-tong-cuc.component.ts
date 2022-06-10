@@ -49,6 +49,14 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   labelDonViSearch: string;
   isDetail: boolean = false;
   selectedId: number = 0;
+  allChecked = false;
+  indeterminate = false;
+  isViewDetail: boolean;
+  countChiTieu = {
+    chiTieuKeHoachNamTongCuc: 0,
+    chiTieuKeHoachNamCuc: 0
+  }
+  capDvi: number = 1;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -66,6 +74,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.userService.isChiCuc()) {
       this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      this.capDvi = 2;
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
@@ -90,6 +99,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           this.optionsDonVi.push(item);
         }
         this.options = cloneDeep(this.optionsDonVi);
+        this.getCount();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -102,9 +112,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  redirectThongTinChiTieuKeHoachNam(id: number) {
+  redirectThongTinChiTieuKeHoachNam(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
 
   showList() {
@@ -140,9 +151,11 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         donviId = getDonVi[0].id;
       }
     }
+
     let body = {
-      ngayKyDenNgay: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      capDvi: this.capDvi,
+      ngayKyDenNgay: this.startValue
+        ? dayjs(this.startValue[1]).format('YYYY-MM-DD')
         : null,
       id: 0,
       donViId: donviId ?? this.donViIdSearch,
@@ -153,7 +166,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       trichYeu: this.searchFilter.trichYeu,
       namKeHoach: this.searchFilter.namKeHoach,
       ngayKyTuNgay: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+        ? dayjs(this.startValue[0]).format('YYYY-MM-DD')
         : null,
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
@@ -163,6 +176,24 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async getCount() {
+    try {
+      let res = await this.chiTieuKeHoachNamService.getCountChiTieu();
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.countChiTieu.chiTieuKeHoachNamCuc = res.data.chiTieuKeHoachNamCuc ?? 0;
+          this.countChiTieu.chiTieuKeHoachNamTongCuc = res.data.chiTieuKeHoachNamTongCuc ?? 0;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -313,5 +344,89 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   selectDonVi(donVi) {
     this.maDonViSearch = donVi.maDvi;
     this.labelDonViSearch = donVi.labelDonVi;
+  }
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.chiTieuKeHoachNamService.deleteMultiple(dataDelete);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+  selectTab(cap: string) {
+    switch (cap) {
+      case 'tong-cuc':
+        this.capDvi = 1;
+        break;
+      case 'cuc':
+        this.capDvi = 2;
+        break;
+      default:
+        break;
+    }
+    this.clearFilter();
+    this.search();
   }
 }

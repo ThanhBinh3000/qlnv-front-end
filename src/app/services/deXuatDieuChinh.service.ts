@@ -18,6 +18,8 @@ export class DeXuatDieuChinhService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam?`
     if (body.namKeHoach)
       url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
+    if (body.maDvi)
+      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.soVanBan)
       url_ += 'soVanBan=' + encodeURIComponent('' + body.soVanBan) + '&';
     if (body.trichYeuDx)
@@ -60,6 +62,11 @@ export class DeXuatDieuChinhService extends BaseService {
   deleteData(id: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/${id}`;
     return this.httpClient.delete(url).toPromise();
+  }
+
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/delete/multiple`;
+    return this.httpClient.put(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {

@@ -15,12 +15,16 @@ export class MultipleTagComponent implements OnInit {
   @Input() type: string;
   @Input() trangThai: string;
   @Input() disable: boolean;
+  @Input() typeFile: string;
+  @Input() showDowloadFile?: boolean = true;
 
   @Output()
   selectDataEvent = new EventEmitter<any>();
 
   @Output()
   removeDataEvent = new EventEmitter<any>();
+  @Output()
+  downloadFileEvent = new EventEmitter<any>();
   nameFile: string;
   constructor(public globals: Globals) { }
 
@@ -30,13 +34,26 @@ export class MultipleTagComponent implements OnInit {
   removeData(item: any) {
     this.removeDataEvent.emit(item);
   }
+  downloadFile() {
+    if (
+      this.type == 'file' ||
+      this.trangThai === this.globals.prop.BAN_HANH ||
+      this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      this.trangThai === 'view-detail'
+    ) {
+      return;
+    }
+    this.downloadFileEvent.emit(this.typeFile);
+  }
 
   selectData() {
     if (
       this.type == 'file' ||
       this.trangThai === this.globals.prop.BAN_HANH ||
       this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      this.trangThai === 'view-detail'
     ) {
       return;
     }

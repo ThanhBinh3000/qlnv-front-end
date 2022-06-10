@@ -47,6 +47,15 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     if (param && param.ngayKyTuNgayCT) {
       tempUrl = tempUrl + 'ngayKyTuNgayCT=' + param.ngayKyTuNgayCT + '&';
     }
+    if (param && param.trangThai) {
+      tempUrl = tempUrl + 'trangThai=' + param.trangThai + '&';
+    }
+    if (param && param.capDvi) {
+      tempUrl = tempUrl + 'capDvi=' + param.capDvi + '&';
+    }
+    if (param && param.maDvi) {
+      tempUrl = tempUrl + 'maDvi=' + param.maDvi + '&';
+    }
     if (tempUrl && tempUrl != '') {
       url = url + '?' + tempUrl.substring(0, tempUrl.length - 1);
     }
@@ -56,6 +65,11 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   loadChiTiet(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  getCount(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/count`;
+    return this.httpClient.get(url).toPromise();
   }
 
   importFile(body: any): Promise<any> {
@@ -73,6 +87,11 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   deleteData(id: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`;
     return this.httpClient.delete(url).toPromise();
+  }
+
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/delete/multiple`;
+    return this.httpClient.put(url, body).toPromise();
   }
 
   soLuongTruocDieuChinh(body: any): Promise<any> {
