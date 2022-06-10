@@ -490,18 +490,19 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.notification.warning(MESSAGE.ERROR, "Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!");
 				return;
 			}
-		} else {
-			let check = true;
-			this.lstDieuChinhs.forEach(item => {
-				if (item.trangThai == '2'){
-					check = false;
-				}
-			})
-			if (!check){
-				this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
-				return;
-			}
 		}
+    // else {
+			// let check = true;
+			// this.lstDieuChinhs.forEach(item => {
+			// 	if (item.trangThai == '2'){
+			// 		check = false;
+			// 	}
+			// })
+			// if (!check){
+			// 	this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
+			// 	return;
+			// }
+		// }
 		if (this.id) {
 			const requestGroupButtons = {
 				id: this.id,

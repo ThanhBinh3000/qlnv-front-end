@@ -138,8 +138,8 @@ export class QuanLyVonPhiService extends BaseService {
   }
   bCDieuChinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id,
     );
   }
 
@@ -338,8 +338,8 @@ export class QuanLyVonPhiService extends BaseService {
   // upload phu luc dieu chinh du toan NSNN
   updatePLDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet',
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet',
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/chi-tiet',
       request,
     );
   }
