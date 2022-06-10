@@ -128,6 +128,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   editVatTuCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   titleTable: string = '';
+  namKeHoach: number = 0;
 
   constructor(
     private router: Router,
@@ -1475,6 +1476,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             );
           }
 
+          this.yearNow = this.dieuChinhThongTinChiTieuKHNam.namKeHoach;
+
           this.updateDataVatTu();
           this.loadData();
         }
@@ -1597,7 +1600,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzClosable: false,
         nzWidth: '900px',
         nzFooter: null,
-        nzComponentParams: {},
+        nzComponentParams: {
+          maDVi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+          namKeHoach: this.yearNow
+        },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
@@ -2728,11 +2734,27 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzClosable: false,
         nzWidth: '900px',
         nzFooter: null,
-        nzComponentParams: {},
+        nzComponentParams: {
+          type: 'de-xuat',
+          namKeHoach: this.yearNow
+        },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
-
+          let item = {
+            id: data.id,
+            text: data.soVanBan,
+          };
+          if (this.dataDeXuat && this.dataDeXuat.length > 0) {
+            let findDeXuat = this.dataDeXuat.find(x => x.id == item.id);
+            if (findDeXuat != null && findDeXuat.length > 0) {
+              this.dataDeXuat.push(item);
+            }
+          }
+          else {
+            this.dataDeXuat = [];
+            this.dataDeXuat.push(item);
+          }
         }
       });
     }

@@ -18,6 +18,8 @@ export class DeXuatDieuChinhService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam?`
     if (body.namKeHoach)
       url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
+    if (body.maDvi)
+      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.soVanBan)
       url_ += 'soVanBan=' + encodeURIComponent('' + body.soVanBan) + '&';
     if (body.trichYeuDx)
