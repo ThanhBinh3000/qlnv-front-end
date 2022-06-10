@@ -7,9 +7,54 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+
+// trang thai ban ghi
+export const TRANG_THAI_TIM_KIEM = [
+  {
+      id: "1",
+      tenDm: 'Đang soạn'
+  },
+  {
+      id: "2",
+      tenDm: 'Trình duyệt'
+  },
+  {
+      id: "3",
+      tenDm: 'Trưởng BP từ chối'
+  },
+  {
+      id: "4",
+      tenDm: 'Trưởng BP duyệt'
+  },
+  {
+      id: "5",
+      tenDm: 'Lãnh đạo từ chối'
+  },
+  {
+      id: "6",
+      tenDm: 'Lãnh đạo duyệt'
+  },
+  {
+      id: "7",
+      tenDm: 'Mới'
+  },
+  {
+      id: "8",
+      tenDm: 'Từ chối'
+  },
+  {
+      id: "9",
+      tenDm: 'Tiếp nhận'
+  },
+  // {
+  //     id: "10",
+  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+  // },
+]
+
 @Component({
   selector: 'app-phe-duyet-bao-cao-dieu-chinh',
   templateUrl: './phe-duyet-bao-cao-dieu-chinh.component.html',

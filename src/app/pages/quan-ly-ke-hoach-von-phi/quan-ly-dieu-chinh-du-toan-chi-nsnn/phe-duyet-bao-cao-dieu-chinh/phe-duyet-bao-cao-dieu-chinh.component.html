@@ -115,14 +115,24 @@
 							<td [hidden]="status">
 								{{getUnitName(item.maDvi)}}
 							</td>
-							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+							<!-- <td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 								<ng-container *ngIf="!item.ngayTraKq; else xem">
 									Phê duyệt
 								</ng-container>
 								<ng-template #xem>
 									Xem
 								</ng-template>
-							</td>
+							</td> -->
+              <ng-container *ngIf="item.trangThai == '7'">
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                  <span>Phê duyệt</span>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="item.trangThai == '8' || item.trangThai == '9'">
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                  <span>Xem</span>
+                </button>
+              </ng-container>
 						</tr>
 					</tbody>
 				</nz-table>

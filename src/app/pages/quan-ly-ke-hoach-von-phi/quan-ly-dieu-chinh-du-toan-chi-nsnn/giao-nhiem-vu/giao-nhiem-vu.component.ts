@@ -431,6 +431,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
+    if (!request.congVan.fileName){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -760,7 +764,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
 			this.selectedIndex = this.tabs.length + 1;
-      console.log(this.data);
 		}
 
 	}

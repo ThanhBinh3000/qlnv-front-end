@@ -141,14 +141,18 @@ export class PhuLuc6Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
-        thienSluongTteThien: divMoney(item.thienSluongTteThien, this.maDviTien),
-        thienSluongUocThien: divMoney(item.thienSluongUocThien, this.maDviTien),
-        thienCong: divMoney(item.thienCong, this.maDviTien),
-        thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
-        thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
-        kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
-        ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
+        kphiDmuc: divMoney(item.kphiDmuc, this.maDviTien),
+        kphiTtien: divMoney(item.kphiTtien, this.maDviTien),
+        cphiTcong: divMoney(item.cphiTcong, this.maDviTien),
+        cphiNtruoc: divMoney(item.cphiNtruoc, this.maDviTien),
+        cphiNnay: divMoney(item.cphiNnay, this.maDviTien),
+        chenhLech: divMoney(item.chenhLech, this.maDviTien),
+        kphiQtoan: divMoney(item.kphiQtoan, this.maDviTien),
+        kphiChuaQtoanCong: divMoney(item.kphiChuaQtoanCong, this.maDviTien),
+        kphiChuaQtoanKpTchi: divMoney(item.kphiChuaQtoanKpTchi, this.maDviTien),
+        kphiChuaQtoanKpTkiem: divMoney(item.kphiChuaQtoanKpTkiem, this.maDviTien),
+        soChuaQtoan: divMoney(item.soChuaQtoan, this.maDviTien),
+        dtoan2021ThanhQtoan2020: divMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {

@@ -9,8 +9,22 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
-
+import { TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+// loai trang thai kiem tra
+export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
+  {
+      id: '9',
+      ten: 'Tiếp nhận'
+  },
+  {
+      id: '7',
+      ten: 'Mới'
+  },
+  {
+      id: '-1',
+      ten: 'Chưa gửi đơn vị cấp trên'
+  },
+]
 
 
 @Component({
@@ -99,7 +113,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		}
 		let requestReport = {
 			dotBcao: null,
-      loaiTimKiem: "0",
+      loaiTimKiem: "1",
       maBcao: "",
       maDvi:this.maDviTao,
       namBcao: this.namHienTai,

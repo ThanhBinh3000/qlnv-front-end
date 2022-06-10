@@ -243,8 +243,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet dieu chinh du toan NSNN
   trinhDuyetDieuChinhService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/them-moi',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/them-moi',
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/them-moi',
       request,
     );
   }
@@ -615,8 +615,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   updateDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/cap-nhat',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/cap-nhat',
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/cap-nhat',
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/cap-nhat',
       request);
   }
 
