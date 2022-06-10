@@ -427,13 +427,6 @@ export class BaoCaoComponent implements OnInit {
 			return;
 		}
 
-		// replace nhung ban ghi dc them moi id thanh null
-		this.lstLapThamDinhs.forEach(item => {
-			if (item.id?.length == 38) {
-				item.id = null;
-			}
-		})
-
 		let tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
@@ -468,6 +461,13 @@ export class BaoCaoComponent implements OnInit {
 			return;
 		}
 
+		// replace nhung ban ghi dc them moi id thanh null
+		request.lstLapThamDinhs.forEach(item => {
+			if (item.id?.length == 38) {
+				item.id = null;
+			}
+		})
+
 		//call service them moi
 		this.spinner.show();
 		if (!this.id) {
@@ -500,11 +500,6 @@ export class BaoCaoComponent implements OnInit {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
-		this.lstLapThamDinhs.filter(item => {
-			if (!item.id) {
-				item.id = uuid.v4() + 'FE';
-			}
-		});
 		this.spinner.hide();
 	}
 

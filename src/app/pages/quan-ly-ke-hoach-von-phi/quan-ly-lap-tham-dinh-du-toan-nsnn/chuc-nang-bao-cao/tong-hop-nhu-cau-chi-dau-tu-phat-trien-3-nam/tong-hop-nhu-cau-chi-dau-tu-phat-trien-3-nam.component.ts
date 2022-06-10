@@ -163,7 +163,8 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 data1.ncauNamDtoanN - data2.ncauNamDtoanN != data3.ncauNamDtoanN ||
                 data1.ncauNamN1 - data2.ncauNamN1 != data3.ncauNamN1 ||
                 data1.ncauNamN2 - data2.ncauNamN2 != data3.ncauNamN2) {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA);
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA + 
+                        this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
                     return;
             }
         }
