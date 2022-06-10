@@ -147,10 +147,10 @@
                   <td>{{data.ngayKy}}</td>
                   <td>{{data.trichYeu}}</td>
                   <td>{{data.soQdKeHoachNam}}</td>
-                  <td>{{data.namKeHoach}}</td>
+                  <td class="text-right">{{data.namKeHoach}}</td>
                   <td>{{data.tenHangHoa}}</td>
-                  <td *ngIf="userService.isCuc()">{{data.tenTrangThai}}</td>
-                  <td>{{data.trangThaiDuyet}}</td>
+                  <td *ngIf="userService.isCuc()" class="text-center">{{data.tenTrangThai}}</td>
+                  <td class="text-center">{{data.trangThaiDuyet}}</td>
                   <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="icon htvbdh_eye"></i>

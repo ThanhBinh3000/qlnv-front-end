@@ -13,7 +13,7 @@
             <label class="search__label">Số QĐ</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" placeholder="Số QĐ" />
           </div>
-          <div nz-col nzSpan="14">
+          <div nz-col nzSpan="6">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" placeholder="Trích yếu" />
           </div>
@@ -29,7 +29,7 @@
             <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
               nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
           </div> -->
-          <div nz-col nzSpan="24">
+          <div nz-col nzSpan="8">
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
@@ -161,14 +161,49 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr class="search-table">
                   <td></td>
                   <td></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
                   <td>
                   </td>
                 </tr>
@@ -180,8 +215,8 @@
                   <td>{{(page-1)*pageSize+i+1}}</td>
                   <td>{{ data.soQuyetDinh }}</td>
                   <td>{{ data.ngayKy }}</td>
-                  <td>{{ data.namKeHoach }}</td>
-                  <td class="text-center">{{ data.trichYeu }}</td>
+                  <td class="text-right">{{ data.namKeHoach }}</td>
+                  <td>{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td class="text-right">
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
@@ -237,14 +272,49 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr class="search-table">
                   <td></td>
                   <td></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                  </td>
                   <td>
                   </td>
                 </tr>
@@ -256,8 +326,8 @@
                   <td>{{(page-1)*pageSize+i+1}}</td>
                   <td>{{ data.soQuyetDinh }}</td>
                   <td>{{ data.ngayKy }}</td>
-                  <td>{{ data.namKeHoach }}</td>
-                  <td class="text-center">{{ data.trichYeu }}</td>
+                  <td class="text-right">{{ data.namKeHoach }}</td>
+                  <td>{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td class="text-right">
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">

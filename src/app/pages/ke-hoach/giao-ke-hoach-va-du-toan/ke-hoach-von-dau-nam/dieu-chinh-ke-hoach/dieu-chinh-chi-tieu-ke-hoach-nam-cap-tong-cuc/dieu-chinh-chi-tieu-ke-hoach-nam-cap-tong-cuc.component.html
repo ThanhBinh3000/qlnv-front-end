@@ -9,11 +9,11 @@
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="5">
+          <div nz-col nzSpan="3">
             <label class="search__label">Số QĐ điều chỉnh/TB từ chối</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
           </div>
-          <div nz-col nzSpan="10">
+          <div nz-col nzSpan="6">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
@@ -21,19 +21,7 @@
             <label class="search__label">Ngày ký</label>
             <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <!-- <div nz-col nzSpan="5">
-            <label class="search__label">Số QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
-            <input class="search__input" nz-input [(ngModel)]="soQDDieuChinh" />
-          </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ký</label>
-            <nz-range-picker [(ngModel)]="ngayKyDc" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </div>
-          <div nz-col nzSpan="13">
-            <label class="search__label">Trích yếu QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
-            <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
-          </div> -->
-          <div nz-col nzSpan="24">
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
@@ -175,9 +163,9 @@
                   <td>{{ data.ngayKy }}</td>
                   <td>{{ data.trichYeu }}</td>
                   <td>{{ data.soQdGoc }}</td>
-                  <td>{{ data.namKeHoach }}</td>
+                  <td class="text-right">{{ data.namKeHoach }}</td>
                   <td></td>
-                  <td>{{ data.trangThaiDuyet }}</td>
+                  <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
@@ -310,8 +298,8 @@
                   <td>{{ data.ngayKy }}</td>
                   <td>{{ data.trichYeu }}</td>
                   <td>{{ data.soQdGoc }}</td>
-                  <td>{{ data.namKeHoach }}</td>
-                  <td>{{ data.trangThaiDuyet }}</td>
+                  <td class="text-right">{{ data.namKeHoach }}</td>
+                  <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
