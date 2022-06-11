@@ -5,40 +5,13 @@
       (<span class="number-title-tab">10</span>)
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="title_thoc">
+  <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_thoc">
     <ng-template #title_thoc>
-      Thóc
-      (<span class="number-title-tab">3</span>)
+      {{tab.giaTri}}
+      (<span class="number-title-tab">{{tab.count}}</span>)
     </ng-template>
     <ng-template nz-tab>
-      <app-danh-sach-giao-nhap-hang typeVthh="thoc"></app-danh-sach-giao-nhap-hang>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_gao">
-    <ng-template #title_gao>
-      Gạo
-      (<span class="number-title-tab">3</span>)
-    </ng-template>
-    <ng-template nz-tab>
-      <app-danh-sach-giao-nhap-hang typeVthh="gao"></app-danh-sach-giao-nhap-hang>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_muoi">
-    <ng-template #title_muoi>
-      Muối
-      (<span class="number-title-tab">4</span>)
-    </ng-template>
-    <ng-template nz-tab>
-      <app-danh-sach-giao-nhap-hang typeVthh="muoi"></app-danh-sach-giao-nhap-hang>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_vat_tu">
-    <ng-template #title_vat_tu>
-      Vật tư, thiết bị
-      (<span class="number-title-tab">4</span>)
-    </ng-template>
-    <ng-template nz-tab>
-      <app-danh-sach-giao-nhap-hang typeVthh="vat-tu"></app-danh-sach-giao-nhap-hang>
+      <app-danh-sach-giao-nhap-hang typeVthh="{{tab.ma}}"></app-danh-sach-giao-nhap-hang>
     </ng-template>
   </nz-tab>
 </nz-tabset>
