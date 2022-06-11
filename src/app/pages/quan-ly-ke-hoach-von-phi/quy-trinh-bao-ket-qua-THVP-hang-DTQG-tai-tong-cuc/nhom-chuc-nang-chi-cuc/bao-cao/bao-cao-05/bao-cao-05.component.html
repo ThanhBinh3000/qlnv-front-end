@@ -1,0 +1,1351 @@
+<div id="tablePrint">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+        <div nz-col [nzSpan]="3">
+            <ng-container *ngIf="status;else templateName5">
+                <label class="search__label">Đơn vị:</label>
+                <div *ngFor="let item of donViTiens">
+                    <div *ngIf="item.id == maDviTien">
+                        {{item.tenDm}}
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #templateName5>
+                <label class="search__label">Đơn vị</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                    [class]="maDviTien ?'' : 'input-error-validate' ">
+                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                </nz-select>
+            </ng-template>
+        </div>
+        <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+            <button type="button" class="btn btn-sub" [hidden]="status">
+                <i class="icon htvbdh_tcdt_import"></i>
+                <span>Import</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+                <i class="fa fa-trash-o"></i>
+                <span>Xóa</span>
+            </button>
+        </div>
+    </div>
+    <nz-table nzBordered class="table__body">
+        <thead>
+            <tr>
+                <th rowspan="2">STT</th>
+                <th rowspan="2">Nội dung chi</th>
+                <th colspan="{{3 + listColTemp.length}}">Chi tiết theo từng mặt hàng trong đợt</th>
+                <th colspan="{{3 + listColTemp.length}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
+                <th rowspan="2">Ghi chú</th>
+                <th rowspan="2" colspan="3" [hidden]="status"></th>
+                <th rowspan="2" [hidden]="status">
+                    <label nz-checkbox [(ngModel)]="allChecked1" (ngModelChange)="updateAllChecked()">
+                    </label>
+                </th>
+            </tr>
+            <tr>
+                <th>Tổng Cộng</th>
+                <th>Thóc</th>
+                <th>Gạo</th>
+                <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
+                <th>Tổng Cộng</th>
+                <th>Thóc</th>
+                <th>Gạo</th>
+                <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
+            </tr>
+            <tr>
+                <th>A</th>
+                <th>Tình hình thực hiện nhiệm vụ xuất</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Tổng số lượng theo quyết định (kg, bộ chiếc)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Tổng số lượng thực hiện gộp</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Trong đó số lượng thực hiện năm trước (đối với quyết định thực hiện năm trước còn đang dang dở
+                    chuyển sang năm nay)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th [hidden]="status"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+                <th *ngFor="let colname of listColTemp"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>I</td>
+                <td>Tổng mức phí đơn vị được hưởng (Đồng)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Đơn vị chủ động thực hiện</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-I1')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5I1; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5I1">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-I1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-I1')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-I1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-I1')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5I1>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-I1')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-I1')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-I1')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-I1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-I1')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Tổng cục phê duyệt trước khi thực hiện (NVCM)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-I2')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5I2; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5I2">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-I2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-I2')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-I2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-I2')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5I2>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-I2')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-I2')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-I2')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-I2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-I2')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>II</td>
+                <td>Tổng chi phí thực hiện</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Đơn vị chủ động thực hiện</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr>
+                <td>1.1</td>
+                <td>Chi thanh toán cá nhân</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5II11; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5II11">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II1.1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-II1.1')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II1.1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II1.1')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5II11>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II1.1')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-II1.1')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-II1.1')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II1.1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II1.1')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>1.2</td>
+                <td>Nghiệp vụ chuyên môn</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-II1.2')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5II12; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5II12">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II1.2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-II1.2')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II1.2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II1.2')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5II12>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II1.2')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-II1.2')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-II1.2')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II1.2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II1.2')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>1.2</td>
+                <td>Cục điều hành (nghiệp vụ chuyên môn)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-II2')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5II2; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5II2">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-II2')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II2')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5II2>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-II2')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-II2')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-II2')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-II2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-II2')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>III</td>
+                <td>Tổng số chênh lệch</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Đơn vị chủ động thực hiện</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-III1')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5III1; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5III1">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-III1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-III1')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-III1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-III1')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5III1>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-III1')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-III1')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-III1')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-III1')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-III1')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Tổng cục phê duyệt trước khi thực hiện (NVCM)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-III2')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5III2; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5III2">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-III2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-III2')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-III2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-III2')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5III2>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-III2')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-III2')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-III2')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-III2')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-III2')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>B</td>
+                <td>Tình hình kinh phí và quyết toán kinh phí</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td *ngFor="let colname of listColTemp"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-B')"></i>
+                </td>
+                <td [hidden]="status"></td>
+            </tr>
+            <tr *ngFor="let item of lstCtietBcao5B; let i = index">
+                <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5B">
+                    <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.trongDotTcong}}</td>
+                    <td>{{item.trongDotThoc}}</td>
+                    <td>{{item.trongDotGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 0">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.luyKeTcong}}</td>
+                    <td>{{item.luyKeThoc}}</td>
+                    <td>{{item.luyKeGao}}</td>
+                    <ng-container *ngFor="let e of item.listCtiet">
+                        <ng-container *ngIf="e.loaiMatHang == 1">
+                            <td>
+                                {{e.sl}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>{{item.ghiChu}}</td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-B')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <ng-container *ngIf="!getLowStatus(item.stt,'5-B')">
+                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                        </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-B')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-B')"></label>
+                    </td>
+                </ng-container>
+                <ng-template #editTemplate5B>
+                    <td></td>
+                    <td>
+                        <div *ngFor="let vtu of lstVatTuFull">
+                            <div *ngIf="vtu.id == item.maNdungChi">
+                                {{vtu.ten}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 0">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        <nz-input-number type="number" class="search__input" nzSize="small"
+                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
+                        </nz-input-number>
+                    </td>
+                    <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
+                        <ng-container *ngIf="kv.loaiMatHang == 1">
+                            <td>
+                                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <td>
+                        <input type="text" class="search__input" nz-input
+                            [(ngModel)]="editCache[item.id].data.ghiChu" />
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(item.id,'5-B')"></i>
+                    </td>
+                    <td>
+                        <a (click)="saveEdit(item.id,'5-B')" class="save" style="margin-right:15px">Lưu</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                            (nzOnConfirm)="cancelEdit(item.id,'5-B')" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                        <i class="fa fa-plus" (click)="addLine(item.id,'5-B')"></i>
+                    </td>
+                    <td [hidden]="status">
+                        <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                            (ngModelChange)="updateChecked(item.id,'5-B')"></label>
+                    </td>
+                </ng-template>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
+<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+    <div nz-col nzSpan="12">
+        <label class="search__label">Thuyết minh</label>
+        <ng-container *ngIf="status;else templatePresent">
+            <br>{{thuyetMinh}}
+        </ng-container>
+        <ng-template #templatePresent>
+            <nz-textarea-count [nzMaxCharacterCount]="100">
+                <textarea rows="4" nz-input [(ngModel)]="thuyetMinh"></textarea>
+            </nz-textarea-count>
+        </ng-template>
+    </div>
+</div>
+<div class="action">
+    <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+        <i nz-icon nzType="printer" nzTheme="outline"></i>
+        <span>In</span>
+    </button>
+    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        <span>OK</span>
+    </button>
+    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
+        <i nz-icon nzType="close" nzTheme="outline"></i>
+        <span>Not OK</span>
+    </button>
+    <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+    </button>
+    <button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        <span>Hoàn tất nhập liệu</span>
+    </button>
+</div>

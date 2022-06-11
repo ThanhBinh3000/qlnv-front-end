@@ -10,7 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BAO_CAO_DOT, BAO_CAO_NAM, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BAO_CAO_NAM, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NOT_OK, OK, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { LISTCANBO } from '../../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, KHOAN_MUC, LISTBIEUMAUDOT, LISTBIEUMAUNAM, NOI_DUNG, NOI_DUNG_PL2, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
@@ -153,7 +153,6 @@ export class BaoCaoComponent implements OnInit {
   constructor(
     private userService: UserService,
     private notification: NzNotificationService,
-    private route: Router,
     private router: ActivatedRoute,
     private danhMucService: DanhMucHDVService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -172,9 +171,10 @@ export class BaoCaoComponent implements OnInit {
   statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
   statusBtnCopy: boolean = true;                      // trang thai copy
   statusBtnPrint: boolean = true;                     // trang thai print
-  statusBtnOk: boolean = true;                        // trang thai ok/ not ok
   statusBtnClose: boolean = false;                        // trang thai ok/ not ok
+
   statusBtnFinish: boolean = true;                    // trang thai hoan tat nhap lieu
+  statusBtnOk: boolean = true;                        // trang thai ok/ not ok
 
   lstFiles: any = [];                          // list File de day vao api
 
@@ -186,7 +186,6 @@ export class BaoCaoComponent implements OnInit {
   donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
   tuNgay: any;
   denNgay: any;
-
 
   donVis: any[] = [];
   userInfor: any;
@@ -211,6 +210,8 @@ export class BaoCaoComponent implements OnInit {
 
   //----
   listVattu: any[] = [];
+  lstVatTuFull = [];
+
   baoCao: ItemDanhSach = new ItemDanhSach();
   currentday = new Date();
   maPhanBcao: string = '1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
@@ -284,27 +285,39 @@ export class BaoCaoComponent implements OnInit {
   lstCtietBcao4bIII3: ItemDataMau0405[] = [];
   lstCtietBcao4bB: ItemDataMau0405[] = [];
 
+  //nhóm biến biểu mẫu 05
+  lstCtietBcao5I1: ItemDataMau0405[] = [];
+  lstCtietBcao5I2: ItemDataMau0405[] = [];
+  lstCtietBcao5II11: ItemDataMau0405[] = [];
+  lstCtietBcao5II12: ItemDataMau0405[] = [];
+  lstCtietBcao5II2: ItemDataMau0405[] = [];
+  lstCtietBcao5III1: ItemDataMau0405[] = [];
+  lstCtietBcao5III2: ItemDataMau0405[] = [];
+  lstCtietBcao5B: ItemDataMau0405[] = [];
+
   vt: number;
   stt: number;
   kt: boolean;
   disable: boolean = false;
   soLaMa: any[] = SOLAMA;
   lstCTietBaoCaoTemp: any[] = [];
-
+  tabs: any[] = [];
   lstCtietBcao04bx: ItemDataMau0405[] = [];
   lstCtietBcao05: ItemDataMau0405[] = [];
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
   allChecked1: any;
-  listColTemp: any[] = [];
+  
   cols: number = 0;
   lstIdDeleteCols: string = '';
 
   nguoiBcaos: any[] = LISTCANBO;
-  lstVatTuFull = [];
   vatTusBC02 = NOI_DUNG;
   vatTusBC03 = NOI_DUNG;
   noiDungChisBC04 = NOI_DUNG;
   noiDungChisBC05 = NOI_DUNG;
+  data: any;
+  listColTemp: any[] = [];
+  selectedIndex: number = 1;
   async ngOnInit() {
     this.cols = 3;
     this.id = this.router.snapshot.paramMap.get('id');
@@ -441,7 +454,7 @@ export class BaoCaoComponent implements OnInit {
     );
 
     //lay danh sach cac đơn vị quản lý (chi cục, cục khu vực,...)
-    await this.quanLyVonPhiService.dMDonVi().toPromise().then(res => {
+    await this.danhMucService.dMDonVi().toPromise().then(res => {
       if (res.statusCode == 0) {
         this.donVis = res.data;
       } else {
@@ -706,6 +719,25 @@ export class BaoCaoComponent implements OnInit {
     return 0;
   }
 
+  newTab(maPhuLuc: any): void {
+		var index: number = this.tabs.findIndex(e => e.id === maPhuLuc);
+		if (index != -1) {
+			this.selectedIndex = index + 1;
+		} else {
+			let item = this.baoCao.lstBcaos.find(e => e.maLoai == maPhuLuc);
+			this.data = {
+				...item,
+				trangThaiBaoCao: this.baoCao.trangThai,
+				statusBtnOk: this.statusBtnOk,
+				statusBtnFinish: this.statusBtnFinish,
+				status: this.status,
+			}
+			this.tabs = [];
+			this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
+			this.selectedIndex = this.tabs.length + 1;
+		}
+	}
+
   async changeTab(maPhuLuc, trangThaiChiTiet) {
     this.spinner.show();
     let checkSaveEdit;
@@ -713,6 +745,8 @@ export class BaoCaoComponent implements OnInit {
     await this.saveMau03();
     await this.saveMau04ax();
     await this.saveMau04an();
+    await this.saveMau04b();
+    await this.saveMau05();
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
@@ -748,6 +782,14 @@ export class BaoCaoComponent implements OnInit {
     this.trangThaiChiTiet = trangThaiChiTiet;
     this.resetList();
     // tinh toan tien va tach bao cao ra cac bao cao nho
+    
+			this.data = {
+				...this.lstCTietBaoCaoTemp,
+				trangThaiBaoCao: this.baoCao?.trangThai,
+				statusBtnOk: this.statusBtnOk,
+				statusBtnFinish: this.statusBtnFinish,
+				status: this.status,
+			}
     this.listColTemp = []
     switch (maPhuLuc) {
       // bm 02
@@ -938,8 +980,36 @@ export class BaoCaoComponent implements OnInit {
 
       // 05/BCPBQ
       case KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG:
-        this.lstCTietBaoCaoTemp?.filter(data => {
-          data.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+        this.lstCTietBaoCaoTemp?.filter(async data => {
+          await data.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+          switch (data.header) {
+            case '5-I1':
+              this.lstCtietBcao5I1.push(data);
+              break;
+            case '5-I2':
+              this.lstCtietBcao5I2.push(data);
+              break;
+            case '5-II11':
+              this.lstCtietBcao5II11.push(data);
+              break;
+            case '5-II12':
+              this.lstCtietBcao5II12.push(data);
+              break;
+            case '5-II2':
+              this.lstCtietBcao5II2.push(data);
+              break;
+            case '5-III1':
+              this.lstCtietBcao5III1.push(data);
+              break;
+            case '5-III2':
+              this.lstCtietBcao5III2.push(data);
+              break;
+            case '5-B':
+              this.lstCtietBcao5B.push(data);
+              break;
+            default:
+              break;
+          }
         });
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
           if (el.loaiMatHang == 0) {
@@ -1146,6 +1216,7 @@ export class BaoCaoComponent implements OnInit {
     await this.saveMau04ax();
     await this.saveMau04an();
     await this.saveMau04b();
+    await this.saveMau05();
     let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
 
@@ -2145,6 +2216,36 @@ export class BaoCaoComponent implements OnInit {
     }
   }
 
+  async saveMau05() {
+    if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+      this.lstCTietBaoCaoTemp = [];
+      await this.lstCtietBcao5I1.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5I2.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5II11.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5II12.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5II2.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5III1.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5III2.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+      await this.lstCtietBcao5B.forEach(e => {
+        this.lstCTietBaoCaoTemp.push(e);
+      })
+    }
+  }
+
   addAllCol() {
     let lstDviChon = this.lstVatTuFull.filter(item => this.listColTemp?.findIndex(data => data.maVtu == item.id) == -1);
     const modalIn = this.modal.create({
@@ -2939,6 +3040,23 @@ export class BaoCaoComponent implements OnInit {
         return this.lstCtietBcao4bIII3;
       case '4b-B':
         return this.lstCtietBcao4bB;
+      // 05
+      case '5-I1':
+        return this.lstCtietBcao5I1;
+      case '5-I2':
+        return this.lstCtietBcao5I2;
+      case '5-II11':
+        return this.lstCtietBcao5II11;
+      case '5-II12':
+        return this.lstCtietBcao5II12;
+      case '5-II2':
+        return this.lstCtietBcao5II2;
+      case '5-III1':
+        return this.lstCtietBcao5III1;
+      case '5-III2':
+        return this.lstCtietBcao5III2;
+      case '5-B':
+        return this.lstCtietBcao5B;
       //
       case '21':
         return this.lstCtietBcao021;
@@ -3071,7 +3189,32 @@ export class BaoCaoComponent implements OnInit {
       case '4b-B':
         this.lstCtietBcao4bB = listPhuLuc;
         break;
-      //bv 02
+      // bc 05
+      case '5-I1':
+        this.lstCtietBcao5I1 = listPhuLuc;
+        break;
+      case '5-I2':
+        this.lstCtietBcao5I2 = listPhuLuc;
+        break;
+      case '5-II11':
+        this.lstCtietBcao5II11 = listPhuLuc;
+        break;
+      case '5-II12':
+        this.lstCtietBcao5II12 = listPhuLuc;
+        break;
+      case '5-II2':
+        this.lstCtietBcao5II2 = listPhuLuc;
+        break;
+      case '5-III1':
+        this.lstCtietBcao5III1 = listPhuLuc;
+        break;
+      case '5-III2':
+        this.lstCtietBcao5III2 = listPhuLuc;
+        break;
+      case '5-B':
+        this.lstCtietBcao5B = listPhuLuc;
+        break;
+      //bc 02
       case '21':
         this.lstCtietBcao021 = listPhuLuc;
         break;
@@ -3093,4 +3236,28 @@ export class BaoCaoComponent implements OnInit {
         break;
     }
   }
+  closeTab({ index }: { index: number }): void {
+		this.tabs.splice(index - 1, 1);
+	}
+  getNewData(obj: any) {
+		console.log(obj);
+    
+    let index = this.baoCao?.lstBcaos.findIndex(e => e.maLoai == this.tabSelected);
+		// if (obj?.trangThai == '-1') {
+		// 	this.getDetailReport();
+		// 	this.lstCTietBaoCaoTemp = {
+		// 		...this.baoCao?.lstBcaos[index],
+		// 		trangThaiBaoCao: this.trangThaiBaoCao,
+		// 		statusBtnOk: this.statusBtnOk,
+		// 		statusBtnFinish: this.statusBtnFinish,
+		// 		status: this.status,
+		// 	}
+		// 	this.tabs = [];
+		// 	this.tabs.push(PHU_LUC.find(e => e.id == this.lstLapThamDinhs[index].maBieuMau));
+		// 	this.selectedIndex = this.tabs.length + 1;
+		// } else {
+		// 	this.lstLapThamDinhs[index].trangThai = obj?.trangThai;
+		// 	this.lstLapThamDinhs[index].lyDoTuChoi = obj?.lyDoTuChoi;
+		// }
+	}
 }

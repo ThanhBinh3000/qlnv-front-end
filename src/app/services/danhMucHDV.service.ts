@@ -115,17 +115,8 @@ export class DanhMucHDVService extends BaseService {
 
   //danh muc loai ke hoach
   dMDiaDiemXayDung(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/45",
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": ""
-      }
-    );
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/XUAT_BAN",)
   }
 
   //danh muc loai ke hoach
