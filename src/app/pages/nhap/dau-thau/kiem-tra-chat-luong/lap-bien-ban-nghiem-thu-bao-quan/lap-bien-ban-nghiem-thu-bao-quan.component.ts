@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -30,19 +31,18 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
+  soQuyetDinh: string;
   soBB: number = null;
   ngayTongHop: any = null;
   diemKho: string = '';
   nhaKho: string = '';
   nganLo: string = '';
-
-  loaiVthh: string;
-  routerVthh: string;
 
   userInfo: UserLogin;
 
@@ -54,6 +54,22 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
 
+  allChecked = false;
+  indeterminate = false;
+
+  filterTable: any = {
+    soQuyetDinh: '',
+    soBb: '',
+    ngayNghiemThuShow: '',
+    tenDiemkho: '',
+    tenNhakho: '',
+    tenNganlo: '',
+    chiPhiThucHienTrongNam: '',
+    chiPhiThucHienNamTruoc: '',
+    tongGiaTri: '',
+    trangThaiDuyet: '',
+  };
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -61,14 +77,13 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private router: Router,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
       this.userInfo = this.userService.getUserLogin();
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
@@ -84,9 +99,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       await Promise.all([
-        this.loadDiemKho(),
-        this.loadNhaKho(null),
-        this.loadNganLo(),
+        // this.loadDiemKho(),
+        // this.loadNhaKho(null),
+        // this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -94,6 +109,37 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 
@@ -162,22 +208,6 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiVthh = "01";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiVthh = "00";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiVthh = "02";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   clearFilter() {
     this.inputDonVi = '';
     this.soBB = null;
@@ -185,6 +215,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.diemKho = '';
     this.nhaKho = '';
     this.nganLo = '';
+    this.soQuyetDinh = null;
     this.search();
   }
 
@@ -193,7 +224,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
         ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": this.loaiVthh,
+      "loaiVthh": this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
       "maNganKho": this.nganLo,
       "maNganlo": this.nganLo,
@@ -220,8 +251,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
           if (item.ngayNghiemThu && item.ngayNghiemThu != null) {
             item.ngayNghiemThuShow = dayjs(item.ngayNghiemThu).format('DD/MM/YYYY')
           }
+          item.checked = false;
         });
       }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -332,7 +365,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
           "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
             ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,
-          "loaiVthh": this.loaiVthh,
+          "loaiVthh": this.typeVthh,
           "maDvi": this.userInfo.MA_DVI,
           "maNganKho": this.nganLo,
           "orderBy": null,
@@ -369,5 +402,79 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
+  }
+
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // if (res.msg == MESSAGE.SUCCESS) {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQuyetDinh: '',
+      soBb: '',
+      ngayNghiemThuShow: '',
+      tenDiemkho: '',
+      tenNhakho: '',
+      tenNganlo: '',
+      chiPhiThucHienTrongNam: '',
+      chiPhiThucHienNamTruoc: '',
+      tongGiaTri: '',
+      trangThaiDuyet: '',
+    }
   }
 }

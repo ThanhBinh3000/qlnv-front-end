@@ -44,7 +44,16 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Đơn vị
+                  Số Quyết định
+                </nz-form-label>
+                <input nz-input placeholder="Nhập số phiếu" [(ngModel)]="detail.soQuyetDinh"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tên đơn vị
                 </nz-form-label>
                 <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
@@ -132,7 +141,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng nhập kho
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maHangHoa" disabled />
+                <input nz-input [(ngModel)]="typeVthh" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -175,21 +184,21 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Tổ chức giám định
-                </nz-form-label>
-                <input nz-input placeholder="Nhập tổ chức giám định" [(ngModel)]="detail.tchucGdinh"
-                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Biển số xe của phương tiện vận tải
                 </nz-form-label>
                 <input nz-input placeholder="Nhập biển số xe của phương tiện vận tải" [(ngModel)]="detail.bienSoXe"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tổ chức giám định
+                </nz-form-label>
+                <input nz-input placeholder="Nhập tổ chức giám định" [(ngModel)]="detail.tchucGdinh"
                   [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>

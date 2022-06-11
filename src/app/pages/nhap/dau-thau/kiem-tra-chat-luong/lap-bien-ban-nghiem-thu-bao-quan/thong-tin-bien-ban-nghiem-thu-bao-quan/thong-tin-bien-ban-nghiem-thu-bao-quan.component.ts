@@ -42,11 +42,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   idNhapHang: number = 0;
   viewChiTiet: boolean = false;
 
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  routerVthh: string;
-
   listThuKho: any[] = [];
   listNganLo: any[] = [];
   listLoaiKho: any[] = [];
@@ -73,7 +68,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
       this.getIdNhap();
       this.checkIsView();
       this.create.dvt = "Tấn";
@@ -330,29 +324,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -539,10 +510,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "kyThuatVien": this.detail?.kyThuatVien,
         "ldoTuchoi": null,
         "lhKho": this.detail?.lhKho,
-        "loaiVthh": this.loaiVthh,
+        "loaiVthh": this.typeVthh,
         "maDvi": this.detail?.maDvi,
         "maNganlo": this.detail?.maNganlo,
-        "maVthh": this.maVthh,
+        "maVthh": this.typeVthh,
         "ngayKthuc": null,
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
