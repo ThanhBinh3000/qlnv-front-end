@@ -20,6 +20,7 @@ import VNnum2words from 'vn-num2words';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import * as dayjs from 'dayjs';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -40,18 +41,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   idNhapHang: number = 0;
-  viewChiTiet: boolean = false;
-
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  routerVthh: string;
 
   listThuKho: any[] = [];
   listNganLo: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
+  listSoQuyetDinh: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -67,15 +63,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     private userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
-      this.getIdNhap();
-      this.checkIsView();
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
@@ -86,6 +80,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
         this.loadDonViTinh(),
+        this.loadSoQuyetDinh(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -96,26 +91,35 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
-      }
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
     }
-  }
-
-  getIdNhap() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/chi-tiet/");
-      if (index != -1) {
-        let url = this.router.url.substring(index + 10);
-        let temp = url.split("/");
-        if (temp && temp.length > 0) {
-          this.idNhapHang = +temp[0];
-        }
-      }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -330,29 +334,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -539,10 +520,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "kyThuatVien": this.detail?.kyThuatVien,
         "ldoTuchoi": null,
         "lhKho": this.detail?.lhKho,
-        "loaiVthh": this.loaiVthh,
+        "loaiVthh": this.typeVthh,
         "maDvi": this.detail?.maDvi,
         "maNganlo": this.detail?.maNganlo,
-        "maVthh": this.maVthh,
+        "maVthh": this.typeVthh,
         "ngayKthuc": null,
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
