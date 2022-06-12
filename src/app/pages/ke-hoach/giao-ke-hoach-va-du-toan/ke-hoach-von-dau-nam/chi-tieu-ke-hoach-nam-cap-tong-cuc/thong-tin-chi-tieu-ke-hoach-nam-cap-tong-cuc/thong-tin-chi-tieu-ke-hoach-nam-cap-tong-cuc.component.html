@@ -130,8 +130,10 @@
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
                   [data]="canCuList" [trangThai]="isViewDetail ? 'view-detail' :  thongTinChiTieuKeHoachNam.trangThai"
-                  type="file" (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)"
-                  (downloadFileEvent)="downloadFileKeHoach($event)" typeFile="can-cu">
+                  type="file"
+                  (selectDataEvent)="userService.isTongCuc() ? openFileCanCu($event) : openDialogGiaoChiTieu()"
+                  (removeDataEvent)="deleteCanCuTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
+                  typeFile="can-cu">
                 </multiple-tag>
               </nz-form-control>
               <!-- </nz-form-item> -->

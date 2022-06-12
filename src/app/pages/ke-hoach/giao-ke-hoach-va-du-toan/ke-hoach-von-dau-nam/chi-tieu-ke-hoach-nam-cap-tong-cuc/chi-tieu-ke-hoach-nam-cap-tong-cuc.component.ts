@@ -41,6 +41,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
   listNam: any[] = [];
   lastBreadcrumb: string;
   userInfo: UserLogin;
@@ -57,6 +58,13 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     chiTieuKeHoachNamCuc: 0
   }
   capDvi: number = 1;
+  filterTable: any = {
+    soQd: '',
+    ngayKy: '',
+    namKeHoach: '',
+    trichYeu: '',
+    tenTrangThai: '',
+  };
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -173,6 +181,12 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -427,6 +441,33 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         break;
     }
     this.clearFilter();
+    this.clearFilterTable();
     this.search();
+  }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      ngayKy: '',
+      namKeHoach: '',
+      trichYeu: '',
+      tenTrangThai: '',
+    }
   }
 }

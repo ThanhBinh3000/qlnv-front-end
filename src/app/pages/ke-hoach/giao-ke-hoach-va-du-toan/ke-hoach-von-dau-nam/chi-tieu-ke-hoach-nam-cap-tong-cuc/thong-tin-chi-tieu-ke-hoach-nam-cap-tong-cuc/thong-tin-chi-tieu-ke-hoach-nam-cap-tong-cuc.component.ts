@@ -16,6 +16,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { DialogThongTinLuongThucComponent } from 'src/app/components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
@@ -2569,5 +2570,30 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       default:
         break;
     }
+  }
+  openDialogGiaoChiTieu() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        isDexuat: true
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        let item = {
+          id: new Date().getTime(),
+          text: data.soQuyetDinh,
+        };
+        if (!this.canCuList.find((x) => x.text === item.text)) {
+          // this.thongTinChiTieuKeHoachNam.canCus.push(item);
+          this.canCuList.push(item);
+        }
+      }
+    });
   }
 }

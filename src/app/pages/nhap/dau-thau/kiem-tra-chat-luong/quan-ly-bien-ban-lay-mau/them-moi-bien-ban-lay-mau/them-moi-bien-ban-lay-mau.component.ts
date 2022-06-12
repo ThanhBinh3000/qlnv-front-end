@@ -27,6 +27,7 @@ import { MESSAGE } from 'src/app/constants/message';
 })
 export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   @Input() id: number;
+  @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   bienBanLayMau: BienBanLayMau;
@@ -55,7 +56,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async ngOnInit() {
     this.routerUrl = this.router.url;
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    // this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
     this.newObjectBienBanLayMau();
     this.checkIsView();
@@ -81,11 +82,10 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   newObjectBienBanLayMau() {
     this.bienBanLayMau = new BienBanLayMau();
   }
-  disableBanHanh(): boolean {
+  isAction(): boolean {
     return (
       this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0 ||
-      this.bienBanLayMau.trangThai === this.globals.prop.TU_CHOI
+      !this.isViewDetail
     );
   }
   save(isGuiDuyet?: boolean) {

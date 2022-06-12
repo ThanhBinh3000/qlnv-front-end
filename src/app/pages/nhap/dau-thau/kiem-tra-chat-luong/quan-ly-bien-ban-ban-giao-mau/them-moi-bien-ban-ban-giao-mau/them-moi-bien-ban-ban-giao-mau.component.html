@@ -6,12 +6,11 @@
         <div class="trai">
         </div>
         <div class="canphai phai" *ngIf="!viewChiTiet">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="disableBanHanh()">
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="isAction()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh()"
-            (click)="guiDuyet()">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="isAction()" (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Gửi duyệt</span>
           </button>
@@ -30,8 +29,7 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectBienBanLayMau()"
-            *ngIf="bienBanLayMau.trangThai === globals.prop.DU_THAO || id===0">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectBienBanLayMau()">
             <i class="icon htvbdh_tcdt_delete"></i>
             <span>Quay về</span>
           </a>
@@ -53,7 +51,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.tenDonVi" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.tenDonVi" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -61,7 +59,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.maDonVi" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.maDonVi" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -72,7 +70,7 @@
                   Số biên bản
                 </nz-form-label>
                 <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="bienBanLayMau.soBban"
-                  [readonly]=" viewChiTiet" />
+                  [disabled]="!isAction()" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -80,7 +78,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số hợp đồng
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.soHd" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.soHd" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -88,7 +86,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày hợp đồng
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.ngayHd" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.ngayHd" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -96,7 +94,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị cung cấp hàng
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.tenDonViCCHang" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.tenDonViCCHang" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -105,7 +103,7 @@
                   Ngày lấy mẫu
                 </nz-form-label>
                 <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" [(ngModel)]="bienBanLayMau.ngayLayMau"
-                  [disabled]=" viewChiTiet">
+                  [disabled]="!isAction()">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -115,7 +113,7 @@
                   Địa điểm lấy mẫu
                 </nz-form-label>
                 <input placeholder="Nhập địa điểm lấy mẫu" nz-input [(ngModel)]="bienBanLayMau.ddiemLayMau"
-                  [readonly]=" viewChiTiet" />
+                  [disabled]="!isAction()" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -133,7 +131,7 @@
                   Đại diện Cục Dự Trữ nhà nước
                 </nz-form-label>
                 <input nz-input placeholder="Nhập tên" [(ngModel)]="bienBanLayMau.ddienCucDtruNnuoc"
-                  [readonly]=" viewChiTiet" />
+                  [disabled]="!isAction()" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -142,7 +140,7 @@
                   Trưởng phòng kỹ thuật bảo quản
                 </nz-form-label>
                 <input nz-input placeholder="Nhập tên" [(ngModel)]="bienBanLayMau.tphongKthuatBquan"
-                  [readonly]=" viewChiTiet" />
+                  [disabled]="!isAction()" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -151,7 +149,7 @@
                   Đại diện bên nhận
                 </nz-form-label>
                 <input nz-input placeholder="Nhập tên" [(ngModel)]="bienBanLayMau.ddienBenNhan"
-                  [readonly]=" viewChiTiet" />
+                  [disabled]="!isAction()" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -162,7 +160,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số lượng mẫu hàng kiểm tra
                 </nz-form-label>
-                <input nz-input readonly [(ngModel)]="bienBanLayMau.sluongLMau" />
+                <input nz-input disabled [(ngModel)]="bienBanLayMau.sluongLMau" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -170,7 +168,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Phương pháp lấy mẫu
                 </nz-form-label>
-                <nz-select [(ngModel)]="bienBanLayMau.pphapLayMau" [disabled]=" viewChiTiet">
+                <nz-select [(ngModel)]="bienBanLayMau.pphapLayMau" [disabled]="!isAction()">
                   <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.id" [nzLabel]="item.giaTri">
                   </nz-option>
                 </nz-select>
