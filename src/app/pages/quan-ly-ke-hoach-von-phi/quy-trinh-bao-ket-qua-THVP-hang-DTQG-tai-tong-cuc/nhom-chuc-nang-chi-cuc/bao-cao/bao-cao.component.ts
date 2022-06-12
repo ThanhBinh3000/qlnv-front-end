@@ -485,7 +485,7 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfor.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.maDviCha == this.userInfor.dvql) {
+    if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
     const utils = new Utils();
@@ -1055,22 +1055,23 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfor.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.maDviCha == this.userInfor.dvql) {
+    if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
     let roleNguoiTao = this.userInfor?.roles[0]?.code;
     let trangThaiBaoCao = this.baoCao?.trangThai;
-    if (trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
     }
+
     if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
-      && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
+      && roleNguoiTao == '3' && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;

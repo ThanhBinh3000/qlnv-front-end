@@ -60,77 +60,78 @@ export class Utils {
     public static CAP_VON = "1";
     public static UNG_VON = "2";
     //role xoa
-    public btnRoleDel = {
+    //role xoa
+    public static btnRoleDel = {
         "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO,
+        "role": ['3'],
     }
 
     //role luu
-    public btnRoleSave = {
+    public static btnRoleSave = {
         "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO,
+        "role": ['3'],
     }
 
     //role trinh duyet
-    public btnRoleApprove = {
+    public static btnRoleApprove = {
         "status": ['1'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO,
+        "role": ['3'],
     }
 
     //role truong bo phan
-    public btnRoleTBP = {
+    public static btnRoleTBP = {
         "status": ['2'],
         "unit": [1, 2],
-        "role": ROLE_TRUONG_BO_PHAN,
+        "role": ['2'],
     }
 
     //role lanh dao
-    public btnRoleLD = {
+    public static btnRoleLD = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": ROLE_LANH_DAO,
+        "role": ['1'],
     }
 
     //role gui don vi cap tren
-    public btnRoleGuiDVCT = {
+    public static btnRoleGuiDVCT = {
         "status": ['6'],
         "unit": [1, 2],
-        "role": ROLE_LANH_DAO,
+        "role": ['1'],
     }
 
     //role don vi cap tren
-    public btnRoleDVCT = {
+    public static btnRoleDVCT = {
         "status": ['7'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO,
+        "role": ['3'],
     }
 
     //role lanh dao dieu chinh
-    public btnRoleLDDC = {
+    public static btnRoleLDDC = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": ROLE_LANH_DAO,
+        "role": ['1'],
     }
 
     //role copy
-    public btnRoleCOPY = {
+    public static btnRoleCOPY = {
         "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO,
+        "role": ['3'],
     }
 
     //role in
-    public btnRolePRINT = {
+    public static btnRolePRINT = {
         "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
-        "role": ROLE_CAN_BO.concat(ROLE_LANH_DAO).concat(ROLE_TRUONG_BO_PHAN),
+        "role": ['1', '2', '3'],
     }
 
     //role copy
-    public btnRoleOK = {
+    public static btnRoleOK = {
         "statusBaoCao": ['2', '4', '7'],
         "statusChiTiet": ['2'],
         "unit": ['1']
@@ -138,59 +139,58 @@ export class Utils {
 
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
-        return !(this.btnRoleDel.status.includes(status) && unit == true && this.btnRoleDel.role.includes(role));
+        return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
     }
 
     //get role luu
     public getRoleSave(status: any, unit: any, role: any) {
-        return !(this.btnRoleSave.status.includes(status) && unit == true && this.btnRoleSave.role.includes(role));
+        return !(Utils.btnRoleSave.status.includes(status) && unit == true && Utils.btnRoleSave.role.includes(role));
     }
 
     //get role trinh duyet
     public getRoleApprove(status: any, unit: any, role: any) {
-        return !(this.btnRoleApprove.status.includes(status) && unit == true && this.btnRoleApprove.role.includes(role));
+        return !(Utils.btnRoleApprove.status.includes(status) && unit == true && Utils.btnRoleApprove.role.includes(role));
     }
 
     //get role truong bo phan
     public getRoleTBP(status: any, unit: any, role: any) {
-        return !(this.btnRoleTBP.status.includes(status) && unit == true && this.btnRoleTBP.role.includes(role));
+        return !(Utils.btnRoleTBP.status.includes(status) && unit == true && Utils.btnRoleTBP.role.includes(role));
     }
 
     //get role button lanh dao
     public getRoleLD(status: any, unit: any, role: any) {
-        return !(this.btnRoleLD.status.includes(status) && unit == true && this.btnRoleLD.role.includes(role));
+        return !(Utils.btnRoleLD.status.includes(status) && unit == true && Utils.btnRoleLD.role.includes(role));
     }
 
     //get role button gui don vi cap tren
     public getRoleGuiDVCT(status: any, unit: any, role: any) {
-        return !(this.btnRoleGuiDVCT.status.includes(status) && unit == true && this.btnRoleGuiDVCT.role.includes(role));
+        return !(Utils.btnRoleGuiDVCT.status.includes(status) && unit == true && Utils.btnRoleGuiDVCT.role.includes(role));
     }
 
     //get role button don vi cap tren
     public getRoleDVCT(status: any, unit: any, role: any) {
-        return !(this.btnRoleDVCT.status.includes(status) && unit == true && this.btnRoleDVCT.role.includes(role));
+        return !(Utils.btnRoleDVCT.status.includes(status) && unit == true && Utils.btnRoleDVCT.role.includes(role));
     }
 
     //role lanh dao dieu chinh
     public getRoleLDDC(status: any, unit: any, role: any) {
-        return !(this.btnRoleLDDC.status.includes(status) && unit == true && this.btnRoleLDDC.role.includes(role));
+        return !(Utils.btnRoleLDDC.status.includes(status) && unit == true && Utils.btnRoleLDDC.role.includes(role));
     }
 
     //role copy
     public getRoleCopy(status: any, unit: any, role: any) {
-        return !(this.btnRoleCOPY.status.includes(status) && unit == true && this.btnRoleCOPY.role.includes(role));
+        return !(Utils.btnRoleCOPY.status.includes(status) && unit == true && Utils.btnRoleCOPY.role.includes(role));
     }
 
     //role in
     public getRolePrint(status: any, unit: any, role: any) {
-        return !(this.btnRolePRINT.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
+        return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
     }
 
     //role OK/not Ok
     public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
-        return !(this.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && this.btnRoleOK.statusChiTiet.includes(statusChiTiet));
+        return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
-
     // lay quyen
     public getRole(id: number) {
         let role;
@@ -291,6 +291,9 @@ export class Utils {
         return statusName?.ten;
     }
 }
+export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
+export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
+export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
 
 // loai bao cao quan ly von phi
 export const LOAI_BAO_CAO = [
@@ -487,9 +490,6 @@ export const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N: string = "29";
 export const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N: string = "30";
 export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N: string = "31";
 export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N: string = "32";
-export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
-export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
-export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
 
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
@@ -881,223 +881,223 @@ export const TRANG_THAI_GIAO = [
 export const MONEY_LIMIT = 9000000000000000000;
 
 export const KHOAN_MUC: any[] = [
-    {
-        id: 10000,
-        tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
-        level: 0,
-        idCha: 0,
-    },
-    {
-        id: 11000,
-        tenDm: "Kinh phí thực hiện tự chủ",
-        idCha: 10000,
-        level: 1,
-    },
-    {
-        id: 12000,
-        tenDm: "Kinh phí không thực hiện tự chủ",
-        idCha: 10000,
-        level: 1,
-    },
-    {
-        id: 12100,
-        tenDm: "Giao đơn vị thực hiện nhiệm vụ",
-        idCha: 12000,
-        level: 2,
-    },
-    {
-        id: 12110,
-        tenDm: "Mua sắm, sửa chữa tài sản",
-        idCha: 12100,
-        level: 3,
-    },
-    {
-        id: 12111,
-        tenDm: "Chi sửa chữa kho tàng và các công trình phụ trợ",
-        idCha: 12110,
-        level: 4,
-    },
-    {
-        id: 12120,
-        tenDm: "Nghiệp vụ chuyên môn đặc thù",
-        idCha: 12100,
-        level: 3,
-    },
-    {
-        id: 12121,
-        tenDm: "Phí bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ, hỗ trợ chính sách",
-        idCha: 12120,
-        level: 4,
-    },
-    {
-        id: 12130,
-        tenDm: "Chi khác",
-        idCha: 12100,
-        level: 3,
-    },
+	{
+		id: 10000,
+		tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
+		level: 0,
+		idCha: 0,
+	},
+	{
+		id: 11000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 10000,
+		level: 1,
+	},
+	{
+		id: 12000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 10000,
+		level: 1,
+	},
+	{
+		id: 12100,
+		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+		idCha: 12000,
+		level: 2,
+	},
+	{
+		id: 12110,
+		tenDm: "Mua sắm, sửa chữa tài sản",
+		idCha: 12100,
+		level: 3,
+	},
+	{
+		id: 12111,
+		tenDm: "Chi sửa chữa kho tàng và các công trình phụ trợ",
+		idCha: 12110,
+		level: 4,
+	},
+	{
+		id: 12120,
+		tenDm: "Nghiệp vụ chuyên môn đặc thù",
+		idCha: 12100,
+		level: 3,
+	},
+	{
+		id: 12121,
+		tenDm: "Phí bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ, hỗ trợ chính sách",
+		idCha: 12120,
+		level: 4,
+	},
+	{
+		id: 12130,
+		tenDm: "Chi khác",
+		idCha: 12100,
+		level: 3,
+	},
 
-    {
-        id: 20000,
-        tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
-        idCha: 0,
-        level: 0,
-    },
-    {
-        id: 21000,
-        tenDm: "Kinh phí thực hiện tự chủ",
-        idCha: 20000,
-        level: 1,
-    },
-    {
-        id: 21100,
-        tenDm: "Giao đơn vị thực hiện nhiệm vụ",
-        idCha: 21000,
-        level: 2,
-    },
-    {
-        id: 21110,
-        tenDm: "Thanh toán cá nhân và quản lý hành chính",
-        idCha: 21100,
-        level: 3,
-    },
-    {
-        id: 21111,
-        tenDm: "Quỹ lương",
-        idCha: 21110,
-        level: 4,
-    },
-    {
-        id: 21112,
-        tenDm: "Chi quản lý hành chính theo định mức",
-        idCha: 21110,
-        level: 4,
-    },
-    {
-        id: 21113,
-        tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
-        idCha: 21110,
-        level: 4,
-    },
-    {
-        id: 21114,
-        tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
-        idCha: 21110,
-        level: 4,
-    },
-    {
-        id: 22000,
-        tenDm: "Kinh phí không thực hiện tự chủ",
-        idCha: 20000,
-        level: 1,
-    },
-    {
-        id: 30000,
-        tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
-        idCha: 0,
-        level: 0,
-    },
-    {
-        id: 31000,
-        tenDm: "Kinh phí thực hiện tự chủ",
-        idCha: 30000,
-        level: 1,
-    },
-    {
-        id: 32000,
-        tenDm: "Kinh phí không thực hiện tự chủ",
-        idCha: 30000,
-        level: 1,
-    },
-    {
-        id: 32100,
-        tenDm: "Giao đơn vị thực hiện nhiệm vụ",
-        idCha: 32000,
-        level: 2,
+	{
+		id: 20000,
+		tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
+		idCha: 0,
+		level: 0,
+	},
+	{
+		id: 21000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 20000,
+		level: 1,
+	},
+	{
+		id: 21100,
+		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+		idCha: 21000,
+		level: 2,
+	},
+	{
+		id: 21110,
+		tenDm: "Thanh toán cá nhân và quản lý hành chính",
+		idCha: 21100,
+		level: 3,
+	},
+	{
+		id: 21111,
+		tenDm: "Quỹ lương",
+		idCha: 21110,
+		level: 4,
+	},
+	{
+		id: 21112,
+		tenDm: "Chi quản lý hành chính theo định mức",
+		idCha: 21110,
+		level: 4,
+	},
+	{
+		id: 21113,
+		tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
+		idCha: 21110,
+		level: 4,
+	},
+	{
+		id: 21114,
+		tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
+		idCha: 21110,
+		level: 4,
+	},
+	{
+		id: 22000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 20000,
+		level: 1,
+	},
+	{
+		id: 30000,
+		tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
+		idCha: 0,
+		level: 0,
+	},
+	{
+		id: 31000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 30000,
+		level: 1,
+	},
+	{
+		id: 32000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 30000,
+		level: 1,
+	},
+	{
+		id: 32100,
+		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+		idCha: 32000,
+		level: 2,
 
-    },
-    {
-        id: 32110,
-        tenDm: "Chỉ đào tạo, bồi dưỡng cán bộ, công chức trong nước",
-        idCha: 32100,
-        level: 3,
+	},
+	{
+		id: 32110,
+		tenDm: "Chỉ đào tạo, bồi dưỡng cán bộ, công chức trong nước",
+		idCha: 32100,
+		level: 3,
 
-    },
-    {
-        id: 40000,
-        tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 331)",
-        idCha: 0,
-        level: 0,
+	},
+	{
+		id: 40000,
+		tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 331)",
+		idCha: 0,
+		level: 0,
 
-    },
-    {
-        id: 41000,
-        tenDm: "Kinh phí thực hiện tự chủ",
-        idCha: 40000,
-        level: 1,
-    },
-    {
-        id: 42000,
-        tenDm: "Kinh phí không thực hiện tự chủ",
-        idCha: 40000,
-        level: 1,
-    },
+	},
+	{
+		id: 41000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 40000,
+		level: 1,
+	},
+	{
+		id: 42000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 40000,
+		level: 1,
+	},
 ];
 
 
 
 export const LA_MA: any[] = [
-    {
-        kyTu: "M",
-        gTri: 1000,
-    },
-    {
-        kyTu: "CM",
-        gTri: 900,
-    },
-    {
-        kyTu: "D",
-        gTri: 500,
-    },
-    {
-        kyTu: "CD",
-        gTri: 400,
-    },
-    {
-        kyTu: "C",
-        gTri: 100,
-    },
-    {
-        kyTu: "XC",
-        gTri: 90,
-    },
-    {
-        kyTu: "L",
-        gTri: 50,
-    },
-    {
-        kyTu: "XL",
-        gTri: 40,
-    },
-    {
-        kyTu: "X",
-        gTri: 10,
-    },
-    {
-        kyTu: "IX",
-        gTri: 9,
-    },
-    {
-        kyTu: "V",
-        gTri: 5,
-    },
-    {
-        kyTu: "IV",
-        gTri: 4,
-    },
-    {
-        kyTu: "I",
-        gTri: 1,
-    },
+	{
+		kyTu: "M",
+		gTri: 1000,
+	},
+	{
+		kyTu: "CM",
+		gTri: 900,
+	},
+	{
+		kyTu: "D",
+		gTri: 500,
+	},
+	{
+		kyTu: "CD",
+		gTri: 400,
+	},
+	{
+		kyTu: "C",
+		gTri: 100,
+	},
+	{
+		kyTu: "XC",
+		gTri: 90,
+	},
+	{
+		kyTu: "L",
+		gTri: 50,
+	},
+	{
+		kyTu: "XL",
+		gTri: 40,
+	},
+	{
+		kyTu: "X",
+		gTri: 10,
+	},
+	{
+		kyTu: "IX",
+		gTri: 9,
+	},
+	{
+		kyTu: "V",
+		gTri: 5,
+	},
+	{
+		kyTu: "IV",
+		gTri: 4,
+	},
+	{
+		kyTu: "I",
+		gTri: 1,
+	},
 ];
 
 export const LOAI_DE_NGHI = [
@@ -1120,14 +1120,14 @@ export const LOAI_DE_NGHI = [
 ]
 
 export const NGUON_BAO_CAO = [
-    {
-        id: Utils.THOP_TU_CUC_KV,
-        tenDm: "Tổng hợp từ cục khu vực",
-    },
-    {
-        id: Utils.THOP_TAI_TC,
-        tenDm: "Tổng hợp tại tổng cục",
-    },
+        {
+            id: Utils.THOP_TU_CUC_KV,
+            tenDm: "Tổng hợp từ cục khu vực",
+        },
+        {
+            id: Utils.THOP_TAI_TC,
+            tenDm: "Tổng hợp tại tổng cục",
+        },
 ]
 
 export const CAN_CU_GIA = [

@@ -41,6 +41,18 @@ export const LISTCANBO: any[] = [
         id: "10002",
         tenDm: "canbotc",
     },
+    {
+        id: "51520",
+        fullName: "canbo1",
+    },
+    {
+        id: "51550",
+        fullName: "canbo2",
+    },
+    {
+        id: "51480",
+        fullName: "canbo",
+    }
 ];
 
 export const NOI_DUNG = [
