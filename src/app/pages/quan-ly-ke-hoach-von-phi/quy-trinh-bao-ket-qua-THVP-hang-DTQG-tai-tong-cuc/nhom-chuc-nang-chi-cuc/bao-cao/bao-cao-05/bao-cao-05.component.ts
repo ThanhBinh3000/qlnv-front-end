@@ -134,6 +134,17 @@ export class BaoCao05Component implements OnInit {
                     break;
             }
         });
+        //lấy danh sách vật tư
+        await this.danhMucService.dMVatTu().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listVattu = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        await this.addListVatTu(this.listVattu);
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
             if (el.loaiMatHang == 0) {
                 el.colName = this.lstVatTuFull.find(e => e.id == el.maVtu)?.ten;
@@ -151,18 +162,6 @@ export class BaoCao05Component implements OnInit {
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
         })
-
-        //lấy danh sách vật tư
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.listVattu = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        this.addListVatTu(this.listVattu);
         //danh sách đơn vị tính (đơn vị đo lường )
         this.quanLyVonPhiService.dmDonvitinh().toPromise().then(
             (data) => {

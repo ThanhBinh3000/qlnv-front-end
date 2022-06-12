@@ -43,15 +43,15 @@ export const LISTCANBO: any[] = [
     },
     {
         id: "51520",
-        fullName: "canbo1",
+        tenDm: "canbo1",
     },
     {
         id: "51550",
-        fullName: "canbo2",
+        tenDm: "canbo2",
     },
     {
         id: "51480",
-        fullName: "canbo",
+        tenDm: "canbo",
     }
 ];
 
