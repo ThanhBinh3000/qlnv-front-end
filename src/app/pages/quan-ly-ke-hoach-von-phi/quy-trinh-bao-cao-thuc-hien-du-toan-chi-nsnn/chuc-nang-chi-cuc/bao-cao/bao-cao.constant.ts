@@ -30,16 +30,16 @@ export const PHULUCLIST = [
 
 export const LISTCANBO: any[] = [
     {
-        id: "51480",
-        tenDm: "canbo",
+        id: "10008",
+        tenDm: "canbocc",
     },
     {
-        id: "51520",
-        tenDm: "canbo1",
+        id: "10002",
+        tenDm: "canboc",
     },
     {
-        id: "51550",
-        tenDm: "canbo2",
+        id: "10002",
+        tenDm: "canbotc",
     },
 ];
 
