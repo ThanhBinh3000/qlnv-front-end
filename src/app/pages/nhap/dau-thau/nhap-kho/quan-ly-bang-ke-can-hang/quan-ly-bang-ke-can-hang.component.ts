@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -20,28 +21,20 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   @Input() typeVthh: string;
 
   searchFilter = {
+    soQuyetDinh: '',
     soBangKe: '',
     ngayNhapXuat: '',
-    maDiemKho: '',
-    maNhaKho: '',
-    maNganKho: '',
     soHopDong: '',
-    soPhieuNhap: '',
   };
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
 
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  idVthh: number;
-  routerVthh: string;
-
   userInfo: UserLogin;
 
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -50,6 +43,18 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
 
+  allChecked = false;
+  indeterminate = false;
+
+  filterTable: any = {
+    soQuyetDinh: '',
+    soPhieu: '',
+    ngayNhapKho: '',
+    tenDiemKho: '',
+    tenNhaKho: '',
+    tenNganLo: '',
+  };
+
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
@@ -57,7 +62,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {
@@ -65,8 +70,8 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadDiemKho(),
-        this.loadNganLo(),
+        // this.loadDiemKho(),
+        // this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -78,11 +83,42 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
   async search() {
     let param = {
       "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHang": this.maVthh,
+      "maHang": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,
@@ -92,6 +128,12 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
@@ -102,13 +144,10 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      soQuyetDinh: '',
       soBangKe: '',
       ngayNhapXuat: '',
-      maDiemKho: '',
-      maNhaKho: '',
-      maNganKho: '',
       soHopDong: '',
-      soPhieuNhap: '',
     };
   }
 
@@ -206,13 +245,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-    this.searchFilter.maNhaKho = null;
-    if (diemKho && diemKho.length > 0) {
-      await this.loadNhaKho(diemKho[0].id);
-    }
-  }
+  // async changeDiemKho() {
+  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
+  //   this.searchFilter.maNhaKho = null;
+  //   if (diemKho && diemKho.length > 0) {
+  //     await this.loadNhaKho(diemKho[0].id);
+  //   }
+  // }
 
   async loadNganLo() {
     let body = {
@@ -236,32 +275,6 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.idVthh = 2;
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.idVthh = 6;
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.idVthh = 78;
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
@@ -274,5 +287,75 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   export() {
 
+  }
+
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // if (res.msg == MESSAGE.SUCCESS) {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQuyetDinh: '',
+      soPhieu: '',
+      ngayNhapKho: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganLo: '',
+    }
   }
 }

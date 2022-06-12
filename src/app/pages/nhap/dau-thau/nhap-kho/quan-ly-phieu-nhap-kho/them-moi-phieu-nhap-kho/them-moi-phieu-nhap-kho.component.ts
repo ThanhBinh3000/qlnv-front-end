@@ -34,18 +34,13 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   detail: any = {};
   idNhapHang: number = 0;
   detailGiaoNhap: any = {};
-  viewChiTiet: boolean = false;
-
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  routerVthh: string;
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listDanhMucHang: any[] = [];
+  listSoQuyetDinh: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -69,19 +64,17 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
-      this.checkIsView();
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
-        this.getIdNhap(),
         this.loadDiemKho(),
         this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
+        this.loadSoQuyetDinh(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -91,41 +84,42 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
-      }
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
     }
-  }
-
-  async getIdNhap() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/chi-tiet/");
-      if (index != -1) {
-        let url = this.router.url.substring(index + 10);
-        let temp = url.split("/");
-        if (temp && temp.length > 0) {
-          this.detail.soQdNvuNhang = +temp[0];
-          let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.soQdNvuNhang);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.detailGiaoNhap = res.data;
-            this.detail.ngayQdNvuNhang = this.detailGiaoNhap.ngayQdinh;
-          }
-          else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-      }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.maVthh,
+      "maHangHoa": this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": null,
       "ngayKiemTraTuNgay": null,
@@ -154,7 +148,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
 
   async loadDanhMucHang() {
     let body = {
-      "str": this.maVthh
+      "str": this.typeVthh
     };
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -365,29 +359,6 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
     }
   }
 

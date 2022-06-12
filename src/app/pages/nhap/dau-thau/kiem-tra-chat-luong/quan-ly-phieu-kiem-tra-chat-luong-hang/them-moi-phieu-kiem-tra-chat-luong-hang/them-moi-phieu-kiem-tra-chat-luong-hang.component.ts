@@ -32,7 +32,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   detail: any = {};
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
-  viewChiTiet: boolean = false;
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -41,6 +40,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listTieuChuan: any[] = [];
+  listSoQuyetDinh: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -60,7 +60,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.checkIsView();
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.trangThai = "00";
@@ -70,6 +69,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.loadDiemKho(),
         this.loadNganLo(),
         this.loadTieuChuan(),
+        this.loadSoQuyetDinh(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -79,13 +79,35 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     }
   }
 
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
-      }
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
