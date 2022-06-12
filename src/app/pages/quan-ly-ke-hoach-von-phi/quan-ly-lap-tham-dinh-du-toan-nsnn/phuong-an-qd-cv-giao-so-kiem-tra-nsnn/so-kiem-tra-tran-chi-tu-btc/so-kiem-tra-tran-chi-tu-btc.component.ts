@@ -323,7 +323,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.lstCtietBcao = data.data.listCtiet;
                     this.maDviTien = data.data.maDviTien;
                     this.lstFiles = data.data.lstFiles;
-					this.listFile = [];
+                    this.listFile = [];
                     this.sortByIndex();
                     this.maDviTien = data.data.maDviTien;
                     this.lstCtietBcao.forEach(item => {
@@ -629,6 +629,11 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             }
         }
 
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt);
+            this.updateEditCache();
+        }
+
         let item: ItemData = {
             id: uuid.v4() + 'FE',
             stt: stt,
@@ -650,6 +655,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         var nho: string = this.lstCtietBcao[index].stt;
         var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        var stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
@@ -660,6 +666,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, -1);
+        this.sum(stt);
         this.updateEditCache();
     }
 
@@ -684,6 +691,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtietBcao[index].stt);
+        this.updateEditCache();
     }
 
 
@@ -835,6 +844,40 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 this.updateEditCache();
             }
         });
+    }
+
+    getLowStatus(str: string) {
+        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
+            return false;
+        }
+        return true;
+    }
+
+    sum(stt: string) {
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            let data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                id: data.id,
+                stt: data.stt,
+                level: data.stt,
+                maNhom: data.maNhom,
+                tongSo: 0,
+                nguonNsnn: 0,
+                nguonKhac: 0,
+                checked: false,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].nguonKhac += item.nguonKhac;
+                    this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
+                }
+            })
+            this.lstCtietBcao[index].tongSo = this.lstCtietBcao[index].nguonKhac + this.lstCtietBcao[index].nguonNsnn; 
+            stt = this.getHead(stt);
+        }
     }
 
     changeModel(id: any) {

@@ -22,21 +22,21 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maCvUv: "",
-        trangThai: "",
-        tuNgay: "",
-        denNgay: "",
-        maThanhToan: "",
-        khachHang: "",
-        maDvi: "",
+		trangThai: "",
+		tuNgay: "",
+		denNgay: "",
+		maThanhToan: "",
+		khachHang: "",
+		maDvi: "",
 	};
 	//danh muc
 	danhSach: any[] = [];
 	trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    loaiVons: any[] = LOAI_VON;
+	loaiVons: any[] = LOAI_VON;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                           
+	pages = {
 		size: 10,
 		page: 1,
 	}
@@ -57,8 +57,8 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		this.searchFilter.maDvi = this.userInfo?.dvql;	
-		this.onSubmit();	
+		this.searchFilter.maDvi = this.userInfo?.dvql;
+		this.onSubmit();
 	}
 
 	//get user info
@@ -82,7 +82,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	async onSubmit() {
 
 		let trangThais = [];
-		if (this.searchFilter.trangThai){
+		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
@@ -133,21 +133,13 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	}
 
 	taoMoi() {
-		// if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-		// 	if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-		// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-		// 		return;
-		// 	}
-		// }
-		// if (!this.searchFilter.nam){
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-		// 	]);
-		// } else {
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-		// 	]);
-		// }
+		if (this.searchFilter.maCvUv) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/0/' + this.searchFilter.maCvUv,
+		]);
 	}
 
 	xemChiTiet(id: string) {
@@ -156,11 +148,11 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		])
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 
-	xoaBaoCao(id: any){
+	xoaBaoCao(id: any) {
 		// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
 		// 	data => {
 		// 		if (data.statusCode == 0){
@@ -176,10 +168,10 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		// )
 	}
 
-	checkDeleteReport(item: any): boolean{
+	checkDeleteReport(item: any): boolean {
 		var check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;

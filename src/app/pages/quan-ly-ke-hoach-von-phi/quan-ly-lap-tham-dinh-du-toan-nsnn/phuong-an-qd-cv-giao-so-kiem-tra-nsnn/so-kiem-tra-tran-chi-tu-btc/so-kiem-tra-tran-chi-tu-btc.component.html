@@ -142,7 +142,9 @@
 											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
 										</td>
 										<td [hidden]="status">
-											<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+											<ng-container *ngIf="!getLowStatus(data.stt)">
+												<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+											</ng-container>
 										</td>
 										<td [hidden]="status">
 											<i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -169,15 +171,15 @@
 										<td>
 											<nz-input-number class="search__input" nzSize="small"
 												[(ngModel)]="editCache[data.id].data.nguonNsnn"
-												(ngModelChange)="changeModel(data.id)"
-												[class]="editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0?'' : 'input-error-validate'">
+												[class]="editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0?'' : 'input-error-validate'"
+												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
 										</td>
 										<td>
 											<nz-input-number class="search__input" nzSize="small"
 												[(ngModel)]="editCache[data.id].data.nguonKhac"
-												(ngModelChange)="changeModel(data.id)"
-												[class]="editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0?'' : 'input-error-validate'">
+												[class]="editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0?'' : 'input-error-validate'"
+												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
 										</td>
 										<td [hidden]="status">
