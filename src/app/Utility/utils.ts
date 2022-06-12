@@ -60,6 +60,7 @@ export class Utils {
     public static CAP_VON = "1";
     public static UNG_VON = "2";
     //role xoa
+    //role xoa
     public static btnRoleDel = {
         "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
@@ -190,7 +191,6 @@ export class Utils {
     public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
         return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
-
     // lay quyen
     public getRole(id: number) {
         let role;
@@ -291,6 +291,9 @@ export class Utils {
         return statusName?.ten;
     }
 }
+export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
+export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
+export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
 
 // loai bao cao quan ly von phi
 export const LOAI_BAO_CAO = [

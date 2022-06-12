@@ -16,7 +16,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, MONEY_LIMIT, mulMoney, NOT_OK, OK, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 // import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
@@ -432,7 +432,7 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
     const utils = new Utils();
@@ -772,23 +772,23 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
     let roleNguoiTao = this.userInfo?.roles[0]?.code;
     let trangThaiBaoCao = this.baoCao?.trangThai;
-    if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    if (trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
     }
 
     if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
-      && roleNguoiTao == '3' && checkChirld) {
+      && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;

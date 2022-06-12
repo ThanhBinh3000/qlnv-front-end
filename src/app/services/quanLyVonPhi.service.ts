@@ -378,12 +378,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  //get list don vi tao
-  dMDonVi(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/tat-ca',
-    );
-  }
 
   //tong hop
   tongHop(request: any): Observable<any> {
