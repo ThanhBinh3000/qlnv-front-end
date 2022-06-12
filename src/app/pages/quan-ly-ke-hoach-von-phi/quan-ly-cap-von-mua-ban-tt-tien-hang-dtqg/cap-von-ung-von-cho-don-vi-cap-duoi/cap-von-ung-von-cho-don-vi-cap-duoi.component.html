@@ -3,7 +3,7 @@
 		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
 			aria-labelledby="banhanh-tab">
 			<div class="trai">
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectkehoachvonphi()">
+				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="close()">
 					<i class="fa fa-arrow-circle-left"></i>
 				</a>
 			</div>
@@ -12,21 +12,37 @@
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
-				<button class="btn btn-main" (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
+				<button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusBtnApprove">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
-					<span>Tạo mới phương án</span>
+					<span>Trình duyệt</span>
 				</button>
-				<button class="btn btn-main" (click)="sua()" [hidden]="statusBtnEdit">
-					<i class="icon htvbdh_tcdt_guiduyet"></i>
-					<span>Sửa</span>
+				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Từ chối</span>
+				</a>
+				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Duyệt</span>
 				</button>
+				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Từ chối</span>
+				</button>
+				<a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Phê duyệt</span>
+				</a>
+				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Từ chối</span>
+				</button>
+				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Tiếp nhận</span>
+				</a>
 				<a class="btn btn-main" [hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="!status">
-					<i nz-icon nzType="copy" nzTheme="outline"></i>
-					<span>Chính xác</span>
 				</a>
 				<a class="btn btn-main" [hidden]="statusBtnPrint">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
@@ -40,8 +56,6 @@
 		</div>
 	</div>
 </nz-affix>
-
-<!--body-->
 <div class="contentBor chi-tieu__body">
 	<div class="contentDetail">
 		<div class="main-content">
@@ -49,43 +63,44 @@
 				<nz-table #basicTable class="nowrap">
 					<thead>
 						<tr>
-							<th width="130px">Mã báo cáo</th>
-							<th width="175px">Số QĐ/CV</th>
-							<th width="175px">Mã phương án</th>
-							<th width="175px">Năm phương án</th>
-							<th width="175px">Ngày tạo</th>
+							<th>Mã cấp ứng vốn cho đơn vị cấp dưới</th>
+							<th>Mã cấp ứng vốn nhận từ đơn vị cấp trên</th>
+							<th>Ngày tạo</th>
+							<th>Ngày trình duyệt</th>
+							<th>Ngày TBP duyệt</th>
+							<th>Ngày lãnh đạo phê duyệt</th>
+							<th>Trạng thái</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>{{maBaoCao}}</td>
+							<td>{{maCvUvDuoi}}</td>
+							<td>{{maCvUvTren}}</td>
 							<td>
-								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
-									<button nz-button>
-										<i nz-icon nzType="upload"></i>
-										Select File
-									</button>
-								</nz-upload>
-								<div class="tep" (click)="downloadFileCv()">
-									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
-									<span>{{soQdCv?.fileName}}</span>
-								</div>
+								{{ngayTao}}
 							</td>
-							<td>{{maPaBtc}}</td>
-							<td>{{namPa}}</td>
-							<td>{{ngayTao}}</td>
+							<td>
+								{{ngayTrinhDuyet}}
+							</td>
+							<td>
+								{{ngayDuyet}}
+							</td>
+							<td>{{ngayPheDuyet}}</td>
+							<td>
+								{{getStatusName(trangThai)}}
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
 			</nz-card>
-			<div class="tab__container" id="tablePrint">
+			<div class="tab__container">
 				<nz-tabset nzType="card" class="tab__container">
-					<nz-tab [nzTitle]="'Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị'">
+					<nz-tab [nzTitle]="'Danh sách cấp ứng vốn cho đơn vị cấp dưới'">
 						<ng-container *ngIf="status;else templateName">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="3">
 									Đơn vị:
-									<div *ngFor="let item of donViTiens">
+									<div *ngFor="let item of dviTiens">
 										<div *ngIf="item.id == maDviTien">
 											{{item.tenDm}}
 										</div>
@@ -98,7 +113,7 @@
 								<div nz-col class="gutter-row" [nzSpan]="3">
 									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
 										[(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+										<nz-option *ngFor="let item of dviTiens" [nzValue]="item.id"
 											[nzLabel]="item.tenDm"></nz-option>
 									</nz-select>
 								</div>
@@ -107,100 +122,180 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th rowspan="2" nzWidth="75px">STT</th>
-									<th rowspan="2" nzWidth="400px">Nội dung</th>
-									<th rowspan="2">Tổng số</th>
-									<th colspan="2">Trong đó</th>
-									<th rowspan="2" colspan="3" [hidden]="status"></th>
-									<th rowspan="2" [hidden]="status">
+									<th rowspan="2">STT</th>
+									<th rowspan="2" nzWidth="300px">Đơn vị nhận</th>
+									<th rowspan="2">Ngày lập (ủy nhiệm chi)</th>
+									<th rowspan="2">Loại</th>
+									<th rowspan="2">Ngày nhận (lệnh chuyển có)</th>
+									<th rowspan="2">Nội dung</th>
+									<th rowspan="2">Mã nguồn NS</th>
+									<th rowspan="2">Niên độ NS</th>
+									<th rowspan="2">Tổng số tiền</th>
+									<th colspan="2">Chia ra</th>
+									<th rowspan="2">Bằng chữ</th>
+									<th colspan="3" rowspan="2" [hidden]="status"></th>
+									<th [hidden]="status" rowspan="2">
 										<label nz-checkbox [(ngModel)]="allChecked"
-											(ngModelChange)="updateAllChecked()"></label>
+											(ngModelChange)="updateAllChecked()">
+										</label>
 									</th>
 								</tr>
 								<tr>
-									<th>Nguồn NSNN</th>
-									<th>Nguồn khác</th>
+									<th>Nộp thuế</th>
+									<th>TT cho ĐV hưởng</th>
 								</tr>
 							</thead>
 							<tbody>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>1</td>
+									<td>2</td>
+									<td>3</td>
+									<td>4=5+6</td>
+									<td>5</td>
+									<td>6</td>
+									<td></td>
+									<td width="2.25%" [hidden]="status"></td>
+									<td width="2.25%" [hidden]="status"></td>
+									<td width="2.25%" [hidden]="status"></td>
+									<td width="2.25%" [hidden]="status"></td>
+								</tr>
 								<tr *ngFor="let data of lstCtietBcao; let i = index">
 									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-										<td [nzIndentSize]="data.level * 8">
-											{{getChiMuc(data.stt)}}
+										<td>{{ i + 1 }}</td>
+										<td>
+											{{getUnitName(data.dviNhan)}}
 										</td>
 										<td>
-											<div *ngFor="let item of noiDungs">
-												<div *ngIf="item.id ==data.maNhom">
+											{{data.ngayLap}}
+										</td>
+										<td>
+											<div *ngFor="let item of loaiVons">
+												<div *ngIf="item.id == data.loai">
 													{{item.tenDm}}
 												</div>
 											</div>
 										</td>
-										<td>{{data.tongSo}}</td>
-										<td>{{data.nguonNsnn}}</td>
-										<td>{{data.nguonKhac}}</td>
+										<td>
+											{{data.ngayNhan}}
+										</td>
+										<td>
+											{{data.noiDung}}
+										</td>
+										<td>
+											{{data.maNguonNs}}
+										</td>
+										<td>
+											{{data.nienDoNs}}
+										</td>
+										<td>
+											{{data.tongSoTien}}
+										</td>
+										<td>
+											{{data.nopThue}}
+										</td>
+										<td>
+											{{data.ttChoDviHuong}}
+										</td>
+										<td>
+											{{data.soTienBangChu}}
+										</td>
+
 										<td [hidden]="status">
-											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+											<i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
 										</td>
 										<td [hidden]="status">
-											<ng-container *ngIf="!getLowStatus(data.stt)">
-												<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-											</ng-container>
+											<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 										</td>
 										<td [hidden]="status">
-											<i class="fa fa-plus" (click)="addLine(data.id)"></i>
+											<i class="fa fa-plus" (click)="addLine(i + 1)"></i>
 										</td>
 										<td [hidden]="status">
 											<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-												(ngModelChange)="updateChecked(data.id)"></label>
+												(ngModelChange)="updateSingleChecked()"></label>
 										</td>
+
 									</ng-container>
 									<ng-template #editTemplate>
-										<td [nzIndentSize]="data.level * 8">
-											{{getChiMuc(editCache[data.id].data.stt)}}
+										<td>{{ i + 1 }}</td>
+										<td>
+											<nz-select nzShowSearch nzAllowClear
+												[class]="editCache[data.id].data.dviNhan ?'' : 'input-error-validate' "
+												nzPlaceHolder="Chọn đơn vị" [(ngModel)]="editCache[data.id].data.dviNhan">
+												<nz-option *ngFor="let item of unitChilds" [nzValue]="item.maDvi"
+													[nzLabel]="item.tenDvi">
+												</nz-option>
+											</nz-select>
 										</td>
 										<td>
-											<div *ngFor="let item of noiDungs;">
-												<div *ngIf="item.id ==data.maNhom">
-													{{item.tenDm}}
-												</div>
-											</div>
+											<nz-date-picker class="search__input"
+												[(ngModel)]="editCache[data.id].data.ngayLap" nzFormat="dd/MM/yyyy">
+											</nz-date-picker>
 										</td>
 										<td>
-											{{data.tongSo}}
+											<nz-select nzShowSearch nzAllowClear
+												[class]="editCache[data.id].data.loai ?'' : 'input-error-validate' "
+												nzPlaceHolder="Chọn loại vốn"
+												[(ngModel)]="editCache[data.id].data.loai">
+												<nz-option *ngFor="let item of loaiVons" [nzValue]="item.id"
+													[nzLabel]="item.tenDm">
+												</nz-option>
+											</nz-select>
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[(ngModel)]="editCache[data.id].data.nguonNsnn"
-												[class]="editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0?'' : 'input-error-validate'"
+											<nz-date-picker class="search__input"
+												[(ngModel)]="editCache[data.id].data.ngayNhan" nzFormat="dd/MM/yyyy">
+											</nz-date-picker>
+										</td>
+										<td>
+											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.noiDung" />
+										</td>
+										<td>
+											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maNguonNs" />
+										</td>
+										<td>
+											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nienDoNs" />
+										</td>
+										<td>
+											{{editCache[data.id].data.tongSoTien}}
+										</td>
+										<td>
+											<nz-input-number class="search__input"
+												[class]="editCache[data.id].data.nopThue || editCache[data.id].data.nopThue === 0 ?'' : 'input-error-validate' "
+												nzSize="small" [(ngModel)]="editCache[data.id].data.nopThue"
 												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[(ngModel)]="editCache[data.id].data.nguonKhac"
-												[class]="editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0?'' : 'input-error-validate'"
+											<nz-input-number class="search__input"
+												[class]="editCache[data.id].data.ttChoDviHuong || editCache[data.id].data.ttChoDviHuong === 0 ?'' : 'input-error-validate' "
+												nzSize="small" [(ngModel)]="editCache[data.id].data.ttChoDviHuong"
 												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
+										</td>
+										<td>
+											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.soTienBangChu" />
 										</td>
 										<td [hidden]="status">
-											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+											<i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
 										</td>
-										<td>
+										<td [hidden]="status">
 											<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 										</td>
 										<td [hidden]="status">
 											<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-												(nzOnConfirm)="cancelEdit(data.id)" class="save">
-												Hủy
-											</a>
+												(nzOnConfirm)="cancelEdit(data.id)" class="save">hủy</a>
 										</td>
 										<td [hidden]="status">
 											<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-												(ngModelChange)="updateChecked(data.id)"></label>
+												(ngModelChange)="updateSingleChecked()"></label>
 										</td>
 									</ng-template>
 								</tr>
-
 							</tbody>
 						</nz-table>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -256,28 +351,18 @@
 					</nz-tab>
 				</nz-tabset>
 				<div class="action">
-					<button type="button" class="btn btn-main" (click)="deleteAllChecked()">
+					<button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
-					<ng-container *ngIf="lstCtietBcao.length == 0">
-						<button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-							<i class="icon htvbdh_dau-cong"></i>
-							<span>Thêm</span>
-						</button>
-					</ng-container>
-					<button type="button" class="btn btn-sub">
+					<button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)" [hidden]="status">
+						<i class="icon htvbdh_dau-cong"></i>
+						<span>Thêm</span>
+					</button>
+					<button type="button" class="btn btn-sub" [hidden]="status">
 						<i class="icon htvbdh_tcdt_import"></i>
 						<span>Import</span>
 					</button>
-					<!-- <button type="button" class="btn btn-sub">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
-            </button> -->
-					<!-- <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
-            </button> -->
 				</div>
 			</div>
 			<div class="ghi-chu">

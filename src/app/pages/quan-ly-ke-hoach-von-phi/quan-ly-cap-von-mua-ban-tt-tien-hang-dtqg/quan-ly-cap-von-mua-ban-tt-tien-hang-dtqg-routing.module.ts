@@ -64,6 +64,76 @@ const routes: Routes = [
 				'./danh-sach/danh-sach-thanh-toan-cho-khach-hang/danh-sach-thanh-toan-cho-khach-hang.module'
 			).then((m) => m.DanhSachThanhToanChoKhachHangModule),
 	},
+	{
+		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc/:id',
+		loadChildren: () =>
+			import(
+				'./ghi-nhan-von-tai-dvct-tai-tong-cuc/ghi-nhan-von-tai-dvct-tai-tong-cuc.module'
+			).then((m) => m.GhiNhanVonTaiDvctTaiTongCucModule),
+	},
+	{
+		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc/:loai/:ma/:soLenhChi',
+		loadChildren: () =>
+			import(
+				'./ghi-nhan-von-tai-dvct-tai-tong-cuc/ghi-nhan-von-tai-dvct-tai-tong-cuc.module'
+			).then((m) => m.GhiNhanVonTaiDvctTaiTongCucModule),
+	},
+	{
+		path: 'ghi-nhan-von-tai-ckv-cc',
+		loadChildren: () =>
+			import(
+				'./ghi-nhan-von-tai-ckv-cc/ghi-nhan-von-tai-ckv-cc.module'
+			).then((m) => m.GhiNhanVonTaiCkvCcModule),
+	},
+	{
+		path: 'von-ban-hang',
+		loadChildren: () =>
+			import(
+				'./von-ban-hang/von-ban-hang.module'
+			).then((m) => m.VonBanHangModule),
+	},
+	{
+		path: 'tien-thua/:id',
+		loadChildren: () =>
+			import(
+				'./tien-thua/tien-thua.module'
+			).then((m) => m.TienThuaModule),
+	},
+	{
+		path: 'tien-thua/0/:maCvUv',
+		loadChildren: () =>
+			import(
+				'./tien-thua/tien-thua.module'
+			).then((m) => m.TienThuaModule),
+	},
+	{
+		path: 'thanh-toan-cho-khach-hang/:id',
+		loadChildren: () =>
+			import(
+				'./thanh-toan-cho-khach-hang/thanh-toan-cho-khach-hang.module'
+			).then((m) => m.ThanhToanChoKhachHangModule),
+	},
+	{
+		path: 'thanh-toan-cho-khach-hang/0/:maCvUv',
+		loadChildren: () =>
+			import(
+				'./thanh-toan-cho-khach-hang/thanh-toan-cho-khach-hang.module'
+			).then((m) => m.ThanhToanChoKhachHangModule),
+	},
+	{
+		path: 'cap-von-ung-von-cho-don-vi-cap-duoi/:id',
+		loadChildren: () =>
+			import(
+				'./cap-von-ung-von-cho-don-vi-cap-duoi/cap-von-ung-von-cho-don-vi-cap-duoi.module'
+			).then((m) => m.CapVonUngVonChoDonViCapDuoiModule),
+	},
+	{
+		path: 'cap-von-ung-von-cho-don-vi-cap-duoi/0/:maTren',
+		loadChildren: () =>
+			import(
+				'./cap-von-ung-von-cho-don-vi-cap-duoi/cap-von-ung-von-cho-don-vi-cap-duoi.module'
+			).then((m) => m.CapVonUngVonChoDonViCapDuoiModule),
+	},
 ];
 
 @NgModule({

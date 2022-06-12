@@ -196,21 +196,13 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	}
 
 	taoMoi() {
-		// if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-		// 	if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-		// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-		// 		return;
-		// 	}
-		// }
-		// if (!this.searchFilter.nam){
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-		// 	]);
-		// } else {
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-		// 	]);
-		// }
+		if (!this.searchFilter.maCvUv) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/0/' + this.searchFilter.maCvUv,
+		]);
 	}
 
 	xemChiTiet(id: string) {

@@ -437,6 +437,7 @@ export class BaoCaoComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
+
 		let request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: this.lstFiles,
@@ -456,7 +457,7 @@ export class BaoCaoComponent implements OnInit {
 			request.congVan = await this.uploadFile(file);
 		}
 
-		if (!request.congVan.fileName){
+		if (!request.congVan){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}

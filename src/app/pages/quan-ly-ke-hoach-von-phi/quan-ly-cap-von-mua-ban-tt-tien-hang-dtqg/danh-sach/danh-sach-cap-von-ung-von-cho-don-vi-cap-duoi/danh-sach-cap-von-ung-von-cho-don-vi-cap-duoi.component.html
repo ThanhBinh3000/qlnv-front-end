@@ -26,7 +26,12 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ cấp trên</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.maTren" />
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
+							[(ngModel)]="searchFilter.maTren"
+							[class]="statusBtnNew || searchFilter.maTren ?'' : 'input-error-validate'">
+							<nz-option *ngFor="let item of danhSachMaVon" [nzValue]="item" [nzLabel]="item">
+							</nz-option>
+						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>

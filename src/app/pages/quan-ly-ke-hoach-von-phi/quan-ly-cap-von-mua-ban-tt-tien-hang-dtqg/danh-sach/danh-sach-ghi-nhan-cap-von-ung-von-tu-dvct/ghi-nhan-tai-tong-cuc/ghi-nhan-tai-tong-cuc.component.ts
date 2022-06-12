@@ -77,6 +77,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 	}
 	//trang thai
 	status: boolean;
+	statusBtnNew: boolean = true;
 	disable: boolean;
 
 	constructor(
@@ -144,7 +145,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-
+		this.statusBtnNew = true;
 		let trangThais = [];
 		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
@@ -197,21 +198,15 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 	}
 
 	taoMoi() {
-		// if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-		// 	if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-		// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-		// 		return;
-		// 	}
-		// }
-		// if (!this.searchFilter.nam){
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-		// 	]);
-		// } else {
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-		// 	]);
-		// }
+		this.statusBtnNew = false;
+		if (!this.searchFilter.maCvUv || !this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' 
+			+ this.searchFilter.loaiVon + '/' + this.searchFilter.maCvUv + '/' + this.searchFilter.soLenhChiTien
+		]);
 	}
 
 	xemChiTiet(id: string) {

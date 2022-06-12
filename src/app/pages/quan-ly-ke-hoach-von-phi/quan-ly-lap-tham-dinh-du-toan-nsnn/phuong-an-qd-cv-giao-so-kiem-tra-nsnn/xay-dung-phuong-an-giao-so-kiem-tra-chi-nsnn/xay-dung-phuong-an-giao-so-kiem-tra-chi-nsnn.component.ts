@@ -751,6 +751,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 }
             }
         }
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt);
+            this.updateEditCache();
+        }
 
         let obj: ItemDvi[] = [];
         let obj1: ItemDvi[] = [];
@@ -799,6 +803,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         var nho: string = this.lstCtietBcao[index].stt;
         var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        var stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
@@ -809,6 +814,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, -1);
+        this.sum(stt);
         this.updateEditCache();
     }
 
@@ -857,6 +863,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listCtietDvi: data,
         }
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtietBcao[index].stt);
+        this.updateEditCache();
     }
 
 
@@ -1034,6 +1042,57 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 this.updateEditCache();
             }
         });
+    }
+
+    getLowStatus(str: string) {
+        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
+            return false;
+        }
+        return true;
+    }
+
+    sum(stt: string) {
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            let data = this.lstCtietBcao[index];
+            var mm: any[] = [];
+            data.listCtietDvi.forEach(item => {
+                mm.push({
+                    ...item,
+                    soTranChi: 0,
+                })
+            })
+            this.lstCtietBcao[index] = {
+                id: data.id,
+                stt: data.stt,
+                level: data.stt,
+                maNhom: data.maNhom,
+                tongSo: 0,
+                listCtietDvi: mm,
+                checked: false,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    item.listCtietDvi.forEach(e => {
+                        let ind = this.lstCtietBcao[index].listCtietDvi.findIndex(i => i.maBcao == e.maBcao);
+                        this.lstCtietBcao[index].listCtietDvi[ind].soTranChi += e.soTranChi;
+                    })
+                }
+            })
+            this.lstCtietBcao[index].listCtietDvi.forEach(item => {
+                this.lstCtietBcao[index].tongSo += item.soTranChi;
+            })
+            stt = this.getHead(stt);
+        }
+    }
+
+    changeModel(id: any){
+        this.editCache[id].data.tongSo = 0;
+        this.editCache[id].data.listCtietDvi.forEach(item => {
+            this.editCache[id].data.tongSo += item.soTranChi;
+        })
     }
 
     close() {

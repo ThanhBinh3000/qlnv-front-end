@@ -154,7 +154,9 @@
 												<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
 											</td>
 											<td [hidden]="status">
-												<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+												<ng-container *ngIf="!getLowStatus(data.stt)">
+													<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+												</ng-container>
 											</td>
 											<td [hidden]="status">
 												<i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -183,7 +185,8 @@
 													<div *ngIf="e.maBcao == item.maBcao">
 														<nz-input-number class="search__input" nzSize="small"
 															[(ngModel)]="e.soTranChi"
-															[class]="e.soTranChi || e.soTranChi === 0 ?'' : 'input-error-validate'">
+															[class]="e.soTranChi || e.soTranChi === 0 ?'' : 'input-error-validate'"
+															(ngModelChange)="changeModel(data.id)">
 														</nz-input-number>
 													</div>
 												</div>
