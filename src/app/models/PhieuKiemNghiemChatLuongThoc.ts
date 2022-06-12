@@ -30,6 +30,7 @@ export class PhieuKiemNghiemChatLuongHang {
     thuKho: string;
     ketLuan: string;
     ketQuaDanhGia: string;
+    soQd: string;
     kquaKnghiem: Array<KetQuaKiemNghiemChatLuongHang>;
     constructor(ketQuaKiemNghiem: Array<KetQuaKiemNghiemChatLuongHang> = []) {
         this.kquaKnghiem = ketQuaKiemNghiem;

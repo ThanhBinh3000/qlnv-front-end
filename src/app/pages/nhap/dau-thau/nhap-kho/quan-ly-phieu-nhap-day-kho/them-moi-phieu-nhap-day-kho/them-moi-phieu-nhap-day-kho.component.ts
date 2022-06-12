@@ -25,6 +25,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   @Input() id: number;
+  // @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
@@ -653,5 +654,12 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       }).catch(err => {
         this.notification.error(MESSAGE.ERROR, err.msg);
       })
+  }
+  isAction(): boolean {
+    return true;
+    // return (
+    //   this.bienBanNhapDayKho.trangThai === this.globals.prop.DU_THAO ||
+    //   !this.isViewDetail
+    // );
   }
 }

@@ -28,6 +28,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
+    soQd: '',
     ngayLayMau: '',
     soHopDong: '',
     diemkho: '',
@@ -158,6 +159,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
   clearFilter() {
     this.searchFilter = {
+      soQd: '',
       ngayLayMau: '',
       soHopDong: '',
       diemkho: '',

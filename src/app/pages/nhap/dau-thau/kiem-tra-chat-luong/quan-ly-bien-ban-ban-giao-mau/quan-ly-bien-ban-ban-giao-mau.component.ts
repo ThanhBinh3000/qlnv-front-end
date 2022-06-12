@@ -25,6 +25,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
+    soQd: '',
     ngayLayMau: '',
     soHopDong: '',
     diemkho: '',
@@ -155,6 +156,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   }
   clearFilter() {
     this.searchFilter = {
+      soQd: '',
       ngayLayMau: '',
       soHopDong: '',
       diemkho: '',

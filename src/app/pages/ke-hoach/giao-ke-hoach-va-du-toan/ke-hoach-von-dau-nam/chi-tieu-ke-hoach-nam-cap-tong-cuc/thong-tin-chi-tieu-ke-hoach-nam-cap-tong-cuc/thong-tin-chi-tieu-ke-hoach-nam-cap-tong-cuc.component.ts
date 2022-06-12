@@ -324,19 +324,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.soQuyetDinh
           : null,
-        [Validators.required],
+        [],
       ],
       ngayKy: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.ngayKy
           : null,
-        [Validators.required],
+        [],
       ],
       ngayHieuLuc: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.ngayHieuLuc
           : null,
-        [Validators.required],
+        [],
       ],
       namKeHoach: [
         this.thongTinChiTieuKeHoachNam
@@ -361,8 +361,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           : null,
       ],
     });
-  }
 
+    this.formData.get('soQD').setValidators(this.setRequired());
+    this.formData.get('ngayKy').setValidators(this.setRequired());
+    this.formData.get('ngayHieuLuc').setValidators(this.setRequired());
+  }
+  setRequired() {
+    if (this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.LANH_DAO_DUYET) {
+      return [Validators.required];
+    } else {
+      return [];
+    }
+  }
   themMoi(data?: any) {
     if (this.tabSelected == TAB_SELECTED.luongThuc) {
       const modalLuongThuc = this.modal.create({
@@ -1289,6 +1299,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: this.globals.prop.BAN_HANH,
           };
+          await this.save();
           const res = await this.chiTieuKeHoachNamService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);

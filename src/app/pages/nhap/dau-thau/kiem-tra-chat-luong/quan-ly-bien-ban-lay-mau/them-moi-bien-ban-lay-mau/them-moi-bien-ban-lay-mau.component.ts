@@ -123,7 +123,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "tenDdienCcap": null,
       "tenDdienNhan": null,
       "tinhTrang": this.bienBanLayMau.tinhTrang,
-      "tphongKthuatBquan": this.bienBanLayMau.tphongKthuatBquan
+      "tphongKthuatBquan": this.bienBanLayMau.tphongKthuatBquan,
+      "soQd": this.bienBanLayMau.soQd ?? null,
+      "chiTieuChatLuongCanKiemTra": this.bienBanLayMau.chiTieuChatLuongCanKiemTra ?? null,
     }
     if (this.id > 0) {
       this.bienBanLayMauService.sua(

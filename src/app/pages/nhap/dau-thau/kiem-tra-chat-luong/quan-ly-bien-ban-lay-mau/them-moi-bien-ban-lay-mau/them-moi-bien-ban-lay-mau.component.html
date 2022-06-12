@@ -49,6 +49,14 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
+                  Số quyết định nhập
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanLayMau.soQd" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
                 <input nz-input disabled [(ngModel)]="bienBanLayMau.tenDonVi" />
@@ -61,8 +69,6 @@
                 </nz-form-label>
                 <input nz-input disabled [(ngModel)]="bienBanLayMau.maDonVi" />
               </nz-form-item>
-            </div>
-            <div nz-col nzSpan="8">
             </div>
             <div nz-col nzSpan="8">
               <nz-form-item>
@@ -172,6 +178,14 @@
                   <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.id" [nzLabel]="item.giaTri">
                   </nz-option>
                 </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Các chỉ tiêu chất lượng cần kiểm tra
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanLayMau.chiTieuChatLuongCanKiemTra" [disabled]="!isAction()" />
               </nz-form-item>
             </div>
           </div>

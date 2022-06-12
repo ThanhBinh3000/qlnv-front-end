@@ -72,7 +72,7 @@
               <nz-form-control [nzErrorTip]="soQDError">
                 <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                   <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
-                    [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly />
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.LANH_DAO_DUYET" appNumberOnly />
                   <!-- <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                       nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
                       [nzDisabled]="disableBanHanhLanhDaoDuyet()">
@@ -90,7 +90,8 @@
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="ngayKyError">
                 <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                  formControlName="ngayKy" nzPlaceHolder="Ngày ký" [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                  formControlName="ngayKy" nzPlaceHolder="Ngày ký"
+                  [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.LANH_DAO_DUYET">
                 </nz-date-picker>
                 <ng-template #ngayKyError let-control>
                   <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -105,7 +106,7 @@
               <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
                 <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                   formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
-                  [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                  [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.LANH_DAO_DUYET">
                 </nz-date-picker>
                 <ng-template #ngayHieuLucError let-control>
                   <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -140,7 +141,7 @@
             </div>
             <div nz-col nzSpan="24">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Tài liệu đính kèm
+              <nz-form-label [nzNoColon]="true" class="text-left"> Tài liệu đính kèm
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
