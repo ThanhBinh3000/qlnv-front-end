@@ -168,7 +168,6 @@ export class Utils {
 
     //get role button don vi cap tren
     public getRoleDVCT(status: any, unit: any, role: any) {
-        debugger
         return !(this.btnRoleDVCT.status.includes(status) && unit == true && this.btnRoleDVCT.role.includes(role));
     }
 

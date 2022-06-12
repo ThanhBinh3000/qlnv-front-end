@@ -2,12 +2,12 @@
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
         <div nz-col [nzSpan]="3">
             <ng-container *ngIf="status;else templateName5">
-                <label class="search__label">Đơn vị:</label>
-                <div *ngFor="let item of donViTiens">
-                    <div *ngIf="item.id == maDviTien">
+                <label class="search__label">Đơn vị</label><br>
+                <ng-container *ngFor="let item of donViTiens">
+                    <ng-container *ngIf="item.id == maDviTien">
                         {{item.tenDm}}
-                    </div>
-                </div>
+                    </ng-container>
+                </ng-container>
             </ng-container>
             <ng-template #templateName5>
                 <label class="search__label">Đơn vị</label>
@@ -18,6 +18,30 @@
             </ng-template>
         </div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+            <button type="button" class="btn btn-main" (click)="addAllCol()" [hidden]="status">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Thêm cột</span>
+            </button>
+            <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <i nz-icon nzType="printer" nzTheme="outline"></i>
+                <span>In</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1');" [hidden]="statusBtnOk">
+                <i nz-icon nzType="check" nzTheme="outline"></i>
+                <span>OK</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0');" [hidden]="statusBtnOk">
+                <i nz-icon nzType="close" nzTheme="outline"></i>
+                <span>Not OK</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
+                <i nz-icon nzType="check" nzTheme="outline"></i>
+                <span>Hoàn tất nhập liệu</span>
+            </button>
             <button type="button" class="btn btn-sub" [hidden]="status">
                 <i class="icon htvbdh_tcdt_import"></i>
                 <span>Import</span>
@@ -38,7 +62,7 @@
                 <th rowspan="2">Ghi chú</th>
                 <th rowspan="2" colspan="3" [hidden]="status"></th>
                 <th rowspan="2" [hidden]="status">
-                    <label nz-checkbox [(ngModel)]="allChecked1" (ngModelChange)="updateAllChecked()">
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                     </label>
                 </th>
             </tr>
@@ -1328,24 +1352,5 @@
     </div>
 </div>
 <div class="action">
-    <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
-        <i nz-icon nzType="printer" nzTheme="outline"></i>
-        <span>In</span>
-    </button>
-    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
-        <i nz-icon nzType="check" nzTheme="outline"></i>
-        <span>OK</span>
-    </button>
-    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
-        <i nz-icon nzType="close" nzTheme="outline"></i>
-        <span>Not OK</span>
-    </button>
-    <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-    </button>
-    <button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
-        <i nz-icon nzType="check" nzTheme="outline"></i>
-        <span>Hoàn tất nhập liệu</span>
-    </button>
+    
 </div>
