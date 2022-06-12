@@ -427,13 +427,6 @@ export class BaoCaoComponent implements OnInit {
 			return;
 		}
 
-		// replace nhung ban ghi dc them moi id thanh null
-		this.lstLapThamDinhs.forEach(item => {
-			if (item.id?.length == 38) {
-				item.id = null;
-			}
-		})
-
 		let tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
@@ -444,6 +437,7 @@ export class BaoCaoComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
+
 		let request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: this.lstFiles,
@@ -463,10 +457,17 @@ export class BaoCaoComponent implements OnInit {
 			request.congVan = await this.uploadFile(file);
 		}
 
-		if (!request.congVan.fileName){
+		if (!request.congVan){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}
+
+		// replace nhung ban ghi dc them moi id thanh null
+		request.lstLapThamDinhs.forEach(item => {
+			if (item.id?.length == 38) {
+				item.id = null;
+			}
+		})
 
 		//call service them moi
 		this.spinner.show();
@@ -500,11 +501,6 @@ export class BaoCaoComponent implements OnInit {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
-		this.lstLapThamDinhs.filter(item => {
-			if (!item.id) {
-				item.id = uuid.v4() + 'FE';
-			}
-		});
 		this.spinner.hide();
 	}
 
