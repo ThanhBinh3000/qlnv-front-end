@@ -2347,6 +2347,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          await this.save(true);
           let body = {
             id: this.id,
             lyDoTuChoi: null,
