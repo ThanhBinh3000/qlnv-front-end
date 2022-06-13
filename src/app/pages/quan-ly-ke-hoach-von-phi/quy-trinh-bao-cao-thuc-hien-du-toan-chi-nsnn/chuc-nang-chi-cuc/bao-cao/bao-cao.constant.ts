@@ -315,3 +315,30 @@ export const MA_DU_AN = [
         idCha: 0,
     },
 ]
+
+export const DIADIEM = [
+    {
+        id: 100,
+        tenDm: "Hà Nội",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 200,
+        tenDm: "Thái Bình",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 300,
+        tenDm: "Lào Cai",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 400,
+        tenDm: "Tuyên Quang",
+        level: 0,
+        idCha: 0,
+    },
+]
