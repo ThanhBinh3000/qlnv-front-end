@@ -10,31 +10,29 @@
               </div>
               <div class="canphai phai">
                 <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-                  *ngIf="detail.trangThai == '00' || id == 0">
+                  *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
                   <i class="icon  htvbdh_tcdt_save"></i>
                   <span>Lưu</span>
                 </button>
                 <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                  *ngIf="detail.trangThai == '00' || id == 0">
+                  *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
                   <i class="icon htvbdh_trinh"></i>
                   <span>Trình duyệt</span>
                 </button>
                 <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
-                  *ngIf="detail.trangThai == '01'">
+                  *ngIf="detail.trangThai == '01' && !isView">
                   <i class="icon  htvbdh_da-xu-ly"></i>
                   <span>Hoàn thành</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'">
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                  *ngIf="detail.trangThai == '04' && !isView">
                   <i class="icon htvbdh_dakyduyet"></i>
                   <span>Duyệt</span>
                 </button>
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                  *ngIf="detail.trangThai == '04' && !isView">
                   <i class="icon htvbdh_tcdt_tuchoi"></i>
                   <span>Từ chối</span>
-                </a>
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                  <i class="icon htvbdh_tcdt_delete"></i>
-                  <span>Hủy bỏ</span>
                 </a>
                 <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
                   <span>Quay về</span>
@@ -50,7 +48,7 @@
     <div class="contentDetail">
       <div class="main-content thong-tin-de-xuat-khlcnt">
         <div class="thong-tin-chi-tieu">
-          <div class="title-chi-tieu">
+          <div class="title-chi-tieu hop-dong-title">
             <span [ngClass]="thongTinTrangThai(detail.trangThai)">Dự thảo</span>
             <span>Căn cứ kết quả LCNT</span>
           </div>
@@ -66,20 +64,11 @@
               </div>
               <div nz-col [nzSpan]="18">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chọn đơn vị trúng thầu / gói thầu </nz-form-label>
-                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                    <input placeholder="Đơn vị" nz-input [(ngModel)]="detail.tenDvi" (input)="onInputDonVi($event)"
-                      [nzAutocomplete]="auto" />
-                  </nz-input-group>
-                  <ng-template #suffixIcon>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                  <nz-autocomplete #auto>
-                    <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
-                      (click)="selectDonVi(option)">
-                      {{ option.labelDonVi }}
-                    </nz-auto-option>
-                  </nz-autocomplete>
+                  <nz-form-label [nzNoColon]="true"> Gói thầu </nz-form-label>
+                  <nz-select [(ngModel)]="detail.goiThau">
+                    <nz-option *ngFor="let item of listGoiThau" [nzValue]="item.value" [nzLabel]="item.text">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="6">
@@ -133,63 +122,24 @@
                     <input nz-input [readonly]="true" placeholder="Số ngày thực hiện" [(ngModel)]="loaiStr" />
                   </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="12">
+                <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                      Tốc độ cung cấp
-                    </nz-form-label>
-                    <nz-range-picker placeholder="Tốc độ cung cấp" nzFormat="dd/MM/yyyy" [(ngModel)]="detail.ngayTocDo"
-                      (ngModelChange)="changeDateTocDo()">
-                    </nz-range-picker>
+                    <nz-form-label [nzNoColon]="true">Chủng loại hàng hóa</nz-form-label>
+                    <input nz-input [readonly]="true" placeholder="Số ngày thực hiện" [(ngModel)]="loaiStr" />
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số ngày theo tiến độ </nz-form-label>
-                    <input nz-input [readonly]="true" placeholder="Số ngày theo tiến độ"
-                      [(ngModel)]="detail.soNgayTdo" />
+                    <nz-form-label [nzNoColon]="true"> Số lượng (kg) </nz-form-label>
+                    <input nz-input [readonly]="true" placeholder="Số lượng (tấn)" [(ngModel)]="detail.soLuong"
+                      (input)="caculatorSauVAT()" />
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Loại hợp đồng</nz-form-label>
-                    <nz-select [(ngModel)]="detail.loaiHd">
-                      <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                    </nz-select>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Nước sản xuất </nz-form-label>
-                    <input nz-input placeholder="Nước sản xuất" [(ngModel)]="detail.nuocSxuat" />
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="18">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tiêu chuẩn chất lượng </nz-form-label>
-                    <input nz-input placeholder="Tiêu chuẩn chất lượng" [(ngModel)]="detail.tieuChuanCl" />
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số lượng (tấn) </nz-form-label>
-                    <input nz-input [readonly]="true" placeholder="Số lượng (tấn)" [(ngModel)]="detail.soLuong" />
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Giá trị hợp đồng trước thuế </nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đ/kg) </nz-form-label>
                     <nz-input-number type="text" nz-input [nzSize]="'small'" [nzMin]="0" (input)="caculatorSauVAT()"
-                      [nzMax]="globals.prop.MAX_INPUT" [(ngModel)]="detail.gtriHdTrcVat"></nz-input-number>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thuế VAT </nz-form-label>
-                    <nz-input-group nzAddOnAfter="%">
-                      <nz-input-number type="text" nz-input [nzSize]="'small'" [nzMin]="0" (input)="caculatorSauVAT()"
-                        [nzMax]="globals.prop.MAX_INPUT" [(ngModel)]="detail.vat"></nz-input-number>
-                    </nz-input-group>
+                      [nzMax]="globals.prop.MAX_INPUT" [(ngModel)]="detail.donGiaVat"></nz-input-number>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -199,11 +149,13 @@
                       [nzMax]="globals.prop.MAX_INPUT" [(ngModel)]="detail.gtriHdSauVat" disabled></nz-input-number>
                   </nz-form-item>
                 </div>
-                <div class="d-flex align-items-center tl-dk">
-                  <button class="btn btn-sm waves-effect waves-light">
+                <div nz-col [nzSpan]="6">
+                  <button class="btn btn-sm waves-effect waves-light btn-file-dinh-kem">
                     <i class="icon htvbdh_tcdt_tep"></i>
                     <span>Tài liệu đính kèm</span>
                   </button>
+                </div>
+                <div nz-col [nzSpan]="6">
                   <button class="btn download-file btn-sm waves-effect waves-light">
                     <i class="icon htvbdh_tcdt_import"></i>
                     <span>Tải file</span>

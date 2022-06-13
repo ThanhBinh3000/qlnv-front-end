@@ -45,6 +45,7 @@ export class ThongTinComponent implements OnInit {
   optionsDonViShow: any[] = [];
 
   listLoaiHopDong: any[] = [];
+  listGoiThau: any[] = [];
 
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
@@ -312,7 +313,7 @@ export class ThongTinComponent implements OnInit {
   }
 
   caculatorSauVAT() {
-    this.detail.gtriHdSauVat = ((this.detail?.gtriHdTrcVat ?? 0) * (1 + (this.detail?.vat ?? 0) / 100)).toFixed();
+    this.detail.gtriHdSauVat = ((this.detail?.soLuong ?? 0) * (this.detail?.donGiaVat ?? 0)).toFixed();
   }
 
   changeDateThucHien() {
