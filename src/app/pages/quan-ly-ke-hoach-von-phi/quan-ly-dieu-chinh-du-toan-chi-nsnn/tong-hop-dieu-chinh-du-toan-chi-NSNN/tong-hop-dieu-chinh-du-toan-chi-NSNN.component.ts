@@ -135,8 +135,8 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachDieuChinh = data.data.content;
 					this.danhSachDieuChinh.forEach(e => {
-						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-						e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;

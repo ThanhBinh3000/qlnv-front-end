@@ -90,7 +90,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   ngayDuyet!: string;
   trangThaiBaoCao: string = '1';
   congVan: ItemCongVan = new ItemCongVan();
-  maPhanBcao1: number = 1;
+  maPhanBcao1: number = 2;
   maDviTao!: string;
   nguoiNhap!: string;
   capDvi: string;
@@ -139,6 +139,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     return false;
   };
   maBcao!: string;
+  maDchinh!: string;
 
   // them file vao danh sach
   handleUpload(): void {
@@ -149,8 +150,6 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     });
     this.fileList = [];
   }
-
-
 
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
@@ -168,21 +167,22 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     this.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR,)
   }
 
-
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    let namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    this.namQtoan = new Date().getFullYear();
+    this.namQtoan = Number(namQtoan)
 
     if (this.id) {
       await this.getDetailReport();
-    } else {
+    } else if(this.namQtoan){
+      this.getQuyetToan()
       await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBcao = data.data;
-            this.maBcao = this.maBcao.substring(0, 2) + "ĐC" + this.maBcao.substring(2)
+            // this.maBcao = this.maBcao.substring(0, 2) + "ĐC" + this.maBcao.substring(2)
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -295,11 +295,47 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 					this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
           this.maBcao = data.data.maBcao;
+          this.maDchinh = data.data.maDchinh;
           this.trangThaiBaoCao = data.data.trangThai;
           this.namQtoan = data.data.namQtoan;
           this.maDviTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+          this.congVan = data.data.congVan;
+          this.lstFiles = data.data.fileDinhKems;
+
+					this.listFile = [];;
+          this.getTotal()
+          this.updateEditCache();
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    this.spinner.hide();
+  }
+
+  async getQuyetToan() {
+    const res = {
+      namQtoan: this.namQtoan
+    }
+    this.spinner.show();
+    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
+      async (data) => {
+        if (data.statusCode == 0) {
+          console.log(data);
+          this.lstCtietBcao = data.data.lstCtiet;
+          this.maDviTien = data.data.maDviTien;
+          this.sortByIndex();
+          this.lstCtietBcao.forEach(item => {
+            item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
+            item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
+          })
+          this.maDchinh = data.data.maBcao;
+          this.thuyetMinh = data.data.thuyetMinh;
           this.congVan = data.data.congVan;
           this.lstFiles = data.data.fileDinhKems;
 
@@ -360,7 +396,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     lstCtietBcaoTemp.forEach(item => {
-      if (item.id?.length == 38) {
+      if (item.id?.length == 36) {
         item.id = null;
       }
     })
@@ -382,6 +418,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       maDvi: this.maDviTao,
       namQtoan: this.namQtoan,
       maBcao: this.maBcao,
+      maDchinh:this.maDchinh,
       maPhanBcao: this.maPhanBcao,
     }));
     //get file cong van url
@@ -467,7 +504,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveQuyetToan1(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);

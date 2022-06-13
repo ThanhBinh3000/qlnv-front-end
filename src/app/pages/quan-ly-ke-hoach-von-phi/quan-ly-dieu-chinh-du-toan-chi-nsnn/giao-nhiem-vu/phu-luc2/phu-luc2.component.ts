@@ -677,12 +677,12 @@ export class PhuLuc2Component implements OnInit {
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
-        let idCha = this.getIdCha(item.maNdung);
-        var index: number = this.lstCtietBcao.findIndex(e => e.maNdung === idCha);
+        let idCha = this.getIdCha( Number(item.maNdung));
+        var index: number = this.lstCtietBcao.findIndex(e => Number(e.maNdung) === idCha);
         if (index != -1) {
           this.addLow(this.lstCtietBcao[index].id, item);
         } else {
-          index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.maNdung) === idCha);
+          index = this.lstCtietBcao.findIndex(e => this.getIdCha( Number(e.maNdung)) === idCha);
           this.addSame(this.lstCtietBcao[index].id, item);
         }
       })
@@ -690,7 +690,6 @@ export class PhuLuc2Component implements OnInit {
       lstTemp = lstCtietBcaoTemp.filter(e => e.level == level);
     }
   }
-
   addLine(id: any) {
     var maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
     let obj = {

@@ -699,6 +699,8 @@ export class PhuLuc4Component implements OnInit {
     this.addFirst(data);
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
+    console.log(lstTemp);
+
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
         let idCha = this.getIdCha(item.loaiMatHang);

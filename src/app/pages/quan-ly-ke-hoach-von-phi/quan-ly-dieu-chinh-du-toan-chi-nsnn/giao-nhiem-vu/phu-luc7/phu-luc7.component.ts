@@ -714,12 +714,12 @@ export class PhuLuc7Component implements OnInit {
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
-        let idCha = this.getIdCha(item.loaiMatHang);
-        var index: number = this.lstCtietBcao.findIndex(e => e.loaiMatHang === idCha);
+        let idCha = this.getIdCha( Number(item.loaiMatHang));
+        var index: number = this.lstCtietBcao.findIndex(e => Number(e.loaiMatHang) === idCha);
         if (index != -1) {
           this.addLow(this.lstCtietBcao[index].id, item);
         } else {
-          index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.loaiMatHang) === idCha);
+          index = this.lstCtietBcao.findIndex(e => this.getIdCha( Number(e.loaiMatHang)) === idCha);
           this.addSame(this.lstCtietBcao[index].id, item);
         }
       })
