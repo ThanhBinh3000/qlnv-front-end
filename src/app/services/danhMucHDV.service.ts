@@ -34,8 +34,8 @@ export class DanhMucHDVService extends BaseService {
   //get list don vi tao
   dMDonVi(): Observable<any>{
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
-      this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
+      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
+      // this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
     );
   }
 

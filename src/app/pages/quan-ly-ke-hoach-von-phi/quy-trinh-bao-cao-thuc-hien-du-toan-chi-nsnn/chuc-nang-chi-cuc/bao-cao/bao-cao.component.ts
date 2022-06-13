@@ -746,9 +746,12 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { 
-      item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), 
-      item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => {
+      if (item.maLoai == this.tabSelected) {
+        item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp),
+          item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete
+      }
+    });
     this.tabSelected = maPhuLuc;
     // set listBCaoTemp theo ma phu luc vua chon
     let lstBcaosTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc);
@@ -785,11 +788,11 @@ export class BaoCaoComponent implements OnInit {
 
     if (this.danhSachChiTietPhuLucTemp.length > 0) {
       if (!this.danhSachChiTietPhuLucTemp[0].stt) {
-          await this.sortWithoutIndex();
+        await this.sortWithoutIndex();
       } else {
-          await this.sortByIndex();
+        await this.sortByIndex();
       }
-  }
+    }
 
     this.getStatusButtonOk();
   }
@@ -1866,19 +1869,19 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-  getChiMuc(str: string,dauMuc:string): string {
+  getChiMuc(str: string, dauMuc: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
     var xau: string = "";
     let chiSo: any = str.split('.');
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
-    if(dauMuc == '4'){
+    if (dauMuc == '4') {
       if (n == 0) {
         xau = "-";
-      }else if (n == 1){
+      } else if (n == 1) {
         xau = "+";
       }
-    }else{
+    } else {
       if (n == 0) {
         for (var i = 0; i < this.soLaMa.length; i++) {
           while (k >= this.soLaMa[i].gTri) {
@@ -1904,7 +1907,7 @@ export class BaoCaoComponent implements OnInit {
   }
   // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
   getHead(str: string): string {
-    return str.substring(0, str.lastIndexOf('.'));
+    return str?.substring(0, str.lastIndexOf('.'));
   }
   // lấy phần đuôi của stt
   getTail(str: string): number {
@@ -2083,7 +2086,7 @@ export class BaoCaoComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string, phuLuc: string): void {
-    
+
     if (this.tabSelected == TAB_SELECTED.phuLuc1) {
       if (!this.editCache[id].data.maNdung) {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
@@ -2101,8 +2104,6 @@ export class BaoCaoComponent implements OnInit {
       }
     }
     let phuLucTemp = this.getPhuLuc(phuLuc);
-
-    debugger
     this.editCache[id].data.checked = phuLucTemp.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietPhuLucTemp
     const index = phuLucTemp.findIndex(item => item.id == id); // lay vi tri hang minh sua
     Object.assign(phuLucTemp[index], this.editCache[id].data); // set lai data cua danhSachChiTietPhuLucTemp[index] = this.editCache[id].data
@@ -2110,7 +2111,6 @@ export class BaoCaoComponent implements OnInit {
   }
 
   updateChecked(id: any, phuLuc: string) {
-    debugger
     let phuLucTemp = this.getPhuLuc(phuLuc);
     var data = phuLucTemp.find(e => e.id == id);
     //đặt các phần tử con có cùng trạng thái với nó
@@ -2135,7 +2135,7 @@ export class BaoCaoComponent implements OnInit {
         nho = phuLucTemp[index].checked;
       }
     }
-    
+
   }
   //kiểm tra các phần tử con có cùng được đánh dấu hay ko
   checkAllChild(str: string, phuLuc: string): boolean {
@@ -2414,4 +2414,62 @@ export class BaoCaoComponent implements OnInit {
     this.danhSachChiTietPhuLuc11Temp = [];
     this.danhSachChiTietPhuLuc12Temp = [];
   }
+
+  sum(stt: string,phuLuc) {
+    let dataPL;
+    if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL1();
+    } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL2();
+    } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL3();
+    }
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    stt = this.getHead(stt);
+    while (stt != '0') {
+      var index = phuLucTemp.findIndex(e => e.stt == stt);
+      let data = phuLucTemp[index];
+      phuLucTemp[index] = {
+        ...dataPL,
+        id: data.id,
+        stt: data.stt,
+        header: data.header,
+        checked: data.checked,
+        level: data.level,
+        bcaoCtietId : data.bcaoCtietId,
+        maNdung: data.maNdung,       // pl 1,2
+        ddiemXdung: data.ddiemXdung, // pl 3
+        ghiChu: data.ghiChu, // pl 3
+        khoachThienNdungCviecThangConLaiNam: data.khoachThienNdungCviecThangConLaiNam, // pl 3
+        ndungCviecDangThien: data.ndungCviecDangThien, // pl 3
+        ndungCviecHthanhCuoiThang: data.ndungCviecHthanhCuoiThang, // pl 3
+        qddtSoQdinh: data.qddtSoQdinh, // pl 3
+      }
+      phuLucTemp.forEach(item => {
+        if (this.getHead(item.stt) == stt) {
+          phuLucTemp[index].thNamHienHanhN1 += item.thNamHienHanhN1;
+          phuLucTemp[index].ncauNamDtoanN += item.ncauNamDtoanN;
+          phuLucTemp[index].ncauNamN1 += item.ncauNamN1;
+          phuLucTemp[index].ncauNamN2 += item.ncauNamN2;
+        }
+      })
+      stt = this.getHead(stt);
+    }
+    // this.getTotal();
+  }
+
+  // getTotal() {
+  //   this.total.thNamHienHanhN1 = 0;
+  //   this.total.ncauNamDtoanN = 0;
+  //   this.total.ncauNamN1 = 0;
+  //   this.total.ncauNamN2 = 0;
+  //   this.lstCtietBcao.forEach(item => {
+  //     if (item.level == 0) {
+  //       this.total.thNamHienHanhN1 += item.thNamHienHanhN1;
+  //       this.total.ncauNamDtoanN += item.ncauNamDtoanN;
+  //       this.total.ncauNamN1 += item.ncauNamN1;
+  //       this.total.ncauNamN2 += item.ncauNamN2;
+  //     }
+  //   })
+  // }
 }
