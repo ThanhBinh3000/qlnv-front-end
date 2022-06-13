@@ -38,31 +38,38 @@ const routes: Routes = [
   {
     path: 'giao-nhiem-vu/:id',
     loadChildren: () =>
-    import(
-      './giao-nhiem-vu/giao-nhiem-vu.module'
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
       ).then((m) => m.GiaoNhiemVuModule),
-    },
-    {
-      path: 'giao-nhiem-vu/0/:dotBcao/:namHienHanh/:maDvi',
-      loadChildren: () =>
-        import(
-          './giao-nhiem-vu/giao-nhiem-vu.module'
-        ).then((m) => m.GiaoNhiemVuModule),
-    },
-    {
-      path: 'giao-nhiem-vu/0/:namHienHanh',
-      loadChildren: () =>
-        import(
-          './giao-nhiem-vu/giao-nhiem-vu.module'
-        ).then((m) => m.GiaoNhiemVuModule),
-    },
-    {
-      path: 'phe-duyet-bao-cao-dieu-chinh',
-      loadChildren: () =>
-        import(
-          './phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
-        ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
-    },
+  },
+  {
+    path: 'giao-nhiem-vu/:dotBcao/:namHienHanh/:maDvi',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
+  {
+    path: 'giao-nhiem-vu/:namHienHanh',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
+  {
+    path: 'giao-nhiem-vu/:loai/:id',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
+  {
+    path: 'phe-duyet-bao-cao-dieu-chinh',
+    loadChildren: () =>
+      import(
+        './phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
+      ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
+  },
 
 ];
 
@@ -70,4 +77,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class QuanLyDieuChinhDuToanChiNSNNRoutingModule {}
+export class QuanLyDieuChinhDuToanChiNSNNRoutingModule { }

@@ -235,6 +235,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   //check role cho các nut trinh duyet
   getStatusButton() {
+    debugger
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
     if (dVi && dVi.maDvi == this.userInfo?.dvql) {
@@ -358,7 +359,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.maPaCha = data.data.maPaCha;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
-          this.ngayTao = data.data.ngayTao;
+          this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
@@ -1149,6 +1150,14 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.lstCtietBcao.forEach(item => {
       item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
     })
+  }
+
+  getLowStatus(str: string) {
+    var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+    if (index == -1) {
+      return false;
+    }
+    return true;
   }
 
   addLine(id: any) {

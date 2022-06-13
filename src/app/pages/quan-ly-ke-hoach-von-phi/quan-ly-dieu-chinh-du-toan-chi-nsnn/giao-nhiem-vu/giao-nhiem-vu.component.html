@@ -82,7 +82,15 @@
 					<tbody>
 						<tr>
 							<td>{{maBaoCao}}</td>
-							<td>{{namHienHanh}}</td>
+							<td>
+                <!-- {{namHienHanh}} -->
+                  <nz-input-number [nzSize]="'small'"
+                    [class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
+                    [(ngModel)]="namHienHanh"
+                    (ngModelChange)="changeNam()"
+                    >
+                  </nz-input-number>
+              </td>
 							<td>{{dotBcao}}</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>

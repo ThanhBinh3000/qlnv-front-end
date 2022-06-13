@@ -50,6 +50,20 @@
       <th>Tăng</th>
       <th>Giảm</th>
     </tr>
+    <tr>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th colspan="3" [hidden]="status"></th>
+      <th [hidden]="status"></th>
+    </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of lstDchinh; let i = index">
@@ -97,6 +111,7 @@
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kh2021"
+            (ngModelChange)="changeModel(data.id)"
             [class]="editCache[data.id].data.kh2021 || editCache[data.id].data.kh2021 ===0?'' : 'input-error-validate'">
           </nz-input-number>
         </td>
@@ -111,27 +126,25 @@
           </nz-input-number>
         </td>
         <td>
-          <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dxuatDchinhTong"
-            [class]="editCache[data.id].data.dxuatDchinhTong || editCache[data.id].data.dxuatDchinhTong ===0?'' : 'input-error-validate'">
-          </nz-input-number>
+          {{editCache[data.id].data.dxuatDchinhTong}}
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dxuatDchinhTang"
+            (ngModelChange)="changeModel(data.id)"
             [class]="editCache[data.id].data.dxuatDchinhTang || editCache[data.id].data.dxuatDchinhTang ===0?'' : 'input-error-validate'">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dxuatDchinhGiam"
+            (ngModelChange)="changeModel(data.id)"
             [class]="editCache[data.id].data.dxuatDchinhGiam || editCache[data.id].data.dxuatDchinhGiam ===0?'' : 'input-error-validate'">
           </nz-input-number>
         </td>
         <td>
-          <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kh2021SauDchinh"
-            [class]="editCache[data.id].data.kh2021SauDchinh || editCache[data.id].data.kh2021SauDchinh ===0?'' : 'input-error-validate'">
-          </nz-input-number>
+          {{editCache[data.id].data.kh2021SauDchinh}}
         </td>
         <td>
-          <input nz-input class="search__input"  [(ngModel)]="editCache[data.id].data.ghiChu" />
+          <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
         </td>
 
         <td [hidden]="status">
@@ -165,20 +178,19 @@
     <span>In</span>
   </button>
   <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
-      <i nz-icon nzType="check" nzTheme="outline"></i>
-      <span>Hoàn tất nhập liệu</span>
+    <i nz-icon nzType="check" nzTheme="outline"></i>
+    <span>Hoàn tất nhập liệu</span>
   </button>
   <button type="button" class="btn btn-main" [hidden]="statusBtnFinish" (click)="save('4')">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
+    <i class="icon htvbdh_tcdt_save"></i>
+    <span>Lưu</span>
   </button>
   <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
     <i nz-icon nzType="check" nzTheme="outline"></i>
     <span>OK</span>
   </button>
   <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
-      <i nz-icon nzType="close" nzTheme="outline"></i>
-      <span>Not OK</span>
+    <i nz-icon nzType="close" nzTheme="outline"></i>
+    <span>Not OK</span>
   </button>
 </div>
-
