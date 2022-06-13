@@ -43,7 +43,7 @@ const routes: Routes = [
       ).then((m) => m.GiaoNhiemVuModule),
   },
   {
-    path: 'giao-nhiem-vu/:dotBcao/:namHienHanh/:maDvi',
+    path: 'giao-nhiem-vu-/:dotBcao/:namHienHanh/:maDvi',
     loadChildren: () =>
       import(
         './giao-nhiem-vu/giao-nhiem-vu.module'

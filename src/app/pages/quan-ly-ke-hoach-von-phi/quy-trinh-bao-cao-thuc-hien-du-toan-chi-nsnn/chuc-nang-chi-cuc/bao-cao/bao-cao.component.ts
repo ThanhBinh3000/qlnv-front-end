@@ -21,7 +21,7 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 // import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
-import { LISTCANBO, MA_DU_AN, NOI_DUNG, NOI_DUNG_PL2, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
+import { DIADIEM, LISTCANBO, MA_DU_AN, NOI_DUNG, NOI_DUNG_PL2, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
   id!: any;
   maLoai!: string;
@@ -248,7 +248,7 @@ export class BaoCaoComponent implements OnInit {
   listIdDelete: any = [];                     // list id delete
 
   maDans: any = MA_DU_AN;
-  ddiemXdungs: any = [];
+  ddiemXdungs: any = DIADIEM;
 
   statusBtnDel: boolean = true;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
@@ -395,18 +395,18 @@ export class BaoCaoComponent implements OnInit {
     //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     //   }
     // );
-    this.danhMucService.dMDiaDiemXayDung().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.ddiemXdungs = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+    // this.danhMucService.dMDiaDiemXayDung().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.ddiemXdungs = data.data?.content;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //   }
+    // );
 
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
