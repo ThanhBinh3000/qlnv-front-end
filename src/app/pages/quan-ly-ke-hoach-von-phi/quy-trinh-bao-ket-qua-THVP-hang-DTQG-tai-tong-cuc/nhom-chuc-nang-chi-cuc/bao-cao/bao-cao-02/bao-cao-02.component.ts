@@ -199,7 +199,7 @@ export class BaoCao02Component implements OnInit {
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
-        return str.substring(0, str.lastIndexOf('.'));
+        return str?.substring(0, str.lastIndexOf('.'));
     }
     // lấy phần đuôi của stt
     getTail(str: string): number {
@@ -522,7 +522,7 @@ export class BaoCao02Component implements OnInit {
 
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: any, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
+        let baoCao = [];
         let item;
         if (initItem?.id) {
             item = {
@@ -543,6 +543,7 @@ export class BaoCao02Component implements OnInit {
             edit: true,
             data: { ...item }
         };
+        this.setBieuMau(baoCao,phuLuc)
     }
 
     sortByIndex() {

@@ -238,7 +238,7 @@ export class BaoCao05Component implements OnInit {
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
-        return str.substring(0, str.lastIndexOf('.'));
+        return str?.substring(0, str.lastIndexOf('.'));
     }
     // lấy phần đuôi của stt
     getTail(str: string): number {
@@ -615,7 +615,7 @@ export class BaoCao05Component implements OnInit {
             listVtu.push(objTrongD);
             listVtu.push(objLke);
         });
-        let baoCao = this.getBieuMau(phuLuc);
+        let baoCao = [];
         let item;
         if (initItem?.id) {
             item = {
