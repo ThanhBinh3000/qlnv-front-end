@@ -209,36 +209,38 @@ export class BaoCao05Component implements OnInit {
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
-        str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
-        if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
-                while (k >= this.soLaMa[i].gTri) {
-                    xau += this.soLaMa[i].kyTu;
-                    k -= this.soLaMa[i].gTri;
+        if (str) {
+            str = str.substring(str.indexOf('.') + 1, str.length);
+            var xau: string = "";
+            let chiSo: any = str.split('.');
+            var n: number = chiSo.length - 1;
+            var k: number = parseInt(chiSo[n], 10);
+            if (n == 0) {
+                for (var i = 0; i < this.soLaMa.length; i++) {
+                    while (k >= this.soLaMa[i].gTri) {
+                        xau += this.soLaMa[i].kyTu;
+                        k -= this.soLaMa[i].gTri;
+                    }
                 }
+            };
+            if (n == 1) {
+                xau = chiSo[n];
+            };
+            if (n == 2) {
+                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+            };
+            if (n == 3) {
+                xau = String.fromCharCode(k + 96);
             }
-        };
-        if (n == 1) {
-            xau = chiSo[n];
-        };
-        if (n == 2) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
-        if (n == 3) {
-            xau = String.fromCharCode(k + 96);
+            if (n == 4) {
+                xau = "-";
+            }
+            return xau;
         }
-        if (n == 4) {
-            xau = "-";
-        }
-        return xau;
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
-        return str.substring(0, str.lastIndexOf('.'));
+        return str?.substring(0, str.lastIndexOf('.'));
     }
     // lấy phần đuôi của stt
     getTail(str: string): number {
@@ -295,7 +297,7 @@ export class BaoCao05Component implements OnInit {
                 obj: obj
             },
         });
-        modalIn.afterClose.subscribe((res) => {
+        modalIn.afterClose.subscribe(async (res) => {
             if (res) {
                 var index: number;
                 index = baoCao.findIndex(e => e.maNdungChi == res.maKhoanMuc);
@@ -308,12 +310,12 @@ export class BaoCao05Component implements OnInit {
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
-                        this.addFirst(data, phuLuc);
+                        await this.addFirst(data, phuLuc);
                     } else {
-                        this.addSame(id, data, phuLuc);
+                        await this.addSame(id, data, phuLuc);
                     }
                 }
-
+                baoCao = this.getBieuMau(phuLuc);
                 id = baoCao.find(e => e.maNdungChi == res.maKhoanMuc)?.id;
 
                 res.lstKhoanMuc.forEach(item => {
@@ -615,7 +617,7 @@ export class BaoCao05Component implements OnInit {
             listVtu.push(objTrongD);
             listVtu.push(objLke);
         });
-        let baoCao = this.getBieuMau(phuLuc);
+        let baoCao = [];
         let item;
         if (initItem?.id) {
             item = {
@@ -636,6 +638,7 @@ export class BaoCao05Component implements OnInit {
             edit: true,
             data: { ...item }
         };
+        this.setBieuMau(baoCao, phuLuc);
     }
 
     sortByIndex() {
@@ -694,7 +697,8 @@ export class BaoCao05Component implements OnInit {
             var danhSachChiTietBaoCaoTemp: any[] = baoCao;
             baoCao = [];
             var data = danhSachChiTietBaoCaoTemp.find(e => e.level == 0);
-            this.addFirst(data, phuLuc);
+            await this.addFirst(data, phuLuc);
+            baoCao = this.getBieuMau(phuLuc);
             danhSachChiTietBaoCaoTemp = danhSachChiTietBaoCaoTemp.filter(e => e.id != data.id);
             var lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
             while (lstTemp.length != 0 || level == 0) {
@@ -710,6 +714,7 @@ export class BaoCao05Component implements OnInit {
                 })
                 level += 1;
                 lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
+                baoCao = this.getBieuMau(phuLuc);
             }
         })
     }
