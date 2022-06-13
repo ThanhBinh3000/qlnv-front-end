@@ -174,7 +174,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
-      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+      this.ngayTao = this.newDate.toISOString().slice(0, 16);
       this.spinner.show();
       this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
@@ -190,7 +190,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-
       this.namPa = this.newDate.getFullYear();
     }
     this.getStatusButton();
@@ -218,40 +217,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     );
   }
-
-  //check role cho các nut trinh duyet
-  // getStatusButton() {
-  //   if (this.id) {
-  //     this.status = true;
-  //   } else {
-  //     this.status = false;
-  //   }
-
-  //   let checkChirld = false;
-  //   let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-  //   if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-  //     checkChirld = true;
-  //   }
-  //   const utils = new Utils();
-  //   this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-  //   if (this.id) {
-  //     this.statusBtnSave = true;
-  //   }
-  //   if (!this.id) {
-  //     this.statusBtnNew = true;
-  //     this.statusBtnEdit = true;
-  //   } else {
-  //     if (this.lstCtietBcao.length > 0) {
-  //       this.statusBtnNew = false;
-  //       this.statusBtnEdit = true;
-  //     } else {
-  //       this.statusBtnNew = true;
-  //       this.statusBtnEdit = false;
-  //     }
-  //   }
-  //   this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-  //   this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-  // }
   getStatusButton() {
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
@@ -354,7 +319,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.maPa = data.data.maPa;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
-          this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+          this.ngayTao = data.data.ngayTao
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
           this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
@@ -487,6 +452,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
+
     // gui du lieu trinh duyet len server
     let request = JSON.parse(JSON.stringify({
       id: this.id,
@@ -508,6 +474,10 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
 		if (file) {
 			request.soQd = await this.uploadFile(file);
 		}
+    if(!this.soQd.fileName){
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+      return
+    }
     this.spinner.show();
     if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(

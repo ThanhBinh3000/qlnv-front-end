@@ -86,8 +86,8 @@ export class QuanLyVonPhiService extends BaseService {
   //search list bao cao giao du toan chi
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
-      'http://192.168.1.103:8094/giao_du_toan/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
+      // 'http://192.168.1.103:8094/giao_du_toan/danh-sach',
       request,
     );
   }
@@ -179,8 +179,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG
   CtietBcaoQuyetToan(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
-      // 'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
+      'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
     );
   }
 
@@ -260,8 +260,8 @@ export class QuanLyVonPhiService extends BaseService {
   // Trình duyệt quyết toán vốn, phí hàng DTQG 1
   trinhDuyetServiceQuyetToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/them-moi',
-      // 'http://192.168.1.105:8094/quyet-toan/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/them-moi',
+      'http://192.168.1.105:8094/quyet-toan/them-moi',
       request,
     );
   }
@@ -285,7 +285,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   giaoDuToan2(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.103:8094/giao_du_toan/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/them-moi',
+      // 'http://192.168.1.103:8094/giao_du_toan/them-moi',
       request,
     );
   }
@@ -813,8 +814,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approveQuyetToan1(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
-      'http://192.168.1.103:8094/quyet-toan/trang-thai',
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
+      // 'http://192.168.1.103:8094/quyet-toan/trang-thai',
       request,
     );
   }
