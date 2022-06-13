@@ -175,7 +175,7 @@ export class BaoCao04anComponent implements OnInit {
             this.updateEditCache(phuLuc);
         })
 
-        
+
         this.spinner.hide();
     }
 
@@ -209,32 +209,34 @@ export class BaoCao04anComponent implements OnInit {
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
-        str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
-        if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
-                while (k >= this.soLaMa[i].gTri) {
-                    xau += this.soLaMa[i].kyTu;
-                    k -= this.soLaMa[i].gTri;
+        if (str) {
+            str = str.substring(str.indexOf('.') + 1, str.length);
+            var xau: string = "";
+            let chiSo: any = str.split('.');
+            var n: number = chiSo.length - 1;
+            var k: number = parseInt(chiSo[n], 10);
+            if (n == 0) {
+                for (var i = 0; i < this.soLaMa.length; i++) {
+                    while (k >= this.soLaMa[i].gTri) {
+                        xau += this.soLaMa[i].kyTu;
+                        k -= this.soLaMa[i].gTri;
+                    }
                 }
+            };
+            if (n == 1) {
+                xau = chiSo[n];
+            };
+            if (n == 2) {
+                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+            };
+            if (n == 3) {
+                xau = String.fromCharCode(k + 96);
             }
-        };
-        if (n == 1) {
-            xau = chiSo[n];
-        };
-        if (n == 2) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
-        if (n == 3) {
-            xau = String.fromCharCode(k + 96);
+            if (n == 4) {
+                xau = "-";
+            }
+            return xau;
         }
-        if (n == 4) {
-            xau = "-";
-        }
-        return xau;
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
@@ -634,7 +636,7 @@ export class BaoCao04anComponent implements OnInit {
             edit: true,
             data: { ...item }
         };
-        this.setBieuMau(baoCao,phuLuc);
+        this.setBieuMau(baoCao, phuLuc);
     }
 
     sortByIndex() {

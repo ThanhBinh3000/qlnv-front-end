@@ -209,32 +209,34 @@ export class BaoCao05Component implements OnInit {
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
-        str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
-        if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
-                while (k >= this.soLaMa[i].gTri) {
-                    xau += this.soLaMa[i].kyTu;
-                    k -= this.soLaMa[i].gTri;
+        if (str) {
+            str = str.substring(str.indexOf('.') + 1, str.length);
+            var xau: string = "";
+            let chiSo: any = str.split('.');
+            var n: number = chiSo.length - 1;
+            var k: number = parseInt(chiSo[n], 10);
+            if (n == 0) {
+                for (var i = 0; i < this.soLaMa.length; i++) {
+                    while (k >= this.soLaMa[i].gTri) {
+                        xau += this.soLaMa[i].kyTu;
+                        k -= this.soLaMa[i].gTri;
+                    }
                 }
+            };
+            if (n == 1) {
+                xau = chiSo[n];
+            };
+            if (n == 2) {
+                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+            };
+            if (n == 3) {
+                xau = String.fromCharCode(k + 96);
             }
-        };
-        if (n == 1) {
-            xau = chiSo[n];
-        };
-        if (n == 2) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
-        if (n == 3) {
-            xau = String.fromCharCode(k + 96);
+            if (n == 4) {
+                xau = "-";
+            }
+            return xau;
         }
-        if (n == 4) {
-            xau = "-";
-        }
-        return xau;
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
@@ -295,7 +297,7 @@ export class BaoCao05Component implements OnInit {
                 obj: obj
             },
         });
-        modalIn.afterClose.subscribe((res) => {
+        modalIn.afterClose.subscribe(async (res) => {
             if (res) {
                 var index: number;
                 index = baoCao.findIndex(e => e.maNdungChi == res.maKhoanMuc);
@@ -308,9 +310,9 @@ export class BaoCao05Component implements OnInit {
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
-                        this.addFirst(data, phuLuc);
+                        await this.addFirst(data, phuLuc);
                     } else {
-                        this.addSame(id, data, phuLuc);
+                        await this.addSame(id, data, phuLuc);
                     }
                 }
 
@@ -636,6 +638,7 @@ export class BaoCao05Component implements OnInit {
             edit: true,
             data: { ...item }
         };
+        this.setBieuMau(baoCao, phuLuc);
     }
 
     sortByIndex() {

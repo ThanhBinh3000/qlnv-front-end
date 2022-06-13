@@ -2009,7 +2009,10 @@ export class BaoCaoComponent implements OnInit {
         }
       }
     }
-
+    if (phuLucTemp.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+      this.sum(stt, phuLuc);
+      this.updateEditCache(phuLuc);
+    }
     // them moi phan tu
     if (initItem?.id) {
       let item = {
@@ -2038,6 +2041,7 @@ export class BaoCaoComponent implements OnInit {
   deleteLine(id: any, phuLuc: string) {
     let phuLucTemp = this.getPhuLuc(phuLuc);
     var index: number = phuLucTemp.findIndex(e => e.id == id); // vi tri hien tai
+    var stt: string = phuLucTemp[index].stt;
     // khong tim thay thi out ra
     if (index == -1) return;
     var nho: string = phuLucTemp[index].stt;
@@ -2054,6 +2058,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     this.replaceIndex(lstIndex, -1, phuLuc);
+    this.sum(stt, phuLuc);
     this.updateEditCache(phuLuc);
   }
 
@@ -2112,6 +2117,7 @@ export class BaoCaoComponent implements OnInit {
     const index = phuLucTemp.findIndex(item => item.id == id); // lay vi tri hang minh sua
     Object.assign(phuLucTemp[index], this.editCache[id].data); // set lai data cua danhSachChiTietPhuLucTemp[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.sum(phuLucTemp[index].stt, phuLuc);
   }
 
   updateChecked(id: any, phuLuc: string) {
@@ -2417,5 +2423,150 @@ export class BaoCaoComponent implements OnInit {
   resetList() {
     this.danhSachChiTietPhuLuc11Temp = [];
     this.danhSachChiTietPhuLuc12Temp = [];
+  }
+
+  sum(stt: string, phuLuc) {
+    let dataPL;
+    if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL1();
+    } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL2();
+    } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+      dataPL = new ItemDataPL3();
+    }
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    stt = this.getHead(stt);
+    while (stt != '0') {
+      var index = phuLucTemp.findIndex(e => e.stt == stt);
+      let data = phuLucTemp[index];
+      phuLucTemp[index] = {
+        ...dataPL,
+        id: data.id,
+        stt: data.stt,
+        header: data.header,
+        checked: data.checked,
+        level: data.level,
+        bcaoCtietId: data.bcaoCtietId,
+        maNdung: data.maNdung,       // pl 1,2
+        ddiemXdung: data.ddiemXdung, // pl 3
+        ghiChu: data.ghiChu, // pl 3
+        khoachThienNdungCviecThangConLaiNam: data.khoachThienNdungCviecThangConLaiNam, // pl 3
+        ndungCviecDangThien: data.ndungCviecDangThien, // pl 3
+        ndungCviecHthanhCuoiThang: data.ndungCviecHthanhCuoiThang, // pl 3
+        qddtSoQdinh: data.qddtSoQdinh, // pl 3
+      }
+      phuLucTemp.forEach(item => {
+        if (this.getHead(item.stt) == stt) {
+          if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+            phuLucTemp[index].kphiSdungTcong += item.kphiSdungTcong;
+            phuLucTemp[index].kphiSdungDtoan += item.kphiSdungDtoan;
+            phuLucTemp[index].kphiSdungNguonKhac += item.kphiSdungNguonKhac;
+            phuLucTemp[index].kphiSdungNguonQuy += item.kphiSdungNguonQuy;
+            phuLucTemp[index].kphiSdungNstt += item.kphiSdungNstt;
+            phuLucTemp[index].kphiSdungCk += item.kphiSdungCk;
+            phuLucTemp[index].kphiChuyenSangTcong += item.kphiChuyenSangTcong;
+            phuLucTemp[index].kphiChuyenSangDtoan += item.kphiChuyenSangDtoan;
+            phuLucTemp[index].kphiChuyenSangNguonKhac += item.kphiChuyenSangNguonKhac;
+            phuLucTemp[index].kphiChuyenSangNguonQuy += item.kphiChuyenSangNguonQuy;
+            phuLucTemp[index].kphiChuyenSangNstt += item.kphiChuyenSangNstt;
+            phuLucTemp[index].kphiChuyenSangCk += item.kphiChuyenSangCk;
+            phuLucTemp[index].dtoanGiaoTcong += item.dtoanGiaoTcong;
+            phuLucTemp[index].dtoanGiaoDtoan += item.dtoanGiaoDtoan;
+            phuLucTemp[index].dtoanGiaoNguonKhac += item.dtoanGiaoNguonKhac;
+            phuLucTemp[index].dtoanGiaoNguonQuy += item.dtoanGiaoNguonQuy;
+            phuLucTemp[index].dtoanGiaoNstt += item.dtoanGiaoNstt;
+            phuLucTemp[index].dtoanGiaoCk += item.dtoanGiaoCk;
+            phuLucTemp[index].giaiNganThangBcaoTcong += item.giaiNganThangBcaoTcong;
+            phuLucTemp[index].giaiNganThangBcaoTcongTle += item.giaiNganThangBcaoTcongTle;
+            phuLucTemp[index].giaiNganThangBcaoDtoan += item.giaiNganThangBcaoDtoan;
+            phuLucTemp[index].giaiNganThangBcaoDtoanTle += item.giaiNganThangBcaoDtoanTle;
+            phuLucTemp[index].giaiNganThangBcaoNguonKhac += item.giaiNganThangBcaoNguonKhac;
+            phuLucTemp[index].giaiNganThangBcaoNguonKhacTle += item.giaiNganThangBcaoNguonKhacTle;
+            phuLucTemp[index].giaiNganThangBcaoNguonQuy += item.giaiNganThangBcaoNguonQuy;
+            phuLucTemp[index].giaiNganThangBcaoNguonQuyTle += item.giaiNganThangBcaoNguonQuyTle;
+            phuLucTemp[index].giaiNganThangBcaoNstt += item.giaiNganThangBcaoNstt;
+            phuLucTemp[index].giaiNganThangBcaoNsttTle += item.giaiNganThangBcaoNsttTle;
+            phuLucTemp[index].giaiNganThangBcaoCk += item.giaiNganThangBcaoCk;
+            phuLucTemp[index].giaiNganThangBcaoCkTle += item.giaiNganThangBcaoCkTle;
+            phuLucTemp[index].luyKeGiaiNganTcong += item.luyKeGiaiNganTcong;
+            phuLucTemp[index].luyKeGiaiNganTcongTle += item.luyKeGiaiNganTcongTle;
+            phuLucTemp[index].luyKeGiaiNganDtoan += item.luyKeGiaiNganDtoan;
+            phuLucTemp[index].luyKeGiaiNganDtoanTle += item.luyKeGiaiNganDtoanTle;
+            phuLucTemp[index].luyKeGiaiNganNguonKhac += item.luyKeGiaiNganNguonKhac;
+            phuLucTemp[index].luyKeGiaiNganNguonKhacTle += item.luyKeGiaiNganNguonKhacTle;
+            phuLucTemp[index].luyKeGiaiNganNguonQuy += item.luyKeGiaiNganNguonQuy;
+            phuLucTemp[index].luyKeGiaiNganNguonQuyTle += item.luyKeGiaiNganNguonQuyTle;
+            phuLucTemp[index].luyKeGiaiNganNstt += item.luyKeGiaiNganNstt;
+            phuLucTemp[index].luyKeGiaiNganNsttTle += item.luyKeGiaiNganNsttTle;
+            phuLucTemp[index].luyKeGiaiNganCk += item.luyKeGiaiNganCk;
+            phuLucTemp[index].luyKeGiaiNganCkTle += item.luyKeGiaiNganCkTle;
+          } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+            phuLucTemp[index].dtoanSdungNamTcong += item.dtoanSdungNamTcong;
+            phuLucTemp[index].dtoanSdungNamNguonNsnn += item.dtoanSdungNamNguonNsnn;
+            phuLucTemp[index].dtoanSdungNamNguonSn += item.dtoanSdungNamNguonSn;
+            phuLucTemp[index].dtoanSdungNamNguonQuy += item.dtoanSdungNamNguonQuy;
+            phuLucTemp[index].giaiNganThangTcong += item.giaiNganThangTcong;
+            phuLucTemp[index].giaiNganThangTcongTle += item.giaiNganThangTcongTle;
+            phuLucTemp[index].giaiNganThangNguonNsnn += item.giaiNganThangNguonNsnn;
+            phuLucTemp[index].giaiNganThangNguonNsnnTle += item.giaiNganThangNguonNsnnTle;
+            phuLucTemp[index].giaiNganThangNguonSn += item.giaiNganThangNguonSn;
+            phuLucTemp[index].giaiNganThangNguonSnTle += item.giaiNganThangNguonSnTle;
+            phuLucTemp[index].giaiNganThangNguonQuy += item.giaiNganThangNguonQuy;
+            phuLucTemp[index].giaiNganThangNguonQuyTle += item.giaiNganThangNguonQuyTle;
+            phuLucTemp[index].luyKeGiaiNganTcong += item.luyKeGiaiNganTcong;
+            phuLucTemp[index].luyKeGiaiNganTcongTle += item.luyKeGiaiNganTcongTle;
+            phuLucTemp[index].luyKeGiaiNganNguonNsnn += item.luyKeGiaiNganNguonNsnn;
+            phuLucTemp[index].luyKeGiaiNganNguonNsnnTle += item.luyKeGiaiNganNguonNsnnTle;
+            phuLucTemp[index].luyKeGiaiNganNguonSn += item.luyKeGiaiNganNguonSn;
+            phuLucTemp[index].luyKeGiaiNganNguonSnTle += item.luyKeGiaiNganNguonSnTle;
+            phuLucTemp[index].luyKeGiaiNganNguonQuy += item.luyKeGiaiNganNguonQuy;
+            phuLucTemp[index].luyKeGiaiNganNguonQuyTle += item.luyKeGiaiNganNguonQuyTle;
+          } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+            phuLucTemp[index].qddtTmdtTso += item.qddtTmdtTso;
+            phuLucTemp[index].qddtTmdtNsnn += item.qddtTmdtNsnn;
+            phuLucTemp[index].luyKeVonTso += item.luyKeVonTso;
+            phuLucTemp[index].luyKeVonNsnn += item.luyKeVonNsnn;
+            phuLucTemp[index].luyKeVonDt += item.luyKeVonDt;
+            phuLucTemp[index].luyKeVonThue += item.luyKeVonThue;
+            phuLucTemp[index].luyKeVonScl += item.luyKeVonScl;
+            phuLucTemp[index].luyKeGiaiNganHetNamTso += item.luyKeGiaiNganHetNamTso;
+            phuLucTemp[index].luyKeGiaiNganHetNamNsnnTso += item.luyKeGiaiNganHetNamNsnnTso;
+            phuLucTemp[index].luyKeGiaiNganHetNamNsnnKhNamTruoc += item.luyKeGiaiNganHetNamNsnnKhNamTruoc;
+            phuLucTemp[index].khoachVonNamTruocKeoDaiTso += item.khoachVonNamTruocKeoDaiTso;
+            phuLucTemp[index].khoachVonNamTruocKeoDaiDtpt += item.khoachVonNamTruocKeoDaiDtpt;
+            phuLucTemp[index].khoachVonNamTruocKeoDaiVonKhac += item.khoachVonNamTruocKeoDaiVonKhac;
+            phuLucTemp[index].khoachNamVonTso += item.khoachNamVonTso;
+            phuLucTemp[index].khoachNamVonNsnn += item.khoachNamVonNsnn;
+            phuLucTemp[index].khoachNamVonDt += item.khoachNamVonDt;
+            phuLucTemp[index].khoachNamVonThue += item.khoachNamVonThue;
+            phuLucTemp[index].khoachNamVonScl += item.khoachNamVonScl;
+            phuLucTemp[index].kluongThienTso += item.kluongThienTso;
+            phuLucTemp[index].kluongThienThangBcao += item.kluongThienThangBcao;
+            phuLucTemp[index].giaiNganTso += item.giaiNganTso;
+            phuLucTemp[index].giaiNganTsoTle += item.giaiNganTsoTle;
+            phuLucTemp[index].giaiNganNsnn += item.giaiNganNsnn;
+            phuLucTemp[index].giaiNganNsnnVonDt += item.giaiNganNsnnVonDt;
+            phuLucTemp[index].giaiNganNsnnVonThue += item.giaiNganNsnnVonThue;
+            phuLucTemp[index].giaiNganNsnnVonScl += item.giaiNganNsnnVonScl;
+            phuLucTemp[index].giaiNganNsnnTle += item.giaiNganNsnnTle;
+            phuLucTemp[index].giaiNganNsnnTleVonDt += item.giaiNganNsnnTleVonDt;
+            phuLucTemp[index].giaiNganNsnnTleVonThue += item.giaiNganNsnnTleVonThue;
+            phuLucTemp[index].giaiNganNsnnTleVonScl += item.giaiNganNsnnTleVonScl;
+            phuLucTemp[index].luyKeGiaiNganDauNamTso += item.luyKeGiaiNganDauNamTso;
+            phuLucTemp[index].luyKeGiaiNganDauNamTsoTle += item.luyKeGiaiNganDauNamTsoTle;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnn += item.luyKeGiaiNganDauNamNsnn;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonDt += item.luyKeGiaiNganDauNamNsnnVonDt;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonThue += item.luyKeGiaiNganDauNamNsnnVonThue;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonScl += item.luyKeGiaiNganDauNamNsnnVonScl;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTle += item.luyKeGiaiNganDauNamNsnnTle;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonDt += item.luyKeGiaiNganDauNamNsnnTleVonDt;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonThue += item.luyKeGiaiNganDauNamNsnnTleVonThue;
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonScl += item.luyKeGiaiNganDauNamNsnnTleVonScl;
+          }
+        }
+      })
+      stt = this.getHead(stt);
+    }
+    // this.getTotal();
   }
 }
