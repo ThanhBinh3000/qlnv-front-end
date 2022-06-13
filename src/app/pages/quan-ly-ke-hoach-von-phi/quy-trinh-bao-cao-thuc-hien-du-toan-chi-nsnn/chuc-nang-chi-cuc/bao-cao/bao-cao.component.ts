@@ -704,7 +704,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // doi tab
-  changeTab(maPhuLuc, trangThaiChiTiet) {
+  async changeTab(maPhuLuc, trangThaiChiTiet) {
     this.savePhuLuc1(); // add cac danh sach phu luc 1 con vao danhSachChiTietPhuLucTemp
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -760,7 +760,14 @@ export class BaoCaoComponent implements OnInit {
         break;
     }
 
-    this.sortByIndex();
+    if (this.danhSachChiTietPhuLucTemp.length > 0) {
+      if (!this.danhSachChiTietPhuLucTemp[0].stt) {
+          await this.sortWithoutIndex();
+      } else {
+          await this.sortByIndex();
+      }
+  }
+
     this.getStatusButtonOk();
   }
 
