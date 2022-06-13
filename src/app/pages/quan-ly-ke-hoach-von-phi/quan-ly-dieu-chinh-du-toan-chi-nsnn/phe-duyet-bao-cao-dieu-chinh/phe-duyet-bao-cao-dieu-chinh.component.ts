@@ -65,7 +65,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
-    loaiTimKiem: "",
+    loaiTimKiem: '1',
     nam: null,
     tuNgay: "",
     denNgay: "",
@@ -92,6 +92,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   status: boolean;
   userRole: string;
   maDviTao: string;
+  date: any = new Date()
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -109,6 +110,11 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 		await this.getUserInfo(userName); //get user info
 		this.maDviTao = this.userInfo?.dvql;
 		this.userRole = this.userInfo?.roles[0].code;
+    this.searchFilter.denNgay = new Date().toDateString();
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.searchFilter.tuNgay = this.date.toDateString();
+    this.searchFilter.nam = new Date().getFullYear()
+
     if (this.userRole == Utils.NHAN_VIEN) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
@@ -211,7 +217,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timKiemDieuChinh1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

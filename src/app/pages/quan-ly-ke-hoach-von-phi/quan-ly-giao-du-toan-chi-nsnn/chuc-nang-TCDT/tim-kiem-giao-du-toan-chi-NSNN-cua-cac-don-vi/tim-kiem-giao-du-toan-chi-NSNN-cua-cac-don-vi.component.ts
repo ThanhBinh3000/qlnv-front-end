@@ -73,7 +73,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
         size: 10,
         page: 1,
     }
-
+    date: any = new Date()
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private danhMuc: DanhMucHDVService,
@@ -90,6 +90,10 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.maDviTao = this.userInfo?.dvql;
+        this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+        this.date.setMonth(this.date.getMonth() - 1);
+        this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+        this.searchFilter.namGiao = new Date().getFullYear()
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
