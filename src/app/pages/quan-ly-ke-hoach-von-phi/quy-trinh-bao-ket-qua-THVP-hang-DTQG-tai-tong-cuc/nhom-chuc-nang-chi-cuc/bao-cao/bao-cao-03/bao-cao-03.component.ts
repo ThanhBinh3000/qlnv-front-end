@@ -52,7 +52,6 @@ export class BaoCao03Component implements OnInit {
     lstCtietBcao031: ItemDataMau03[] = [];
     lstCtietBcao032: ItemDataMau03[] = [];
     lstCtietBcao033: ItemDataMau03[] = [];
-    vatTusBC03 = NOI_DUNG;
     listDonvitinh: any[] = [];
 
     //thong tin chung
@@ -98,31 +97,22 @@ export class BaoCao03Component implements OnInit {
             switch (el.header) {
                 case '31':
                     this.lstCtietBcao031.push(el);
+                    this.updateEditCache('31');
                     break;
                 case '32':
                     this.lstCtietBcao032.push(el);
+                    this.updateEditCache('32');
                     break;
                 case '33':
                     this.lstCtietBcao033.push(el);
+                    this.updateEditCache('33');
                     break;
                 default:
                     break;
             }
         });
-        if (this.lstCTietBaoCaoTemp.length > 0) {
-            if (!this.lstCTietBaoCaoTemp[0].stt) {
-                await this.sortWithoutIndex();
-            } else {
-                await this.sortByIndex();
-            }
-        }
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
-        idPhuLuc.forEach(phuLuc => {
-            this.updateEditCache(phuLuc);
-        })
-
-        //lấy danh sách vật tư
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
+         //lấy danh sách vật tư
+         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.listVattu = res.data;
             } else {
@@ -131,8 +121,8 @@ export class BaoCao03Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        this.addListVatTu(this.listVattu);
-        this.quanLyVonPhiService.dmDonvitinh().toPromise().then(
+        await this.addListVatTu(this.listVattu,0);
+        await this.quanLyVonPhiService.dmDonvitinh().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.listDonvitinh = data.data?.content;
@@ -145,14 +135,31 @@ export class BaoCao03Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        if (this.lstCTietBaoCaoTemp.length > 0) {
+            if (!this.lstCTietBaoCaoTemp[0].stt) {
+                await this.sortWithoutIndex();
+            } else {
+                await this.sortByIndex();
+            }
+        }
+        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        idPhuLuc.forEach(phuLuc => {
+            this.updateEditCache(phuLuc);
+        })
         this.spinner.hide();
     }
 
-    addListVatTu(listVattu) {
-        listVattu.forEach(item => {
+    async addListVatTu(listVattu, idCha) {
+        await listVattu.forEach(async item => {
+            item = {
+                ...item,
+                tenDm: item.ten,
+                level: Number(item.cap) - 1,
+                idCha: idCha,
+            }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child);
+                await this.addListVatTu(item.child,item.id);
             }
         });
     }
@@ -247,7 +254,7 @@ export class BaoCao03Component implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau03();
-        lstKmTemp = this.vatTusBC03;
+        lstKmTemp = this.lstVatTuFull;
         maKm = baoCao.find(e => e.id == id)?.maVtu;
         dataPL.header = phuLuc;
         let obj = {
@@ -595,7 +602,7 @@ export class BaoCao03Component implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.vatTusBC03.find(e => e.id == item.maVtu)?.level;
+            item.level = this.lstVatTuFull.find(e => e.id == item.maVtu)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }
@@ -609,7 +616,6 @@ export class BaoCao03Component implements OnInit {
         idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
-            this.setDetail(phuLuc);
             var level = 0;
             var danhSachChiTietBaoCaoTemp: any[] = baoCao;
             baoCao = [];

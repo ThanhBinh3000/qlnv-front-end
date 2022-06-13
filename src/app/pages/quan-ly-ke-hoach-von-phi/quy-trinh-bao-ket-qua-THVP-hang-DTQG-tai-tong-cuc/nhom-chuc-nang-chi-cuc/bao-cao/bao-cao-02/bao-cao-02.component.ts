@@ -47,7 +47,7 @@ export class BaoCao02Component implements OnInit {
     //nhóm biến biểu mẫu 02
     lstCtietBcao021: ItemDataMau02[] = [];
     lstCtietBcao022: ItemDataMau02[] = [];
-    vatTusBC02 = NOI_DUNG;
+    // vatTusBC02 = this.lstVatTuFull;
     listDonvitinh: any[] = [];
 
     //thong tin chung
@@ -93,26 +93,16 @@ export class BaoCao02Component implements OnInit {
             switch (el.header) {
                 case '21':
                     this.lstCtietBcao021.push(el);
+                    this.updateEditCache('21');
                     break;
                 case '22':
                     this.lstCtietBcao022.push(el);
+                    this.updateEditCache('22');
                     break;
                 default:
                     break;
             }
         });
-        if (this.lstCTietBaoCaoTemp.length > 0) {
-            if (!this.lstCTietBaoCaoTemp[0].stt) {
-                await this.sortWithoutIndex();
-            } else {
-                await this.sortByIndex();
-            }
-        }
-        let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
-        idPhuLuc.forEach(phuLuc => {
-            this.updateEditCache(phuLuc);
-        })
-
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -123,7 +113,7 @@ export class BaoCao02Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        this.addListVatTu(this.listVattu);
+        this.addListVatTu(this.listVattu, 0);
         this.quanLyVonPhiService.dmDonvitinh().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -137,14 +127,31 @@ export class BaoCao02Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        if (this.lstCTietBaoCaoTemp.length > 0) {
+            if (!this.lstCTietBaoCaoTemp[0].stt) {
+                await this.sortWithoutIndex();
+            } else {
+                await this.sortByIndex();
+            }
+        }
+        let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
+        idPhuLuc.forEach(phuLuc => {
+            this.updateEditCache(phuLuc);
+        })
         this.spinner.hide();
     }
 
-    addListVatTu(listVattu) {
+    addListVatTu(listVattu, idCha) {
         listVattu.forEach(item => {
+            item = {
+                ...item,
+                tenDm: item.ten,
+                level: Number(item.cap) - 1,
+                idCha: idCha,
+            }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child);
+                this.addListVatTu(item.child,item.id);
             }
         });
     }
@@ -239,7 +246,7 @@ export class BaoCao02Component implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau02();
-        lstKmTemp = this.vatTusBC02;
+        lstKmTemp = this.lstVatTuFull;
         maKm = baoCao.find(e => e.id == id)?.maVtu;
         dataPL.header = phuLuc;
         let obj = {
@@ -396,7 +403,6 @@ export class BaoCao02Component implements OnInit {
 
     //xóa dòng
     deleteLine(id: any, phuLuc: string) {
-        debugger
         let baoCao = this.getBieuMau(phuLuc);
         var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
         // khong tim thay thi out ra
@@ -584,7 +590,7 @@ export class BaoCao02Component implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.vatTusBC02.find(e => e.id == item.maVtu)?.level;
+            item.level = this.lstVatTuFull.find(e => e.id == item.maVtu)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }

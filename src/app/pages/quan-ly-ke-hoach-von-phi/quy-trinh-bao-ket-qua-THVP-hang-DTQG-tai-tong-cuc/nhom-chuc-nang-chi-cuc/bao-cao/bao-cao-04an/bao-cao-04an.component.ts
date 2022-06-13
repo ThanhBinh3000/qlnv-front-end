@@ -67,7 +67,6 @@ export class BaoCao04anComponent implements OnInit {
     lstCtietBcao4anIII2: ItemDataMau0405[] = [];
     lstCtietBcao4anIII3: ItemDataMau0405[] = [];
     lstCtietBcao4anB: ItemDataMau0405[] = [];
-    noiDungChisBC04an = NOI_DUNG;
 
     //thong tin chung
     id: any;
@@ -156,7 +155,7 @@ export class BaoCao04anComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu);
+        await this.addListVatTu(this.listVattu,0);
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
             if (el.loaiMatHang == 0) {
                 el.colName = this.lstVatTuFull.find(e => e.id == el.maVtu)?.ten;
@@ -179,11 +178,17 @@ export class BaoCao04anComponent implements OnInit {
         this.spinner.hide();
     }
 
-    addListVatTu(listVattu) {
+    addListVatTu(listVattu, idCha) {
         listVattu.forEach(item => {
+            item = {
+                ...item,
+                tenDm: item.ten,
+                level: Number(item.cap) - 1,
+                idCha: idCha,
+            }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child);
+                this.addListVatTu(item.child,item.id);
             }
         });
     }
@@ -278,7 +283,7 @@ export class BaoCao04anComponent implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau0405();
-        lstKmTemp = this.noiDungChisBC04an;
+        lstKmTemp = this.lstVatTuFull;
         maKm = baoCao.find(e => e.id == id)?.maNdungChi;
         dataPL.header = phuLuc;
         let obj = {
@@ -676,7 +681,7 @@ export class BaoCao04anComponent implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.noiDungChisBC04an.find(e => e.id == item.maNdungChi)?.level;
+            item.level = this.lstVatTuFull.find(e => e.id == item.maNdungChi)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }
