@@ -425,6 +425,29 @@ export class BaoCaoComponent implements OnInit {
     this.spinner.hide();
   }
 
+  // getStatusButton() {
+  //   let checkParent = false;
+  //   let checkChirld = false;
+  //   let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+  //   if (dVi && dVi.maDvi == this.userInfo.dvql) {
+  //     checkChirld = true;
+  //   }
+  //   if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+  //     checkParent = true;
+  //   }
+  //   const utils = new Utils();
+  //   this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  //   this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.code);
+  // }
+
+  //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
     let checkParent = false;
     let checkChirld = false;
@@ -432,7 +455,7 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
     const utils = new Utils();
@@ -771,6 +794,37 @@ export class BaoCaoComponent implements OnInit {
     this.getStatusButtonOk();
   }
 
+  // getStatusButtonOk() {
+  //   const utils = new Utils();
+  //   let checkParent = false;
+  //   let checkChirld = false;
+  //   let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+  //   if (dVi && dVi.maDvi == this.userInfo.dvql) {
+  //     checkChirld = true;
+  //   }
+  //   if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+  //     checkParent = true;
+  //   }
+  //   let roleNguoiTao = this.userInfo?.roles[0]?.code;
+  //   let trangThaiBaoCao = this.baoCao?.trangThai;
+  //   if (trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else if (trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else if (trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else {
+  //     this.statusBtnOk = true;
+  //   }
+
+  //   if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
+  //     && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
+  //     this.statusBtnFinish = false;
+  //   } else {
+  //     this.statusBtnFinish = true;
+  //   }
+  // }
+
   getStatusButtonOk() {
     const utils = new Utils();
     let checkParent = false;
@@ -779,23 +833,23 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
     let roleNguoiTao = this.userInfo?.roles[0]?.code;
     let trangThaiBaoCao = this.baoCao?.trangThai;
-    if (trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
     }
 
     if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
-      && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
+      && roleNguoiTao == '3' && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;
