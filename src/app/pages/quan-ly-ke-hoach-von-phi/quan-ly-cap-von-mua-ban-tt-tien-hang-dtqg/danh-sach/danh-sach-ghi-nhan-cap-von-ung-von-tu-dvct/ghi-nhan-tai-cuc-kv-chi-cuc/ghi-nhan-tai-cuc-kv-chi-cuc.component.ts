@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -19,31 +19,69 @@ import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.ser
 export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
 		maCvUv: "",
-        trangThai: "",
-        tuNgay: "",
-        denNgay: "",
-        ngayLap: "",
-        maDvi: "",
+		trangThai: "",
+		tuNgay: "",
+		denNgay: "",
+		ngayLap: "",
+		maDvi: "",
 	};
 	//danh muc
 	danhSach: any[] = [];
-	trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    loaiVons: any[] = LOAI_VON;
+	trangThais: any[] = [
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_3,
+			tenDm: "TBP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "TBP chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_8,
+			tenDm: "Từ chối",
+		},
+		{
+			id: Utils.TT_BC_9,
+			tenDm: "Tiếp nhận",
+		},
+	];
+	loaiVons: any[] = LOAI_VON;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                           
+	pages = {
 		size: 10,
 		page: 1,
 	}
+	//trang thai
+	status: boolean;
+	disable: boolean;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
 		private router: Router,
+		private routerActive: ActivatedRoute,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
 		private fb: FormBuilder,
@@ -53,11 +91,36 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.loai = this.routerActive.snapshot.paramMap.get('loai');
+
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		this.searchFilter.maDvi = this.userInfo?.dvql;	
-		this.onSubmit();	
+		this.searchFilter.maDvi = this.userInfo?.dvql;
+
+		if (this.loai == "0") {
+			this.status = true;
+			this.disable = false;
+		} else {
+			this.status = false;
+			this.disable = true;
+			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN) {
+				this.searchFilter.trangThai = Utils.TT_BC_7;
+				this.trangThais = [
+					{
+						id: Utils.TT_BC_7,
+						tenDm: "Mới",
+					}
+				]
+			} else {
+				if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+					this.searchFilter.trangThai = Utils.TT_BC_2;
+				} else {
+					this.searchFilter.trangThai = Utils.TT_BC_4;
+				}
+			}
+		}
+		this.onSubmit();
 	}
 
 	//get user info
@@ -81,7 +144,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	async onSubmit() {
 
 		let trangThais = [];
-		if (this.searchFilter.trangThai){
+		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
@@ -155,11 +218,11 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		])
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 
-	xoaBaoCao(id: any){
+	xoaBaoCao(id: any) {
 		// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
 		// 	data => {
 		// 		if (data.statusCode == 0){
@@ -175,10 +238,10 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		// )
 	}
 
-	checkDeleteReport(item: any): boolean{
+	checkDeleteReport(item: any): boolean {
 		var check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;

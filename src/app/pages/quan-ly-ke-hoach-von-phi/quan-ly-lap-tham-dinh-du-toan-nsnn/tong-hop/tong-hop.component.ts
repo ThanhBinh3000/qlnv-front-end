@@ -27,7 +27,20 @@ export class TongHopComponent implements OnInit {
 	maDviTao: string;
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
+	trangThais: any[] = [
+		{
+			id: '9',
+			ten: 'Tiếp nhận'
+		},
+		{
+			id: '7',
+			ten: 'Mới'
+		},
+		{
+			id: '-1',
+			ten: 'Chưa gửi đơn vị cấp trên'
+		},
+	];
 	donVis: any[] = [];
 	//phan trang
 	totalElements = 0;
@@ -98,7 +111,9 @@ export class TongHopComponent implements OnInit {
 		let trangThais = [];
 		if (this.trangThai){
 			trangThais = [this.trangThai];
-		}
+		} else [
+			trangThais = [Utils.TT_BC_9, Utils.TT_BC_7]
+		]
 		let requestReport = {
 			loaiTimKiem: "1",
 			maDvi: this.maDviTao,

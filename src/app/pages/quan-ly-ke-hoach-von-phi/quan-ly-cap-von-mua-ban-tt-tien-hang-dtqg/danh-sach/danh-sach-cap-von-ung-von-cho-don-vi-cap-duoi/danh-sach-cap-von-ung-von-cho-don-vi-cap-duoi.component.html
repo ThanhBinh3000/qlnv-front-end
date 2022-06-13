@@ -26,11 +26,16 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ cấp trên</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.maTren" />
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
+							[(ngModel)]="searchFilter.maTren"
+							[class]="statusBtnNew || searchFilter.maTren ?'' : 'input-error-validate'">
+							<nz-option *ngFor="let item of danhSachMaVon" [nzValue]="item" [nzLabel]="item">
+							</nz-option>
+						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="disable"
 							[(ngModel)]="searchFilter.trangThai">
 							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
@@ -103,9 +108,16 @@
 								</ng-container>
 							</td>
 							<td>
-								<ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
+								<ng-container *ngIf="status; else pheDuyet">
+									<ng-container *ngIf="checkDeleteReport(item)">
+										<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
+									</ng-container>
 								</ng-container>
+								<ng-template #pheDuyet>
+									<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+										Phê duyệt
+									</a>
+								</ng-template>
 							</td>
 						</tr>
 					</tbody>
@@ -131,7 +143,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
+				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>

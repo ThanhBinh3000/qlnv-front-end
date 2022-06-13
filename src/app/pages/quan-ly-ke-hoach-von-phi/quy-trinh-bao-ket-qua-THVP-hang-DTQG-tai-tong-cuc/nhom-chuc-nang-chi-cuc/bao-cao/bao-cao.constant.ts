@@ -28,28 +28,28 @@ export const LISTBIEUMAUDOT = [
     tenPhuLuc: '04a/BCPN-X_x',
     tieuDe: 'Báo cáo chi tiết thực hiện phí xuất hàng DTQG đợt ',
     status: false,
-    lstId: ['1111'],
+    lstId: ['4ax-I1','4ax-I2','4ax-I3','4ax-II1.1','4ax-II1.2','4ax-II2','4ax-II3','4ax-III1','4ax-III2','4ax-III3','4ax-B'],
   },
   {
     maPhuLuc: '7',
     tenPhuLuc: '04a/BCPN-X_n',
     tieuDe: 'Báo cáo chi tiết thực hiện phí nhập mua hàng DTQG đợt ',
     status: false,
-    lstId: ['1111'],
+    lstId: ['4an-I1','4an-I2','4an-I3','4an-II1.1','4an-II1.2','4an-II2','4an-II3','4an-III1','4an-III2','4an-III3','4an-B'],
   },
   {
     maPhuLuc: '8',
     tenPhuLuc: '04b/BCPN-X',
     tieuDe: 'Báo cáo chi tiết thực hiện phí xuất hàng cứu trợ, viện trợ hỗ trợ đợt ',
     status: false,
-    lstId: ['1111'],
+    lstId: ['4b-I1','4b-I2','4b-I3','4b-II1.1','4b-II1.2','4b-II2','4b-II3','4b-II21','4b-II22','4b-II23','4b-II24','4b-III1','4b-III2','4b-III3','4b-B'],
   },
   {
     maPhuLuc: '9',
     tenPhuLuc: '05/BCPBQ',
     tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG đợt ',
     status: false,
-    lstId: ['1111'],
+    lstId: ['5-I1','5-I2','5-II11','5-II12','5-II2','5-III1','5-III2','5-B'],
   },
   // {
   //     maPhuLuc:10,
@@ -101,7 +101,7 @@ export const LISTBIEUMAUNAM = [
 export const BAO_CAO_NHAP_HANG_DTQG: string = '4'; //02
 export const BAO_CAO_XUAT_HANG_DTQG: string = '5'; //03
 export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG: string = '6'; //4a - xuat
-export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG: string = '7'; //4a -nhap
+export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG: string = '7'; //4a -nhap
 export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO: string = '8'; //4b
 export const KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG: string = '9'; //05
 export const BAO_CAO_TONG_HOP_THUC_HIEN_VON_MUA_BAN_VA_PHI_NHAP_PHI_XUAT_PHI_BAO_QUAN_LAN_DAU: string = '10'

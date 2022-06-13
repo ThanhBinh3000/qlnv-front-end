@@ -83,4 +83,58 @@ export const NOI_DUNG = [
         level: 0,
         idCha: 0,
     },
+    {
+        id: 310,
+        tenDm: "Chi đầu tư phát triển",
+        level: 1,
+        idCha: 300,
+    },
+    {
+        id: 311,
+        tenDm: "Chi đầu tư các dự án",
+        level: 2,
+        idCha: 310,
+    },
+    {
+        id: 312,
+        tenDm: "Chi quốc phòng",
+        level: 2,
+        idCha: 310,
+    },
+    {
+        id: 313,
+        tenDm: "Chi an ninh và trật tự ATXH",
+        level: 2,
+        idCha: 310,
+    },
+    {
+        id: 314,
+        tenDm: "Chi đầu tư và hỗ trợ vốn cho DN cung cấp sản phẩm, dịch vụ công ích; các tổ chức kinh tế; các tổ chức tài chính; đầu tư vốn NN vào DN",
+        level: 2,
+        idCha: 310,
+    },
+    {
+        id: 315,
+        tenDm: "Chi đầu tư phát triển khác",
+        level: 2,
+        idCha: 310,
+    },
+    {
+        id: 320,
+        tenDm: "Chi thường xuyên*",
+        level: 1,
+        idCha: 300,
+    },
+    {
+        id: 321,
+        tenDm: "Chi quốc phòng",
+        level: 2,
+        idCha: 320,
+    },
+    {
+        id: 322,
+        tenDm: "Chi an ninh và trật tự ATXH",
+        level: 2,
+        idCha: 320,
+    },
 ]
