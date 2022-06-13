@@ -753,7 +753,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + id,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu-/' + id,
 		])
 	}
 
@@ -773,26 +773,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 	closeTab({ index }: { index: number }): void {
 		this.tabs.splice(index - 1, 1);
 	}
-
-	// newTab(id: any): void {
-	// 	var index: number = this.tabs.findIndex(e => e.id === id);
-	// 	if (index != -1) {
-	// 		this.selectedIndex = index + 1;
-	// 	} else {
-	// 		let item = this.lstDieuChinhs.find(e => e.maLoai == id);
-	// 		this.data = {
-	// 			...item,
-	// 			namHienHanh: this.namHienHanh,
-	// 			trangThaiBaoCao: this.trangThaiBaoCao,
-	// 			statusBtnOk: this.statusBtnOk,
-	// 			statusBtnFinish: this.statusBtnFinish,
-	// 			status: this.status,
-	// 		}
-	// 		this.tabs = [];
-	// 		this.tabs.push(PHU_LUC.find(e => e.id === id));
-	// 		this.selectedIndex = this.tabs.length + 1;
-	// 	}
-	// }
 
   newTab(id: any): void {
 		var index: number = this.tabs.findIndex(e => e.id === id);
@@ -846,6 +826,87 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.location.back();
 			}
 		}
-
 	}
+
+  async doCopy() {
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					maBcaoNew = data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return;
+			}
+		);
+		let lstDieuChinhTemps: any[] = [];
+		this.lstDieuChinhs.forEach(data => {
+			let lstCtietTemp: any[] = [];
+			data.lstCtietDchinh.forEach(item => {
+				lstCtietTemp.push({
+					...item,
+					id: null,
+				})
+			})
+			lstDieuChinhTemps.push({
+				...data,
+				giaoCho: this.userInfo?.username,
+				lstCtietDchinh: lstCtietTemp,
+				id: null,
+			})
+		})
+		let request = {
+			id: null,
+			fileDinhKems: [],
+			listIdDeleteFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstDchinh: lstDieuChinhTemps,
+			maBcao: maBcaoNew,
+			maDvi: this.maDviTao,
+			namBcao: this.namHienHanh,
+			namHienHanh: this.namHienHanh,
+			congVan: null,
+      dotBcao: this.dotBcao,
+			tongHopTuIds: [],
+		};
+
+		this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.router.navigate([
+						'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id,
+					])
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+	}
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
 }

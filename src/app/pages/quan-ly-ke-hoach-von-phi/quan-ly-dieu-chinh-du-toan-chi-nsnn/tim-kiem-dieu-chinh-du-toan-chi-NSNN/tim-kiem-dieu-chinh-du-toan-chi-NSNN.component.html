@@ -15,10 +15,6 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-        <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
-        </button>
       </div>
     </div>
   </div>
@@ -31,7 +27,7 @@
           <div nz-col nzSpan="12">
             <label class="search__label">Năm báo cáo</label>
             <nz-input-number [nzSize]="'small'"
-              [class]="searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999 || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
+              [class]="searchFilter.nam && searchFilter.nam < 3000 && searchFilter.nam > 999 ?'' : 'input-error-validate' "
               [(ngModel)]="searchFilter.nam"></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
@@ -54,7 +50,7 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
@@ -71,11 +67,11 @@
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th width="60px">STT</th>
-              <th width="150px">Mã báo cáo</th>
-              <th width="200px">Ngày tạo</th>
-              <th width="150px">Năm báo cáo</th>
-              <th width="200px" class="text-center">Trạng thái</th>
+              <th nzWidth="60px">STT</th>
+              <th nzWidth="150px">Mã báo cáo</th>
+              <th nzWidth="200px">Ngày tạo</th>
+              <th nzWidth="150px">Năm báo cáo</th>
+              <th nzWidth="200px" class="text-center">Trạng thái</th>
               <th colspan="2"></th>
             </tr>
           </thead>

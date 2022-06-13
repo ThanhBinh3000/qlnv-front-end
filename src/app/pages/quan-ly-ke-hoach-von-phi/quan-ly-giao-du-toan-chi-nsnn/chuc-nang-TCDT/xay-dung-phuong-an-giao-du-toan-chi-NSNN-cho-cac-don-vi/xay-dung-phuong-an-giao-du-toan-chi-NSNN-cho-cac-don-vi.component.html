@@ -16,7 +16,7 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<button class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnDVCT">
+				<button class="btn btn-main" (click)="onSubmit('7',null)">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Gửi đơn vị cấp trên</span>
 				</button>
@@ -40,11 +40,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+				<button class="btn btn-main" (click)="tuChoi('8')" >
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
+				<a class="btn btn-main" (click)="onSubmit('9',null)" >
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>tiếp nhận</span>
 				</a>
@@ -248,7 +248,7 @@
 								</ng-container>
 							</tbody>
 						</nz-table>
-            <!-- <ng-container *ngIf="lstDviTrucThuoc.length != 0">
+            <ng-container *ngIf="lstDviTrucThuoc.length != 0">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="12">
 									Danh sách báo cáo từ các đơn vị trực thuộc
@@ -275,7 +275,7 @@
 										<tbody>
 											<tr *ngFor="let data of lstDviTrucThuoc; let i = index">
 												<td>{{i+1}}</td>
-												<td>{{getUnitName(data.maDvi)}}</td>
+												<td>{{getUnitNameDviTT(data.maDvi)}}</td>
 												<td>
 													<a (click)="xemChiTiet(data.id)" style="color: #1890ff;">
 														{{ data.maBcao}}
@@ -284,7 +284,7 @@
 												<td>{{data.namHienHanh}}</td>
 												<td>{{data.ngayDuyet}}</td>
 												<td>{{data.ngayPheDuyet}}</td>
-												<td>{{getStatusName(data.trangThai)}}</td>
+												<td>{{getStatusNameDviTT(data.trangThai)}}</td>
 											</tr>
 										</tbody>
 									</nz-table>
@@ -296,7 +296,7 @@
 									<textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
 								</div>
 							</div>
-						</ng-container> -->
+						</ng-container>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col nzSpan="24">
                 <label class="search__label">Thuyết minh</label>

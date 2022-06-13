@@ -42,7 +42,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     size: 10,
     page: 1,
   }
-
+  date: any = new Date()
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -54,6 +54,10 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.namPa = new Date().getFullYear()
   }
 
   redirectThongTinTimKiem() {
