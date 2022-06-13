@@ -746,9 +746,12 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { 
-      item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), 
-      item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => {
+      if (item.maLoai == this.tabSelected) {
+        item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp),
+          item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete
+      }
+    });
     this.tabSelected = maPhuLuc;
     // set listBCaoTemp theo ma phu luc vua chon
     let lstBcaosTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc);
@@ -785,11 +788,11 @@ export class BaoCaoComponent implements OnInit {
 
     if (this.danhSachChiTietPhuLucTemp.length > 0) {
       if (!this.danhSachChiTietPhuLucTemp[0].stt) {
-          await this.sortWithoutIndex();
+        await this.sortWithoutIndex();
       } else {
-          await this.sortByIndex();
+        await this.sortByIndex();
       }
-  }
+    }
 
     this.getStatusButtonOk();
   }
@@ -1866,45 +1869,47 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-  getChiMuc(str: string,dauMuc:string): string {
-    str = str.substring(str.indexOf('.') + 1, str.length);
-    var xau: string = "";
-    let chiSo: any = str.split('.');
-    var n: number = chiSo.length - 1;
-    var k: number = parseInt(chiSo[n], 10);
-    if(dauMuc == '4'){
-      if (n == 0) {
-        xau = "-";
-      }else if (n == 1){
-        xau = "+";
-      }
-    }else{
-      if (n == 0) {
-        for (var i = 0; i < this.soLaMa.length; i++) {
-          while (k >= this.soLaMa[i].gTri) {
-            xau += this.soLaMa[i].kyTu;
-            k -= this.soLaMa[i].gTri;
-          }
+  getChiMuc(str: string, dauMuc: string): string {
+    if (str) {
+      str = str.substring(str.indexOf('.') + 1, str.length);
+      var xau: string = "";
+      let chiSo: any = str.split('.');
+      var n: number = chiSo.length - 1;
+      var k: number = parseInt(chiSo[n], 10);
+      if (dauMuc == '4') {
+        if (n == 0) {
+          xau = "-";
+        } else if (n == 1) {
+          xau = "+";
         }
-      };
-      if (n == 1) {
-        xau = chiSo[n];
-      };
-      if (n == 2) {
-        xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-      };
-      if (n == 3) {
-        xau = String.fromCharCode(k + 96);
+      } else {
+        if (n == 0) {
+          for (var i = 0; i < this.soLaMa.length; i++) {
+            while (k >= this.soLaMa[i].gTri) {
+              xau += this.soLaMa[i].kyTu;
+              k -= this.soLaMa[i].gTri;
+            }
+          }
+        };
+        if (n == 1) {
+          xau = chiSo[n];
+        };
+        if (n == 2) {
+          xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+        };
+        if (n == 3) {
+          xau = String.fromCharCode(k + 96);
+        }
+        if (n == 4) {
+          xau = "-";
+        }
       }
-      if (n == 4) {
-        xau = "-";
-      }
+      return xau;
     }
-    return xau;
   }
   // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
   getHead(str: string): string {
-    return str.substring(0, str.lastIndexOf('.'));
+    return str?.substring(0, str.lastIndexOf('.'));
   }
   // lấy phần đuôi của stt
   getTail(str: string): number {
@@ -2083,7 +2088,7 @@ export class BaoCaoComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string, phuLuc: string): void {
-    
+
     if (this.tabSelected == TAB_SELECTED.phuLuc1) {
       if (!this.editCache[id].data.maNdung) {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
@@ -2135,7 +2140,7 @@ export class BaoCaoComponent implements OnInit {
         nho = phuLucTemp[index].checked;
       }
     }
-    
+
   }
   //kiểm tra các phần tử con có cùng được đánh dấu hay ko
   checkAllChild(str: string, phuLuc: string): boolean {
@@ -2178,14 +2183,7 @@ export class BaoCaoComponent implements OnInit {
 
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: any, phuLuc: string) {
-    let phuLucTemp = this.getPhuLuc(phuLuc);
-    // if (phuLuc == '11') {
-    //   phuLucTemp = this.danhSachChiTietPhuLuc11Temp;
-    // } else if (phuLuc == '12') {
-    //   phuLucTemp = this.danhSachChiTietPhuLuc12Temp;
-    // } else {
-    //   phuLucTemp = this.danhSachChiTietPhuLucTemp;
-    // }
+    let phuLucTemp = [];
     let item;
     if (initItem?.id) {
       item = {
@@ -2201,9 +2199,10 @@ export class BaoCaoComponent implements OnInit {
     }
     phuLucTemp.push(item);
     this.editCache[item.id] = {
-      edit: true,
+      edit: false,
       data: { ...item }
     };
+    this.setPhuLuc(phuLucTemp, phuLuc)
   }
 
   sortByIndex() {
@@ -2261,29 +2260,32 @@ export class BaoCaoComponent implements OnInit {
   sortWithoutIndex() {
     let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
     idPhuLuc.forEach(async phuLuc => {
-      await this.setDetail(phuLuc);
       let phuLucTemp = this.getPhuLuc(phuLuc);
-      this.setDetail(phuLuc);
-      var level = 0;
-      var danhSachChiTietPhuLucTempTemp: any[] = phuLucTemp;
-      phuLucTemp = [];
-      var data = danhSachChiTietPhuLucTempTemp.find(e => e.level == 0);
-      this.addFirst(data, phuLuc);
-      danhSachChiTietPhuLucTempTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.id != data.id);
-      var lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
-      while (lstTemp.length != 0 || level == 0) {
-        lstTemp.forEach(item => {
-          let idCha = this.getIdCha(item.maNdung);
-          var index: number = phuLucTemp.findIndex(e => e.maNdung == idCha);
-          if (index != -1) {
-            this.addLow(phuLucTemp[index].id, item, phuLuc);
-          } else {
-            index = phuLucTemp.findIndex(e => this.getIdCha(e.maNdung) == idCha);
-            this.addSame(phuLucTemp[index].id, item, phuLuc);
-          }
-        })
-        level += 1;
-        lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
+      if (phuLucTemp && phuLucTemp.length > 0) {
+
+        this.setDetail(phuLuc);
+        var level = 0;
+        var danhSachChiTietPhuLucTempTemp: any[] = phuLucTemp;
+        phuLucTemp = [];
+        var data = danhSachChiTietPhuLucTempTemp.find(e => e.level == 0);
+        this.addFirst(data, phuLuc);
+        danhSachChiTietPhuLucTempTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.id != data.id);
+        var lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
+        while (lstTemp.length != 0 || level == 0) {
+          lstTemp.forEach(item => {
+            let idCha = this.getIdCha(item.maNdung);
+            var index: number = phuLucTemp.findIndex(e => e.maNdung == idCha);
+            if (index != -1) {
+              this.addLow(phuLucTemp[index].id, item, phuLuc);
+            } else {
+              index = phuLucTemp.findIndex(e => this.getIdCha(e.maNdung) == idCha);
+              this.addSame(phuLucTemp[index].id, item, phuLuc);
+            }
+          })
+          level += 1;
+          lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
+        }
+
       }
     })
   }
@@ -2376,6 +2378,8 @@ export class BaoCaoComponent implements OnInit {
       return false;
     }
     return true;
+
+
   }
 
   getPhuLuc(phuLuc) {
