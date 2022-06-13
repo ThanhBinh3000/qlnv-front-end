@@ -164,7 +164,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 			return;
 		}
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/0/' + this.dotBcao + '/' + this.namHienTai + '/' +this.maDviTao,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu-/' + this.dotBcao + '/' + this.namHienTai + '/' + this.maDviTao,
 		])
 	}
 
