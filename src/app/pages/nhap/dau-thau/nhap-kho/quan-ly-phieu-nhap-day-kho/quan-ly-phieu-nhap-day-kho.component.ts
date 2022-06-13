@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -20,6 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   searchFilter = {
+    soQd: '',
     soBienBan: '',
     ngayNhapDayKho: '',
     ngayKetThucNhap: '',
@@ -47,6 +49,18 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   totalRecord: number = 0;
   isDetail: boolean = false;
   selectedId: number = 0;
+  isViewDetail: boolean;
+
+  filterTable = {
+    soQd: '',
+    soBienBan: '',
+    ngayBatDauNhap: '',
+    tenDiemKho: '',
+    tenNhaKho: '',
+    tenNganLo: '',
+    noiDung: '',
+  }
+  dataTableAll: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
@@ -54,7 +68,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {
@@ -109,6 +123,12 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
@@ -119,6 +139,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      soQd: '',
       soBienBan: '',
       ngayNhapDayKho: '',
       ngayKetThucNhap: '',
@@ -271,7 +292,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(id: number, isView?: boolean) {
     // if (!isView) {
     //   let urlChiTiet = this.router.url + '/thong-tin'
     //   this.router.navigate([urlChiTiet, id,]);
@@ -282,6 +303,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     // }
     this.selectedId = id;
     this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
 
   export() {
@@ -289,5 +311,33 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
   showList() {
     this.isDetail = false;
+  }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      soBienBan: '',
+      ngayBatDauNhap: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganLo: '',
+      noiDung: '',
+    }
   }
 }
