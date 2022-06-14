@@ -1463,10 +1463,10 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // lay ten trang thai ban ghi
-  getStatusName(id) {
+  getStatusName(Status: any) {
     const utils = new Utils();
-    return utils.getStatusName(id);
-  }
+    return utils.getStatusName(Status == '7' ? '6' : Status);
+  };
 
   getStatusAppendixName(id) {
     const utils = new Utils();

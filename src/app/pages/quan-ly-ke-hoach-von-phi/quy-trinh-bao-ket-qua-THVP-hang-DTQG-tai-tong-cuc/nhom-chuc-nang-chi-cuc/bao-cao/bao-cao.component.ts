@@ -1649,7 +1649,7 @@ export class BaoCaoComponent implements OnInit {
 
   getStatusName(Status: any) {
     const utils = new Utils();
-    return utils.getStatusName(Status);
+    return utils.getStatusName(Status == '7' ? '6' : Status);
   };
 
   getStatusAppendixName(id) {

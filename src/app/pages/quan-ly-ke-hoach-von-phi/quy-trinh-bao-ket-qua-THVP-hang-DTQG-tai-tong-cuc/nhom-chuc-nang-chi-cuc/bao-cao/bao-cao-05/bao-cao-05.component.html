@@ -494,7 +494,9 @@
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
-                <td [hidden]="status"></td>
+                <td [hidden]="status">
+                    <i class="fa fa-plus" (click)="addLine(null,'5-II1.1')"></i>
+                </td>
                 <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao5II11; let i = index">
@@ -759,8 +761,8 @@
                 </ng-template>
             </tr>
             <tr>
-                <td>1.2</td>
-                <td>Cục điều hành (nghiệp vụ chuyên môn)</td>
+                <td>2</td>
+                <td>Tổng cục phê duyệt trước khi thực hiện</td>
                 <td></td>
                 <td></td>
                 <td></td>
