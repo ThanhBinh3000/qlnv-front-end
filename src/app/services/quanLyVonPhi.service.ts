@@ -42,6 +42,15 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //search list bao cao
+  timKiemVonMuaBan(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/danh-sach',
+      'http://192.168.1.104:8094/nhap-ghi-nhan-von/danh-sach',
+      request,
+    );
+  }
+
+  //search list bao cao
   timKiemDeNghi(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/danh-sach',

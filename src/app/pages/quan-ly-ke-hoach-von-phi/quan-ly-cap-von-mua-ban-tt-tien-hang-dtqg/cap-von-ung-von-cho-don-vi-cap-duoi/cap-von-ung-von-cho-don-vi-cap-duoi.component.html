@@ -32,21 +32,9 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Phê duyệt</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
-					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Từ chối</span>
-				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
-					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Tiếp nhận</span>
-				</a>
 				<a class="btn btn-main" [hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
 				</a>
 				<a class="btn btn-main" (click)="close()">
 					<i nz-icon nzType="stop" nzTheme="outline"></i>

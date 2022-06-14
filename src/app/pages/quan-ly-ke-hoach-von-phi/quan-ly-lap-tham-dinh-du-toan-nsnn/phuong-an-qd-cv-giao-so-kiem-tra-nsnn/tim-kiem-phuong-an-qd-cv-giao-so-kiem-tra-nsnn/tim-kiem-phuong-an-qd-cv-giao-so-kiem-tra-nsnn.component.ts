@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,14 +31,15 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     searchFilter = {
         loaiTimKiem: "",
         namPa: null,
-        tuNgay: "",
-        denNgay: "",
+        tuNgay: null,
+        denNgay: null,
         donViTao: "",
         trangThai: "",
         maBaoCao: "",
         maPa: "",
         maPaBtc: "",
     };
+    newDate = new Date();
     //danh muc
     danhSachBaoCao: any = [];
     donViTaos: any[] = [];
@@ -91,6 +92,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
+        private location: Location,
     ) {
     }
 
@@ -106,6 +108,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.donViTao = this.userInfo?.dvql;
+
+        this.searchFilter.denNgay = new Date();
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
@@ -313,7 +319,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
 	}
 
     close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.location.back();
 	}
 
 }

@@ -29,7 +29,8 @@
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
 							[(ngModel)]="searchFilter.maTren"
 							[class]="statusBtnNew || searchFilter.maTren ?'' : 'input-error-validate'">
-							<nz-option *ngFor="let item of danhSachMaVon" [nzValue]="item" [nzLabel]="item">
+							<nz-option *ngFor="let item of danhSachMaVon" [nzValue]="item.maCapUngVonTuCapTren"
+								[nzLabel]="item.maCapUngVonTuCapTren">
 							</nz-option>
 						</nz-select>
 					</div>
@@ -83,17 +84,17 @@
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maDuoi}}
+									{{ item.maCapUngVonChoCapDuoi}}
 								</a>
 							</td>
-                            <td>
-                                {{item.maTren}}
-                            </td>
+							<td>
+								{{item.maCapUngVonTuCapTren}}
+							</td>
 							<td>
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayTrinhDuyet}}
+								{{item.ngayTrinh}}
 							</td>
 							<td>
 								{{item.ngayDuyet}}
@@ -103,7 +104,8 @@
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+								<ng-container
+									*ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
