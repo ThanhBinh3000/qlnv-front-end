@@ -716,8 +716,8 @@ export class QuanLyVonPhiService extends BaseService {
   }
   timKiemDieuChinh1(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
-      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
+      // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
 
