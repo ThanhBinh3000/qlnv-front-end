@@ -48,7 +48,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     maCvUv: string;
-    maCvUvTren: string; 
+    maCvUvTren: string;
     ngayTao: string;
     maDonViTao: string;
     ngayLap: string;
@@ -77,17 +77,12 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     statusBtnTBP: boolean;
     statusBtnLD: boolean;
     statusBtnCopy: boolean;
-    statusBtnPrint: boolean;
-    statusBtnGiao: boolean;
-    statusBtnBtc: boolean;
     allChecked = false;
     //khac
-    listId: string = '';
     lstFiles: any[] = []; //show file ra man hinh
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
-    fileDetail: NzUploadFile;
     //beforeUpload: any;
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
 
@@ -149,10 +144,10 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            await  this.dataSource.currentData.subscribe(obj => {
+            await this.dataSource.currentData.subscribe(obj => {
                 this.maCvUvTren = obj?.maCvUv;
             });
-            if (!this.maCvUvTren){
+            if (!this.maCvUvTren) {
                 this.close();
             }
             this.getTtGui();
@@ -162,7 +157,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
                     if (res.statusCode == 0) {
                         let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
                         var str: string;
-                        if (capDvi == Utils.CUC_KHU_VUC){
+                        if (capDvi == Utils.CUC_KHU_VUC) {
                             str = "CKV";
                         } else {
                             str = "CC";
@@ -270,7 +265,6 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     }
 
     //upload file
@@ -330,7 +324,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.maDonViTao = data.data.maDvi;      
+                    this.maDonViTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
                     this.ngayLapTemp = data.data.ngayLap;
@@ -351,7 +345,9 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
                     this.ttGui.soTienBangChu = data.data.soTienBangChu;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
                     this.thuyetMinh = data.data.thuyetMinh;
-                    this.trangThaiBanGhi = data.data.trangThai;            
+                    this.trangThaiBanGhi = data.data.trangThai;
+                    this.lstFiles = data.data.lstFileNhans;
+                    this.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -427,8 +423,8 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
-            fileDinhKemGuis: this.lstFiles,
-            listIdDeleteFileGuis: this.listIdFilesDelete,
+            fileDinhKemNhans: listFile,
+            listIdDeleteFileNhans: this.listIdFilesDelete,
             maLoai: "1",
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
@@ -504,11 +500,11 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     }
 
-    getMaDviTien(){
+    getMaDviTien() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 
-    modelChange(){
+    modelChange() {
         this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
 

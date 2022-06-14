@@ -49,6 +49,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//trang thai
 	status: boolean;
 	disable: boolean;
+	statusNew: boolean;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -150,7 +151,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-
+		this.statusNew = true;
 		let trangThais = [];
 		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
@@ -209,6 +210,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	}
 
 	taoMoi() {
+		this.statusNew = false;
 		if (!this.searchFilter.maCvUv) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
@@ -233,19 +235,19 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	}
 
 	xoaBaoCao(id: any) {
-		// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0){
-		// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-		// 			this.onSubmit();
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, data?.msg);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// )
+		this.quanLyVonPhiService.xoaVonMuaBan(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0){
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
 	}
 
 	checkDeleteReport(item: any): boolean {

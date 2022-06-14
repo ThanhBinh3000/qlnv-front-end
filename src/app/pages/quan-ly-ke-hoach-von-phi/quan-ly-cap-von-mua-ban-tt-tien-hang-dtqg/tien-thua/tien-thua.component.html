@@ -187,7 +187,6 @@
                                         </td>
                                         <td>
                                             <nz-input-number class="search__input"
-                                                [class]="ttGuiCache.nopThue || ttGuiCache.nopThue === 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.nopThue"
                                                 (ngModelChange)="changeModel()">
                                             </nz-input-number>
@@ -223,15 +222,15 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
                                 Danh sách văn bản đính kèm
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                <nz-upload [(nzFileList)]="ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
                                     [hidden]="statusGui">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Select File
                                     </button>
                                 </nz-upload>
-                                <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="statusGui" style="margin-top: 16px">
+                                <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
+                                    [disabled]="ttGui.fileList.length === 0" [hidden]="statusGui" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -248,16 +247,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let data of lstFiles; let i = index">
+                                        <tr *ngFor="let data of ttGui.lstFiles; let i = index">
                                             <td>{{ i + 1 }} </td>
                                             <td>{{ data.fileName }}</td>
                                             <td>
                                                 <button class="btn btn-function"
-                                                    (click)="downloadFile(data.id)">Xem</button>
+                                                    (click)="downloadFileGui(data.id)">Xem</button>
                                             </td>
                                             <td [hidden]="statusGui">
                                                 <button class="btn btn-function"
-                                                    (click)="deleteFile(data.id)">Xóa</button>
+                                                    (click)="deleteFileGui(data.id)">Xóa</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -283,12 +282,16 @@
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Ngày nhận lệnh chuyển có</label>
                                     <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
-                                        (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy">
+                                        (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
+                                        [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
                                     </nz-date-picker>
                                 </div>
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Tài khoản nhận</label>
-                                    <input nz-input class="search__input" [(ngModel)]="ttNhan.taiKhoanNhan" />
+                                    <nz-input-number class="search__input"
+                                        [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' "
+                                        nzSize="small" [(ngModel)]="ttNhan.taiKhoanNhan">
+                                    </nz-input-number>
                                 </div>
                             </ng-template>
                             <div nz-col nzSpan="12">
@@ -301,15 +304,15 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
                                 Danh sách văn bản đính kèm
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                <nz-upload [(nzFileList)]="ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
                                     [hidden]="statusNhan">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Select File
                                     </button>
                                 </nz-upload>
-                                <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="statusNhan" style="margin-top: 16px">
+                                <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
+                                    [disabled]="ttNhan.fileList.length === 0" [hidden]="statusNhan" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -326,16 +329,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let data of lstFiles; let i = index">
+                                        <tr *ngFor="let data of ttNhan.lstFiles; let i = index">
                                             <td>{{ i + 1 }} </td>
                                             <td>{{ data.fileName }}</td>
                                             <td>
                                                 <button class="btn btn-function"
-                                                    (click)="downloadFile(data.id)">Xem</button>
+                                                    (click)="downloadFileNhan(data.id)">Xem</button>
                                             </td>
                                             <td [hidden]="statusNhan">
                                                 <button class="btn btn-function"
-                                                    (click)="deleteFile(data.id)">Xóa</button>
+                                                    (click)="deleteFileNhan(data.id)">Xóa</button>
                                             </td>
                                         </tr>
                                     </tbody>

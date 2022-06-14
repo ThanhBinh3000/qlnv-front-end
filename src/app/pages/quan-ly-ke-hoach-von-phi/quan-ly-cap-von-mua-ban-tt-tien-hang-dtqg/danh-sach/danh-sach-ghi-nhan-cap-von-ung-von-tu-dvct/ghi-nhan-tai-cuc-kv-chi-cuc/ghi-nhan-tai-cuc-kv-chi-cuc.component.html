@@ -27,7 +27,8 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ cấp trên</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
-							[(ngModel)]="searchFilter.maCvUv">
+							[(ngModel)]="searchFilter.maCvUv"
+							[class]="statusNew || searchFilter.maCvUv ?'' : 'input-error-validate' ">
 							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonChoCapDuoi" [nzLabel]="item.maCapUngVonChoCapDuoi">
 							</nz-option>
 						</nz-select>
