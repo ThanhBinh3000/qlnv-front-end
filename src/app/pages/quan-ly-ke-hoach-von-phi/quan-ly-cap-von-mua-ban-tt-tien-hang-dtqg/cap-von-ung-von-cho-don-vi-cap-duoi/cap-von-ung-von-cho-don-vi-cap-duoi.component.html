@@ -159,7 +159,7 @@
 											{{getUnitName(data.dviNhan)}}
 										</td>
 										<td>
-											{{data.ngayLap}}
+											{{data.ngayLapTemp}}
 										</td>
 										<td>
 											<div *ngFor="let item of loaiVons">
@@ -169,7 +169,7 @@
 											</div>
 										</td>
 										<td>
-											{{data.ngayNhan}}
+											{{data.ngayNhanTemp}}
 										</td>
 										<td>
 											{{data.noiDung}}
@@ -221,7 +221,8 @@
 										</td>
 										<td>
 											<nz-date-picker class="search__input"
-												[(ngModel)]="editCache[data.id].data.ngayLap" nzFormat="dd/MM/yyyy">
+												[(ngModel)]="editCache[data.id].data.ngayLap" nzFormat="dd/MM/yyyy"
+												(ngModelChange)="changeDate(data.id)">
 											</nz-date-picker>
 										</td>
 										<td>
@@ -236,24 +237,28 @@
 										</td>
 										<td>
 											<nz-date-picker class="search__input"
-												[(ngModel)]="editCache[data.id].data.ngayNhan" nzFormat="dd/MM/yyyy">
+												[(ngModel)]="editCache[data.id].data.ngayNhan" nzFormat="dd/MM/yyyy"
+												(ngModelChange)="changeDate(data.id)">
 											</nz-date-picker>
 										</td>
 										<td>
 											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.noiDung" />
 										</td>
 										<td>
-											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maNguonNs" />
+											<nz-input-number class="search__input"
+												nzSize="small" [(ngModel)]="editCache[data.id].data.maNguonNs">
+											</nz-input-number>
 										</td>
 										<td>
-											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nienDoNs" />
+											<nz-input-number class="search__input"
+												nzSize="small" [(ngModel)]="editCache[data.id].data.nienDoNs">
+											</nz-input-number>
 										</td>
 										<td>
 											{{editCache[data.id].data.tongSoTien}}
 										</td>
 										<td>
 											<nz-input-number class="search__input"
-												[class]="editCache[data.id].data.nopThue || editCache[data.id].data.nopThue === 0 ?'' : 'input-error-validate' "
 												nzSize="small" [(ngModel)]="editCache[data.id].data.nopThue"
 												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
@@ -276,7 +281,7 @@
 										</td>
 										<td [hidden]="status">
 											<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-												(nzOnConfirm)="cancelEdit(data.id)" class="save">hủy</a>
+												(nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
 										</td>
 										<td [hidden]="status">
 											<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"

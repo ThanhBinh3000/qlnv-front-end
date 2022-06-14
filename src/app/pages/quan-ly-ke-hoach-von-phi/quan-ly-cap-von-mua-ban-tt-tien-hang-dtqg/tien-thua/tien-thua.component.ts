@@ -16,6 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
 
 
 export class ItemGui {
@@ -27,12 +28,20 @@ export class ItemGui {
     nopThue: number;
     ttChoDviHuong: number;
     thuyetMinh: string;
+    lstFiles: any[] = []; 
+    listFile: File[] = [];                     
+    fileList: NzUploadFile[] = [];
+    listIdFilesDelete: any = [];   
 }
 
 export class ItemNhan {
     ngayNhan: string;
     taiKhoanNhan: string;
     thuyetMinh: string;
+    lstFiles: any[] = []; 
+    listFile: File[] = [];                     
+    fileList: NzUploadFile[] = [];
+    listIdFilesDelete: any = [];   
 }
 
 @Component({
@@ -82,31 +91,39 @@ export class TienThuaComponent implements OnInit {
     statusLDParent: boolean;
     statusBtnParent: boolean;
     allChecked = false;
-    //khac
-    listId: string = '';
-    lstFiles: any[] = []; //show file ra man hinh
-    //file
-    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
-    fileList: NzUploadFile[] = [];
-    fileDetail: NzUploadFile;
-    //beforeUpload: any;
-    listIdFilesDelete: any = [];                        // id file luc call chi tiet
+    
+    // before uploaf file
+    beforeUploadGui = (file: NzUploadFile): boolean => {
+        this.ttGui.fileList = this.ttGui.fileList.concat(file);
+        return false;
+    };
 
     // before uploaf file
-    beforeUpload = (file: NzUploadFile): boolean => {
-        this.fileList = this.fileList.concat(file);
+    beforeUploadNhan = (file: NzUploadFile): boolean => {
+        this.ttNhan.fileList = this.ttNhan.fileList.concat(file);
         return false;
     };
 
     // them file vao danh sach
-    handleUpload(): void {
-        this.fileList.forEach((file: any) => {
+    handleUploadGui(): void {
+        this.ttGui.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name });
-            this.listFile.push(file);
+            this.ttGui.lstFiles.push({ id: id, fileName: file?.name });
+            this.ttGui.listFile.push(file);
         });
-        this.fileList = [];
+        this.ttGui.fileList = [];
     }
+
+    // them file vao danh sach
+    handleUploadNhan(): void {
+        this.ttNhan.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.ttNhan.lstFiles.push({ id: id, fileName: file?.name });
+            this.ttNhan.listFile.push(file);
+        });
+        this.ttNhan.fileList = [];
+    }
+
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -120,12 +137,12 @@ export class TienThuaComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService, 
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.maCvUv = this.routerActive.snapshot.paramMap.get('maCvUv');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -147,7 +164,13 @@ export class TienThuaComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
-            this.maDviTao = this.userInfo?.dvql;
+            this.statusBtnParent = true;
+            this.dataSource.currentData.subscribe(obj => {
+                this.maCvUv = obj?.maCvUv;
+            })
+            if (!this.maCvUv) {
+                this.close();
+            }
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.ngayLap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -228,11 +251,6 @@ export class TienThuaComponent implements OnInit {
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
             checkChirld = true;
         }
-        if (dVi?.parent?.maDvi == this.userInfo?.dvql) {
-            this.statusBtnParent = false;
-        } else {
-            this.statusBtnParent = true;
-        }
         let nguoiDangNhap = this.userInfo?.roles[0]?.code;
         const utils = new Utils();
         this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
@@ -271,18 +289,47 @@ export class TienThuaComponent implements OnInit {
     }
 
     // xoa file trong bang file
-    deleteFile(id: string): void {
-        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
-        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-        this.listIdFilesDelete.push(id);
+    deleteFileGui(id: string): void {
+        this.ttGui.lstFiles = this.ttGui.lstFiles.filter((a: any) => a.id !== id);
+        this.ttGui.listFile = this.ttGui.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.ttGui.listIdFilesDelete.push(id);
+    }
+
+    // xoa file trong bang file
+    deleteFileNhan(id: string): void {
+        this.ttNhan.lstFiles = this.ttNhan.lstFiles.filter((a: any) => a.id !== id);
+        this.ttNhan.listFile = this.ttNhan.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.ttNhan.listIdFilesDelete.push(id);
     }
 
     //download file về máy tính
-    async downloadFile(id: string) {
+    async downloadFileGui(id: string) {
         let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        file = this.ttGui.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            let fileAttach = this.ttGui.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    }
+
+    //download file về máy tính
+    async downloadFileNhan(id: string) {
+        let file!: File;
+        file = this.ttNhan.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            let fileAttach = this.ttNhan.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -306,6 +353,12 @@ export class TienThuaComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.maDviTao = data.data.maDvi;
+                    let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+                    if (dVi && dVi?.parent?.maDvi == this.userInfo?.dvql) {
+                        this.statusBtnParent = false;
+                    } else {
+                        this.statusBtnParent = true;
+                    }
                     this.maDviTien = data.data.maDviTien;
                     this.maTienThua = data.data.maNopTienThua;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
@@ -326,9 +379,9 @@ export class TienThuaComponent implements OnInit {
                     this.ttGui.noiDung = data.data.noiDung;
                     this.ttGui.maNguonNs = data.data.maNguonNs;
                     this.ttGui.nienDoNs = data.data.nienDoNs;
-                    this.ttGui.soTien = data.data.soTien;
-                    this.ttGui.nopThue = data.data.nopThue;
-                    this.ttGui.ttChoDviHuong = data.data.ttChoDviHuong;
+                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
+                    this.ttGui.nopThue = divMoney(data.data.nopThue, this.maDviTien);
+                    this.ttGui.ttChoDviHuong = divMoney(data.data.ttChoDviHuong, this.maDviTien);
                     this.ttGui.soTienBangChu = data.data.soTienBangChu;
                     this.ttGui.thuyetMinh = data.data.thuyetMinh;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
@@ -336,6 +389,10 @@ export class TienThuaComponent implements OnInit {
                     this.trangThaiCha = data.data.trangThaiDviCha;
                     this.ttNhan.thuyetMinh = data.data.thuyetMinhDviCha;
                     this.ttGuiCache = this.ttGui;
+                    this.ttGui.lstFiles = data.data.lstFileGuis;
+                    this.ttGui.listFile = [];
+                    this.ttNhan.lstFiles = data.data.lstFileNhans;
+                    this.ttNhan.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -408,6 +465,18 @@ export class TienThuaComponent implements OnInit {
 
     // luu
     async save() {
+        if (!this.statusBtnParent) {
+            if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+                return;
+            }
+        }
+
+        if (this.startEdit){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        
         if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
@@ -418,16 +487,23 @@ export class TienThuaComponent implements OnInit {
             return;
         }
         //get list file url
-        let listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
+        let listFileGui: any = [];
+        for (const iterator of this.ttGui.listFile) {
+            listFileGui.push(await this.uploadFile(iterator));
+        }
+        //get list file url
+        let listFileNhan: any = [];
+        for (const iterator of this.ttNhan.listFile) {
+            listFileNhan.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
             maLoai: "3",
-            fileDinhKemGuis: this.lstFiles,
-            listIdDeleteFileGuis: this.listIdFilesDelete,
+            fileDinhKemGuis: listFileGui,
+            listIdDeleteFileGuis: this.ttGui.listIdFilesDelete,
+            fileDinhKemNhans: listFileNhan,
+            listIdDeleteFileNhans: this.ttNhan.listIdFilesDelete,
             maDvi: this.maDviTao,
             maDviTien: this.maDviTien,
             maNopTienThua: this.maTienThua,
@@ -437,9 +513,9 @@ export class TienThuaComponent implements OnInit {
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
             nienDoNs: this.ttGui.nienDoNs,
-            soTien: this.ttGui.soTien,
-            nopThue: this.ttGui.nopThue,
-            ttChoDviHuong: this.ttGui.ttChoDviHuong,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
+            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
+            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
             soTienBangChu: this.ttGui.soTienBangChu,
             tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: this.trangThaiBanGhi,
@@ -498,6 +574,10 @@ export class TienThuaComponent implements OnInit {
 
     // luu thay doi
     saveEdit(): void {
+        if (!this.ttGuiCache.ttChoDviHuong && this.ttGuiCache.ttChoDviHuong !== 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -542,7 +622,15 @@ export class TienThuaComponent implements OnInit {
     }
 
     changeModel() {
-        this.ttGuiCache.soTien = Number(this.ttGuiCache.nopThue) + Number(this.ttGuiCache.ttChoDviHuong);
+        var nopThue: number = 0;
+        var ttChoDviHuong: number = 0;
+        if (this.ttGuiCache.nopThue){
+            nopThue = Number(this.ttGuiCache.nopThue);
+        }
+        if (this.ttGuiCache.ttChoDviHuong){
+            ttChoDviHuong = Number(this.ttGuiCache.ttChoDviHuong);
+        }
+        this.ttGuiCache.soTien = nopThue + ttChoDviHuong;
     }
 
 

@@ -114,7 +114,7 @@ const routes: Routes = [
 			).then((m) => m.TienThuaModule),
 	},
 	{
-		path: 'tien-thua/0/:maCvUv',
+		path: 'tien-thua',
 		loadChildren: () =>
 			import(
 				'./tien-thua/tien-thua.module'
@@ -128,7 +128,7 @@ const routes: Routes = [
 			).then((m) => m.ThanhToanChoKhachHangModule),
 	},
 	{
-		path: 'thanh-toan-cho-khach-hang/0/:maCvUv',
+		path: 'thanh-toan-cho-khach-hang',
 		loadChildren: () =>
 			import(
 				'./thanh-toan-cho-khach-hang/thanh-toan-cho-khach-hang.module'
