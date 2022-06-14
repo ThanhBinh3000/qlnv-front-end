@@ -1,5 +1,6 @@
 import { QuanLyCapVonMuaBanTtTienHangDtqg } from './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.type';
 import { MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_CAP_VON_MUA_BAN_TT_TIEN_HANG_DTQG } from '../../../constants/routerUrl';
+import { Utils } from 'src/app/Utility/utils';
 export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanTtTienHangDtqg[] = [
 	{
 		icon: 'htvbdh_tcdt_icon-common',
@@ -98,3 +99,57 @@ export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanT
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_CAP_VON_MUA_BAN_TT_TIEN_HANG_DTQG}/danh-sach-thanh-toan-cho-khach-hang/1`,
 	},
 ];
+
+export const TRANG_THAI_TIM_KIEM_CON = [
+	{
+		id: Utils.TT_BC_1,
+		tenDm: "Đang soạn",
+	},
+	{
+		id: Utils.TT_BC_2,
+		tenDm: "Trình duyệt",
+	},
+	{
+		id: Utils.TT_BC_3,
+		tenDm: "Trưởng BP từ chối",
+	},
+	{
+		id: Utils.TT_BC_4,
+		tenDm: "Trưởng BP duyệt",
+	},
+	{
+		id: Utils.TT_BC_5,
+		tenDm: "Lãnh đạo từ chối",
+	},
+	{
+		id: Utils.TT_BC_7,
+		tenDm: "Lãnh đạo phê duyệt",
+	},
+]
+
+export const TRANG_THAI_TIM_KIEM_CHA = [
+	{
+		id: Utils.TT_BC_1,
+		tenDm: "Mới",
+	},
+	{
+		id: Utils.TT_BC_2,
+		tenDm: "Trình duyệt",
+	},
+	{
+		id: Utils.TT_BC_3,
+		tenDm: "Trưởng BP từ chối",
+	},
+	{
+		id: Utils.TT_BC_4,
+		tenDm: "Trưởng BP duyệt",
+	},
+	{
+		id: Utils.TT_BC_5,
+		tenDm: "Lãnh đạo từ chối",
+	},
+	{
+		id: Utils.TT_BC_7,
+		tenDm: "Lãnh đạo phê duyệt",
+	},
+]

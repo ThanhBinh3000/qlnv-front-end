@@ -85,12 +85,7 @@
                         <ng-container *ngIf="status;else templateName">
                             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                 <div nz-col class="gutter-row" [nzSpan]="3">
-                                    Đơn vị:
-                                    <div *ngFor="let item of donViTiens">
-                                        <div *ngIf="item.id == maDviTien">
-                                            {{item.tenDm}}
-                                        </div>
-                                    </div>
+                                    Đơn vị: {{getMaDviTien()}}
                                 </div>
                             </div>
                         </ng-container>
@@ -124,7 +119,7 @@
                                             {{ttGui.soTien}}
                                         </td>
                                         <td>
-                                            {{ttGui.ngayThanhToan}}
+                                            {{ngayThanhToan}}
                                         </td>
                                         <td [hidden]="status">
                                             <i class="fa fa-pencil" (click)="startEdit()"></i>
@@ -143,7 +138,7 @@
                                         </td>
                                         <td>
                                             <nz-date-picker class="search__input" [(ngModel)]="ttGui.ngayThanhToan"
-                                                nzFormat="dd/MM/yyyy">
+                                                nzFormat="dd/MM/yyyy" (ngModelChange)="changeDate()">
                                             </nz-date-picker>
                                         </td>
                                         <td [hidden]="status">

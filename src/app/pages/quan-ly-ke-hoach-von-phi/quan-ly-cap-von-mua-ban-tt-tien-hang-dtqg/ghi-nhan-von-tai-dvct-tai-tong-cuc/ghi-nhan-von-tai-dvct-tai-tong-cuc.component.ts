@@ -16,16 +16,18 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
     noiDung: string;
-    maNguonNs: string;
-    maChuong: string;
-    maNdkt: string;
+    maNguonNs: number;
+    maChuong: number;
+    maNdkt: number;
     soTien: number;
     soTienChu: string;
-    taiKhoan: string;
+    taiKhoan: number;
 }
 
 export class ItemNhan {
@@ -50,6 +52,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     loaiVon: string;
     soLenhChiTien: string;
     ngayLap: string;
+    ngayLapTemp: string;
     ngayNhan: string;
     ngayTrinhDuyet: string;
     ngayDuyet: string;
@@ -63,6 +66,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     thuyetMinh: string;
     //danh muc
     donVis: any[] = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     loaiVons: any[] = LOAI_VON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
@@ -116,15 +120,13 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.loaiVon = this.routerActive.snapshot.paramMap.get('loai');
-        this.maCvUv = this.routerActive.snapshot.paramMap.get('ma');
-        this.soLenhChiTien = this.routerActive.snapshot.paramMap.get('soLenhChi');
-        
+
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -149,8 +151,17 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         } else {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
+            await this.dataSource.currentData.subscribe(obj => {
+                this.maCvUv = obj?.maCvUv;
+                this.loaiVon = obj?.loaiCap;
+                this.soLenhChiTien = obj?.soLenhChiTien;
+                this.ngayLapTemp = obj?.ngayLap;
+                this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
+            })
+            if (!this.maCvUv) {
+                this.close();
+            }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.ngayLap = this.ngayTao;
             this.spinner.show();
         }
 
@@ -205,7 +216,6 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     }
 
     //upload file
@@ -266,10 +276,13 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
+                    this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
                     this.soLenhChiTien = data.data.soLechChiTien;
-                    this.ngayLap = this.datePipe.transform(data.data.ngayLap, Utils.FORMAT_DATE_STR);
-                    this.ttNhan.ngayNhan = this.datePipe.transform(data.data.ngayNhan, Utils.FORMAT_DATE_STR);
+                    this.ngayLapTemp = data.data.ngayLap;
+                    this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
+                    this.ttNhan.ngayNhan = data.data.ngayNhan;
+                    this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
                     this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
@@ -280,11 +293,10 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                     this.ttGui.maNguonNs = data.data.maNguonNs;
                     this.ttGui.maChuong = data.data.maChuong;
                     this.ttGui.maNdkt = data.data.maNdkt;
-                    this.ttGui.soTien = data.data.soTien;
+                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
                     this.ttGui.soTienChu = data.data.soTienBangChu;
                     this.ttGui.taiKhoan = data.data.tuTk;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
-                    this.maDviTien = data.data.maDviTien;
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -348,7 +360,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien) {
+        if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -358,7 +370,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         }
 
         // gui du lieu trinh duyet len server
-        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT){
+        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -378,13 +390,13 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             maCapUngVonTuCapTren: this.maCvUv,
             loaiCap: this.loaiVon,
             soLechChiTien: this.soLenhChiTien,
-            ngayLap: this.datePipe.transform(this.ngayLap, "yyyy-MM-dd"),
-            ngayNhan: this.datePipe.transform(this.ttNhan.ngayNhan, "yyyy-MM-dd"),
+            ngayLap: this.ngayLapTemp,
+            ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
             maChuong: this.ttGui.maChuong,
             maNdkt: this.ttGui.maNdkt,
-            soTien: this.ttGui.soTien,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
             soTienBangChu: this.ttGui.soTienChu,
             tuTk: this.ttGui.taiKhoan,
             tkNhan: this.ttNhan.taiKhoanNhan,
@@ -393,13 +405,13 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         };
 
         this.spinner.show();
-        if (!this.id){
+        if (!this.id) {
             this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                         this.router.navigate([
-                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' 
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/'
                             + data.data.id
                         ]);
                     } else {
@@ -435,8 +447,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThaiBanGhi);
+        return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
     // start edit
@@ -452,21 +463,32 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     // luu thay doi
     saveEdit(): void {
+        if ((!this.ttGuiCache.soTien && this.ttGuiCache.soTien !== 0) ||
+            !this.ttGuiCache.taiKhoan) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
 
-    modelChange(){
-        this.ttNhan.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
+    changeDate() {
+        this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
 
     close() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
+        this.router.navigate([
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-tong-cuc/0'
+        ]);
     }
 
-  
-    async doCopy(){
-        
+    getMaDviTien(){
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
+
+    async doCopy() {
+
     }
 
 

@@ -72,11 +72,18 @@ const routes: Routes = [
 			).then((m) => m.GhiNhanVonTaiDvctTaiTongCucModule),
 	},
 	{
-		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc/:loai/:ma/:soLenhChi',
+		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc',
 		loadChildren: () =>
 			import(
 				'./ghi-nhan-von-tai-dvct-tai-tong-cuc/ghi-nhan-von-tai-dvct-tai-tong-cuc.module'
 			).then((m) => m.GhiNhanVonTaiDvctTaiTongCucModule),
+	},
+	{
+		path: 'ghi-nhan-von-tai-ckv-cc/:id',
+		loadChildren: () =>
+			import(
+				'./ghi-nhan-von-tai-ckv-cc/ghi-nhan-von-tai-ckv-cc.module'
+			).then((m) => m.GhiNhanVonTaiCkvCcModule),
 	},
 	{
 		path: 'ghi-nhan-von-tai-ckv-cc',
@@ -87,6 +94,13 @@ const routes: Routes = [
 	},
 	{
 		path: 'von-ban-hang',
+		loadChildren: () =>
+			import(
+				'./von-ban-hang/von-ban-hang.module'
+			).then((m) => m.VonBanHangModule),
+	},
+	{
+		path: 'von-ban-hang/:id',
 		loadChildren: () =>
 			import(
 				'./von-ban-hang/von-ban-hang.module'
@@ -128,7 +142,7 @@ const routes: Routes = [
 			).then((m) => m.CapVonUngVonChoDonViCapDuoiModule),
 	},
 	{
-		path: 'cap-von-ung-von-cho-don-vi-cap-duoi/0/:maTren',
+		path: 'cap-von-ung-von-cho-don-vi-cap-duoi',
 		loadChildren: () =>
 			import(
 				'./cap-von-ung-von-cho-don-vi-cap-duoi/cap-von-ung-von-cho-don-vi-cap-duoi.module'

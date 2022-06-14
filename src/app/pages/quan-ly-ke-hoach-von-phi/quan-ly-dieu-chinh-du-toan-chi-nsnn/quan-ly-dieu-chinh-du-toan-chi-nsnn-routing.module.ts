@@ -43,6 +43,13 @@ const routes: Routes = [
       ).then((m) => m.GiaoNhiemVuModule),
   },
   {
+    path: 'giao-nhiem-vu-/:id',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
+  {
     path: 'giao-nhiem-vu-/:dotBcao/:namHienHanh/:maDvi',
     loadChildren: () =>
       import(
@@ -50,7 +57,7 @@ const routes: Routes = [
       ).then((m) => m.GiaoNhiemVuModule),
   },
   {
-    path: 'giao-nhiem-vu/:namHienHanh',
+    path: 'giao-nhiem-vu/0/:namHienHanh',
     loadChildren: () =>
       import(
         './giao-nhiem-vu/giao-nhiem-vu.module'

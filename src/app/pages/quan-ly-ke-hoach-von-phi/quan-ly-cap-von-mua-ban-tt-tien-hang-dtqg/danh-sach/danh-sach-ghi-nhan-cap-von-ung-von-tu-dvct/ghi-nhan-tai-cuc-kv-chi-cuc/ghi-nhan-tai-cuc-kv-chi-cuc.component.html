@@ -26,7 +26,11 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ cấp trên</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.maCvUv" />
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
+							[(ngModel)]="searchFilter.maCvUv">
+							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonChoCapDuoi" [nzLabel]="item.maCapUngVonChoCapDuoi">
+							</nz-option>
+						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
@@ -81,12 +85,12 @@
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maCvUv}}
+									{{ item.maCapUngVonTuCapTren}}
 								</a>
 							</td>
 							<td>
 								<div *ngFor="let e of loaiVons">
-									<div *ngIf="e.id == item.loaiVon">
+									<div *ngIf="e.id == item.loaiCap">
 										{{e.tenDm}}
 									</div>
 								</div>
@@ -101,7 +105,7 @@
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayTrinhDuyet}}
+								{{item.ngayTrinh}}
 							</td>
 							<td>
 								{{item.ngayDuyet}}

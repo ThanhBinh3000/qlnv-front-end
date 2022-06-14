@@ -77,7 +77,7 @@
                             </td>
                             <td>{{soLenhChiTien}}</td>
                             <td>{{ngayLap}}</td>
-                            <td>{{ttNhan.ngayNhan}}</td>
+                            <td>{{ngayNhan}}</td>
                             <td>{{ngayTao}}</td>
                             <td>{{ngayTrinhDuyet}}</td>
                             <td>{{ngayDuyet}}</td>
@@ -87,18 +87,13 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <div class="tab__container" >
+            <div class="tab__container">
                 <nz-tabset nzType="card" class="tab__container">
                     <nz-tab [nzTitle]="'Thông tin nơi gửi'">
                         <ng-container *ngIf="status;else templateName">
                             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                 <div nz-col class="gutter-row" [nzSpan]="3">
-                                    Đơn vị:
-                                    <div *ngFor="let item of donViTiens">
-                                        <div *ngIf="item.id == maDviTien">
-                                            {{item.tenDm}}
-                                        </div>
-                                    </div>
+                                    Đơn vị: {{getMaDviTien()}}
                                 </div>
                             </div>
                         </ng-container>
@@ -160,13 +155,19 @@
                                             <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
                                         </td>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNguonNs" />
+                                            <nz-input-number class="search__input" nzSize="small"
+                                                [(ngModel)]="ttGuiCache.maNguonNs">
+                                            </nz-input-number>
                                         </td>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maChuong" />
+                                            <nz-input-number class="search__input" nzSize="small"
+                                                [(ngModel)]="ttGuiCache.maChuong">
+                                            </nz-input-number>
                                         </td>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNdkt" />
+                                            <nz-input-number class="search__input" nzSize="small"
+                                                [(ngModel)]="ttGuiCache.maNdkt">
+                                            </nz-input-number>
                                         </td>
                                         <td>
                                             <nz-input-number class="search__input"
@@ -178,7 +179,10 @@
                                             <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
                                         </td>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.taiKhoan" />
+                                            <nz-input-number class="search__input"
+                                                [class]="ttGuiCache.taiKhoan || ttGuiCache.taiKhoan === 0 ?'' : 'input-error-validate' "
+                                                nzSize="small" [(ngModel)]="ttGuiCache.taiKhoan">
+                                            </nz-input-number>
                                         </td>
                                         <td [hidden]="status">
                                             <a (click)="saveEdit()" class="save">Lưu</a>
@@ -196,26 +200,37 @@
                 <nz-tabset nzType="card" class="tab__container">
                     <nz-tab [nzTitle]="'Thông tin nơi nhận'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div nz-col nzSpan="6">
-                                <label class="search__label">Ngày nhận lệnh chuyển có</label>
-                                <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan" [hidden]="status"
-                                    nzFormat="dd/MM/yyyy"
-                                    (ngModelChange)="modelChange()">
-                                </nz-date-picker>
-                                <div [hidden]="!status">
-                                    {{ttNhan.ngayNhan}}
+                            <ng-container *ngIf="status; else nhap">
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">
+                                        Ngày nhận lệnh chuyển có: <span>{{ngayNhan}}</span>
+                                    </label>
                                 </div>
-                            </div>
-                            <div nz-col nzSpan="6">
-                                <label class="search__label">Tài khoản nhận</label>
-                                <input nz-input class="search__input" [(ngModel)]="ttNhan.taiKhoanNhan" [hidden]=status/>
-                                <div [hidden]="!status">
-                                    {{ttNhan.taiKhoanNhan}}
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">
+                                        Tài khoản nhận: <span>{{ttNhan.taiKhoanNhan}}</span>
+                                    </label>
                                 </div>
-                            </div>
+                            </ng-container>
+                            <ng-template #nhap>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Ngày nhận lệnh chuyển có</label>
+                                    <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
+                                        (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
+                                        [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
+                                    </nz-date-picker>
+                                </div>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Tài khoản nhận</label>
+                                    <nz-input-number class="search__input" nzSize="small"
+                                        [(ngModel)]="ttNhan.taiKhoanNhan"
+                                        [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' ">
+                                    </nz-input-number>
+                                </div>
+                            </ng-template>
                             <div nz-col nzSpan="12">
                             </div>
-                            <div nz-col nzSpan="24">
+                            <div nz-col nzSpan="24" style="margin-top: 10px;">
                                 <label class="search__label">Thuyết minh</label>
                                 <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
                             </div>
