@@ -61,7 +61,7 @@
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="Danh sách nhập vốn bán hàng lên đơn vị cấp trên" [nzExtra]="tableCard1"
+			<nz-card nzTitle="Danh sách ghi nhận vốn bán hàng lên đơn vị cấp trên" 
 				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
@@ -81,7 +81,7 @@
 							<th>Ngày TBP duyệt</th>
 							<th>Ngày lãnh đạo duyệt</th>
 							<th>Trạng thái</th>
-							<th></th>
+							<th [hidden]="status"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -96,7 +96,7 @@
 							</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maNop}}
+									{{ item.maNopTienVon}}
 								</a>
 							</td>
 							<td>
@@ -109,32 +109,25 @@
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayTrinhDuyet}}
+								{{item.ngayTrinhDviCha}}
 							</td>
 							<td>
-								{{item.ngayDuyet}}
+								{{item.ngayDuyetDviCha}}
 							</td>
 							<td>
-								{{item.ngayPheDuyet}}
+								{{item.ngayPheDuyetDviCha}}
 							</td>
 							<td>
-								{{getStatusName(item.trangThai)}}
+								{{getStatusName(item.trangThaiDviCha)}}
 								<ng-container
-									*ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-									<br>Lý do: {{item.lyDoTuChoi}}
+									*ngIf="item.trangThaiDviCha == '3' || item.trangThaiDviCha == '5'">
+									<br>Lý do: {{item.lyDoTuChoiDviCha}}
 								</ng-container>
 							</td>
-							<td>
-								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item)">
-										<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
-									</ng-container>
-								</ng-container>
-								<ng-template #pheDuyet>
+							<td [hidden]="status">
 									<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 										Phê duyệt
 									</a>
-								</ng-template>
 							</td>
 						</tr>
 					</tbody>
@@ -159,12 +152,6 @@
 					</div>
 				</div>
 			</nz-card>
-			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
-					<i class="icon htvbdh_dau-cong"></i>
-					<span>Tạo mới</span>
-				</button>
-			</ng-template>
 		</div>
 	</div>
 </div>

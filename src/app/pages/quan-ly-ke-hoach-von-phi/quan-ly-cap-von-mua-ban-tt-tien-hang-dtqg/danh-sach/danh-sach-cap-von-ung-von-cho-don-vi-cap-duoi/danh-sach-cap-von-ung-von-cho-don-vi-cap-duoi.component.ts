@@ -258,19 +258,19 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	}
 
 	xoaBaoCao(id: any) {
-		// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0){
-		// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-		// 			this.onSubmit();
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, data?.msg);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// )
+		this.quanLyVonPhiService.xoaCapVon(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0){
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
 	}
 
 	checkDeleteReport(item: any): boolean {

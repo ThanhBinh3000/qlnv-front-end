@@ -110,8 +110,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.searchFilter.donViTao = this.userInfo?.dvql;
 
         this.searchFilter.denNgay = new Date();
-		this.newDate.setMonth(this.newDate.getMonth() -1);
-		this.searchFilter.tuNgay = this.newDate;
+        this.newDate.setMonth(this.newDate.getMonth() - 1);
+        this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
@@ -179,8 +179,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             maPa: this.searchFilter.maPa,
             maPaBtc: this.searchFilter.maPaBtc,
             namPa: this.searchFilter.namPa,
-            ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
-            ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             maBcao: this.searchFilter.maBaoCao,
             str: null,
             trangThai: this.searchFilter.trangThai,
@@ -225,13 +225,49 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
 
     async taoMoi() {
         this.statusBtnBcao = false;
-        if (this.loai == "0" && !this.searchFilter.maBaoCao){
+        if (this.loai == "0" && !this.searchFilter.maBaoCao) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (this.loai == "0"){
+        if (this.loai == "0") {
+            let checkBcao = false;
+            let requestReport = {
+                loaiTimKiem: "0",
+                maBcao: this.searchFilter.maBaoCao,
+                maDvi: this.searchFilter.donViTao,
+                namBcao: "",
+                ngayTaoDen: "",
+                ngayTaoTu: "",
+                paggingReq: {
+                    limit: this.pages.size,
+                    page: this.pages.page,
+                },
+                trangThais: [Utils.TT_BC_7],
+            };
+            this.spinner.show();
+            await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+                (data) => {
+                    if (data.statusCode == 0) {
+                        if (data.data.content.length > 0) {
+                            checkBcao = true;
+                        }
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+            );
+            this.spinner.hide();
+            if (!checkBcao){
+                this.notification.warning(MESSAGE.WARNING, "Không tìm thấy mã báo cáo: " + this.searchFilter.maBaoCao);
+                return;
+            }
+        }
+        if (this.loai == "0") {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/0/' +this.searchFilter.maBaoCao,
+                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/0/' + this.searchFilter.maBaoCao,
             ]);
         } else {
             this.router.navigate([
@@ -241,7 +277,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     xemChiTiet(id: string) {
-        if (this.loai == "0"){
+        if (this.loai == "0") {
             this.router.navigate([
                 '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/' + id,
             ])
@@ -288,38 +324,38 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
-    checkDeleteReport(item: any): boolean{
-		var check: boolean = false;
-        if (this.userInfo?.username == item.nguoiTao){
-            if (this.status){
+    checkDeleteReport(item: any): boolean {
+        var check: boolean = false;
+        if (this.userInfo?.username == item.nguoiTao) {
+            if (this.status) {
                 check = true;
             } else {
-                if (item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8){
+                if (item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) {
                     check = true;
                 }
             }
         }
-		return check;
-	}
+        return check;
+    }
 
-    xoaPA(id: any){
-		this.quanLyVonPhiService.xoaPhuongAn(id).toPromise().then(
-			data => {
-				if (data.statusCode == 0){
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-					this.onSubmit();
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		)
-	}
+    xoaPA(id: any) {
+        this.quanLyVonPhiService.xoaPhuongAn(id).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                    this.onSubmit();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        )
+    }
 
     close() {
-		this.location.back();
-	}
+        this.location.back();
+    }
 
 }
