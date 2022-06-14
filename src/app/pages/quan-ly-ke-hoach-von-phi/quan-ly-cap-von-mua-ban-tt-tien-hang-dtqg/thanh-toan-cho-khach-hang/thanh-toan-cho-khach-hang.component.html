@@ -128,7 +128,8 @@
 
                                     <ng-template #editTemplate>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
+                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" 
+                                            [class]="ttGuiCache.noiDung ?'' : 'input-error-validate' "/>
                                         </td>
                                         <td>
                                             <nz-input-number class="search__input"
@@ -137,8 +138,9 @@
                                             </nz-input-number>
                                         </td>
                                         <td>
-                                            <nz-date-picker class="search__input" [(ngModel)]="ttGui.ngayThanhToan"
-                                                nzFormat="dd/MM/yyyy" (ngModelChange)="changeDate()">
+                                            <nz-date-picker class="search__input" [(ngModel)]="ttGuiCache.ngayThanhToan"
+                                                nzFormat="dd/MM/yyyy" 
+                                                [class]="ttGuiCache.ngayThanhToan ?'' : 'input-error-validate' ">
                                             </nz-date-picker>
                                         </td>
                                         <td [hidden]="status">

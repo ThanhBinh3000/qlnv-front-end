@@ -297,6 +297,8 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                     this.ttGui.soTienChu = data.data.soTienBangChu;
                     this.ttGui.taiKhoan = data.data.tuTk;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
+                    this.lstFiles = data.data.lstFileNhans;
+                    this.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -385,7 +387,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             maLoai: '1',
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
-            fileDinhKemNhans: this.lstFiles,
+            fileDinhKemNhans: listFile,
             listIdDeleteFileNhans: this.listIdFilesDelete,
             maCapUngVonTuCapTren: this.maCvUv,
             loaiCap: this.loaiVon,

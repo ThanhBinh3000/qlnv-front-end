@@ -16,6 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
 
 
 export class ItemGui {
@@ -102,12 +103,12 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.maCvUv = this.routerActive.snapshot.paramMap.get('maCvUv');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -130,6 +131,13 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         } else {
             this.trangThaiBanGhi = '1';
             this.maDviTao = this.userInfo?.dvql;
+            this.dataSource.currentData.subscribe(obj => {
+                this.maCvUv = obj?.maCvUv;
+                this.khachHang = obj?.khachHang;
+            }) 
+            if (!this.maCvUv){
+                this.close();
+            }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
             this.quanLyVonPhiService.maThanhToan().toPromise().then(
@@ -256,7 +264,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.maDviTao = data.data.maDvi;      
+                    this.maDviTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.maThanhToan = data.data.maThanhToan;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
@@ -264,11 +272,15 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    this.khachHang = data.data.khachHang;
                     this.ttGui.noiDung = data.data.noiDung;
-                    this.ttGui.soTien = data.data.soTien;
+                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
                     this.ttGui.ngayThanhToan = data.data.ngayThanhToan;
-                    this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR); 
-                    this.trangThaiBanGhi = data.data.trangThai; 
+                    this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
+                    this.trangThaiBanGhi = data.data.trangThai;
+                    this.thuyetMinh = data.data.thuyetMinh;
+                    this.lstFiles = data.data.lstFileGuis;
+                    this.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -332,12 +344,17 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     // luu
     async save() {
+        if (this.statusEdit){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
         if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
         // gui du lieu trinh duyet len server
-        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT){
+        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -350,15 +367,16 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         let request = {
             id: this.id,
             maLoai: "4",
-            fileDinhKemGuis: this.lstFiles,
+            fileDinhKemGuis: listFile,
             listIdDeleteFileGuis: this.listIdFilesDelete,
             maDvi: this.maDviTao,
-            maDviTien: this.maDviTien, 
+            maDviTien: this.maDviTien,
+            khachHang: this.khachHang,
             maThanhToan: this.maThanhToan,
             maCapUngVonTuCapTren: this.maCvUv,
             ngayThanhToan: this.ttGui.ngayThanhToan,
             noiDung: this.ttGui.noiDung,
-            soTien: this.ttGui.soTien,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
             trangThai: this.trangThaiBanGhi,
             thuyetMinh: this.thuyetMinh,
         };
@@ -413,8 +431,15 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     // luu thay doi
     saveEdit(): void {
+        if (!this.ttGuiCache.noiDung ||
+            !this.ttGuiCache.ngayThanhToan ||
+            (!this.ttGuiCache.soTien && this.ttGuiCache.soTien !== 0)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
+        this.changeDate();
     }
 
 
@@ -434,15 +459,15 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         ]);
     }
 
-    async doCopy(){
-        
+    async doCopy() {
+
     }
 
-    changeDate(){
+    changeDate() {
         this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
     }
 
-    getMaDviTien(){
+    getMaDviTien() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 

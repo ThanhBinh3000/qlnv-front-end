@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
+import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
 	selector: 'app-danh-sach-ghi-nhan-tien-von-thua',
@@ -33,40 +34,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	};
 	//danh muc
 	danhSach: any[] = [];
-	trangThais: any[] = [
-		{
-			id: Utils.TT_BC_1,
-			tenDm: "Đang soạn",
-		},
-		{
-			id: Utils.TT_BC_2,
-			tenDm: "Trình duyệt",
-		},
-		{
-			id: Utils.TT_BC_3,
-			tenDm: "TBP từ chối",
-		},
-		{
-			id: Utils.TT_BC_4,
-			tenDm: "TBP chấp nhận",
-		},
-		{
-			id: Utils.TT_BC_5,
-			tenDm: "Lãnh đạo từ chối",
-		},
-		{
-			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo chấp nhận",
-		},
-		{
-			id: Utils.TT_BC_8,
-			tenDm: "Từ chối",
-		},
-		{
-			id: Utils.TT_BC_9,
-			tenDm: "Tiếp nhận",
-		},
-	];
+	trangThais: any[] = TRANG_THAI_TIM_KIEM_CHA;
 	donVis: any[] = [];
 	loaiVons: any[] = LOAI_VON;
 	//phan trang
@@ -119,20 +87,10 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN) {
-				this.searchFilter.trangThai = Utils.TT_BC_7;
-				this.trangThais = [
-					{
-						id: Utils.TT_BC_7,
-						tenDm: "Mới",
-					}
-				]
+			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
-				if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
-					this.searchFilter.trangThai = Utils.TT_BC_2;
-				} else {
-					this.searchFilter.trangThai = Utils.TT_BC_4;
-				}
+				this.searchFilter.trangThai = Utils.TT_BC_4;
 			}
 		}
 
@@ -164,26 +122,33 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
-			loaiTimKiem: "0",
-			// maBcao: this.searchFilter.maBaoCao,
-			// maDvi: this.searchFilter.donViTao,
-			// namBcao: this.searchFilter.nam,
+			loaiTimKiem: "1",
+			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
+			maNopTienThua: this.searchFilter.maTienThua,
+			dviGui: this.searchFilter.maDviGui,
+			maDvi: this.userInfo?.dvql,
+			maLoai: "3",
+			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: trangThais,
+			trangThaiDviChas: trangThais,
 		};
 		this.spinner.show();
-		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.danhSach = data.data.content;
 					this.danhSach.forEach(e => {
+						e.ngayLap = this.datePipe.transform(e.ngayLap, Utils.FORMAT_DATE_STR);
+						e.ngayNhan = this.datePipe.transform(e.ngayNhan, Utils.FORMAT_DATE_STR);
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayTrinhDviCha = this.datePipe.transform(e.ngayTrinhDviCha, Utils.FORMAT_DATE_STR);
+						e.ngayDuyetDviCha = this.datePipe.transform(e.ngayDuyetDviCha, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyetDviCha = this.datePipe.transform(e.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -198,6 +163,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		this.spinner.hide();
 	}
 
+
 	//doi so trang
 	onPageIndexChange(page) {
 		this.pages.page = page;
@@ -210,27 +176,9 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		this.onSubmit();
 	}
 
-	taoMoi() {
-		// if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-		// 	if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-		// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-		// 		return;
-		// 	}
-		// }
-		// if (!this.searchFilter.nam){
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-		// 	]);
-		// } else {
-		// 	this.router.navigate([
-		// 		'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-		// 	]);
-		// }
-	}
-
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + id,
 		])
 	}
 
