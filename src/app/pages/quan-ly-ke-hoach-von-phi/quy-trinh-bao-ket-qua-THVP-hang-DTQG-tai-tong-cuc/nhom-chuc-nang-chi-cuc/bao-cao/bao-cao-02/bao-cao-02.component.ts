@@ -13,21 +13,24 @@ import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils"
 import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
 
 export class ItemDataMau02 {
+    bcaoCtietId = null;
     id = null;
     header = null;
     stt = '0';
     checked = false;
     level = 0;
+    
     maVtu = null;
+    maVtuCha = null;
     maDviTinh = null;
     soQd = null;
+    ghiChu = null;
     khSoLuong = 0;
     khGiaMuaTd = 0;
     khTtien = 0;
     thSoLuong = 0;
     thGiaMuaTd = 0;
     thTtien = 0;
-    ghiChu = null;
 
 }
 
@@ -151,7 +154,7 @@ export class BaoCao02Component implements OnInit {
             }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child,item.id);
+                this.addListVatTu(item.child, item.id);
             }
         });
     }
@@ -373,7 +376,9 @@ export class BaoCao02Component implements OnInit {
                 }
             }
         }
-
+        if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt, phuLuc);
+        }
         // them moi phan tu
         if (initItem?.id) {
             let item = {
@@ -405,6 +410,7 @@ export class BaoCao02Component implements OnInit {
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
         var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        var stt: string = baoCao[index].stt;
         // khong tim thay thi out ra
         if (index == -1) return;
         var nho: string = baoCao[index].stt;
@@ -420,6 +426,7 @@ export class BaoCao02Component implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, -1, phuLuc);
+        this.sum(stt, phuLuc);
         this.updateEditCache(phuLuc);
     }
 
@@ -456,6 +463,7 @@ export class BaoCao02Component implements OnInit {
         const index = baoCao.findIndex(item => item.id == id); // lay vi tri hang minh sua
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(baoCao[index].stt, phuLuc);
     }
 
     updateChecked(id: any, phuLuc: string) {
@@ -797,5 +805,41 @@ export class BaoCao02Component implements OnInit {
     changeModel02(id: string, loaiList: any) {
         this.editCache[id].data.khTtien = Number(this.editCache[id].data.khSoLuong) * Number(this.editCache[id].data.khGiaMuaTd);
         this.editCache[id].data.thTtien = Number(this.editCache[id].data.thSoLuong) * Number(this.editCache[id].data.thGiaMuaTd);
+    }
+
+    sum(stt: string, phuLuc) {
+        let dataPL = new ItemDataMau02();
+        let baoCaoTemp = this.getBieuMau(phuLuc);
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = baoCaoTemp.findIndex(e => e.stt == stt);
+            let data = baoCaoTemp[index];
+            baoCaoTemp[index] = {
+                ...dataPL,
+                id: data.id,
+                stt: data.stt,
+                header: data.header,
+                checked: data.checked,
+                level: data.level,
+                bcaoCtietId: data.bcaoCtietId,
+                maVtu: data.maVtu,
+                ghiChu: data.ghiChu,
+                maVtuCha: data.maVtuCha,
+                maDviTinh: data.maDviTinh,
+            }
+            baoCaoTemp.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    baoCaoTemp[index].khSoLuong += item.khSoLuong;
+                    baoCaoTemp[index].khGiaMuaTd += item.khGiaMuaTd;
+                    baoCaoTemp[index].khTtien += item.khTtien;
+                    baoCaoTemp[index].thSoLuong += item.thSoLuong;
+                    baoCaoTemp[index].thGiaMuaTd += item.thGiaMuaTd;
+                    baoCaoTemp[index].thTtien += item.thTtien;
+                }
+            })
+            stt = this.getHead(stt);
+        }
+        this.updateEditCache(phuLuc);
+        // this.getTotal();
     }
 }

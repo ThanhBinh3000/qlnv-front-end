@@ -2011,7 +2011,6 @@ export class BaoCaoComponent implements OnInit {
     }
     if (phuLucTemp.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
       this.sum(stt, phuLuc);
-      this.updateEditCache(phuLuc);
     }
     // them moi phan tu
     if (initItem?.id) {

@@ -20,7 +20,7 @@ export class ItemDataMau0405 {
     stt = '0';
     checked = false;
     level = 0;
-
+    bcaoCtietId = null;
     maNdungChi = null;
     trongDotTcong = 0;
     trongDotThoc = 0;
@@ -114,48 +114,63 @@ export class BaoCao04bComponent implements OnInit {
             switch (el.header) {
                 case '4b-I1':
                     this.lstCtietBcao4bI1.push(el);
+                    this.updateEditCache('4b-I1');
                     break;
                 case '4b-I2':
                     this.lstCtietBcao4bI2.push(el);
+                    this.updateEditCache('4b-I2');
                     break;
                 case '4b-I3':
                     this.lstCtietBcao4bI3.push(el);
+                    this.updateEditCache('4b-I3');
                     break;
                 case '4b-II1.1':
                     this.lstCtietBcao4bII11.push(el);
+                    this.updateEditCache('4b-II1.1');
                     break;
                 case '4b-II1.2':
                     this.lstCtietBcao4bII12.push(el);
+                    this.updateEditCache('4b-II1.2');
                     break;
                 case '4b-II2':
                     this.lstCtietBcao4bII2.push(el);
+                    this.updateEditCache('4b-II2');
                     break;
                 case '4b-II3':
                     this.lstCtietBcao4bII3.push(el);
+                    this.updateEditCache('4b-II3');
                     break;
                 case '4b-II21':
                     this.lstCtietBcao4bII21.push(el);
+                    this.updateEditCache('4b-II21');
                     break;
                 case '4b-II22':
                     this.lstCtietBcao4bII22.push(el);
+                    this.updateEditCache('4b-II22');
                     break;
                 case '4b-II23':
                     this.lstCtietBcao4bII23.push(el);
+                    this.updateEditCache('4b-II23');
                     break;
                 case '4b-II24':
                     this.lstCtietBcao4bII24.push(el);
+                    this.updateEditCache('4b-II24');
                     break;
                 case '4b-III1':
                     this.lstCtietBcao4bIII1.push(el);
+                    this.updateEditCache('4b-III1');
                     break;
                 case '4b-III2':
                     this.lstCtietBcao4bIII2.push(el);
+                    this.updateEditCache('4b-III2');
                     break;
                 case '4b-III3':
                     this.lstCtietBcao4bIII3.push(el);
+                    this.updateEditCache('4b-III3');
                     break;
                 case '4b-B':
                     this.lstCtietBcao4bB.push(el);
+                    this.updateEditCache('4b-B');
                     break;
                 default:
                     break;
@@ -443,6 +458,9 @@ export class BaoCao04bComponent implements OnInit {
                 }
             }
         }
+        if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt, phuLuc);
+        }
         var listVtu: vatTu[] = [];
         this.listColTemp.forEach((e) => {
             let objTrongD = {
@@ -493,6 +511,8 @@ export class BaoCao04bComponent implements OnInit {
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
         var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        var stt: string = baoCao[index].stt;
+
         // khong tim thay thi out ra
         if (index == -1) return;
         var nho: string = baoCao[index].stt;
@@ -508,6 +528,7 @@ export class BaoCao04bComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, -1, phuLuc);
+        this.sum(stt, phuLuc);
         this.updateEditCache(phuLuc);
     }
 
@@ -544,6 +565,7 @@ export class BaoCao04bComponent implements OnInit {
         const index = baoCao.findIndex(item => item.id == id); // lay vi tri hang minh sua
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(baoCao[index].stt, phuLuc);
     }
 
     updateChecked(id: any, phuLuc: string) {
@@ -1109,5 +1131,45 @@ export class BaoCao04bComponent implements OnInit {
             this.lstCTietBaoCaoTemp.push(e);
         })
 
+    }
+
+    sum(stt: string, phuLuc) {
+        let dataPL = new ItemDataMau0405();
+        let baoCaoTemp = this.getBieuMau(phuLuc);
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = baoCaoTemp.findIndex(e => e.stt == stt);
+            let data = baoCaoTemp[index];
+            data.listCtiet.filter(el => el.sl = 0);
+            baoCaoTemp[index] = {
+                ...dataPL,
+                id: data.id,
+                stt: data.stt,
+                header: data.header,
+                checked: data.checked,
+                level: data.level,
+                bcaoCtietId: data.bcaoCtietId,
+                maNdungChi: data.maNdungChi,
+                maNdungChiCha: data.maNdungChiCha,
+                listCtiet:data.listCtiet,
+                ghiChu: data.ghiChu,
+            }
+            baoCaoTemp.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    baoCaoTemp[index].trongDotTcong += item.trongDotTcong;
+                    baoCaoTemp[index].trongDotThoc += item.trongDotThoc;
+                    baoCaoTemp[index].trongDotGao += item.trongDotGao;
+                    baoCaoTemp[index].luyKeTcong += item.luyKeTcong;
+                    baoCaoTemp[index].luyKeThoc += item.luyKeThoc;
+                    baoCaoTemp[index].luyKeGao += item.luyKeGao;
+                    baoCaoTemp[index].listCtiet.filter(el => {
+                        el.sl += item.listCtiet.find(e => e.loaiMatHang == el.loaiMatHang && e.maVtu == el.maVtu).sl;
+                    })
+                }
+            })
+            stt = this.getHead(stt);
+        }
+        this.updateEditCache(phuLuc);
+        // this.getTotal();
     }
 }
