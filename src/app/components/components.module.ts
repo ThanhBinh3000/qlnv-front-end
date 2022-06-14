@@ -1,3 +1,4 @@
+import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -145,6 +146,7 @@ import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-b
     DialogThemKhoanMucComponent,
     DialogLuaChonThemDonViComponent,
     DialogBaoCaoCopyComponent,
+    DialogDieuChinhCopyComponent,
   ],
   imports: [
     CommonModule,
