@@ -60,7 +60,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	userInfo: any;
 	//thong tin chung bao cao
 	maBaoCao!: string;
-	namHienHanh!: number;
+	namHienHanh: number = new Date().getFullYear();
 	ngayNhap!: string;
 	nguoiNhap!: string;
 	congVan: ItemCongVan = new ItemCongVan();
@@ -75,11 +75,44 @@ export class GiaoNhiemVuComponent implements OnInit {
   dotBcao: number = 1;
 	//danh muc
 	lstDieuChinhs: ItemData[] = [];
-	phuLucs: any[] = PHU_LUC;
+	phuLucs: any[] = JSON.parse(JSON.stringify(PHU_LUC)) ;
 	donVis: any[] = [];
 	tabs: any[] = [];
 	lstDviTrucThuoc: any[] = [];
-	trangThaiBaoCaos: any[] = TRANG_THAI_TIM_KIEM;
+	trangThaiBaoCaos: any[] = [
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_3,
+			tenDm: "Trưởng BP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trưởng BP chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_8,
+			tenDm: "Từ chối",
+		},
+		{
+			id: Utils.TT_BC_9,
+			tenDm: "Tiếp nhận",
+		},
+	];;
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[] = [
 		{
@@ -166,6 +199,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	async ngOnInit() {
 		this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
@@ -175,6 +209,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			if (dotBcaoDieuChinh && nam) {
+        this.loai = "1";
 				this.namHienHanh = parseInt(nam, 10);
 				await this.tongHop();
 				this.trangThaiBaoCao = "1";
@@ -193,6 +228,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				);
 				this.maBaoCao = '';
 			} else {
+        this.loai = "0";
 				this.phuLucs.forEach(item => {
 					this.lstDieuChinhs.push({
 						id: uuid.v4() + 'FE',
@@ -206,6 +242,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						checked: false,
 					})
 				})
+
 				this.trangThaiBaoCao = "1";
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
@@ -226,12 +263,15 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (nam) {
 					this.namHienHanh = parseInt(nam, 10);
 				} else {
-					this.namHienHanh = new Date().getFullYear();
+					// this.namHienHanh = new Date().getFullYear();
+          // this.phuLucs.forEach(item => {
+          //   item.tenDm = item.tenDm.replace("N",  this.namHienHanh)
+          // })
 				}
 			}
 
 		}
-
+    this.changeNam();
 		//lay danh sach danh muc don vi
 		await this.danhMucService.dMDonVi().toPromise().then(
 			(data) => {
@@ -248,6 +288,12 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.getStatusButton();
 		this.spinner.hide();
 	}
+
+  changeNam(){
+    this.phuLucs.forEach(item => {
+      item.tenDm = PHU_LUC.find(el => el.id == item.id)?.tenDm + this.namHienHanh;
+    })
+  }
 
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
@@ -341,26 +387,26 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	//download file về máy tính
-	async downloadFile(id: string) {
-		let file!: File;
-		file = this.listFile.find(element => element?.lastModified.toString() == id);
-		if (!file) {
-			let fileAttach = this.lstFiles.find(element => element?.id == id);
-			if (fileAttach) {
-				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-					(data) => {
-						fileSaver.saveAs(data, fileAttach.fileName);
-					},
-					err => {
-						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-					},
-				);
-			}
-		} else {
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
-		}
-	}
+  async downloadFile(id: string) {
+    let file!: File;
+    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    if (!file) {
+      let fileAttach = this.lstFiles.find(element => element?.id == id);
+      if (fileAttach) {
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
+      }
+    } else {
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
+  }
 
 	//download file về máy tính
 	async downloadFileCv() {
@@ -431,6 +477,11 @@ export class GiaoNhiemVuComponent implements OnInit {
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
+
+    if (!request.congVan.fileName){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -440,7 +491,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
 						if (!this.id) {
 							this.router.navigate([
-								'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id
+								'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/'+ data.data.id
 							])
 						}
 						else {
@@ -702,7 +753,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + id,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu-/' + id,
 		])
 	}
 
@@ -723,26 +774,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.tabs.splice(index - 1, 1);
 	}
 
-	// newTab(id: any): void {
-	// 	var index: number = this.tabs.findIndex(e => e.id === id);
-	// 	if (index != -1) {
-	// 		this.selectedIndex = index + 1;
-	// 	} else {
-	// 		let item = this.lstDieuChinhs.find(e => e.maLoai == id);
-	// 		this.data = {
-	// 			...item,
-	// 			namHienHanh: this.namHienHanh,
-	// 			trangThaiBaoCao: this.trangThaiBaoCao,
-	// 			statusBtnOk: this.statusBtnOk,
-	// 			statusBtnFinish: this.statusBtnFinish,
-	// 			status: this.status,
-	// 		}
-	// 		this.tabs = [];
-	// 		this.tabs.push(PHU_LUC.find(e => e.id === id));
-	// 		this.selectedIndex = this.tabs.length + 1;
-	// 	}
-	// }
-
   newTab(id: any): void {
 		var index: number = this.tabs.findIndex(e => e.id === id);
 		if (index != -1) {
@@ -760,7 +791,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
 			this.selectedIndex = this.tabs.length + 1;
-      console.log(this.data);
 		}
 
 	}
@@ -796,6 +826,87 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.location.back();
 			}
 		}
-
 	}
+
+  async doCopy() {
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					maBcaoNew = data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return;
+			}
+		);
+		let lstDieuChinhTemps: any[] = [];
+		this.lstDieuChinhs.forEach(data => {
+			let lstCtietTemp: any[] = [];
+			data.lstCtietDchinh.forEach(item => {
+				lstCtietTemp.push({
+					...item,
+					id: null,
+				})
+			})
+			lstDieuChinhTemps.push({
+				...data,
+				giaoCho: this.userInfo?.username,
+				lstCtietDchinh: lstCtietTemp,
+				id: null,
+			})
+		})
+		let request = {
+			id: null,
+			fileDinhKems: [],
+			listIdDeleteFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstDchinh: lstDieuChinhTemps,
+			maBcao: maBcaoNew,
+			maDvi: this.maDviTao,
+			namBcao: this.namHienHanh,
+			namHienHanh: this.namHienHanh,
+			congVan: null,
+      dotBcao: this.dotBcao,
+			tongHopTuIds: [],
+		};
+
+		this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.router.navigate([
+						'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id,
+					])
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+	}
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
 }

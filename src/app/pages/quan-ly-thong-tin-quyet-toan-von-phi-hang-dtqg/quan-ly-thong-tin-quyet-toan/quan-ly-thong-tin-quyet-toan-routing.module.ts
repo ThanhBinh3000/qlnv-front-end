@@ -43,6 +43,13 @@ const routes: Routes = [
       ).then((m) => m.DieuChinhSoLieuQuyetToanModule),
   },
   {
+    path: 'dieu-chinh-so-lieu-quyet-toan-/:namQtoan',
+    loadChildren: () =>
+      import(
+        './dieu-chinh-so-lieu-quyet-toan/dieu-chinh-so-lieu-quyet-toan.module'
+      ).then((m) => m.DieuChinhSoLieuQuyetToanModule),
+  },
+  {
     path: 'duyet-phe-duyet-bao-cao',
     loadChildren: () =>
       import(

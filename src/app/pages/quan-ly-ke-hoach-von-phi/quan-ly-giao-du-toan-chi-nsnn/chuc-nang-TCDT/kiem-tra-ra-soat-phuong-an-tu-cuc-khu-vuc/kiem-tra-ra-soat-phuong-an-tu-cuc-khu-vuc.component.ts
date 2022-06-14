@@ -44,7 +44,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     trangThais:[],
     maBcao:'',
     maLoaiDuAn:'',
-    namBcao:'',
+    namBcao:null,
     thangBcao: '',
     dotBcao:'',
     paggingReq: {
@@ -54,6 +54,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     str: '',
     donVi:'',
   };
+  date: any = new Date()
 
   donViTaos: any = [];
   loaiDuAns: any[] = [
@@ -78,6 +79,10 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.namBcao = new Date().getFullYear()
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {

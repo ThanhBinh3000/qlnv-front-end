@@ -1,3 +1,4 @@
+<div id="tablePrint">
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
   <div nz-col [nzSpan]="3">
     <ng-container *ngIf="status;else templateName">
@@ -78,9 +79,9 @@
         </td>
         <td>
           <div *ngFor="let item of noiDungs">
-              <div *ngIf="item.id == data.maNdung">
-                  {{item.tenDm}}
-              </div>
+            <div *ngIf="item.id == data.maNdung">
+              {{item.tenDm}}
+            </div>
           </div>
         </td>
         <td>
@@ -101,16 +102,16 @@
           <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
         </td>
         <td [hidden]="status">
-            <ng-container *ngIf="!getLowStatus(data.stt)">
-                <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-            </ng-container>
+          <ng-container *ngIf="!getLowStatus(data.stt)">
+            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+          </ng-container>
         </td>
         <td [hidden]="status">
-            <i class="fa fa-plus" (click)="addLine(data.id)"></i>
+          <i class="fa fa-plus" (click)="addLine(data.id)"></i>
         </td>
         <td [hidden]="status">
-            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                (ngModelChange)="updateChecked(data.id)"></label>
+          <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+            (ngModelChange)="updateChecked(data.id)"></label>
         </td>
 
       </ng-container>
@@ -120,9 +121,9 @@
         </td>
         <td>
           <div *ngFor="let item of noiDungs">
-              <div *ngIf="item.id == data.maNdung">
-                  {{item.tenDm}}
-              </div>
+            <div *ngIf="item.id == data.maNdung">
+              {{item.tenDm}}
+            </div>
           </div>
         </td>
         <td>
@@ -172,22 +173,23 @@
           <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
         </td>
         <td>
-            <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+          <a (click)="saveEdit(data.id)" class="save">Lưu</a>
         </td>
         <td [hidden]="status">
-            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                Hủy
-            </a>
+          <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+            class="save">
+            Hủy
+          </a>
         </td>
         <td [hidden]="status">
-            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                (ngModelChange)="updateChecked(data.id)"></label>
+          <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+            (ngModelChange)="updateChecked(data.id)"></label>
         </td>
       </ng-template>
     </tr>
   </tbody>
 </nz-table>
+</div>
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
   <div nz-col nzSpan="24">
     <label class="search__label">Thuyết minh</label>
@@ -216,3 +218,4 @@
     <span>Not OK</span>
   </button>
 </div>
+

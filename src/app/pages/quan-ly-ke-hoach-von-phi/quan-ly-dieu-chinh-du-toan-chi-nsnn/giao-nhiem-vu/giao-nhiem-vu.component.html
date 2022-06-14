@@ -42,11 +42,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="doCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
+				<a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
 				</a>
@@ -82,7 +82,15 @@
 					<tbody>
 						<tr>
 							<td>{{maBaoCao}}</td>
-							<td>{{namHienHanh}}</td>
+							<td>
+                <!-- {{namHienHanh}} -->
+                  <nz-input-number [nzSize]="'small'"
+                    [class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
+                    [(ngModel)]="namHienHanh"
+                    (ngModelChange)="changeNam()"
+                    >
+                  </nz-input-number>
+              </td>
 							<td>{{dotBcao}}</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>
@@ -115,10 +123,10 @@
 					</tbody>
 				</nz-table>
 			</nz-card>
-			<div class="tab__container">
+			<div class="tab__container" id="tablePrint">
 				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex" nzType="editable-card"
 					(nzClose)="closeTab($event)" nzHideAdd>
-					<nz-tab [nzTitle]="'DANH SÁCH BIỂU MẪU'">
+					<nz-tab [nzTitle]="'DANH SÁCH BIỂU MẪU'" >
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col class="gutter-row canphai phai" [nzSpan]="24"
 								style="display:flex; justify-content: end;">
@@ -132,7 +140,7 @@
 								</button>
 							</div>
 						</div>
-						<nz-table nzBordered class="table__body">
+						<nz-table nzBordered class="table__body" >
 							<thead>
 								<tr>
 									<th nzWidth="5%">STT</th>

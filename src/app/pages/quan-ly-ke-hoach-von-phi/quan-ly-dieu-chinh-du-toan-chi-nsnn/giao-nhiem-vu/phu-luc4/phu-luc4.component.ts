@@ -141,14 +141,14 @@ export class PhuLuc4Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
-        thienSluongTteThien: divMoney(item.thienSluongTteThien, this.maDviTien),
-        thienSluongUocThien: divMoney(item.thienSluongUocThien, this.maDviTien),
-        thienCong: divMoney(item.thienCong, this.maDviTien),
-        thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
-        thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
-        kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
-        ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
+        dinhMuc: divMoney(item.dinhMuc, this.maDviTien),
+        thanhTien: divMoney(item.thanhTien, this.maDviTien),
+        dtoanThieuNTruoc: divMoney(item.dtoanThieuNTruoc, this.maDviTien),
+        tongNcauKphi: divMoney(item.tongNcauKphi, this.maDviTien),
+        kphiTcong: divMoney(item.kphiTcong, this.maDviTien),
+        kphiQtoanNtruoc: divMoney(item.kphiQtoanNtruoc, this.maDviTien),
+        kphiDtoanGiaoTnam: divMoney(item.kphiDtoanGiaoTnam, this.maDviTien),
+        dtoanDchinh: divMoney(item.dtoanDchinh, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {
@@ -699,6 +699,8 @@ export class PhuLuc4Component implements OnInit {
     this.addFirst(data);
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
+    console.log(lstTemp);
+
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
         let idCha = this.getIdCha(item.loaiMatHang);

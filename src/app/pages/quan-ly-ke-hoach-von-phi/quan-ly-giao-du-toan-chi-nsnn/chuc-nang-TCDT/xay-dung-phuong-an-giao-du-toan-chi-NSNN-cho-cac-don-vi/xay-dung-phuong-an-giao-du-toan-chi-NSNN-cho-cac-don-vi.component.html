@@ -16,7 +16,7 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<button class="btn btn-main" (click)="onSubmit('7',null)" >
+				<button class="btn btn-main" (click)="onSubmit('7',null)">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Gửi đơn vị cấp trên</span>
 				</button>
@@ -40,11 +40,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+				<button class="btn btn-main" (click)="tuChoi('8')" >
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
+				<a class="btn btn-main" (click)="onSubmit('9',null)" >
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>tiếp nhận</span>
 				</a>
@@ -152,9 +152,9 @@
 							<tbody>
 								<tr *ngFor="let data of lstCtietBcao; let i = index">
 									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-										<td [nzIndentSize]="data.level * 8">
-											{{getChiMuc(data.stt)}}
-										</td>
+										<td [nzIndentSize]="data.level! * 8">
+                      {{getChiMuc(data.stt)}}
+                    </td>
 										<td>
 											<div *ngFor="let item of noiDungs">
 												<div *ngIf="item.id ==data.maNdung">
@@ -171,23 +171,25 @@
 											</div>
 										</td>
 										<td [hidden]="status">
-											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-										</td>
-										<td [hidden]="status">
-											<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-										</td>
-										<td [hidden]="status">
-											<i class="fa fa-plus" (click)="addLine(data.id)"></i>
-										</td>
-										<td [hidden]="status">
-											<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-												(ngModelChange)="updateChecked(data.id)"></label>
-										</td>
+                      <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <ng-container *ngIf="!getLowStatus(data.stt)">
+                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                      </ng-container>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateChecked(data.id)"></label>
+                    </td>
 									</ng-container>
 									<ng-template #editTemplate>
 										<td [nzIndentSize]="data.level * 8">
-											{{getChiMuc(editCache[data.id].data.stt)}}
-										</td>
+                      {{getChiMuc(editCache[data.id].data.stt)}}
+                    </td>
 										<td>
 											<div *ngFor="let item of noiDungs;">
 												<div *ngIf="item.id ==data.maNdung">
@@ -209,21 +211,21 @@
 											</div>
 										</td>
 										<td [hidden]="status">
-											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-										</td>
-										<td>
-											<a (click)="saveEdit(data.id)" class="save">Lưu</a>
-										</td>
-										<td [hidden]="status">
-											<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-												(nzOnConfirm)="cancelEdit(data.id)" class="save">
-												Hủy
-											</a>
-										</td>
-										<td [hidden]="status">
-											<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-												(ngModelChange)="updateChecked(data.id)"></label>
-										</td>
+                      <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </td>
+                    <td>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                    </td>
+                    <td [hidden]="status">
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+                        class="save">
+                        Hủy
+                      </a>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateChecked(data.id)"></label>
+                    </td>
 									</ng-template>
 								</tr>
 								<ng-container *ngIf="lstCtietBcao.length > 0">
@@ -246,7 +248,7 @@
 								</ng-container>
 							</tbody>
 						</nz-table>
-            <!-- <ng-container *ngIf="lstDviTrucThuoc.length != 0">
+            <ng-container *ngIf="lstDviTrucThuoc.length != 0">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="12">
 									Danh sách báo cáo từ các đơn vị trực thuộc
@@ -273,7 +275,7 @@
 										<tbody>
 											<tr *ngFor="let data of lstDviTrucThuoc; let i = index">
 												<td>{{i+1}}</td>
-												<td>{{getUnitName(data.maDvi)}}</td>
+												<td>{{getUnitNameDviTT(data.maDvi)}}</td>
 												<td>
 													<a (click)="xemChiTiet(data.id)" style="color: #1890ff;">
 														{{ data.maBcao}}
@@ -282,7 +284,7 @@
 												<td>{{data.namHienHanh}}</td>
 												<td>{{data.ngayDuyet}}</td>
 												<td>{{data.ngayPheDuyet}}</td>
-												<td>{{getStatusName(data.trangThai)}}</td>
+												<td>{{getStatusNameDviTT(data.trangThai)}}</td>
 											</tr>
 										</tbody>
 									</nz-table>
@@ -294,7 +296,7 @@
 									<textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
 								</div>
 							</div>
-						</ng-container> -->
+						</ng-container>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col nzSpan="24">
                 <label class="search__label">Thuyết minh</label>

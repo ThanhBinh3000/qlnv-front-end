@@ -71,7 +71,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   }
   //trang thai
   status: boolean;
-
+  date: any = new Date()
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -89,6 +89,10 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     await this.getUserInfo(userName); //get user info
     this.maDviTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
+    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.namPa = new Date().getFullYear()
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {

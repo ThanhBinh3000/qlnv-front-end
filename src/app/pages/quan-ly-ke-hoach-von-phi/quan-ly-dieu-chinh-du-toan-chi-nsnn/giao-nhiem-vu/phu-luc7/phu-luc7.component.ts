@@ -138,14 +138,17 @@ export class PhuLuc7Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
-        thienSluongTteThien: divMoney(item.thienSluongTteThien, this.maDviTien),
-        thienSluongUocThien: divMoney(item.thienSluongUocThien, this.maDviTien),
-        thienCong: divMoney(item.thienCong, this.maDviTien),
-        thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
-        thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
-        kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
-        ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
+        kphiBqDmuc: divMoney(item.kphiBqDmuc, this.maDviTien),
+        kphiBqTtien: divMoney(item.kphiBqTtien, this.maDviTien),
+        cphiBqTcong: divMoney(item.cphiBqTcong, this.maDviTien),
+        cphiBqNtruoc: divMoney(item.cphiBqNtruoc, this.maDviTien),
+        cphiBqNnay: divMoney(item.cphiBqNnay, this.maDviTien),
+        chenhLech: divMoney(item.chenhLech, this.maDviTien),
+        soQtoan: divMoney(item.soQtoan, this.maDviTien),
+        soQtoanChuyenNsauKpTk: divMoney(item.soQtoanChuyenNsauKpTk, this.maDviTien),
+        soQtoanChuyenNsauKpTchi: divMoney(item.soQtoanChuyenNsauKpTchi, this.maDviTien),
+        soChuaQtoan: divMoney(item.soChuaQtoan, this.maDviTien),
+        dtoan2021ThanhQtoan2020: divMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {
@@ -230,11 +233,11 @@ export class PhuLuc7Component implements OnInit {
       let soChuaQtoan = mulMoney(item.soChuaQtoan, this.maDviTien);
       let dtoan2021ThanhQtoan2020 = mulMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien);
       if (
-        kphiBqDmuc> MONEY_LIMIT ||
+        kphiBqDmuc > MONEY_LIMIT ||
         kphiBqTtien > MONEY_LIMIT ||
         cphiBqTcong > MONEY_LIMIT ||
-        cphiBqNtruoc  > MONEY_LIMIT ||
-        cphiBqNnay  > MONEY_LIMIT ||
+        cphiBqNtruoc > MONEY_LIMIT ||
+        cphiBqNnay > MONEY_LIMIT ||
         chenhLech > MONEY_LIMIT ||
         soQtoan > MONEY_LIMIT ||
         soQtoanChuyenNsauKpTk > MONEY_LIMIT ||
@@ -711,12 +714,12 @@ export class PhuLuc7Component implements OnInit {
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
-        let idCha = this.getIdCha(item.loaiMatHang);
-        var index: number = this.lstCtietBcao.findIndex(e => e.loaiMatHang === idCha);
+        let idCha = this.getIdCha( Number(item.loaiMatHang));
+        var index: number = this.lstCtietBcao.findIndex(e => Number(e.loaiMatHang) === idCha);
         if (index != -1) {
           this.addLow(this.lstCtietBcao[index].id, item);
         } else {
-          index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.loaiMatHang) === idCha);
+          index = this.lstCtietBcao.findIndex(e => this.getIdCha( Number(e.loaiMatHang)) === idCha);
           this.addSame(this.lstCtietBcao[index].id, item);
         }
       })

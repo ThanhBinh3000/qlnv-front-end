@@ -7,9 +7,54 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+
+// trang thai ban ghi
+export const TRANG_THAI_TIM_KIEM = [
+  {
+      id: "1",
+      tenDm: 'Đang soạn'
+  },
+  {
+      id: "2",
+      tenDm: 'Trình duyệt'
+  },
+  {
+      id: "3",
+      tenDm: 'Trưởng BP từ chối'
+  },
+  {
+      id: "4",
+      tenDm: 'Trưởng BP duyệt'
+  },
+  {
+      id: "5",
+      tenDm: 'Lãnh đạo từ chối'
+  },
+  {
+      id: "6",
+      tenDm: 'Lãnh đạo duyệt'
+  },
+  {
+      id: "7",
+      tenDm: 'Mới'
+  },
+  {
+      id: "8",
+      tenDm: 'Từ chối'
+  },
+  {
+      id: "9",
+      tenDm: 'Tiếp nhận'
+  },
+  // {
+  //     id: "10",
+  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+  // },
+]
+
 @Component({
   selector: 'app-phe-duyet-bao-cao-dieu-chinh',
   templateUrl: './phe-duyet-bao-cao-dieu-chinh.component.html',
@@ -20,13 +65,17 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
-    loaiTimKiem: "",
+    loaiTimKiem: '1',
     nam: null,
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
     donViTao: "",
     trangThai: "",
+    paggingReq: {
+      limit: 10,
+      page: 1
+    },
   };
   //danh muc
   danhSachBaoCao: any = [];
@@ -43,6 +92,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   status: boolean;
   userRole: string;
   maDviTao: string;
+  date: any = new Date()
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -60,6 +110,11 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 		await this.getUserInfo(userName); //get user info
 		this.maDviTao = this.userInfo?.dvql;
 		this.userRole = this.userInfo?.roles[0].code;
+    this.searchFilter.denNgay = new Date().toDateString();
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.searchFilter.tuNgay = this.date.toDateString();
+    this.searchFilter.nam = new Date().getFullYear()
+
     if (this.userRole == Utils.NHAN_VIEN) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
@@ -162,7 +217,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timKiemDieuChinh1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -189,13 +244,13 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
     this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
     this.onSubmit();
   }
   xoaDieuKien() {

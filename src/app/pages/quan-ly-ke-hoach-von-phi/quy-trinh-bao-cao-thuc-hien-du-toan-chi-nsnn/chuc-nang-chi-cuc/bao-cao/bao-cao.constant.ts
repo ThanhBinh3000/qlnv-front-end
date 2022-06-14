@@ -30,8 +30,16 @@ export const PHULUCLIST = [
 
 export const LISTCANBO: any[] = [
     {
-        id: "51480",
-        tenDm: "canbo",
+        id: "10008",
+        tenDm: "canbocc",
+    },
+    {
+        id: "10002",
+        tenDm: "canboc",
+    },
+    {
+        id: "10002",
+        tenDm: "canbotc",
     },
     {
         id: "51520",
@@ -41,6 +49,10 @@ export const LISTCANBO: any[] = [
         id: "51550",
         tenDm: "canbo2",
     },
+    {
+        id: "51480",
+        tenDm: "canbo",
+    }
 ];
 
 export const NOI_DUNG = [
@@ -299,6 +311,33 @@ export const MA_DU_AN = [
     {
         id: 200,
         tenDm: "NHU CẦU CHI CÒN LẠI, SAU KHI TRỪ ĐI SỐ CHI TỪ NGUỒN THU ĐỂ LẠI CHO ĐƠN VỊ SỬ DỤNG (A-B)",
+        level: 0,
+        idCha: 0,
+    },
+]
+
+export const DIADIEM = [
+    {
+        id: 100,
+        tenDm: "Hà Nội",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 200,
+        tenDm: "Thái Bình",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 300,
+        tenDm: "Lào Cai",
+        level: 0,
+        idCha: 0,
+    },
+    {
+        id: 400,
+        tenDm: "Tuyên Quang",
         level: 0,
         idCha: 0,
     },

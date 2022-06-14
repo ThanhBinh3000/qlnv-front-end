@@ -62,7 +62,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
         size: 10,
         page: 1,
     }
-
+    date: any = new Date()
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private danhMuc: DanhMucHDVService,
@@ -79,6 +79,10 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.donViTao = this.userInfo?.dvql;
+        this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+        this.date.setMonth(this.date.getMonth() - 1);
+        this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+        this.searchFilter.namPa = new Date().getFullYear()
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
