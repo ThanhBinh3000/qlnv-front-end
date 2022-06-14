@@ -448,10 +448,7 @@ export class PhuLuc1Component implements OnInit {
       }
     }
 
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
-    }
+
     // them moi phan tu
     if (initItem.id) {
       let item: ItemData = {
@@ -476,7 +473,10 @@ export class PhuLuc1Component implements OnInit {
         data: { ...item }
       };
     }
-
+    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+      this.sum(stt);
+      this.updateEditCache();
+    }
   }
   //xóa dòng
   deleteLine(id: any) {
@@ -664,7 +664,6 @@ export class PhuLuc1Component implements OnInit {
   }
 
   sortWithoutIndex() {
-    debugger
     this.setDetail();
     var level = 0;
     var lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
