@@ -14,14 +14,16 @@
             <span>Tải về văn bản</span>
         </div>
     </div>
-    <div class="select-tag" (click)="selectData()" nz-col [nzSpan]="2">
+    <div class="select-tag" (click)="selectData()" nz-col [nzSpan]="2"
+        *ngIf="typeFile === 'tai-lieu-dinh-kem' || (typeFile === 'can-cu' && !userService.isCuc())">
         <i class="icon" [ngClass]="icon"></i>
         <input type="file" name="abc" class="multi-file-tag" *ngIf="type === 'file'" (change)="getNameFile($event)"
             [readonly]="disable || trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'">
         {{buttonName}}
     </div>
-    <!-- <div class="select-tag" (click)="selectDataCanCu()" nz-col [nzSpan]="2" *ngIf="typeFile === 'can-cu'">
+    <div class="select-tag" (click)="selectDataCanCu()" nz-col [nzSpan]="2"
+        *ngIf="typeFile === 'can-cu' && userService.isCuc()">
         <i class="icon" [ngClass]="icon"></i>
         Chọn căn cứ
-    </div> -->
+    </div>
 </div>

@@ -685,14 +685,26 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               this.taiLieuDinhKemList.push(item);
             });
           }
-          if (this.thongTinChiTieuKeHoachNam?.canCus?.length > 0) {
-            this.thongTinChiTieuKeHoachNam.canCus.forEach((file) => {
+          if (this.userService.isCuc()) {
+            if (res.data.chiTieuCanCuId) {
               const item = {
-                id: file.id,
-                text: file.fileName,
+                id: res.data.chiTieuId,
+                text: res.data.soQdChiTieu,
               };
               this.canCuList.push(item);
-            });
+            } else {
+              this.canCuList = [];
+            }
+          } else {
+            if (this.thongTinChiTieuKeHoachNam?.canCus?.length > 0) {
+              this.thongTinChiTieuKeHoachNam.canCus.forEach((file) => {
+                const item = {
+                  id: file.id,
+                  text: file.fileName,
+                };
+                this.canCuList.push(item);
+              });
+            }
           }
           this.dsKeHoachLuongThucClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khLuongThuc,
@@ -1371,11 +1383,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!this.formData.valid) {
       return;
     }
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
-      }/${this.qdTCDT}`;
-    this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQD').value ? `${this.formData.get('soQD').value
+      }/${this.qdTCDT}` : null;
+    this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
-      this.formData.get('ngayHieuLuc').value;
+      this.formData.get('ngayHieuLuc').value ?? null;
     this.thongTinChiTieuKeHoachNam.namKeHoach =
       this.formData.get('namKeHoach').value;
     this.thongTinChiTieuKeHoachNam.trichYeu =
@@ -1384,6 +1396,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .get('ghiChu')
       .value?.trim();
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
+    if (this.userService.isCuc()) {
+      this.thongTinChiTieuKeHoachNam.chiTieuId = this.canCuList[0].id;
+    }
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
     );
@@ -2597,11 +2612,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     modalQD.afterClose.subscribe((data) => {
       if (data) {
         let item = {
-          id: new Date().getTime(),
+          id: data.id,
           text: data.soQuyetDinh,
         };
         if (!this.canCuList.find((x) => x.text === item.text)) {
           // this.thongTinChiTieuKeHoachNam.canCus.push(item);
+          this.canCuList = [];
           this.canCuList.push(item);
         }
       }

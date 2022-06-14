@@ -102,7 +102,7 @@
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
                 [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
                 (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)"
-                [showDowloadFile]="false">
+                [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
@@ -111,7 +111,7 @@
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDeXuat"
                 [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
                 (selectDataEvent)="openDialogDeXuatCuc()" (removeDataEvent)="deleteDataDeXuatCuc($event)"
-                [showDowloadFile]="false">
+                [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="24">
