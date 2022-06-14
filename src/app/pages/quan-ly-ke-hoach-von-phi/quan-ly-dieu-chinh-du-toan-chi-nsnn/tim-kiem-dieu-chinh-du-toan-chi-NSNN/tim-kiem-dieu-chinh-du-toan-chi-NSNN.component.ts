@@ -37,10 +37,14 @@ export const TRANG_THAI_TIM_KIEM = [
       id: "6",
       tenDm: 'Lãnh đạo duyệt'
   },
-  {
-      id: "7",
-      tenDm: 'Gửi ĐV cấp trên'
-  },
+  // {
+  //     id: "7",
+  //     tenDm: 'Gửi ĐV cấp trên'
+  // },
+  // {
+  //     id: "7",
+  //     tenDm: 'Lãnh đạo duyệt'
+  // },
   {
       id: "8",
       tenDm: 'ĐV cấp trên Từ chối'

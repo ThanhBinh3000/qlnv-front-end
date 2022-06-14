@@ -481,7 +481,10 @@ export class PhuLuc2Component implements OnInit {
         data: { ...item }
       };
     }
-
+    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+      this.sum(stt);
+      this.updateEditCache();
+    }
   }
   //xóa dòng
   deleteLine(id: any) {

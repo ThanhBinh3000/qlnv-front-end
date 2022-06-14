@@ -474,16 +474,16 @@ export class GiaoNhiemVuComponent implements OnInit {
       congVan: this.congVan,
 			tongHopTuIds: tongHopTuIds,
 		}));
+    if (request.congVan.fileName == null){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
     //get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
 
-    if (!request.congVan){
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
