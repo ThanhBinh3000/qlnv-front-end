@@ -39,8 +39,8 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     maThanhToan: string;
     maCvUv: string;
     ngayTao: string;
-    maDviTao: string;
     ngayThanhToan: string;
+    maDviTao: string;
     khachHang: string;
     ngayTrinhDuyet: string;
     ngayDuyet: string;
@@ -63,9 +63,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     statusBtnTBP: boolean;
     statusBtnLD: boolean;
     statusBtnCopy: boolean;
-    statusBtnPrint: boolean;
-    statusBtnGiao: boolean;
-    statusBtnBtc: boolean;
     allChecked = false;
     //khac
     listId: string = '';
@@ -135,7 +132,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
-            this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            this.quanLyVonPhiService.maThanhToan().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
                         this.maThanhToan = res.data;
@@ -178,6 +175,16 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
+        if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+        ) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
         let checkChirld = false;
         let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
@@ -190,7 +197,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     }
 
     //upload file
@@ -247,21 +253,22 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     // call chi tiet bao cao
     async getDetailReport() {
         this.spinner.show();
-        await this.quanLyVonPhiService.ctietPhuongAn(this.id).toPromise().then(
+        await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.id = data.data.id;
-                    
-                    if (
-                        this.trangThaiBanGhi == Utils.TT_BC_1 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_3 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_5 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_8
-                    ) {
-                        this.status = false;
-                    } else {
-                        this.status = true;
-                    }
+                    this.maDviTao = data.data.maDvi;      
+                    this.maDviTien = data.data.maDviTien;
+                    this.maThanhToan = data.data.maThanhToan;
+                    this.maCvUv = data.data.maCapUngVonTuCapTren;
+                    this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    this.ttGui.noiDung = data.data.noiDung;
+                    this.ttGui.soTien = data.data.soTien;
+                    this.ttGui.ngayThanhToan = data.data.ngayThanhToan;
+                    this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR); 
+                    this.trangThaiBanGhi = data.data.trangThai; 
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -280,9 +287,10 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                 id: this.id,
                 maChucNang: mcn,
                 lyDoTuChoi: lyDoTuChoi,
+                maLoai: "0",
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).toPromise().then(async (data) => {
+            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
@@ -341,16 +349,40 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
-            fileDinhKems: this.lstFiles,
-            listIdDeleteFiles: this.listIdFilesDelete,
+            maLoai: "4",
+            fileDinhKemGuis: this.lstFiles,
+            listIdDeleteFileGuis: this.listIdFilesDelete,
+            maDvi: this.maDviTao,
+            maDviTien: this.maDviTien, 
+            maThanhToan: this.maThanhToan,
+            maCapUngVonTuCapTren: this.maCvUv,
+            ngayThanhToan: this.ttGui.ngayThanhToan,
+            noiDung: this.ttGui.noiDung,
+            soTien: this.ttGui.soTien,
             trangThai: this.trangThaiBanGhi,
+            thuyetMinh: this.thuyetMinh,
         };
 
         this.spinner.show();
-        if (!this.id){
-
+        if (!this.id) {
+            this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                        this.router.navigate([
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/'
+                            + data.data.id,
+                        ]);
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
         } else {
-            this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
+            this.quanLyVonPhiService.capNhatVonMuaBan(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -397,13 +429,21 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     }
 
     close() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
+        this.router.navigate([
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-thanh-toan-cho-khach-hang/0'
+        ]);
     }
 
     async doCopy(){
         
     }
 
+    changeDate(){
+        this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
+    }
 
+    getMaDviTien(){
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
 
 }

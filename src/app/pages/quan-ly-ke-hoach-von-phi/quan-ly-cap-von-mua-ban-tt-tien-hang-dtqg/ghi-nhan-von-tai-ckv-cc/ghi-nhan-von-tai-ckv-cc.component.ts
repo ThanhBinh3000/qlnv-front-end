@@ -16,17 +16,19 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
-    loaiVon: string;
+    loaiCap: string;
     noiDung: string;
     maNguonNs: string;
     nienDoNs: string;
-    tongTien: number;
-    soTienChu: string;
+    soTien: number;
+    soTienBangChu: string;
     nopThue: number;
-    ttChoDvHuong: number;
+    ttChoDviHuong: number;
 }
 
 export class ItemNhan {
@@ -46,9 +48,11 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     maCvUv: string;
+    maCvUvTren: string; 
     ngayTao: string;
     maDonViTao: string;
     ngayLap: string;
+    ngayLapTemp: string;
     ngayNhan: string;
     ngayTrinhDuyet: string;
     ngayDuyet: string;
@@ -63,6 +67,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     //danh muc
     donVis: any[] = [];
     loaiVons: any[] = LOAI_VON;
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     status: boolean = false;
@@ -114,6 +119,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
@@ -143,11 +149,27 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            await  this.dataSource.currentData.subscribe(obj => {
+                this.maCvUvTren = obj?.maCvUv;
+            });
+            if (!this.maCvUvTren){
+                this.close();
+            }
+            this.getTtGui();
             this.spinner.show();
-            this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
+                        let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+                        var str: string;
+                        if (capDvi == Utils.CUC_KHU_VUC){
+                            str = "CKV";
+                        } else {
+                            str = "CC";
+                        }
                         this.maCvUv = res.data;
+                        let mm = this.maCvUv.split('.');
+                        this.maCvUv = mm[0] + str + '.' + mm[1];
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -161,6 +183,45 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         this.getStatusButton();
         this.spinner.hide();
 
+    }
+
+    async getTtGui() {
+        let request = {
+            maCapUngVonChoCapDuoi: this.maCvUvTren,
+            ngayTaoTu: "",
+            ngayTaoDen: "",
+            trangThai: "",
+            paggingReq: {
+                limit: 1000,
+                page: 1
+            }
+        }
+        await this.quanLyVonPhiService.timKiemCapVon(request).toPromise().then(
+            (res) => {
+                if (res?.statusCode == 0) {
+                    let data = res.data.content.find(e => e.maCapUngVonChoCapDuoi == this.maCvUvTren);
+                    this.maDviTien = data.maDviTien;
+                    this.ngayLapTemp = data.ngayTao;
+                    this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
+                    let item = data.capUngVonCtiets.find(e => e.dviNhan == this.userInfo?.dvql);
+                    this.ttGui = {
+                        loaiCap: item.loai,
+                        noiDung: item.noiDung,
+                        maNguonNs: item.maNguonNs,
+                        nienDoNs: item.nienDoNs,
+                        soTien: item.tongSoTien,
+                        soTienBangChu: item.soTienBangChu,
+                        nopThue: item.nopThue,
+                        ttChoDviHuong: item.ttChoDviHuong,
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
     }
 
     redirectkehoachvonphi() {
@@ -187,6 +248,16 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
+        if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+        ) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
         let checkChirld = false;
         let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
@@ -256,21 +327,31 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     // call chi tiet bao cao
     async getDetailReport() {
         this.spinner.show();
-        await this.quanLyVonPhiService.ctietPhuongAn(this.id).toPromise().then(
+        await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.id = data.data.id;
-                    
-                    if (
-                        this.trangThaiBanGhi == Utils.TT_BC_1 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_3 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_5 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_8
-                    ) {
-                        this.status = false;
-                    } else {
-                        this.status = true;
-                    }
+                    this.maDonViTao = data.data.maDvi;      
+                    this.maDviTien = data.data.maDviTien;
+                    this.maCvUv = data.data.maCapUngVonTuCapTren;
+                    this.ngayLapTemp = data.data.ngayLap;
+                    this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
+                    this.ttNhan.ngayNhan = data.data.ngayNhan;
+                    this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
+                    this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    this.ttGui.loaiCap = data.data.loaiCap;
+                    this.ttGui.noiDung = data.data.noiDung;
+                    this.ttGui.maNguonNs = data.data.maNguonNs;
+                    this.ttGui.nienDoNs = data.data.nienDoNs;
+                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
+                    this.ttGui.nopThue = divMoney(data.data.nopThue, this.maDviTien);
+                    this.ttGui.ttChoDviHuong = divMoney(data.data.ttChoDviHuong, this.maDviTien);
+                    this.ttGui.soTienBangChu = data.data.soTienBangChu;
+                    this.ttNhan.taiKhoanNhan = data.data.tkNhan;
+                    this.thuyetMinh = data.data.thuyetMinh;
+                    this.trangThaiBanGhi = data.data.trangThai;            
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -289,9 +370,10 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
                 id: this.id,
                 maChucNang: mcn,
                 lyDoTuChoi: lyDoTuChoi,
+                maLoai: "0",
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).toPromise().then(async (data) => {
+            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
@@ -333,13 +415,8 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien) {
+        if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
-        // gui du lieu trinh duyet len server
-        if (mulMoney(this.ttGui.tongTien, this.maDviTien) > MONEY_LIMIT){
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
         //get list file url
@@ -350,17 +427,47 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
-            fileDinhKems: this.lstFiles,
-            listIdDeleteFiles: this.listIdFilesDelete,
+            fileDinhKemGuis: this.lstFiles,
+            listIdDeleteFileGuis: this.listIdFilesDelete,
+            maLoai: "1",
+            maDvi: this.maDonViTao,
+            maDviTien: this.maDviTien,
+            maCapUngVonTuCapTren: this.maCvUv,
+            ngayLap: this.ngayLapTemp,
+            ngayNhan: this.ttNhan.ngayNhan,
+            loaiCap: this.ttGui.loaiCap,
+            noiDung: this.ttGui.noiDung,
+            maNguonNs: this.ttGui.maNguonNs,
+            nienDoNs: this.ttGui.nienDoNs,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
+            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
+            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
+            soTienBangChu: this.ttGui.soTienBangChu,
+            tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: this.trangThaiBanGhi,
             thuyetMinh: this.thuyetMinh,
         };
 
         this.spinner.show();
-        if (!this.id){
-
+        if (!this.id) {
+            this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                        this.router.navigate([
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc/'
+                            + data.data.id,
+                        ]);
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
         } else {
-            this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
+            this.quanLyVonPhiService.capNhatVonMuaBan(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -384,16 +491,25 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThaiBanGhi);
+        return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
     close() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
+        this.router.navigate([
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-cuc-kv-chi-cuc/0'
+        ]);
     }
 
-    async doCopy(){
-        
+    async doCopy() {
+
+    }
+
+    getMaDviTien(){
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
+    modelChange(){
+        this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
 
 

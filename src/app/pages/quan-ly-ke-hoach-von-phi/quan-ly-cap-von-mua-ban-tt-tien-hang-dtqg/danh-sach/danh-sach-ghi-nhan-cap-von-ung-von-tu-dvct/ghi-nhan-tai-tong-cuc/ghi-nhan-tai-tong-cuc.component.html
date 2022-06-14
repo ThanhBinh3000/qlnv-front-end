@@ -98,12 +98,12 @@
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maCvUv}}
+									{{ item.maCapUngVonTuCapTren}}
 								</a>
 							</td>
 							<td>
 								<div *ngFor="let e of loaiVons">
-									<div *ngif="e.id == item.loaiVon">
+									<div *ngIf="e.id == item.loaiCap">
 										{{e.tenDm}}
 									</div>
 								</div>
@@ -121,7 +121,7 @@
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayTrinhDuyet}}
+								{{item.ngayTrinh}}
 							</td>
 							<td>
 								{{item.ngayDuyet}}
