@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,7 +20,9 @@ import * as dayjs from 'dayjs';
 })
 export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
   searchFilter = {
+    soQd: '',
     ngayLayMau: '',
     soHopDong: '',
     diemkho: '',
@@ -41,6 +44,16 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     ngayKiemNghiem: '',
     soBienBan: '',
   };
+  filterTable = {
+    soQd: '',
+    soPhieu: '',
+    ngayKnghiem: '',
+    soBbanKthucNhap: '',
+    ngayLayMau: '',
+    tenDiemKho: '',
+    tenNhaKho: '',
+    tenNganLo: '',
+  }
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
   listNganLo: any[] = [];
@@ -65,7 +78,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private userService: UserService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {
@@ -108,6 +121,12 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -143,6 +162,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
   clearFilter() {
     this.searchFilter = {
+      soQd: '',
       ngayLayMau: '',
       soHopDong: '',
       diemkho: '',
@@ -294,5 +314,34 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
   showList() {
     this.isDetail = false;
+  }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      soPhieu: '',
+      ngayKnghiem: '',
+      soBbanKthucNhap: '',
+      ngayLayMau: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganLo: '',
+    }
   }
 }

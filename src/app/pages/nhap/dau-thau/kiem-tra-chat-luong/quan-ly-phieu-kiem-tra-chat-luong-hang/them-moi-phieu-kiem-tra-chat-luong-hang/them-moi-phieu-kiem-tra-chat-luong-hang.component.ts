@@ -32,12 +32,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   detail: any = {};
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
-  viewChiTiet: boolean = false;
-
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  routerVthh: string;
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -46,6 +40,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listTieuChuan: any[] = [];
+  listSoQuyetDinh: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -65,8 +60,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
-      this.checkIsView();
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.trangThai = "00";
@@ -76,6 +69,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.loadDiemKho(),
         this.loadNganLo(),
         this.loadTieuChuan(),
+        this.loadSoQuyetDinh(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -85,19 +79,41 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     }
   }
 
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
-      }
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async loadTieuChuan() {
     let body = {
-      "maHang": this.maVthh,
+      "maHang": this.typeVthh,
       "namQchuan": null,
       "paggingReq": {
         "limit": 1000,
@@ -241,34 +257,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
         this.detail.maHangHoa = this.detailHopDong.loaiVthh;
         this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
-        this.detail.maHangHoa = this.maVthh;
+        this.detail.maHangHoa = this.typeVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
     }
   }
 
@@ -288,7 +281,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "maDiemKho": this.detail.maDiemKho,
         "diemKhoId": this.detail.diemKhoId,
         "maDonVi": this.detail.maDonVi,
-        "maHangHoa": this.maVthh,
+        "maHangHoa": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDonVi,
@@ -302,7 +295,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "soPhieu": this.detail.soPhieu,
         "soPhieuAnToanThucPham": null,
         "tchucGdinh": this.detail.tchucGdinh,
-        "tenHangHoa": this.loaiStr,
+        "tenHangHoa": null,
         "tenNganKho": null,
         "trangThai": this.detail.trangThai,
       };

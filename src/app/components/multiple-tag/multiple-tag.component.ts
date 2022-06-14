@@ -59,6 +59,9 @@ export class MultipleTagComponent implements OnInit {
     }
     this.selectDataEvent.emit();
   }
+  selectDataCanCu() {
+    this.selectDataEvent.emit();
+  }
   getNameFile(event?: any) {
     if (
       this.trangThai === this.globals.prop.BAN_HANH ||

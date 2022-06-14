@@ -14,7 +14,9 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -39,12 +41,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   idNhapHang: number = 0;
-  viewChiTiet: boolean = false;
-
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  routerVthh: string;
 
   listDonViTinh: any[] = [];
   listLoaiKho: any[] = [];
@@ -54,6 +50,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listSoKho: any[] = [];
+  listSoQuyetDinh: any[] = [];
+  listSoPhieuNhapKho: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -71,15 +69,14 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private quanLyPhieuSoKhoService: QuanLyPhieuSoKhoService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getTitleVthh();
-      this.getIdNhap();
-      this.checkIsView();
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
@@ -93,22 +90,14 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         this.loadLoaiKho(),
         this.loadDonViTinh(),
         this.loadSoKho(),
+        this.loadSoQuyetDinh(),
+        this.loadSoPhieuNhapKho(),
       ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
-      }
     }
   }
 
@@ -122,6 +111,68 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           this.idNhapHang = +temp[0];
         }
       }
+    }
+  }
+
+  async loadSoPhieuNhapKho() {
+    let body = {
+      "denNgay": null,
+      "maDonVi": this.userInfo.MA_DVI,
+      "ngayGiaoNhanHang": null,
+      "ngayNhapKho": null,
+      "ngayTaoPhieu": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": null,
+        "orderType": null,
+        "page": 0
+      },
+      "soPhieu": null,
+      "str": null,
+      "trangThai": null,
+      "tuNgay": null,
+      "maHangHoa": this.typeVthh
+    };
+    let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoPhieuNhapKho = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -224,7 +275,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   async loadPhieuKiemTraChatLuong() {
     let body = {
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.maVthh,
+      "maHangHoa": this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": null,
       "ngayKiemTraTuNgay": null,
@@ -414,29 +465,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -618,7 +646,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "id": this.id,
         "maDiemKho": this.detail.maDiemKho,
         "maDonVi": this.detail.maDvi,
-        "maHang": this.maVthh,
+        "maHang": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
         "maLhKho": this.detail.maLhKho,
         "maNhaKho": this.detail.maNhaKho,
@@ -630,7 +658,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "soBangKe": this.detail.soBangKe,
         "soHd": this.detail.soHd,
         "soKho": this.detail.soKho,
-        "tenHang": this.loaiStr,
+        "tenHang": null,
         "tenNguoiGiaoHang": this.detail.donViTinh,
         "thoiGianGiaoHang": null
       };

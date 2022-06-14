@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -13,6 +14,7 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'quan-ly-bien-ban-lay-mau',
@@ -24,7 +26,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
   searchFilter = {
+    soQd: '',
     ngayLayMau: '',
     soHopDong: '',
     diemkho: '',
@@ -48,6 +52,16 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   listNganLo: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
+  isViewDetail: boolean;
+  filterTable: any = {
+    soQd: '',
+    soBban: '',
+    ngayLayMau: '',
+    soHd: '',
+    tenKho: '',
+    tenLo: '',
+    tenNgan: '',
+  };
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -56,6 +70,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    public userService: UserService,
 
   ) { }
 
@@ -93,17 +108,27 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    console.log(body);
-
-    let res = await this.bienBanLayMauService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    try {
+      let res = await this.bienBanLayMauService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+        this.totalRecord = data.totalElements;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
+
   }
   async changePageIndex(event) {
     this.spinner.show();
@@ -134,6 +159,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
   clearFilter() {
     this.searchFilter = {
+      soQd: '',
       ngayLayMau: '',
       soHopDong: '',
       diemkho: '',
@@ -175,7 +201,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       },
     });
   }
-  redirectToChiTiet(id: number) {
+  redirectToChiTiet(id: number, isView?: boolean) {
     // if (!isView) {
     //   let urlChiTiet = this.router.url + '/thong-tin'
     //   this.router.navigate([urlChiTiet, id]);
@@ -186,6 +212,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     // }
     this.selectedId = id;
     this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
   showList() {
     this.isDetail = false;
@@ -266,6 +293,34 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';
+    }
+  }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      soBban: '',
+      ngayLayMau: '',
+      soHd: '',
+      tenKho: '',
+      tenLo: '',
+      tenNgan: '',
     }
   }
 }

@@ -34,6 +34,7 @@ export class BienBanNhapDayKho {
     trangThai: string;
     tinhTrang: string;
     tenDonVi: string;
+    soQd: string;
     constructor(chiTiets: Array<DetailBienBanNhapDayKho> = []) {
         this.chiTiets = chiTiets;
     }

@@ -60,7 +60,7 @@
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
               <nz-input-group [nzAddOnAfter]="'/' + qdTCDT">
                 <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
-                  [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
+                  [nzDisabled]="dieuChinhThongTinChiTieuKHNam.trangThai != '01' || isView">
                 </nz-input-number>
               </nz-input-group>
             </div>
@@ -69,7 +69,7 @@
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
                 formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)"
-                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
+                [nzDisabled]="dieuChinhThongTinChiTieuKHNam.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
             <div nz-col [nzSpan]="5">
@@ -78,7 +78,7 @@
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                 formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
                 (nzOnOpenChange)="handleEndOpenChange($event)"
-                [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
+                [nzDisabled]="dieuChinhThongTinChiTieuKHNam.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
             <div nz-col [nzSpan]="5">

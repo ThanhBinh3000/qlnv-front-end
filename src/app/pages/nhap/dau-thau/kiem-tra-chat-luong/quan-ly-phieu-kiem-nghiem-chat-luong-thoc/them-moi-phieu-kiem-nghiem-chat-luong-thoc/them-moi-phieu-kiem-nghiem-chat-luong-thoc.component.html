@@ -49,7 +49,15 @@
         </div>
         <nz-card nzTitle="" class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số quyết định nhập
+                </nz-form-label>
+                <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.soQd" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
@@ -57,7 +65,7 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.tenDonVi" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
@@ -65,7 +73,7 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.maDonVi" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu
@@ -74,7 +82,7 @@
                   [disabled]="viewChiTiet" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
@@ -86,7 +94,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
@@ -97,10 +105,10 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngăn/Lô bảo quản
+                  Ngăn/Lô
                 </nz-form-label>
                 <nz-select [(ngModel)]="phieuKiemNghiemChatLuongHang.maNganLo" [disabled]="viewChiTiet">
                   <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
@@ -108,7 +116,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Số lượng hàng bảo quản
@@ -118,7 +126,7 @@
                 </nz-input-number>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Hình thức bảo quản
@@ -130,7 +138,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Thủ kho
@@ -139,17 +147,17 @@
                   [disabled]="viewChiTiet" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngày, tháng nhập đầy lô/ngăn kho
+                  Ngày, tháng nhập kho
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder=" "
                   [(ngModel)]="phieuKiemNghiemChatLuongHang.ngayNhapDay" [disabled]="viewChiTiet">
                 </nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Ngày lấy mẫu
@@ -159,7 +167,7 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Ngày kiểm nghiệm mẫu

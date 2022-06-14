@@ -1,4 +1,4 @@
-<div class="contentBor chi-tieu__body giao-ke-hoach">
+<div class="contentBor chi-tieu__body giao-ke-hoach" *ngIf="userService.isCuc() || userService.isChiCuc()">
     <div class="contentDetail">
         <div class="main-content tab-menu-new">
             <nz-tabset nzType="card" class="tab-level-0">

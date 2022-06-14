@@ -40,4 +40,6 @@ export class BienBanLayMau {
     tenDonViCCHang: string;
     tenTrangThai: string;
     trangThaiDuyet: string;
+    soQd: string;
+    chiTieuChatLuongCanKiemTra: string;
 }
