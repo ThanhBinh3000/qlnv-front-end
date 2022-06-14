@@ -26,7 +26,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     nam: null,
     tuNgay: "",
     denNgay: "",
-    maBaoCao: "",
+    maBcao: "",
     donViTao: "",
     paggingReq: {
       limit: 10,

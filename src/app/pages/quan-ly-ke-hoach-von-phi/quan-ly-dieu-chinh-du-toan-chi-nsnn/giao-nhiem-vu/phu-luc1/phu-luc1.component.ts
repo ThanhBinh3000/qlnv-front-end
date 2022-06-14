@@ -664,12 +664,15 @@ export class PhuLuc1Component implements OnInit {
   }
 
   sortWithoutIndex() {
+    debugger
     this.setDetail();
     var level = 0;
     var lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
     this.lstCtietBcao = [];
+
     var data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
     this.addFirst(data);
+
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {

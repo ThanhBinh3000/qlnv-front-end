@@ -392,7 +392,7 @@ export class QuanLyVonPhiService extends BaseService {
   tongHopDieuChinhDuToan(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/tong-hop',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/tong-hop',
+      // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/tong-hop',
       request,
     );
   }
@@ -839,7 +839,7 @@ export class QuanLyVonPhiService extends BaseService {
   approveDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/trang-thai',
+      // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/trang-thai',
       request,
     );
   }
