@@ -32,6 +32,7 @@ import { ObservableService } from 'src/app/services/observable.service';
 import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 
 
 interface ItemData {
@@ -47,6 +48,17 @@ interface ItemData {
 
 export interface TreeNodeInterface {
   key: string;
+  maDvi: string;
+  tenDvi: string;
+  goiThau: string;
+  soLuongTheoChiTieu?: number;
+  maDiemKho?: string;
+  soLuongDaMua?: number;
+  diaDiemNhap?: string;
+  soLuong?: number;
+  donGia?: number;
+  thanhTien?: string;
+  bangChu?: string;
   name: string;
   age?: number;
   level?: number;
@@ -84,6 +96,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   userLogin: UserLogin
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
+  listTieuChuan: any[] = [];
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
@@ -108,7 +121,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   selectHang: any = { ten: '' };
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-
+  dataChiTieu: any;
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
@@ -137,6 +150,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private helperService: HelperService,
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formData = this.fb.group(
       {
@@ -205,10 +219,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
-
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -221,15 +233,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     } else {
       this.initForm();
     }
-    this.listOfMapData2.forEach(item => {
-      this.mapOfExpandedData2[item.key] = this.convertTreeToList(item);
-    });
     Promise.all([
       this.loaiVTHHGetAll(),
       this.nguonVonGetAll(),
       this.phuongThucDauThauGetAll(),
       this.hinhThucDauThauGetAll(),
       this.loaiHopDongGetAll(),
+      this.getDataChiTieu()
     ]);
   }
 
@@ -264,7 +274,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         loaiHdong: dataDetail?.children1 ? dataDetail.children1.loaiHdong : null,
         hthucLcnt: dataDetail?.children1 ? dataDetail.children1.hthucLcnt : null,
         pthucLcnt: dataDetail?.children1 ? dataDetail.children1.pthucLcnt : null,
-        donGia: dataDetail?.children1 ? dataDetail.children1.donGia : null,
+        donGia: dataDetail?.children1 ? dataDetail.children1.donGia : 123,
         tgianTbao: dataDetail?.children1 ? dataDetail.children1.tgianTbao : null,
         tgianPhatHanh: dataDetail?.children1 ? dataDetail.children1.tgianPhatHanh : null,
         tgianMoThau: dataDetail?.children1 ? dataDetail.children1.tgianMoThau : null,
@@ -332,7 +342,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
           'value': res.data.child[i].maDiemkho,
-          'text': res.data.child[i].tenDiemkho
+          'text': res.data.child[i].tenDiemkho,
+          'diaDiemNhap': res.data.child[i].diaDiem,
         };
         this.listDiemKho.push(item);
       }
@@ -382,7 +393,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   bindingDataHangHoa(data) {
+    let cloaiVthh = null;
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      cloaiVthh = data.ma;
       this.formData.patchValue({
         maVtu: null,
         tenVtu: null,
@@ -394,6 +407,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
     if (data.loaiHang == "VT") {
       if (data.cap == "3") {
+        cloaiVthh = data
         this.formData.patchValue({
           maVtu: data.ma,
           tenVtu: data.ten,
@@ -525,6 +539,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   themMoiGoiThau(data?: DanhSachGoiThau) {
+    // if (!this.formData.get('loaiVthh').value) {
+    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+    //   return
+    // }
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin gói thầu',
       nzContent: DialogThemMoiVatTuComponent,
@@ -534,12 +552,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         thongtinDauThau: data,
+        dataChiTieu: this.dataChiTieu,
+        donGia: this.formThongTinChung.get('donGia').value,
+        loaiVthh: '0101'
       },
     });
     modalGT.afterClose.subscribe((res) => {
       if (!res) {
         return;
       }
+
       const dsGoiThauDialog = new DanhSachGoiThau();
       dsGoiThauDialog.bangChu = res.value.bangChu;
       dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
@@ -552,16 +574,15 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       dsGoiThauDialog.soLuong = +res.value.soLuong;
       dsGoiThauDialog.thanhTien = res.value.thanhTien;
       dsGoiThauDialog.idVirtual = new Date().getTime();
+      dsGoiThauDialog.children = res.value.children;
       this.listOfData = [
         ...this.listOfData,
         dsGoiThauDialog
       ]
-      this.listOfData.forEach((value, index) => {
-        this.editCache[index] = {
-          edit: false,
-          data: { ...value }
-        };
-      })
+      this.listOfData.forEach(item => {
+        this.mapOfExpandedData2[item.maDvi] = this.convertTreeToList2(item);
+      });
+      console.log(this.mapOfExpandedData2);
     });
   }
 
@@ -604,28 +625,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  openDialogQuyetDinhGiaoChiTieu() {
-    if (this.formData.get('trangThai').value != '00' && this.formData.get('trangThai').value != '03' && this.formData.get('trangThai').value != '') {
-      return;
-    }
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
-      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.formData.patchValue({
-          soQd: data.soQuyetDinh,
-        });
-      }
-    });
-  }
-
   async phuongThucDauThauGetAll() {
     this.listPhuongThucDauThau = [];
     let res = await this.danhMucService.phuongThucDauThauGetAll();
@@ -664,6 +663,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let res = await this.danhMucService.loaiHopDongGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = res.data;
+    }
+  }
+
+  async getDataChiTieu() {
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(this.formData.get('namKhoach').value)
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+      this.formData.patchValue({
+        soQd: this.dataChiTieu.soQuyetDinh,
+      });
     }
   }
 
@@ -867,70 +876,47 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   listOfMapData2: TreeNodeInterface[] = [
     {
-      key: `1`,
+      key: `Việt trì`,
+      maDvi: '',
+      tenDvi: '',
+      goiThau: '',
       name: 'John Brown sr.',
       age: 60,
       address: 'New York No. 1 Lake Park',
       children: [
         {
           key: `1-1`,
+          maDvi: '',
+          tenDvi: '',
+          goiThau: '',
           name: 'John Brown',
           age: 42,
           address: 'New York No. 2 Lake Park'
         },
         {
           key: `1-2`,
+          maDvi: '',
+          tenDvi: '',
+          goiThau: '',
           name: 'John Brown jr.',
           age: 30,
-          address: 'New York No. 3 Lake Park',
-          children: [
-            {
-              key: `1-2-1`,
-              name: 'Jimmy Brown',
-              age: 16,
-              address: 'New York No. 3 Lake Park'
-            }
-          ]
+          address: 'New York No. 3 Lake Park'
         },
         {
           key: `1-3`,
+          maDvi: '',
+          tenDvi: '',
+          goiThau: '',
           name: 'Jim Green sr.',
           age: 72,
           address: 'London No. 1 Lake Park',
-          children: [
-            {
-              key: `1-3-1`,
-              name: 'Jim Green',
-              age: 42,
-              address: 'London No. 2 Lake Park',
-              children: [
-                {
-                  key: `1-3-1-1`,
-                  name: 'Jim Green jr.',
-                  age: 25,
-                  address: 'London No. 3 Lake Park'
-                },
-                {
-                  key: `1-3-1-2`,
-                  name: 'Jimmy Green sr.',
-                  age: 18,
-                  address: 'London No. 4 Lake Park'
-                }
-              ]
-            }
-          ]
         }
       ]
-    },
-    {
-      key: `2`,
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
     }
   ];
 
-  mapOfExpandedData2: { [key: string]: TreeNodeInterface[] } = {};
+  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
+
 
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
     if (!$event) {
@@ -946,29 +932,43 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  convertTreeToList(root: TreeNodeInterface): TreeNodeInterface[] {
-    const stack: TreeNodeInterface[] = [];
-    const array: TreeNodeInterface[] = [];
-    const hashMap = {};
-    stack.push({ ...root, level: 0, expand: false });
+  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.maDvi === d.maDvi)!;
+          target.expand = false;
+          this.collapse2(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
 
+  convertTreeToList2(root: DanhSachGoiThau): DanhSachGoiThau[] {
+    const stack: DanhSachGoiThau[] = [];
+    const array: DanhSachGoiThau[] = [];
+    const hashMap = {};
+    debugger;
+    stack.push({ ...root, level: 0, expand: false });
     while (stack.length !== 0) {
-      const node = stack.pop()!;
-      this.visitNode(node, hashMap, array);
+      const node = stack.pop();
+      this.visitNode2(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
           stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
         }
       }
     }
-
     return array;
   }
 
-  visitNode(node: TreeNodeInterface, hashMap: { [key: string]: boolean }, array: TreeNodeInterface[]): void {
-    if (!hashMap[node.key]) {
-      hashMap[node.key] = true;
+  visitNode2(node: DanhSachGoiThau, hashMap: { [maDvi: string]: boolean }, array: DanhSachGoiThau[]): void {
+    if (!hashMap[node.maDvi]) {
+      hashMap[node.maDvi] = true;
       array.push(node);
     }
   }
+
 }
