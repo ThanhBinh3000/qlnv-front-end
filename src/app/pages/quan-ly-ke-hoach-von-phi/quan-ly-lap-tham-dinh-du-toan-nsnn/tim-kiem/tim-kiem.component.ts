@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,12 +22,13 @@ export class TimKiemComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		nam: null,
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay:null,
 		maBaoCao: "",
 		donViTao: "",
 		trangThai: "",
 	};
+	newDate = new Date();
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -81,13 +82,16 @@ export class TimKiemComponent implements OnInit {
 		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
+		private location: Location,
 	) {
 	}
 
 	async ngOnInit() {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
-
+		this.searchFilter.denNgay = new Date();
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.tuNgay = this.newDate;
 		this.searchFilter.donViTao = this.userInfo?.dvql;	
 		this.onSubmit();	
 	}
@@ -245,6 +249,6 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.location.back();
 	}
 }

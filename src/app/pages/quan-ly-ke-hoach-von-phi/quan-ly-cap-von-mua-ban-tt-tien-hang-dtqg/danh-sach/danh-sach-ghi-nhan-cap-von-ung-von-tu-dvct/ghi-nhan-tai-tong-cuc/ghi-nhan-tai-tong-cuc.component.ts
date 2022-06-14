@@ -10,6 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
+import { DataService } from '../../../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
 	selector: 'app-ghi-nhan-tai-tong-cuc',
@@ -33,40 +35,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 	};
 	//danh muc
 	danhSach: any[] = [];
-	trangThais: any[] = [
-		{
-			id: Utils.TT_BC_1,
-			tenDm: "Đang soạn",
-		},
-		{
-			id: Utils.TT_BC_2,
-			tenDm: "Trình duyệt",
-		},
-		{
-			id: Utils.TT_BC_3,
-			tenDm: "TBP từ chối",
-		},
-		{
-			id: Utils.TT_BC_4,
-			tenDm: "TBP chấp nhận",
-		},
-		{
-			id: Utils.TT_BC_5,
-			tenDm: "Lãnh đạo từ chối",
-		},
-		{
-			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo chấp nhận",
-		},
-		{
-			id: Utils.TT_BC_8,
-			tenDm: "Từ chối",
-		},
-		{
-			id: Utils.TT_BC_9,
-			tenDm: "Tiếp nhận",
-		},
-	];
+	trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
 	loaiVons: any[] = LOAI_VON;
 	//phan trang
 	totalElements = 0;
@@ -90,6 +59,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -107,20 +77,10 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN) {
-				this.searchFilter.trangThai = Utils.TT_BC_7;
-				this.trangThais = [
-					{
-						id: Utils.TT_BC_7,
-						tenDm: "Mới",
-					}
-				]
+			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
-				if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
-					this.searchFilter.trangThai = Utils.TT_BC_2;
-				} else {
-					this.searchFilter.trangThai = Utils.TT_BC_4;
-				}
+				this.searchFilter.trangThai = Utils.TT_BC_4;
 			}
 		}
 		this.onSubmit();
@@ -145,16 +105,16 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		this.statusBtnNew = true;
 		let trangThais = [];
 		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
 			loaiTimKiem: "0",
-			// maBcao: this.searchFilter.maBaoCao,
-			// maDvi: this.searchFilter.donViTao,
-			// namBcao: this.searchFilter.nam,
+			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
+			maDvi: this.userInfo?.dvql,
+			maLoai: "1",
+			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			paggingReq: {
@@ -165,12 +125,17 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.danhSach = data.data.content;
 					this.danhSach.forEach(e => {
+						e.ngayLap = this.datePipe.transform(e.ngayLap, Utils.FORMAT_DATE_STR);
+						e.ngayNhan = this.datePipe.transform(e.ngayNhan, Utils.FORMAT_DATE_STR);
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -199,19 +164,25 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	taoMoi() {
 		this.statusBtnNew = false;
-		if (!this.searchFilter.maCvUv || !this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien) {
+		if (!this.searchFilter.maCvUv || !this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien || !this.searchFilter.ngayLap) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
+		let obj = {
+			maCvUv: this.searchFilter.maCvUv,
+			loaiCap: this.searchFilter.loaiVon,
+			soLenhChiTien: this.searchFilter.soLenhChiTien,
+			ngayLap: this.searchFilter.ngayLap,
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' 
-			+ this.searchFilter.loaiVon + '/' + this.searchFilter.maCvUv + '/' + this.searchFilter.soLenhChiTien
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc'
 		]);
 	}
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' + id,
 		])
 	}
 

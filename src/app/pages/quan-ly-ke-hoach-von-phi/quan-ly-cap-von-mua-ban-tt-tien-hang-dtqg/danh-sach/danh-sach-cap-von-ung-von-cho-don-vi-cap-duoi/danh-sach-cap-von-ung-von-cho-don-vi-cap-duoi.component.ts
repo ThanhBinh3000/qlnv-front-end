@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
+import { DataService } from '../../data.service';
 
 @Component({
 	selector: 'app-danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi',
@@ -89,6 +90,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -124,22 +126,29 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		}
 
 		await this.getDanhSachMaVon();
-
-		
-
 		this.onSubmit();
 	}
 
 	async getDanhSachMaVon(){
-		let request = {
+		let requestReport = {
+			loaiTimKiem: "0",
+			maCapUngVonTuCapTren: "",
 			maDvi: this.userInfo?.dvql,
 			maLoai: "1",
-			loaiTimKiem: '0',
-		}
-		await this.quanLyVonPhiService.danhSachMaVon(request).toPromise().then(
+			ngayLap: "",
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
+				limit: 1000,
+				page: 1,
+			},
+			trangThais: [Utils.TT_BC_7],
+		};
+		this.spinner.show();
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.danhSachMaVon = data.data;
+					this.danhSachMaVon = data.data.content;
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -194,6 +203,9 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 					this.danhSach = data.data.content;
 					this.danhSach.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -226,15 +238,18 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
+		let obj = {
+			maCvUv: this.searchFilter.maTren,
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/0/' 
-			+ this.searchFilter.maTren,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi',
 		]);
 	}
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/' + id
 		])
 	}
 
@@ -270,6 +285,8 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	}
 
 	close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
+		])
 	}
 }

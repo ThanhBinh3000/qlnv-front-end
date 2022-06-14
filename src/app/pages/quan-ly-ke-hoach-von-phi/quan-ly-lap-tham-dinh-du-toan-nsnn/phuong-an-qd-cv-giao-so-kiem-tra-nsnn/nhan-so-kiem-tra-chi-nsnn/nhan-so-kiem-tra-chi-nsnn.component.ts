@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,14 +23,15 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin tim kiem
     searchFilter = {
         namGiao: null,
-        tuNgay: "",
-        denNgay: "",
+        tuNgay: null,
+        denNgay: null,
         maDviTao: "",
         maDviNhan: "",
         trangThai: "",
         maPa: "",
         maBcao: "",
     };
+    newDate = new Date();
     //danh muc
     danhSachBaoCao: any = [];
     donVis: any[] = [];
@@ -52,6 +53,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
+        private location: Location,
     ) {
     }
 
@@ -59,6 +61,11 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.maDviNhan = this.userInfo?.dvql;
+
+        this.searchFilter.denNgay = new Date();
+        console.log(this.searchFilter.denNgay);
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
@@ -169,5 +176,9 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
 
     getUnitName(maDvi: string) {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    }
+
+    close(){
+        this.location.back();
     }
 }

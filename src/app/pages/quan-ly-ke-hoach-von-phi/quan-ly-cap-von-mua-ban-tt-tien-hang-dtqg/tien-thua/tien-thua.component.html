@@ -28,7 +28,32 @@
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                     <span>Từ chối</span>
                 </button>
-                <a class="btn btn-main" (click)="onSubmit('6',null)" [hidden]="statusBtnLD">
+                <a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
+                    <i class="icon htvbdh_tcdt_tuchoi"></i>
+                    <span>Chấp nhận</span>
+                </a>
+
+                <button class="btn btn-main" (click)="save()" [hidden]="statusSaveParent">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+                <button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusApproveParent">
+                    <i class="icon htvbdh_tcdt_guiduyet"></i>
+                    <span>Trình duyệt</span>
+                </button>
+                <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusTBPParent">
+                    <i class="icon htvbdh_tcdt_tuchoi"></i>
+                    <span>Từ chối</span>
+                </a>
+                <button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusTBPParent">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    <span>Chấp nhận</span>
+                </button>
+                <button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusLDParent">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    <span>Từ chối</span>
+                </button>
+                <a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusLDParent">
                     <i class="icon htvbdh_tcdt_tuchoi"></i>
                     <span>Chấp nhận</span>
                 </a>
@@ -53,7 +78,7 @@
                 <nz-table #basicTable class="nowrap">
                     <thead>
                         <tr>
-                            <th>Đơn vị gửi</th>
+                            <th [hidden]="statusBtnParent">Đơn vị gửi</th>
                             <th>Mã nộp tiền thừa</th>
                             <th>Mã cấp ứng vốn nhận từ đơn vị câp trên</th>
                             <th>Ngày lập (ủy nhiệm chi)</th>
@@ -67,7 +92,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{getUnitName(maDviTao)}}</td>
+                            <td [hidden]="statusBtnParent">{{getUnitName(maDviTao)}}</td>
                             <td>{{maTienThua}}</td>
                             <td>{{maCvUv}}</td>
                             <td>{{ngayLap}}</td>
@@ -84,15 +109,10 @@
             <div class="tab__container">
                 <nz-tabset nzType="card" class="tab__container">
                     <nz-tab [nzTitle]="'Thông tin nơi gửi'">
-                        <ng-container *ngIf="status;else templateName">
+                        <ng-container *ngIf="statusGui;else templateName">
                             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                 <div nz-col class="gutter-row" [nzSpan]="3">
-                                    Đơn vị:
-                                    <div *ngFor="let item of donViTiens">
-                                        <div *ngIf="item.id == maDviTien">
-                                            {{item.tenDm}}
-                                        </div>
-                                    </div>
+                                    Đơn vị: {{getMaDviTien()}}
                                 </div>
                             </div>
                         </ng-container>
@@ -124,66 +144,74 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <ng-container *ngIf="!statusEdit; else editTemplate">
-                                    <td>
-                                        {{ttGui.noiDung}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.maNguonNs}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.nienDoNs}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.tongTien}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.nopThue}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.ttChoDvHuong}}
-                                    </td>
-                                    <td>
-                                        {{ttGui.soTienChu}}
-                                    </td>
-                                    <td [hidden]="status">
-                                        <i class="fa fa-pencil" (click)="startEdit()"></i>
-                                    </td>
-                                </ng-container>
+                                <tr>
+                                    <ng-container *ngIf="!statusEdit; else editTemplate">
+                                        <td>
+                                            {{ttGui.noiDung}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.maNguonNs}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.nienDoNs}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.soTien}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.nopThue}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.ttChoDviHuong}}
+                                        </td>
+                                        <td>
+                                            {{ttGui.soTienBangChu}}
+                                        </td>
+                                        <td [hidden]="statusGui">
+                                            <i class="fa fa-pencil" (click)="startEdit()"></i>
+                                        </td>
+                                    </ng-container>
 
-                                <ng-template #editTemplate>
-                                    <td>
-                                        <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input" [(ngModel)]="ttGuiCache.nienDoNs" />
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input" [(ngModel)]="ttGuiCache.tongTien" />
-                                    </td>
-                                    <td>
-                                        <nz-input-number class="search__input"
-                                            [class]="ttGuiCache.nopThue || ttGuiCache.nopThue === 0 ?'' : 'input-error-validate' "
-                                            nzSize="small" [(ngModel)]="ttGuiCache.nopThue">
-                                        </nz-input-number>
-                                    </td>
-                                    <td>
-                                        <nz-input-number class="search__input"
-                                            [class]="ttGuiCache.ttChoDvHuong || ttGuiCache.ttChoDvHuong === 0 ?'' : 'input-error-validate' "
-                                            nzSize="small" [(ngModel)]="ttGuiCache.ttChoDvHuong">
-                                        </nz-input-number>
-                                    </td>
-                                    <td>
-                                        <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
-                                    </td>
-                                    <td [hidden]="status">
-                                        <a (click)="saveEdit()" class="save">Lưu</a>
-                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                            (nzOnConfirm)="cancelEdit()" class="save">
-                                            Hủy
-                                        </a>
-                                    </td>
-                                </ng-template>
+                                    <ng-template #editTemplate>
+                                        <td>
+                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNguonNs" />
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.nienDoNs" />
+                                        </td>
+                                        <td>
+                                            {{ttGuiCache.soTien}}
+                                        </td>
+                                        <td>
+                                            <nz-input-number class="search__input"
+                                                [class]="ttGuiCache.nopThue || ttGuiCache.nopThue === 0 ?'' : 'input-error-validate' "
+                                                nzSize="small" [(ngModel)]="ttGuiCache.nopThue"
+                                                (ngModelChange)="changeModel()">
+                                            </nz-input-number>
+                                        </td>
+                                        <td>
+                                            <nz-input-number class="search__input"
+                                                [class]="ttGuiCache.ttChoDviHuong || ttGuiCache.ttChoDviHuong === 0 ?'' : 'input-error-validate' "
+                                                nzSize="small" [(ngModel)]="ttGuiCache.ttChoDviHuong"
+                                                (ngModelChange)="changeModel()">
+                                            </nz-input-number>
+                                        </td>
+                                        <td>
+                                            <input nz-input class="search__input"
+                                                [(ngModel)]="ttGuiCache.soTienBangChu" />
+                                        </td>
+                                        <td [hidden]="statusGui">
+                                            <a (click)="saveEdit()" class="save">Lưu</a>
+                                            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                (nzOnConfirm)="cancelEdit()" class="save">
+                                                Hủy
+                                            </a>
+                                        </td>
+                                    </ng-template>
+                                </tr>
                             </tbody>
                         </nz-table>
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -195,14 +223,15 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
                                 Danh sách văn bản đính kèm
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                    [hidden]="statusGui">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Select File
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" [hidden]="statusGui" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -215,7 +244,7 @@
                                             <th>STT</th>
                                             <th>Tên file</th>
                                             <th></th>
-                                            <th class="th" [hidden]="status"></th>
+                                            <th class="th" [hidden]="statusGui"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -226,7 +255,7 @@
                                                 <button class="btn btn-function"
                                                     (click)="downloadFile(data.id)">Xem</button>
                                             </td>
-                                            <td [hidden]="status">
+                                            <td [hidden]="statusGui">
                                                 <button class="btn btn-function"
                                                     (click)="deleteFile(data.id)">Xóa</button>
                                             </td>
@@ -236,18 +265,32 @@
                             </div>
                         </div>
                     </nz-tab>
-                    <nz-tab [nzTitle]="'Thông tin nơi nhận'">
+                    <nz-tab [nzTitle]="'Thông tin nơi nhận'" [nzDisabled]="statusBtnParent">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div nz-col nzSpan="6">
-                                <label class="search__label">Ngày nhận lệnh chuyển có</label>
-                                <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
-                                    nzFormat="dd/MM/yyyy">
-                                </nz-date-picker>
-                            </div>
-                            <div nz-col nzSpan="6">
-                                <label class="search__label">Tài khoản nhận</label>
-                                <input nz-input class="search__input" [(ngModel)]="ttNhan.taiKhoanNhan" />
-                            </div>
+                            <ng-container *ngIf="statusNhan; else nhap">
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">
+                                        Ngày nhận lệnh chuyển có: <span>{{ngayNhan}}</span>
+                                    </label>
+                                </div>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">
+                                        Tài khoản nhận: <span>{{ttNhan.taiKhoanNhan}}</span>
+                                    </label>
+                                </div>
+                            </ng-container>
+                            <ng-template #nhap>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Ngày nhận lệnh chuyển có</label>
+                                    <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
+                                        (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </div>
+                                <div nz-col nzSpan="6">
+                                    <label class="search__label">Tài khoản nhận</label>
+                                    <input nz-input class="search__input" [(ngModel)]="ttNhan.taiKhoanNhan" />
+                                </div>
+                            </ng-template>
                             <div nz-col nzSpan="12">
                             </div>
                             <div nz-col nzSpan="24">
@@ -258,14 +301,15 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
                                 Danh sách văn bản đính kèm
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                    [hidden]="statusNhan">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Select File
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" [hidden]="statusNhan" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -278,7 +322,7 @@
                                             <th>STT</th>
                                             <th>Tên file</th>
                                             <th></th>
-                                            <th class="th" [hidden]="status"></th>
+                                            <th class="th" [hidden]="statusNhan"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -289,7 +333,7 @@
                                                 <button class="btn btn-function"
                                                     (click)="downloadFile(data.id)">Xem</button>
                                             </td>
-                                            <td [hidden]="status">
+                                            <td [hidden]="statusNhan">
                                                 <button class="btn btn-function"
                                                     (click)="deleteFile(data.id)">Xóa</button>
                                             </td>

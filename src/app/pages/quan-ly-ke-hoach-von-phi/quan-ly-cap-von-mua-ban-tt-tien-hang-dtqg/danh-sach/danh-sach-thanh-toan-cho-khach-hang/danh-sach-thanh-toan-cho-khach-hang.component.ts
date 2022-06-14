@@ -133,12 +133,12 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	}
 
 	taoMoi() {
-		if (this.searchFilter.maCvUv) {
+		if (!this.searchFilter.maCvUv) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/0/' + this.searchFilter.maCvUv,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/0/' + this.searchFilter.maCvUv,
 		]);
 	}
 

@@ -17,6 +17,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_DE_NGHI, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
 
 export class ItemData {
     id: any;
@@ -72,10 +73,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
     statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnGuiDVCT: boolean = true;                   // trang thai nut gui don vi cap tren
-    statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
     statusBtnCopy: boolean = true;                      // trang thai copy
-    statusBtnPrint: boolean = true;                     // trang thai print
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -115,12 +113,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.maCvUvTren = this.routerActive.snapshot.paramMap.get('maTren');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -144,6 +142,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            await this.dataSource.currentData.subscribe(obj => {
+                this.maCvUvTren = obj?.maCvUv;
+            })
             this.spinner.show();
             this.quanLyVonPhiService.maCapVonUng().toPromise().then(
                 (res) => {
@@ -208,16 +209,8 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        if (this.trangThai == Utils.TT_BC_2) {
-            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, roleNguoiTao);
-        } else {
-            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
-        }
-
-        this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnDVCT = utils.getRoleDVCT(this.trangThai, checkParent, roleNguoiTao);
+        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThai, checkChirld, roleNguoiTao);
     }
 
     //upload file
@@ -400,9 +393,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                            this.router.navigate([
-                                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/' + data.data.id,
-                            ])
+                        this.router.navigate([
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/' + data.data.id,
+                        ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
