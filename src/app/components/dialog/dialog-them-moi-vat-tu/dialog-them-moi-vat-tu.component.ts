@@ -26,6 +26,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   listOfData: any[] = [];
   tableExist: boolean = false;
   selectedChiCuc: boolean = false;
+  isValid: boolean = false;
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -38,6 +39,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null, [Validators.required]],
+      tenDvi: [null],
       goiThau: [null, [Validators.required]],
       tenCcuc: [null],
       donGia: [null, [Validators.required]],
@@ -84,8 +86,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   }
 
+  checkDisabledSave() {
+    this.isValid = this.listOfData && this.listOfData.length > 0
+  }
+
   async changeChiCuc(event) {
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    let data = this.listChiCuc.filter(item => item.maDvi === event);
+    this.formData.get('tenDvi').setValue(data[0].tenDonVi);
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       for (let i = 0; i < res.data?.child.length; i++) {
@@ -116,7 +124,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     } else {
       let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinDauThau.maDiemKho);
       if (diemKho.length > 0) {
+        this.thongtinDauThau.tenDiemKho = diemKho[0].text;
         this.thongtinDauThau.diaDiemNhap = diemKho[0].diaDiemNhap;
+        console.log(this.thongtinDauThau);
       }
     }
   }
@@ -125,11 +135,13 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     if (this.thongtinDauThau.maDiemKho && this.thongtinDauThau.soLuong) {
       this.thongtinDauThau.donGia = this.formData.get('donGia').value;
       this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
+      this.thongtinDauThau.idVirtual = new Date().getTime();
       this.listOfData = [...this.listOfData, this.thongtinDauThau];
       this.updateEditCache;
       this.thongtinDauThau = new DanhSachGoiThau();
       this.disableChiCuc();
       this.filterData();
+      this.checkDisabledSave();
     }
   }
 
@@ -198,6 +210,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
     this.disableChiCuc();
+    this.checkDisabledSave();
   }
 
   ngAfterViewChecked(): void {

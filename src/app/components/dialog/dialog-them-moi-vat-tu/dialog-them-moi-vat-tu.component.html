@@ -16,7 +16,7 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Tên chi cục </nz-form-label>
         <nz-form-control>
           <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)" [nzDisabled]='selectedChiCuc'>
-            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.maDvi"></nz-option>
+            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
@@ -90,7 +90,7 @@
     </tr>
     <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
       <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
-        <td>{{ data.maDiemKho }}</td>
+        <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.diaDiemNhap }}</td>
         <td>{{ data.soLuong}}</td>
         <td class="text-center">
@@ -144,7 +144,7 @@
         Hủy
       </button>
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
-        [disabled]="!formData.valid">
+        [disabled]="!isValid">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>

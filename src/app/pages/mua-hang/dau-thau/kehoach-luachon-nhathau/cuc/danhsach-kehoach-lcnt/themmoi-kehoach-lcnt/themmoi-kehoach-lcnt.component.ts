@@ -274,7 +274,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         loaiHdong: dataDetail?.children1 ? dataDetail.children1.loaiHdong : null,
         hthucLcnt: dataDetail?.children1 ? dataDetail.children1.hthucLcnt : null,
         pthucLcnt: dataDetail?.children1 ? dataDetail.children1.pthucLcnt : null,
-        donGia: dataDetail?.children1 ? dataDetail.children1.donGia : 123,
+        donGia: dataDetail?.children1 ? dataDetail.children1.donGia : null,
         tgianTbao: dataDetail?.children1 ? dataDetail.children1.tgianTbao : null,
         tgianPhatHanh: dataDetail?.children1 ? dataDetail.children1.tgianPhatHanh : null,
         tgianMoThau: dataDetail?.children1 ? dataDetail.children1.tgianMoThau : null,
@@ -539,10 +539,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   themMoiGoiThau(data?: DanhSachGoiThau) {
-    // if (!this.formData.get('loaiVthh').value) {
-    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
-    //   return
-    // }
+    if (!this.formData.get('loaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      return
+    }
     const modalGT = this.modal.create({
       nzTitle: 'Thông tin gói thầu',
       nzContent: DialogThemMoiVatTuComponent,
@@ -580,9 +580,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         dsGoiThauDialog
       ]
       this.listOfData.forEach(item => {
-        this.mapOfExpandedData2[item.maDvi] = this.convertTreeToList2(item);
+        this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
       });
-      console.log(this.mapOfExpandedData2);
     });
   }
 
@@ -608,6 +607,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     body.children2 = this.listOfData;
     body.children3 = [...this.baoGiaThiTruongList, ... this.canCuKhacList];
     let res = null;
+    console.log(this.mapOfExpandedData2);
     if (this.formData.get('id').value) {
       res = await this.dauThauService.update(body);
     } else {
@@ -936,7 +936,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (!$event) {
       if (data.children) {
         data.children.forEach(d => {
-          const target = array.find(a => a.maDvi === d.maDvi)!;
+          const target = array.find(a => a.idVirtual === d.idVirtual)!;
           target.expand = false;
           this.collapse2(array, target, false);
         });
@@ -950,7 +950,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     const stack: DanhSachGoiThau[] = [];
     const array: DanhSachGoiThau[] = [];
     const hashMap = {};
-    debugger;
     stack.push({ ...root, level: 0, expand: false });
     while (stack.length !== 0) {
       const node = stack.pop();
@@ -965,8 +964,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   visitNode2(node: DanhSachGoiThau, hashMap: { [maDvi: string]: boolean }, array: DanhSachGoiThau[]): void {
-    if (!hashMap[node.maDvi]) {
-      hashMap[node.maDvi] = true;
+    if (!hashMap[node.idVirtual]) {
+      hashMap[node.idVirtual] = true;
       array.push(node);
     }
   }
