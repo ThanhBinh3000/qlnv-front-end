@@ -870,11 +870,11 @@ export class GiaoNhiemVuComponent implements OnInit {
 				id: null,
 			})
 		})
-
+    debugger
     let tongHopTuIds = [];
     if (response.loaiCopy == 'D') {
       //xoa lst don vi truc thuoc theo lua chon tu dialog
-      return tongHopTuIds = [];
+      tongHopTuIds = [];
     }else{
       // thêm cac dvi trực thuộc vào danh sách thêm mới sau khi tổng hợp
       this.lstDviTrucThuoc.forEach(item => {
