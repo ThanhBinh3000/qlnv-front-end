@@ -30,7 +30,7 @@ export class Utils {
     public static TT_BC_3 = "3"; // Trưởng BP từ chối,
     public static TT_BC_4 = "4"; // Trưởng BP duyệt,
     public static TT_BC_5 = "5"; // Lãnh đạo từ chối,
-    public static TT_BC_6 = "6"; // Lãnh đạo duyệt,
+    public static TT_BC_6 = "6"; // Lãnh đạo phê duyệt,
     public static TT_BC_7 = "7"; // Gửi ĐV cấp trên,
     public static TT_BC_8 = "8"; // ĐV cấp trên từ chối,
     public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
@@ -391,7 +391,7 @@ export class Utils {
                 statusName = "Lãnh đạo từ chối"
                 break;
             case Utils.TT_BC_6:
-                statusName = "Lãnh đạo duyệt"
+                statusName = "Lãnh đạo phê duyệt"
                 break;
             case Utils.TT_BC_7:
                 statusName = "Gửi ĐV cấp trên"
@@ -715,7 +715,7 @@ export const TRANG_THAI = [
     },
     {
         id: 6,
-        tenDm: 'Lãnh đạo duyệt'
+        tenDm: 'Lãnh đạo phê duyệt'
     },
     {
         id: 7,
@@ -762,20 +762,16 @@ export const TRANG_THAI_TIM_KIEM = [
         tenDm: 'Lãnh đạo từ chối'
     },
     {
-        id: "6",
-        tenDm: 'Lãnh đạo duyệt'
-    },
-    {
         id: "7",
-        tenDm: 'Gửi ĐV cấp trên'
+        tenDm: 'Lãnh đạo phê duyệt'
     },
     {
         id: "8",
-        tenDm: 'Từ chối'
+        tenDm: 'Đơn vị cấp trên từ chối'
     },
     {
         id: "9",
-        tenDm: 'Tiếp nhận'
+        tenDm: 'Đơn vị cấp trên tiếp nhận'
     },
     // {
     //     id: "10",

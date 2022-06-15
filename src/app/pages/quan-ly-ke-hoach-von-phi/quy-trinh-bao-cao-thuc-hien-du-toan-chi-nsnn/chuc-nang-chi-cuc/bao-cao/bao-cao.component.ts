@@ -2009,9 +2009,7 @@ export class BaoCaoComponent implements OnInit {
         }
       }
     }
-    if (phuLucTemp.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt, phuLuc);
-    }
+
     // them moi phan tu
     if (initItem?.id) {
       let item = {
@@ -2024,6 +2022,9 @@ export class BaoCaoComponent implements OnInit {
         data: { ...item }
       };
     } else {
+      if (phuLucTemp.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+        this.sum(stt, phuLuc);
+      }
       let item = {
         ...initItem,
         id: uuid.v4() + "FE",

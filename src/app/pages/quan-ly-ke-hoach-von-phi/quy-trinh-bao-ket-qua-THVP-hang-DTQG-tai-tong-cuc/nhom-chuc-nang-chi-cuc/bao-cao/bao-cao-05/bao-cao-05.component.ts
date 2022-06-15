@@ -461,9 +461,7 @@ export class BaoCao05Component implements OnInit {
                 }
             }
         }
-        if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-            this.sum(stt, phuLuc);
-        }
+        
         var listVtu: vatTu[] = [];
         this.listColTemp.forEach((e) => {
             let objTrongD = {
@@ -495,6 +493,9 @@ export class BaoCao05Component implements OnInit {
                 data: { ...item }
             };
         } else {
+            if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt, phuLuc);
+            }
             let item = {
                 ...initItem,
                 id: uuid.v4() + "FE",

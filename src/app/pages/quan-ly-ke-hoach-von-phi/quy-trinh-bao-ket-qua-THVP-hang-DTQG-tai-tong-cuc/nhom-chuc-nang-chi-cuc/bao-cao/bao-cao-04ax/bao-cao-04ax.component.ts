@@ -499,6 +499,9 @@ export class BaoCao04axComponent implements OnInit {
                 data: { ...item }
             };
         } else {
+            if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt, phuLuc);
+            }
             let item = {
                 ...initItem,
                 id: uuid.v4() + "FE",
