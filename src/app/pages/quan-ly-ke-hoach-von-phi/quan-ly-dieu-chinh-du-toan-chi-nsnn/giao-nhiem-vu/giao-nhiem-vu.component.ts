@@ -1,3 +1,4 @@
+import { DialogDieuChinhCopyComponent } from './../../../../components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,6 +9,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -15,7 +17,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from "../../../../Utility/utils";
+import { TRANG_THAI_PHU_LUC, Utils } from "../../../../Utility/utils";
 import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
@@ -27,7 +29,7 @@ import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 // 	lyDoTuChoi: string;
 // 	thuyetMinh: string;
 // 	giaoCho: string;
-// 	lstCtietLapThamDinhs: any[];
+// 	lstCtietDieuChinhs: any[];
 // 	checked: boolean;
 // }
 export class ItemData {
@@ -263,10 +265,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (nam) {
 					this.namHienHanh = parseInt(nam, 10);
 				} else {
-					// this.namHienHanh = new Date().getFullYear();
-          // this.phuLucs.forEach(item => {
-          //   item.tenDm = item.tenDm.replace("N",  this.namHienHanh)
-          // })
 				}
 			}
 
@@ -472,16 +470,16 @@ export class GiaoNhiemVuComponent implements OnInit {
       congVan: this.congVan,
 			tongHopTuIds: tongHopTuIds,
 		}));
+    if (request.congVan.fileName == null){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
     //get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
 
-    if (!request.congVan.fileName){
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -542,18 +540,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				return;
 			}
 		}
-    // else {
-			// let check = true;
-			// this.lstDieuChinhs.forEach(item => {
-			// 	if (item.trangThai == '2'){
-			// 		check = false;
-			// 	}
-			// })
-			// if (!check){
-			// 	this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
-			// 	return;
-			// }
-		// }
 		if (this.id) {
 			const requestGroupButtons = {
 				id: this.id,
@@ -828,7 +814,30 @@ export class GiaoNhiemVuComponent implements OnInit {
 		}
 	}
 
-  async doCopy() {
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namHienHanh,
+      dotBcao: this.dotBcao,
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogDieuChinhCopyComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  obj
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
 		var maBcaoNew: string;
 		await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 			(data) => {
@@ -856,21 +865,20 @@ export class GiaoNhiemVuComponent implements OnInit {
 			lstDieuChinhTemps.push({
 				...data,
 				giaoCho: this.userInfo?.username,
-				lstCtietDchinh: lstCtietTemp,
+				lstCtietDieuChinhs: lstCtietTemp,
 				id: null,
 			})
 		})
 		let request = {
 			id: null,
 			fileDinhKems: [],
-			listIdDeleteFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstDchinh: lstDieuChinhTemps,
 			maBcao: maBcaoNew,
 			maDvi: this.maDviTao,
-			namBcao: this.namHienHanh,
-			namHienHanh: this.namHienHanh,
+			namBcao: response?.namBcao,
+			namHienHanh: response?.namBcao,
 			congVan: null,
-      dotBcao: this.dotBcao,
 			tongHopTuIds: [],
 		};
 
@@ -878,9 +886,17 @@ export class GiaoNhiemVuComponent implements OnInit {
 			async data => {
 				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.router.navigate([
-						'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id,
-					])
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -889,6 +905,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			},
 		);
+
 	}
 
   // action print

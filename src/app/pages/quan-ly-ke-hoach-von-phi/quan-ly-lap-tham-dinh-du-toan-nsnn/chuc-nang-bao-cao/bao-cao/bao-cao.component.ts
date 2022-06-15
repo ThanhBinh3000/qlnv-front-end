@@ -8,6 +8,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -815,7 +817,29 @@ export class BaoCaoComponent implements OnInit {
 		}
 	}
 
-	async doCopy() {
+	showDialogCopy(){
+		let obj = {
+			namBcao: this.namHienHanh,
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogDoCopyComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  obj
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
 		var maBcaoNew: string;
 		await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 			(data) => {
@@ -854,8 +878,8 @@ export class BaoCaoComponent implements OnInit {
 			lstLapThamDinhs: lstLapThamDinhTemps,
 			maBcao: maBcaoNew,
 			maDvi: this.maDviTao,
-			namBcao: this.namHienHanh,
-			namHienHanh: this.namHienHanh,
+			namBcao: response?.namBcao,
+			namHienHanh: response?.namBcao,
 			congVan: null,
 			tongHopTuIds: [],
 		};
@@ -864,9 +888,17 @@ export class BaoCaoComponent implements OnInit {
 			async data => {
 				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.router.navigate([
-						'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + data.data.id,
-					])
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

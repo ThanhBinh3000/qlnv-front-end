@@ -120,7 +120,7 @@ export class PhuLuc2Component implements OnInit {
     this.maDviTien = this.data?.maDviTien;
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
-    this.namBcao = this.data?.namBcao;
+    this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
@@ -213,10 +213,11 @@ export class PhuLuc2Component implements OnInit {
       let thienDinhMuc = mulMoney(item.thienDinhMuc, this.maDviTien);
       let thienThanhTien = mulMoney(item.thienThanhTien, this.maDviTien);
       let kphiThieuNtruoc = mulMoney(item.kphiThieuNtruoc, this.maDviTien);
+      let ncauKphi = mulMoney(item.ncauKphi, this.maDviTien);
       if (thienSluongKhoachDgiao > MONEY_LIMIT || thienDinhMuc > MONEY_LIMIT ||
         thienSluongTteThien > MONEY_LIMIT || thienThanhTien > MONEY_LIMIT ||
         thienSluongUocThien > MONEY_LIMIT || kphiThieuNtruoc > MONEY_LIMIT ||
-        thienCong > MONEY_LIMIT
+        thienCong > MONEY_LIMIT || ncauKphi> MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
@@ -452,10 +453,7 @@ export class PhuLuc2Component implements OnInit {
       }
     }
 
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
-    }
+
     // them moi phan tu
     if (initItem.id) {
       let item: ItemData = {
@@ -468,6 +466,10 @@ export class PhuLuc2Component implements OnInit {
         data: { ...item }
       };
     } else {
+      if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+        this.sum(stt);
+        this.updateEditCache();
+      }
       let item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
@@ -480,7 +482,6 @@ export class PhuLuc2Component implements OnInit {
         data: { ...item }
       };
     }
-
   }
   //xóa dòng
   deleteLine(id: any) {

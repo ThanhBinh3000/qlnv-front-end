@@ -119,7 +119,7 @@
 							<td [hidden]="status">
 								{{getStatusName(item.trangThai)}}
 							</td>
-							<!-- <td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+              <!-- <td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 								<ng-container *ngIf="!item.ngayTraKq; else xem">
 									Phê duyệt
 								</ng-container>
@@ -127,7 +127,7 @@
 									Xem
 								</ng-template>
 							</td> -->
-              <ng-container *ngIf="item.trangThai == '7'">
+              <ng-container *ngIf="item.trangThai == '7' || item.trangThai == '2'|| item.trangThai == '4'">
                 <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
                   <span>Phê duyệt</span>
                 </button>
