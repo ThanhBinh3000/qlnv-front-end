@@ -84,7 +84,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
   statusBtnGiao: boolean ;
-  statusBtnGiaoToanBo: boolean = false;
+  statusBtnGiaoToanBo: boolean ;
   statusBtnTongHop: boolean = true;
   statusAn: boolean = true;
   allChecked = false;
@@ -250,8 +250,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     if (this.userInfo?.roles[0]?.code == '3' && this.soQd && this.trangThaiBanGhi == '6') {
       this.statusBtnGiao = false;
+      this.statusBtnGiaoToanBo = false
     } else {
       this.statusBtnGiao = true;
+      this.statusBtnGiaoToanBo = true
     }
   }
 
@@ -367,16 +369,9 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
             this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
-            this.status = false;
-            this.lstDviChon = [];
-            this.donVis.forEach(item => {
-              if ((this.lstDvi.findIndex(e => e.maDvi == item.maDvi) == -1) && (item.parent?.maDvi === this.maDonViTao)) {
-                this.lstDviChon.push(item);
-              }
-            })
+              this.status = false;
           } else {
-            this.status = true;
-            this.statusAn = false;
+              this.status = true;
           }
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
             if (item.trangThai == "1") {
@@ -558,7 +553,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 		}
     this.spinner.show();
     if (this.id && this.namDtoan) {
-      this.quanLyVonPhiService.giaoDuToan2(request1).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan1(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -1284,7 +1279,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     ]);
 
     this.spinner.show();
-    await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
+    await this.quanLyVonPhiService.tongHopGiaoDuToan1(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
@@ -1309,7 +1304,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
           this.ngayTao = this.newDate;
           this.spinner.show();
-          this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+          this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
             (res) => {
               if (res.statusCode == 0) {
                 this.maPa = res.data;
