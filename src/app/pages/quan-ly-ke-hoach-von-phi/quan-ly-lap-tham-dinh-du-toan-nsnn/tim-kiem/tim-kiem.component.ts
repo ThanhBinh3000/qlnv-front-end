@@ -89,9 +89,12 @@ export class TimKiemComponent implements OnInit {
 	async ngOnInit() {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		
 		this.searchFilter.denNgay = new Date();
-		this.newDate.setMonth(this.newDate.getMonth() -1);
-		this.searchFilter.tuNgay = this.newDate;
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
+		
 		this.searchFilter.donViTao = this.userInfo?.dvql;	
 		this.onSubmit();	
 	}

@@ -26,7 +26,7 @@
 					</div>
                     <div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="disable"
 							[(ngModel)]="searchFilter.trangThai">
 							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
@@ -99,11 +99,24 @@
 							<td>{{item.ngayTao}}</td>
                             <td>{{item.ngayTrinh}}</td>
                             <td>{{item.ngayPheDuyet}}</td>
-							<td>{{getStatusName(item.trangThai)}}</td>
 							<td>
-								<ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" (click)="xoaDeNghi(item.id)" ></i>
+								{{getStatusName(item.trangThai)}}
+								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+									<br/>
+									Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngIf="status; else xem">
+									<a (click)="xemChiTiet(item)" style="color: #1890ff;">
+										Phê duyệt
+									</a>
+								</ng-container>
+								<ng-template #xem>
+									<ng-container *ngIf="checkDeleteReport(item)">
+										<i class="fa fa-trash-o do" (click)="xoaDeNghi(item.id)" ></i>
+									</ng-container>
+								</ng-template>
 							</td>
 						</tr>
 					</tbody>

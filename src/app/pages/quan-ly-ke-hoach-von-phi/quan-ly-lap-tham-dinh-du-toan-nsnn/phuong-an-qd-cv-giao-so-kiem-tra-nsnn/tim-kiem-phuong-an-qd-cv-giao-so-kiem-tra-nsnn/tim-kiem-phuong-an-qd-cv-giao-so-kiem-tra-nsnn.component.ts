@@ -173,6 +173,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 return;
             }
         }
+        let lstTrangThai = [];
+        if (this.searchFilter.trangThai){
+            lstTrangThai = [this.searchFilter.trangThai];
+        }
         let requestReport = {
             loaiTimKiem: this.searchFilter.loaiTimKiem,
             maDviTao: this.searchFilter.donViTao,
@@ -183,7 +187,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             maBcao: this.searchFilter.maBaoCao,
             str: null,
-            trangThai: this.searchFilter.trangThai,
+            trangThais: lstTrangThai,
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,

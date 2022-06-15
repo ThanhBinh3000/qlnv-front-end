@@ -7,12 +7,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
 
 export class ItemCongVan {
     fileName: string;
@@ -189,7 +192,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                         })
                         this.tongTien = 0;
                         this.lstCtietBcao.forEach(item => {
-                            this.tongTien += item.thanhTien;
+                            this.tongTien += mulMoney(item.thanhTien, item.dviThanhTien);
                         })
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -430,6 +433,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     // luu
     async save() {
+        if (!this.kphiDaCap && this.kphiDaCap !== 0){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         //get list file url
         let listFile: any = [];
         for (const iterator of this.listFile) {
@@ -444,7 +451,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: [],
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
             dnghiCapvonCtiets: lstCtietBcaoTemp,
             congVan: this.congVan,
@@ -452,7 +459,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             maDnghi: this.maDeNghi,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
-            maDviTien: "",
+            maDviTien: "1",
             soQdChiTieu: this.qdChiTieu,
             tongTien: this.tongTien,
             kphiDaCap: this.kphiDaCap,
@@ -464,6 +471,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         let file: any = this.fileDetail;
         if (file) {
             request.congVan = await this.uploadFile(file);
+        }
+        if (!request.congVan){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
         }
         this.spinner.show();
         if (!this.id) {
@@ -508,6 +519,100 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.router.navigate([
             'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/0'
         ])
+    }
+
+    showDialogCopy() {
+        let obj = {
+            qdChiTieu: this.qdChiTieu,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy Đề nghị',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
+    }
+
+    async doCopy(response: any) {
+        var maDeNghiNew: string;
+        await this.quanLyVonPhiService.maDeNghi().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maDeNghiNew = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        if (!this.kphiDaCap && this.kphiDaCap !== 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        let lstCtietBcaoTemp: any[] = [];
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                id: null,
+            })
+        })
+        // gui du lieu trinh duyet len server
+        let request = JSON.parse(JSON.stringify({
+            id: null,
+            fileDinhKems: [],
+            listIdDeleteFiles: [],
+            dnghiCapvonCtiets: lstCtietBcaoTemp,
+            congVan: null,
+            maDvi: this.maDviTao,
+            maDnghi: maDeNghiNew,
+            loaiDnghi: this.loaiDn,
+            canCuVeGia: this.canCuGia,
+            maDviTien: "1",
+            soQdChiTieu: response.qdChiTieu,
+            tongTien: this.tongTien,
+            kphiDaCap: this.kphiDaCap,
+            ycauCapThem: this.tongTien - this.kphiDaCap,
+            trangThai: this.trangThai,
+            thuyetMinh: this.thuyetMinh,
+        }));
+
+        this.spinner.show();
+        this.quanLyVonPhiService.taoMoiDeNghi(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maDeNghiNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 
 

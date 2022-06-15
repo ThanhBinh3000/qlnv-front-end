@@ -26,8 +26,8 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	searchFilter = {
 		maCvUv: "",
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		maThanhToan: "",
 		khachHang: "",
 		maDvi: "",
@@ -67,6 +67,11 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 		if (this.loai == "0") {
@@ -112,8 +117,8 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 			ngayTaoDen: "",
 			ngayTaoTu: "",
 			paggingReq: {
-				limit: this.pages.size,
-				page: this.pages.page,
+				limit: 1000,
+				page: 1,
 			},
 			trangThais: [Utils.TT_BC_7],
 		};

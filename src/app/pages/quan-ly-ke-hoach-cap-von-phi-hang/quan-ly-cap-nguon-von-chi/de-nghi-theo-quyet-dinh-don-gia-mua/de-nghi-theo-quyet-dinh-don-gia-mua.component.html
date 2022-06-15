@@ -40,13 +40,9 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
 				</a>
 				<a class="btn btn-main" (click)="close()">
 					<i nz-icon nzType="stop" nzTheme="outline"></i>
@@ -108,7 +104,7 @@
 							<td>{{ngayTrinhDuyet}}</td>
 							<td>{{ngayPheDuyet}}</td>
 							<td>
-									{{getStatusName(trangThai)}}
+								{{getStatusName(trangThai)}}
 							</td>
 						</tr>
 					</tbody>
@@ -154,7 +150,8 @@
 										<th>Thành tiền</th>
 										<th colspan="3" [hidden]="status"></th>
 										<th [hidden]="status">
-											<label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+											<label nz-checkbox [(ngModel)]="allChecked"
+												(ngModelChange)="updateAllChecked()">
 											</label>
 										</th>
 									</tr>
@@ -176,7 +173,11 @@
 										<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 											<td>{{ i + 1 }}</td>
 											<td>
-												{{data.maHang}}
+												<div *ngFor="let item of vatTus">
+													<div *ngIf="item.ma == data.maHang">
+														{{item.ten}}
+													</div>
+												</div>
 											</td>
 											<td>
 												<div *ngFor="let item of dviTinhs">
@@ -194,7 +195,7 @@
 											<td>
 												{{data.thanhTien}}
 											</td>
-											
+
 											<td [hidden]="status">
 												<i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
 											</td>
@@ -265,28 +266,43 @@
 											</td>
 										</ng-template>
 									</tr>
-									<tr>
-										<td>Tổng tiền</td>
-										<td>{{tongTien}}</td>
-										<td>Kinh phí đã cấp</td>
-										<td>
-											<ng-container *ngIf="status; else edit">
-												{{kphiDaCap}}
-											</ng-container>
-											<ng-template #edit>
-												<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"></nz-input-number>
-											</ng-template>
-										</td>
-										<td>Yêu cầu cấp thêm</td>
-										<td>{{tongTien-kphiDaCap}}</td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-									</tr>
 								</tbody>
 							</nz-table>
-							
+						</div>
+						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+							<div nz-col class="gutter-row" [nzSpan]="12">
+								<nz-table #basicTable class="nowrap">
+									<tbody>
+										<tr>
+											<td>
+												Tổng tiền:
+											</td>
+											<td>
+												{{tongTien}}
+											</td>
+											<td>
+												Kinh phí đã cấp:
+											</td>
+											<td>
+												<ng-container *ngIf="status; else edit">
+													{{kphiDaCap}}
+												</ng-container>
+												<ng-template #edit>
+													<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"
+													[class]="kphiDaCap || kphiDaCap === 0 ?'' : 'input-error-validate' "></nz-input-number>
+												</ng-template>
+											</td>
+											<td>
+												Yêu cầu cấp thêm:
+											</td>
+											<td>
+												{{tongTien-kphiDaCap}}
+											</td>
+										</tr>
+									</tbody>
+
+								</nz-table>
+							</div>
 						</div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col nzSpan="24">
@@ -344,16 +360,15 @@
 					<button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
-				   </button>
-				   <button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)"
-						[hidden]="status">
+					</button>
+					<button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)" [hidden]="status">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm</span>
-				   </button>
-				   <button type="button" class="btn btn-sub" [hidden]="status">
+					</button>
+					<!-- <button type="button" class="btn btn-sub" [hidden]="status">
 						<i class="icon htvbdh_tcdt_import"></i>
 						<span>Import</span>
-				   </button>
+					</button> -->
 				</div>
 			</div>
 			<div class="ghi-chu">

@@ -887,7 +887,6 @@ export class BaoCaoComponent implements OnInit {
 		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
 					const modalCopy = this.modal.create({
 						nzTitle: MESSAGE.ALERT,
 						nzContent: DialogCopyComponent,
