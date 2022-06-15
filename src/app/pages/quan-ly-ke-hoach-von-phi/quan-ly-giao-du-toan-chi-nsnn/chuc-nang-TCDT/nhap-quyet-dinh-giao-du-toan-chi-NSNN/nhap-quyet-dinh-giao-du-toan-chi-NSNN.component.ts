@@ -55,7 +55,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   maPaCha: string;
   lstDvi: any[] = [];                                         //danh sach don vi da duoc chon
   namPa: number;
-  soQd: ItemCongVan;
+  soQd: ItemCongVan = new ItemCongVan();
   trangThaiBanGhi: string = '1';
   newDate = new Date();
   maDviTien: string;
@@ -176,7 +176,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
       this.ngayTao = this.newDate.toISOString().slice(0, 16);
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -217,18 +217,39 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     );
   }
+  //check role cho các nut trinh duyet
   getStatusButton() {
+    if (this.id) {
+      this.status = true;
+    } else {
+      this.status = false;
+    }
+
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
     if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-        checkChirld = true;
+      checkChirld = true;
     }
     const utils = new Utils();
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    if (this.id) {
+      this.statusBtnSave = true;
+    }
+    if (!this.id) {
+      this.statusBtnNew = true;
+      this.statusBtnEdit = true;
+    } else {
+      if (this.lstCtietBcao.length > 0) {
+        this.statusBtnNew = false;
+        this.statusBtnEdit = true;
+      } else {
+        this.statusBtnNew = true;
+        this.statusBtnEdit = false;
+      }
+    }
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-
-}
+  }
   //upload file
   async uploadFile(file: File) {
     // day file len server
@@ -324,7 +345,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.maPaCha = data.data.maPa;
           this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
           this.lstFiles = data.data.lstFiles;
-					this.listFile = [];
+          this.listFile = [];
           this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -346,7 +367,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();
@@ -385,22 +406,22 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     });
   }
   //download file về máy tính
-	async downloadFileCv() {
-		if (this.soQd?.fileUrl) {
-		  await this.quanLyVonPhiService.downloadFile(this.soQd?.fileUrl).toPromise().then(
-			(data) => {
-			  fileSaver.saveAs(data, this.soQd?.fileName);
-			},
-			err => {
-			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		  );
-		} else {
-		  let file: any = this.fileDetail;
-		  const blob = new Blob([file], { type: "application/octet-stream" });
-		  fileSaver.saveAs(blob, file.name);
-		}
-	  }
+  async downloadFileCv() {
+    if (this.soQd?.fileUrl) {
+      await this.quanLyVonPhiService.downloadFile(this.soQd?.fileUrl).toPromise().then(
+        (data) => {
+          fileSaver.saveAs(data, this.soQd?.fileName);
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    } else {
+      let file: any = this.fileDetail;
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
+  }
 
 
   // luu
@@ -469,14 +490,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       thuyetMinh: this.thuyetMinh,
       soQd: this.soQd,
     }));
-    //get file cong van url
-		let file: any = this.fileDetail;
-		if (file) {
-			request.soQd = await this.uploadFile(file);
-		}
-    if(!this.soQd.fileName){
-      this.notification.warning(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+    if (this.soQd.fileName == null) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return
+    }
+    //get file cong van url
+    let file: any = this.fileDetail;
+    if (file) {
+      request.soQd = await this.uploadFile(file);
     }
     this.spinner.show();
     if (!this.id) {
@@ -502,7 +523,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         },
       );
     }
-    else{
+    else {
       this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
@@ -665,10 +686,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     }
 
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
-    }
     // them moi phan tu
     if (initItem.id) {
       let item: ItemData = {
@@ -681,6 +698,10 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         data: { ...item }
       };
     } else {
+      if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+        this.sum(stt);
+        this.updateEditCache();
+      }
       let item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
@@ -924,7 +945,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   async linkToPaPbo() {
     let listCtietDvi: any[] = [];
     let maPaCha = this.maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.maPa = res.data;
@@ -1004,7 +1025,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   async linkToPaGiaoDC() {
     let listCtietDvi: any[] = [];
     let maPaCha = this.maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.maPa = res.data;
