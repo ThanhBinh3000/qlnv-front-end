@@ -1,3 +1,7 @@
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/services/user.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -37,6 +41,9 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
   searchFilter = {
     soDeXuat: '',
   };
+  donVis: any[] = [];
+  capDvi: string;
+  userInfo: any;
   ////////
   listOfData: DataItem[] = [];
   sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
@@ -50,9 +57,37 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
 
   constructor(
     private router: Router,
+		private userService: UserService,
+		private notification: NzNotificationService,
+		private danhMuc: DanhMucHDVService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    let userName = this.userService.getUserName();
+		await this.getUserInfo(userName); //get user info
+		//lay danh sach danh muc
+		await this.danhMuc.dMDonVi().toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.donVis = data.data;
+					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+		this.QuanLyGiaoDuToanChiNSNNList.forEach(data => {
+			data.unRole.forEach(item => {
+				if (this.userInfo?.roles[0]?.code == item.role && this.capDvi == item.unit){
+					data.isDisabled = true;
+					return;
+				}
+			})
+		})
+		this.QuanLyGiaoDuToanChiNSNNList = this.QuanLyGiaoDuToanChiNSNNList.filter(item => item.isDisabled == false);
     /////////
     const data = [];
     for (let i = 0; i < 100; i++) {
@@ -70,7 +105,22 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
     this.listOfData = data;
     //////////////
   }
-
+  //get user info
+	async getUserInfo(username: string) {
+		await this.userService.getUserInfo(username).toPromise().then(
+			(data) => {
+				if (data?.statusCode == 0) {
+					this.userInfo = data?.data
+					return data?.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+	}
   redirectThongTinChiTieuKeHoachNam() {
     this.router.navigate([
       '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
