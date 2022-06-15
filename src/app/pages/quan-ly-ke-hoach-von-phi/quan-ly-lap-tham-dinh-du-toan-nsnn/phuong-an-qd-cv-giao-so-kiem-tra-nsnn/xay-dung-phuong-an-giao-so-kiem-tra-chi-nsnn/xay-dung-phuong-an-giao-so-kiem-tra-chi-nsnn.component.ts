@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -1152,15 +1153,29 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         })
 
+        var lstTtCtietTemp: any[] = [];
+        if (lstCtietBcaoTemp.length > 0){
+            let item = lstCtietBcaoTemp[0];
+            item.listCtietDvi.forEach(e => {
+                lstTtCtietTemp.push({
+                    id: null,
+                    maBcao: e.maBcao,
+                    trangThai: "0",
+                })
+            })
+        }
+
 		let request = {
 			id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],
             listCtiet: lstCtietBcaoTemp,
+            listTtCtiet: lstTtCtietTemp,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
             maPa: maPaNew,
             namPa: this.namPa,
+            maPaBtc: this.maPaBtc,
             maBcao: this.maBaoCao,
             trangThai: "1",
             thuyetMinh: "",
@@ -1170,12 +1185,17 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 		this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.router.navigate([
-						'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
-					])
-                    this.id = data.data.id;
-                    this.getDetailReport();
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maPaNew
+						},
+					  });
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

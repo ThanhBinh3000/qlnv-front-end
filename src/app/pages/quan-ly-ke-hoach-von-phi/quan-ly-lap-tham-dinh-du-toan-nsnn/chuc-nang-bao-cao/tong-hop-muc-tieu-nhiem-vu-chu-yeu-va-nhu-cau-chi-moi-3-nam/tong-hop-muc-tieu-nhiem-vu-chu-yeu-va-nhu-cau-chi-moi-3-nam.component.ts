@@ -434,10 +434,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 }
             }
         }
-        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-            this.sum(stt);
-            this.updateEditCache();
-        }
+        
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -450,6 +447,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 data: { ...item }
             };
         } else {
+            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt);
+                this.updateEditCache();
+            }
             let item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",

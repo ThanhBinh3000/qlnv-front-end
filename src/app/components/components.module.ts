@@ -98,6 +98,7 @@ import { DialogChonThemBieuMauComponent } from './dialog/dialog-chon-them-bieu-m
 import { DialogThemKhoanMucComponent } from './dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogLuaChonThemDonViComponent } from './dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-bao-cao-copy.component';
+import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.component';
 
 @NgModule({
   declarations: [
@@ -146,6 +147,7 @@ import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-b
     DialogThemKhoanMucComponent,
     DialogLuaChonThemDonViComponent,
     DialogBaoCaoCopyComponent,
+    DialogDoCopyComponent,
     DialogDieuChinhCopyComponent,
   ],
   imports: [
