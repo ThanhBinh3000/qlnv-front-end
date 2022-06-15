@@ -1,4 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
+import { NullTemplateVisitor } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +8,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -587,12 +590,157 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         return this.trangThais.find(e => e.id == id)?.tenDm;
     }
 
+    getMaDviTien() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
     close() {
         this.router.navigate([
             'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
         ])
     }
 
+    async showDialogCopy() {
+        let requestReport = {
+			loaiTimKiem: "0",
+			maCapUngVonTuCapTren: "",
+			maDvi: this.userInfo?.dvql,
+			maLoai: "1",
+			ngayLap: "",
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
+				limit: 1000,
+				page: 1,
+			},
+			trangThais: [Utils.TT_BC_7],
+		};
+        let danhSach = [];
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					danhSach = data.data.content;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+        let obj = {
+            maCvUv: this.maCvUvTren,
+            danhSach: danhSach,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy Cấp vốn ứng cho đơn vị cấp dưới',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
+    }
 
+    async doCopy(response: any) {
+        var maCvUvNew: string;
+        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maCvUvNew = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        if (!this.maDviTien){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        let checkMoneyRange = true;
+        let checkSave = true;
+
+        this.lstCtietBcao.forEach(item => {
+            if (this.editCache[item.id].edit){
+                checkSave = false;
+                return;
+            }
+        })
+        if (!checkSave) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        var lstCtietBcaoTemp: ItemData[] = [];
+        this.lstCtietBcao.forEach(item => {
+            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT){
+                checkMoneyRange = false;
+                return;
+            }
+            lstCtietBcaoTemp.push({
+                ...item,
+                tongSoTien: mulMoney(item.tongSoTien, this.maDviTien),
+                nopThue: mulMoney(item.nopThue, this.maDviTien),
+                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
+                id: null,
+            })
+        })
+
+        if (!checkMoneyRange){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        
+        // gui du lieu trinh duyet len server
+        let request = JSON.parse(JSON.stringify({
+            id: null,
+            fileDinhKemGuis: [],
+            listIdDeleteFileGuis: [],
+            capUngVonCtiets: lstCtietBcaoTemp,
+            maCapUngVonChoCapDuoi: maCvUvNew,
+            maCapUngVonTuCapTren: response.maCvUv,
+            maDvi: this.maDviTao,
+            maDviTien: this.maDviTien,
+            trangThai: "1",
+            thuyetMinh: "",
+        }));
+
+        this.spinner.show();
+        this.quanLyVonPhiService.taoMoiCapVon(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maCvUvNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
+    }
 
 }

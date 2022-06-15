@@ -7,6 +7,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -78,7 +80,7 @@ export class TienThuaComponent implements OnInit {
     //trang thai cac nut
     statusGui: boolean = false;
     statusNhan: boolean = false;
-    statusEdit: boolean = false;
+    statusEdit: boolean = true;
     statusBtnDel: boolean;
     statusBtnSave: boolean;
     statusBtnApprove: boolean;
@@ -258,7 +260,11 @@ export class TienThuaComponent implements OnInit {
         this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
         this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
         this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
+        if (this.statusBtnParent){
+            this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
+        } else {
+            this.statusBtnCopy = true;
+        }
         //
         this.statusSaveParent = utils.getRoleSave(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
         this.statusApproveParent = utils.getRoleApprove(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
@@ -472,7 +478,7 @@ export class TienThuaComponent implements OnInit {
             }
         }
 
-        if (this.startEdit){
+        if (this.statusEdit){
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
@@ -609,10 +615,6 @@ export class TienThuaComponent implements OnInit {
         }
     }
 
-    async doCopy() {
-
-    }
-
     changeDate() {
         this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
@@ -631,6 +633,153 @@ export class TienThuaComponent implements OnInit {
             ttChoDviHuong = Number(this.ttGuiCache.ttChoDviHuong);
         }
         this.ttGuiCache.soTien = nopThue + ttChoDviHuong;
+    }
+
+    async showDialogCopy() {
+        let danhSach = [];
+
+        let requestReport = {
+			loaiTimKiem: "0",
+			maCapUngVonTuCapTren: "",
+			maDvi: this.userInfo?.dvql,
+			maLoai: "1",
+			ngayLap: "",
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
+				limit: 1000,
+				page: 1,
+			},
+			trangThais: [Utils.TT_BC_7],
+		};
+		this.spinner.show();
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					danhSach = data.data.content;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+
+		this.spinner.hide();
+        let obj = {
+            maCvUv: this.maCvUv,
+            danhSach: danhSach,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy  Nộp tiền thừa lên đơn vị cấp trên',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
+    }
+
+    async doCopy(response: any) {
+        var maCvUvNew: string;
+        await this.quanLyVonPhiService.maNopTienVon().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+                    var str: string;
+                    if (capDvi == Utils.CUC_KHU_VUC) {
+                        str = "CKV";
+                    } else {
+                        str = "CC";
+                    }
+                    maCvUvNew = res.data;
+                    let mm = maCvUvNew.split('.');
+                    maCvUvNew = mm[0] + str + '.' + mm[1];
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        if (this.statusEdit){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        
+        if (!this.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        // gui du lieu trinh duyet len server
+        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        
+        // gui du lieu trinh duyet len server
+        let request = {
+            id: null,
+            maLoai: "3",
+            fileDinhKemGuis: [],
+            listIdDeleteFileGuis: [],
+            fileDinhKemNhans: [],
+            listIdDeleteFileNhans: [],
+            maDvi: this.maDviTao,
+            maDviTien: this.maDviTien,
+            maNopTienThua: maCvUvNew,
+            maCapUngVonTuCapTren: response.maCvUv,
+            ngayLap: this.ngayLapTemp,
+            ngayNhan: null,
+            noiDung: this.ttGui.noiDung,
+            maNguonNs: this.ttGui.maNguonNs,
+            nienDoNs: this.ttGui.nienDoNs,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
+            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
+            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
+            soTienBangChu: this.ttGui.soTienBangChu,
+            tkNhan: null,
+            trangThai: "1",
+            trangThaiDviCha: "1",
+            thuyetMinh: "",
+            thuyetMinhDviCha: "",
+        };
+
+        this.spinner.show();
+        this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maCvUvNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 
 

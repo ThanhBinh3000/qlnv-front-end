@@ -131,9 +131,12 @@
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
+								<ng-container *ngIf="item.trangThai =='3' || item.trangThai == '5' || item.trangThai == '8'">
+									<br/>
+									Lý do: {{item.lyDoTuChoi}}
+								</ng-container>
 							</td>
 							<td>
-
 								<ng-container *ngIf="status; else xem">
 									<a (click)="xemChiTiet(item)" style="color: #1890ff;">
 										Phê duyệt
