@@ -490,10 +490,7 @@ export class PhuLuc6Component implements OnInit {
       }
     }
 
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
-    }
+
     // them moi phan tu
     if (initItem.id) {
       let item: ItemData = {
@@ -517,6 +514,9 @@ export class PhuLuc6Component implements OnInit {
         edit: true,
         data: { ...item }
       };
+    }if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+      this.sum(stt);
+      this.updateEditCache();
     }
 
   }
@@ -881,12 +881,12 @@ export class PhuLuc6Component implements OnInit {
 
   // gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
-    this.editCache[id].data.kphiTtien = this.editCache[id].data.slHangTte * this.editCache[id].data.kphiDmuc;
-    this.editCache[id].data.cphiTcong = this.editCache[id].data.cphiNtruoc + this.editCache[id].data.cphiNnay;
-    this.editCache[id].data.chenhLech = this.editCache[id].data.kphiTtien - this.editCache[id].data.cphiTcong;
-    this.editCache[id].data.kphiChuaQtoanCong = this.editCache[id].data.kphiChuaQtoanKpTkiem + this.editCache[id].data.kphiChuaQtoanKpTchi;
-    this.editCache[id].data.soChuaQtoan = this.editCache[id].data.kphiChuaQtoanCong - this.editCache[id].data.dtoan2021ThanhQtoan2020;
-
+    this.editCache[id].data.soChuaQtoan = Number(this.editCache[id].data.kphiChuaQtoanCong) - Number(this.editCache[id].data.dtoan2021ThanhQtoan2020);
+    this.editCache[id].data.kphiChuaQtoanCong = Number(this.editCache[id].data.kphiChuaQtoanKpTkiem) + Number(this.editCache[id].data.kphiChuaQtoanKpTchi);
+    this.editCache[id].data.chenhLech = Number(this.editCache[id].data.kphiTtien) - Number(this.editCache[id].data.cphiTcong);
+    this.editCache[id].data.cphiTcong = Number(this.editCache[id].data.cphiNtruoc) + Number(this.editCache[id].data.cphiNnay);
+    this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
   }
+
 
 }

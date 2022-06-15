@@ -213,10 +213,11 @@ export class PhuLuc2Component implements OnInit {
       let thienDinhMuc = mulMoney(item.thienDinhMuc, this.maDviTien);
       let thienThanhTien = mulMoney(item.thienThanhTien, this.maDviTien);
       let kphiThieuNtruoc = mulMoney(item.kphiThieuNtruoc, this.maDviTien);
+      let ncauKphi = mulMoney(item.ncauKphi, this.maDviTien);
       if (thienSluongKhoachDgiao > MONEY_LIMIT || thienDinhMuc > MONEY_LIMIT ||
         thienSluongTteThien > MONEY_LIMIT || thienThanhTien > MONEY_LIMIT ||
         thienSluongUocThien > MONEY_LIMIT || kphiThieuNtruoc > MONEY_LIMIT ||
-        thienCong > MONEY_LIMIT
+        thienCong > MONEY_LIMIT || ncauKphi> MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
@@ -480,7 +481,10 @@ export class PhuLuc2Component implements OnInit {
         data: { ...item }
       };
     }
-
+    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+      this.sum(stt);
+      this.updateEditCache();
+    }
   }
   //xóa dòng
   deleteLine(id: any) {
