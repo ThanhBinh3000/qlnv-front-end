@@ -24,6 +24,7 @@ export class DialogDieuChinhCopyComponent implements OnInit {
         this.response = {
             ...this.obj,
         };
+        this.response.loaiCopy = 'C'
     }
 
     handleOk() {

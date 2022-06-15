@@ -32,7 +32,7 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Phê duyệt</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
@@ -87,12 +87,7 @@
 						<ng-container *ngIf="status;else templateName">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="3">
-									Đơn vị:
-									<div *ngFor="let item of dviTiens">
-										<div *ngIf="item.id == maDviTien">
-											{{item.tenDm}}
-										</div>
-									</div>
+									Đơn vị: {{getMaDviTien()}}
 								</div>
 							</div>
 						</ng-container>
@@ -352,10 +347,10 @@
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm</span>
 					</button>
-					<button type="button" class="btn btn-sub" [hidden]="status">
+					<!-- <button type="button" class="btn btn-sub" [hidden]="status">
 						<i class="icon htvbdh_tcdt_import"></i>
 						<span>Import</span>
-					</button>
+					</button> -->
 				</div>
 			</div>
 			<div class="ghi-chu">

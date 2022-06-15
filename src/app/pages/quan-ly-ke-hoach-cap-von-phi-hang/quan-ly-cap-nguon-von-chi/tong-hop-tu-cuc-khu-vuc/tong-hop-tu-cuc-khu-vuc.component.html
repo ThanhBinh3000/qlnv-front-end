@@ -18,14 +18,14 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+				<!-- <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Từ chối</span>
 				</a>
 				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Duyệt</span>
-				</button>
+				</button> -->
 				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
@@ -42,13 +42,9 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
 				</a>
 				<a class="btn btn-main" (click)="close()" >
 					<i nz-icon nzType="stop" nzTheme="outline"></i>

@@ -26,8 +26,8 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	searchFilter = {
 		maCvUv: "",
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		maTienThua: "",
 		ngayLap: "",
 		maDvi: "",
@@ -68,6 +68,11 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 
@@ -114,8 +119,8 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 			ngayTaoDen: "",
 			ngayTaoTu: "",
 			paggingReq: {
-				limit: this.pages.size,
-				page: this.pages.page,
+				limit: 1000,
+				page: 1,
 			},
 			trangThais: [Utils.TT_BC_7],
 		};

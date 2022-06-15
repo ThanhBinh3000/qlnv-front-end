@@ -818,6 +818,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		let obj = {
 			namBcao: this.namHienHanh,
       dotBcao: this.dotBcao,
+      loaiCopy: ''
 		}
 		const modalTuChoi = this.modal.create({
 			nzTitle: 'Copy Báo Cáo',
@@ -869,6 +870,16 @@ export class GiaoNhiemVuComponent implements OnInit {
 				id: null,
 			})
 		})
+    let tongHopTuIds = [];
+    if (response.loaiCopy == 'D') {
+      //xoa lst don vi truc thuoc theo lua chon tu dialog
+      tongHopTuIds = [];
+    }else{
+      // thêm cac dvi trực thuộc vào danh sách thêm mới sau khi tổng hợp
+      this.lstDviTrucThuoc.forEach(item => {
+        tongHopTuIds.push(item.id);
+      })
+    }
 		let request = {
 			id: null,
 			fileDinhKems: [],
@@ -879,7 +890,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			namBcao: response?.namBcao,
 			namHienHanh: response?.namBcao,
 			congVan: null,
-			tongHopTuIds: [],
+			tongHopTuIds: tongHopTuIds ,
 		};
 
 		this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(

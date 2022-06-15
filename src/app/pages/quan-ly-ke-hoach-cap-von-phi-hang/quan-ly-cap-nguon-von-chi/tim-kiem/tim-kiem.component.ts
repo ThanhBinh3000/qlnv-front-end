@@ -24,8 +24,8 @@ export class TimKiemComponent implements OnInit {
 	searchFilter = {
 		maDn: null,
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		qdChiTieu: "",
 		canCuGia: "",
 		loaiDn: "",
@@ -41,7 +41,7 @@ export class TimKiemComponent implements OnInit {
             tenDm: "Đang soạn",
         },
         {
-            id: Utils.TT_BC_4,
+            id: Utils.TT_BC_2,
             tenDm: "Trình duyệt",
         },
         {
@@ -94,6 +94,11 @@ export class TimKiemComponent implements OnInit {
 		
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
 		if (this.loai == "0"){
@@ -101,9 +106,9 @@ export class TimKiemComponent implements OnInit {
 		} else {
 			this.status = true;
 			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN){
-				this.searchFilter.trangThai = Utils.TT_BC_6;
+				this.searchFilter.trangThai = Utils.TT_BC_7;
 				this.trangThais = [{
-					id: Utils.TT_BC_6,
+					id: Utils.TT_BC_7,
 					tenDm: "Mới",
 				}]
 			} else {

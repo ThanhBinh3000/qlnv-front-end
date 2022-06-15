@@ -8,8 +8,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -435,7 +438,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: [],
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
             thopCucKvCtiets: this.lstCtietBcao,
             maDvi: this.maDviTao,
@@ -450,6 +453,10 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         let file: any = this.fileDetail;
         if (file) {
             request.congVan = await this.uploadFile(file);
+        }
+        if (!request.congVan){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
         }
         this.spinner.show();
         if (!this.id) {
@@ -552,8 +559,93 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop'
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/0'
         ])
+    }
+
+    showDialogCopy() {
+        let obj = {
+            qdChiTieu: this.qdChiTieu,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy Đề nghị tổng hợp từ cục khu vực',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
+    }
+
+    async doCopy(response: any) {
+        var maDeNghiNew: string;
+        await this.quanLyVonPhiService.maDeNghi().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maDeNghiNew = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        let lstCtietBcaoTemp: any[] = [];
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                id: null,
+            })
+        })
+        // gui du lieu trinh duyet len server
+        let request = JSON.parse(JSON.stringify({
+            id: null,
+            fileDinhKems: [],
+            listIdDeleteFiles: [],
+            thopCucKvCtiets: lstCtietBcaoTemp,
+            maDvi: this.maDviTao,
+            maDnghi: maDeNghiNew,
+            maDviTien: "1",
+            loaiDnghi: this.nguonBcao,
+            soQdChiTieu: response.qdChiTieu,
+            trangThai: "1",
+            thuyetMinh: "",
+        }));
+
+        this.spinner.show();
+        this.quanLyVonPhiService.themMoiDnghiThop(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maDeNghiNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 
 

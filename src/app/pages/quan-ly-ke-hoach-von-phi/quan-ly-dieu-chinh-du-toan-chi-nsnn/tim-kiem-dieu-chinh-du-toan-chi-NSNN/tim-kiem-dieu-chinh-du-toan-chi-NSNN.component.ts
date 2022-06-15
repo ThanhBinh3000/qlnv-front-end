@@ -186,14 +186,13 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     searchFilterTemp.trangThais= [];
     searchFilterTemp.tuNgay = this.datePipe.transform(searchFilterTemp.tuNgay, 'dd/MM/yyyy') || searchFilterTemp.tuNgay;
     searchFilterTemp.denNgay = this.datePipe.transform(searchFilterTemp.denNgay, 'dd/MM/yyyy') || searchFilterTemp.denNgay;
+    if(this.trangThai){
+      searchFilterTemp.trangThais.push(this.trangThai)
+    }else{
+      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    }
     if (!this.trangThai) {
-      if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
-        searchFilterTemp.trangThais = [Utils.TT_BC_1];
-      } else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
-        searchFilterTemp.trangThais = [Utils.TT_BC_2];
-      } else {
-        searchFilterTemp.trangThais = [Utils.TT_BC_4];
-      }
+      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }

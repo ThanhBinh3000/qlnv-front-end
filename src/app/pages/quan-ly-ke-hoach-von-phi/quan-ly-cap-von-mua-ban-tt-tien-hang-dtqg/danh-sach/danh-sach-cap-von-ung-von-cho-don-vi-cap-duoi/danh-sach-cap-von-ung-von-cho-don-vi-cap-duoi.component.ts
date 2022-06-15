@@ -25,8 +25,8 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	searchFilter = {
 		maTren: "",
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		maDuoi: "",
 		maDvi: "",
 	};
@@ -100,6 +100,11 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
+
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 
 		if (this.loai == "0") {
@@ -144,7 +149,6 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 			},
 			trangThais: [Utils.TT_BC_7],
 		};
-		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {

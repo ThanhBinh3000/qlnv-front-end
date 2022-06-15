@@ -7,6 +7,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -57,7 +59,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     status: boolean = false;
-    statusEdit: boolean = false;
+    statusEdit: boolean = true;
     statusBtnDel: boolean;
     statusBtnSave: boolean;
     statusBtnApprove: boolean;
@@ -459,16 +461,140 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         ]);
     }
 
-    async doCopy() {
-
-    }
-
     changeDate() {
         this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
     }
 
     getMaDviTien() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
+    async showDialogCopy() {
+        let danhSach = [];
+
+        let requestReport = {
+			loaiTimKiem: "0",
+			maCapUngVonTuCapTren: "",
+			maDvi: this.userInfo?.dvql,
+			maLoai: "1",
+			ngayLap: "",
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
+				limit: 1000,
+				page: 1,
+			},
+			trangThais: [Utils.TT_BC_7],
+		};
+		this.spinner.show();
+		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					danhSach = data.data.content;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+
+		this.spinner.hide();
+        let obj = {
+            maCvUv: this.maCvUv,
+            danhSach: danhSach,
+            khachHang: this.khachHang,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy  Thanh toán cho khách hàng',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
+    }
+
+    async doCopy(response: any) {
+        var maCvUvNew: string;
+        await this.quanLyVonPhiService.maThanhToan().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maCvUvNew = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        if (this.statusEdit){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        if (!this.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        // gui du lieu trinh duyet len server
+        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        // gui du lieu trinh duyet len server
+        let request = {
+            id: null,
+            maLoai: "4",
+            fileDinhKemGuis: [],
+            listIdDeleteFileGuis: [],
+            maDvi: this.maDviTao,
+            maDviTien: this.maDviTien,
+            khachHang: response.khachHang,
+            maThanhToan: maCvUvNew,
+            maCapUngVonTuCapTren: response.maCvUv,
+            ngayThanhToan: this.ttGui.ngayThanhToan,
+            noiDung: this.ttGui.noiDung,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
+            trangThai: "1",
+            thuyetMinh: "",
+        };
+
+        this.spinner.show();
+        this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maCvUvNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 
 }

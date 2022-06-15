@@ -7,6 +7,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -71,7 +73,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     status: boolean = false;
-    statusEdit: boolean = false;
+    statusEdit: boolean = true;
     statusBtnDel: boolean;
     statusBtnSave: boolean;
     statusBtnApprove: boolean;
@@ -488,11 +490,96 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 
-
-    async doCopy() {
-
+    async showDialogCopy() {
+        let obj = {
+            maCvUvBtc: this.maCvUv,
+            loaiVon: this.loaiVon,
+            soLenhChiTien: this.soLenhChiTien,
+            ngayLap: this.ngayLapTemp,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy  Nhận cấp ứng vốn từ đơn vị cấp trên',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
     }
 
+    async doCopy(response: any) {
+        if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        if (this.statusEdit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        // gui du lieu trinh duyet len server
+        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        // gui du lieu trinh duyet len server
+        let request = {
+            id: null,
+            maLoai: '1',
+            maDvi: this.maDonViTao,
+            maDviTien: this.maDviTien,
+            fileDinhKemNhans: [],
+            listIdDeleteFileNhans: [],
+            maCapUngVonTuCapTren: response.maCvUvBtc,
+            loaiCap: response.loaiVon,
+            soLechChiTien: response.soLenhChiTien,
+            ngayLap: response.ngayLap,
+            ngayNhan: this.ttNhan.ngayNhan,
+            noiDung: this.ttGui.noiDung,
+            maNguonNs: this.ttGui.maNguonNs,
+            maChuong: this.ttGui.maChuong,
+            maNdkt: this.ttGui.maNdkt,
+            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
+            soTienBangChu: this.ttGui.soTienChu,
+            tuTk: this.ttGui.taiKhoan,
+            tkNhan: this.ttNhan.taiKhoanNhan,
+            trangThai: "1",
+            thuyetMinh: "",
+        };
+
+        this.spinner.show();
+        this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: response.maCvUvBtc
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
+    }
 
 
 }
