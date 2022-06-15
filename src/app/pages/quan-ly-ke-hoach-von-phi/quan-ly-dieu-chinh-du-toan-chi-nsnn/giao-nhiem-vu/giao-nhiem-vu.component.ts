@@ -870,7 +870,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				id: null,
 			})
 		})
-    debugger
     let tongHopTuIds = [];
     if (response.loaiCopy == 'D') {
       //xoa lst don vi truc thuoc theo lua chon tu dialog
