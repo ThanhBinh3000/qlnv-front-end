@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
+import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
@@ -76,6 +77,7 @@ export class BaoCao04bComponent implements OnInit {
     //thong tin chung
     id: any;
     lstCTietBaoCaoTemp: any[] = [];
+    idBaoCao:string;        //id bao cao to
 
     thuyetMinh: string;
     maDviTien: string = '1';
@@ -1195,5 +1197,16 @@ export class BaoCao04bComponent implements OnInit {
         }
         this.updateEditCache(phuLuc);
         // this.getTotal();
+    }
+
+    export(){
+        this.quanLyVonPhiService.exportBaoCao(this.id,this.idBaoCao).toPromise().then(
+            (data) => {
+                fileSaver.saveAs(data, '04b_BCPN-X.xlsx');
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 }

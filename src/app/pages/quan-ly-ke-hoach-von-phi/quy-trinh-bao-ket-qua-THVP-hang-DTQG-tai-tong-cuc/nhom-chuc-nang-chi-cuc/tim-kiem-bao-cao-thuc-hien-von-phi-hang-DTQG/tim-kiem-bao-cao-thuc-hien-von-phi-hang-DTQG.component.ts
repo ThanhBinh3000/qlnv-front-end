@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -44,6 +44,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   totalPages = 0;
 
   donViTaos: any = [];
+  userInfo: any;
   baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 
   constructor(
@@ -54,18 +55,27 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     private notification: NzNotificationService,
     private location: Location,
     private spinner: NgxSpinnerService,
-
+    private userService: UserService,
   ) {
   }
 
   async ngOnInit() {
+    let userName = this.userService.getUserName();
+    await this.getUserInfo(userName); //get user info
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+    } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '2';
+    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '4';
+    }
     let date = new Date();
     this.searchFilter.ngayTaoDen = date.toDateString();
     this.searchFilter.namBcao = date.getFullYear();
     date.setMonth(date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = date.toDateString();
-    this.trangThai = '1';
-    this.searchFilter.maLoaiBcao='1';
+
+    this.searchFilter.maLoaiBcao = '1';
     this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -80,6 +90,24 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+  }
+
+  //get user info
+  async getUserInfo(username: string) {
+    let userInfo = await this.userService.getUserInfo(username).toPromise().then(
+      (data) => {
+        if (data?.statusCode == 0) {
+          this.userInfo = data?.data
+          return data?.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+    return userInfo;
   }
 
   // lay ten don vi tao

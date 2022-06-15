@@ -88,10 +88,6 @@
           <i nz-icon nzType="copy" nzTheme="outline"></i>
           <span>Copy</span>
         </a>
-        <a class="btn btn-main" (click)="doPrint()" [hidden]="statusBtnPrint">
-          <i nz-icon nzType="printer" nzTheme="outline"></i>
-          <span>In</span>
-        </a>
         <a class="btn btn-main" (click)="close()" [hidden]="statusBtnClose">
           <i nz-icon nzType="stop" nzTheme="outline"></i>
           <span>Đóng</span>
@@ -167,10 +163,10 @@
                       [hidden]="!status">
                       <span>Xem</span>
                     </button>
-                    <button type="button" class="btn btn-main"
+                    <!-- <button type="button" class="btn btn-main"
                       [hidden]="status || userInfor?.username != item.nguoiBcao || !id">
                       <span>Biểu mẫu nhập số liệu</span>
-                    </button>
+                    </button> -->
                   </td>
                   <td [hidden]="status">
                     <label [hidden]="userInfor?.username != baoCao?.nguoiTao" nz-checkbox [nzValue]="item.id"
@@ -196,6 +192,7 @@
                         <th>Mã báo cáo</th>
                         <th>Báo cáo năm</th>
                         <th>Báo cáo đợt</th>
+                        <th>Người tạo</th>
                         <th>
                           Ngày trình duyệt<br>
                           (Ngày đơn vị cấp dưới gửi báo cáo)
@@ -220,6 +217,7 @@
                         <td>{{item.maBcao}}</td>
                         <td>{{item.namBcao}}</td>
                         <td>{{item.dotBcao}}</td>
+                        <td>{{userInfor.fullName}}</td>
                         <td>{{item.ngayTrinh}}</td>
                         <td>{{item.ngayDuyet}}</td>
                         <td>{{getStatusName(item.trangThai)}}</td>

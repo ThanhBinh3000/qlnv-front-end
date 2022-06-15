@@ -1091,4 +1091,10 @@ export class QuanLyVonPhiService extends BaseService {
     // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet',request);
   }
 
+  // call api chức năng duyet bieu mau
+  exportBaoCao(bcaoCtietId:string,bcaoId:string): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId,{ responseType: 'blob' });
+    // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet',request);
+  }
+
 }

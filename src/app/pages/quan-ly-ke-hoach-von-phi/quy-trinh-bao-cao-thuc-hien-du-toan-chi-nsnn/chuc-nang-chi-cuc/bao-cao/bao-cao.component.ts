@@ -228,6 +228,7 @@ export class BaoCaoComponent implements OnInit {
   danhSachChiTietPhuLuc11Temp: ItemDataPL1[] = [];
   danhSachChiTietPhuLuc12Temp: ItemDataPL1[] = [];
 
+  tabs: any[] = [];
 
   id!: any;                                   // id truyen tu router
   loaiBaoCao!: any;                           // loai bao cao (thang/nam)
@@ -277,6 +278,8 @@ export class BaoCaoComponent implements OnInit {
   tab = TAB_SELECTED;
   lstKhoanMuc: any[] = KHOAN_MUC;
   nguoiBcaos: any[] = LISTCANBO;
+  selectedIndex: number = 1;
+
   constructor(
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -728,6 +731,14 @@ export class BaoCaoComponent implements OnInit {
 
   // doi tab
   async changeTab(maPhuLuc, trangThaiChiTiet) {
+    var index: number = this.tabs.findIndex(e => e.id === maPhuLuc);
+    if (index != -1) {
+      this.selectedIndex = index + 1;
+    } else {
+      this.tabs = [];
+      this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
+      this.selectedIndex = this.tabs.length + 1;
+    }
     this.savePhuLuc1(); // add cac danh sach phu luc 1 con vao danhSachChiTietPhuLucTemp
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -2567,5 +2578,22 @@ export class BaoCaoComponent implements OnInit {
       stt = this.getHead(stt);
     }
     // this.getTotal();
+  }
+
+  newTab(maPhuLuc: any): void {
+    debugger
+    this.getStatusButtonOk();
+    var index: number = this.tabs.findIndex(e => e.id === maPhuLuc);
+    if (index != -1) {
+      this.selectedIndex = index + 1;
+    } else {
+      this.tabs = [];
+      this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
+      this.selectedIndex = this.tabs.length + 1;
+    }
+  }
+
+  closeTab({ index }: { index: number }): void {
+    this.tabs.splice(index - 1, 1);
   }
 }

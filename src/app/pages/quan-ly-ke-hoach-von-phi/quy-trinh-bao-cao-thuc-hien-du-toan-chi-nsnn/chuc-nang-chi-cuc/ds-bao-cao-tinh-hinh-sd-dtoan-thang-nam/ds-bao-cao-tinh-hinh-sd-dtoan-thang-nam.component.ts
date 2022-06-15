@@ -7,11 +7,12 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, Utils } from 'src/app/Utility/utils';
+import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
   templateUrl: './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam.component.html',
@@ -26,9 +27,10 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   url: any = '/bao-cao/';
 
   trangThais: any = TRANG_THAI_TIM_KIEM;
-  trangThai!:string;
+  trangThai!: string;
   listBcaoKqua: any[] = [];
   lenght: any = 0;
+  userInfo: any;
 
 
   searchFilter = {
@@ -47,7 +49,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       page: 1
     },
     str: "",
-    loaiTimKiem:'0',
+    loaiTimKiem: '0',
   };
 
   donViTaos: any = [];
@@ -60,10 +62,20 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     private notification: NzNotificationService,
     private location: Location,
     private spinner: NgxSpinnerService,
+    private userService: UserService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    let userName = this.userService.getUserName();
+    await this.getUserInfo(userName); //get user info
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+    } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '2';
+    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '4';
+    }
     let date = new Date();
     this.searchFilter.ngayTaoDen = date.toDateString();
     this.searchFilter.namBcao = date.getFullYear();
@@ -71,7 +83,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     date.setMonth(date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = date.toDateString();
     this.trangThai = '1';
-    this.searchFilter.maLoaiBcao='526';
+    this.searchFilter.maLoaiBcao = '526';
     this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -93,16 +105,34 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
+  //get user info
+  async getUserInfo(username: string) {
+    let userInfo = await this.userService.getUserInfo(username).toPromise().then(
+      (data) => {
+        if (data?.statusCode == 0) {
+          this.userInfo = data?.data
+          return data?.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+    return userInfo;
+  }
+
   async onSubmit() {
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
-    searchFilterTemp.trangThais= [];
+    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    searchFilterTemp.trangThais = [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
-    if(this.trangThai){
+    if (this.trangThai) {
       searchFilterTemp.trangThais.push(this.trangThai)
-    }else{
-      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    } else {
+      searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
     await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
       if (res.statusCode == 0) {
@@ -154,21 +184,21 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
   deleteReport(id) {
-		if (id) {
-			this.quanLyVonPhiService.xoaBaoCao(id).toPromise().then(async res => {
-				if (res.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+    if (id) {
+      this.quanLyVonPhiService.xoaBaoCao(id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.onSubmit();
         } else {
-					this.notification.error(MESSAGE.ERROR, res?.msg);
-				}
-			}, err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			})
-		} else {
-			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-		}
-	}
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+  }
 
   // lay ten trang thai ban ghi
   getStatusName(id) {

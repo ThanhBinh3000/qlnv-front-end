@@ -42,10 +42,14 @@
                 <i nz-icon nzType="check" nzTheme="outline"></i>
                 <span>Hoàn tất nhập liệu</span>
             </button>
-            <button type="button" class="btn btn-sub" [hidden]="status">
+            <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
+                <i class="icon htvbdh_tcdt_import"></i>
+                <span>Export</span>
+              </button>
+            <!-- <button type="button" class="btn btn-sub" [hidden]="status">
                 <i class="icon htvbdh_tcdt_import"></i>
                 <span>Import</span>
-            </button>
+            </button> -->
             <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
                 <i class="fa fa-trash-o"></i>
                 <span>Xóa</span>
@@ -57,8 +61,8 @@
             <tr>
                 <th rowspan="2">STT</th>
                 <th rowspan="2">Nội dung chi</th>
-                <th colspan="{{3 + listColTemp.length}}">Chi tiết theo từng mặt hàng trong đợt</th>
-                <th colspan="{{3 + listColTemp.length}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
+                <th colspan="{{1 + listColTemp.length}}">Chi tiết theo từng mặt hàng trong đợt</th>
+                <th colspan="{{1 + listColTemp.length}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
                 <th rowspan="2">Ghi chú</th>
                 <th rowspan="2" colspan="3" [hidden]="status"></th>
                 <th rowspan="2" [hidden]="status">
@@ -68,23 +72,15 @@
             </tr>
             <tr>
                 <th>Tổng Cộng</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
                 <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
                         (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
                 <th>Tổng Cộng</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
                 <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
                         (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
             </tr>
             <tr>
                 <th>A</th>
                 <th>Tình hình thực hiện nhiệm vụ xuất</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -101,10 +97,6 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -115,10 +107,6 @@
             <tr>
                 <th></th>
                 <th>Tổng số lượng thực hiện gộp</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -133,10 +121,6 @@
                 <th></th>
                 <th>Trong đó số lượng thực hiện năm trước (đối với quyết định thực hiện năm trước còn đang dang dở
                     chuyển sang năm nay)</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -155,10 +139,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
@@ -172,16 +152,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-I1')"></i>
+                    <ng-container *ngIf="lstCtietBcao5I1.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-I1')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -195,8 +173,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -205,8 +181,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -245,16 +219,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -266,16 +230,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -312,16 +266,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-I2')"></i>
+                    <ng-container *ngIf="lstCtietBcao5I2.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-I2')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -335,8 +287,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -345,8 +295,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -385,16 +333,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -406,16 +344,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -452,10 +380,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
@@ -466,10 +390,6 @@
             <tr>
                 <td>1</td>
                 <td>Đơn vị chủ động thực hiện</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -486,16 +406,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-II1.1')"></i>
+                    <ng-container *ngIf="lstCtietBcao5II11.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-II1.1')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -509,8 +427,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -519,8 +435,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -559,16 +473,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -580,16 +484,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -626,16 +520,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-II1.2')"></i>
+                    <ng-container *ngIf="lstCtietBcao5II12.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-II1.2')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -649,8 +541,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -659,8 +549,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -699,16 +587,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -720,16 +598,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -766,16 +634,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-II2')"></i>
+                    <ng-container *ngIf="lstCtietBcao5II2.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-II2')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -789,8 +655,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -799,8 +663,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -839,16 +701,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -860,16 +712,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -906,10 +748,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
@@ -923,16 +761,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-III1')"></i>
+                    <ng-container *ngIf="lstCtietBcao5III1.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-III1')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -946,8 +782,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -956,8 +790,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -996,16 +828,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -1017,16 +839,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -1063,16 +875,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-III2')"></i>
+                    <ng-container *ngIf="lstCtietBcao5III2.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-III2')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -1086,8 +896,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -1096,8 +904,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -1136,16 +942,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -1157,16 +953,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -1203,16 +989,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td *ngFor="let colname of listColTemp"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status"></td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(null,'5-B')"></i>
+                    <ng-container *ngIf="lstCtietBcao5B.length == 0">
+                        <i class="fa fa-plus" (click)="addLine(null,'5-B')"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status"></td>
             </tr>
@@ -1226,8 +1010,6 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
-                    <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
@@ -1236,8 +1018,6 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
-                    <td>{{item.luyKeThoc}}</td>
                     <td>{{item.luyKeGao}}</td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
@@ -1276,16 +1056,6 @@
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
                     </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.trongDotGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
@@ -1297,16 +1067,6 @@
                     <td>
                         <nz-input-number type="number" class="search__input" nzSize="small"
                             [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeThoc" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number type="number" class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[item.id].data.luyKeGao" (ngModelChange)="tinhTong(item.id)">
-                        </nz-input-number>
                     </td>
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 1">
@@ -1354,5 +1114,5 @@
     </div>
 </div>
 <div class="action">
-    
+
 </div>
