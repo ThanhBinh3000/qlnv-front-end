@@ -265,10 +265,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (nam) {
 					this.namHienHanh = parseInt(nam, 10);
 				} else {
-					// this.namHienHanh = new Date().getFullYear();
-          // this.phuLucs.forEach(item => {
-          //   item.tenDm = item.tenDm.replace("N",  this.namHienHanh)
-          // })
 				}
 			}
 

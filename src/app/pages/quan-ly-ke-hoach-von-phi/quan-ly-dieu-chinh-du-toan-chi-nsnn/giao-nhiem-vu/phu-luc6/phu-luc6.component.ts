@@ -135,7 +135,7 @@ export class PhuLuc6Component implements OnInit {
     this.maDviTien = this.data?.maDviTien;
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
-    this.namBcao = this.data?.namBcao;
+    this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
