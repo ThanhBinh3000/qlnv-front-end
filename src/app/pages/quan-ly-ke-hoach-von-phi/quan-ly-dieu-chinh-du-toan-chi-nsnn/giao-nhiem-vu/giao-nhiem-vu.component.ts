@@ -1,4 +1,3 @@
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogDieuChinhCopyComponent } from './../../../../components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -10,6 +9,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -17,7 +17,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from "../../../../Utility/utils";
+import { TRANG_THAI_PHU_LUC, Utils } from "../../../../Utility/utils";
 import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
@@ -29,7 +29,7 @@ import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 // 	lyDoTuChoi: string;
 // 	thuyetMinh: string;
 // 	giaoCho: string;
-// 	lstCtietLapThamDinhs: any[];
+// 	lstCtietDieuChinhs: any[];
 // 	checked: boolean;
 // }
 export class ItemData {
@@ -814,7 +814,30 @@ export class GiaoNhiemVuComponent implements OnInit {
 		}
 	}
 
-  async doCopy() {
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namHienHanh,
+      dotBcao: this.dotBcao,
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogDieuChinhCopyComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  obj
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
 		var maBcaoNew: string;
 		await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 			(data) => {
@@ -842,21 +865,20 @@ export class GiaoNhiemVuComponent implements OnInit {
 			lstDieuChinhTemps.push({
 				...data,
 				giaoCho: this.userInfo?.username,
-				lstCtietDchinh: lstCtietTemp,
+				lstCtietDieuChinhs: lstCtietTemp,
 				id: null,
 			})
 		})
 		let request = {
 			id: null,
 			fileDinhKems: [],
-			listIdDeleteFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstDchinh: lstDieuChinhTemps,
 			maBcao: maBcaoNew,
 			maDvi: this.maDviTao,
-			namBcao: this.namHienHanh,
-			namHienHanh: this.namHienHanh,
+			namBcao: response?.namBcao,
+			namHienHanh: response?.namBcao,
 			congVan: null,
-      dotBcao: this.dotBcao,
 			tongHopTuIds: [],
 		};
 
@@ -864,9 +886,17 @@ export class GiaoNhiemVuComponent implements OnInit {
 			async data => {
 				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.router.navigate([
-						'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id,
-					])
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -875,6 +905,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			},
 		);
+
 	}
 
   // action print
@@ -895,322 +926,4 @@ export class GiaoNhiemVuComponent implements OnInit {
     WindowPrt.print();
     WindowPrt.close();
   }
-
-  // doShowDialogCopy() {
-  //   const modalTuChoi = this.modal.create({
-  //     nzTitle: 'Copy Báo Cáo',
-  //     nzContent: DialogDieuChinhCopyComponent,
-  //     nzMaskClosable: false,
-  //     nzClosable: false,
-  //     nzWidth: '900px',
-  //     nzFooter: null,
-  //     nzComponentParams: {
-  //       namBcao: this.namHienHanh,
-  //       dotBcao: null,
-  //     },
-  //   });
-  //   modalTuChoi.afterClose.toPromise().then(async (response) => {
-  //     if (response) {
-  //       this.doCopy(response);
-  //     }
-  //   });
-  // }
-  // async doCopy(response) {
-
-  //   this.spinner.show();
-  //   var maBcaoNew: string;
-  //   this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
-  //     (data) => {
-  //       if (data.statusCode == 0) {
-  //         maBcaoNew = data.data;
-  //       } else {
-  //         this.notification.error(MESSAGE.ERROR, data?.msg);
-  //       }
-  //     },
-  //     (err) => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-  //       return null
-  //     }
-  //   );
-  //   this.spinner.hide();
-  //   if(!maBcaoNew){
-  //     return
-  //   }
-
-  //   let lstDieuChinhTemps: any[] = [];
-  //   	this.lstDieuChinhs.forEach(data => {
-  //   		let lstCtietTemp: any[] = [];
-  //   		data.lstCtietDchinh.forEach(item => {
-  //   			lstCtietTemp.push({
-  //   				...item,
-  //   				id: null,
-  //   			})
-  //   		})
-  //   		lstDieuChinhTemps.push({
-  //   			...data,
-  //   			giaoCho: this.userInfo?.username,
-  //   			lstCtietDchinh: lstCtietTemp,
-  //   			id: null,
-  //   		})
-  //   	})
-  //     if (response.loaiCopy == 'D') {
-  //       //xoa lst don vi truc thuoc theo lua chon tu dialog
-  //       this.lstDviTrucThuoc = [];
-  //     }
-  //   	let request = {
-  //   		id: null,
-  //   		fileDinhKems: [],
-  //   		listIdFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-  //   		lstDchinh: lstDieuChinhTemps,
-  //   		maBcao: maBcaoNew,
-  //   		maDvi: this.maDviTao,
-  //   		namBcao: response.namBcao,
-  //   		namHienHanh:response.namBcao,
-  //   		congVan: null,
-  //       dotBcao: response.dotBcao,
-  //   		tongHopTuIds: this.lstDviTrucThuoc,
-  //   	};
-  //     this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
-  //       async data => {
-  //         if (data.statusCode == 0) {
-  //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-  //           // this.router.navigate([
-  //           //   '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + data.data.id,
-  //           // ])
-  //           const modalCopy = this.modal.create({
-  //                       nzTitle: MESSAGE.ALERT,
-  //                       nzContent: DialogCopyComponent,
-  //                       nzMaskClosable: false,
-  //                       nzClosable: false,
-  //                       nzWidth: '900px',
-  //                       nzFooter: null,
-  //                       nzComponentParams: {
-  //                         maBcao: maBcaoNew
-  //                       },
-  //                     });
-  //         } else {
-  //           this.notification.error(MESSAGE.ERROR, data?.msg);
-  //           this.spinner.hide();
-  //         }
-  //       },
-  //       err => {
-  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //         this.spinner.hide();
-  //       },
-  //     );
-  //     this.spinner.hide();
-  // }
-
-  // async doCopy(response) {
-  //   this.spinner.show();
-  //   let maBaoCao = await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
-  //     (data) => {
-  //       if (data.statusCode == 0) {
-  //         return data.data;
-  //       } else {
-  //         this.notification.error(MESSAGE.ERROR, data?.msg);
-  //         return null;
-  //       }
-  //     },
-  //     (err) => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-  //       return null;
-  //     }
-  //   );
-  //   this.spinner.hide();
-  //   if (!maBaoCao) {
-  //     return;
-  //   }
-
-  //   // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-  //   this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh } });
-  //   let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-  //   baoCaoTemp.congVan = null;
-  //   // set nambao,dot bao cao tu dialog gui ve
-  //   baoCaoTemp.namBcao = response.namBcao;
-  //   baoCaoTemp.thangBcao = response.thangBcao;
-  //   if (response.loaiCopy == 'D') {
-  //     //xoa lst don vi truc thuoc theo lua chon tu dialog
-  //     baoCaoTemp.lstBcaoDviTrucThuocs = [];
-  //   }
-  //   let checkMoneyRange = true;
-  //   // replace nhung ban ghi dc them moi id thanh null
-  //   baoCaoTemp?.lstBcaos?.filter(item => {
-  //     item.id = null;
-  //     item.listIdDelete = null;
-  //     item.trangThai = '3'; // set trang thai phu luc la chua danh gia
-  //     item?.lstCtietBcaos.filter(data => {
-  //       data.id = null;
-  //       switch (item.maLoai) {
-  //         // phu luc 1
-  //         case PHULUCLIST[0].maPhuLuc:
-  //           data.kphiSdungTcong = mulMoney(data.kphiSdungTcong, item.maDviTien);
-  //           data.kphiSdungDtoan = mulMoney(data.kphiSdungDtoan, item.maDviTien);
-  //           data.kphiSdungNguonKhac = mulMoney(data.kphiSdungNguonKhac, item.maDviTien);
-  //           data.kphiSdungNguonQuy = mulMoney(data.kphiSdungNguonQuy, item.maDviTien);
-  //           data.kphiSdungNstt = mulMoney(data.kphiSdungNstt, item.maDviTien);
-  //           data.kphiSdungCk = mulMoney(data.kphiSdungCk, item.maDviTien);
-  //           data.kphiChuyenSangTcong = mulMoney(data.kphiChuyenSangTcong, item.maDviTien);
-  //           data.kphiChuyenSangDtoan = mulMoney(data.kphiChuyenSangDtoan, item.maDviTien);
-  //           data.kphiChuyenSangNguonKhac = mulMoney(data.kphiChuyenSangNguonKhac, item.maDviTien);
-  //           data.kphiChuyenSangNguonQuy = mulMoney(data.kphiChuyenSangNguonQuy, item.maDviTien);
-  //           data.kphiChuyenSangNstt = mulMoney(data.kphiChuyenSangNstt, item.maDviTien);
-  //           data.kphiChuyenSangCk = mulMoney(data.kphiChuyenSangCk, item.maDviTien);
-  //           data.dtoanGiaoTcong = mulMoney(data.dtoanGiaoTcong, item.maDviTien);
-  //           data.dtoanGiaoDtoan = mulMoney(data.dtoanGiaoDtoan, item.maDviTien);
-  //           data.dtoanGiaoNguonKhac = mulMoney(data.dtoanGiaoNguonKhac, item.maDviTien);
-  //           data.dtoanGiaoNguonQuy = mulMoney(data.dtoanGiaoNguonQuy, item.maDviTien);
-  //           data.dtoanGiaoNstt = mulMoney(data.dtoanGiaoNstt, item.maDviTien);
-  //           data.dtoanGiaoCk = mulMoney(data.dtoanGiaoCk, item.maDviTien);
-  //           data.giaiNganThangBcaoTcong = mulMoney(data.giaiNganThangBcaoTcong, item.maDviTien);
-  //           data.giaiNganThangBcaoDtoan = mulMoney(data.giaiNganThangBcaoDtoan, item.maDviTien);
-  //           data.giaiNganThangBcaoNguonKhac = mulMoney(data.giaiNganThangBcaoNguonKhac, item.maDviTien);
-  //           data.giaiNganThangBcaoNguonQuy = mulMoney(data.giaiNganThangBcaoNguonQuy, item.maDviTien);
-  //           data.giaiNganThangBcaoNstt = mulMoney(data.giaiNganThangBcaoNstt, item.maDviTien);
-  //           data.giaiNganThangBcaoCk = mulMoney(data.giaiNganThangBcaoCk, item.maDviTien);
-  //           data.luyKeGiaiNganTcong = mulMoney(data.luyKeGiaiNganTcong, item.maDviTien);
-  //           data.luyKeGiaiNganDtoan = mulMoney(data.luyKeGiaiNganDtoan, item.maDviTien);
-  //           data.luyKeGiaiNganNguonKhac = mulMoney(data.luyKeGiaiNganNguonKhac, item.maDviTien);
-  //           data.luyKeGiaiNganNguonQuy = mulMoney(data.luyKeGiaiNganNguonQuy, item.maDviTien);
-  //           data.luyKeGiaiNganNstt = mulMoney(data.luyKeGiaiNganNstt, item.maDviTien);
-  //           data.luyKeGiaiNganCk = mulMoney(data.luyKeGiaiNganCk, item.maDviTien);
-  //           if (data.kphiSdungTcong > MONEY_LIMIT || data.kphiSdungDtoan > MONEY_LIMIT || data.kphiSdungNguonKhac > MONEY_LIMIT ||
-  //             data.kphiSdungNguonQuy > MONEY_LIMIT || data.kphiSdungNstt > MONEY_LIMIT || data.kphiSdungCk > MONEY_LIMIT ||
-  //             data.kphiChuyenSangTcong > MONEY_LIMIT || data.kphiChuyenSangDtoan > MONEY_LIMIT || data.kphiChuyenSangNguonKhac > MONEY_LIMIT ||
-  //             data.kphiChuyenSangNguonQuy > MONEY_LIMIT || data.kphiChuyenSangNstt > MONEY_LIMIT || data.kphiChuyenSangCk > MONEY_LIMIT ||
-  //             data.dtoanGiaoTcong > MONEY_LIMIT || data.dtoanGiaoDtoan > MONEY_LIMIT || data.dtoanGiaoNguonKhac > MONEY_LIMIT ||
-  //             data.dtoanGiaoNguonQuy > MONEY_LIMIT || data.dtoanGiaoNstt > MONEY_LIMIT || data.dtoanGiaoCk > MONEY_LIMIT ||
-  //             data.giaiNganThangBcaoTcong > MONEY_LIMIT || data.giaiNganThangBcaoDtoan > MONEY_LIMIT || data.giaiNganThangBcaoNguonKhac > MONEY_LIMIT ||
-  //             data.giaiNganThangBcaoNguonQuy > MONEY_LIMIT || data.giaiNganThangBcaoNstt > MONEY_LIMIT || data.giaiNganThangBcaoCk > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganTcong > MONEY_LIMIT || data.luyKeGiaiNganDtoan > MONEY_LIMIT || data.luyKeGiaiNganNguonKhac > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganNguonQuy > MONEY_LIMIT || data.luyKeGiaiNganNstt > MONEY_LIMIT || data.luyKeGiaiNganCk > MONEY_LIMIT) {
-  //             checkMoneyRange = false;
-  //             return;
-  //           }
-  //           break;
-
-  //         // phu luc 2
-  //         case PHULUCLIST[1].maPhuLuc:
-  //           data.dtoanSdungNamTcong = mulMoney(data.dtoanSdungNamTcong, item.maDviTien);
-  //           data.dtoanSdungNamNguonNsnn = mulMoney(data.dtoanSdungNamNguonNsnn, item.maDviTien);
-  //           data.dtoanSdungNamNguonSn = mulMoney(data.dtoanSdungNamNguonSn, item.maDviTien);
-  //           data.dtoanSdungNamNguonQuy = mulMoney(data.dtoanSdungNamNguonQuy, item.maDviTien);
-  //           data.giaiNganThangTcong = mulMoney(data.giaiNganThangTcong, item.maDviTien);
-  //           data.giaiNganThangNguonNsnn = mulMoney(data.giaiNganThangNguonNsnn, item.maDviTien);
-  //           data.giaiNganThangNguonSn = mulMoney(data.giaiNganThangNguonSn, item.maDviTien);
-  //           data.giaiNganThangNguonQuy = mulMoney(data.giaiNganThangNguonQuy, item.maDviTien);
-  //           data.luyKeGiaiNganTcong = mulMoney(data.luyKeGiaiNganTcong, item.maDviTien);
-  //           data.luyKeGiaiNganNguonNsnn = mulMoney(data.luyKeGiaiNganNguonNsnn, item.maDviTien);
-  //           data.luyKeGiaiNganNguonSn = mulMoney(data.luyKeGiaiNganNguonSn, item.maDviTien);
-  //           data.luyKeGiaiNganNguonQuy = mulMoney(data.luyKeGiaiNganNguonQuy, item.maDviTien);
-
-  //           if (data.dtoanSdungNamTcong > MONEY_LIMIT || data.dtoanSdungNamNguonNsnn > MONEY_LIMIT || data.dtoanSdungNamNguonSn > MONEY_LIMIT ||
-  //             data.dtoanSdungNamNguonQuy > MONEY_LIMIT || data.giaiNganThangTcong > MONEY_LIMIT || data.giaiNganThangNguonNsnn > MONEY_LIMIT ||
-  //             data.giaiNganThangNguonSn > MONEY_LIMIT || data.giaiNganThangNguonQuy > MONEY_LIMIT || data.luyKeGiaiNganTcong > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganNguonNsnn > MONEY_LIMIT || data.luyKeGiaiNganNguonSn > MONEY_LIMIT || data.luyKeGiaiNganNguonQuy > MONEY_LIMIT) {
-  //             checkMoneyRange = false;
-  //             return;
-  //           }
-  //           break;
-
-  //         // phu luc 3
-  //         case PHULUCLIST[2].maPhuLuc:
-  //           data.qddtTmdtTso = mulMoney(data.qddtTmdtTso, item.maDviTien);
-  //           data.qddtTmdtNsnn = mulMoney(data.qddtTmdtNsnn, item.maDviTien);
-  //           data.luyKeVonTso = mulMoney(data.luyKeVonTso, item.maDviTien);
-  //           data.luyKeVonNsnn = mulMoney(data.luyKeVonNsnn, item.maDviTien);
-  //           data.luyKeVonDt = mulMoney(data.luyKeVonDt, item.maDviTien);
-  //           data.luyKeVonThue = mulMoney(data.luyKeVonThue, item.maDviTien);
-  //           data.luyKeVonScl = mulMoney(data.luyKeVonScl, item.maDviTien);
-  //           data.luyKeGiaiNganHetNamTso = mulMoney(data.luyKeGiaiNganHetNamTso, item.maDviTien);
-  //           data.luyKeGiaiNganHetNamNsnnTso = mulMoney(data.luyKeGiaiNganHetNamNsnnTso, item.maDviTien);
-  //           data.luyKeGiaiNganHetNamNsnnKhNamTruoc = mulMoney(data.luyKeGiaiNganHetNamNsnnKhNamTruoc, item.maDviTien);
-  //           data.khoachVonNamTruocKeoDaiTso = mulMoney(data.khoachVonNamTruocKeoDaiTso, item.maDviTien);
-  //           data.khoachVonNamTruocKeoDaiDtpt = mulMoney(data.khoachVonNamTruocKeoDaiDtpt, item.maDviTien);
-  //           data.khoachVonNamTruocKeoDaiVonKhac = mulMoney(data.khoachVonNamTruocKeoDaiVonKhac, item.maDviTien);
-  //           data.khoachNamVonTso = mulMoney(data.khoachNamVonTso, item.maDviTien);
-  //           data.khoachNamVonNsnn = mulMoney(data.khoachNamVonNsnn, item.maDviTien);
-  //           data.khoachNamVonDt = mulMoney(data.khoachNamVonDt, item.maDviTien);
-  //           data.khoachNamVonThue = mulMoney(data.khoachNamVonThue, item.maDviTien);
-  //           data.khoachNamVonScl = mulMoney(data.khoachNamVonScl, item.maDviTien);
-  //           data.giaiNganTso = mulMoney(data.giaiNganTso, item.maDviTien);
-  //           data.giaiNganNsnn = mulMoney(data.giaiNganNsnn, item.maDviTien);
-  //           data.giaiNganNsnnVonDt = mulMoney(data.giaiNganNsnnVonDt, item.maDviTien);
-  //           data.giaiNganNsnnVonThue = mulMoney(data.giaiNganNsnnVonThue, item.maDviTien);
-  //           data.giaiNganNsnnVonScl = mulMoney(data.giaiNganNsnnVonScl, item.maDviTien);
-  //           data.luyKeGiaiNganDauNamTso = mulMoney(data.luyKeGiaiNganDauNamTso, item.maDviTien);
-  //           data.luyKeGiaiNganDauNamNsnn = mulMoney(data.luyKeGiaiNganDauNamNsnn, item.maDviTien);
-  //           data.luyKeGiaiNganDauNamNsnnVonDt = mulMoney(data.luyKeGiaiNganDauNamNsnnVonDt, item.maDviTien);
-  //           data.luyKeGiaiNganDauNamNsnnVonThue = mulMoney(data.luyKeGiaiNganDauNamNsnnVonThue, item.maDviTien);
-  //           data.luyKeGiaiNganDauNamNsnnVonScl = mulMoney(data.luyKeGiaiNganDauNamNsnnVonScl, item.maDviTien);
-
-  //           if (data.qddtTmdtTso > MONEY_LIMIT || data.qddtTmdtNsnn > MONEY_LIMIT || data.luyKeVonTso > MONEY_LIMIT ||
-  //             data.luyKeVonNsnn > MONEY_LIMIT || data.luyKeVonDt > MONEY_LIMIT || data.luyKeVonThue > MONEY_LIMIT ||
-  //             data.luyKeVonScl > MONEY_LIMIT || data.luyKeGiaiNganHetNamTso > MONEY_LIMIT || data.luyKeGiaiNganHetNamNsnnTso > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganHetNamNsnnKhNamTruoc > MONEY_LIMIT || data.khoachVonNamTruocKeoDaiTso > MONEY_LIMIT || data.khoachVonNamTruocKeoDaiDtpt > MONEY_LIMIT ||
-  //             data.khoachVonNamTruocKeoDaiVonKhac > MONEY_LIMIT || data.khoachNamVonTso > MONEY_LIMIT || data.khoachNamVonNsnn > MONEY_LIMIT ||
-  //             data.khoachNamVonDt > MONEY_LIMIT || data.khoachNamVonThue > MONEY_LIMIT || data.khoachNamVonScl > MONEY_LIMIT ||
-  //             data.giaiNganTso > MONEY_LIMIT || data.giaiNganNsnn > MONEY_LIMIT || data.giaiNganNsnnVonDt > MONEY_LIMIT ||
-  //             data.giaiNganNsnnVonThue > MONEY_LIMIT || data.giaiNganNsnnVonScl > MONEY_LIMIT || data.luyKeGiaiNganDauNamTso > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganDauNamNsnn > MONEY_LIMIT || data.luyKeGiaiNganDauNamNsnnVonDt > MONEY_LIMIT || data.luyKeGiaiNganDauNamNsnnVonThue > MONEY_LIMIT ||
-  //             data.luyKeGiaiNganDauNamNsnnVonScl > MONEY_LIMIT) {
-  //             checkMoneyRange = false;
-  //             return;
-  //           }
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     })
-  //     if (!checkMoneyRange == true) {
-  //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-  //     }
-  //   })
-
-  //   if (checkMoneyRange != true) {
-  //     return;
-  //   } else {
-  //     // replace nhung ban ghi dc them moi id thanh null
-  //     baoCaoTemp.id = null;
-  //     baoCaoTemp.maBcao = maBaoCao;
-  //     baoCaoTemp.tongHopTuIds = [];
-  //     baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
-  //       baoCaoTemp.tongHopTuIds.push(item.id);
-  //     })
-  //     baoCaoTemp.fileDinhKems = [];
-  //     baoCaoTemp.listIdFiles = null;
-  //     baoCaoTemp.trangThai = "1";
-  //     baoCaoTemp.maDvi = this.maDonViTao;
-  //     baoCaoTemp.maPhanBcao = '0';
-
-  //     //call service them moi
-  //     this.spinner.show();
-  //     this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
-  //       async data => {
-  //         if (data.statusCode == 0) {
-  //           const modalCopy = this.modal.create({
-  //             nzTitle: MESSAGE.ALERT,
-  //             nzContent: DialogCopyComponent,
-  //             nzMaskClosable: false,
-  //             nzClosable: false,
-  //             nzWidth: '900px',
-  //             nzFooter: null,
-  //             nzComponentParams: {
-  //               maBcao: maBaoCao
-  //             },
-  //           });
-  //         } else {
-  //           this.notification.error(MESSAGE.ERROR, data?.msg);
-  //           this.spinner.hide();
-  //         }
-  //       },
-  //       err => {
-  //         this.spinner.hide();
-  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //       },
-  //     );
-
-  //   }
-  //   this.spinner.hide();
-  // }
 }

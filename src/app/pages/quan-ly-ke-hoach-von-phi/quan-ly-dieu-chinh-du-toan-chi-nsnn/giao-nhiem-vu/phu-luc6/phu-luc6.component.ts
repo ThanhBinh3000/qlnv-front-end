@@ -503,6 +503,10 @@ export class PhuLuc6Component implements OnInit {
         data: { ...item }
       };
     } else {
+      if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+        this.sum(stt);
+        this.updateEditCache();
+      }
       let item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
@@ -514,9 +518,6 @@ export class PhuLuc6Component implements OnInit {
         edit: true,
         data: { ...item }
       };
-    }if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
     }
 
   }
