@@ -25,8 +25,8 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	searchFilter = {
 		maCvUv: "",
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		maTienThua: "",
 		ngayLap: "",
 		maDviGui: "",
@@ -66,6 +66,11 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 

@@ -51,7 +51,7 @@ const routes: Routes = [
 			).then((m) => m.TongHopTaiTongCucModule),
 	},
 	{
-		path: 'tong-hop',
+		path: 'tong-hop/:loai',
 		loadChildren: () =>
 			import(
 				'./tong-hop/tong-hop.module'

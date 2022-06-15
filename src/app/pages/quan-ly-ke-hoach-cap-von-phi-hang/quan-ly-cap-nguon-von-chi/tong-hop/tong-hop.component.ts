@@ -1,7 +1,7 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -21,13 +21,14 @@ import { NGUON_BAO_CAO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils 
 export class TongHopComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
 		loaiTimKiem: '0',
 		maDeNghi: "",
 		trangThai: "",
-		tuNgay: "",
-		denNgay: "",
+		tuNgay: null,
+		denNgay: null,
 		qdChiTieu: "",
 		loaiDn: "",
 		maDviTao: "",
@@ -40,7 +41,7 @@ export class TongHopComponent implements OnInit {
 			tenDm: "Đang soạn",
 		},
 		{
-			id: Utils.TT_BC_4,
+			id: Utils.TT_BC_2,
 			tenDm: "Trình duyệt",
 		},
 		{
@@ -71,6 +72,8 @@ export class TongHopComponent implements OnInit {
 	}
 	//trang thai
 	statusBtnNew: boolean = true;
+	status: boolean;
+	disable: boolean;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -82,12 +85,29 @@ export class TongHopComponent implements OnInit {
 		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
+		private routerActive: ActivatedRoute,
 	) { }
 
 	async ngOnInit() {
+		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
+		// this.searchFilter.denNgay = new Date();
+		// let newDate = new Date();
+		// newDate.setMonth(newDate.getMonth() -1);
+		// this.searchFilter.tuNgay = newDate;
+
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
+
+		if (this.loai == "0") {
+			this.status = false;
+			this.disable = false;
+		} else {
+			this.status = true;
+			this.disable = true;
+			this.searchFilter.trangThai = Utils.TT_BC_2;
+		}
 		//lay danh sach danh muc
 		this.danhMuc.dMDonVi().toPromise().then(
 			data => {
@@ -176,7 +196,7 @@ export class TongHopComponent implements OnInit {
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/'+this.searchFilter.qdChiTieu
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/' + this.searchFilter.qdChiTieu
 			])
 		} else {
 			this.router.navigate([
@@ -192,9 +212,9 @@ export class TongHopComponent implements OnInit {
 
 
 	xemChiTiet(item: any) {
-		if (item.loaiDnghi == Utils.THOP_TAI_TC){
+		if (item.loaiDnghi == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/'+item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + item.id
 			])
 		} else {
 			this.router.navigate([
