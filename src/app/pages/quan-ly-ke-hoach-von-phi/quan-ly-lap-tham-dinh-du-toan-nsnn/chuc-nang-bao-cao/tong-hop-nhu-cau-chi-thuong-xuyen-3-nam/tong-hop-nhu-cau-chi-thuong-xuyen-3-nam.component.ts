@@ -446,10 +446,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 }
             }
         }
-        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-            this.sum(stt);
-            this.updateEditCache();
-        }
+        
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -462,6 +459,10 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 data: { ...item }
             };
         } else {
+            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt);
+                this.updateEditCache();
+            }
             let item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
