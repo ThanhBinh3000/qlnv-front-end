@@ -132,7 +132,7 @@ export class PhuLuc7Component implements OnInit {
     this.maDviTien = this.data?.maDviTien;
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
-    this.namBcao = this.data?.namBcao;
+    this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
@@ -496,6 +496,10 @@ export class PhuLuc7Component implements OnInit {
         data: { ...item }
       };
     } else {
+      if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+        this.sum(stt);
+        this.updateEditCache();
+      }
       let item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
@@ -508,10 +512,7 @@ export class PhuLuc7Component implements OnInit {
         data: { ...item }
       };
     }
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-      this.sum(stt);
-      this.updateEditCache();
-    }
+
   }
   //xóa dòng
   deleteLine(id: any) {
