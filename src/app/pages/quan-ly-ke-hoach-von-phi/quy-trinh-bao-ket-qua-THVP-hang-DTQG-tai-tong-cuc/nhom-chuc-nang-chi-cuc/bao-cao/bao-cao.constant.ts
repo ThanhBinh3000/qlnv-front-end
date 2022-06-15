@@ -49,7 +49,7 @@ export const LISTBIEUMAUDOT = [
     tenPhuLuc: '05/BCPBQ',
     tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG đợt ',
     status: false,
-    lstId: ['5-I1','5-I2','5-II11','5-II12','5-II2','5-III1','5-III2','5-B'],
+    lstId: ['5-I1','5-I2','5-II1.1','5-II1.2','5-II2','5-III1','5-III2','5-B'],
   },
   // {
   //     maPhuLuc:10,

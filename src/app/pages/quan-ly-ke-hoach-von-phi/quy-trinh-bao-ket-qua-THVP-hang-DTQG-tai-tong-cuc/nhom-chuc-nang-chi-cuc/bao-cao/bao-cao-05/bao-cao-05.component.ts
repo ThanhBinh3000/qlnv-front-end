@@ -66,7 +66,7 @@ export class BaoCao05Component implements OnInit {
     lstCtietBcao5III1: ItemDataMau0405[] = [];
     lstCtietBcao5III2: ItemDataMau0405[] = [];
     lstCtietBcao5B: ItemDataMau0405[] = [];
-
+    noiDungChis: any[] = [];
     //thong tin chung
     id: any;
     lstCTietBaoCaoTemp: any[] = [];
@@ -113,9 +113,9 @@ export class BaoCao05Component implements OnInit {
                     this.lstCtietBcao5I2.push(el);
                     this.updateEditCache('5-I2');
                     break;
-                case '5-II11':
+                case '5-II1.1':
                     this.lstCtietBcao5II11.push(el);
-                    this.updateEditCache('5-II11');
+                    this.updateEditCache('5-II1.1');
                     break;
                 case '5-II12':
                     this.lstCtietBcao5II12.push(el);
@@ -158,6 +158,28 @@ export class BaoCao05Component implements OnInit {
                 this.listColTemp.push(el);
             }
         });
+        //lấy danh sách nội dung chi
+        await this.danhMucService.dMNoiDungChi05().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.noiDungChis = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        let noiDungChiFulls=[];
+        this.noiDungChis.forEach(item => {
+            item = {
+                ...item,
+                tenDm: item.giaTri,
+                ten: item.giaTri,
+                level: 0,
+                idCha: 0,
+            }
+            noiDungChiFulls.push(item);
+        });
+        this.noiDungChis = noiDungChiFulls;
         if (this.lstCTietBaoCaoTemp.length > 0) {
             if (!this.lstCTietBaoCaoTemp[0].stt) {
                 await this.sortWithoutIndex();
@@ -291,8 +313,8 @@ export class BaoCao05Component implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau0405();
-        lstKmTemp = this.lstVatTuFull;
-        maKm = baoCao.find(e => e.id == id)?.maNdungChi;
+        lstKmTemp = this.noiDungChis;
+        maKm = baoCao?.find(e => e.id == id)?.maNdungChi;
         dataPL.header = phuLuc;
         let obj = {
             maKhoanMuc: maKm,
@@ -697,13 +719,13 @@ export class BaoCao05Component implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.lstVatTuFull.find(e => e.id == item.maNdungChi)?.level;
+            item.level = this.noiDungChis.find(e => e.id == item.maNdungChi)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }
 
     getIdCha(maKM: any) {
-        return this.lstVatTuFull.find(e => e.id == maKM)?.idCha;
+        return this.noiDungChis.find(e => e.id == maKM)?.idCha;
     }
 
     sortWithoutIndex() {
@@ -754,9 +776,9 @@ export class BaoCao05Component implements OnInit {
                 return this.lstCtietBcao5I1;
             case '5-I2':
                 return this.lstCtietBcao5I2;
-            case '5-II11':
+            case '5-II1.1':
                 return this.lstCtietBcao5II11;
-            case '5-II12':
+            case '5-II1.2':
                 return this.lstCtietBcao5II12;
             case '5-II2':
                 return this.lstCtietBcao5II2;
@@ -767,7 +789,7 @@ export class BaoCao05Component implements OnInit {
             case '5-B':
                 return this.lstCtietBcao5B;
             default:
-                return null;
+                return [];
         }
     }
 
@@ -780,10 +802,10 @@ export class BaoCao05Component implements OnInit {
             case '5-I2':
                 this.lstCtietBcao5I2 = listPhuLuc;
                 break;
-            case '5-II11':
+            case '5-II1.1':
                 this.lstCtietBcao5II11 = listPhuLuc;
                 break;
-            case '5-II12':
+            case '5-II1.2':
                 this.lstCtietBcao5II12 = listPhuLuc;
                 break;
             case '5-II2':

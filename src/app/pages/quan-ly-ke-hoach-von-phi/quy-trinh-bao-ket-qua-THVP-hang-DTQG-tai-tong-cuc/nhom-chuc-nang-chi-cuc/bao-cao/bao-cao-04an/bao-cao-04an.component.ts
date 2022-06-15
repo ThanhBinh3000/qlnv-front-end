@@ -68,6 +68,7 @@ export class BaoCao04anComponent implements OnInit {
     lstCtietBcao4anIII2: ItemDataMau0405[] = [];
     lstCtietBcao4anIII3: ItemDataMau0405[] = [];
     lstCtietBcao4anB: ItemDataMau0405[] = [];
+    noiDungChis: any[] = [];
 
     //thong tin chung
     id: any;
@@ -174,6 +175,30 @@ export class BaoCao04anComponent implements OnInit {
                 this.listColTemp.push(el);
             }
         });
+
+        //lấy danh sách nội dung chi
+        await this.danhMucService.dMNoiDungChi04a().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.noiDungChis = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        let noiDungChiFulls=[];
+        this.noiDungChis.forEach(item => {
+            item = {
+                ...item,
+                tenDm: item.giaTri,
+                ten: item.giaTri,
+                level: 0,
+                idCha: 0,
+            }
+            noiDungChiFulls.push(item);
+        });
+        this.noiDungChis = noiDungChiFulls;
+
         if (this.lstCTietBaoCaoTemp.length > 0) {
             if (!this.lstCTietBaoCaoTemp[0].stt) {
                 await this.sortWithoutIndex();
@@ -295,7 +320,7 @@ export class BaoCao04anComponent implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau0405();
-        lstKmTemp = this.lstVatTuFull;
+        lstKmTemp = this.noiDungChis;
         maKm = baoCao.find(e => e.id == id)?.maNdungChi;
         dataPL.header = phuLuc;
         let obj = {
@@ -700,13 +725,13 @@ export class BaoCao04anComponent implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.lstVatTuFull.find(e => e.id == item.maNdungChi)?.level;
+            item.level = this.noiDungChis.find(e => e.id == item.maNdungChi)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }
 
     getIdCha(maKM: any) {
-        return this.lstVatTuFull.find(e => e.id == maKM)?.idCha;
+        return this.noiDungChis.find(e => e.id == maKM)?.idCha;
     }
 
     sortWithoutIndex() {

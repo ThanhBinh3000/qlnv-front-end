@@ -752,5 +752,26 @@ dMucBcaoDuyet(): Observable<any> {
       this.urlDefault + '/qlnv-category/dmuc-khoachvon/' + id,
     );
   }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04a)
+  dMNoiDungChi04a(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI04A",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungChi04b(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI04B",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungChi05(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI05",
+    );
+  }
 }
 
