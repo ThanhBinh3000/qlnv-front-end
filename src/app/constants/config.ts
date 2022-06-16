@@ -156,10 +156,10 @@ export const LOAI_QUYET_DINH = {
 };
 
 export const LOAI_HANG_DTQG = {
-  GAO: '00',
-  THOC: '01',
-  MUOI: '02',
-  VAT_TU: '03',
+  GAO: '0102',
+  THOC: '0101',
+  MUOI: '04',
+  VAT_TU: '02',
 };
 
 export const TEN_HANG_DTQG = {

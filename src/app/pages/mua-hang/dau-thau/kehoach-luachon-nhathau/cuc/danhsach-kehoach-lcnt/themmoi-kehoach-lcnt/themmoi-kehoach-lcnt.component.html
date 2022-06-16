@@ -64,7 +64,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input class="search__input" [readonly]="true" nz-input formControlName="soQd" readonly="true" />
                   </nz-input-group>
                   <ng-template #soQDError let-control>
@@ -109,10 +109,14 @@
             </div>
           </div>
           <div nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6" class="btn-tep">
+            <div nz-col nzSpan="24" class="btn-tep">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">File đính kèm</nz-form-label>
                 <nz-form-control>
+                  <!-- <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
+                    [data]="fileDinhKem" type="file" (selectDataEvent)="taiLieuDinhKem($event)"
+                    (downloadFileEvent)="downloadFile($event)" typeFile="can-cu">
+                  </multiple-tag> -->
                   <button class="btn btn-sm waves-effect waves-light" (click)="taiLieuDinhKem('tai-lieu-dinh-kem')"
                     [disabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                     <i class="icon htvbdh_tcdt_tep"></i>
@@ -404,129 +408,98 @@
           <nz-tab [nzTitle]="'Phụ lục đề xuất kế hoạch lựa chon nhà thầu'" class="ds-goi-thau__container"
             (nzClick)="tabSelected = 'dsGoiThau'">
             <!-- <nz-card nzTitle="Danh sách đề xuất" class="mt16 flex-card p-lr16" [nzExtra]="tableCardNhaThau"> -->
-            <nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
+            <!-- <nz-table #expandTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
               [nzShowPagination]="false" id="table-danh-sach-goi-thau">
               <thead>
                 <tr>
-                  <th rowspan="2" [width]="35" class="text-center">STT</th>
-                  <th rowspan="2" [width]="218" class="text-center">Gói thầu</th>
-                  <th rowspan="2" [width]="95" class="text-center">Số lượng (tấn)</th>
-                  <th colspan="3" [width]="300" class="text-center">ĐỊA ĐIỂM NHẬP KHO</th>
-                  <th rowspan="2" [width]="100" class="text-center">Đơn giá đã bao gồm VAT (đồng/kg)</th>
-                  <th rowspan="2" [width]="200" class="text-center">Thành tiền (đồng)</th>
-                  <th rowspan="2" [width]="300" class="text-center">Bằng chữ</th>
-                  <th rowspan="2" [width]="80" class="text-center">Thao tác</th>
-                </tr>
-                <tr>
-                  <th class="text-center"> Tên chi cục </th>
-                  <th class="text-center"> Điểm kho </th>
-                  <th class="text-center"> Địa điểm kho </th>
+                  <th [width]="35" class="text-center">STT</th>
+                  <th [width]="218" class="text-center">Chi cục</th>
+                  <th [width]="95" class="text-center">Số lượng (tấn)</th>
+                  <th [width]="300" class="text-center">Địa điểm nhập kho</th>
+                  <th [width]="100" class="text-center">Số lượng theo chỉ tiêu theo kế hoạch</th>
+                  <th [width]="200" class="text-center">Đã lên kế hoạch</th>
+                  <th [width]="300" class="text-center">Số lượng (tấn)</th>
+                  <th [width]="300" class="text-center">Đơn giá đã bao gồm VAT (đồng/kg)</th>
+                  <th [width]="300" class="text-center">Thành tiền(đồng)</th>
+                  <th [width]="300" class="text-center">Bằng chữ</th>
+                  <th [width]="80" class="text-center">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
-                  <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
-                    <td class="text-center">{{i+1}}</td>
-                    <td>{{ data.goiThau }}</td>
-                    <td>{{ data.soLuong }}</td>
-                    <td>{{ getTenDviTable(data.maDvi) }}</td>
-                    <td>{{ getTenDiemKhoTable(data.maDiemKho) }}</td>
-                    <td>{{ data.diaDiemNhap }}</td>
-                    <td>{{ data.donGia }}</td>
-                    <td>{{ data.soLuong * 1000 * data.donGia | number: '1.0-1'}}</td>
-                    <td>{{ data.soLuong ? convertTienTobangChu(data.soLuong * 1000 * data.donGia) : '' }}</td>
-                    <td class="text-center">
-                      <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                        (click)="startEdit(i)">
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                        (click)="deleteRow(i)">
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
+                <ng-container *ngFor="let data of expandTable.data">
+                  <ng-container *ngFor="let item of mapOfExpanded[data.maDvi]">
+                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                      <td class="text-center">{{i+1}}</td>
+                      <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+                        (nzExpandChange)="collapse(mapOfExpanded[data.maDvi], item, $event)">
+                        {{ item.maDvi }}
+                      </td>
+                      <td>{{ data.goiThau }}</td>
+                      <td>{{ data.soLuong }}</td>
+                      <td>{{ getTenDviTable(data.maDvi) }}</td>
+                      <td>{{ getTenDiemKhoTable(data.maDiemKho) }}</td>
+                      <td>{{ data.diaDiemNhap }}</td>
+                      <td>{{ data.donGia }}</td>
+                      <td>{{ data.soLuong * 1000 * data.donGia | number: '1.0-1'}}</td>
+                      <td>{{ data.soLuong ? convertTienTobangChu(data.soLuong * 1000 * data.donGia) : '' }}</td>
+                      <td class="text-center">
+                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                          (click)="startEdit(i)">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                          (click)="deleteRow(i)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
                   </ng-container>
-                  <ng-template #editTemplate>
-                    <td class="text-center">{{i+1}}</td>
-                    <td>
-                      <input type="text" [(ngModel)]="editCache[i].data.goiThau" nz-input name="goiThau" />
-                    </td>
-                    <td>
-                      <nz-input-number nz-input [(ngModel)]="editCache[i].data.soLuong" [nzMin]="1" [nzStep]="1"
-                        [nzSize]="'small'">
-                      </nz-input-number>
-                    </td>
-                    <td>
-                      <nz-select [(ngModel)]="editCache[i].data.maDvi" (ngModelChange)="changeChiCuc($event,i)">
-                        <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </td>
-                    <td>
-                      <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
-                        <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                      </nz-select>
-                    </td>
-                    <td><input type="text" [(ngModel)]="editCache[i].data.diaDiemNhap" nz-input /> </td>
-                    <td>
-                      <nz-input-number nz-input [(ngModel)]="editCache[i].data.donGia" [nzMin]="1" [nzStep]="1"
-                        [nzSize]="'small'">
-                      </nz-input-number>
-                    </td>
-                    <td>
-                      {{editCache[i].data.soLuong *
-                      1000 *
-                      editCache[i].data.donGia | number: '1.0-1'}}
-                    </td>
-                    <td>{{editCache[i].data.soLuong ?
-                      convertTienTobangChu(editCache[i].data.soLuong *
-                      1000 *
-                      editCache[i].data.donGia) : '' }}</td>
-                    <td class="text-center">
-                      <a (click)="saveEdit(i)" class="save">
-                        <i class="icon htvbdh_tcdt_save"></i>
-                      </a>
-                      <a (click)="cancelEdit(i)">
-                        <i class="fa fa-ban do"></i>
-                      </a>
-                    </td>
-                  </ng-template>
-                </tr>
+                </ng-container>
               </tbody>
-            </nz-table>
-            <nz-table #expandTable [nzData]="listOfMapData2" nzTableLayout="fixed">
+            </nz-table> -->
+            <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
               <thead>
                 <tr>
-                  <th>STT</th>
-                  <th>Chi cục</th>
+                  <th [width]="218">Chi cục</th>
                   <th>Tên gói thầu</th>
-                  <th>Địa điểm nhập kho</th>
+                  <th>Điểm kho</th>
                   <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
                   <th>Đã lên kế hoạch mua</th>
                   <th>Số lượng tấn</th>
                   <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
                   <th>Thành tiền</th>
                   <th>Bằng chữ</th>
-                  <th>Thao tác</th>
+                  <th [width]="80">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 <ng-container *ngFor="let data of expandTable.data">
-                  <ng-container *ngFor="let item of mapOfExpandedData2[data.key]">
+                  <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">
                     <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
                       <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
-                        (nzExpandChange)="collapse(mapOfExpandedData2[data.key], item, $event)">
-                        {{ item.name }}
+                        (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">
+                        {{ item.tenDvi }}
                       </td>
-                      <td>{{ item.age }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
-                      <td>{{ item.address }}</td>
+                      <td>{{ item.goiThau }}</td>
+                      <td>{{ item.tenDiemKho }}</td>
+                      <td>{{ item.soLuongTheoChiTieu }}</td>
+                      <td>{{ item.soLuongTheoChiTieu }}</td>
+                      <td>{{ item.soLuong }}</td>
+                      <td>{{ item.donGia }}</td>
+                      <td>{{ item.soLuong * 1000 * item.donGia | number: '1.0-1'}}</td>
+                      <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * 1000 * item.donGia) : '' }}</td>
+                      <td class="text-center">
+                        <div *ngIf="item?.children?.length == 0 || !item?.children">
+                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                            (click)="startEdit(i)">
+                            <i class="fa fa-pencil"></i>
+                          </a>
+                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                            (click)="deleteRow(i)">
+                            <i class="fa fa-trash-o do"></i>
+                          </a>
+                        </div>
+                      </td>
                     </tr>
                   </ng-container>
                 </ng-container>
@@ -549,7 +522,7 @@
           <nz-tab [nzTitle]="'Căn cứ xác định'" class="cc-xac-dinh__container" (nzClick)="tabSelected = 'ccXacDinh'">
             <div nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="24">
-                <nz-card nzTitle="BÁO GIÁ THỊ TRƯỜNG" class="mt16 flex-card p-lr16 card-table"
+                <nz-card nzTitle="Cơ sở phân chia các gói thầu" class="mt16 flex-card p-lr16 card-table"
                   [nzExtra]="tableCardBaoGiaThiTruong">
                   <nz-table #baoGiaThiTruong nzBordered [nzData]="baoGiaThiTruongList" id="table-bao-gia-thi-truong"
                     [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -583,7 +556,8 @@
                 </nz-card>
               </div>
               <div nz-col nzSpan="24">
-                <nz-card nzTitle="CĂN CỨ KHÁC" class="mt16 flex-card p-lr16 card-table" [nzExtra]="tableCardCanCuKhac">
+                <nz-card nzTitle="Cơ sở xác định giá gói thầu" class="mt16 flex-card p-lr16 card-table"
+                  [nzExtra]="tableCardCanCuKhac">
                   <nz-table #canCuKhac nzBordered [nzData]="canCuKhacList" id="table-can-cu-khac"
                     [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
