@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 
@@ -26,7 +27,9 @@ export class MultipleTagComponent implements OnInit {
   @Output()
   downloadFileEvent = new EventEmitter<any>();
   nameFile: string;
-  constructor(public globals: Globals) { }
+  constructor(
+    public globals: Globals,
+    public userService: UserService) { }
 
   ngOnInit(): void {
   }

@@ -2489,6 +2489,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
         this.dieuChinhThongTinChiTieuKHNam.dxDcKhnIds = dxDcKhnIds;
 
+        if (this.dataDieuChinh && this.dataDieuChinh.length > 0) {
+          this.dieuChinhThongTinChiTieuKHNam.dcChiTieuId = this.dataDieuChinh[0].id;
+        }
+
         let body = {
           qdDc: this.dieuChinhThongTinChiTieuKHNam,
           qdGocId: this.dieuChinhThongTinChiTieuKHNam.qdGocId,
@@ -2830,20 +2834,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
+          this.dataDieuChinh = [];
           let item = {
             id: data.id,
             text: data.soVanBan,
           };
-          if (this.dataDieuChinh && this.dataDieuChinh.length > 0) {
-            let findDeXuat = this.dataDieuChinh.find(x => x.id == item.id);
-            if (findDeXuat != null && findDeXuat.length > 0) {
-              this.dataDieuChinh.push(item);
-            }
-          }
-          else {
-            this.dataDieuChinh = [];
-            this.dataDieuChinh.push(item);
-          }
+          this.dataDieuChinh.push(item);
         }
       });
     }
