@@ -70,7 +70,9 @@ export class ThongtinDauthauComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isViewDetail: boolean;
 
 
   async ngOnInit() {
@@ -164,7 +166,7 @@ export class ThongtinDauthauComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id) {
+  redirectToChiTiet(id: number, isView?: boolean) {
     // if (this.router.url.includes(LEVEL.TONG_CUC)) {
     //   this.router.navigate([
     //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
@@ -176,10 +178,15 @@ export class ThongtinDauthauComponent implements OnInit {
     //     id,
     //   ]);
     // }
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau/chinh-sua', id]);
+    // let loatVthh = this.router.url.split('/')[4]
+    // this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau/chinh-sua', id]);
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
-
+  showList() {
+    this.isDetail = false;
+  }
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;

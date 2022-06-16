@@ -9,11 +9,11 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'dau-thau',
+                redirectTo: 'theo-phuong-thuc-dau-thau',
                 pathMatch: 'full',
             },
             {
-                path: 'dau-thau',
+                path: 'theo-phuong-thuc-dau-thau',
                 loadChildren: () =>
                     import('../mua-hang/dau-thau/dau-thau.module').then(
                         (m) => m.DauThauModule,
