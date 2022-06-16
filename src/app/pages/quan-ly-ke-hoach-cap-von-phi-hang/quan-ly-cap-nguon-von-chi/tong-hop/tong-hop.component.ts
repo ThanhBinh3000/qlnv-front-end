@@ -93,10 +93,10 @@ export class TongHopComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		// this.searchFilter.denNgay = new Date();
-		// let newDate = new Date();
-		// newDate.setMonth(newDate.getMonth() -1);
-		// this.searchFilter.tuNgay = newDate;
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
@@ -148,8 +148,8 @@ export class TongHopComponent implements OnInit {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDnghi: this.searchFilter.maDeNghi,
 			maDvi: this.searchFilter.maDviTao,
-			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
-			ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			soQdChiTieu: this.searchFilter.qdChiTieu,
 			loaiDnghi: this.searchFilter.loaiDn,
 			paggingReq: {
