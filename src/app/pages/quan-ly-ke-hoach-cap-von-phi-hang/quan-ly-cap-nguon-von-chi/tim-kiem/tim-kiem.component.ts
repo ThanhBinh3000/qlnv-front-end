@@ -279,4 +279,10 @@ export class TimKiemComponent implements OnInit {
 		}
 		return check;
 	}
+
+	close(){
+		this.router.navigate([
+			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
+		])
+	}
 }
