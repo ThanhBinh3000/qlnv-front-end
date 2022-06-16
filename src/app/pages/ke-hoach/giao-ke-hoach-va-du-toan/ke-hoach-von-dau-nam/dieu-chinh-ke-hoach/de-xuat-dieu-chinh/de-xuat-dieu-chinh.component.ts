@@ -97,7 +97,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      await Promise.all([this.search()]);
+      await Promise.all([
+        this.search(),
+        this.loadDonVi(),
+      ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -148,6 +151,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
         };
         this.optionsDonVi.push(item);
       }
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -156,7 +160,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   onInputDonVi(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = [];
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -254,6 +258,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
       ngayKyTuNgayQd: this.ngayKy && this.ngayKy.length > 0
         ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
         : null,
+      maDvi: this.selectedDonVi ? this.selectedDonVi.maDvi : null,
     };
     let res = await this.deXuatDieuChinhService.timKiem(
       param,

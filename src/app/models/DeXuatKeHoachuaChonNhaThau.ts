@@ -104,10 +104,15 @@ export class DanhSachGoiThau {
   goiThau: string;
   id: number;
   soLuong: number;
+  soLuongTheoChiTieu: number;
   thanhTien: string;
   bangChu: string;
   idVirtual?: number;
   isEdit: boolean;
+  children?: DanhSachGoiThau[];
+  level?: number;
+  expand?: boolean;
+  parent?: DanhSachGoiThau
 }
 export class CanCuXacDinh {
   id: number;

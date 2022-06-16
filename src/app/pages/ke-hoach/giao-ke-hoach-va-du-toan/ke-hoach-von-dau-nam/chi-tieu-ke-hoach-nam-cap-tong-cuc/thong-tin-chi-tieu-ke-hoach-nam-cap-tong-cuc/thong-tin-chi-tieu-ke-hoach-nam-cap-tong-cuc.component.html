@@ -129,9 +129,9 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
-                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
                   [data]="canCuList" [trangThai]="isViewDetail ? 'view-detail' :  thongTinChiTieuKeHoachNam.trangThai"
-                  type="file"
+                  [type]="userService.isTongCuc() ? 'file' : 'chi-tieu'"
                   (selectDataEvent)="userService.isTongCuc() ? openFileCanCu($event) : openDialogGiaoChiTieu()"
                   (removeDataEvent)="deleteCanCuTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
                   typeFile="can-cu" [showDowloadFile]="userService.isTongCuc() ? true : false">

@@ -28,6 +28,11 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
+  nhaKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/nha-kho/tra-cuu`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   nganKhoGetList(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/ngan-kho/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
@@ -38,8 +43,8 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  nhaKhoGetList(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/nha-kho/tra-cuu`;
-    return this.httpClient.post<any>(url, body).toPromise();
+  getTreeKho(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/thong-tin`;
+    return this._httpClient.post<any>(url, null).toPromise();
   }
 }

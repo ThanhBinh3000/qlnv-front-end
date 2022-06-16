@@ -8,7 +8,8 @@ import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { I } from '@angular/cdk/keycodes';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -17,8 +18,15 @@ import { I } from '@angular/cdk/keycodes';
 })
 export class DialogThemMoiVatTuComponent implements OnInit {
   formData: FormGroup;
-  thongtinDauThau: DanhSachGoiThau;
+  thongtinDauThau: DanhSachGoiThau
+  loaiVthh: any;
+  dataChiTieu: any;
+  donGia: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
+  listOfData: any[] = [];
+  tableExist: boolean = false;
+  selectedChiCuc: boolean = false;
+  isValid: boolean = false;
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -26,18 +34,35 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private userService: UserService,
     private donViService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-  ) { }
+    private helperService: HelperService
+  ) {
+    this.formData = this.fb.group({
+      id: [null],
+      maDvi: [null, [Validators.required]],
+      tenDvi: [null],
+      goiThau: [null, [Validators.required]],
+      tenCcuc: [null],
+      donGia: [null, [Validators.required]],
+      soLuong: [null, [Validators.required]],
+      thanhTien: [null],
+      bangChu: [null],
+      children: [null]
+    });
+  }
 
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
 
   ngOnInit(): void {
     this.initForm();
-    this.listOfData.push(new DanhSachGoiThau);
     this.updateEditCache();
+    this.disableChiCuc();
   }
 
   save() {
+    this.formData.patchValue({
+      children: this.listOfData
+    })
     this._modalRef.close(this.formData);
   }
 
@@ -45,73 +70,111 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this._modalRef.destroy();
   }
   initForm() {
-    this.formData = this.fb.group({
-      diaDiemNhap: [
-        this.thongtinDauThau ? this.thongtinDauThau.diaDiemNhap : null, [Validators.required]
-      ],
-      maDvi: [
-        this.thongtinDauThau ? this.thongtinDauThau.maDvi : null, [Validators.required]
-      ],
-      tenCcuc: [null],
-      maDiemKho: [
-        this.thongtinDauThau ? this.thongtinDauThau.maDiemKho : null, [Validators.required]
-      ],
-      tenDiemKho: [null],
-      donGia: [this.thongtinDauThau ? this.thongtinDauThau.donGia : null, [Validators.required]],
-      goiThau: [
-        this.thongtinDauThau ? this.thongtinDauThau.goiThau : null,
-        [Validators.required],
-      ],
-      id: [this.thongtinDauThau ? this.thongtinDauThau.id : null],
-      soLuong: [
-        this.thongtinDauThau ? this.thongtinDauThau.soLuong : null,
-        [Validators.required],
-      ],
-      thanhTien: [this.thongtinDauThau ? this.thongtinDauThau.thanhTien : null],
-      bangChu: [this.thongtinDauThau ? this.thongtinDauThau.bangChu : null]
-    });
+    this.formData.get('donGia').setValue(this.donGia);
+    this.thongtinDauThau = new DanhSachGoiThau();
     this.loadDonVi();
   }
 
   async loadDonVi() {
-    const res = await this.donViService.layDonViCon();
     this.listChiCuc = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          'value': res.data[i].maDvi,
-          'text': res.data[i].tenDvi
-        };
-        this.listChiCuc.push(item);
-      }
+    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+      this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
     }
+    if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+      this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+    }
+
+  }
+
+  checkDisabledSave() {
+    this.isValid = this.listOfData && this.listOfData.length > 0
   }
 
   async changeChiCuc(event) {
-    // console.log(event);
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    let data = this.listChiCuc.filter(item => item.maDvi === event);
+    this.formData.get('tenDvi').setValue(data[0].tenDonVi);
     this.listDiemKho = [];
-    this.formData.get('maDiemKho').setValue(null);
-    this.formData.get('diaDiemNhap').setValue(null);
     if (res.msg == MESSAGE.SUCCESS) {
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
           'value': res.data.child[i].maDiemkho,
-          'text': res.data.child[i].tenDiemkho
+          'text': res.data.child[i].tenDiemkho,
+          'diaDiemNhap': res.data.child[i].diaChi,
         };
         this.listDiemKho.push(item);
+        this.filterData();
       }
     }
   }
 
-  changeDiemKho() {
-    let chiCuc = this.listChiCuc.filter(item => item.value == this.formData.get('maDvi').value);
-    let diemKho = this.listDiemKho.filter(item => item.value == this.formData.get('maDiemKho').value);
-    if (chiCuc.length > 0 && diemKho.length > 0) {
-      this.formData.get('tenCcuc').setValue(chiCuc[0].text);
-      this.formData.get('tenDiemKho').setValue(diemKho[0].text);
-      this.formData.get('diaDiemNhap').setValue(diemKho[0]?.text + " - " + chiCuc[0]?.text);
+  filterData() {
+    this.listOfData.forEach(data => {
+      this.listDiemKho = this.listDiemKho.filter(item => item.value !== data.maDiemKho);
+    })
+  }
+
+  changeDiemKho(index?) {
+    if (index >= 0) {
+      let diemKho = this.listDiemKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
+      if (diemKho.length > 0) {
+        this.editCache[index].data.tenDiemKho = diemKho[0].text;
+        this.editCache[index].data.diaDiemNhap = diemKho[0].diaDiemNhap;
+      }
+    } else {
+      let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinDauThau.maDiemKho);
+      if (diemKho.length > 0) {
+        this.thongtinDauThau.tenDiemKho = diemKho[0].text;
+        this.thongtinDauThau.diaDiemNhap = diemKho[0].diaDiemNhap;
+        console.log(this.thongtinDauThau);
+      }
     }
+  }
+
+  addDiemKho() {
+    if (this.thongtinDauThau.maDiemKho && this.thongtinDauThau.soLuong) {
+      this.thongtinDauThau.donGia = this.formData.get('donGia').value;
+      this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
+      this.thongtinDauThau.idVirtual = new Date().getTime();
+      this.listOfData = [...this.listOfData, this.thongtinDauThau];
+      this.updateEditCache;
+      this.thongtinDauThau = new DanhSachGoiThau();
+      this.disableChiCuc();
+      this.filterData();
+      this.checkDisabledSave();
+    }
+  }
+
+  clearDiemKho() {
+
+  }
+
+  reduceRowData(
+    indexTable: number,
+    indexCell: number,
+    indexRow: number,
+    stringReplace: string,
+    idTable: string,
+  ): number {
+    let sumVal = 0;
+    const listTable = document
+      .getElementById(idTable)
+      ?.getElementsByTagName('table');
+    if (listTable && listTable.length >= indexTable) {
+      const table = listTable[indexTable];
+      for (let i = indexRow; i < table.rows.length - 1; i++) {
+        if (
+          table.rows[i]?.cells[indexCell]?.innerHTML &&
+          table.rows[i]?.cells[indexCell]?.innerHTML != ''
+        ) {
+          sumVal =
+            sumVal +
+            parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
+          this.formData.get('soLuong').setValue(sumVal);
+        }
+      }
+    }
+    return sumVal;
   }
 
   calculatorThanhTien() {
@@ -126,8 +189,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     });
   }
 
-  editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
-  listOfData: DanhSachGoiThau[] = [];
+  editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   startEdit(index: number): void {
     this.editCache[index].edit = true;
@@ -147,14 +209,29 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
+    this.disableChiCuc();
+    this.checkDisabledSave();
+  }
+
+  ngAfterViewChecked(): void {
+    const table = document.getElementsByTagName('table');
+    this.tableExist = table && table.length > 0 ? true : false;
   }
 
   updateEditCache(): void {
-    this.listOfData.forEach(item => {
-      this.editCache[item.id] = {
-        edit: true,
+    this.listOfData.forEach((item, index) => {
+      this.editCache[index] = {
+        edit: false,
         data: { ...item }
       };
     });
+  }
+
+  disableChiCuc() {
+    if (this.listOfData.length > 0) {
+      this.selectedChiCuc = true;
+    } else {
+      this.selectedChiCuc = false;
+    }
   }
 }

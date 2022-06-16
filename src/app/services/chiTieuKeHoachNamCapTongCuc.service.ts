@@ -108,4 +108,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/count`;
     return this.httpClient.get(url).toPromise();
   }
+
+  loadThongTinChiTieuKeHoachCucNam(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
 }
