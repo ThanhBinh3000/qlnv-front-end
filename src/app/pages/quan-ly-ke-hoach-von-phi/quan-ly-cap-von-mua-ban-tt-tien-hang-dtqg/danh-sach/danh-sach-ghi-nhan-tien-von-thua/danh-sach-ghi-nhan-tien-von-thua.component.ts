@@ -69,7 +69,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 
 		this.searchFilter.denNgay = new Date();
 		let newDate = new Date();
-		newDate.setMonth(newDate.getMonth() -1);
+		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
@@ -78,6 +78,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
+					this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -122,16 +123,16 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 
-		let trangThais = [];
-		if (this.searchFilter.trangThai) {
-			trangThais = [this.searchFilter.trangThai];
-		}
+		// let trangThais = [];
+		// if (this.searchFilter.trangThai) {
+		// 	trangThais = [this.searchFilter.trangThai];
+		// }
 		let requestReport = {
 			loaiTimKiem: "1",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maNopTienThua: this.searchFilter.maTienThua,
-			dviGui: this.searchFilter.maDviGui,
-			maDvi: this.userInfo?.dvql,
+			maDvi: this.searchFilter.maDviGui,
+			maDviCha: this.userInfo?.dvql,
 			maLoai: "3",
 			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
@@ -140,7 +141,8 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThaiDviChas: trangThais,
+			trangThai: Utils.TT_BC_7,
+			trangThaiDviCha: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
@@ -183,7 +185,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + this.loai + '/' + id,
 		])
 	}
 

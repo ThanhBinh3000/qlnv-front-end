@@ -53,6 +53,7 @@ export class ItemNhan {
 export class VonBanHangComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maNopTien: string;
@@ -138,6 +139,7 @@ export class VonBanHangComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -525,7 +527,7 @@ export class VonBanHangComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/'
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/0/'
                             + data.data.id,
                         ]);
                     } else {
@@ -595,11 +597,11 @@ export class VonBanHangComponent implements OnInit {
     close() {
         if (this.statusBtnParent) {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/0'
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/'+this.loai
             ]);
         } else {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/0'
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/'+this.loai
             ]);
         }
 

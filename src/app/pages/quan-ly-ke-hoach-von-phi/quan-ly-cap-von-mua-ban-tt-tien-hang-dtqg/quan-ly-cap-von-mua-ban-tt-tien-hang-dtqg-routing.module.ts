@@ -64,8 +64,9 @@ const routes: Routes = [
 				'./danh-sach/danh-sach-thanh-toan-cho-khach-hang/danh-sach-thanh-toan-cho-khach-hang.module'
 			).then((m) => m.DanhSachThanhToanChoKhachHangModule),
 	},
+
 	{
-		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc/:id',
+		path: 'ghi-nhan-von-tai-dvct-tai-tong-cuc/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./ghi-nhan-von-tai-dvct-tai-tong-cuc/ghi-nhan-von-tai-dvct-tai-tong-cuc.module'
@@ -79,19 +80,19 @@ const routes: Routes = [
 			).then((m) => m.GhiNhanVonTaiDvctTaiTongCucModule),
 	},
 	{
-		path: 'ghi-nhan-von-tai-ckv-cc/:id',
+		path: 'ghi-nhan-von-tai-ckv-cc/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./ghi-nhan-von-tai-ckv-cc/ghi-nhan-von-tai-ckv-cc.module'
 			).then((m) => m.GhiNhanVonTaiCkvCcModule),
 	},
-	{
-		path: 'ghi-nhan-von-tai-ckv-cc',
-		loadChildren: () =>
-			import(
-				'./ghi-nhan-von-tai-ckv-cc/ghi-nhan-von-tai-ckv-cc.module'
-			).then((m) => m.GhiNhanVonTaiCkvCcModule),
-	},
+	// {
+	// 	path: 'ghi-nhan-von-tai-ckv-cc',
+	// 	loadChildren: () =>
+	// 		import(
+	// 			'./ghi-nhan-von-tai-ckv-cc/ghi-nhan-von-tai-ckv-cc.module'
+	// 		).then((m) => m.GhiNhanVonTaiCkvCcModule),
+	// },
 	{
 		path: 'von-ban-hang',
 		loadChildren: () =>
@@ -100,14 +101,14 @@ const routes: Routes = [
 			).then((m) => m.VonBanHangModule),
 	},
 	{
-		path: 'von-ban-hang/:id',
+		path: 'von-ban-hang/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./von-ban-hang/von-ban-hang.module'
 			).then((m) => m.VonBanHangModule),
 	},
 	{
-		path: 'tien-thua/:id',
+		path: 'tien-thua/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./tien-thua/tien-thua.module'
@@ -121,7 +122,7 @@ const routes: Routes = [
 			).then((m) => m.TienThuaModule),
 	},
 	{
-		path: 'thanh-toan-cho-khach-hang/:id',
+		path: 'thanh-toan-cho-khach-hang/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./thanh-toan-cho-khach-hang/thanh-toan-cho-khach-hang.module'
@@ -135,7 +136,7 @@ const routes: Routes = [
 			).then((m) => m.ThanhToanChoKhachHangModule),
 	},
 	{
-		path: 'cap-von-ung-von-cho-don-vi-cap-duoi/:id',
+		path: 'cap-von-ung-von-cho-don-vi-cap-duoi/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./cap-von-ung-von-cho-don-vi-cap-duoi/cap-von-ung-von-cho-don-vi-cap-duoi.module'
