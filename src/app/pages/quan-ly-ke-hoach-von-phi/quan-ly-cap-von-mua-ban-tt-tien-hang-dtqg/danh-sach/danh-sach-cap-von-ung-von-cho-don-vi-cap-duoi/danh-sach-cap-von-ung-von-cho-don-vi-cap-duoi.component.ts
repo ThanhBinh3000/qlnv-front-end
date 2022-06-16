@@ -290,7 +290,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
 	close() {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg'
 		])
 	}
 }

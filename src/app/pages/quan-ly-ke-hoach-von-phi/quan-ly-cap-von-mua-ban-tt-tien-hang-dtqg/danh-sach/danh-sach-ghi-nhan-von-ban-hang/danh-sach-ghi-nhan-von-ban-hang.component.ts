@@ -217,6 +217,8 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	}
 
 	close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg'
+		])
 	}
 }
