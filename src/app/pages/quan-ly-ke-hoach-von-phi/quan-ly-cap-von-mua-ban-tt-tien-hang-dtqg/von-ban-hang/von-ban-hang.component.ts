@@ -346,6 +346,7 @@ export class VonBanHangComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
                     let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
                     if (dVi && dVi?.parent?.maDvi == this.userInfo?.dvql) {
