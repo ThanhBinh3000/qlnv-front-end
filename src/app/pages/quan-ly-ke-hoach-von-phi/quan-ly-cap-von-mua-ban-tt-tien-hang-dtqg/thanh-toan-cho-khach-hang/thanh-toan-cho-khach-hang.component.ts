@@ -266,6 +266,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.maThanhToan = data.data.maThanhToan;
@@ -281,6 +282,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                     this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
                     this.trangThaiBanGhi = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh;
+                    this.ttGuiCache = this.ttGui;
                     this.lstFiles = data.data.lstFileGuis;
                     this.listFile = [];
                 } else {

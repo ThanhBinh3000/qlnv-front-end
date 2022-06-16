@@ -277,6 +277,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
                     this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
@@ -299,6 +300,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                     this.ttGui.soTienChu = data.data.soTienBangChu;
                     this.ttGui.taiKhoan = data.data.tuTk;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
+                    this.ttGuiCache = this.ttGui;
                     this.lstFiles = data.data.lstFileNhans;
                     this.listFile = [];
                 } else {
