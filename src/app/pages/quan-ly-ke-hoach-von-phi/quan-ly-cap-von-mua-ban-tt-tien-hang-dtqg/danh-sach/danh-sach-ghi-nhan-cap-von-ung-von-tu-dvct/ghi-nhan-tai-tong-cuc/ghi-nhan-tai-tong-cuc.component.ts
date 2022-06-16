@@ -110,12 +110,11 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		let trangThais = [];
-		if (this.searchFilter.trangThai) {
-			trangThais = [this.searchFilter.trangThai];
-		}
+		// let trangThais = [];
+		// if (this.searchFilter.trangThai) {
+		// 	trangThais = [this.searchFilter.trangThai];
+		// }
 		let requestReport = {
-			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maDvi: this.userInfo?.dvql,
 			maLoai: "1",
@@ -126,7 +125,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: trangThais,
+			trangThai: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
@@ -186,7 +185,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/' + this.loai + '/' + id,
 		])
 	}
 

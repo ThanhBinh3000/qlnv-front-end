@@ -26,7 +26,7 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ đơn vị cấp trên</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn" [nzDisabled]="disable"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn" 
 							[(ngModel)]="searchFilter.maCvUv"
 							[class]="statusNew || searchFilter.maCvUv ?'' : 'input-error-validate' ">
 							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonTuCapTren" [nzLabel]="item.maCapUngVonTuCapTren">
@@ -35,7 +35,7 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="disable"
 							[(ngModel)]="searchFilter.trangThai">
 							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>

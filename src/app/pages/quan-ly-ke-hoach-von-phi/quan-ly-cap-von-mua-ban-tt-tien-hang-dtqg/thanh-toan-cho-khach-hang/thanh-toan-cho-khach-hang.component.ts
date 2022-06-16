@@ -37,6 +37,7 @@ export class ItemGui {
 export class ThanhToanChoKhachHangComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maThanhToan: string;
@@ -110,6 +111,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -392,7 +394,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/'
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/0/'
                             + data.data.id,
                         ]);
                     } else {
@@ -459,7 +461,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-thanh-toan-cho-khach-hang/0'
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-thanh-toan-cho-khach-hang/'+this.loai
         ]);
     }
 

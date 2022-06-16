@@ -45,6 +45,7 @@ export class ItemNhan {
 export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maCvUv: string;
@@ -119,6 +120,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -401,7 +403,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-cuc-kv-chi-cuc/0'
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-cuc-kv-chi-cuc/' + this.loai
         ]);
     }
 

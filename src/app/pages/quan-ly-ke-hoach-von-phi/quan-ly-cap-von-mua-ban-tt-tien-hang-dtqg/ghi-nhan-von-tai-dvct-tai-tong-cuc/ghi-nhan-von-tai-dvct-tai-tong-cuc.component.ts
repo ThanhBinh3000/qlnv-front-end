@@ -46,6 +46,7 @@ export class ItemNhan {
 export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maCvUv: string;
@@ -127,6 +128,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
 
         //lay thong tin user
@@ -291,7 +293,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
                     this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
-                    this.soLenhChiTien = data.data.soLechChiTien;
+                    this.soLenhChiTien = data.data.soLenhChiTien;
                     this.ngayLapTemp = data.data.ngayLap;
                     this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
                     this.ttNhan.ngayNhan = data.data.ngayNhan;
@@ -405,7 +407,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             listIdDeleteFileNhans: this.listIdFilesDelete,
             maCapUngVonTuCapTren: this.maCvUv,
             loaiCap: this.loaiVon,
-            soLechChiTien: this.soLenhChiTien,
+            soLenhChiTien: this.soLenhChiTien,
             ngayLap: this.ngayLapTemp,
             ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
@@ -425,9 +427,9 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/'
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/0/'
                             + data.data.id
                         ]);
                     } else {
@@ -494,7 +496,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-tong-cuc/0'
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-tong-cuc/'+this.loai
         ]);
     }
 
@@ -528,7 +530,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     async doCopy(response: any) {
         let maCVUvNew: string;
-        this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
                     maCVUvNew = res.data;
@@ -566,7 +568,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             listIdDeleteFileNhans: [],
             maCapUngVonTuCapTren: maCVUvNew,
             loaiCap: response.loaiVon,
-            soLechChiTien: response.soLenhChiTien,
+            soLenhChiTien: response.soLenhChiTien,
             ngayLap: response.ngayLap,
             ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
@@ -593,7 +595,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                         nzWidth: '900px',
                         nzFooter: null,
                         nzComponentParams: {
-                            maBcao: response.maCvUvBtc
+                            maBcao: maCVUvNew
                         },
                     });
                 } else {

@@ -48,6 +48,7 @@ export class ItemData {
 export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maCvUvDuoi: string;
@@ -92,8 +93,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // them file vao danh sach
     handleUpload(): void {
-        this.fileList.forEach((file: any) => {
+        this.fileList.forEach((file: any) => {    
             const id = file?.lastModified.toString();
+            console.log({ id: id, fileName: file?.name });
             this.lstFiles.push({ id: id, fileName: file?.name });
             this.listFile.push(file);
         });
@@ -122,6 +124,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -296,7 +299,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh,
-                    this.lstFiles = data.data.lstFileGuis;
+                    this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                     this.updateEditCache();
                 } else {
@@ -415,8 +418,8 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKemGuis: listFile,
-            listIdDeleteFileGuis: this.listIdFilesDelete,
+            fileDinhKems: listFile,
+            listIdDeleteFiles: this.listIdFilesDelete,
             capUngVonCtiets: lstCtietBcaoTemp,
             maCapUngVonChoCapDuoi: this.maCvUvDuoi,
             maCapUngVonTuCapTren: this.maCvUvTren,
@@ -433,7 +436,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/' + data.data.id,
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -599,7 +602,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
+            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/' + this.loai
         ])
     }
 
