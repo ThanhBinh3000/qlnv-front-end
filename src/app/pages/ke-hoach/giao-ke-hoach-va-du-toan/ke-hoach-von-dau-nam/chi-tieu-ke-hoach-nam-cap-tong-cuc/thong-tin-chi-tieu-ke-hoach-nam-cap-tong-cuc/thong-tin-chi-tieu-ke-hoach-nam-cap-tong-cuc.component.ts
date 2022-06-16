@@ -686,9 +686,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             });
           }
           if (this.userService.isCuc()) {
-            if (res.data.chiTieuCanCuId) {
+            if (res.data.qdGocId) {
               const item = {
-                id: res.data.chiTieuId,
+                id: res.data.qdGocId,
                 text: res.data.soQdChiTieu,
               };
               this.canCuList.push(item);
@@ -735,7 +735,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.initForm();
           this.loadData();
           this.formData.patchValue({
-            soQD: this.formData.get('soQD').value.split('/')[0],
+            soQD: this.formData.get('soQD').value?.split('/')[0],
           });
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1397,7 +1397,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .value?.trim();
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
     if (this.userService.isCuc()) {
-      this.thongTinChiTieuKeHoachNam.chiTieuId = this.canCuList[0].id;
+      this.thongTinChiTieuKeHoachNam.qdGocId = this.canCuList[0].id;
     }
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
