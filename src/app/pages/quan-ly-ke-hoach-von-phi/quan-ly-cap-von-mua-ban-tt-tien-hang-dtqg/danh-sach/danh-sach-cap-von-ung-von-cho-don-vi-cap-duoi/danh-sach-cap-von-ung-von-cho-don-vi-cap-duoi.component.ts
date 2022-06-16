@@ -197,7 +197,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: this.searchFilter.trangThai,
+			trangThai: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

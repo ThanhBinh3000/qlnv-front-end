@@ -26,12 +26,7 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ cấp trên</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp ứng vốn"
-							[(ngModel)]="searchFilter.maCvUv"
-							[class]="statusNew || searchFilter.maCvUv ?'' : 'input-error-validate' ">
-							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonChoCapDuoi" [nzLabel]="item.maCapUngVonChoCapDuoi">
-							</nz-option>
-						</nz-select>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.maCvUv" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
@@ -156,10 +151,10 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
+				<!-- <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
-				</button>
+				</button> -->
 			</ng-template>
 		</div>
 	</div>

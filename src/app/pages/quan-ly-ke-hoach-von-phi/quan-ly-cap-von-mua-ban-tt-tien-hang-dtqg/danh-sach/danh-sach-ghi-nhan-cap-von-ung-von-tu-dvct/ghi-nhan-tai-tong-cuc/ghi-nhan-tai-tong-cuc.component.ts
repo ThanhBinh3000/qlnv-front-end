@@ -169,12 +169,11 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	taoMoi() {
 		this.statusBtnNew = false;
-		if (!this.searchFilter.maCvUv || !this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien || !this.searchFilter.ngayLap) {
+		if (!this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien || !this.searchFilter.ngayLap) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
 		let obj = {
-			maCvUv: this.searchFilter.maCvUv,
 			loaiCap: this.searchFilter.loaiVon,
 			soLenhChiTien: this.searchFilter.soLenhChiTien,
 			ngayLap: this.searchFilter.ngayLap,

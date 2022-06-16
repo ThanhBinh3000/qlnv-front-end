@@ -53,6 +53,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     maCvUvDuoi: string;
     maCvUvTren: string;
     ngayTao: string;
+    ngayTaoTemp: string;
     ngayTrinhDuyet: string;
     ngayDuyet: string;
     ngayPheDuyet: string;
@@ -288,6 +289,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     })
                     this.maCvUvDuoi = data.data.maCapUngVonChoCapDuoi;
                     this.maCvUvTren = data.data.maCapUngVonTuCapTren;
+                    this.ngayTaoTemp = data.data.ngayTao;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
@@ -326,6 +328,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    }
+                    if (mcn == Utils.TT_BC_7){
+                        this.capToanBo();
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -596,6 +601,67 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.router.navigate([
             'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
         ])
+    }
+
+    async capToanBo(){
+        var maCvUvDuoi: string;
+        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+                    var str: string;
+                    if (capDvi == Utils.TONG_CUC) {
+                        str = "CKV";
+                    } else {
+                        str = "CC";
+                    }
+                    maCvUvDuoi = res.data;
+                    let mm = maCvUvDuoi.split('.');
+                    maCvUvDuoi = mm[0] + str + '.' + mm[1];
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        let request: any[] = [];
+        this.lstCtietBcao.forEach(item => {
+            request.push({
+                id: null,
+                fileDinhKemNhans: [],
+                listIdDeleteFileNhans: [],
+                maLoai: "1",
+                maDvi: item.dviNhan,
+                maDviTien: this.maDviTien,
+                maCapUngVonTuCapTren: maCvUvDuoi,
+                ngayLap: this.ngayTaoTemp,
+                ngayNhan: null,
+                loaiCap: item.loai,
+                noiDung: item.noiDung,
+                maNguonNs: item.maNguonNs,
+                nienDoNs: item.nienDoNs,
+                soTien: mulMoney(item.tongSoTien, this.maDviTien),
+                nopThue: mulMoney(item.nopThue, this.maDviTien),
+                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
+                soTienBangChu: item.soTienBangChu,
+                tkNhan: null,
+                trangThai: "1",
+                thuyetMinh: "",
+            })
+        })
+        this.quanLyVonPhiService.capTatCa(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
     async showDialogCopy() {
