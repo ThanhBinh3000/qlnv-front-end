@@ -58,6 +58,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
+    this.onSubmit()
   }
 
   redirectThongTinTimKiem() {
@@ -86,7 +87,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
         searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
         searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     this.spinner.show();
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachQuyetDinh = data.data.content;
@@ -130,13 +131,4 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
       '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + id,
     ])
   }
-
-  // getStatusName(trangThai: string){
-  //     return this.trangThais.find(e => e.id == trangThai)?.tenDm;
-  // }
-
-  // getUnitName(maDvi: string){
-  //     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-  // }
-
 }

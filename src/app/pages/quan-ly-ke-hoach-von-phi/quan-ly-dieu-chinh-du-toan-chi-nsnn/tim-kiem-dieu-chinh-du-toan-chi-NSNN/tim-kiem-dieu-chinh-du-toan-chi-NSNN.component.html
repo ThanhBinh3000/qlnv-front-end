@@ -78,17 +78,32 @@
           <tbody>
             <tr *ngFor="let item of danhSachDieuChinh; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.maBcao}}</td>
+              <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">{{ item.maBcao}}</a></td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
-              <td class="text-center">{{getStatusName(item.trangThai)}}</td>
-              <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Xem</a></td>
-              <!-- <td (click)="xoaDuToanDieuChinh(item.id)"><span class="xoa">Xóa</span></td> -->
-              <td>
+              <!-- <td class="text-center">{{getStatusName(item.trangThai)}}</td> -->
+              <!-- <td [hidden]="status"><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Nhập dữ liệu/Sửa</a></td>
+              <td [hidden]="status">
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa bản ghi này?"
                       (nzOnConfirm)="xoaDuToanDieuChinh(item.id)" class="xoa">
                       Xóa
                   </a>
+              </td> -->
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
+              <td>
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
+
+                </button>
+                <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <span>Xóa</span>
+                </button>
+
               </td>
             </tr>
           </tbody>

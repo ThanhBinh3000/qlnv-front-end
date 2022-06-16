@@ -16,7 +16,7 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<button class="btn btn-main" (click)="onSubmit('7',null)">
+				<button class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Gửi đơn vị cấp trên</span>
 				</button>
@@ -40,11 +40,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" >
+				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" >
+				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>tiếp nhận</span>
 				</a>
@@ -352,30 +352,25 @@
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
+          <ng-container *ngIf="lstCtietBcao.length == 0">
 					<button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm hàng</span>
 					</button>
-					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiao">
-						<!-- <i class="icon htvbdh_dau-cong"></i> -->
+          </ng-container>
+					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiaoToanBo">
 						<span>Giao toàn bộ</span>
 					</button>
+          <ng-container *ngIf="lstCtietBcao.length == 0">
 					<button type="button" class="btn btn-main" (click)="addAllCol()" [hidden]="status">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm cột</span>
 					</button>
+          </ng-container>
 					<button type="button" class="btn btn-sub">
 						<i class="icon htvbdh_tcdt_import"></i>
 						<span>Import</span>
 					</button>
-					<!-- <button type="button" class="btn btn-sub">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
-            </button> -->
-					<!-- <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
-            </button> -->
 				</div>
 			</div>
 			<div class="ghi-chu">
