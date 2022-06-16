@@ -21,6 +21,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
+import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -66,13 +67,15 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
 
-
   idPA: number = 0;
+  tabSelected: string = 'thongTinChung';
 
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
 
   userInfo: UserLogin;
+  dataDeXuat: any[] = [];
+  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
   constructor(
     private modal: NzModalService,
@@ -144,6 +147,24 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.idVirtual === d.idVirtual)!;
+          target.expand = false;
+          this.collapse2(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  convertTienTobangChu(tien: number): string {
+    return VNnum2words(tien);
   }
 
   async loadChiTiet() {
@@ -284,3 +305,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
 }
+function VNnum2words(tien: number): string {
+  throw new Error('Function not implemented.');
+}
+

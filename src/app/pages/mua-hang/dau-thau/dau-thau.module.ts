@@ -49,6 +49,9 @@ import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trien
     HopDongModule,
     KehoachLuachonNhathauModule,
     TrienkhaiLuachonNhathauModule
+  ],
+  exports: [
+    QuyetdinhPheduyetKhlcntComponent,
   ]
 })
 export class DauThauModule { }
