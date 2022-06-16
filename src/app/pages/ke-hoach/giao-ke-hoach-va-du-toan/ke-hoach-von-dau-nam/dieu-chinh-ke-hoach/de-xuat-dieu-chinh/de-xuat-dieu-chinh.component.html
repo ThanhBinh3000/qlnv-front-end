@@ -21,6 +21,22 @@
             <label class="search__label">Trích yếu văn bản đề xuất</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
+          <div nz-col nzSpan="24" *ngIf="userService.isTongCuc()">
+            <label class="search__label">Đơn vị</label>
+            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+                [nzAutocomplete]="auto" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+              <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+                (click)="selectDonVi(option)">
+                {{ option.labelDonVi }}
+              </nz-auto-option>
+            </nz-autocomplete>
+          </div>
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--clear" (click)="clearFilter()">
@@ -45,7 +61,7 @@
                       [nzIndeterminate]="indeterminate"></label>
                   </th>
                   <th>STT</th>
-                  <th>Số vb đề xuất</th>
+                  <th>Số đề xuất</th>
                   <th *ngIf="userService.isTongCuc()">Đơn vị</th>
                   <th>Ngày ký</th>
                   <th>Trích yếu</th>

@@ -42,6 +42,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   endValue: Date | null = null;
   startValueDc: Date | null = null;
   endValueDc: Date | null = null;
+  loaiHangHoa: string = null;
 
   ngayKy: any;
   ngayKyDc: any;
@@ -297,23 +298,21 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     this.inputDonVi = '';
     this.selectedDonVi = {};
     this.ngayKy = null;
+    this.loaiHangHoa = null;
   }
 
   async search() {
     let capDvi = null;
-    let maDvi = null;
     if (this.tabSelected == 'tu-choi' && !this.userService.isTongCuc()) {
       capDvi = 1;
-      maDvi = this.userInfo.MA_DVI;
     } else if (this.tabSelected == 'cuc' && !this.userService.isCuc()) {
       capDvi = 2;
-      maDvi = this.userInfo.MA_DVI;
     }
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
       capDvi: capDvi,
-      maDvi: maDvi,
+      maDvi: this.selectedDonVi.maDvi,
       namKeHoach: this.namKeHoach,
       soQD: this.soQDDieuChinh,
       trichYeu: this.trichYeuDieuChinh,
@@ -331,7 +330,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       ngayKyTuNgayCT: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-      trangThai: this.tabSelected == 'tu-choi' ? this.globals.prop.TU_CHOI : null,
+      loaiHangHoa: this.loaiHangHoa,
+      trangThai: null,
     };
     let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
       param,

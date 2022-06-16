@@ -20,6 +20,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DialogDiaDiemKhoComponent } from 'src/app/components/dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -33,7 +34,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
 
   deXuatDieuChinh: any = {};
-  tabSelected: string = 'luongThuc';
+  tabSelected: string = '00';
 
   formData: FormGroup;
 
@@ -165,6 +166,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           );
           this.formData.controls['noiDung'].setValue(
             this.deXuatDieuChinh.noiDung,
+          );
+          this.formData.controls['loaiHangHoa'].setValue(
+            this.deXuatDieuChinh.loaiHangHoa,
           );
 
           if (this.deXuatDieuChinh.fileDinhKems && this.deXuatDieuChinh.fileDinhKems.length > 0) {
@@ -443,6 +447,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         this.deXuatDieuChinh.trichYeu = this.formData.get('trichYeu').value;
         this.deXuatDieuChinh.nguyenNhan = this.formData.get('nguyenNhan').value;
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
+        this.deXuatDieuChinh.loaiHangHoa = this.formData.get('loaiHangHoa').value;
 
         let dxDcLtVtReqList = [];
         if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0 && this.tabSelected == 'luongThuc') {
@@ -503,6 +508,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           "fileDinhKemReqs": this.deXuatDieuChinh.fileDinhKemReqs,
           "id": this.deXuatDieuChinh.id,
           "keHoachNamId": this.selectedCanCu.id,
+          "loaiHangHoa": this.deXuatDieuChinh.loaiHangHoa,
           "namKeHoach": this.deXuatDieuChinh.namKeHoach,
           "ngayHieuLuc": this.deXuatDieuChinh.ngayHieuLuc,
           "ngayKy": this.deXuatDieuChinh.ngayKy,
@@ -976,5 +982,26 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  selectHangHoa(event) {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách địa điểm kho',
+      nzContent: DialogDiaDiemKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        console.log(data);
+      }
+    });
+  }
+
+  deleteDiaDiemAdd(event) {
+
   }
 }

@@ -7,6 +7,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
+import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 
 @Component({
   selector: 'dialog-quyet-dinh-giao-chi-tieu',
@@ -30,6 +31,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
     private deXuatDieuChinhService: DeXuatDieuChinhService,
   ) { }
@@ -82,6 +84,17 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     };
     if (this.type && this, this.type == 'de-xuat') {
       let res = await this.deXuatDieuChinhService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          this.dataTable = data.content;
+        }
+        this.totalRecord = data.totalElements;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } else if (this.type && this, this.type == 'dieu-chinh') {
+      let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
