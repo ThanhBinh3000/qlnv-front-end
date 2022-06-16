@@ -5,14 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
 import { DataService } from '../../../data.service';
-import { Subscription } from 'rxjs';
-import { TRANG_THAI_TIM_KIEM_CON } from '../../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
+import { TRANG_THAI_TIM_KIEM_CHA } from '../../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
 	selector: 'app-ghi-nhan-tai-cuc-kv-chi-cuc',
@@ -36,7 +34,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//danh muc
 	danhSach: any[] = [];
 	donVis: any[] = [];
-	trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
+	trangThais: any[] = TRANG_THAI_TIM_KIEM_CHA;
 	loaiVons: any[] = LOAI_VON;
 	danhSachCapVon: any[] = [];
 	//phan trang
@@ -209,20 +207,20 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		this.onSubmit();
 	}
 
-	taoMoi() {
-		this.statusNew = false;
-		if (!this.searchFilter.maCvUv) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-			return;
-		}
-		let obj = {
-			maCvUv: this.searchFilter.maCvUv,
-		}
-		this.dataSource.changeData(obj);
-		this.router.navigate([
-			'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc',
-		]);
-	}
+	// taoMoi() {
+	// 	this.statusNew = false;
+	// 	if (!this.searchFilter.maCvUv) {
+	// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+	// 		return;
+	// 	}
+	// 	let obj = {
+	// 		maCvUv: this.searchFilter.maCvUv,
+	// 	}
+	// 	this.dataSource.changeData(obj);
+	// 	this.router.navigate([
+	// 		'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc',
+	// 	]);
+	// }
 
 	xemChiTiet(id: string) {
 		this.router.navigate([

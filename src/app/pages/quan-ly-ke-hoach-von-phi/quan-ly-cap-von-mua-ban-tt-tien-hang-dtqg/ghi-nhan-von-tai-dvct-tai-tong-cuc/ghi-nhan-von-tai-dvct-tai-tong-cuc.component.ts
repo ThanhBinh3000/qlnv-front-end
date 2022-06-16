@@ -154,15 +154,25 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             await this.dataSource.currentData.subscribe(obj => {
-                this.maCvUv = obj?.maCvUv;
                 this.loaiVon = obj?.loaiCap;
                 this.soLenhChiTien = obj?.soLenhChiTien;
                 this.ngayLapTemp = obj?.ngayLap;
                 this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
             })
-            if (!this.maCvUv) {
-                this.close();
-            }
+            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+                (res) => {
+                    if (res.statusCode == 0) {
+                        this.maCvUv = res.data;
+                        let mm = this.maCvUv.split('.');
+                        this.maCvUv = mm[0] + "TCDT" + '.' + mm[1];
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, res?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
         }
@@ -494,7 +504,6 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     async showDialogCopy() {
         let obj = {
-            maCvUvBtc: this.maCvUv,
             loaiVon: this.loaiVon,
             soLenhChiTien: this.soLenhChiTien,
             ngayLap: this.ngayLapTemp,
@@ -518,6 +527,21 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     }
 
     async doCopy(response: any) {
+        let maCVUvNew: string;
+        this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maCVUvNew = res.data;
+                    let mm = maCVUvNew.split('.');
+                    maCVUvNew = mm[0] + "TCDT" + '.' + mm[1];
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
         if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
@@ -540,7 +564,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             maDviTien: this.maDviTien,
             fileDinhKemNhans: [],
             listIdDeleteFileNhans: [],
-            maCapUngVonTuCapTren: response.maCvUvBtc,
+            maCapUngVonTuCapTren: maCVUvNew,
             loaiCap: response.loaiVon,
             soLechChiTien: response.soLenhChiTien,
             ngayLap: response.ngayLap,

@@ -610,6 +610,13 @@ export class QuanLyVonPhiService extends BaseService {
       request);
   }
 
+  capTatCa(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/them-moi/danh-sach',
+      // 'http://192.168.1.104:8094/nhap-ghi-nhan-von/them-moi/danh-sach',
+      request);
+  }
+
   capNhatDnghiThop(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/cap-nhat',

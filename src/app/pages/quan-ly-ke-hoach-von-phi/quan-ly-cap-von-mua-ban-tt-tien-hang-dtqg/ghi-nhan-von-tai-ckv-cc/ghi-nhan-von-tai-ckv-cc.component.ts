@@ -138,86 +138,14 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
-        if (this.id) {
-            await this.getDetailReport();
-        } else {
-            this.trangThaiBanGhi = '1';
-            this.maDonViTao = this.userInfo?.dvql;
-            this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            await this.dataSource.currentData.subscribe(obj => {
-                this.maCvUvTren = obj?.maCvUv;
-            });
-            if (!this.maCvUvTren) {
-                this.close();
-            }
-            this.getTtGui();
-            this.spinner.show();
-            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-                        var str: string;
-                        if (capDvi == Utils.CUC_KHU_VUC) {
-                            str = "CKV";
-                        } else {
-                            str = "CC";
-                        }
-                        this.maCvUv = res.data;
-                        let mm = this.maCvUv.split('.');
-                        this.maCvUv = mm[0] + str + '.' + mm[1];
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        }
+
+        await this.getDetailReport();
 
         this.getStatusButton();
         this.spinner.hide();
 
     }
 
-    async getTtGui() {
-        let request = {
-            maCapUngVonChoCapDuoi: this.maCvUvTren,
-            ngayTaoTu: "",
-            ngayTaoDen: "",
-            trangThai: "",
-            paggingReq: {
-                limit: 1000,
-                page: 1
-            }
-        }
-        await this.quanLyVonPhiService.timKiemCapVon(request).toPromise().then(
-            (res) => {
-                if (res?.statusCode == 0) {
-                    let data = res.data.content.find(e => e.maCapUngVonChoCapDuoi == this.maCvUvTren);
-                    this.maDviTien = data.maDviTien;
-                    this.ngayLapTemp = data.ngayTao;
-                    this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
-                    let item = data.capUngVonCtiets.find(e => e.dviNhan == this.userInfo?.dvql);
-                    this.ttGui = {
-                        loaiCap: item.loai,
-                        noiDung: item.noiDung,
-                        maNguonNs: item.maNguonNs,
-                        nienDoNs: item.nienDoNs,
-                        soTien: item.tongSoTien,
-                        soTienBangChu: item.soTienBangChu,
-                        nopThue: item.nopThue,
-                        ttChoDviHuong: item.ttChoDviHuong,
-                    }
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
-    }
 
     redirectkehoachvonphi() {
         // this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
@@ -445,39 +373,20 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         };
 
         this.spinner.show();
-        if (!this.id) {
-            this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        this.router.navigate([
-                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc/'
-                            + data.data.id,
-                        ]);
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        } else {
-            this.quanLyVonPhiService.capNhatVonMuaBan(request).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                        await this.getDetailReport();
-                        this.getStatusButton();
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        }
+        this.quanLyVonPhiService.capNhatVonMuaBan(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    await this.getDetailReport();
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
         this.spinner.hide();
     }
 
