@@ -23,7 +23,7 @@ export class TimKiemComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maDn: null,
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		qdChiTieu: "",

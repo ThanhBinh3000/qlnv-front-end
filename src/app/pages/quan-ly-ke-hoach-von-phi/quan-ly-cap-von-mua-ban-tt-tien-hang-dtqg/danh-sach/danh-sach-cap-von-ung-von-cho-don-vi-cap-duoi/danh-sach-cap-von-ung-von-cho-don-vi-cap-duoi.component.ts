@@ -24,7 +24,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maTren: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		maDuoi: "",
