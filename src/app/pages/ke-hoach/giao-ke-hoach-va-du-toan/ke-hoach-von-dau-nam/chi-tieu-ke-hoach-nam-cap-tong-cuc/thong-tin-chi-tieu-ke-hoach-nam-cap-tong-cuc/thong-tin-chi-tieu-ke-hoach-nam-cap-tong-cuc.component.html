@@ -68,7 +68,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
               <nz-form-control [nzErrorTip]="soQDError">
                 <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                   <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
@@ -86,7 +86,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày ký
+              <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="ngayKyError">
                 <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
@@ -101,7 +101,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+              <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
                 <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
