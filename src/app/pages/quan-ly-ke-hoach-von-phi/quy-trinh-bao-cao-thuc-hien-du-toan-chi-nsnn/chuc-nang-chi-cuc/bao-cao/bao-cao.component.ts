@@ -392,6 +392,7 @@ export class BaoCaoComponent implements OnInit {
         this.noiDungFull.push({
           ...item,
           tenDm: item.giaTri,
+          ten: item.giaTri,
           level: 0,
           idCha: 0,
         })
@@ -448,6 +449,7 @@ export class BaoCaoComponent implements OnInit {
           el = {
             ...el,
             tenDm: el.giaTri,
+            ten: item.giaTri,
             level: item.level + 1,
             idCha: item.id,
           }

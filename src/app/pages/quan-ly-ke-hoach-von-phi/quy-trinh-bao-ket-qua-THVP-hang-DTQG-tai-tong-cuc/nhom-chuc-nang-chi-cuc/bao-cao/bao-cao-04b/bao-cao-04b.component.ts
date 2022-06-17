@@ -77,7 +77,7 @@ export class BaoCao04bComponent implements OnInit {
     //thong tin chung
     id: any;
     lstCTietBaoCaoTemp: any[] = [];
-    idBaoCao:string;        //id bao cao to
+    idBaoCao: string;        //id bao cao to
 
     thuyetMinh: string;
     maDviTien: string = '1';
@@ -189,7 +189,7 @@ export class BaoCao04bComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu,0);
+        await this.addListVatTu(this.listVattu, 0);
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
             if (el.loaiMatHang == 0) {
                 el.colName = this.lstVatTuFull.find(e => e.id == el.maVtu)?.ten;
@@ -206,7 +206,7 @@ export class BaoCao04bComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        let noiDungChiFulls=[];
+        let noiDungChiFulls = [];
         this.noiDungChis.forEach(item => {
             item = {
                 ...item,
@@ -242,7 +242,7 @@ export class BaoCao04bComponent implements OnInit {
             }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child,item.id);
+                this.addListVatTu(item.child, item.id);
             }
         });
     }
@@ -267,36 +267,77 @@ export class BaoCao04bComponent implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
+    getChiMuc(str: string, dauMuc: string, dauMucCha: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             var xau: string = "";
             let chiSo: any = str.split('.');
             var n: number = chiSo.length - 1;
             var k: number = parseInt(chiSo[n], 10);
-            if (n == 0) {
-                for (var i = 0; i < this.soLaMa.length; i++) {
-                    while (k >= this.soLaMa[i].gTri) {
-                        xau += this.soLaMa[i].kyTu;
-                        k -= this.soLaMa[i].gTri;
-                    }
+            if (dauMuc == '1') {
+                if (n == 0) {
+                    xau = chiSo[n];
+                };
+                if (n == 1) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 2) {
+                    xau = String.fromCharCode(k + 96);
                 }
-            };
-            if (n == 1) {
-                xau = chiSo[n];
-            };
-            if (n == 2) {
-                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            };
-            if (n == 3) {
-                xau = String.fromCharCode(k + 96);
+                if (n == 3) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '2' || dauMuc == '3') {
+                if (n == 0) {
+                    xau = dauMucCha + "." + chiSo[n].toString();
+                };
+                if (n == 1) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 2) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '4') {
+                if (n == 0) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 1) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '5') {
+                if (n == 0) {
+                    xau = "-";
+                }
+                return xau;
+            } else {
+                if (n == 0) {
+                    for (var i = 0; i < this.soLaMa.length; i++) {
+                        while (k >= this.soLaMa[i].gTri) {
+                            xau += this.soLaMa[i].kyTu;
+                            k -= this.soLaMa[i].gTri;
+                        }
+                    }
+                };
+                if (n == 1) {
+                    xau = chiSo[n];
+                };
+                if (n == 2) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 3) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 4) {
+                    xau = "-";
+                }
+                return xau;
             }
-            if (n == 4) {
-                xau = "-";
-            }
-            return xau;
         }
     }
+    
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
         return str?.substring(0, str.lastIndexOf('.'));
@@ -483,7 +524,7 @@ export class BaoCao04bComponent implements OnInit {
                 }
             }
         }
-        
+
         var listVtu: vatTu[] = [];
         this.listColTemp.forEach((e) => {
             let objTrongD = {
@@ -779,7 +820,7 @@ export class BaoCao04bComponent implements OnInit {
                 })
                 level += 1;
                 lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
-                
+
             }
         })
     }
@@ -1177,7 +1218,7 @@ export class BaoCao04bComponent implements OnInit {
                 bcaoCtietId: data.bcaoCtietId,
                 maNdungChi: data.maNdungChi,
                 maNdungChiCha: data.maNdungChiCha,
-                listCtiet:data.listCtiet,
+                listCtiet: data.listCtiet,
                 ghiChu: data.ghiChu,
             }
             baoCaoTemp.forEach(item => {
@@ -1199,8 +1240,8 @@ export class BaoCao04bComponent implements OnInit {
         // this.getTotal();
     }
 
-    export(){
-        this.quanLyVonPhiService.exportBaoCao(this.id,this.idBaoCao).toPromise().then(
+    export() {
+        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '04b_BCPN-X.xlsx');
             },

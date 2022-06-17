@@ -137,7 +137,7 @@
       <tr *ngFor="let item of lstCtietBcao031; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate1">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -180,7 +180,7 @@
         </ng-container>
         <ng-template #editTemplate1>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -275,7 +275,7 @@
       <tr *ngFor="let item of lstCtietBcao032; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate2">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -318,7 +318,7 @@
         </ng-container>
         <ng-template #editTemplate2>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -413,7 +413,7 @@
       <tr *ngFor="let item of lstCtietBcao033; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate3">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -456,7 +456,7 @@
         </ng-container>
         <ng-template #editTemplate3>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">

@@ -157,13 +157,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-I1')"></i>
+          <ng-container *ngIf="lstCtietBcao4anI1?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-I1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anI1; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anI1">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','1')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -217,7 +219,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -269,13 +271,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-I2')"></i>
+          <ng-container *ngIf="lstCtietBcao4anI2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-I2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anI2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anI2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -329,7 +333,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -381,13 +385,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-I3')"></i>
+          <ng-container *ngIf="lstCtietBcao4anI3?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-I3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anI3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anI3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -441,7 +447,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -519,13 +525,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-II1.1')"></i>
+          <ng-container *ngIf="lstCtietBcao4anII11?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-II1.1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anII11; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anII11">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'3',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -579,7 +587,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -631,13 +639,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-II1.2')"></i>
+          <ng-container *ngIf="lstCtietBcao4anII12?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-II1.2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anII12; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anII12">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'3',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -691,7 +701,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -743,13 +753,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-II2')"></i>
+          <ng-container *ngIf="lstCtietBcao4anII2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-II2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anII2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anII2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -803,7 +815,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -855,13 +867,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-II3')"></i>
+          <ng-container *ngIf="lstCtietBcao4anII3?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-II3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anII3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anII3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -915,7 +929,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -980,13 +994,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-III1')"></i>
+          <ng-container *ngIf="lstCtietBcao4anIII1?.length == 0"> 
+            <i class="fa fa-plus" (click)="addLine(null,'4an-III1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anIII1; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anIII1">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','1')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1040,7 +1056,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -1092,13 +1108,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-III2')"></i>
+          <ng-container *ngIf="lstCtietBcao4anIII2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-III2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anIII2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anIII2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1152,7 +1170,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -1204,13 +1222,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-III3')"></i>
+          <ng-container *ngIf="lstCtietBcao4anIII3?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-III3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anIII3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anIII3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1264,7 +1284,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -1316,13 +1336,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4an-B')"></i>
+          <ng-container *ngIf="lstCtietBcao4anB?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4an-B')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4anB; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anB">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'1',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1376,7 +1398,7 @@
             <nz-input-number type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
-          
+
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>

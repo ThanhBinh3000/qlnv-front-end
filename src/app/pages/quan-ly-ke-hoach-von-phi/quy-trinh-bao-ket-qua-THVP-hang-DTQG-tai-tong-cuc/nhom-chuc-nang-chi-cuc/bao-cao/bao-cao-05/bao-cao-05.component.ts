@@ -69,10 +69,11 @@ export class BaoCao05Component implements OnInit {
     lstCtietBcao5III2: ItemDataMau0405[] = [];
     lstCtietBcao5B: ItemDataMau0405[] = [];
     noiDungChis: any[] = [];
+    noiDungChiFull: any[] = [];
     //thong tin chung
     id: any;
     lstCTietBaoCaoTemp: any[] = [];
-    idBaoCao:string;        //id bao cao to
+    idBaoCao: string;        //id bao cao to
 
     thuyetMinh: string;
     maDviTien: string = '1';
@@ -154,7 +155,7 @@ export class BaoCao05Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu,0);
+        await this.addListVatTu(this.listVattu, 0);
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
             if (el.loaiMatHang == 0) {
                 el.colName = this.lstVatTuFull.find(e => e.id == el.maVtu)?.ten;
@@ -171,18 +172,18 @@ export class BaoCao05Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        let noiDungChiFulls=[];
-        this.noiDungChis.forEach(item => {
-            item = {
-                ...item,
-                tenDm: item.giaTri,
-                ten: item.giaTri,
-                level: 0,
-                idCha: 0,
+        await this.noiDungChis.forEach(item => {
+            if (!item.maCha) {
+                this.noiDungChiFull.push({
+                    ...item,
+                    tenDm: item.giaTri,
+                    ten: item.giaTri,
+                    level: 0,
+                    idCha: 0,
+                })
             }
-            noiDungChiFulls.push(item);
-        });
-        this.noiDungChis = noiDungChiFulls;
+        })
+        await this.addListNoiDungChi(this.noiDungChiFull);
         if (this.lstCTietBaoCaoTemp.length > 0) {
             if (!this.lstCTietBaoCaoTemp[0].stt) {
                 await this.sortWithoutIndex();
@@ -211,6 +212,28 @@ export class BaoCao05Component implements OnInit {
         this.spinner.hide();
     }
 
+    addListNoiDungChi(noiDungChiTemp) {
+        let a = [];
+        noiDungChiTemp.forEach(item => {
+            this.noiDungChis.forEach(el => {
+                if (item.ma == el.maCha) {
+                    el = {
+                        ...el,
+                        tenDm: el.giaTri,
+                        ten: item.giaTri,
+                        level: item.level + 1,
+                        idCha: item.id,
+                    }
+                    this.noiDungChiFull.push(el);
+                    a.push(el);
+                }
+            });
+        })
+        if (a.length > 0) {
+            this.addListNoiDungChi(a);
+        }
+    }
+
     addListVatTu(listVattu, idCha) {
         listVattu.forEach(item => {
             item = {
@@ -221,7 +244,7 @@ export class BaoCao05Component implements OnInit {
             }
             this.lstVatTuFull.push(item);
             if (item.child) {
-                this.addListVatTu(item.child,item.id);
+                this.addListVatTu(item.child, item.id);
             }
         });
     }
@@ -246,34 +269,74 @@ export class BaoCao05Component implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
+    getChiMuc(str: string, dauMuc: string, dauMucCha: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             var xau: string = "";
             let chiSo: any = str.split('.');
             var n: number = chiSo.length - 1;
             var k: number = parseInt(chiSo[n], 10);
-            if (n == 0) {
-                for (var i = 0; i < this.soLaMa.length; i++) {
-                    while (k >= this.soLaMa[i].gTri) {
-                        xau += this.soLaMa[i].kyTu;
-                        k -= this.soLaMa[i].gTri;
-                    }
+            if (dauMuc == '1') {
+                if (n == 0) {
+                    xau = chiSo[n];
+                };
+                if (n == 1) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 2) {
+                    xau = String.fromCharCode(k + 96);
                 }
-            };
-            if (n == 1) {
-                xau = chiSo[n];
-            };
-            if (n == 2) {
-                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            };
-            if (n == 3) {
-                xau = String.fromCharCode(k + 96);
+                if (n == 3) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '2') {
+                if (n == 0) {
+                    xau = dauMucCha + "." + chiSo[n].toString();
+                };
+                if (n == 1) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 2) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '3') {
+                if (n == 0) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 1) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '4') {
+                if (n == 0) {
+                    xau = "-";
+                }
+                return xau;
+            } else {
+                if (n == 0) {
+                    for (var i = 0; i < this.soLaMa.length; i++) {
+                        while (k >= this.soLaMa[i].gTri) {
+                            xau += this.soLaMa[i].kyTu;
+                            k -= this.soLaMa[i].gTri;
+                        }
+                    }
+                };
+                if (n == 1) {
+                    xau = chiSo[n];
+                };
+                if (n == 2) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 3) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 4) {
+                    xau = "-";
+                }
+                return xau;
             }
-            if (n == 4) {
-                xau = "-";
-            }
-            return xau;
         }
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
@@ -316,7 +379,7 @@ export class BaoCao05Component implements OnInit {
         var maKm;                   // ma khoan muc
 
         dataPL = new ItemDataMau0405();
-        lstKmTemp = this.noiDungChis;
+        lstKmTemp = this.noiDungChiFull;
         maKm = baoCao?.find(e => e.id == id)?.maNdungChi;
         dataPL.header = phuLuc;
         let obj = {
@@ -464,7 +527,7 @@ export class BaoCao05Component implements OnInit {
                 }
             }
         }
-        
+
         var listVtu: vatTu[] = [];
         this.listColTemp.forEach((e) => {
             let objTrongD = {
@@ -723,13 +786,13 @@ export class BaoCao05Component implements OnInit {
     setDetail(phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
-            item.level = this.noiDungChis.find(e => e.id == item.maNdungChi)?.level;
+            item.level = this.noiDungChiFull.find(e => e.id == item.maNdungChi)?.level;
         })
         this.setBieuMau(baoCao, phuLuc);
     }
 
     getIdCha(maKM: any) {
-        return this.noiDungChis.find(e => e.id == maKM)?.idCha;
+        return this.noiDungChiFull.find(e => e.id == maKM)?.idCha;
     }
 
     sortWithoutIndex() {
@@ -1101,7 +1164,7 @@ export class BaoCao05Component implements OnInit {
                 bcaoCtietId: data.bcaoCtietId,
                 maNdungChi: data.maNdungChi,
                 maNdungChiCha: data.maNdungChiCha,
-                listCtiet:data.listCtiet,
+                listCtiet: data.listCtiet,
                 ghiChu: data.ghiChu,
             }
             baoCaoTemp.forEach(item => {
@@ -1123,8 +1186,8 @@ export class BaoCao05Component implements OnInit {
         // this.getTotal();
     }
 
-    export(){
-        this.quanLyVonPhiService.exportBaoCao(this.id,this.idBaoCao).toPromise().then(
+    export() {
+        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '05BCBPQ.xlsx');
             },
