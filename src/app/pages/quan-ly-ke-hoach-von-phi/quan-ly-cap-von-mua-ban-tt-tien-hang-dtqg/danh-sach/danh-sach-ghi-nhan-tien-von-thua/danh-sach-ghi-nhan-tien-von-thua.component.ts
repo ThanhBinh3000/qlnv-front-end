@@ -190,7 +190,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	}
 
 	getStatusName(trangThai: string) {
-		return this.trangThais.find(e => e.id == trangThai).tenDm;
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
 	xoaBaoCao(id: any) {
@@ -211,7 +211,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+		if ((item.trangThaiDviCha == Utils.TT_BC_1 || item.trangThaiDviCha == Utils.TT_BC_3 || item.trangThaiDviCha == Utils.TT_BC_5 ) &&
 			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {

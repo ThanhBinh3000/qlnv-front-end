@@ -26,7 +26,7 @@ export class TongHopComponent implements OnInit {
 	searchFilter = {
 		loaiTimKiem: '0',
 		maDeNghi: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		qdChiTieu: "",
