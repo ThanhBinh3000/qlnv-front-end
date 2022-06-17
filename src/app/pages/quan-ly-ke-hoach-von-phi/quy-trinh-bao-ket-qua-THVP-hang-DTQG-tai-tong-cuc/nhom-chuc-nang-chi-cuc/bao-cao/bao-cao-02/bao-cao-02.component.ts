@@ -10,8 +10,9 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
+import { DON_VI_TIEN, LA_MA, NOT_OK, OK, Utils } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
+import { DatePipe } from '@angular/common';
 
 export class ItemDataMau02 {
     bcaoCtietId = null;
@@ -79,6 +80,7 @@ export class BaoCao02Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -736,8 +738,8 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        baoCaoChiTietTemp.tuNgay = this.tuNgay;
-        baoCaoChiTietTemp.denNgay = this.denNgay;
+        baoCaoChiTietTemp.tuNgay = this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR);
+        baoCaoChiTietTemp.denNgay = this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR);
         let checkMoneyRange = true;
         let checkPersonReport = true;
 

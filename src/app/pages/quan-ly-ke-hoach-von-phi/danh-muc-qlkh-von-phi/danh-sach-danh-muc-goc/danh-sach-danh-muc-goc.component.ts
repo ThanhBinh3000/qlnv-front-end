@@ -161,7 +161,6 @@ export class DanhSachDanhMucGocComponent implements OnInit {
 
   // Xóa danh mục
   async xoaDanhMuc(id: number) {
-    debugger
     this.idGoc = id;
 
     await this.danhMuc.xoaDanhMuc(id).toPromise().then(

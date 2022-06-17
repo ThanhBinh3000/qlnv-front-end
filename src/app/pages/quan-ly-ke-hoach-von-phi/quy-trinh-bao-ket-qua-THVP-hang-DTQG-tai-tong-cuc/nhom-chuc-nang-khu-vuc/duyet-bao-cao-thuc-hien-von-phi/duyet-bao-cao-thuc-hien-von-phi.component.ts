@@ -232,7 +232,6 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   //download file về máy tính
   async downloadFileCv(fileUrl, fileName) {
-    debugger
     await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
       (data) => {
         fileSaver.saveAs(data,fileName);

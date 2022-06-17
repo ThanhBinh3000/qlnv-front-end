@@ -297,7 +297,6 @@ export class PhuLuc5Component implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
-    debugger
     let file!: File;
     file = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
