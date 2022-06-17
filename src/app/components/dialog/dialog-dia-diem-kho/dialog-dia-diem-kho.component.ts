@@ -1,9 +1,11 @@
+import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from './../../../constants/message';
 import { DanhMucService } from './../../../services/danhmuc.service';
 
@@ -13,6 +15,8 @@ import { DanhMucService } from './../../../services/danhmuc.service';
   styleUrls: ['./dialog-dia-diem-kho.component.scss'],
 })
 export class DialogDiaDiemKhoComponent implements OnInit {
+  data?: any;
+  maDvi: string;
   radioValue: string = 'trung';
   listOfMapData: any[];
   listOfMapDataClone: any[];
@@ -41,18 +45,24 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     maNganLo: '',
   }
 
+  deXuatCuc: any[] = [];
+
+  dataTreeKho: any;
+  sumTang: number = 0;
+  sumGiam: number = 0;
+
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donViService: DonviService,
     private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
     await this.loadTreeKho();
     await this.loadDonVi();
-    await this.loadDiemKho();
   }
 
   async loadDonVi() {
@@ -86,10 +96,19 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   async selectDonVi(donVi) {
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
+    this.searchData.maDvi = this.selectedDonVi.maDvi;
+    await this.loadDiemKho(this.selectedDonVi.id);
   }
 
   clearFilter() {
-
+    this.searchData = {
+      maDvi: '',
+      maDiemKho: '',
+      maNhaKho: '',
+      maNganKho: '',
+      maNganLo: '',
+    }
+    this.inputDonVi = '';
   }
 
   handleOk() {
@@ -100,14 +119,31 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     this._modalRef.close();
   }
 
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
+  async loadDiemKho(tongKhoId) {
+    // let body = {
+    //   "maDiemKho": null,
+    //   "paggingReq": {
+    //     "limit": 1000,
+    //     "page": 1
+    //   },
+    //   "str": null,
+    //   "tenDiemKho": null,
+    //   "tongKhoId": tongKhoId,
+    //   "trangThai": null
+    // };
+    // let res = await this.tinhTrangKhoHienThoiService.diemKhoGetList(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   if (res.data) {
+    //     this.listDiemKho = res.data;
+    //   }
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
+    if (this.searchData.maDvi && this.searchData.maDvi != '') {
+      let getDataChiCuc = this.dataTreeKho.filter(x => x.maTongKho == this.searchData.maDvi);
+      if (getDataChiCuc && getDataChiCuc.length > 0) {
+        this.listDiemKho = getDataChiCuc[0].child;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -205,12 +241,21 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     let res = await this.tinhTrangKhoHienThoiService.getTreeKho();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.listOfMapData = [];
-        this.listOfMapData.push(res.data);
-        this.listOfMapDataClone = [...this.listOfMapData];
-        this.listOfMapData.forEach((item) => {
-          this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-        });
+        if (this.maDvi) {
+          let getDataCuc = res.data.child.filter(x => x.maDtqgkv == this.maDvi);
+          if (getDataCuc && getDataCuc.length > 0) {
+            this.dataTreeKho = getDataCuc[0].child;
+          }
+        }
+        else {
+          this.dataTreeKho = res.data;
+        }
+        // this.listOfMapData = [];
+        // this.listOfMapData.push(res.data);
+        // this.listOfMapDataClone = [...this.listOfMapData];
+        // this.listOfMapData.forEach((item) => {
+        //   this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+        // });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -265,10 +310,71 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   }
 
   search() {
-
+    let dataTree = [];
+    if (this.searchData.maDvi && this.searchData.maDvi != '') {
+      let getDataChiCuc = this.dataTreeKho.filter(x => x.maTongKho == this.searchData.maDvi);
+      if (getDataChiCuc && getDataChiCuc.length > 0) {
+        dataTree = getDataChiCuc;
+        if (this.searchData.maDiemKho && this.searchData.maDiemKho != '') {
+          let getDataDiemKho = dataTree[0].child.filter(x => x.maDiemkho == this.searchData.maDiemKho);
+          if (getDataDiemKho && getDataDiemKho.length > 0) {
+            dataTree[0].child = getDataDiemKho;
+            if (this.searchData.maNhaKho && this.searchData.maNhaKho != '') {
+              if (dataTree[0].child[0].child && dataTree[0].child[0].child.length > 0) {
+                let getDataNhaKho = dataTree[0].child[0].child.filter(x => x.maNhakho == this.searchData.maNhaKho);
+                if (getDataNhaKho && getDataNhaKho.length > 0) {
+                  dataTree[0].child[0].child = getDataNhaKho;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    else {
+      dataTree = this.dataTreeKho;
+    }
+    this.listOfMapData = dataTree;
+    this.listOfMapDataClone = [...this.listOfMapData];
+    this.listOfMapData.forEach((item) => {
+      this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+    });
   }
 
   selectHangHoa(item: any) {
     this._modalRef.close(item);
+  }
+
+  editDeXuat(data: any) {
+
+  }
+
+  deleteDeXuat(data: any) {
+
+  }
+
+  changeValue(type, item) {
+    if (type == 'tang') {
+      if (item.oldDataTang && item.oldDataTang >= 0) {
+        this.sumTang = this.sumTang - item.oldDataTang + item.slTang;
+      }
+      else {
+        this.sumTang += item.slTang;
+      }
+      item.oldDataTang = item.slTang;
+    }
+    else if (type == 'giam') {
+      if (item.oldDataGiam && item.oldDataGiam >= 0) {
+        this.sumGiam = this.sumGiam - item.oldDataGiam + item.slGiam;
+      }
+      else {
+        this.sumGiam += item.slGiam;
+      }
+      item.oldDataGiam = item.slGiam;
+    }
+  }
+
+  saveDataTree(data, item) {
+
   }
 }

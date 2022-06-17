@@ -986,13 +986,15 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   selectHangHoa(event) {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách địa điểm kho',
+      nzTitle: 'Đề xuất điều chỉnh',
       nzContent: DialogDiaDiemKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        maDvi: this.userInfo.MA_DVI,
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
