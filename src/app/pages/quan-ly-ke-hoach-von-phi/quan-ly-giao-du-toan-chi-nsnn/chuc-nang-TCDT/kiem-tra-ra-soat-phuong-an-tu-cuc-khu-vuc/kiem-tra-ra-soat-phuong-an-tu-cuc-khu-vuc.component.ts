@@ -112,7 +112,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     }else{
       this.searchFilter.trangThais = ['1', '2']
     }
-    await this.quanLyVonPhiService.timBaoCaoGiao1(this.searchFilter).toPromise().then(res => {
+    await this.quanLyVonPhiService.timBaoCaoGiao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {

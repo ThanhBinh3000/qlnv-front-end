@@ -15,7 +15,7 @@ const routes: Routes = [
       ).then((m) => m.DanhSachBaoCaoQuyetToanVonPhiHangDTQGModule),
   },
   {
-    path: 'them-moi-bao-cao-quyet-toan',
+    path: 'them-moi-bao-cao-quyet-toan-/:namQtoan',
     loadChildren: () =>
       import(
         './them-moi-bao-cao-quyet-toan/them-moi-bao-cao-quyet-toan.module'

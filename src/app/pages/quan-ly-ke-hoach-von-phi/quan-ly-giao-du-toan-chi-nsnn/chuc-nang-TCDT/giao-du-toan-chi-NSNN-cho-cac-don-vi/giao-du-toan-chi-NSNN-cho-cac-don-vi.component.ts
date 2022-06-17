@@ -147,7 +147,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     // call chi tiet bao cao
     async getDetailReport() {
         this.spinner.show();
-        await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, "1").toPromise().then(
+        await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.lstCtietBcao = data.data.lstCtiets;

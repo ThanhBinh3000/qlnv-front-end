@@ -280,7 +280,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.CtietBcaoQuyetToan1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.CtietBcaoQuyetToan(this.id).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -430,7 +430,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

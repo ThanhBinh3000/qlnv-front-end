@@ -23,8 +23,8 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     maBcao: null,
     maPhanBcao: '2',
     namQtoan: null,
-    ngayTaoDen: "",
-    ngayTaoTu: "",
+    ngayTaoDen: null,
+    ngayTaoTu: null,
     paggingReq: {
       limit: 10,
       page: 1
@@ -46,7 +46,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   }
   donViTao!: any;
   trangThai!:string;
-
+  newDate = new Date();
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -60,7 +60,11 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   async ngOnInit() {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-
+    this.searchFilter.namQtoan = new Date().getFullYear()
+    this.searchFilter.ngayTaoDen = new Date();
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.ngayTaoTu = this.newDate;
+    this.donViTao = this.userInfo?.dvql;
     this.donViTao = this.userInfo?.dvql;
     this.onSubmit();
   }
