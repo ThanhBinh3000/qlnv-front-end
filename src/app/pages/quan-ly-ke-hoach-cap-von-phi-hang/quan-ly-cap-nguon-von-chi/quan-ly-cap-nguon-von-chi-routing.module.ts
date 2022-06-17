@@ -23,28 +23,28 @@ const routes: Routes = [
 			).then((m) => m.DanhSachDeNghiTuCucKhuVucModule),
 	},
 	{
-		path: 'tong-hop-tu-cuc-khu-vuc/:id',
+		path: 'tong-hop-tu-cuc-khu-vuc/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tu-cuc-khu-vuc/tong-hop-tu-cuc-khu-vuc.module'
 			).then((m) => m.TongHopTuCucKhuVucModule),
 	},
 	{
-		path: 'tong-hop-tu-cuc-khu-vuc/:maDvi/:soQd',
+		path: 'tong-hop-tu-cuc-khu-vuc/0/:maDvi/:soQd',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tu-cuc-khu-vuc/tong-hop-tu-cuc-khu-vuc.module'
 			).then((m) => m.TongHopTuCucKhuVucModule),
 	},
 	{
-		path: 'tong-hop-tai-tong-cuc/:id',
+		path: 'tong-hop-tai-tong-cuc/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tai-tong-cuc/tong-hop-tai-tong-cuc.module'
 			).then((m) => m.TongHopTaiTongCucModule),
 	},
 	{
-		path: 'tong-hop-tai-tong-cuc/0/:qdChiTieu',
+		path: 'tong-hop-tai-tong-cuc/:qdChiTieu',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tai-tong-cuc/tong-hop-tai-tong-cuc.module'
@@ -58,7 +58,14 @@ const routes: Routes = [
 			).then((m) => m.TonghopModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-trung-thau/:loaiDn/:qdChiTieu',
+		path: 'de-nghi-theo-quyet-dinh-trung-thau/0/:loaiDn/:qdChiTieu',
+		loadChildren: () =>
+			import(
+				'./de-nghi-theo-quyet-dinh-trung-thau/de-nghi-theo-quyet-dinh-trung-thau.module'
+			).then((m) => m.DeNghiTheoQuyetDinhTrungThauModule),
+	},
+	{
+		path: 'de-nghi-theo-quyet-dinh-trung-thau/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-trung-thau/de-nghi-theo-quyet-dinh-trung-thau.module'
@@ -72,7 +79,14 @@ const routes: Routes = [
 			).then((m) => m.DeNghiTheoQuyetDinhTrungThauModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/:loaiDn/:qdChiTieu',
+		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/0/:loaiDn/:qdChiTieu',
+		loadChildren: () =>
+			import(
+				'./de-nghi-theo-quyet-dinh-don-gia-mua/de-nghi-theo-quyet-dinh-don-gia-mua.module'
+			).then((m) => m.DeNghiTheoQuyetDinhDonGiaMuaModule),
+	},
+	{
+		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/:loai/:id',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-don-gia-mua/de-nghi-theo-quyet-dinh-don-gia-mua.module'

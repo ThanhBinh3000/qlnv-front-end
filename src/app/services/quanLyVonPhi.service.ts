@@ -54,7 +54,7 @@ export class QuanLyVonPhiService extends BaseService {
   timKiemDeNghi(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/danh-sach',
-      // 'http://192.168.1.100:8094/de-nghi-cap-von/danh-sach',
+      // 'http://192.168.1.104:8094/de-nghi-cap-von/danh-sach',
       request,
     );
   }
@@ -407,7 +407,7 @@ export class QuanLyVonPhiService extends BaseService {
   tongHopCapVonNguonChi(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/tong-hop',
-      // 'http://192.168.1.100:8094/thop-cap-von/tong-hop',
+      // 'http://192.168.1.104:8094/thop-cap-von/tong-hop',
       request,
     );
   }

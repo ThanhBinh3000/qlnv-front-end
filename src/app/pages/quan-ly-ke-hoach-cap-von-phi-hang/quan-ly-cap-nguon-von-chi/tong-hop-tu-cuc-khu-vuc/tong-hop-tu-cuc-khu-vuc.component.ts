@@ -50,6 +50,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     //thong tin dang nhap
     id: any;
     userInfo: any;
+    loai: any;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -97,6 +98,32 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     };
     //danh muc
     lstCtietBcao: ItemData[] = [];
+    trangThais: any[] = [
+        {
+            id: Utils.TT_BC_1,
+            tenDm: "Đang soạn",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Trình duyệt",
+        },
+        {
+            id: Utils.TT_BC_5,
+            tenDm: "Lãnh đạo từ chối",
+        },
+        {
+            id: Utils.TT_BC_7,
+            tenDm: "Lãnh đạo duyệt",
+        },
+        {
+            id: Utils.TT_BC_8,
+            tenDm: "Từ chối",
+        },
+        {
+            id: Utils.TT_BC_9,
+            tenDm: "Tiếp nhận",
+        }
+    ]
     donVis: any[] = [];
     cucKhuVucs: any[] = [];
     lstFiles: any[] = []; //show file ra man hinh
@@ -161,6 +188,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
         this.qdChiTieu = this.routerActive.snapshot.paramMap.get('soQd');
@@ -273,7 +301,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
+        if (this.trangThai == Utils.TT_BC_2) {
+            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, roleNguoiTao);
+        } else {
+            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
+        }
         this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnDVCT = utils.getRoleDVCT(this.trangThai, checkParent, roleNguoiTao);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
@@ -465,7 +497,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + data.data.id,
+                            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -530,8 +562,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThai);
+        return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
     async xemChiTiet(id: any){
@@ -559,7 +590,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/0'
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/' + this.loai
         ])
     }
 

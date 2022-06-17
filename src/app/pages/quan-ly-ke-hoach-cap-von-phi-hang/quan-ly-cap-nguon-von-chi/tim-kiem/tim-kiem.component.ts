@@ -101,21 +101,6 @@ export class TimKiemComponent implements OnInit {
 		this.searchFilter.tuNgay = newDate;
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
-		if (this.loai == "0"){
-			this.status = false;
-		} else {
-			this.status = true;
-			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN){
-				this.searchFilter.trangThai = Utils.TT_BC_7;
-				this.trangThais = [{
-					id: Utils.TT_BC_7,
-					tenDm: "Mới",
-				}]
-			} else {
-				this.searchFilter.trangThai = Utils.TT_BC_4;
-			}
-		}
-
 		await this.danhMuc.dMDonVi().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
@@ -130,7 +115,46 @@ export class TimKiemComponent implements OnInit {
 			}
 		);
 
-		if (this.capDvi == Utils.TONG_CUC) {
+		if (this.loai == "0"){
+			this.status = false;
+			if (this.capDvi == Utils.TONG_CUC){
+				this.trangThais = [
+					{
+						id: Utils.TT_BC_1,
+						tenDm: "Đang soạn",
+					},
+					{
+						id: Utils.TT_BC_2,
+						tenDm: "Trình duyệt",
+					},
+					{
+						id: Utils.TT_BC_5,
+						tenDm: "Lãnh đạo từ chối",
+					},
+					{
+						id: Utils.TT_BC_7,
+						tenDm: "Lãnh đạo duyệt",
+					},
+				]
+			}
+		} else {
+			this.status = true;
+			
+			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN){
+				this.searchFilter.loaiTimKiem = "1";
+				this.searchFilter.trangThai = Utils.TT_BC_7;
+				this.trangThais = [{
+					id: Utils.TT_BC_7,
+					tenDm: "Mới",
+				}]
+			} else {
+				this.searchFilter.trangThai = Utils.TT_BC_2;
+			}
+		}
+
+		
+
+		if (this.capDvi == Utils.TONG_CUC && (this.loai == "0" || this.userInfo?.roles[0]?.code == Utils.LANH_DAO)) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
 			this.searchFilter.loaiDn = Utils.MUA_VTU;
 			this.disable = true;
@@ -169,7 +193,7 @@ export class TimKiemComponent implements OnInit {
 		}
 		let requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
-			maDvi: this.searchFilter.maDviTao,
+			// maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			soQdChiTieu: this.searchFilter.qdChiTieu,
@@ -227,12 +251,12 @@ export class TimKiemComponent implements OnInit {
 		}
 		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/0/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
 			])
 		}
 		else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/0/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
 			])
 		}
 	}
@@ -240,11 +264,11 @@ export class TimKiemComponent implements OnInit {
 	xemChiTiet(item: any) {
 		if (item.canCuVeGia == Utils.HD_TRUNG_THAU){
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + item.id,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' +this.loai + '/' + item.id,
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + item.id,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + this.loai + '/' + item.id,
 			])
 		}
 	}
