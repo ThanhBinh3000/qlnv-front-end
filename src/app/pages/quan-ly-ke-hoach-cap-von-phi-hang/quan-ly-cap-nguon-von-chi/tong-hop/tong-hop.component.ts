@@ -196,7 +196,7 @@ export class TongHopComponent implements OnInit {
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/' + this.searchFilter.qdChiTieu
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + this.searchFilter.qdChiTieu
 			])
 		} else {
 			this.router.navigate([
@@ -216,11 +216,11 @@ export class TongHopComponent implements OnInit {
 	xemChiTiet(item: any) {
 		if (item.loaiDnghi == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' +this.loai + '/' + item.id
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + this.loai + '/' + item.id
 			])
 		}
 	}
