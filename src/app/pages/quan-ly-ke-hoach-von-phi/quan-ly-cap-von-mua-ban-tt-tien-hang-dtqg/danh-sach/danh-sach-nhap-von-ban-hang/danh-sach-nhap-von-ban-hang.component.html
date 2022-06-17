@@ -48,7 +48,8 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập (ủy nhiệm chi)</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayLap" nzFormat="dd/MM/yyyy">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayLap" 
+						[class]="statusNew || searchFilter.ngayLap ?'' : 'input-error-validate'" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 				</div>
