@@ -1,38 +1,33 @@
-import { cloneDeep } from 'lodash';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import VNnum2words from 'vn-num2words';
-import * as dayjs from 'dayjs';
-import * as XLSX from 'xlsx';
-import { Globals } from 'src/app/shared/globals';
-import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
-import { HelperService } from 'src/app/services/helper.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { ObservableService } from 'src/app/services/observable.service';
-import { environment } from 'src/environments/environment';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { ObservableService } from 'src/app/services/observable.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { environment } from 'src/environments/environment';
+import VNnum2words from 'vn-num2words';
 
 interface ItemData {
   id: string;
@@ -50,6 +45,9 @@ interface ItemData {
   styleUrls: ['./themmoi-quyetdinh-ketqua-lcnt.component.scss']
 })
 export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
+  @Output()
+  showListEvent = new EventEmitter<any>();
+  @Input() isViewDetail: boolean;
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
@@ -422,19 +420,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   quayLai() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn quay lại ?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        let loatVthh = this.router.url.split('/')[4]
-        this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
-      },
-    });
+    // this.modal.confirm({
+    //   nzClosable: false,
+    //   nzTitle: 'Xác nhận',
+    //   nzContent: 'Bạn có chắc chắn muốn quay lại ?',
+    //   nzOkText: 'Đồng ý',
+    //   nzCancelText: 'Không',
+    //   nzOkDanger: true,
+    //   nzWidth: 350,
+    //   nzOnOk: async () => {
+    //     let loatVthh = this.router.url.split('/')[4]
+    //     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
+    //   },
+    // });
+    this.showListEvent.emit();
   }
 
   async guiDuyet() {
