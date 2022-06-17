@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
@@ -57,6 +58,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     maDviTien: string;
     //danh muc
     donVis: any[] = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     status: boolean = false;
@@ -455,8 +457,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThaiBanGhi);
+        return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
     close() {

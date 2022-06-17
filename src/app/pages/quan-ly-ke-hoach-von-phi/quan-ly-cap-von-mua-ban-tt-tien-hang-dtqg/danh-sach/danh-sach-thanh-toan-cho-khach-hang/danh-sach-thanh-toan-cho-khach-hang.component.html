@@ -122,14 +122,24 @@
 							</td>
 							<td>
 								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item)">
-										<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
+									<ng-container *ngIf="checkDeleteReport(item); else xem">
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Nhập/Sửa dữ liệu</span>
+										</button>
+										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)">
+											<span>Xóa</span>
+										</button>
 									</ng-container>
+									<ng-template #xem>
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Xem</span>
+										</button>
+									</ng-template>
 								</ng-container>
 								<ng-template #pheDuyet>
-									<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-										Phê duyệt
-									</a>
+									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<span>Phê duyệt</span>
+									</button>
 								</ng-template>
 							</td>
 						</tr>

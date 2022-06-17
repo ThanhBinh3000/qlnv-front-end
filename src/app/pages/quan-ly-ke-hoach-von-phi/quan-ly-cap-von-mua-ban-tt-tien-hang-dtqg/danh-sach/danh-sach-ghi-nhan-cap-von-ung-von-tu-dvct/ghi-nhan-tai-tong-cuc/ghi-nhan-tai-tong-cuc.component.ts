@@ -190,7 +190,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 	}
 
 	getStatusName(trangThai: string) {
-		return this.trangThais.find(e => e.id == trangThai).tenDm;
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
 	xoaBaoCao(id: any) {

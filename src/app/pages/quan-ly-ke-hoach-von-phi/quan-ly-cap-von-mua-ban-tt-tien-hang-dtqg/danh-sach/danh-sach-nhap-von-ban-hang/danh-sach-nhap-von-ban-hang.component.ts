@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
+import { DataService } from '../../data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
@@ -44,6 +45,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 	//trang thai
 	status: boolean;
 	disable: boolean;
+	statusNew: boolean = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -55,6 +57,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -105,7 +108,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-
+		this.statusNew = true;
 		// let trangThais = [];
 		// if (this.searchFilter.trangThai) {
 		// 	trangThais = [this.searchFilter.trangThai];
@@ -162,6 +165,15 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 	}
 
 	taoMoi() {
+		this.statusNew = false;
+		if (!this.searchFilter.ngayLap){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		let obj = {
+			ngayLap: this.searchFilter.ngayLap,
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang',
 		]);
@@ -174,7 +186,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 	}
 
 	getStatusName(trangThai: string) {
-		return this.trangThais.find(e => e.id == trangThai).tenDm;
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
 	xoaBaoCao(id: any) {
