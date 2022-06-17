@@ -1,6 +1,6 @@
-<div *ngIf="isTongCuc">
+<div *ngIf="userService.isTongCuc()">
     <app-tong-cuc></app-tong-cuc>
 </div>
-<div *ngIf="isCuc">
+<div *ngIf="userService.isCuc()">
     <app-cuc></app-cuc>
 </div>

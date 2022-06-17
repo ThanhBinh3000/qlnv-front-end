@@ -54,6 +54,7 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
             item.child = item.child.filter(item => item.ma == this.data);
           }
           this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+          console.log(this.mapOfExpandedData[item.id]);
         });
       }
     });

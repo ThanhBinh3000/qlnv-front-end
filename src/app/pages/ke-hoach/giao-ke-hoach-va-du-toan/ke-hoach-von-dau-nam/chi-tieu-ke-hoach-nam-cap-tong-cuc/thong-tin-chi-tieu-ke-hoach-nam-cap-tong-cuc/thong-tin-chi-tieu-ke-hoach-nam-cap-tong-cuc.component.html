@@ -68,7 +68,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
               <nz-form-control [nzErrorTip]="soQDError">
                 <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                   <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
@@ -86,7 +86,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày ký
+              <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="ngayKyError">
                 <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
@@ -101,7 +101,7 @@
             </div>
             <div nz-col nzSpan="4">
               <!-- <nz-form-item> -->
-              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+              <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
                 <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
@@ -129,12 +129,12 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
-                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
                   [data]="canCuList" [trangThai]="isViewDetail ? 'view-detail' :  thongTinChiTieuKeHoachNam.trangThai"
-                  type="file"
+                  [type]="userService.isTongCuc() ? 'file' : 'chi-tieu'"
                   (selectDataEvent)="userService.isTongCuc() ? openFileCanCu($event) : openDialogGiaoChiTieu()"
                   (removeDataEvent)="deleteCanCuTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
-                  typeFile="can-cu">
+                  typeFile="can-cu" [showDowloadFile]="userService.isTongCuc() ? true : false">
                 </multiple-tag>
               </nz-form-control>
               <!-- </nz-form-item> -->
@@ -1222,7 +1222,7 @@
         <div class="tep" (click)="downloadTemplate()"
           *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai === globals.prop.TU_CHOI">
           <i class="icon htvbdh_tcdt_tep"></i>
-          <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
+          <span>Biểu mẫu nhập dữ liệu</span>
         </div>
         <div class="action">
           <!-- <button type="button" class="btn btn-main" (click)="themMoi()"

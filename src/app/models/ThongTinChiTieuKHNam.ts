@@ -19,6 +19,8 @@ export class ThongTinChiTieuKeHoachNam {
   canCu: string;
   fileDinhKemReqs: Array<FileDinhKem>;
   canCus: Array<FileDinhKem>;
+  qdGocId: number;
+  soQdGoc: string;
   constructor(
     fileDinhKemReqs: Array<FileDinhKem> = [],
     canCus: Array<FileDinhKem> = [],

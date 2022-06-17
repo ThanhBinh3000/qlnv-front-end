@@ -14,7 +14,7 @@
           [disabled]="!formData.valid"
           *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Gửi duyệt</span>
+          <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
@@ -48,7 +48,7 @@
         </div>
         <form nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
               <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
@@ -56,7 +56,7 @@
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
               <nz-input-group [nzAddOnAfter]="'/' + qdTCDT">
                 <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
@@ -64,7 +64,7 @@
                 </nz-input-number>
               </nz-input-group>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày ký
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
@@ -72,7 +72,7 @@
                 [nzDisabled]="dieuChinhThongTinChiTieuKHNam.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
@@ -81,23 +81,18 @@
                 [nzDisabled]="dieuChinhThongTinChiTieuKHNam.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="4">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hàng hóa
               </nz-form-label>
               <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()"
                 [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView">
-                <nz-option [nzValue]="tab.luongThuc" nzLabel="Điều chỉnh lương thực dự trữ nhà nước"></nz-option>
-                <nz-option [nzValue]="tab.muoi" nzLabel="Điều chỉnh muối dự trữ nhà nước"></nz-option>
-                <nz-option [nzValue]="tab.vatTu" nzLabel="Điều chỉnh nhập vật tư, thiết bị"></nz-option>
+                <nz-option [nzValue]="'00'" nzLabel="Điều chỉnh lương thực dự trữ nhà nước"></nz-option>
+                <nz-option [nzValue]="'01'" nzLabel="Điều chỉnh muối dự trữ nhà nước"></nz-option>
+                <nz-option [nzValue]="'02'" nzLabel="Điều chỉnh nhập vật tư, thiết bị"></nz-option>
               </nz-select>
             </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
-              <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
-                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView" />
-            </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ theo chỉ tiêu</nz-form-label>
+            <div nz-col [nzSpan]="6" *ngIf="userService.isTongCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quyết định giao chỉ tiêu KH năm</nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
                 [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
@@ -105,13 +100,49 @@
                 [showDowloadFile]="false">
               </multiple-tag>
             </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
+              <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
+                [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView" />
+            </div>
             <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ theo đề xuất</nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số đề xuất điều chỉnh của Cục DTNN KV
+              </nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn văn bản đề xuất của cục"
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDeXuat"
                 [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
                 (selectDataEvent)="openDialogDeXuatCuc()" (removeDataEvent)="deleteDataDeXuatCuc($event)"
                 [showDowloadFile]="false">
+              </multiple-tag>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quyết định giao chỉ tiêu KH năm cấp Cục
+              </nz-form-label>
+              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
+                [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
+                (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)"
+                [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
+              </multiple-tag>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> QĐ điều chỉnh giao chỉ tiêu cấp TC
+              </nz-form-label>
+              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định điều chỉnh giao chỉ tiêu kế hoạch năm"
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDieuChinh"
+                [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
+                (selectDataEvent)="openDialogQuyetDinhDieuChinh()" (removeDataEvent)="deleteDataDieuChinh($event)"
+                [showDowloadFile]="false">
+              </multiple-tag>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đề xuất điều chỉnh giao chỉ tiêu của cục
+              </nz-form-label>
+              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn văn bản đề xuất của cục"
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDeXuat"
+                [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
+                (selectDataEvent)="openDialogDeXuatCuc()" (removeDataEvent)="deleteDataDeXuatCuc($event)"
+                [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="24">
@@ -128,15 +159,15 @@
       </div>
       <div class="tab__container" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
         <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
-          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)"
-            *ngIf="tabSelected == tab.luongThuc">
+          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData('00')"
+            *ngIf="tabSelected == '00'">
           </nz-tab>
-          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"
-            *ngIf="tabSelected == tab.muoi"></nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData('01')"
+            *ngIf="tabSelected == '01'"></nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh nhập vật tư, thiết bị'" class="vat-tu__container"
-            (nzClick)="selectTabData(tab.vatTu)" *ngIf="tabSelected == tab.vatTu"></nz-tab>
+            (nzClick)="selectTabData('02')" *ngIf="tabSelected == '02'"></nz-tab>
         </nz-tabset>
-        <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+        <div [ngClass]="tabSelected == '00' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-luong-thuc-tong-hop">
             <nz-table #groupingTableThocSau [nzData]="dataLuongThuc" nzBordered [nzFrontPagination]="false"
               [nzShowPagination]="false" class="table__body" [nzScroll]="{ x: '1700px' }">
@@ -813,7 +844,7 @@
             </div>
           </div>
         </div>
-        <div [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+        <div [ngClass]="tabSelected == '01' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-muoi-tong-hop">
             <nz-table #groupingTableMuoiSau [nzData]="dataMuoi" nzBordered [nzFrontPagination]="false"
               [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
@@ -1177,7 +1208,7 @@
             </div>
           </div>
         </div>
-        <div [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+        <div [ngClass]="tabSelected == '02' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-vat-tu-tong-hop">
             <nz-table #groupingTableVatTuSau [nzData]="dataVatTu" nzBordered [nzFrontPagination]="false"
               [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
@@ -1593,15 +1624,12 @@
       <form nz-form [formGroup]="formData">
         <div class="ghi-chu">
           <nz-form-item>
-            <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true" class="label-color-kh"> Ghi chú
+            <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true" class="label-color-kh"> Ghi chú
             </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ghiChuError">
+            <nz-form-control nz-col [nzSpan]="24">
               <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
                 [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03') || isView"
                 placeholder="Ghi chú"></textarea>
-              <ng-template #ghiChuError let-control>
-                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>

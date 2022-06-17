@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
@@ -133,7 +133,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   userInfo: UserLogin;
 
-  maTrinh: string = ''
+  maTrinh: string = '';
+
+  addModelBaoGia: any = {
+    moTa: '',
+    taiLieu: [],
+  };
+  addModelCoSo: any = {
+    moTa: '',
+    taiLieu: [],
+  };
 
   constructor(
     private modal: NzModalService,
@@ -146,11 +155,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     public globals: Globals,
-    private userService: UserService,
+    public userService: UserService,
     private helperService: HelperService,
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.formData = this.fb.group(
       {
@@ -544,7 +554,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       return
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thông tin gói thầu',
+      nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -970,4 +980,69 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
+  deleteTaiLieuDinhKemTag(data: any, id, type) {
+    if (type == 'bao-gia') {
+      if (id == 0) {
+        this.addModelBaoGia.taiLieu = [];
+      }
+      else if (id > 0) {
+
+      }
+    } else if (type == 'co-so') {
+      if (id == 0) {
+        this.addModelCoSo.taiLieu = [];
+      }
+      else if (id > 0) {
+
+      }
+    }
+  }
+
+  openFile(event, id, type) {
+    let item = {
+      id: new Date().getTime(),
+      text: event.name,
+    };
+    if (type == 'bao-gia') {
+      if (id == 0) {
+        this.addModelBaoGia.taiLieu = [];
+        this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
+      }
+      else if (id > 0) {
+
+      }
+    } else if (type == 'co-so') {
+      if (id == 0) {
+        this.addModelCoSo.taiLieu = [];
+        this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
+      }
+      else if (id > 0) {
+
+      }
+    }
+    this.cdr.detectChanges();
+    this.uploadFileService.uploadFile(event.file, event.name).then(() => { });
+  }
+
+  addBaoGia() {
+
+  }
+
+  clearBaoGia() {
+    this.addModelBaoGia = {
+      moTa: '',
+      taiLieu: [],
+    };
+  }
+
+  addCoSo() {
+
+  }
+
+  clearCoSo() {
+    this.addModelCoSo = {
+      moTa: '',
+      taiLieu: [],
+    };
+  }
 }

@@ -4,7 +4,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dauthau',
         title: 'Theo phương thức đấu thầu',
-        url: `/dau-thau`,
+        url: `/theo-phuong-thuc-dau-thau`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
         hasTab: true,
@@ -12,7 +12,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_muatructiep',
         title: 'Theo phương thức mua trực tiếp',
-        url: `/mua-truc-tiep`,
+        url: `/theo-phuong-thuc-mua-truc-tiep`,
         dropdown: 'mua-truc-tiep',
         idHover: 'muatructiep',
         hasTab: true,
@@ -20,7 +20,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_kynhay',
         title: 'Quản lý hợp đồng',
-        url: `/hop-dong`,
+        url: `/quan-ly-hop-dong`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,

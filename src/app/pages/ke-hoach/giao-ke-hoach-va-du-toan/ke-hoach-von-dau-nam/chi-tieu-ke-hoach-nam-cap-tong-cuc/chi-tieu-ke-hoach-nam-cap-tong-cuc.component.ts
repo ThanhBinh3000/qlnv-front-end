@@ -107,10 +107,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           this.optionsDonVi.push(item);
         }
         this.options = cloneDeep(this.optionsDonVi);
-        this.getCount();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+      this.getCount();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -128,6 +128,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
+    this.getCount();
   }
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value.trim();
@@ -290,6 +291,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
                 MESSAGE.DELETE_SUCCESS,
               );
               this.search();
+              this.getCount();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

@@ -56,6 +56,9 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     if (param && param.maDvi) {
       tempUrl = tempUrl + 'maDvi=' + param.maDvi + '&';
     }
+    if (param && param.loaiHangHoa) {
+      tempUrl = tempUrl + 'loaiHangHoa=' + param.loaiHangHoa + '&';
+    }
     if (tempUrl && tempUrl != '') {
       url = url + '?' + tempUrl.substring(0, tempUrl.length - 1);
     }

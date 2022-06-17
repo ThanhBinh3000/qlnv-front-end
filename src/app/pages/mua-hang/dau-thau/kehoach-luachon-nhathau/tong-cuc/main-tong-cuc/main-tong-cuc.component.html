@@ -1,15 +1,27 @@
 <nz-tabset nzType="card" class="mt-16 tab-level-2 no-scroll">
-    <nz-tab [nzTitle]="'Tổng hợp kế hoạch lựa chọn nhà thầu'">
+    <nz-tab [nzTitle]="title_tongHop">
+        <ng-template #title_tongHop>
+            Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
+            (<span class="number-title-tab">10</span>)
+        </ng-template>
         <ng-template nz-tab>
             <app-tong-hop-khlcnt [loaiVthh]="loaiVthh"></app-tong-hop-khlcnt>
         </ng-template>
     </nz-tab>
-    <nz-tab [nzTitle]="'Kế hoạch lựa chọn nhà thầu'">
+    <nz-tab [nzTitle]="title_keHoach">
+        <ng-template #title_keHoach>
+            Đề xuất kế hoạch lựa chọn nhà thầu
+            (<span class="number-title-tab">10</span>)
+        </ng-template>
         <ng-template nz-tab>
             <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
         </ng-template>
     </nz-tab>
-    <nz-tab [nzTitle]="'Quyết định phê duyệt kế hoạch lựa chọn nhà thầu'">
+    <nz-tab [nzTitle]="title_quyetDinh">
+        <ng-template #title_quyetDinh>
+            Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+            (<span class="number-title-tab">10</span>)
+        </ng-template>
         <ng-template nz-tab>
             <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
         </ng-template>

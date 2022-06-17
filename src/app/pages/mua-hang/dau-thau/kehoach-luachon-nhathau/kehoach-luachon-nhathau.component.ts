@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertIdToLoaiVthh } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-kehoach-luachon-nhathau',
@@ -10,22 +9,25 @@ import { convertIdToLoaiVthh } from 'src/app/shared/commonFunction';
   styleUrls: ['./kehoach-luachon-nhathau.component.scss']
 })
 export class KeHoachLuachonNhathauComponent implements OnInit {
-
-  listVthh: any = LIST_VAT_TU_HANG_HOA;
+  tabs: any[] = [];
   constructor(
-    private userService: UserService,
-    private router: Router
-  ) {
-
-  }
-
-  isTongCuc: boolean = false;
-  isCuc: boolean = false;
-
+    public userService: UserService,
+    private danhMucService: DanhMucService,
+  ) { }
   ngOnInit(): void {
-    this.isTongCuc = this.userService.isTongCuc();
-    this.isCuc = this.userService.isCuc();
+    this.loaiVTHHGetAll();
   }
 
-
+  async loaiVTHHGetAll() {
+    this.tabs = [];
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          element.count = 0;
+          this.tabs.push(element);
+        });
+      }
+    }
+  }
 }

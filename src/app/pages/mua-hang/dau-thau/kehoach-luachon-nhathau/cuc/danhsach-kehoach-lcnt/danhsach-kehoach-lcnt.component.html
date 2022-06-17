@@ -11,10 +11,14 @@
               </nz-select>
             </div>
             <div nz-col nzSpan="4">
+              <label class="search__label">Loại hàng hóa</label>
+              <input class="search__input" placeholder="" nz-input />
+            </div>
+            <div nz-col nzSpan="4">
               <label class="search__label">Số tờ trình</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
             </div>
-            <div nz-col nzSpan="14">
+            <div nz-col nzSpan="10">
               <label class="search__label">Trích yếu</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
             </div>
@@ -43,50 +47,136 @@
                 [nzShowPagination]="false" nzBordered>
                 <thead>
                   <tr>
+                    <th width="45px">
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                        [nzIndeterminate]="indeterminate"></label>
+                    </th>
                     <th width="60px" class="text-center">STT</th>
-                    <th width="" class="text-center">Số tờ trình</th>
-                    <th *ngIf="isTongCuc" width="" class="text-center">Đơn vị</th>
-                    <th width="" class="text-center">Ngày ký</th>
+                    <th width="">Số tờ trình</th>
+                    <th *ngIf="isTongCuc" width="">Đơn vị</th>
+                    <th width="">Ngày đề xuất</th>
                     <th width="">Trích yếu</th>
-                    <th width="" class="text-center">Năm kế hoạch</th>
-                    <th width="" class="text-center">Số QĐ giao chỉ tiêu</th>
-                    <th width="" class="text-center">Loại hàng hóa</th>
-                    <th *ngIf="isCuc" width="" class="text-center">Chủng loại hàng hóa</th>
-                    <th width="" class="text-center">Số gói thầu</th>
-                    <th width="" class="text-center">Trạng thái</th>
-                    <th width="80" class="text-center">Thao tác</th>
+                    <th width="">Số QĐ giao chỉ tiêu</th>
+                    <th width="">Năm kế hoạch</th>
+                    <th width="">Hàng hóa</th>
+                    <th *ngIf="isCuc" width="">Chủng loại hàng hóa</th>
+                    <th width="">Số gói thầu</th>
+                    <th width="">Trạng thái của đề xuất</th>
+                    <th width="90px">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <tr class="search-table">
+                    <th></th>
+                    <th></th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th *ngIf="isTongCuc">
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th *ngIf="isCuc">
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th></th>
+                  </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
+                    <th width="45px">
+                      <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                        [nzDisabled]="data.trangThai != '00'"></label>
+                    </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td class="text-center">{{ data.soDxuat }}</td>
-                    <td *ngIf="isTongCuc" width="" class="text-center">{{data.tenDvi}}</td>
-                    <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{ data.soDxuat }}</td>
+                    <td *ngIf="isTongCuc" width="">{{data.tenDvi}}</td>
+                    <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
-                    <td class="text-center">{{ data.namKhoach }}</td>
-                    <td class="text-center">{{ data.soQd }}</td>
-                    <td class="text-center">{{ data.tenVthh }}</td>
-                    <td *ngIf="isCuc" class="text-center">{{ data.tenCloaiVthh }}</td>
-                    <td class="text-center">{{ data.children2.length }}</td>
-                    <td class="text-center">{{ convertTrangThai(data.trangThai) }}</td>
-                    <td class="text-left">
-                      <span>
-                        <a (click)="detail(data)">
-                          <i class="fa fa-eye"></i>
-                        </a>
-                      </span>
-                      <!-- Trạng thái 00 : lưu mới và 03 : từ chối  -->
-                      <span>
-                        <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="detail(data)">
-                          <i class="fa fa-pencil"></i>
-                        </a>
-                      </span>
-                      <span>
-                        <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="xoaItem(data)">
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </span>
+                    <td>{{ data.soQd }}</td>
+                    <td>{{ data.namKhoach }}</td>
+                    <td>{{ data.tenVthh }}</td>
+                    <td *ngIf="isCuc">{{ data.tenCloaiVthh }}</td>
+                    <td>{{ data.children2.length }}</td>
+                    <td>{{ convertTrangThai(data.trangThai) }}</td>
+                    <td class="text-right">
+                      <a (click)="detail(data)">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && isCuc" (click)="detail(data)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a *ngIf="data.trangThai=='00' && isCuc" (click)="xoaItem(data)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -111,6 +201,10 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
+            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+              <i class="fa fa-trash-o do"></i>
+              <span>Xóa</span>
+            </button>
             <button type="button" class="btn btn-sub">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>

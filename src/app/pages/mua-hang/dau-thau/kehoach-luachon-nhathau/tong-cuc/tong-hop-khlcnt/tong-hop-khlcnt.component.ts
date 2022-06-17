@@ -32,7 +32,7 @@ export class TongHopKhlcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
@@ -42,8 +42,6 @@ export class TongHopKhlcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   danhMucDonVi: any;
-  isDetail: boolean = false;
-  selectedId: number = 0;
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
@@ -52,6 +50,10 @@ export class TongHopKhlcntComponent implements OnInit {
     trichYeu: ''
   };
 
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isView: boolean = false;
+
   dataTable: any[] = [];
   dataTableDanhSachDX: any[] = [];
   page: number = 1;
@@ -59,6 +61,8 @@ export class TongHopKhlcntComponent implements OnInit {
   totalRecord: number = 0;
   userInfo: UserLogin;
 
+  allChecked = false;
+  indeterminate = false;
 
   async ngOnInit() {
     this.spinner.show();
@@ -79,6 +83,37 @@ export class TongHopKhlcntComponent implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 
@@ -113,8 +148,18 @@ export class TongHopKhlcntComponent implements OnInit {
       let data = res.data;
       if (this.tabSelected == 'phuong-an-tong-hop') {
         this.dataTable = data.content;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
       } else {
         this.dataTableDanhSachDX = data.content;
+        if (this.dataTableDanhSachDX && this.dataTableDanhSachDX.length > 0) {
+          this.dataTableDanhSachDX.forEach((item) => {
+            item.checked = false;
+          });
+        }
       }
       this.totalRecord = data.totalElements;
     } else {
@@ -178,9 +223,10 @@ export class TongHopKhlcntComponent implements OnInit {
     this.selectedId = null;
   }
 
-  redirectToChiTiet(id?) {
-    this.isDetail = true;
+  redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   calendarData(list, column) {
@@ -289,4 +335,44 @@ export class TongHopKhlcntComponent implements OnInit {
     this.helperService.formatDate()
   }
 
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // if (res.msg == MESSAGE.SUCCESS) {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
 }

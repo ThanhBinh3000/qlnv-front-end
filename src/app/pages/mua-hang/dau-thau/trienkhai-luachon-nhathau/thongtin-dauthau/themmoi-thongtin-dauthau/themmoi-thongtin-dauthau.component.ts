@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -24,6 +24,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
 })
 export class ThemmoiThongtinDauthauComponent implements OnInit {
+  @Input() isViewDetail: boolean;
 
   constructor(
     private router: Router,

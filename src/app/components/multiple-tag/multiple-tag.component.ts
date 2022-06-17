@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 
@@ -26,7 +27,9 @@ export class MultipleTagComponent implements OnInit {
   @Output()
   downloadFileEvent = new EventEmitter<any>();
   nameFile: string;
-  constructor(public globals: Globals) { }
+  constructor(
+    public globals: Globals,
+    public userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -34,6 +37,7 @@ export class MultipleTagComponent implements OnInit {
   removeData(item: any) {
     this.removeDataEvent.emit(item);
   }
+
   downloadFile() {
     if (
       this.type == 'file' ||
@@ -59,9 +63,11 @@ export class MultipleTagComponent implements OnInit {
     }
     this.selectDataEvent.emit();
   }
+
   selectDataCanCu() {
     this.selectDataEvent.emit();
   }
+
   getNameFile(event?: any) {
     if (
       this.trangThai === this.globals.prop.BAN_HANH ||
