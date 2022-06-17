@@ -259,12 +259,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
     xemphuongan() {
         let CtietPA = this.lstMa.filter((a: any) => a.maPa == this.maPa)
         this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + CtietPA[0].id])
-        // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/' + this.maPa])
     }
-    // //lay ten don vi tạo
-    // getUnitName(mdv: any): string {
-    //     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
-    // }
 
     dong() {
         // this.router.navigate(['/'])

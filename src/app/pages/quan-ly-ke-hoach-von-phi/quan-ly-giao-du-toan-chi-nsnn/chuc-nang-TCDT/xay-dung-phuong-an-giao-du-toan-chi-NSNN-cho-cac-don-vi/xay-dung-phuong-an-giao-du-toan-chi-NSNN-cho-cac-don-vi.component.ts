@@ -17,8 +17,6 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-
-
 export class ItemData {
   id!: any;
   stt: any;
@@ -329,7 +327,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -376,9 +374,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
             if (item.trangThai == "1") {
               this.statusBtnGiaoToanBo = true;
-              this.statusBtnTongHop = false;
             }
           })
+          if(this.soQd && this.trangThaiBanGhi == "6"){
+            this.statusBtnTongHop = false;
+          }
           this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -553,7 +553,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 		}
     this.spinner.show();
     if (this.id && this.namDtoan) {
-      this.quanLyVonPhiService.giaoDuToan1(request1).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -569,7 +569,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         },
       );
     } else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1279,7 +1279,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     ]);
 
     this.spinner.show();
-    await this.quanLyVonPhiService.tongHopGiaoDuToan1(request).toPromise().then(
+    await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
@@ -1304,7 +1304,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
           this.ngayTao = this.newDate;
           this.spinner.show();
-          this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
+          this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
             (res) => {
               if (res.statusCode == 0) {
                 this.maPa = res.data;

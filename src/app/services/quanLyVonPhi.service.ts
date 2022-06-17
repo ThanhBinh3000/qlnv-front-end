@@ -170,9 +170,9 @@ export class QuanLyVonPhiService extends BaseService {
 
 
   // call api chi tiết báo cáo giao dự toán chi nsnn
-  QDGiaoChiTiet(id: any): Observable<any> {
+  QDGiaoChiTiet(id: any, maLoai: string): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/chi-tiet/' + id +  '?maLoai=' + maLoai,
     );
   }
 
@@ -186,8 +186,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG
   CtietBcaoQuyetToan(id: any): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
-      'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
+      // 'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
     );
   }
 

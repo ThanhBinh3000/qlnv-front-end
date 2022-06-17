@@ -23,8 +23,8 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     maBcao: null,
     maPhanBcao: '1',
     namQtoan: null,
-    ngayTaoDen: "",
-    ngayTaoTu: "",
+    ngayTaoDen: null,
+    ngayTaoTu: null,
     paggingReq: {
       limit: 10,
       page: 1
@@ -46,7 +46,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
   donViTao!: any;
   trangThai!:string;
-
+  newDate = new Date();
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -60,7 +60,10 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   async ngOnInit() {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-
+    this.searchFilter.namQtoan = new Date().getFullYear()
+    this.searchFilter.ngayTaoDen = new Date();
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.dvql;
     this.onSubmit();
   }
@@ -114,7 +117,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     }else{
       searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
     }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -160,7 +163,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
 
   taoMoi() {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan',
+      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan-/' + this.searchFilter.namQtoan,
     ])
   }
 
