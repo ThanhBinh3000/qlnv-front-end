@@ -47,6 +47,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //thong tin dang nhap
     id: any;
     userInfo: any;
+    loai: any;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -164,6 +165,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.loaiDn = this.routerActive.snapshot.paramMap.get('loaiDn');
         this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
@@ -533,7 +535,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + data.data.id,
+                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -689,8 +691,11 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     close() {
+        if (this.id && !this.loai){
+            this.location.back();
+        }
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/0'
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/' + this.loai
         ])
     }
 

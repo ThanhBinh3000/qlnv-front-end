@@ -227,6 +227,8 @@ export class PheDuyetComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn',
+		])
 	}
 }

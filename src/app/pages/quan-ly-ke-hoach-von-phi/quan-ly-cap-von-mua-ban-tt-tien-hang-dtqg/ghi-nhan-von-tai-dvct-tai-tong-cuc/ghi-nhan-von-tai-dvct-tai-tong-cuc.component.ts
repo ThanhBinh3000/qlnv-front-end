@@ -46,6 +46,7 @@ export class ItemNhan {
 export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maCvUv: string;
@@ -127,6 +128,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
 
         //lay thong tin user
@@ -154,15 +156,25 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             await this.dataSource.currentData.subscribe(obj => {
-                this.maCvUv = obj?.maCvUv;
                 this.loaiVon = obj?.loaiCap;
                 this.soLenhChiTien = obj?.soLenhChiTien;
                 this.ngayLapTemp = obj?.ngayLap;
                 this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
             })
-            if (!this.maCvUv) {
-                this.close();
-            }
+            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+                (res) => {
+                    if (res.statusCode == 0) {
+                        this.maCvUv = res.data;
+                        let mm = this.maCvUv.split('.');
+                        this.maCvUv = mm[0] + "TCDT" + '.' + mm[1];
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, res?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
         }
@@ -277,10 +289,11 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
                     this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
-                    this.soLenhChiTien = data.data.soLechChiTien;
+                    this.soLenhChiTien = data.data.soLenhChiTien;
                     this.ngayLapTemp = data.data.ngayLap;
                     this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
                     this.ttNhan.ngayNhan = data.data.ngayNhan;
@@ -299,6 +312,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                     this.ttGui.soTienChu = data.data.soTienBangChu;
                     this.ttGui.taiKhoan = data.data.tuTk;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
+                    this.ttGuiCache = this.ttGui;
                     this.lstFiles = data.data.lstFileNhans;
                     this.listFile = [];
                 } else {
@@ -393,7 +407,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             listIdDeleteFileNhans: this.listIdFilesDelete,
             maCapUngVonTuCapTren: this.maCvUv,
             loaiCap: this.loaiVon,
-            soLechChiTien: this.soLenhChiTien,
+            soLenhChiTien: this.soLenhChiTien,
             ngayLap: this.ngayLapTemp,
             ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
@@ -413,9 +427,9 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/'
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-dvct-tai-tong-cuc/0/'
                             + data.data.id
                         ]);
                     } else {
@@ -482,7 +496,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-tong-cuc/0'
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-tai-tong-cuc/'+this.loai
         ]);
     }
 
@@ -492,7 +506,6 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     async showDialogCopy() {
         let obj = {
-            maCvUvBtc: this.maCvUv,
             loaiVon: this.loaiVon,
             soLenhChiTien: this.soLenhChiTien,
             ngayLap: this.ngayLapTemp,
@@ -516,6 +529,21 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     }
 
     async doCopy(response: any) {
+        let maCVUvNew: string;
+        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maCVUvNew = res.data;
+                    let mm = maCVUvNew.split('.');
+                    maCVUvNew = mm[0] + "TCDT" + '.' + mm[1];
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
         if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
@@ -538,9 +566,9 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
             maDviTien: this.maDviTien,
             fileDinhKemNhans: [],
             listIdDeleteFileNhans: [],
-            maCapUngVonTuCapTren: response.maCvUvBtc,
+            maCapUngVonTuCapTren: maCVUvNew,
             loaiCap: response.loaiVon,
-            soLechChiTien: response.soLenhChiTien,
+            soLenhChiTien: response.soLenhChiTien,
             ngayLap: response.ngayLap,
             ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
@@ -567,7 +595,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
                         nzWidth: '900px',
                         nzFooter: null,
                         nzComponentParams: {
-                            maBcao: response.maCvUvBtc
+                            maBcao: maCVUvNew
                         },
                     });
                 } else {

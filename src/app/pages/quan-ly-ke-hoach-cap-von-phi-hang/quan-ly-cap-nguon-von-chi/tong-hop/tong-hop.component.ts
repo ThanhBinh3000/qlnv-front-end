@@ -26,7 +26,7 @@ export class TongHopComponent implements OnInit {
 	searchFilter = {
 		loaiTimKiem: '0',
 		maDeNghi: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		qdChiTieu: "",
@@ -93,10 +93,10 @@ export class TongHopComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		// this.searchFilter.denNgay = new Date();
-		// let newDate = new Date();
-		// newDate.setMonth(newDate.getMonth() -1);
-		// this.searchFilter.tuNgay = newDate;
+		this.searchFilter.denNgay = new Date();
+		let newDate = new Date();
+		newDate.setMonth(newDate.getMonth() -1);
+		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
@@ -148,8 +148,8 @@ export class TongHopComponent implements OnInit {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDnghi: this.searchFilter.maDeNghi,
 			maDvi: this.searchFilter.maDviTao,
-			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
-			ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			soQdChiTieu: this.searchFilter.qdChiTieu,
 			loaiDnghi: this.searchFilter.loaiDn,
 			paggingReq: {
@@ -196,7 +196,7 @@ export class TongHopComponent implements OnInit {
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/' + this.searchFilter.qdChiTieu
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + this.searchFilter.qdChiTieu
 			])
 		} else {
 			this.router.navigate([
@@ -207,18 +207,20 @@ export class TongHopComponent implements OnInit {
 
 
 	dong() {
-		this.location.back();
+		this.router.navigate([
+			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
+		])
 	}
 
 
 	xemChiTiet(item: any) {
 		if (item.loaiDnghi == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' +this.loai + '/' + item.id
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + this.loai + '/' + item.id
 			])
 		}
 	}

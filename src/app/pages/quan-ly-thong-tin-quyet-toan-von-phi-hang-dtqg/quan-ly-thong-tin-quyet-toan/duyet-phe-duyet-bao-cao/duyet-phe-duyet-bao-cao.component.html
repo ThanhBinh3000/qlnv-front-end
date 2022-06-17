@@ -75,10 +75,13 @@
 						<tr>
 							<th width="60px">STT</th>
 							<th width="150px">Mã báo cáo</th>
-							<th width="200px">Ngày tạo</th>
-							<th width="150px">Năm báo cáo</th>
+							<th width="150px">Quyết toán năm</th>
+							<th width="200px">Ngày lập</th>
+							<th width="200px">Ngày trình duyệt</th>
+							<th width="200px">Ngày trưởng bộ phận duyệt</th>
+							<th width="200px">Ngày lãnh đạo phê duyệt</th>
 							<th width="200px" class="text-center">Trạng thái</th>
-							<th width="60px"></th>
+							<th ></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -89,19 +92,23 @@
 									{{ item.maBcao}}
 								</a>
 							</td>
+							<td>{{item.namQtoan}}</td>
 							<td>{{item.ngayTao}}</td>
-							<td>{{item.namHienHanh}}</td>
+							<td>{{item.ngayTrinh}}</td>
+							<td>{{item.ngayDuyet}}</td>
+							<td>{{item.ngayPheDuyet}}</td>
 							<td class="text-center">
 								{{getStatusName(item.trangThai)}}
 								<ng-container *ngIf="item.lyDoTuChoi">
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
-							<td>
-								<ng-container *ngIf="checkDeleteReport(item)">
-									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
-								</ng-container>
-							</td>
+              <td>
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                  <span *ngIf="item.trangThai == '2'">Duyệt</span>
+                  <span *ngIf="item.trangThai == '4'">Phê duyệt</span>
+                </button>
+              </td>
 						</tr>
 					</tbody>
 				</nz-table>

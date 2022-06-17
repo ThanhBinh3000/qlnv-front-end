@@ -76,6 +76,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     statusBtnCopy: boolean;
     statusBtnPrint: boolean;
     statusBtnGiao: boolean;
+    statusGiaoToanBo: boolean = true;
     statusBtnBtc: boolean;
     allChecked = false;
     //khac
@@ -226,6 +227,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
+            this.statusGiaoToanBo = true;
         }
         let capDvi: string = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
         if (capDvi == Utils.TONG_CUC){
@@ -325,6 +327,11 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     this.lstFiles = data.data.lstFiles;
 					this.listFile = [];
                     this.lstTtCtiet = data.data.listTtCtiet;
+                    this.lstTtCtiet.forEach(item => {
+                        if (item.trangThai == "0"){
+                            this.statusGiaoToanBo = false;
+                        }
+                    })
                     this.maBaoCao = data.data.maBcao;
                     this.namPa = data.data.namPa;
                     this.trangThaiBanGhi = data.data.trangThai;
@@ -542,10 +549,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     lstGiao.push({
                         maPa: this.maPa,
                         maGiao: this.maGiao,
-                        maDviGui: item.maKhuVuc,
+                        maDviGui: this.maDonViTao,
                         namGiao: this.namGiao,
                         maBcao: item.maBcao,
-                        maDviNhan: this.lstDvi.find(e => e.maBcao == maBcao)?.maDvi,
+                        maDviNhan: this.lstDvi.find(e => e.maBcao == item.maBcao)?.maDvi,
                         namPa: this.namPa,
                         trangThai: '1',
                         maDviTien: this.maDviTien,
