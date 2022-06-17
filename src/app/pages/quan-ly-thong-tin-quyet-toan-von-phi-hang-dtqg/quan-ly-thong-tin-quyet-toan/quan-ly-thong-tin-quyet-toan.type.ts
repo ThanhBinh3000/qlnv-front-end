@@ -3,5 +3,6 @@ export type QuanLyThongTinQuyetToan = {
   title: string;
   description: string;
   url: string;
+  unRole: any[];
   isDisabled?: boolean;
 };

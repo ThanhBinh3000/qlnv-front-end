@@ -172,9 +172,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    let namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    this.namQtoan = new Date().getFullYear();
+    this.namQtoan = Number(namQtoan);
 
     if (this.id) {
       await this.getDetailReport();
@@ -393,7 +394,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

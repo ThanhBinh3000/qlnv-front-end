@@ -328,7 +328,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -559,7 +559,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 		}
     this.spinner.show();
     if (this.id && this.namDtoan) {
-      this.quanLyVonPhiService.giaoDuToan1(request1).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -575,7 +575,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         },
       );
     } else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

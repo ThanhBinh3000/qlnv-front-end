@@ -19,13 +19,14 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   //thong tin dang nhap
   userInfo: any;
+  userRole: string;
   //thong tin tim kiem
   searchFilter = {
     maBcao: null,
     maPhanBcao: '1',
     namQtoan: null,
-    ngayTaoDen: "",
-    ngayTaoTu: "",
+    ngayTaoDen: null,
+    ngayTaoTu: null,
     paggingReq: {
       limit: 10,
       page: 1
@@ -37,7 +38,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   };
   //danh muc
   danhSachBaoCao: any[] = [];
-  trangThais: any[] = TRANG_THAI_TIM_KIEM;
+  trangThais: any[] = [];
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -47,7 +48,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
   donViTao!: any;
   trangThai!:string;
-
+  newDate = new Date();
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -61,8 +62,20 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   async ngOnInit() {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-
+    this.searchFilter.namQtoan = new Date().getFullYear()
+    this.searchFilter.ngayTaoDen = new Date();
+		this.newDate.setMonth(this.newDate.getMonth() -1);
+		this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.dvql;
+    this.userRole = this.userInfo?.roles[0].code;
+
+    if (this.userRole == Utils.TRUONG_BO_PHAN) {
+      this.searchFilter.trangThai = Utils.TT_BC_2;
+      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+    } else {
+      this.searchFilter.trangThai = Utils.TT_BC_4;
+      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+    }
     this.onSubmit();
   }
 
@@ -110,12 +123,29 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
-    if(this.trangThai){
-      searchFilterTemp.trangThais.push(this.trangThai)
-    }else{
-      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
-    }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi1(searchFilterTemp).toPromise().then(
+    // if(this.trangThai){
+    //   searchFilterTemp.trangThais.push(this.trangThai)
+    // }
+    // else{
+    //   searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    // }
+    debugger
+
+		if (!this.trangThai){
+      if(this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
+				searchFilterTemp.trangThais = [Utils.TT_BC_2];
+
+			} else if(this.userInfo?.roles[0].code == Utils.LANH_DAO) {
+				searchFilterTemp.trangThais = [Utils.TT_BC_4];
+
+			}
+      else{
+        searchFilterTemp.trangThais = [Utils.TT_BC_2,Utils.TT_BC_4]
+
+      }
+		}
+
+    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -176,7 +206,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   xoaBaoCao(id: any) {
-    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan1(id).toPromise().then(
+    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(id).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
