@@ -64,6 +64,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   maDviTien: string;
   thuyetMinh: string;
   namDtoan: any;
+  capDvi: string;
   //danh muc
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
@@ -83,8 +84,8 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   statusBtnDVCT: boolean;
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
-  statusBtnGiao: boolean ;
-  statusBtnGiaoToanBo: boolean = false;
+  statusBtnGiao: boolean;
+  statusBtnGiaoToanBo: boolean;
   statusBtnTongHop: boolean = true;
   statusAn: boolean = true;
   allChecked = false;
@@ -119,6 +120,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  statusBtnGuiDVCT: boolean;
   // them file vao danh sach
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
@@ -156,8 +158,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          console.log(this.donVis);
-
+          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -254,6 +255,14 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     } else {
       this.statusBtnGiao = true;
     }
+    this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+      if (item.trangThai == "1") {
+        this.statusBtnGiaoToanBo = true;
+      }
+    })
+    if (dVi && dVi.capDvi == "1") {
+      this.statusBtnGuiDVCT = true
+    }
   }
 
   //download file về máy tính
@@ -346,11 +355,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
               e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
             })
           })
-          this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-            if (item.trangThai == "1") {
-              this.statusBtnGiaoToanBo = true;
-            }
-          })
           this.namPa = data.data.namPa;
           this.namDtoan = data.data.namDtoan;
           this.trangThaiBanGhi = data.data.trangThai;
@@ -379,12 +383,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             this.status = true;
             this.statusAn = false;
           }
-          this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-            if (item.trangThai == "1") {
-              this.statusBtnGiaoToanBo = true;
-              this.statusBtnTongHop = false;
-            }
-          })
           this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -504,16 +502,18 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     });
 
     //get list file url
-		let listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
 
+    // gan danh sach don vi truc thuoc
     let tongHopTuIds = [];
     this.lstDviTrucThuoc.forEach(item => {
       tongHopTuIds.push(item.id);
     })
 
+    // doi du lieu request thanh kieu string
     let request = JSON.parse(JSON.stringify({
       id: this.id,
       fileDinhKems: this.lstFiles,
@@ -553,19 +553,19 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       tongHopTuIds: tongHopTuIds,
     }));
     //get file cong van url
-		let file: any = this.fileDetail;
-		if (file) {
-		  request1.soQd = await this.uploadFile(file);
-		}
+    let file: any = this.fileDetail;
+    if (file) {
+      request1.soQd = await this.uploadFile(file);
+    }
     this.spinner.show();
     if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.router.navigate([
-                '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
-              ])
+            this.router.navigate([
+              '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+            ])
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -694,51 +694,51 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   public getStatusName1(id: string) {
     let statusName;
     switch (id) {
-        case Utils.TT_BC_0:
-            statusName = "Đã xóa";
-            break;
-        case Utils.TT_BC_1:
-            statusName = "Đang soạn"
-            break;
-        case Utils.TT_BC_2:
-            statusName = "Trình duyệt"
-            break;
-        case Utils.TT_BC_3:
-            statusName = "Trưởng BP từ chối"
-            break;
-        case Utils.TT_BC_4:
-            statusName = "Trưởng BP duyệt"
-            break;
-        case Utils.TT_BC_5:
-            statusName = "Lãnh đạo từ chối"
-            break;
-        case Utils.TT_BC_6:
-            statusName = "Lãnh đạo duyệt"
-            break;
-        case Utils.TT_BC_7:
-            statusName = "Mới"
-            break;
-        case Utils.TT_BC_8:
-            statusName = "Từ chối"
-            break;
-        case Utils.TT_BC_9:
-            statusName = "Tiếp nhận"
-            break;
-        case Utils.TT_BC_10:
-            statusName = "Điều chỉnh theo số kiểm tra"
-            break;
-        case Utils.TT_BC_11:
-            statusName = "Đã giao"
-            break;
-        case Utils.TT_BC_KT:
-            statusName = "Chưa có"
-            break;
-        default:
-            statusName = id;
-            break;
+      case Utils.TT_BC_0:
+        statusName = "Đã xóa";
+        break;
+      case Utils.TT_BC_1:
+        statusName = "Đang soạn"
+        break;
+      case Utils.TT_BC_2:
+        statusName = "Trình duyệt"
+        break;
+      case Utils.TT_BC_3:
+        statusName = "Trưởng BP từ chối"
+        break;
+      case Utils.TT_BC_4:
+        statusName = "Trưởng BP duyệt"
+        break;
+      case Utils.TT_BC_5:
+        statusName = "Lãnh đạo từ chối"
+        break;
+      case Utils.TT_BC_6:
+        statusName = "Lãnh đạo duyệt"
+        break;
+      case Utils.TT_BC_7:
+        statusName = "Mới"
+        break;
+      case Utils.TT_BC_8:
+        statusName = "Từ chối"
+        break;
+      case Utils.TT_BC_9:
+        statusName = "Tiếp nhận"
+        break;
+      case Utils.TT_BC_10:
+        statusName = "Điều chỉnh theo số kiểm tra"
+        break;
+      case Utils.TT_BC_11:
+        statusName = "Đã giao"
+        break;
+      case Utils.TT_BC_KT:
+        statusName = "Chưa có"
+        break;
+      default:
+        statusName = id;
+        break;
     }
     return statusName;
-}
+  }
 
   getStatusGiao(trangThai: string) {
     return (!this.statusBtnGiao && (trangThai == '0'));

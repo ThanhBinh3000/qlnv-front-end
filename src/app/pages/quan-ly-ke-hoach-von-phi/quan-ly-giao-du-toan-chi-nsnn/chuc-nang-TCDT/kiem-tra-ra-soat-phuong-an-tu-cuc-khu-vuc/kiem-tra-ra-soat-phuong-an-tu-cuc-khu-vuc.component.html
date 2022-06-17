@@ -1,16 +1,17 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Kiểm tra rà soát phương án"
-        class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+      <nz-card nzTitle="Kiểm tra rà soát phương án" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="3">
             <label class="search__label">Năm dự toán</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại dự án</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiDuAn">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
+              [(ngModel)]="searchFilter.maLoaiDuAn">
               <nz-option *ngFor="let bc of loaiDuAns" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -47,15 +48,15 @@
               </td>
               <td>
                 <ng-container *ngIf="item.trangThai == '1'; else xem">
-                <button type="button" class="btn btn-main" >
-                  <span>Thông báo đến đơn vị cấp dưới</span>
-                </button>
-              </ng-container>
-              <ng-template #xem>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <span>Xem</span>
-                </button>
-              </ng-template>
+                  <button type="button" class="btn btn-main">
+                    <span>Thông báo đến đơn vị cấp dưới</span>
+                  </button>
+                </ng-container>
+                <ng-template #xem>
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Xem</span>
+                  </button>
+                </ng-template>
               </td>
             </tr>
           </tbody>
@@ -82,7 +83,8 @@
       </nz-card>
 
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
+        <button type="button" class="btn btn-main"
+          (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>

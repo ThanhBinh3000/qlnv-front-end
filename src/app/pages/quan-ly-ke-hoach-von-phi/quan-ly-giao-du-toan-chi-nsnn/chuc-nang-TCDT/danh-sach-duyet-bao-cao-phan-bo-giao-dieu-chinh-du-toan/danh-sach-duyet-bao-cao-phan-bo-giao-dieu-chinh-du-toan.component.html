@@ -101,14 +101,14 @@
                 {{getStatusName(item.trangThai)}}
               </td>
               <td>
-                <ng-container *ngIf="item.trangThai == '7'; else xem" >
-                  <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)" >
+                <ng-container *ngIf="item.trangThai == '7'; else xem">
+                  <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)">
                     Phê duyệt
                   </button>
                 </ng-container>
                 <ng-template #xem>
                   <ng-container *ngIf="item.trangThai == '7' && item.maLoaiDan == '1'; else thongbao">
-                    <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)" >
+                    <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)">
                       Xem
                     </button>
                   </ng-container>

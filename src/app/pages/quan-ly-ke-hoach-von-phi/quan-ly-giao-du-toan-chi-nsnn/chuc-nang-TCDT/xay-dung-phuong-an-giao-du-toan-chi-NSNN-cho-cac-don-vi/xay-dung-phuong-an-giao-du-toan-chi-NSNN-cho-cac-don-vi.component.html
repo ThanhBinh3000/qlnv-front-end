@@ -16,7 +16,7 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<button class="btn btn-main" (click)="onSubmit('7',null)" >
+				<button class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnGuiDVCT">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Gửi đơn vị cấp trên</span>
 				</button>
@@ -40,11 +40,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" >
+				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" >
+				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>tiếp nhận</span>
 				</a>
@@ -229,7 +229,7 @@
 									</ng-template>
 								</tr>
 								<ng-container *ngIf="lstCtietBcao.length > 0">
-									<tr [hidden]="statusBtnGiao">
+									<tr [hidden]="statusBtnGiaoToanBo">
 										<td></td>
 										<td></td>
 										<td></td>
