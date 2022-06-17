@@ -16,6 +16,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
@@ -74,6 +75,8 @@ export class VonBanHangComponent implements OnInit {
     maDviTien: string;
     //danh muc
     donVis: any[] = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
+    trangThaiChas: any[] = TRANG_THAI_TIM_KIEM_CHA;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     statusGui: boolean = false;
@@ -586,11 +589,10 @@ export class VonBanHangComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
         if (this.statusBtnParent) {
-            return utils.getStatusName(this.trangThaiBanGhi);
+            return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
         } else {
-            return utils.getStatusName(this.trangThaiCha);
+            return this.trangThaiChas.find(e => e.id == this.trangThaiCha)?.tenDm;
         }
     }
 
