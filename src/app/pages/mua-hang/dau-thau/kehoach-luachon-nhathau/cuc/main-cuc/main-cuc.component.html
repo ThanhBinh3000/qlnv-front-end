@@ -1,7 +1,20 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-2">
-    <nz-tab [nzTitle]="'Đề xuất kế hoạch lựa chọn nhà thầu'">
+<nz-tabset nzType="card" class="mt-16 tab-level-2 chuc-nang-nhap-kho">
+    <nz-tab [nzTitle]="deXuat">
+        <ng-template #deXuat>
+            Đề xuất kế hoạch lựa chọn nhà thầu
+            (<span class="number-title-tab">10</span>)
+        </ng-template>
         <ng-template nz-tab>
             <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
+        </ng-template>
+    </nz-tab>
+    <nz-tab [nzTitle]="quyetDinh">
+        <ng-template #quyetDinh>
+            Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+            (<span class="number-title-tab">10</span>)
+        </ng-template>
+        <ng-template nz-tab>
+            <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
         </ng-template>
     </nz-tab>
 </nz-tabset>

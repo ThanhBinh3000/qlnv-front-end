@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 export class KeHoachLuachonNhathauComponent implements OnInit {
   tabs: any[] = [];
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private danhMucService: DanhMucService,
   ) { }
   ngOnInit(): void {
