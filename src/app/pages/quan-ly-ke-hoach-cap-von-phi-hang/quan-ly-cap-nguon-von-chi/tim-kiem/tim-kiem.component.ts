@@ -23,7 +23,7 @@ export class TimKiemComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maDn: null,
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		qdChiTieu: "",
@@ -278,5 +278,11 @@ export class TimKiemComponent implements OnInit {
 			check = false;
 		}
 		return check;
+	}
+
+	close(){
+		this.router.navigate([
+			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
+		])
 	}
 }

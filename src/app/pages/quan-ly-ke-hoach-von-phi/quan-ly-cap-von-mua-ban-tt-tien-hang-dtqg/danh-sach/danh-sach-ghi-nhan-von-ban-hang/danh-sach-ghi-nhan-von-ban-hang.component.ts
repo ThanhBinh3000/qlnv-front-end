@@ -24,7 +24,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maNop: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		maDviGui: "",
@@ -76,6 +76,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
+					this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -122,15 +123,14 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 
-		let trangThais = [];
-		if (this.searchFilter.trangThai) {
-			trangThais = [this.searchFilter.trangThai];
-		}
+		// let trangThais = [];
+		// if (this.searchFilter.trangThai) {
+		// 	trangThais = [this.searchFilter.trangThai];
+		// }
 		let requestReport = {
-			loaiTimKiem: "1",
 			maNopTienVon: this.searchFilter.maNop,
-			maDvi: this.userInfo?.dvql,
-			dviGui: this.searchFilter.maDviGui,
+			maDviCha: this.userInfo?.dvql,
+			maDvi: this.searchFilter.maDviGui,
 			maLoai: "2",
 			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
@@ -139,7 +139,8 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThaiDviChas: trangThais,
+			trangThai: Utils.TT_BC_7,
+			trangThaiDviCha: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
@@ -181,7 +182,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/'+ this.loai + '/' + id,
 		])
 	}
 
@@ -217,6 +218,8 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	}
 
 	close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg'
+		])
 	}
 }

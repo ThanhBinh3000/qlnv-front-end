@@ -209,7 +209,7 @@
 											</td>
 										</ng-template>
 									</tr>
-									<tr [hidden]="statusBtnGiao">
+									<tr [hidden]="statusGiaoToanBo">
 										<td></td>
 										<td></td>
 										<td></td>
@@ -293,7 +293,7 @@
 							<span>Thêm</span>
 						</button>
 					</ng-container>
-					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiao">
+					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo">
 						<span>Giao toàn bộ</span>
 					</button>
 					<!-- <button type="button" class="btn btn-sub">
