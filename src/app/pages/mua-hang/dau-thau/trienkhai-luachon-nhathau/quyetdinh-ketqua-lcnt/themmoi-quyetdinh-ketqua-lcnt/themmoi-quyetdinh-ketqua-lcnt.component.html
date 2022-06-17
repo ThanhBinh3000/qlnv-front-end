@@ -6,11 +6,11 @@
                     <div nz-row [nzGutter]="[16, 12]">
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kết quả lựa chọn
-                                    nhà thầu
+                                <nz-form-label nzRequired [nzNoColon]="true">
+                                    Số quyết định phê duyệt KQLCNT
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
-                                    <nz-input-group nzAddOnAfter="/DX-TCDT">
+                                    <nz-input-group nzAddOnAfter="/QĐ-CDTHN">
                                         <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
                                             [nzStep]="1" [nzSize]="'small'"
                                             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
@@ -25,7 +25,26 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kết quả LCNT
+                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt KQLCNT
+                                </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
+                                    <nz-input-group>
+                                        <nz-date-picker class="search__input"
+                                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
+                                            formControlName="ngayQd" nzFormat="dd/MM/yyyy"
+                                            [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
+                                        </nz-date-picker>
+                                    </nz-input-group>
+                                    <ng-template #ngayQdErr let-control>
+                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-item class="display-block">
+                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
                                     <nz-input-group>
@@ -83,8 +102,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kế hoạch lựa chọn
-                                    nhà thầu
+                                <nz-form-label nzRequired [nzNoColon]="true"> Số Quyết định phê duyệt KHLCNT
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
                                     <nz-select (ngModelChange)="onChangeSoQdKh($event)" formControlName="canCu"
@@ -102,8 +120,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kế hoạch lựa
-                                    chọn nhà thầu
+                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày QD phê duyệt KHLCNT
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
                                     <nz-input-group>
@@ -143,7 +160,7 @@
                                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                 <button class="btn btn-tep btn-sm waves-effect waves-light mt-1">
                                     <i class="icon htvbdh_tcdt_tep"></i>
-                                    <span>File đính kèm</span>
+                                    <span>Tài liệu đính kèm</span>
                                 </button>
                                 <ng-template #fileListTpl let-list>
                                     <nz-list>
@@ -184,7 +201,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Giá trúng thầu (Đồng) </nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Giá trúng thầu (đồng) </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
                                     <input [readonly]="true" nz-input readonly="true" />
                                 </nz-form-control>
@@ -200,7 +217,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (Ngày)
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày)
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
                                     <input [readonly]="true" nz-input readonly="true" />
@@ -242,7 +259,6 @@
         <span>Từ chối</span>
     </button>
     <button type="button" class="btn btn-sub" (click)="quayLai()">
-        <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
     </button>
 </ng-template>

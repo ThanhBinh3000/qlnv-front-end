@@ -28,7 +28,7 @@ export class ThongtinDauthauComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
