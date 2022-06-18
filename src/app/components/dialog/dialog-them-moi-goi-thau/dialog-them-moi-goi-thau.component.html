@@ -18,6 +18,23 @@
     </div>
   </div>
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+        <nz-select>
+          <nz-option nzValue="nb24" nzLabel="nb24">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-select>
+          <nz-option nzValue="Chiếc" nzLabel="Chiếc"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
@@ -42,7 +59,7 @@
         <input nz-input />
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
+    <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Hình thức LCNT </nz-form-label>
         <nz-select>
@@ -51,7 +68,7 @@
         </nz-select>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
+    <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
         <nz-select>
@@ -59,21 +76,24 @@
         </nz-select>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
+    <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <nz-select>
-          <nz-option nzValue="Đấu thầu rộng rãi trong nước qua mạng" nzLabel="Đấu thầu rộng rãi trong nước qua mạng">
-          </nz-option>
-        </nz-select>
+        <input nz-input />
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
+    <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
         <nz-select>
           <nz-option nzValue="Hợp đồng trọn gói" nzLabel="Hợp đồng trọn gói"></nz-option>
         </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
+        <input nz-input />
       </nz-form-item>
     </div>
   </div>
@@ -98,6 +118,23 @@
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <input nz-input />
+            </td>
+            <td>
+              <input nz-input />
+            </td>
+            <td>
+              <a>
+                <i class="icon htvbdh_dau-cong"></i>
+              </a>
+              <a>
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
           <tr>
             <td>1</td>
             <td>Cục DTNNKV Hà Nội</td>

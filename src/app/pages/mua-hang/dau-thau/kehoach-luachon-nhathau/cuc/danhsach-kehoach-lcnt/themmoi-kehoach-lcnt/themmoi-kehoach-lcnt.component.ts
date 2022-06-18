@@ -17,7 +17,7 @@ import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { Globals } from 'src/app/shared/globals';
-import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
@@ -33,6 +33,7 @@ import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 
 
 interface ItemData {
@@ -143,6 +144,31 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     moTa: '',
     taiLieu: [],
   };
+
+  listOfOption: any[] = [
+    {
+      label: 'a',
+      value: 1
+    }, {
+      label: 'b',
+      value: 2
+    }, {
+      label: 'c',
+      value: 3
+    },
+  ]
+
+  taiLieuDinhKemList: any[] = [];
+  dataGoiThau: any[] = [
+    { id: 1 }
+  ];
+
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
+
+  allChecked = false;
+  indeterminate = false;
 
   constructor(
     private modal: NzModalService,
@@ -1044,5 +1070,184 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       moTa: '',
       taiLieu: [],
     };
+  }
+
+  checkCanUpdate() {
+    if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
+      return true;
+    }
+    return false;
+  }
+
+  // checkUpdateTatCaVatTu() {
+  //   if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
+  }
+
+  deleteTaiLieuDinhKemFormTag(data: any) {
+    this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+      (x) => x.id !== data.id,
+    );
+  }
+
+  openFileTaiLieu(event) {
+    let item = {
+      id: new Date().getTime(),
+      text: event.name,
+    };
+    this.taiLieuDinhKemList.push(item);
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        // body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
+        // body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
+        // if (this.taiLieuDinhKemList.length > 0) {
+        //   this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+        //     saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
+        //   });
+        // }
+        break;
+      default:
+        break;
+    }
+  }
+
+  openDialogGoiThau(data?: any) {
+    this.modal.create({
+      nzTitle: 'Thông tin gói thầu',
+      nzContent: DialogThemMoiGoiThauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: data,
+      },
+    });
+  }
+
+  xoaItem(data: any) {
+
+  }
+
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataGoiThau && this.dataGoiThau.length > 0) {
+      this.dataGoiThau.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // if (res.msg == MESSAGE.SUCCESS) {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataGoiThau && this.dataGoiThau.length > 0) {
+        this.dataGoiThau.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataGoiThau && this.dataGoiThau.length > 0) {
+        this.dataGoiThau.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataGoiThau.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataGoiThau.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
   }
 }

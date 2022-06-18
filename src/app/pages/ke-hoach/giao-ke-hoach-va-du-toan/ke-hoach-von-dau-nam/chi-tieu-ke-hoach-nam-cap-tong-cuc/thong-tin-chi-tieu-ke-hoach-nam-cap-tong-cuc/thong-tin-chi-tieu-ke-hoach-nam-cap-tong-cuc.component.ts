@@ -115,7 +115,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
   levelCuc: any = LEVEL_USER;
   tenDonViCuc: string;
-
+  yearNowClone: number;
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -674,6 +674,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
+          this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
           if (this.thongTinChiTieuKeHoachNam?.fileDinhKemReqs?.length > 0) {
@@ -2448,6 +2449,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
   deleteCanCuTag(data: any) {
     this.canCuList = this.canCuList.filter((x) => x.id !== data.id);
+    if (this.userService.isCuc()) {
+      this.thongTinChiTieuKeHoachNam.namKeHoach = this.yearNowClone;
+      this.formData.patchValue({ namKeHoach: this.yearNowClone });
+    }
   }
   openFile(event) {
     let item = {
@@ -2615,6 +2620,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           id: data.id,
           text: data.soQuyetDinh,
         };
+        this.yearNow = data.namKeHoach;
+        this.formData.patchValue({ namKeHoach: this.yearNow });
         if (!this.canCuList.find((x) => x.text === item.text)) {
           // this.thongTinChiTieuKeHoachNam.canCus.push(item);
           this.canCuList = [];

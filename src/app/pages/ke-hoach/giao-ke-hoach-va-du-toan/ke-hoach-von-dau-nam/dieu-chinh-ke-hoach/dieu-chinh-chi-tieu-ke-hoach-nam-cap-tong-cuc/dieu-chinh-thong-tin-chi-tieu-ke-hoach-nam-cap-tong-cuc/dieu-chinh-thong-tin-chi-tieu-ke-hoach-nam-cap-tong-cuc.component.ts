@@ -25,6 +25,7 @@ import { QuyetDinhChiTieuKHNam } from 'src/app/models/QuyetDinhChiTieuKHNam';
 import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
@@ -140,6 +141,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private deXuatDieuChinhService: DeXuatDieuChinhService,
     private danhMucService: DanhMucService,
     private helperService: HelperService,
     private cdr: ChangeDetectorRef,
@@ -156,7 +158,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-
       if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
         this.titleTable = 'CỤC DTNN KHU VỰC';
@@ -1292,9 +1293,27 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       ghiChu: [null],
       loaiHangHoa: [this.tabSelected]
     });
+    if (this.deXuatId && this.deXuatId > 0) {
+      let res = await this.deXuatDieuChinhService.loadChiTiet(this.deXuatId);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let item = {
+          id: res.data.id,
+          text: res.data.soVanBan,
+        };
+        if (!this.dataDeXuat) {
+          this.dataDeXuat = [];
+        }
+        this.dataDeXuat.push(item);
+        this.formData.controls['namKeHoach'].setValue(
+          res.data.namKeHoach,
+        );
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
     if (id > 0) {
-      let res =
-        await this.quyetDinhDieuChinhChiTieuKeHoachNamService.loadChiTiet(id);
+      let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dieuChinhThongTinChiTieuKHNam = res.data;

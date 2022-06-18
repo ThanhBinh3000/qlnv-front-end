@@ -5,6 +5,7 @@ import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet',
@@ -17,7 +18,9 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
   data: any = {};
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
-  // listOfData: DanhSachGoiThau[] = [];
+
+  listOfData: DanhSachGoiThau[] = [];
+  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
   constructor(
     private _modalRef: NzModalRef,
@@ -29,6 +32,7 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
 
+  addGoiThau: any = {};
 
   async ngOnInit() {
     console.log(this.data);
@@ -39,6 +43,24 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
       };
     })
     this.loadDonVi();
+  }
+
+  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.idVirtual === d.idVirtual)!;
+          target.expand = false;
+          this.collapse2(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  convertTienTobangChu(tien: number): string {
+    return convertTienTobangChu(tien);
   }
 
   ngAfterViewChecked(): void {
@@ -125,6 +147,18 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
         this.listChiCuc.push(item);
       }
     }
+  }
+
+  changeDiemKhoAdd() {
+
+  }
+
+  addNew() {
+
+  }
+
+  clearData() {
+    this.addGoiThau = {};
   }
 
   reduceRowData(
