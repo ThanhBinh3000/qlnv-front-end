@@ -29,7 +29,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
@@ -320,5 +320,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  checkCanUpdate() {
+    if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02' || this.isCuc) {
+      return true;
+    }
+    return false;
   }
 }

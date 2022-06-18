@@ -7,6 +7,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   styleUrls: ['./dialog-them-moi-goi-thau.component.scss'],
 })
 export class DialogThemMoiGoiThauComponent implements OnInit {
+  data?: any;
 
   constructor(private _modalRef: NzModalRef) { }
 
