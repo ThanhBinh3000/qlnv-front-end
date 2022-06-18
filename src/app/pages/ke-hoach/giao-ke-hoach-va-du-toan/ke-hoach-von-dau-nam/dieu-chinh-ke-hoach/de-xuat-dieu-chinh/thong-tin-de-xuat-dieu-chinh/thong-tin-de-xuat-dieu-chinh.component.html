@@ -71,7 +71,7 @@
                 [nzDisabled]="deXuatDieuChinh.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
-            <div nz-col [nzSpan]="5">
+            <!-- <div nz-col [nzSpan]="5">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hàng hóa
               </nz-form-label>
               <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()"
@@ -80,7 +80,7 @@
                 <nz-option nzValue="01" nzLabel="Điều chỉnh muối dự trữ nhà nước"></nz-option>
                 <nz-option nzValue="02" nzLabel="Điều chỉnh vật tư, thiết bị"></nz-option>
               </nz-select>
-            </div>
+            </div> -->
             <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập text"
@@ -116,14 +116,15 @@
       <div class="tab__luong-thuc" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
         <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" class="tt-chung__container"
-            *ngIf="tabSelected == '00'">
+            (nzClick)="tabSelected = '00'">
 
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" class="ds-goi-thau__container"
-            *ngIf="tabSelected == '01'">
+            (nzClick)="tabSelected = '01'">
 
           </nz-tab>
-          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container" *ngIf="tabSelected == '02'">
+          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container"
+            (nzClick)="tabSelected = '02'">
 
           </nz-tab>
         </nz-tabset>

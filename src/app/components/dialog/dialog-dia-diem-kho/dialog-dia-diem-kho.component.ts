@@ -97,6 +97,10 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
     this.searchData.maDvi = this.selectedDonVi.maDvi;
+    this.searchData.maDiemKho = '';
+    this.searchData.maNhaKho = '';
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
     await this.loadDiemKho(this.selectedDonVi.id);
   }
 
@@ -149,7 +153,9 @@ export class DialogDiaDiemKhoComponent implements OnInit {
 
   async changeDiemKho() {
     let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchData.maDiemKho);
-    this.searchData.maNhaKho = null;
+    this.searchData.maNhaKho = '';
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
     if (diemKho && diemKho.length > 0) {
       await this.loadNhaKho(diemKho[0].id);
     }
@@ -179,7 +185,8 @@ export class DialogDiaDiemKhoComponent implements OnInit {
 
   async changeNhaKho() {
     let nhaKho = this.listNhaKho.filter(x => x.maNhakho == this.searchData.maNhaKho);
-    this.searchData.maNganKho = null;
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
     if (nhaKho && nhaKho.length > 0) {
       await this.loadNganKho(nhaKho[0].id);
     }
@@ -209,7 +216,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
 
   async changeNganKho() {
     let nganKho = this.listNganKho.filter(x => x.maNgankho == this.searchData.maNganKho);
-    this.searchData.maNganKho = null;
+    this.searchData.maNganLo = '';
     if (nganKho && nganKho.length > 0) {
       await this.loadNganLo(nganKho[0].id);
     }
@@ -250,12 +257,6 @@ export class DialogDiaDiemKhoComponent implements OnInit {
         else {
           this.dataTreeKho = res.data;
         }
-        // this.listOfMapData = [];
-        // this.listOfMapData.push(res.data);
-        // this.listOfMapDataClone = [...this.listOfMapData];
-        // this.listOfMapData.forEach((item) => {
-        //   this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-        // });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -350,31 +351,117 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   }
 
   deleteDeXuat(data: any) {
-
+    this.deXuatCuc = this.deXuatCuc.filter(x => x.id != data.id);
   }
 
-  changeValue(type, item) {
+  changeValue(type, item, data) {
     if (type == 'tang') {
-      if (item.oldDataTang && item.oldDataTang >= 0) {
-        this.sumTang = this.sumTang - item.oldDataTang + item.slTang;
+      this.sumTang = 0;
+      let listInput = document.getElementsByClassName('input-tang');
+      if (listInput && listInput.length > 0) {
+        for (let i = 0; i < listInput.length; i++) {
+          this.sumTang = this.sumTang + (isNaN(parseInt(listInput[i].getElementsByTagName('input')[0].value)) ? 0 : parseInt(listInput[i].getElementsByTagName('input')[0].value));
+        }
       }
-      else {
-        this.sumTang += item.slTang;
-      }
-      item.oldDataTang = item.slTang;
     }
     else if (type == 'giam') {
-      if (item.oldDataGiam && item.oldDataGiam >= 0) {
-        this.sumGiam = this.sumGiam - item.oldDataGiam + item.slGiam;
+      this.sumGiam = 0;
+      let listInput = document.getElementsByClassName('input-giam');
+      if (listInput && listInput.length > 0) {
+        for (let i = 0; i < listInput.length; i++) {
+          this.sumGiam = this.sumGiam + (isNaN(parseInt(listInput[i].getElementsByTagName('input')[0].value)) ? 0 : parseInt(listInput[i].getElementsByTagName('input')[0].value));
+        }
       }
-      else {
-        this.sumGiam += item.slGiam;
-      }
-      item.oldDataGiam = item.slGiam;
     }
+    this.getSetDataTree('set', data, item);
   }
 
-  saveDataTree(data, item) {
+  saveDataTree(data) {
+    let res = this.getSetDataTree('get', data);
+    if (this.deXuatCuc && this.deXuatCuc.length > 0) {
+      let index = this.deXuatCuc.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.deXuatCuc = this.deXuatCuc.splice(index, 1);
+      }
+    }
+    else {
+      this.deXuatCuc = [];
+    }
+    this.deXuatCuc = [...this.deXuatCuc, res];
+  }
 
+  getSetDataTree(type: string, data: any, item?: any) {
+    let sumTang = 0;
+    let sumGiam = 0;
+    if (data && data.child && data.child.length > 0) {
+      let hasItem = false;
+      data.child.forEach(elementDiemKho => {
+        if (item && type == 'set' && item.maDiemkho && elementDiemKho.maDiemkho == item.maDiemkho) {
+          elementDiemKho.slTang = item.slTang ?? 0;
+          elementDiemKho.slGiam = item.slGiam ?? 0;
+          hasItem = true;
+        }
+        else if (elementDiemKho && elementDiemKho.child && elementDiemKho.child.length > 0) {
+          elementDiemKho.child.forEach(elementNhaKho => {
+            if (item.maNhakho && elementNhaKho.maNhakho == item.maNhakho) {
+              elementNhaKho.slTang = item.slTang ?? 0;
+              elementNhaKho.slGiam = item.slGiam ?? 0;
+              hasItem = true;
+            }
+            else if (elementNhaKho && elementNhaKho.child && elementNhaKho.child.length > 0) {
+              elementNhaKho.child.forEach(elementNganKho => {
+                if (item.maNgankho && elementNganKho.maNgankho == item.maNgankho) {
+                  elementNganKho.slTang = item.slTang ?? 0;
+                  elementNganKho.slGiam = item.slGiam ?? 0;
+                  hasItem = true;
+                }
+                else if (elementNganKho && elementNganKho.child && elementNganKho.child.length > 0) {
+                  elementNganKho.child.forEach(elementNganLo => {
+                    if (item.maNganlo && elementNganLo.maNganlo == item.maNganlo) {
+                      elementNganLo.slTang = item.slTang ?? 0;
+                      elementNganLo.slGiam = item.slGiam ?? 0;
+                      hasItem = true;
+                    }
+                    else if (elementNganLo.slTang || elementNganLo.slGiam) {
+                      sumTang = sumTang + (elementNganLo.slTang ?? 0);
+                      sumGiam = sumGiam + (elementNganLo.slGiam ?? 0);
+                    }
+                    if (hasItem && type == 'set') {
+                      return;
+                    }
+                  });
+                }
+                else if (elementNganKho.slTang || elementNganKho.slGiam) {
+                  sumTang = sumTang + (elementNganKho.slTang ?? 0);
+                  sumGiam = sumGiam + (elementNganKho.slGiam ?? 0);
+                }
+                if (hasItem && type == 'set') {
+                  return;
+                }
+              });
+            }
+            else if (elementNhaKho.slTang || elementNhaKho.slGiam) {
+              sumTang = sumTang + (elementNhaKho.slTang ?? 0);
+              sumGiam = sumGiam + (elementNhaKho.slGiam ?? 0);
+            }
+            if (hasItem && type == 'set') {
+              return;
+            }
+          });
+        }
+        else if (elementDiemKho.slTang || elementDiemKho.slGiam) {
+          sumTang = sumTang + (elementDiemKho.slTang ?? 0);
+          sumGiam = sumGiam + (elementDiemKho.slGiam ?? 0);
+        }
+        if (hasItem && type == 'set') {
+          return;
+        }
+      });
+    }
+    if (type == 'get') {
+      data.sumTang = sumTang;
+      data.sumGiam = sumGiam;
+      return data;
+    }
   }
 }

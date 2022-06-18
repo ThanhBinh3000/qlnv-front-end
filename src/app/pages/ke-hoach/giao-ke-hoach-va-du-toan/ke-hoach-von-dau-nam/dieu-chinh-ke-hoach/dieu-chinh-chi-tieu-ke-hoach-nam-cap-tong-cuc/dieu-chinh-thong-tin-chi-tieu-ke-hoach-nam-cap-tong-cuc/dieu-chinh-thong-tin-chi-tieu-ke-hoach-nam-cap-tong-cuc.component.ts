@@ -2485,20 +2485,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.get('trichYeu').value;
         this.dieuChinhThongTinChiTieuKHNam.ghiChu =
           this.formData.get('ghiChu').value;
-        this.dieuChinhThongTinChiTieuKHNam.loaiHangHoa =
-          this.formData.get('loaiHangHoa').value;
 
         this.dieuChinhThongTinChiTieuKHNam.chiTieuId = this.dieuChinhThongTinChiTieuKHNam.qdGocId;
-
-        if (this.tabSelected != '00') {
-          this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = [];
-        }
-        if (this.tabSelected != '01') {
-          this.dieuChinhThongTinChiTieuKHNam.khMuoi = [];
-        }
-        if (this.tabSelected != '02') {
-          this.dieuChinhThongTinChiTieuKHNam.khVatTu = [];
-        }
 
         let dxDcKhnIds = [];
         if (this.dataDeXuat && this.dataDeXuat.length > 0) {

@@ -447,10 +447,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         this.deXuatDieuChinh.trichYeu = this.formData.get('trichYeu').value;
         this.deXuatDieuChinh.nguyenNhan = this.formData.get('nguyenNhan').value;
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
-        this.deXuatDieuChinh.loaiHangHoa = this.formData.get('loaiHangHoa').value;
 
         let dxDcLtVtReqList = [];
-        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0 && this.tabSelected == 'luongThuc') {
+        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
           this.deXuatDieuChinh.dxDcltList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -474,7 +473,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(itemGao);
           });
         }
-        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0 && this.tabSelected == 'muoi') {
+        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
           this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -488,7 +487,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0 && this.tabSelected == 'vatTu') {
+        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
           this.deXuatDieuChinh.dxDcVtList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
