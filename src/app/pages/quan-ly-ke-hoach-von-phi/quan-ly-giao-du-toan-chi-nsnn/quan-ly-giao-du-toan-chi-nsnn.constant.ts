@@ -83,7 +83,20 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     title: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
     description: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi`,
-    unRole: [],
+    unRole: [
+      {
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+      {
+        "unit": CHI_CUC,
+        "role": TRUONG_BP,
+      },
+      {
+        "unit": CHI_CUC,
+        "role": LANH_DAO,
+      },
+    ],
 		isDisabled: false,
   },
   {
@@ -112,7 +125,20 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     title: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
     description: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan`,
-    unRole: [],
+    unRole: [
+      {
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+      {
+        "unit": CHI_CUC,
+        "role": TRUONG_BP,
+      },
+      {
+        "unit": CHI_CUC,
+        "role": LANH_DAO,
+      },
+    ],
 		isDisabled: false,
   },
   {
@@ -120,15 +146,22 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     title: 'Kiểm tra rà soát báo cáo',
     description: 'Kiểm tra rà soát báo cáo',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
-    unRole: [],
+    unRole: [
+      {
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+      {
+        "unit": CHI_CUC,
+        "role": TRUONG_BP,
+      },
+      {
+        "unit": CHI_CUC,
+        "role": LANH_DAO,
+      },
+    ],
 		isDisabled: false,
-  },
-  // {
-  //   icon: 'htvbdh_tcdt_icon-common',
-  //   title: 'Tổng hợp lập kế hoạch phân bổ dự toán của đơn vị',
-  //   description: 'Tổng hợp lập kế hoạch phân bổ dự toán của đơn vị',
-  //   url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tong-hop-lap-ke-hoach-phan-bo-du-toan-cua-don-vi`,
-  // },
+  }
 ];
 
 

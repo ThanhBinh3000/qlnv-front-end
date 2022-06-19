@@ -16,6 +16,8 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
@@ -53,6 +55,7 @@ export class ItemNhan {
 export class VonBanHangComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maNopTien: string;
@@ -73,6 +76,8 @@ export class VonBanHangComponent implements OnInit {
     maDviTien: string;
     //danh muc
     donVis: any[] = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
+    trangThaiChas: any[] = TRANG_THAI_TIM_KIEM_CHA;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     statusGui: boolean = false;
@@ -134,10 +139,12 @@ export class VonBanHangComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -163,8 +170,13 @@ export class VonBanHangComponent implements OnInit {
             this.statusBtnParent = true;
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.ngayLap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.ngayLapTemp = this.datePipe.transform(this.newDate, "yyyy-MM-dd");
+            this.dataSource.currentData.subscribe(obj => {
+                this.ngayLapTemp = obj?.ngayLap;
+            })
+            if (!this.ngayLapTemp){
+                this.close();
+            }
+            this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
             this.spinner.show();
             this.quanLyVonPhiService.maNopTienVon().toPromise().then(
                 (res) => {
@@ -346,6 +358,7 @@ export class VonBanHangComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
                     let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
                     if (dVi && dVi?.parent?.maDvi == this.userInfo?.dvql) {
@@ -524,7 +537,7 @@ export class VonBanHangComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/'
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/0/'
                             + data.data.id,
                         ]);
                     } else {
@@ -583,22 +596,21 @@ export class VonBanHangComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
         if (this.statusBtnParent) {
-            return utils.getStatusName(this.trangThaiBanGhi);
+            return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
         } else {
-            return utils.getStatusName(this.trangThaiCha);
+            return this.trangThaiChas.find(e => e.id == this.trangThaiCha)?.tenDm;
         }
     }
 
     close() {
         if (this.statusBtnParent) {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/0'
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/'+this.loai
             ]);
         } else {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/0'
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/'+this.loai
             ]);
         }
 

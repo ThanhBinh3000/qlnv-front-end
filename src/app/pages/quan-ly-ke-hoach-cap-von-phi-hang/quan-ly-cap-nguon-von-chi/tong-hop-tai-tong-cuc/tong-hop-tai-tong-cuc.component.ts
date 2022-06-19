@@ -14,6 +14,7 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { TRANG_THAI_TIM_KIEM_CON } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 import { ItemDataMau02 } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -56,6 +57,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     //thong tin dang nhap
     id: any;
     userInfo: any;
+    loai: any;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -75,6 +77,32 @@ export class TongHopTaiTongCucComponent implements OnInit {
     donVis: any[] = [];
     cucKhuVucs: any[] = [];
     dviTinhs: any[] = [];
+    trangThais: any[] = [
+        {
+            id: Utils.TT_BC_1,
+            tenDm: "Đang soạn",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Trình duyệt",
+        },
+        {
+            id: Utils.TT_BC_5,
+            tenDm: "Lãnh đạo từ chối",
+        },
+        {
+            id: Utils.TT_BC_7,
+            tenDm: "Lãnh đạo duyệt",
+        },
+        {
+            id: Utils.TT_BC_8,
+            tenDm: "Từ chối",
+        },
+        {
+            id: Utils.TT_BC_9,
+            tenDm: "Tiếp nhận",
+        }
+    ]
     nguonBcaos: any[] = NGUON_BAO_CAO;
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
@@ -143,6 +171,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
         //lay thong tin user
@@ -254,7 +283,11 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
+        if (this.trangThai == Utils.TT_BC_2) {
+            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, roleNguoiTao);
+        } else {
+            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
+        }
         this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnDVCT = utils.getRoleDVCT(this.trangThai, checkParent, roleNguoiTao);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
@@ -459,7 +492,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                             this.router.navigate([
-                                'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + data.data.id,
+                                'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/' + data.data.id,
                             ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -556,13 +589,12 @@ export class TongHopTaiTongCucComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThai);
+        return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
     close() {
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/0'
+            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/'+ this.loai
         ])
     }
 

@@ -65,8 +65,7 @@
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="Danh sách ghi nhận vốn tiền thừa từ đơn vị cấp dưới" 
-				class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="Danh sách ghi nhận vốn tiền thừa từ đơn vị cấp dưới" class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
@@ -86,7 +85,7 @@
 							<th>Ngày TBP duyệt</th>
 							<th>Ngày lãnh đạo duyệt</th>
 							<th>Trạng thái</th>
-							<th [hidden]="status"></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -132,10 +131,24 @@
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
-							<td [hidden]="status">
-									<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-										Phê duyệt
-									</a>
+							<td>
+								<ng-container *ngIf="status; else pheDuyet">
+									<ng-container *ngIf="checkDeleteReport(item); else xem">
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Nhập/Sửa dữ liệu</span>
+										</button>
+									</ng-container>
+									<ng-template #xem>
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Xem</span>
+										</button>
+									</ng-template>
+								</ng-container>
+								<ng-template #pheDuyet>
+									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<span>Phê duyệt</span>
+									</button>
+								</ng-template>
 							</td>
 						</tr>
 					</tbody>

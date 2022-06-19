@@ -1,5 +1,4 @@
 import { DatePipe, Location } from '@angular/common';
-import { NullTemplateVisitor } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,17 +9,16 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_DE_NGHI, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, LOAI_VON, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 export class ItemData {
     id: any;
@@ -50,11 +48,13 @@ export class ItemData {
 export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maCvUvDuoi: string;
     maCvUvTren: string;
     ngayTao: string;
+    ngayTaoTemp: string;
     ngayTrinhDuyet: string;
     ngayDuyet: string;
     ngayPheDuyet: string;
@@ -67,7 +67,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     unitChilds: any[] = [];
-    trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     loaiVons: any[] = LOAI_VON;
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
@@ -93,8 +93,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // them file vao danh sach
     handleUpload(): void {
-        this.fileList.forEach((file: any) => {
+        this.fileList.forEach((file: any) => {    
             const id = file?.lastModified.toString();
+            console.log({ id: id, fileName: file?.name });
             this.lstFiles.push({ id: id, fileName: file?.name });
             this.listFile.push(file);
         });
@@ -123,6 +124,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -290,13 +292,14 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     })
                     this.maCvUvDuoi = data.data.maCapUngVonChoCapDuoi;
                     this.maCvUvTren = data.data.maCapUngVonTuCapTren;
+                    this.ngayTaoTemp = data.data.ngayTao;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh,
-                    this.lstFiles = data.data.lstFileGuis;
+                    this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                     this.updateEditCache();
                 } else {
@@ -328,6 +331,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    }
+                    if (mcn == Utils.TT_BC_7){
+                        this.capToanBo();
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -412,8 +418,8 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKemGuis: listFile,
-            listIdDeleteFileGuis: this.listIdFilesDelete,
+            fileDinhKems: listFile,
+            listIdDeleteFiles: this.listIdFilesDelete,
             capUngVonCtiets: lstCtietBcaoTemp,
             maCapUngVonChoCapDuoi: this.maCvUvDuoi,
             maCapUngVonTuCapTren: this.maCvUvTren,
@@ -430,7 +436,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/' + data.data.id,
+                            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/cap-von-ung-von-cho-don-vi-cap-duoi/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -596,8 +602,69 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     close() {
         this.router.navigate([
-            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/0'
+            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/' + this.loai
         ])
+    }
+
+    async capToanBo(){
+        var maCvUvDuoi: string;
+        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+                    var str: string;
+                    if (capDvi == Utils.TONG_CUC) {
+                        str = "CKV";
+                    } else {
+                        str = "CC";
+                    }
+                    maCvUvDuoi = res.data;
+                    let mm = maCvUvDuoi.split('.');
+                    maCvUvDuoi = mm[0] + str + '.' + mm[1];
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        let request: any[] = [];
+        this.lstCtietBcao.forEach(item => {
+            request.push({
+                id: null,
+                fileDinhKemNhans: [],
+                listIdDeleteFileNhans: [],
+                maLoai: "1",
+                maDvi: item.dviNhan,
+                maDviTien: this.maDviTien,
+                maCapUngVonTuCapTren: maCvUvDuoi,
+                ngayLap: this.ngayTaoTemp,
+                ngayNhan: null,
+                loaiCap: item.loai,
+                noiDung: item.noiDung,
+                maNguonNs: item.maNguonNs,
+                nienDoNs: item.nienDoNs,
+                soTien: mulMoney(item.tongSoTien, this.maDviTien),
+                nopThue: mulMoney(item.nopThue, this.maDviTien),
+                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
+                soTienBangChu: item.soTienBangChu,
+                tkNhan: null,
+                trangThai: "1",
+                thuyetMinh: "",
+            })
+        })
+        this.quanLyVonPhiService.capTatCa(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
     async showDialogCopy() {

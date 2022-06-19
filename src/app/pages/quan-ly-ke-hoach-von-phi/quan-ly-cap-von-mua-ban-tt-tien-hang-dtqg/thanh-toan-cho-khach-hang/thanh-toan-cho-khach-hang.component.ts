@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_VON, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
+import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 
 export class ItemGui {
@@ -37,6 +38,7 @@ export class ItemGui {
 export class ThanhToanChoKhachHangComponent implements OnInit {
     //thong tin dang nhap
     id: any;
+    loai: any;
     userInfo: any;
     //thong tin chung bao cao
     maThanhToan: string;
@@ -56,6 +58,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     maDviTien: string;
     //danh muc
     donVis: any[] = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
     status: boolean = false;
@@ -110,6 +113,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         let userName = this.userService.getUserName();
@@ -266,6 +270,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.maThanhToan = data.data.maThanhToan;
@@ -281,6 +286,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                     this.ngayThanhToan = this.datePipe.transform(this.ttGui.ngayThanhToan, Utils.FORMAT_DATE_STR);
                     this.trangThaiBanGhi = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh;
+                    this.ttGuiCache = this.ttGui;
                     this.lstFiles = data.data.lstFileGuis;
                     this.listFile = [];
                 } else {
@@ -390,7 +396,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/'
+                            'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/thanh-toan-cho-khach-hang/0/'
                             + data.data.id,
                         ]);
                     } else {
@@ -451,13 +457,12 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThaiBanGhi);
+        return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
     close() {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-thanh-toan-cho-khach-hang/0'
+            '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-thanh-toan-cho-khach-hang/'+this.loai
         ]);
     }
 

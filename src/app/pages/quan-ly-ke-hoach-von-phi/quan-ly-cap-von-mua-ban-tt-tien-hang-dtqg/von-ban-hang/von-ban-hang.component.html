@@ -241,7 +241,8 @@
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                                    [disabled]="ttGui.fileList.length === 0" [hidden]="statusGui" style="margin-top: 16px">
+                                    [disabled]="ttGui.fileList.length === 0" [hidden]="statusGui"
+                                    style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -275,90 +276,98 @@
                             </div>
                         </div>
                     </nz-tab>
-                    <nz-tab [nzTitle]="'Thông tin nơi nhận'" [nzDisabled]="statusBtnParent">
-                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <ng-container *ngIf="statusNhan; else nhap">
-                                <div nz-col nzSpan="6">
-                                    <label class="search__label">
-                                        Ngày nhận lệnh chuyển có: <span>{{ngayNhan}}</span>
-                                    </label>
-                                </div>
-                                <div nz-col nzSpan="6">
-                                    <label class="search__label">
-                                        Tài khoản nhận: <span>{{ttNhan.taiKhoanNhan}}</span>
-                                    </label>
-                                </div>
-                            </ng-container>
-                            <ng-template #nhap>
-                                <div nz-col nzSpan="6">
-                                    <label class="search__label">Ngày nhận lệnh chuyển có</label>
-                                    <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
-                                        (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
-                                        [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
-                                    </nz-date-picker>
-                                </div>
-                                <div nz-col nzSpan="6">
-                                    <label class="search__label">Tài khoản nhận</label>
-                                    <nz-input-number class="search__input"
-                                        [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' "
-                                        nzSize="small" [(ngModel)]="ttNhan.taiKhoanNhan">
-                                    </nz-input-number>
-                                </div>
-                            </ng-template>
-                            <div nz-col nzSpan="12">
-                            </div>
-                            <div nz-col nzSpan="24" style="margin-top: 10px;">
-                                <label class="search__label">Thuyết minh</label>
-                                <textarea rows="2" nz-input [(ngModel)]="ttNhan.thuyetMinh"></textarea>
-                            </div>
-                        </div>
-                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div nz-col class="gutter-row" [nzSpan]="3">
-                                Danh sách văn bản đính kèm
-                                <nz-upload [(nzFileList)]="ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
-                                    [hidden]="statusNhan">
-                                    <button nz-button>
-                                        <i nz-icon nzType="upload"></i>
-                                        Select File
-                                    </button>
-                                </nz-upload>
-                                <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
-                                    [disabled]="ttNhan.fileList.length === 0" [hidden]="statusNhan" style="margin-top: 16px">
-                                    Thêm vào danh sách
-                                </button>
-                            </div>
-                        </div>
-                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div nz-col class="gutter-row" [nzSpan]="12">
-                                <nz-table nzBordered class="table__body">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên file</th>
-                                            <th></th>
-                                            <th class="th" [hidden]="statusNhan"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let data of ttNhan.lstFiles; let i = index">
-                                            <td>{{ i + 1 }} </td>
-                                            <td>{{ data.fileName }}</td>
-                                            <td>
-                                                <button class="btn btn-function"
-                                                    (click)="downloadFileNhan(data.id)">Xem</button>
-                                            </td>
-                                            <td [hidden]="statusNhan">
-                                                <button class="btn btn-function"
-                                                    (click)="deleteFileNhan(data.id)">Xóa</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </nz-table>
-                            </div>
-                        </div>
-                    </nz-tab>
                 </nz-tabset>
             </div>
+            <ng-container *ngIf="!statusBtnParent">
+                <div class="tab__container">
+                    <nz-tabset nzType="card" class="tab__container">
+                        <nz-tab [nzTitle]="'Thông tin nơi nhận'">
+                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                                <ng-container *ngIf="statusNhan; else nhap">
+                                    <div nz-col nzSpan="6">
+                                        <label class="search__label">
+                                            Ngày nhận lệnh chuyển có: <span>{{ngayNhan}}</span>
+                                        </label>
+                                    </div>
+                                    <div nz-col nzSpan="6">
+                                        <label class="search__label">
+                                            Tài khoản nhận: <span>{{ttNhan.taiKhoanNhan}}</span>
+                                        </label>
+                                    </div>
+                                </ng-container>
+                                <ng-template #nhap>
+                                    <div nz-col nzSpan="6">
+                                        <label class="search__label">Ngày nhận lệnh chuyển có</label>
+                                        <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
+                                            (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
+                                            [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
+                                        </nz-date-picker>
+                                    </div>
+                                    <div nz-col nzSpan="6">
+                                        <label class="search__label">Tài khoản nhận</label>
+                                        <nz-input-number class="search__input"
+                                            [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' " nzSize="small"
+                                            [(ngModel)]="ttNhan.taiKhoanNhan">
+                                        </nz-input-number>
+                                    </div>
+                                </ng-template>
+                                <div nz-col nzSpan="12">
+                                </div>
+                                <div nz-col nzSpan="24" style="margin-top: 10px;">
+                                    <label class="search__label">Thuyết minh</label>
+                                    <textarea rows="2" nz-input [(ngModel)]="ttNhan.thuyetMinh"></textarea>
+                                </div>
+                            </div>
+                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                                <div nz-col class="gutter-row" [nzSpan]="3">
+                                    Danh sách văn bản đính kèm
+                                    <nz-upload [(nzFileList)]="ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
+                                        [hidden]="statusNhan">
+                                        <button nz-button>
+                                            <i nz-icon nzType="upload"></i>
+                                            Select File
+                                        </button>
+                                    </nz-upload>
+                                    <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
+                                        [disabled]="ttNhan.fileList.length === 0" [hidden]="statusNhan"
+                                        style="margin-top: 16px">
+                                        Thêm vào danh sách
+                                    </button>
+                                </div>
+                            </div>
+                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                                <div nz-col class="gutter-row" [nzSpan]="12">
+                                    <nz-table nzBordered class="table__body">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên file</th>
+                                                <th></th>
+                                                <th class="th" [hidden]="statusNhan"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let data of ttNhan.lstFiles; let i = index">
+                                                <td>{{ i + 1 }} </td>
+                                                <td>{{ data.fileName }}</td>
+                                                <td>
+                                                    <button class="btn btn-function"
+                                                        (click)="downloadFileNhan(data.id)">Xem</button>
+                                                </td>
+                                                <td [hidden]="statusNhan">
+                                                    <button class="btn btn-function"
+                                                        (click)="deleteFileNhan(data.id)">Xóa</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </div>
+                            </div>
+                        </nz-tab>
+                    </nz-tabset>
+                </div>
+            </ng-container>
+
             <div class="ghi-chu">
                 <nz-form-label nzRequired [nzNoColon]="true">
                     Ghi chú

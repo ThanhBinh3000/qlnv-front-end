@@ -25,7 +25,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maCvUv: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 		tuNgay: null,
 		denNgay: null,
 		maTienThua: "",
@@ -111,7 +111,6 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 
 	async getDanhSachCapVon() {
 		let requestReport = {
-			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: "",
 			maDvi: this.userInfo?.dvql,
 			maLoai: "1",
@@ -122,7 +121,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 				limit: 1000,
 				page: 1,
 			},
-			trangThais: [Utils.TT_BC_7],
+			trangThai: Utils.TT_BC_7,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
@@ -143,10 +142,10 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		this.statusNew =true;
-		let trangThais = [];
-		if (this.searchFilter.trangThai) {
-			trangThais = [this.searchFilter.trangThai];
-		}
+		// let trangThais = [];
+		// if (this.searchFilter.trangThai) {
+		// 	trangThais = [this.searchFilter.trangThai];
+		// }
 		let requestReport = {
 			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
@@ -160,7 +159,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: trangThais,
+			trangThai: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
@@ -217,12 +216,12 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + this.loai + '/' + id,
 		])
 	}
 
 	getStatusName(trangThai: string) {
-		return this.trangThais.find(e => e.id == trangThai).tenDm;
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
 	xoaBaoCao(id: any) {
@@ -253,6 +252,8 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	}
 
 	close() {
-		this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg'
+		])
 	}
 }

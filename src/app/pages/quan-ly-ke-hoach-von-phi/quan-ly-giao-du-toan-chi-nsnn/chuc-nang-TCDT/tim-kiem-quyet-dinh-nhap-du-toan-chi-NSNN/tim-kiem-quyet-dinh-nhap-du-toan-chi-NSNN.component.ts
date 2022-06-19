@@ -87,7 +87,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
         searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
         searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     this.spinner.show();
-    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachQuyetDinh = data.data.content;

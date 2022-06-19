@@ -147,7 +147,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 			return;
 		}
 		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + this.searchFilter.maDviTao + '/' + this.searchFilter.qdChiTieu
+			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/0/' + this.searchFilter.maDviTao + '/' + this.searchFilter.qdChiTieu
 		])
 	}
 
