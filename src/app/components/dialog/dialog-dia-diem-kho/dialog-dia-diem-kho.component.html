@@ -11,9 +11,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of deXuatCucTable.data, let i = index">
-        <td>{{data.tenDvi}}</td>
-        <td>{{data.sumTang}}</td>
-        <td>{{data.sumGiam}}</td>
+        <td>{{data.tenTongKho}}</td>
+        <td>{{data.sumTang ?? 0 | number: '1.0-1'}}</td>
+        <td>{{data.sumGiam ?? 0 | number: '1.0-1'}}</td>
         <td>
           <a (click)="editDeXuat(data)">
             <i class="fa fa-pencil"></i>

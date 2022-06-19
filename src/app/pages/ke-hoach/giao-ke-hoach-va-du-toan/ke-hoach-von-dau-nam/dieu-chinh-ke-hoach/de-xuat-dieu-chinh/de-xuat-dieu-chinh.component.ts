@@ -99,7 +99,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
       }
       await Promise.all([
         this.search(),
-        this.loadDonVi(),
+        // this.loadDonVi(),
       ]);
       this.spinner.hide();
     } catch (e) {

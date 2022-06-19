@@ -63,6 +63,9 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   async ngOnInit() {
     await this.loadTreeKho();
     await this.loadDonVi();
+    if (this.data && this.data.length > 0) {
+      this.loadDataTree(this.data);
+    }
   }
 
   async loadDonVi() {
@@ -104,7 +107,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     await this.loadDiemKho(this.selectedDonVi.id);
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.searchData = {
       maDvi: '',
       maDiemKho: '',
@@ -113,10 +116,11 @@ export class DialogDiaDiemKhoComponent implements OnInit {
       maNganLo: '',
     }
     this.inputDonVi = '';
+    await this.loadTreeKho();
   }
 
   handleOk() {
-    this._modalRef.close();
+    this._modalRef.close(this.deXuatCuc);
   }
 
   handleCancel() {
@@ -245,6 +249,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   }
 
   async loadTreeKho() {
+    this.dataTreeKho = [];
     let res = await this.tinhTrangKhoHienThoiService.getTreeKho();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
@@ -310,7 +315,8 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     }
   }
 
-  search() {
+  async search() {
+    await this.loadTreeKho();
     let dataTree = [];
     if (this.searchData.maDvi && this.searchData.maDvi != '') {
       let getDataChiCuc = this.dataTreeKho.filter(x => x.maTongKho == this.searchData.maDvi);
@@ -335,6 +341,8 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     else {
       dataTree = this.dataTreeKho;
     }
+    this.sumGiam = 0;
+    this.sumTang = 0;
     this.listOfMapData = dataTree;
     this.listOfMapDataClone = [...this.listOfMapData];
     this.listOfMapData.forEach((item) => {
@@ -347,7 +355,17 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   }
 
   editDeXuat(data: any) {
-
+    this.listOfMapData = [];
+    this.listOfMapData = [
+      ...this.listOfMapData,
+      data
+    ]
+    this.listOfMapDataClone = [...this.listOfMapData];
+    this.listOfMapData.forEach((item) => {
+      this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+    });
+    this.sumGiam = data.sumGiam;
+    this.sumTang = data.sumTang;
   }
 
   deleteDeXuat(data: any) {
@@ -381,7 +399,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     if (this.deXuatCuc && this.deXuatCuc.length > 0) {
       let index = this.deXuatCuc.findIndex(x => x.id == data.id);
       if (index != -1) {
-        this.deXuatCuc = this.deXuatCuc.splice(index, 1);
+        this.deXuatCuc.splice(index, 1);
       }
     }
     else {
@@ -393,9 +411,21 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   getSetDataTree(type: string, data: any, item?: any) {
     let sumTang = 0;
     let sumGiam = 0;
+    let dataUpdate = [];
     if (data && data.child && data.child.length > 0) {
+      let itemUpdate = {
+        maDvi: '',
+        maDiemKho: '',
+        maNhaKho: '',
+        maNganKho: '',
+        maLoKho: '',
+        soLuongGiam: 0,
+        soLuongTang: 0
+      };
+      itemUpdate.maDvi = data.maTongKho;
       let hasItem = false;
       data.child.forEach(elementDiemKho => {
+        itemUpdate.maDiemKho = elementDiemKho.maDiemkho;
         if (item && type == 'set' && item.maDiemkho && elementDiemKho.maDiemkho == item.maDiemkho) {
           elementDiemKho.slTang = item.slTang ?? 0;
           elementDiemKho.slGiam = item.slGiam ?? 0;
@@ -403,6 +433,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
         }
         else if (elementDiemKho && elementDiemKho.child && elementDiemKho.child.length > 0) {
           elementDiemKho.child.forEach(elementNhaKho => {
+            itemUpdate.maNhaKho = elementNhaKho.maNhakho;
             if (item.maNhakho && elementNhaKho.maNhakho == item.maNhakho) {
               elementNhaKho.slTang = item.slTang ?? 0;
               elementNhaKho.slGiam = item.slGiam ?? 0;
@@ -410,6 +441,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
             }
             else if (elementNhaKho && elementNhaKho.child && elementNhaKho.child.length > 0) {
               elementNhaKho.child.forEach(elementNganKho => {
+                itemUpdate.maNganKho = elementNganKho.maNgankho;
                 if (item.maNgankho && elementNganKho.maNgankho == item.maNgankho) {
                   elementNganKho.slTang = item.slTang ?? 0;
                   elementNganKho.slGiam = item.slGiam ?? 0;
@@ -417,41 +449,58 @@ export class DialogDiaDiemKhoComponent implements OnInit {
                 }
                 else if (elementNganKho && elementNganKho.child && elementNganKho.child.length > 0) {
                   elementNganKho.child.forEach(elementNganLo => {
+                    itemUpdate.maLoKho = elementNganLo.maNganlo;
                     if (item.maNganlo && elementNganLo.maNganlo == item.maNganlo) {
                       elementNganLo.slTang = item.slTang ?? 0;
                       elementNganLo.slGiam = item.slGiam ?? 0;
                       hasItem = true;
                     }
-                    else if (elementNganLo.slTang || elementNganLo.slGiam) {
+                    else if ((elementNganLo.slTang || elementNganLo.slGiam) && type == 'get') {
                       sumTang = sumTang + (elementNganLo.slTang ?? 0);
                       sumGiam = sumGiam + (elementNganLo.slGiam ?? 0);
+                      itemUpdate.soLuongTang = elementNganLo.slTang;
+                      itemUpdate.soLuongGiam = elementNganLo.slGiam;
+                      let add = cloneDeep(itemUpdate);
+                      dataUpdate = [...dataUpdate, add];
                     }
                     if (hasItem && type == 'set') {
                       return;
                     }
                   });
                 }
-                else if (elementNganKho.slTang || elementNganKho.slGiam) {
+                else if ((elementNganKho.slTang || elementNganKho.slGiam) && type == 'get') {
                   sumTang = sumTang + (elementNganKho.slTang ?? 0);
                   sumGiam = sumGiam + (elementNganKho.slGiam ?? 0);
+                  itemUpdate.soLuongTang = elementNganKho.slTang;
+                  itemUpdate.soLuongGiam = elementNganKho.slGiam;
+                  let add = cloneDeep(itemUpdate);
+                  dataUpdate = [...dataUpdate, add];
                 }
                 if (hasItem && type == 'set') {
                   return;
                 }
               });
             }
-            else if (elementNhaKho.slTang || elementNhaKho.slGiam) {
+            else if ((elementNhaKho.slTang || elementNhaKho.slGiam) && type == 'get') {
               sumTang = sumTang + (elementNhaKho.slTang ?? 0);
               sumGiam = sumGiam + (elementNhaKho.slGiam ?? 0);
+              itemUpdate.soLuongTang = elementNhaKho.slTang;
+              itemUpdate.soLuongGiam = elementNhaKho.slGiam;
+              let add = cloneDeep(itemUpdate);
+              dataUpdate = [...dataUpdate, add];
             }
             if (hasItem && type == 'set') {
               return;
             }
           });
         }
-        else if (elementDiemKho.slTang || elementDiemKho.slGiam) {
+        else if ((elementDiemKho.slTang || elementDiemKho.slGiam) && type == 'get') {
           sumTang = sumTang + (elementDiemKho.slTang ?? 0);
           sumGiam = sumGiam + (elementDiemKho.slGiam ?? 0);
+          itemUpdate.soLuongTang = elementDiemKho.slTang;
+          itemUpdate.soLuongGiam = elementDiemKho.slGiam;
+          let add = cloneDeep(itemUpdate);
+          dataUpdate = [...dataUpdate, add];
         }
         if (hasItem && type == 'set') {
           return;
@@ -461,7 +510,47 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     if (type == 'get') {
       data.sumTang = sumTang;
       data.sumGiam = sumGiam;
+      data.dataUpdate = dataUpdate;
       return data;
+    }
+  }
+
+  loadDataTree(data) {
+    this.deXuatCuc = [];
+    if (data && data.length > 0) {
+      const uniqueMaDvi = [...new Set(data.map(item => item.maDvi))];
+      if (uniqueMaDvi && uniqueMaDvi.length > 0) {
+        uniqueMaDvi.forEach(element => {
+          let getDvi = this.dataTreeKho.filter(x => x.maTongKho == element);
+          if (getDvi && getDvi.length > 0) {
+            let itemDvi = getDvi[0];
+            itemDvi.sumTang = 0;
+            itemDvi.sumGiam = 0;
+            if (itemDvi && itemDvi.child && itemDvi.child.length > 0) {
+              itemDvi.dataUpdate = [];
+              let listDataCheck = data.filter(x => x.maDvi == element);
+              listDataCheck.forEach(elementCheck => {
+                if (elementCheck.maDiemKho && elementCheck.maDiemKho != '') {
+                  let indexDiemKho = itemDvi.child.findIndex(x => x.maDiemkho == elementCheck.maDiemKho);
+                  if (indexDiemKho != -1) {
+                    if (elementCheck.maNhaKho && elementCheck.maNhaKho != '' && itemDvi.child[indexDiemKho].child && itemDvi.child[indexDiemKho].child.length > 0) {
+
+                    }
+                    else {
+                      itemDvi.child[indexDiemKho].slTang = elementCheck.soLuongTang;
+                      itemDvi.child[indexDiemKho].slGiam = elementCheck.soLuongGiam;
+                      itemDvi.sumTang = itemDvi.sumTang + elementCheck.soLuongTang;
+                      itemDvi.sumGiam = itemDvi.sumGiam + elementCheck.soLuongGiam;
+                    }
+                  }
+                }
+                itemDvi.dataUpdate.push(elementCheck);
+              });
+              this.deXuatCuc.push(itemDvi);
+            }
+          }
+        });
+      }
     }
   }
 }
