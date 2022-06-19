@@ -1904,6 +1904,7 @@ td.action.ant-table-cell {
   font-size: 14px;
   line-height: 16px;
   color: #828282;
+  text-transform: uppercase;
 }
 
 .title-chi-tieu {
@@ -1979,5 +1980,13 @@ td.action.ant-table-cell {
     background-color: #E3F9F9;
     color: #19797B;
     border: 0;
+  }
+
+  .specical-title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #111111;
   }
 }

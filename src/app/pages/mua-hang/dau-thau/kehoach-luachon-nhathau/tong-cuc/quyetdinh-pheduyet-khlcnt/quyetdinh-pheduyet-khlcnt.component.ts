@@ -73,7 +73,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private userService: UserService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {
@@ -334,6 +334,47 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
+    }
+  }
+
+  deleteSelect() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // if (res.msg == MESSAGE.SUCCESS) {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
 }
