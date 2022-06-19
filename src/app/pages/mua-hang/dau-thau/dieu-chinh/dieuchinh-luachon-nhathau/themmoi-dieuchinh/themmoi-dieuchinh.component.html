@@ -1,0 +1,323 @@
+<div class="luong-thuc__danh-sach them-moi-thong-tin-dau-thau">
+    <div class="contentBor chi-tieu__body">
+        <div class="contentDetail">
+            <div class="main-content">
+                <div class="title-chi-tieu d-flex d-flex justify-content-between align-items-center">
+                    <span class="title-form">Quyết định điều chỉnh kh lcnt</span>
+                    <div class="btn-action">
+                        <button type="button" class="btn btn-do" (click)="huy()">
+                            <i class="icon htvbdh_tcdt_delete"></i>
+                            <span>Hủy bỏ</span>
+                        </button>
+                        <button class="btn btn-sub btn-sm waves-effect waves-light">
+                            <i class="icon htvbdh_tcdt_guiduyet"></i>
+                            <span>Lưu và gửi duyệt</span>
+                        </button>
+                        <button class="btn btn-main btn-sm waves-effect waves-light">
+                            <i class="icon htvbdh_tcdt_save"></i>
+                            <span>Lưu</span>
+                        </button>
+                    </div>
+                </div>
+                <nz-card class="mt16 flex-card p-lr16">
+                    <form [nzLayout]="'vertical'" [formGroup]="formGoiThau" nz-form class="mt-16 mb-16">
+                        <div nz-row [nzGutter]="[18, 6]">
+                            <div nz-col nzSpan="2">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="tenGoiThau" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Số quyết định điều chỉnh KH LCNT </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group nzAddOnAfter="/QĐ-TCDT">
+                                            <input nz-input formControlName="soQdPD" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="10">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Trích yếu
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                                        </nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Ngày QĐ </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                                        </nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                                        </nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="6">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="soQdPD" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="dViTinh" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4" *ngIf="typeHangHoa !== '02'">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="dViTinh" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24" *ngIf="typeHangHoa === '02'">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true"> Quy chuẩn kỹ thuật </nz-form-label>
+                                    <nz-form-control>
+                                        <textarea rows="3" class="search__input" nz-input></textarea>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item class="display-block">
+                                    <nz-form-label [nzNoColon]="true" class="text-left"> Tài liệu đính kèm
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm"
+                                            icon="icon htvbdh_tcdt_tep" type="file" typeFile="tai-lieu-dinh-kem">
+                                        </multiple-tag>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </form>
+                </nz-card>
+                <div class="tab-giao-chi-tieu thong-tin-dau-thau-tab">
+                    <nz-tabset nzType="card" class="tab__container tab-level-3">
+                        <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" *ngIf="typeHangHoa !== '02'">
+                            <form [nzLayout]="'vertical'" [formGroup]="formGoiThau" nz-form
+                                class="mt-16 mb-16 tt-chung-form">
+                                <div nz-row [nzGutter]="[16, 12]">
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Hình thức lựa chọn nhà thầu
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                </nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-select formControlName="nhaThauTthao">
+                                                    <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.ten"
+                                                        [nzLabel]="p.ten">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Loại hợp đồng
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <input nz-input />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Nguồn vốn
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-input-group>
+                                                    <input nz-input />
+                                                </nz-input-group>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu TCLNT (thời gian phát
+                                                hành HSMT)
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                </nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Thời điểm đóng thầu
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                </nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Thời điểm mở thầu
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                </nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="6"></div>
+                                    <div nz-col [nzSpan]="6">
+                                        <nz-form-item>
+                                            <nz-form-label [nzNoColon]="true"> Thời gian hoàn thành nhập hàng duyệt
+                                            </nz-form-label>
+                                            <nz-form-control>
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                </nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                            </form>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="'Phụ lục điều chỉnh KH LCNT'" class="tt-chung__container"
+                            *ngIf="typeHangHoa !== '02'">
+                            <nz-card class="mt16 flex-card p-lr16">
+                                <nz-table #groupingTable #editRowTable nzBordered class="nowrap"
+                                    [nzFrontPagination]="false" [nzShowPagination]="false"
+                                    [nzData]="listDiaDiemNhapHang">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Cục DTNN KV</th>
+                                            <th>Số gói thầu</th>
+                                            <th>Số tờ trình</th>
+                                            <th>Ngày ký</th>
+                                            <th>Số lượng (Tấn)</th>
+                                            <th>Tổng tiền gồm thuế (đồng)</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Cục DTNN KN Vĩnh Phú</td>
+                                            <td>4</td>
+                                            <td>DX_KHCNT_01</td>
+                                            <td>10/03/2022</td>
+                                            <td>2000</td>
+                                            <td>42.000.000</td>
+                                            <td>
+                                                <a>
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a>
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </nz-card>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="'Phụ lục điều chỉnh KH LCNT'" class="tt-chung__container"
+                            *ngIf="typeHangHoa === '02'">
+                            <nz-card class="mt16 flex-card p-lr16">
+                                <nz-table #groupingTable #editRowTable nzBordered class="nowrap"
+                                    [nzFrontPagination]="false" [nzShowPagination]="false"
+                                    [nzData]="listDiaDiemNhapHang">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label nz-checkbox nz-checkbox></label>
+                                            </th>
+                                            <th>STT</th>
+                                            <th>Tên gói thầu</th>
+                                            <th>Giá bao gồm thuế (đồng)</th>
+                                            <th>Nguồn vốn</th>
+                                            <th>Hình thức LCNT</th>
+                                            <th>Phương thức LCNT</th>
+                                            <th>Thời gian bắt đầu TCLCNT</th>
+                                            <th>Loại hợp đồng</th>
+                                            <th>Thời gian THHĐ (Ngày)</th>
+                                            <th>Địa điểm nhập</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>
+                                                <label nz-checkbox nz-checkbox></label>
+                                            </th>
+                                            <td>1</td>
+                                            <td>Gói thầu số 01: Mua 1.250 bộ nhà bạt</td>
+                                            <td>13.000.625.000</td>
+                                            <td>Ngân sách nhà nước</td>
+                                            <td>Đấu thầu rộng rãi trong nước</td>
+                                            <td>Một giai đoạn hai túi hồ sơ</td>
+                                            <td>Quý II năm 2021</td>
+                                            <td>Hợp đồng trọn gói</td>
+                                            <td>240</td>
+                                            <td>Hà Nội (200 bộ), Hoàng Liên Sơn (150 bộ)</td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </nz-card>
+                        </nz-tab>
+                    </nz-tabset>
+                    <form nzLayout="vertical" nz-form class="mt-16">
+                        <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true">
+                                Ghi chú
+                            </nz-form-label>
+                            <nz-form-control>
+                                <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,40 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-themmoi-thongtin-dauthau',
-  templateUrl: './themmoi-thongtin-dauthau.component.html',
-  styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
+  selector: 'app-themmoi-dieuchinh',
+  templateUrl: './themmoi-dieuchinh.component.html',
+  styleUrls: ['./themmoi-dieuchinh.component.scss']
 })
-export class ThemmoiThongtinDauthauComponent implements OnInit {
+export class ThemMoiDieuChinhComponent implements OnInit {
   @Input() isViewDetail: boolean;
-
+  @Input() typeHangHoa: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService,
+    private userService: UserService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private routerActive: ActivatedRoute,
     public globals: Globals,
@@ -202,8 +195,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau']);
   }
 
-  quayLaiDauThau() {
-    this.isDetail = false;
+  huy() {
+    this.showListEvent.emit();
   }
 
   async phuongThucDauThauGetAll() {
