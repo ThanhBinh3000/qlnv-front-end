@@ -21,7 +21,7 @@ export class ItemDataMau02 {
     stt = '0';
     checked = false;
     level = 0;
-    
+
     maVtu = null;
     maVtuCha = null;
     maDviTinh = null;
@@ -65,7 +65,7 @@ export class BaoCao02Component implements OnInit {
     denNgay: any;
     listIdDelete: string = "";
     trangThaiPhuLuc: string = '1';
-    idBaoCao:string;        //id bao cao to
+    idBaoCao: string;        //id bao cao to
     //trang thai cac nut
     status: boolean = false;
     statusBtnFinish: boolean;
@@ -73,6 +73,20 @@ export class BaoCao02Component implements OnInit {
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
+
+    khSoLuongDv = 0;
+    khGiaMuaTdDv = 0;
+    khTtienDv = 0;
+    thSoLuongDv = 0;
+    thGiaMuaTdDv = 0;
+    thTtienDv = 0;
+    khSoLuongTc = 0;
+    khGiaMuaTdTc = 0;
+    khTtienTc = 0;
+    thSoLuongTc = 0;
+    thGiaMuaTdTc = 0;
+    thTtienTc = 0;
+    tongDvTc = 0;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -141,6 +155,7 @@ export class BaoCao02Component implements OnInit {
                 await this.sortByIndex();
             }
         }
+        this.changeModel();
         let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
@@ -183,14 +198,14 @@ export class BaoCao02Component implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string,dauMuc:string): string {
+    getChiMuc(str: string, dauMuc: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             var xau: string = "";
             let chiSo: any = str.split('.');
             var n: number = chiSo.length - 1;
             var k: number = parseInt(chiSo[n], 10);
-            if(dauMuc == '1'){
+            if (dauMuc == '1') {
                 if (n == 0) {
                     xau = chiSo[n];
                 };
@@ -204,7 +219,7 @@ export class BaoCao02Component implements OnInit {
                     xau = "-";
                 }
                 return xau;
-            }else if(dauMuc == '2'){
+            } else if (dauMuc == '2') {
                 if (n == 0) {
                     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
                 };
@@ -215,7 +230,7 @@ export class BaoCao02Component implements OnInit {
                     xau = "-";
                 }
                 return xau;
-            }else if(dauMuc == '3'){
+            } else if (dauMuc == '3') {
                 if (n == 0) {
                     xau = String.fromCharCode(k + 96);
                 }
@@ -223,12 +238,12 @@ export class BaoCao02Component implements OnInit {
                     xau = "-";
                 }
                 return xau;
-            }else if(dauMuc == '4'){
+            } else if (dauMuc == '4') {
                 if (n == 0) {
                     xau = "-";
                 }
                 return xau;
-            }else{
+            } else {
                 if (n == 0) {
                     for (var i = 0; i < this.soLaMa.length; i++) {
                         while (k >= this.soLaMa[i].gTri) {
@@ -250,7 +265,7 @@ export class BaoCao02Component implements OnInit {
                     xau = "-";
                 }
                 return xau;
-            } 
+            }
         }
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
@@ -420,7 +435,7 @@ export class BaoCao02Component implements OnInit {
                 }
             }
         }
-        
+
         // them moi phan tu
         if (initItem?.id) {
             let item = {
@@ -498,7 +513,7 @@ export class BaoCao02Component implements OnInit {
     }
 
     // luu thay doi
-    saveEdit(id: string, phuLuc: string): void {
+    async saveEdit(id: string, phuLuc: string): Promise<void> {
         if (!this.editCache[id].data.maVtu) {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
             return;
@@ -508,7 +523,8 @@ export class BaoCao02Component implements OnInit {
         const index = baoCao.findIndex(item => item.id == id); // lay vi tri hang minh sua
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.sum(baoCao[index].stt, phuLuc);
+        await this.sum(baoCao[index].stt, phuLuc);
+        this.changeModel();
     }
 
     updateChecked(id: any, phuLuc: string) {
@@ -778,8 +794,9 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        baoCaoChiTietTemp.tuNgay = this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR);
-        baoCaoChiTietTemp.denNgay = this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR);
+        debugger
+        baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
+        baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
         let checkMoneyRange = true;
         let checkPersonReport = true;
 
@@ -850,6 +867,43 @@ export class BaoCao02Component implements OnInit {
     changeModel02(id: string, loaiList: any) {
         this.editCache[id].data.khTtien = Number(this.editCache[id].data.khSoLuong) * Number(this.editCache[id].data.khGiaMuaTd);
         this.editCache[id].data.thTtien = Number(this.editCache[id].data.thSoLuong) * Number(this.editCache[id].data.thGiaMuaTd);
+
+    }
+
+    async changeModel() {
+        this.khSoLuongDv = 0;
+        this.khGiaMuaTdDv = 0;
+        this.khTtienDv = 0;
+        this.thSoLuongDv = 0;
+        this.thGiaMuaTdDv = 0;
+        this.thTtienDv = 0;
+        this.khSoLuongTc = 0;
+        this.khGiaMuaTdTc = 0;
+        this.khTtienTc = 0;
+        this.thSoLuongTc = 0;
+        this.thGiaMuaTdTc = 0;
+        this.thTtienTc = 0;
+        await this.lstCtietBcao021.forEach(element => {
+            if (element?.stt?.split('.').length == 2) {
+                this.khSoLuongDv += Number(element.khSoLuong);
+                this.khGiaMuaTdDv += Number(element.khGiaMuaTd);
+                this.khTtienDv += Number(element.khTtien);
+                this.thSoLuongDv += Number(element.thSoLuong);
+                this.thGiaMuaTdDv += Number(element.thGiaMuaTd);
+                this.thTtienDv += Number(element.thTtien);
+            }
+        })
+        await this.lstCtietBcao022.forEach(element => {
+            if (element?.stt?.split('.').length == 2) {
+                this.khSoLuongTc += Number(element.khSoLuong);
+                this.khGiaMuaTdTc += Number(element.khGiaMuaTd);
+                this.khTtienTc += Number(element.khTtien);
+                this.thSoLuongTc += Number(element.thSoLuong);
+                this.thGiaMuaTdTc += Number(element.thGiaMuaTd);
+                this.thTtienTc += Number(element.thTtien);
+            }
+        });
+        this.tongDvTc = Number(this.thTtienDv) + Number(this.thTtienTc);
     }
 
     sum(stt: string, phuLuc) {
@@ -888,8 +942,8 @@ export class BaoCao02Component implements OnInit {
         // this.getTotal();
     }
 
-    export(){
-        this.quanLyVonPhiService.exportBaoCao(this.id,this.idBaoCao).toPromise().then(
+    export() {
+        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '02/BCN.xlsx');
             },
