@@ -305,7 +305,7 @@
                       <i class="fa fa-trash-o"></i>
                       <span>Xóa</span>
                     </button>
-                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0 && tabSelected != '1'">
+                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0">
                       <button type="button" class="btn btn-main" (click)="addLine(null,'1111')" [hidden]="status">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
@@ -476,115 +476,14 @@
                       <td [hidden]="status" nzRight></td>
                       <td [hidden]="status" nzRight></td>
                     </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Khoản ...</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td [hidden]="status" nzRight></td>
-                      <td [hidden]="status" nzRight></td>
-                      <td [hidden]="status" nzRight></td>
-                      <td [hidden]="status" nzRight></td>
-                    </tr>
-                    <tr>
-                      <td>1.1</td>
-                      <td>KP thường xuyên/tự chủ</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td [hidden]="status" nzRight></td>
-                      <td [hidden]="status" nzRight></td>
-                      <td [hidden]="status" nzRight>
-                        <i class="fa fa-plus" (click)="addLine(null,'11')"></i>
-                      </td>
-                      <td [hidden]="status" nzRight></td>
-                    </tr>
-                    <tr *ngFor="let data of danhSachChiTietPhuLuc11Temp; let i = index">
+                    
+                    <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,'4')}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let itemDetail of noiDungs">
+                          <div *ngFor="let itemDetail of noiDungFull">
                             <div *ngIf="itemDetail.id == data.maNdung">
                               {{itemDetail.tenDm}}
                             </div>
@@ -634,27 +533,27 @@
                         <td>{{data.luyKeGiaiNganCkTle}}</td>
 
                         <td [hidden]="status">
-                          <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'11')"></i>
+                          <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'1111')"></i>
                         </td>
                         <td [hidden]="status">
-                          <ng-container *ngIf="!getLowStatus(data.stt,'11')">
+                          <ng-container *ngIf="!getLowStatus(data.stt,'1111')">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                           </ng-container>
                         </td>
                         <td [hidden]="status">
-                          <i class="fa fa-plus" (click)="addLine(data.id,'11')"></i>
+                          <i class="fa fa-plus" (click)="addLine(data.id,'1111')"></i>
                         </td>
                         <td [hidden]="status">
                           <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                            (ngModelChange)="updateChecked(data.id,'11')"></label>
+                            (ngModelChange)="updateChecked(data.id,'1111')"></label>
                         </td>
                       </ng-container>
                       <ng-template #editTemplate>
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,'4')}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let itemDetail of noiDungs">
+                          <div *ngFor="let itemDetail of noiDungFull">
                             <div *ngIf="itemDetail.id == data.maNdung">
                               {{itemDetail.tenDm}}
                             </div>
@@ -880,24 +779,24 @@
                           </nz-input-number>
                         </td>
                         <td [hidden]="status">
-                          <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'11')"></i>
+                          <i class="fa fa-trash-o do" (click)="deleteLine(data.id,'1111')"></i>
                         </td>
                         <td>
-                          <a (click)="saveEdit(data.id,'11')" class="save">Lưu</a>
+                          <a (click)="saveEdit(data.id,'1111')" class="save">Lưu</a>
                         </td>
                         <td [hidden]="status">
                           <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                            (nzOnConfirm)="cancelEdit(data.id,'11')" class="save">
+                            (nzOnConfirm)="cancelEdit(data.id,'1111')" class="save">
                             Hủy
                           </a>
                         </td>
                         <td [hidden]="status">
                           <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                            (ngModelChange)="updateChecked(data.id,'11')"></label>
+                            (ngModelChange)="updateChecked(data.id,'1111')"></label>
                         </td>
                       </ng-template>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>1.2</td>
                       <td>KP không thường xuyên/không tự chủ</td>
                       <td></td>
@@ -955,7 +854,7 @@
                           {{getChiMuc(data.stt,'4')}}
                         </td>
                         <td>
-                          <div *ngFor="let itemDetail of noiDungs">
+                          <div *ngFor="let itemDetail of noiDungFull">
                             <div *ngIf="itemDetail.id == data.maNdung">
                               {{itemDetail.tenDm}}
                             </div>
@@ -1025,7 +924,7 @@
                           {{getChiMuc(data.stt,'4')}}
                         </td>
                         <td>
-                          <div *ngFor="let itemDetail of noiDungs">
+                          <div *ngFor="let itemDetail of noiDungFull">
                             <div *ngIf="itemDetail.id == data.maNdung">
                               {{itemDetail.tenDm}}
                             </div>
@@ -1267,7 +1166,7 @@
                             (ngModelChange)="updateChecked(data.id,'12')"></label>
                         </td>
                       </ng-template>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </nz-table>
               </div>
@@ -1309,7 +1208,7 @@
                       <i class="fa fa-trash-o"></i>
                       <span>Xóa</span>
                     </button>
-                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0 && tabSelected != '1'">
+                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0">
                       <button type="button" class="btn btn-main" (click)="addLine(null,'1111')" [hidden]="status">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
@@ -1492,7 +1391,7 @@
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,null)}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
                           <div *ngFor="let item of noiDungs">
@@ -1539,10 +1438,10 @@
                       </ng-container>
                       <ng-template #editTemplate>
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,null)}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let item of noiDungs">
+                          <div *ngFor="let item of noiDungFull">
                             <div *ngIf="item.id == data.maNdung">
                               {{item.tenDm}}
                             </div>
@@ -1705,7 +1604,7 @@
                       <i class="fa fa-trash-o"></i>
                       <span>Xóa</span>
                     </button>
-                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0 && tabSelected != '1'">
+                    <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0">
                       <button type="button" class="btn btn-main" (click)="addLine(null,'1111')" [hidden]="status">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
@@ -2054,7 +1953,7 @@
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,null)}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
                           <div *ngFor="let item of maDans">
@@ -2134,7 +2033,7 @@
                       </ng-container>
                       <ng-template #editTemplate>
                         <td [nzIndentSize]="data.level * 8">
-                          {{getChiMuc(data.stt,null)}}
+                          {{getChiMuc(data.stt)}}
                         </td>
                         <td>
                           <div *ngFor="let item of maDans">
@@ -2369,36 +2268,6 @@
           </nz-tab>
         </nz-tabset>
       </div>
-
-      <!-- Action Table chi tiết phụ lục I, II, III -->
-      <ng-template #tableCard3>
-        <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
-          <i class="fa fa-trash-o"></i>
-          <span>Xóa</span>
-        </button>
-        <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0 && tabSelected != '1'">
-          <button type="button" class="btn btn-main" (click)="addLine(null,'1111')" [hidden]="status">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-        </ng-container>
-        <!-- <button type="button" class="btn btn-sub" [hidden]="status">
-          <i class="icon htvbdh_tcdt_import"></i>
-          <span>Import</span>
-        </button> -->
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
-          <span>OK</span>
-        </button>
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
-          <span>Not OK</span>
-        </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
-          <span>Lưu</span>
-        </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('5');" [hidden]="statusBtnFinish">
-          <span>Hoàn tất nhập liệu</span>
-        </button>
-      </ng-template>
     </div>
   </div>
 </div>

@@ -82,7 +82,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     this.searchFilter.thangBcao = date.getMonth();
     date.setMonth(date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = date.toDateString();
-    this.trangThai = '1';
     this.searchFilter.maLoaiBcao = '526';
     this.onSubmit();
     //lay danh sach danh muc

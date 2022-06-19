@@ -252,36 +252,77 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
+    getChiMuc(str: string, dauMuc: string, dauMucCha:string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             var xau: string = "";
             let chiSo: any = str.split('.');
             var n: number = chiSo.length - 1;
             var k: number = parseInt(chiSo[n], 10);
-            if (n == 0) {
-                for (var i = 0; i < this.soLaMa.length; i++) {
-                    while (k >= this.soLaMa[i].gTri) {
-                        xau += this.soLaMa[i].kyTu;
-                        k -= this.soLaMa[i].gTri;
-                    }
+            if (dauMuc == '1') {
+                if (n == 0) {
+                    xau = chiSo[n];
+                };
+                if (n == 1) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 2) {
+                    xau = String.fromCharCode(k + 96);
                 }
-            };
-            if (n == 1) {
-                xau = chiSo[n];
-            };
-            if (n == 2) {
-                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            };
-            if (n == 3) {
-                xau = String.fromCharCode(k + 96);
+                if (n == 3) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '2') {
+                if (n == 0) {
+                    xau = dauMucCha + "." + chiSo[n].toString();
+                };
+                if (n == 1) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 2) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '3') {
+                if (n == 0) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 1) {
+                    xau = "-";
+                }
+                return xau;
+            } else if (dauMuc == '4') {
+                if (n == 0) {
+                    xau = "-";
+                }
+                return xau;
+            } else {
+                if (n == 0) {
+                    for (var i = 0; i < this.soLaMa.length; i++) {
+                        while (k >= this.soLaMa[i].gTri) {
+                            xau += this.soLaMa[i].kyTu;
+                            k -= this.soLaMa[i].gTri;
+                        }
+                    }
+                };
+                if (n == 1) {
+                    xau = chiSo[n];
+                };
+                if (n == 2) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 3) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 4) {
+                    xau = "-";
+                }
+                return xau;
             }
-            if (n == 4) {
-                xau = "-";
-            }
-            return xau;
         }
     }
+
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
         return str?.substring(0, str.lastIndexOf('.'));

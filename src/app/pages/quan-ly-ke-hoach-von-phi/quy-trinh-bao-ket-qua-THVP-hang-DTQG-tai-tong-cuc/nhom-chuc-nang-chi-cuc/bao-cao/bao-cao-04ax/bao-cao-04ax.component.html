@@ -157,13 +157,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-I1')"></i>
+          <ng-container *ngIf="lstCtietBcao4axI1?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-I1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axI1; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axI1">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','1')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -268,13 +270,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-I2')"></i>
+          <ng-container *ngIf="lstCtietBcao4axI2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-I2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axI2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axI2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -379,13 +383,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-I3')"></i>
+          <ng-container *ngIf="lstCtietBcao4axI3?.length == 0">  
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-I3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axI3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axI3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -516,13 +522,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-II1.1')"></i>
+          <ng-container *ngIf="lstCtietBcao4axII11?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-II1.1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axII11; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axII11">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'3',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -627,13 +635,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-II1.2')"></i>
+          <ng-container *ngIf="lstCtietBcao4axII12?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-II1.2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axII12; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axII12">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'3',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -738,13 +748,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-II2')"></i>
+          <ng-container *ngIf="lstCtietBcao4axII2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-II2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axII2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axII2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -849,13 +861,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-II3')"></i>
+          <ng-container *ngIf="lstCtietBcao4axII3?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-II3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axII3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axII3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -973,13 +987,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-III1')"></i>
+          <ng-container *ngIf="lstCtietBcao4axIII1?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-III1')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axIII1; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axIII1">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','1')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1084,13 +1100,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-III2')"></i>
+          <ng-container *ngIf="lstCtietBcao4axIII2?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-III2')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axIII2; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axIII2">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','2')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1195,13 +1213,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-III3')"></i>
+          <ng-container *ngIf="lstCtietBcao4axIII3?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-III3')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axIII3; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axIII3">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'2','3')}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">
@@ -1306,13 +1326,15 @@
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
         <td [hidden]="status">
-          <i class="fa fa-plus" (click)="addLine(null,'4ax-B')"></i>
+          <ng-container *ngIf="lstCtietBcao4axB?.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'4ax-B')"></i>
+          </ng-container>
         </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao4axB; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axB">
-          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt)}}</td>
+          <td [nzIndentSize]="item.level * 8">{{getChiMuc(item.stt,'1',null)}}</td>
           <td>
             <div *ngFor="let vtu of noiDungChis">
               <div *ngIf="vtu.id == item.maNdungChi">

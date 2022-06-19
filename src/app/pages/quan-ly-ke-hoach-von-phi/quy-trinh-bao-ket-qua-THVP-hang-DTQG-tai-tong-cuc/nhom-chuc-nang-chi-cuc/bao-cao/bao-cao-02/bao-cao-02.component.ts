@@ -10,8 +10,9 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
+import { DON_VI_TIEN, LA_MA, NOT_OK, OK, Utils } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
+import { DatePipe } from '@angular/common';
 
 export class ItemDataMau02 {
     bcaoCtietId = null;
@@ -79,6 +80,7 @@ export class BaoCao02Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -181,34 +183,74 @@ export class BaoCao02Component implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
+    getChiMuc(str: string,dauMuc:string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             var xau: string = "";
             let chiSo: any = str.split('.');
             var n: number = chiSo.length - 1;
             var k: number = parseInt(chiSo[n], 10);
-            if (n == 0) {
-                for (var i = 0; i < this.soLaMa.length; i++) {
-                    while (k >= this.soLaMa[i].gTri) {
-                        xau += this.soLaMa[i].kyTu;
-                        k -= this.soLaMa[i].gTri;
-                    }
+            if(dauMuc == '1'){
+                if (n == 0) {
+                    xau = chiSo[n];
+                };
+                if (n == 1) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 2) {
+                    xau = String.fromCharCode(k + 96);
                 }
-            };
-            if (n == 1) {
-                xau = chiSo[n];
-            };
-            if (n == 2) {
-                xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            };
-            if (n == 3) {
-                xau = String.fromCharCode(k + 96);
-            }
-            if (n == 4) {
-                xau = "-";
-            }
-            return xau;
+                if (n == 3) {
+                    xau = "-";
+                }
+                return xau;
+            }else if(dauMuc == '2'){
+                if (n == 0) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 1) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 2) {
+                    xau = "-";
+                }
+                return xau;
+            }else if(dauMuc == '3'){
+                if (n == 0) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 1) {
+                    xau = "-";
+                }
+                return xau;
+            }else if(dauMuc == '4'){
+                if (n == 0) {
+                    xau = "-";
+                }
+                return xau;
+            }else{
+                if (n == 0) {
+                    for (var i = 0; i < this.soLaMa.length; i++) {
+                        while (k >= this.soLaMa[i].gTri) {
+                            xau += this.soLaMa[i].kyTu;
+                            k -= this.soLaMa[i].gTri;
+                        }
+                    }
+                };
+                if (n == 1) {
+                    xau = chiSo[n];
+                };
+                if (n == 2) {
+                    xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+                };
+                if (n == 3) {
+                    xau = String.fromCharCode(k + 96);
+                }
+                if (n == 4) {
+                    xau = "-";
+                }
+                return xau;
+            } 
         }
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
@@ -736,8 +778,8 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        baoCaoChiTietTemp.tuNgay = this.tuNgay;
-        baoCaoChiTietTemp.denNgay = this.denNgay;
+        baoCaoChiTietTemp.tuNgay = this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR);
+        baoCaoChiTietTemp.denNgay = this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR);
         let checkMoneyRange = true;
         let checkPersonReport = true;
 

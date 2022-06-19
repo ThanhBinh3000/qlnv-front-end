@@ -32,7 +32,6 @@ export class DialogBaoCaoCopyComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    debugger
     this.request.loaiCopy = 'C';
     this.request.namBcao = this.namBcao;
     this.request.thangBcao = this.thangBcao;
