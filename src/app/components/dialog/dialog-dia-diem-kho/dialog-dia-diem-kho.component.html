@@ -11,9 +11,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of deXuatCucTable.data, let i = index">
-        <td>{{data.tenDvi}}</td>
-        <td>{{data.sumTang}}</td>
-        <td>{{data.sumGiam}}</td>
+        <td>{{data.title}}</td>
+        <td>{{data.sumTang ?? 0 | number: '1.0-1'}}</td>
+        <td>{{data.sumGiam ?? 0 | number: '1.0-1'}}</td>
         <td>
           <a (click)="editDeXuat(data)">
             <i class="fa fa-pencil"></i>
@@ -51,7 +51,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Điểm kho </nz-form-label>
         <nz-select [(ngModel)]="searchData.maDiemKho" (ngModelChange)="changeDiemKho()">
-          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
+          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
           </nz-option>
         </nz-select>
       </nz-form-item>
@@ -60,7 +60,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Nhà kho </nz-form-label>
         <nz-select [(ngModel)]="searchData.maNhaKho" (ngModelChange)="changeNhaKho()">
-          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
+          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
           </nz-option>
         </nz-select>
       </nz-form-item>
@@ -69,7 +69,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Ngăn kho </nz-form-label>
         <nz-select [(ngModel)]="searchData.maNganKho" (ngModelChange)="changeNganKho()">
-          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
           </nz-option>
         </nz-select>
       </nz-form-item>
@@ -78,7 +78,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Lô kho </nz-form-label>
         <nz-select [(ngModel)]="searchData.maNganLo">
-          <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
+          <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
           </nz-option>
         </nz-select>
       </nz-form-item>
@@ -110,18 +110,18 @@
           <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
             <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
               <td [nzIndentSize]="item.level! * 20"
-                [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child" [(nzExpand)]="item.expand"
-                (nzExpandChange)="collapse(mapOfExpandedData[data.id], item, $event)">
-                {{ item.tenTongKho ?? item.tenDiemkho ?? item.tenNhakho ?? item.tenNgankho ?? item.tenNganlo }}
+                [nzShowExpand]="!!item.children && item.children.length !== 0 || !item?.children"
+                [(nzExpand)]="item.expand" (nzExpandChange)="collapse(mapOfExpandedData[data.id], item, $event)">
+                {{ item.title }}
               </td>
               <td>
-                <nz-input-number *ngIf="item?.child?.length == 0 || !item?.child" type="text" nz-input
+                <nz-input-number *ngIf="item?.children?.length == 0 || !item?.children" type="text" nz-input
                   class="w-120 input-tang" [nzSize]="'small'" [(ngModel)]="item.slTang" [nzMin]="0"
                   [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('tang', item, data)">
                 </nz-input-number>
               </td>
               <td>
-                <nz-input-number *ngIf="item?.child?.length == 0 || !item?.child" type="text" nz-input
+                <nz-input-number *ngIf="item?.children?.length == 0 || !item?.children" type="text" nz-input
                   class="w-120 input-giam" [nzSize]="'small'" [(ngModel)]="item.slGiam" [nzMin]="0"
                   [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('giam', item, data)">
                 </nz-input-number>
