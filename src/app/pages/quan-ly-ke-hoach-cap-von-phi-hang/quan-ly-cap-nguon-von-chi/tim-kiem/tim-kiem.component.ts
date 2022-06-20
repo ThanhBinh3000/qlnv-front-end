@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, LOAI_DE_NGHI, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { DataService } from '../data.service';
 
 @Component({
 	selector: 'app-tim-kiem',
@@ -86,6 +87,7 @@ export class TimKiemComponent implements OnInit {
 		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -249,14 +251,20 @@ export class TimKiemComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
+		let obj = {
+			qdChiTieu: this.searchFilter.qdChiTieu,
+			canCuGia: this.searchFilter.canCuGia,
+			loaiDn: this.searchFilter.loaiDn,
+		}
+		this.dataSource.changeData(obj);
 		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/0/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau',
 			])
 		}
 		else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/0/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua',
 			])
 		}
 	}
