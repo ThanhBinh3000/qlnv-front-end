@@ -1,47 +1,48 @@
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
-	<div class="tab-content tab-menu" id="myTabContent">
-		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-			aria-labelledby="banhanh-tab">
-			<div class="trai">
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectkehoachvonphi()">
-					<i class="fa fa-arrow-circle-left"></i>
-				</a>
-			</div>
-			<div class="canphai phai">
-				<button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave">
-					<i class="icon htvbdh_tcdt_save"></i>
-					<span>Lưu</span>
-				</button>
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectkehoachvonphi()">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
         <ng-template #contentTemplate>
           <div class="contentTemplate_chonpa">
             <a (click)="linkToPaPbo()">1. Phương án phân bổ giao dự toán chi</a>
             <a (click)="linkToPaGiaoDC()">2. Phương án giao, điều chỉnh dự toán chi</a>
           </div>
         </ng-template>
-        <button  class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnNew">
+        <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
+          [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnNew">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Tạo phương án</span>
         </button>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
-					<i nz-icon nzType="copy" nzTheme="outline"></i>
-					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</a>
-				<a class="btn btn-main" (click)="close()">
-					<i nz-icon nzType="stop" nzTheme="outline"></i>
-					<span>Đóng</span>
-				</a>
-			</div>
-		</div>
-	</div>
+        <a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span>Copy</span>
+        </a>
+        <a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </a>
+        <a class="btn btn-main" (click)="close()">
+          <i nz-icon nzType="stop" nzTheme="outline"></i>
+          <span>Đóng</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </nz-affix>
 
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
-    <div class="main-content">
+    <div class="main-content" id="tablePrint">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -55,17 +56,16 @@
           <tbody>
             <tr>
               <td>
-								<nz-upload [nzBeforeUpload]="beforeUploadSoQuyetDinh" [hidden]="status">
-									<button nz-button>
-										<i nz-icon nzType="upload"></i>
-										Select File
-									</button>
-								</nz-upload>
-								<div class="tep__sqd" (click)="downloadFileCv()">
-									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
-									<span>{{soQd?.fileName}}</span>
-								</div>
-							</td>
+                <nz-upload [nzBeforeUpload]="beforeUploadSoQuyetDinh" [hidden]="status">
+                  <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Select File
+                  </button>
+                </nz-upload>
+                <div class="tep__sqd" (click)="downloadFileCv()">
+                  <span>{{soQd?.fileName}}</span>
+                </div>
+              </td>
               <td>
                 {{maPa}}
               </td>
@@ -129,21 +129,21 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstCtietBcao; let i = index">
-									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-										<td [nzIndentSize]="data.level! * 8">
+                  <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                    <td [nzIndentSize]="data.level! * 8">
                       {{getChiMuc(data.stt)}}
                     </td>
-										<td>
-											<div *ngFor="let item of noiDungs">
-												<div *ngIf="item.id ==data.maNdung">
-													{{item.tenDm}}
-												</div>
-											</div>
-										</td>
-										<td>{{data.tongCong}}</td>
-										<td>{{data.nguonNsnn}}</td>
-										<td>{{data.nguonKhac}}</td>
-										<td [hidden]="status">
+                    <td>
+                      <div *ngFor="let item of noiDungs">
+                        <div *ngIf="item.id ==data.maNdung">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{data.tongCong}}</td>
+                    <td>{{data.nguonNsnn}}</td>
+                    <td>{{data.nguonKhac}}</td>
+                    <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
                     <td [hidden]="status">
@@ -158,35 +158,33 @@
                       <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                         (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
-									</ng-container>
-									<ng-template #editTemplate>
-										<td [nzIndentSize]="data.level * 8">
+                  </ng-container>
+                  <ng-template #editTemplate>
+                    <td [nzIndentSize]="data.level * 8">
                       {{getChiMuc(editCache[data.id].data.stt)}}
                     </td>
-										<td>
-											<div *ngFor="let item of noiDungs;">
-												<div *ngIf="item.id ==data.maNdung">
-													{{item.tenDm}}
-												</div>
-											</div>
-										</td>
-										<td>
-											{{editCache[data.id].data.tongCong}}
-										</td>
-										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[(ngModel)]="editCache[data.id].data.nguonNsnn"
-												(ngModelChange)="changeModel(data.id)"
-												[class]="editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0?'' : 'input-error-validate'">
-											</nz-input-number>
-										</td>
-										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[(ngModel)]="editCache[data.id].data.nguonKhac"
-												(ngModelChange)="changeModel(data.id)"
-												[class]="editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0?'' : 'input-error-validate'">
-											</nz-input-number>
-										</td>
+                    <td>
+                      <div *ngFor="let item of noiDungs;">
+                        <div *ngIf="item.id ==data.maNdung">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      {{editCache[data.id].data.tongCong}}
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.nguonNsnn" (ngModelChange)="changeModel(data.id)"
+                        [class]="editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0?'' : 'input-error-validate'">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.nguonKhac" (ngModelChange)="changeModel(data.id)"
+                        [class]="editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0?'' : 'input-error-validate'">
+                      </nz-input-number>
+                    </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
@@ -194,8 +192,8 @@
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                     </td>
                     <td [hidden]="status">
-                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">
                         Hủy
                       </a>
                     </td>
@@ -203,8 +201,8 @@
                       <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                         (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
-									</ng-template>
-								</tr>
+                  </ng-template>
+                </tr>
               </tbody>
             </nz-table>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
