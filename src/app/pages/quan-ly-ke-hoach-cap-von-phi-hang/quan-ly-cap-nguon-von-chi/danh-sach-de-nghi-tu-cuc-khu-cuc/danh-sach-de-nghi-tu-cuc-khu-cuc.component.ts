@@ -25,7 +25,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
         loaiTimKiem: '1',
-        trangThai: Utils.TT_BC_9,
+        trangThai: Utils.TT_BC_7,
 		tuNgay: "",
 		denNgay: "",
         qdChiTieu: "",
@@ -34,7 +34,12 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     };
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANG_THAI_TIM_KIEM;
+	trangThais: any[] = [
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo cấp dưới duyệt",
+		}
+	];
 	donVis: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
 	//phan trang

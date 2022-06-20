@@ -9,15 +9,13 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
 
@@ -228,7 +226,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.vatTus = res.data;
+                    this.addListVtu(res.data);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -241,14 +239,14 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.spinner.hide();
     }
 
-    // addListVtu(lstVtu: any[]){
-    //     lstVtu.forEach(item => {
-    //         this.vatTus.push(item);
-    //         if (item.child.length != 0){
-    //             this.addListVtu(item);
-    //         }
-    //     })
-    // }
+    addListVtu(lstVtu: any){
+        lstVtu.forEach(item => {
+            this.vatTus.push(item);
+            if (item.child){
+                this.addListVtu(item.child);
+            }
+        })
+    }
 
     redirectkehoachvonphi() {
         this.location.back()
@@ -473,6 +471,10 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.kphiDaCap > this.tongTien){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
 
         let checkSave = true;
         this.lstCtietBcao.forEach(item => {
@@ -659,7 +661,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
         if (!this.editCache[id].data.maHang ||
-            !this.editCache[id].data.maDviTinh ||
             (!this.editCache[id].data.soLuong && this.editCache[id].data.soLuong !== 0) ||
             (!this.editCache[id].data.donGiaMua && this.editCache[id].data.donGiaMua !== 0)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -685,6 +686,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
+        this.editCache[id].data.maDviTinh = this.vatTus.find(e => e.ma == this.editCache[id].data.maHang)?.maDviTinh;
         this.editCache[id].data.thanhTien = this.editCache[id].data.soLuong * this.editCache[id].data.donGiaMua;
     }
 
@@ -700,6 +702,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     close() {
         if (this.id && !this.loai){
             this.location.back();
+        }
+        if (!this.loai){
+            this.loai = "0";
         }
         this.router.navigate([
             'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/' + this.loai
