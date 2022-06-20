@@ -10,7 +10,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'so-kho-the-kho',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'so-kho-the-kho',
@@ -41,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class QuanLySoTheKhoRoutingModule { }
+export class QuanLySoTheKhoRoutingModule {}

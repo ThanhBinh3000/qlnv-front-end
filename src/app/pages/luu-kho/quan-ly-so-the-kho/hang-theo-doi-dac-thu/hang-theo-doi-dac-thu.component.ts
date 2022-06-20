@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-hang-theo-doi-dac-thu',
   templateUrl: './hang-theo-doi-dac-thu.component.html',
-  styleUrls: ['./hang-theo-doi-dac-thu.component.scss']
+  styleUrls: ['./hang-theo-doi-dac-thu.component.scss'],
 })
 export class HangTheoDoiDacThuComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
