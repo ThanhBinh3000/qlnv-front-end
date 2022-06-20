@@ -52,23 +52,24 @@ export class MainComponent implements OnInit {
   }
 
   getDanhMucDonVi() {
-    this.donviService.layTatCaDonVi().then((res) => {
-      if (res.msg === MESSAGE.SUCCESS) {
-        sessionStorage.setItem("danhMucDonVi", JSON.stringify(res.data))
-      }
-    })
+    sessionStorage.setItem("danhMucDonVi", null)
+    // this.donviService.layTatCaDonVi().then((res) => {
+    //   if (res.msg === MESSAGE.SUCCESS) {
+    //     sessionStorage.setItem("danhMucDonVi", JSON.stringify(res.data))
+    //   }
+    // })
   }
 
   getDiemKho() {
-    this.tinhTrangKhoHienThoiService.getAllDiemKho().then((res) => {
-      if (res.msg === MESSAGE.SUCCESS) {
-        sessionStorage.setItem("ktDiemKho", JSON.stringify(res.data))
-        // let body = {
-        //   ktDiemKho: res.data
-        // }
-        // this.observableService.routerSubject.next(body);
-      }
-    })
+    sessionStorage.setItem("ktDiemKho", null)
+    // this.tinhTrangKhoHienThoiService.getAllDiemKho().then((res) => {
+    //   if (res.msg === MESSAGE.SUCCESS) {
+    //     // let body = {
+    //     //   ktDiemKho: res.data
+    //     // }
+    //     // this.observableService.routerSubject.next(body);
+    //   }
+    // })
   }
 
   logOut() {

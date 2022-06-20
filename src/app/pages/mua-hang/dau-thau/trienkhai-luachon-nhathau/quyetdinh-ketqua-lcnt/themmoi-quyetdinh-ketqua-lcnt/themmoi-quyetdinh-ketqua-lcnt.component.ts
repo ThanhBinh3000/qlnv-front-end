@@ -180,6 +180,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
+    console.log("🚀 ~ file: themmoi-quyetdinh-ketqua-lcnt.component.ts ~ line 183 ~ ThemmoiQuyetdinhKetquaLcntComponent ~ ngOnInit ~ this.userInfo", this.userInfo)
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({

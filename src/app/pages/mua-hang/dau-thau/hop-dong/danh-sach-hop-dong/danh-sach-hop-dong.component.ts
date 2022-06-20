@@ -162,14 +162,15 @@ export class DanhSachHopDongComponent implements OnInit {
       }
     }
     let body = {
-      "maHangHoa": this.typeVthh,
+      "loaiVthh": '',
       "maDvi": maDonVi,
+      "nhaCcap": this.nhaCungCap ?? '',
+      "tenHd": this.tenHd ?? '',
       "paggingReq": {
         limit: this.pageSize,
-        page: this.page,
+        page: this.page - 1,
       },
       soHd: this.soHd,
-      //"trangThai": "string",
       denNgayKy: this.ngayKy && this.ngayKy.length > 1
         ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
         : null,
