@@ -120,18 +120,23 @@
         <td><b>I</b></td>
         <td><b>Xuất bản</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXb}}</td>
+        <td>{{soLuongTteXb}}</td>
+        <td>{{dgGiaKhoachXb}}</td>
+        <td>{{dgGiaBanTthieuXb}}</td>
+        <td>{{dgGiaBanTteXb}}</td>
+        <td>{{ttGiaHtoanXb}}</td>
+        <td>{{ttGiaBanTteXb}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXb}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'31')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao031.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'31')"></i>
+          </ng-container>
+        </td>
+
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao031; let i = index">
@@ -258,18 +263,22 @@
         <td> <b>II</b> </td>
         <td> <b>Xuất CTVT</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXCTVT}}</td>
+        <td>{{soLuongTteXCTVT}}</td>
+        <td>{{dgGiaKhoachXCTVT}}</td>
+        <td>{{dgGiaBanTthieuXCTVT}}</td>
+        <td>{{dgGiaBanTteXCTVT}}</td>
+        <td>{{ttGiaHtoanXCTVT}}</td>
+        <td>{{ttGiaBanTteXCTVT}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXCTVT}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'32')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao032.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'32')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao032; let i = index">
@@ -396,18 +405,22 @@
         <td><b>III</b></td>
         <td><b>Xuất khác</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXk}}</td>
+        <td>{{soLuongTteXk}}</td>
+        <td>{{dgGiaKhoachXk}}</td>
+        <td>{{dgGiaBanTthieuXk}}</td>
+        <td>{{dgGiaBanTteXk}}</td>
+        <td>{{ttGiaHtoanXk}}</td>
+        <td>{{ttGiaBanTteXk}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXk}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'33')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao033.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'33')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao033; let i = index">

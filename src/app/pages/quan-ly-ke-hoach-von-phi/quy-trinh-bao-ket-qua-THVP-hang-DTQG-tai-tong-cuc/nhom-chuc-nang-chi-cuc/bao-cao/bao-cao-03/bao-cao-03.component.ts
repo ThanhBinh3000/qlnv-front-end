@@ -76,7 +76,30 @@ export class BaoCao03Component implements OnInit {
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
-
+    soLuongKhoachXb = 0;
+    soLuongTteXb = 0;
+    dgGiaKhoachXb = 0;
+    dgGiaBanTthieuXb = 0;
+    dgGiaBanTteXb = 0;
+    ttGiaHtoanXb = 0;
+    ttGiaBanTteXb = 0;
+    ttClechGiaTteVaGiaHtoanXb = 0;
+    soLuongKhoachXCTVT = 0;
+    soLuongTteXCTVT = 0;
+    dgGiaKhoachXCTVT = 0;
+    dgGiaBanTthieuXCTVT = 0;
+    dgGiaBanTteXCTVT = 0;
+    ttGiaHtoanXCTVT = 0;
+    ttGiaBanTteXCTVT = 0;
+    ttClechGiaTteVaGiaHtoanXCTVT = 0;
+    soLuongKhoachXk = 0;
+    soLuongTteXk = 0;
+    dgGiaKhoachXk = 0;
+    dgGiaBanTthieuXk = 0;
+    dgGiaBanTteXk = 0;
+    ttGiaHtoanXk = 0;
+    ttGiaBanTteXk = 0;
+    ttClechGiaTteVaGiaHtoanXk = 0;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -146,6 +169,7 @@ export class BaoCao03Component implements OnInit {
                 await this.sortByIndex();
             }
         }
+        this.changeModel();
         let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
@@ -519,6 +543,7 @@ export class BaoCao03Component implements OnInit {
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(baoCao[index].stt, phuLuc);
+        this.changeModel();
     }
 
     updateChecked(id: any, phuLuc: string) {
@@ -792,8 +817,8 @@ export class BaoCao03Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        baoCaoChiTietTemp.tuNgay = this.tuNgay;
-        baoCaoChiTietTemp.denNgay = this.denNgay;
+        baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
+        baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
 
         let checkMoneyRange = true;
         let checkPersonReport = true;
@@ -918,5 +943,69 @@ export class BaoCao03Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+
+    async changeModel() {
+        this.soLuongKhoachXb = 0;
+        this.soLuongTteXb = 0;
+        this.dgGiaKhoachXb = 0;
+        this.dgGiaBanTthieuXb = 0;
+        this.dgGiaBanTteXb = 0;
+        this.ttGiaHtoanXb = 0;
+        this.ttGiaBanTteXb = 0;
+        this.ttClechGiaTteVaGiaHtoanXb = 0;
+        this.soLuongKhoachXCTVT = 0;
+        this.soLuongTteXCTVT = 0;
+        this.dgGiaKhoachXCTVT = 0;
+        this.dgGiaBanTthieuXCTVT = 0;
+        this.dgGiaBanTteXCTVT = 0;
+        this.ttGiaHtoanXCTVT = 0;
+        this.ttGiaBanTteXCTVT = 0;
+        this.ttClechGiaTteVaGiaHtoanXCTVT = 0;
+        this.soLuongKhoachXk = 0;
+        this.soLuongTteXk = 0;
+        this.dgGiaKhoachXk = 0;
+        this.dgGiaBanTthieuXk = 0;
+        this.dgGiaBanTteXk = 0;
+        this.ttGiaHtoanXk = 0;
+        this.ttGiaBanTteXk = 0;
+        this.ttClechGiaTteVaGiaHtoanXk = 0;
+        await this.lstCtietBcao031.forEach(element => {
+            if (element?.stt?.split('.').length == 2) {
+                this.soLuongKhoachXb += Number(element.soLuongKhoach);
+                this.soLuongTteXb += Number(element.soLuongTte);
+                this.dgGiaKhoachXb += Number(element.dgGiaKhoach);
+                this.dgGiaBanTthieuXb += Number(element.dgGiaBanTthieu);
+                this.dgGiaBanTteXb += Number(element.dgGiaBanTte);
+                this.ttGiaHtoanXb += Number(element.ttGiaHtoan);
+                this.ttGiaBanTteXb += Number(element.ttGiaBanTte);
+                this.ttClechGiaTteVaGiaHtoanXb += Number(element.ttClechGiaTteVaGiaHtoan);
+            }
+        })
+        await this.lstCtietBcao032.forEach(element => {
+            if (element?.stt?.split('.').length == 2) {
+                this.soLuongKhoachXCTVT += Number(element.soLuongKhoach);
+                this.soLuongTteXCTVT += Number(element.soLuongTte);
+                this.dgGiaKhoachXCTVT += Number(element.dgGiaKhoach);
+                this.dgGiaBanTthieuXCTVT += Number(element.dgGiaBanTthieu);
+                this.dgGiaBanTteXCTVT += Number(element.dgGiaBanTte);
+                this.ttGiaHtoanXCTVT += Number(element.ttGiaHtoan);
+                this.ttGiaBanTteXCTVT += Number(element.ttGiaBanTte);
+                this.ttClechGiaTteVaGiaHtoanXCTVT += Number(element.ttClechGiaTteVaGiaHtoan);
+            }
+        })
+        await this.lstCtietBcao033.forEach(element => {
+            if (element?.stt?.split('.').length == 2) {
+                this.soLuongKhoachXk += Number(element.soLuongKhoach);
+                this.soLuongTteXk += Number(element.soLuongTte);
+                this.dgGiaKhoachXk += Number(element.dgGiaKhoach);
+                this.dgGiaBanTthieuXk += Number(element.dgGiaBanTthieu);
+                this.dgGiaBanTteXk += Number(element.dgGiaBanTte);
+                this.ttGiaHtoanXk += Number(element.ttGiaHtoan);
+                this.ttGiaBanTteXk += Number(element.ttGiaBanTte);
+                this.ttClechGiaTteVaGiaHtoanXk += Number(element.ttClechGiaTteVaGiaHtoan);
+            }
+        })
     }
 }

@@ -118,16 +118,20 @@
         <td><b>Đơn vị mua</b></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{khSoLuongDv}}</td>
+        <td>{{ khGiaMuaTdDv}}</td>
+        <td>{{ khTtienDv}}</td>
+        <td>{{ thSoLuongDv}}</td>
+        <td>{{ thGiaMuaTdDv}}</td>
+        <td>{{ thTtienDv}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'21')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao021.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'21')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao021; let i = index">
@@ -248,16 +252,20 @@
         <td> <b>Tổng cục mua</b></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{khSoLuongTc}}</td>
+        <td>{{ khGiaMuaTdTc}}</td>
+        <td>{{ khTtienTc}}</td>
+        <td>{{ thSoLuongTc}}</td>
+        <td>{{ thGiaMuaTdTc}}</td>
+        <td>{{ thTtienTc}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'22')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao022.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'22')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao022; let i = index">
@@ -373,6 +381,23 @@
           </td>
         </ng-template>
       </tr>
+      <tr>
+      <td></td>
+      <td>Tổng cộng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ tongDvTc}}</td>
+      <td></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+    </tr>
     </tbody>
   </nz-table>
 </div>
