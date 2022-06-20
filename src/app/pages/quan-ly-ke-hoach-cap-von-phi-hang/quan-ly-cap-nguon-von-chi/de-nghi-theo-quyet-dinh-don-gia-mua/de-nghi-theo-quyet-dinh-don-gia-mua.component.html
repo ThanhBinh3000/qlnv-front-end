@@ -32,14 +32,14 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Phê duyệt</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+				<!-- <button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
 				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
-				</a>
+				</a> -->
 				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
@@ -180,11 +180,7 @@
 												</div>
 											</td>
 											<td>
-												<div *ngFor="let item of dviTinhs">
-													<div *ngIf="item.id == data.maDviTinh">
-														{{item.tenDm}}
-													</div>
-												</div>
+												{{data.maDviTinh}}
 											</td>
 											<td>
 												{{data.soLuong}}
@@ -217,21 +213,15 @@
 												<nz-select nzShowSearch nzAllowClear
 													[class]="editCache[data.id].data.maHang ?'' : 'input-error-validate' "
 													nzPlaceHolder="Chọn loại mặt hàng"
-													[(ngModel)]="editCache[data.id].data.maHang">
+													[(ngModel)]="editCache[data.id].data.maHang"
+													(ngModelChange)="changeModel(data.id)">
 													<nz-option *ngFor="let item of vatTus" [nzValue]="item.ma"
 														[nzLabel]="item.ten">
 													</nz-option>
 												</nz-select>
 											</td>
 											<td>
-												<nz-select nzShowSearch nzAllowClear
-													[class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate' "
-													nzPlaceHolder="Chọn đơn vị tính"
-													[(ngModel)]="editCache[data.id].data.maDviTinh">
-													<nz-option *ngFor="let item of dviTinhs" [nzValue]="item.id"
-														[nzLabel]="item.tenDm">
-													</nz-option>
-												</nz-select>
+												{{editCache[data.id].data.maDviTinh}}
 											</td>
 											<td>
 												<nz-input-number class="search__input"
@@ -289,7 +279,7 @@
 												</ng-container>
 												<ng-template #edit>
 													<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"
-													[class]="kphiDaCap || kphiDaCap === 0 ?'' : 'input-error-validate' "></nz-input-number>
+													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) ?'' : 'input-error-validate' "></nz-input-number>
 												</ng-template>
 											</td>
 											<td>

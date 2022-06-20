@@ -32,14 +32,14 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Phê duyệt</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+				<!-- <button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
 				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
-				</a>
+				</a> -->
 				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
@@ -119,6 +119,7 @@
 									<tr>
 										<th>STT</th>
 										<th>Hợp đồng</th>
+										<th>Quyết định trúng thầu</th>
 										<th>Tên hàng</th>
 										<th>Số lượng</th>
 										<th>Đơn vị hàng</th>
@@ -135,17 +136,20 @@
 											{{data.maHdong}}
 										</td>
 										<td>
-											{{data.maHang}}
+											{{data.qdTthau}}
 										</td>
 										<td>
-											{{data.sl}}
-										</td>
-										<td>
-											<div *ngFor="let item of dviTinhs">
-												<div *ngIf="item.id == data.maDviTinh">
-													{{item.tenDm}}
+											<div *ngFor="let item of vatTus">
+												<div *ngIf="item.ma == data.maHang">
+													{{item.ten}}
 												</div>
 											</div>
+										</td>
+										<td>
+											{{data.soLuong}}
+										</td>
+										<td>
+											{{data.maDviTinh}}
 										</td>
 										<td>
 											{{data.donGiaMua}}
@@ -190,7 +194,7 @@
 												</ng-container>
 												<ng-template #edit>
 													<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"
-													[class]="kphiDaCap || kphiDaCap === 0 ?'' : 'input-error-validate' "></nz-input-number>
+													[class]="(kphiDaCap || kphiDaCap === 0) && kphiDaCap <= tongTien ?'' : 'input-error-validate' "></nz-input-number>
 												</ng-template>
 											</td>
 											<td>
