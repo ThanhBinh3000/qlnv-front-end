@@ -930,6 +930,19 @@ export class BaoCaoComponent implements OnInit {
 
     this.editCache[id].data.luyKeGiaiNganTcong = Number(this.editCache[id].data.luyKeGiaiNganDtoan) + Number(this.editCache[id].data.luyKeGiaiNganNguonKhac) + Number(this.editCache[id].data.luyKeGiaiNganNguonQuy)
       + Number(this.editCache[id].data.luyKeGiaiNganNstt) + Number(this.editCache[id].data.luyKeGiaiNganCk);
+
+    this.editCache[id].data.giaiNganThangBcaoTcongTle = Number(this.editCache[id].data.giaiNganThangBcaoTcong) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.giaiNganThangBcaoDtoanTle = Number(this.editCache[id].data.giaiNganThangBcaoDtoan) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = Number(this.editCache[id].data.giaiNganThangBcaoNguonKhac) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.giaiNganThangBcaoNguonQuyTle = Number(this.editCache[id].data.giaiNganThangBcaoNguonQuy) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.giaiNganThangBcaoNsttTle = Number(this.editCache[id].data.giaiNganThangBcaoNstt) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.giaiNganThangBcaoCkTle = Number(this.editCache[id].data.giaiNganThangBcaoCk) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.luyKeGiaiNganTcongTle = Number(this.editCache[id].data.luyKeGiaiNganTcong) / Number(this.editCache[id].data.kphiSdungTcong);
+    this.editCache[id].data.luyKeGiaiNganDtoanTle = Number(this.editCache[id].data.luyKeGiaiNganDtoan) / Number(this.editCache[id].data.kphiSdungDtoan);
+    this.editCache[id].data.luyKeGiaiNganNguonKhacTle = Number(this.editCache[id].data.luyKeGiaiNganNguonKhac) / Number(this.editCache[id].data.kphiSdungNguonKhac);
+    this.editCache[id].data.luyKeGiaiNganNguonQuyTle = Number(this.editCache[id].data.luyKeGiaiNganNguonQuy) / Number(this.editCache[id].data.kphiSdungNguonQuy);
+    this.editCache[id].data.luyKeGiaiNganNsttTle = Number(this.editCache[id].data.luyKeGiaiNganNstt) / Number(this.editCache[id].data.kphiSdungNstt);
+    this.editCache[id].data.luyKeGiaiNganCkTle = Number(this.editCache[id].data.luyKeGiaiNganCk) / Number(this.editCache[id].data.kphiSdungCk);
   }
 
   changeModelPL2(id) {
@@ -1923,28 +1936,28 @@ export class BaoCaoComponent implements OnInit {
       let chiSo: any = str.split('.');
       var n: number = chiSo.length - 1;
       var k: number = parseInt(chiSo[n], 10);
-      
-        if (n == 0) {
-          for (var i = 0; i < this.soLaMa.length; i++) {
-            while (k >= this.soLaMa[i].gTri) {
-              xau += this.soLaMa[i].kyTu;
-              k -= this.soLaMa[i].gTri;
-            }
+
+      if (n == 0) {
+        for (var i = 0; i < this.soLaMa.length; i++) {
+          while (k >= this.soLaMa[i].gTri) {
+            xau += this.soLaMa[i].kyTu;
+            k -= this.soLaMa[i].gTri;
           }
-        };
-        if (n == 1) {
-          xau = chiSo[n];
-        };
-        if (n == 2) {
-          xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
-        if (n == 3) {
-          xau = String.fromCharCode(k + 96);
         }
-        if (n == 4) {
-          xau = "-";
-        }
-      
+      };
+      if (n == 1) {
+        xau = chiSo[n];
+      };
+      if (n == 2) {
+        xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+      };
+      if (n == 3) {
+        xau = String.fromCharCode(k + 96);
+      }
+      if (n == 4) {
+        xau = "-";
+      }
+
       return xau;
     }
   }
@@ -2304,7 +2317,7 @@ export class BaoCaoComponent implements OnInit {
       return this.noiDungPL2s.find(e => e.id == maKM)?.idCha;
     } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
       return this.maDans.find(e => e.id == maKM)?.idCha;
-    }else {
+    } else {
       return null;
     }
   }
