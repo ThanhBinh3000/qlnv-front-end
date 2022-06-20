@@ -10,7 +10,7 @@
             <ng-container *ngFor="let route of routes">
                 <li class="nav-item" data-toggle="collapse" data-target="#collapsnav">
                     <span class="nav-link" [ngClass]="
-                route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''
+                route.url && routerUrl.indexOf(route.url) !== -1 ? 'active' : ''
               " nz-popover title nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
                         (mouseenter)="updateCssOverlay()" (click)="redirect(route.url)">
                         <i class="icon" [ngClass]="route.icon"></i>

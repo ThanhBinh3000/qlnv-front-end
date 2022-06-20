@@ -1,45 +1,46 @@
+import { MAIN_ROUTES } from "src/app/layout/main/main-routing.constant";
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const LUU_KHO_MAIN_ROUTE = 'nhap';
+export const LUU_KHO_MAIN_ROUTE = MAIN_ROUTES.luuKho;
 export const LUU_KHO_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_honghoccanbaohanh',
         title: 'Quản lý sổ/thẻ kho',
-        url: '',
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
+        url: `${LUU_KHO_MAIN_ROUTE}/quan-ly-so-kho-the-kho`,
+        dropdown: 'quan-ly-so-the-kho',
+        idHover: 'sothekho',
         hasTab: false,
     },
     {
         icon: 'htvbdh_tcdt_kiem_tra_chat_luong',
         title: 'Kiểm tra chất lượng vật tư, thiết bị',
-        url: '',
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
+        url: `${LUU_KHO_MAIN_ROUTE}/kiem-tra-chat-luong-vat-tu`,
+        dropdown: 'kiem-tra-chat-luong-vat-tu-thiet-bi',
+        idHover: 'kiemtrachatluongvattu',
         hasTab: false,
     },
     {
         icon: 'htvbdh_tcdt_het_han',
         title: 'Kiểm tra chất lượng trước khi hết hạn',
-        url: '',
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
+        url: `${LUU_KHO_MAIN_ROUTE}/kiem-tra-chat-luong-truoc-han`,
+        dropdown: 'kiem-tra-chat-luong-truoc-khi-het-han',
+        idHover: 'kiemtrachatluongtruochethan',
         hasTab: false,
     },
     {
         icon: 'htvbdh_tcdt_theodoibaoquan',
         title: 'Theo dõi bảo quản',
-        url: '',
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
+        url: `${LUU_KHO_MAIN_ROUTE}/theo-doi-bao-quan`,
+        dropdown: 'theo-doi-bao-quan',
+        idHover: 'theodoibaoquan',
         hasTab: false,
     },
     {
         icon: 'htvbdh_tcdt_baocao2',
         title: 'Báo cáo',
-        url: '',
+        url: `${LUU_KHO_MAIN_ROUTE}/bao-cao`,
         dropdown: 'bao-cao',
-        idHover: 'giao-chi-tieu',
+        idHover: 'baocao',
         hasTab: false,
     },
 ];
