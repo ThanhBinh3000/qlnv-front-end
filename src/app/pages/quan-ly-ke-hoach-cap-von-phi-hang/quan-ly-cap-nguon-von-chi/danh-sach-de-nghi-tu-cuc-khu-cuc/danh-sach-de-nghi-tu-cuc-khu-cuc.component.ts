@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -56,6 +57,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
+		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
@@ -146,8 +148,13 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
+		let obj = {
+			qdChiTieu: this.searchFilter.qdChiTieu,
+			maDvi: this.searchFilter.maDviTao,
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/0/' + this.searchFilter.maDviTao + '/' + this.searchFilter.qdChiTieu
+			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc'
 		])
 	}
 

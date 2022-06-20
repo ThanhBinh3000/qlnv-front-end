@@ -208,7 +208,8 @@
 										<td>
 											<nz-select nzShowSearch nzAllowClear
 												[class]="editCache[data.id].data.dviNhan ?'' : 'input-error-validate' "
-												nzPlaceHolder="Chọn đơn vị" [(ngModel)]="editCache[data.id].data.dviNhan">
+												nzPlaceHolder="Chọn đơn vị"
+												[(ngModel)]="editCache[data.id].data.dviNhan">
 												<nz-option *ngFor="let item of unitChilds" [nzValue]="item.maDvi"
 													[nzLabel]="item.tenDvi">
 												</nz-option>
@@ -237,24 +238,25 @@
 											</nz-date-picker>
 										</td>
 										<td>
-											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.noiDung" />
+											<input nz-input class="search__input"
+												[(ngModel)]="editCache[data.id].data.noiDung" />
 										</td>
 										<td>
-											<nz-input-number class="search__input"
-												nzSize="small" [(ngModel)]="editCache[data.id].data.maNguonNs">
+											<nz-input-number class="search__input" nzSize="small"
+												[(ngModel)]="editCache[data.id].data.maNguonNs">
 											</nz-input-number>
 										</td>
 										<td>
-											<nz-input-number class="search__input"
-												nzSize="small" [(ngModel)]="editCache[data.id].data.nienDoNs">
+											<nz-input-number class="search__input" nzSize="small"
+												[(ngModel)]="editCache[data.id].data.nienDoNs">
 											</nz-input-number>
 										</td>
 										<td>
 											{{editCache[data.id].data.tongSoTien}}
 										</td>
 										<td>
-											<nz-input-number class="search__input"
-												nzSize="small" [(ngModel)]="editCache[data.id].data.nopThue"
+											<nz-input-number class="search__input" nzSize="small"
+												[(ngModel)]="editCache[data.id].data.nopThue"
 												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
 										</td>
@@ -266,7 +268,8 @@
 											</nz-input-number>
 										</td>
 										<td>
-											<input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.soTienBangChu" />
+											<input nz-input class="search__input"
+												[(ngModel)]="editCache[data.id].data.soTienBangChu" />
 										</td>
 										<td [hidden]="status">
 											<i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -288,8 +291,8 @@
 						</nz-table>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col nzSpan="24">
-								<label class="search__label">Thuyết minh</label>
-								<textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
+								<label class="search__label">Thuyết minh:</label>
+								<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
 							</div>
 						</div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

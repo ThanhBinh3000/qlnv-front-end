@@ -14,6 +14,7 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 import { ItemDataMau02 } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -167,13 +168,13 @@ export class TongHopTaiTongCucComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -196,6 +197,12 @@ export class TongHopTaiTongCucComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
+            await this.dataSource.currentData.subscribe(obj => {
+                this.qdChiTieu = obj?.qdChiTieu;
+            })
+            if (!this.qdChiTieu){
+                this.close();
+            }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.cucKhuVucs.forEach(item => {
                 this.lstCtietBcao.push({
