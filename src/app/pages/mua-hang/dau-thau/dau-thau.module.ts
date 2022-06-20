@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DauThauRoutingModule } from './dau-thau-routing.module';
 import { DauThauComponent } from './dau-thau.component';
-import { DieuchinhLuachonNhathauComponent } from './dieuchinh-luachon-nhathau/dieuchinh-luachon-nhathau.component';
+import { DieuChinhModule } from './dieu-chinh/dieu-chinh.module';
 import { HopDongModule } from './hop-dong/hop-dong.module';
 import { CucComponent } from './kehoach-luachon-nhathau/cuc/cuc.component';
 import { DanhsachKehoachLcntComponent } from './kehoach-luachon-nhathau/cuc/danhsach-kehoach-lcnt/danhsach-kehoach-lcnt.component';
@@ -19,14 +19,12 @@ import { ThemmoiQuyetdinhKhlcntComponent } from './kehoach-luachon-nhathau/tong-
 import { TongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-cuc.component';
 import { ThemmoiTonghopKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
 import { TongHopKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
-import { QuyetdinhKetquaLcntComponent } from './trienkhai-luachon-nhathau/quyetdinh-ketqua-lcnt/quyetdinh-ketqua-lcnt.component';
 import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
 
 
 @NgModule({
   declarations: [
     DauThauComponent,
-    DieuchinhLuachonNhathauComponent,
     KeHoachLuachonNhathauComponent,
     TongCucComponent,
     CucComponent,
@@ -48,7 +46,8 @@ import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trien
     ComponentsModule,
     HopDongModule,
     KehoachLuachonNhathauModule,
-    TrienkhaiLuachonNhathauModule
+    TrienkhaiLuachonNhathauModule,
+    DieuChinhModule
   ],
   exports: [
     QuyetdinhPheduyetKhlcntComponent,

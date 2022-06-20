@@ -11,9 +11,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of deXuatCucTable.data, let i = index">
-        <td>{{data.tenDvi}}</td>
-        <td>{{data.slTang}}</td>
-        <td>{{data.slGiam}}</td>
+        <td>{{data.tenTongKho}}</td>
+        <td>{{data.sumTang ?? 0 | number: '1.0-1'}}</td>
+        <td>{{data.sumGiam ?? 0 | number: '1.0-1'}}</td>
         <td>
           <a (click)="editDeXuat(data)">
             <i class="fa fa-pencil"></i>
@@ -96,7 +96,7 @@
   </div>
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
     <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
-      class="table__container-vat-tu">
+      class="table__container-vat-tu" id="table-diem-kho">
       <thead>
         <tr>
           <th>Tên đơn vị</th>
@@ -117,17 +117,17 @@
               <td>
                 <nz-input-number *ngIf="item?.child?.length == 0 || !item?.child" type="text" nz-input
                   class="w-120 input-tang" [nzSize]="'small'" [(ngModel)]="item.slTang" [nzMin]="0"
-                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('tang', item)">
+                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('tang', item, data)">
                 </nz-input-number>
               </td>
               <td>
                 <nz-input-number *ngIf="item?.child?.length == 0 || !item?.child" type="text" nz-input
                   class="w-120 input-giam" [nzSize]="'small'" [(ngModel)]="item.slGiam" [nzMin]="0"
-                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('giam', item)">
+                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('giam', item, data)">
                 </nz-input-number>
               </td>
               <td>
-                <a class="save" (click)="saveDataTree(data, item)" *ngIf="item?.child?.length == 0 || !item?.child">
+                <a class="save" (click)="saveDataTree(data)" *ngIf="item.level == 0">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
               </td>
