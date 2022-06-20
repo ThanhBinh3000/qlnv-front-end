@@ -36,8 +36,8 @@
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
-        <nz-input-number [nzDisabled]="true" formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-          [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()">
+        <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
+          [nzSize]="'small'" (input)="calculatorThanhTien()">
         </nz-input-number>
       </nz-form-item>
     </div>

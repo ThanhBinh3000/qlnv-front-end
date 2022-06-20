@@ -136,6 +136,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.thongtinDauThau.donGia = this.formData.get('donGia').value;
       this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
       this.thongtinDauThau.idVirtual = new Date().getTime();
+      this.thongtinDauThau.maDvi = this.formData.get('maDvi').value;
       this.listOfData = [...this.listOfData, this.thongtinDauThau];
       this.updateEditCache;
       this.thongtinDauThau = new DanhSachGoiThau();

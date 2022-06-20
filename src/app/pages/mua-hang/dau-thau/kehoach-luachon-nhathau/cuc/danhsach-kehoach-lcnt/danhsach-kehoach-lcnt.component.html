@@ -10,15 +10,11 @@
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Loại hàng hóa</label>
-              <input class="search__input" placeholder="" nz-input />
-            </div>
-            <div nz-col nzSpan="4">
+            <div nz-col nzSpan="6">
               <label class="search__label">Số tờ trình</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
             </div>
-            <div nz-col nzSpan="10">
+            <div nz-col nzSpan="12">
               <label class="search__label">Trích yếu</label>
               <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
             </div>
@@ -60,7 +56,6 @@
                     <th width="">Năm kế hoạch</th>
                     <th width="">Hàng hóa</th>
                     <th *ngIf="isCuc" width="">Chủng loại hàng hóa</th>
-                    <th width="">Số gói thầu</th>
                     <th width="">Trạng thái của đề xuất</th>
                     <th width="90px">Hành động</th>
                   </tr>
@@ -165,9 +160,8 @@
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.tenVthh }}</td>
                     <td *ngIf="isCuc">{{ data.tenCloaiVthh }}</td>
-                    <td>{{ data.children2.length }}</td>
                     <td>{{ convertTrangThai(data.trangThai) }}</td>
-                    <td class="text-right">
+                    <td class="text-left">
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>
                       </a>
@@ -221,6 +215,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-kehoach-lcnt [id]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-kehoach-lcnt>
 </div>

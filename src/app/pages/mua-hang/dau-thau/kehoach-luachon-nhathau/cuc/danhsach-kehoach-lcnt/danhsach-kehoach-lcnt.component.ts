@@ -245,7 +245,23 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    switch (status) {
+      case '00': {
+        return 'Dự thảo'
+      }
+      case '03': {
+        return 'Từ chối'
+      }
+      case '01': {
+        return 'Chờ duyệt - TP'
+      }
+      case '09': {
+        return 'Chờ duyệt - LĐ Cục'
+      }
+      case '02': {
+        return 'Đã duyệt'
+      }
+    }
   }
 
   exportData() {

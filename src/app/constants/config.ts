@@ -12,6 +12,11 @@ export const STATUS_CODE = {
   UNAUTHORIZED: 401,
 };
 
+export const API_STATUS_CODE = {
+  SUCCESS: 0,
+  ERROR: 1,
+};
+
 export const API_STATUS = {
   SUCCESS: 1,
   ERROR: 0,
