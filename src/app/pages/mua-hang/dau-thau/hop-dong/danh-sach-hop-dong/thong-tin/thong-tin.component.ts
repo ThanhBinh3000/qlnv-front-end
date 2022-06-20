@@ -336,7 +336,7 @@ export class ThongTinComponent implements OnInit {
           delete body.ngayHieuLuc;
         delete body.maHdong;
         delete body.tenCloaiVthh;
-        delete body.loaiVthh;
+        delete body.tenVthh;
 
         body.idNhaThau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
         if (this.id > 0) {

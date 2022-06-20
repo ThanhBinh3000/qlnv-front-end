@@ -11,7 +11,7 @@ export class ThongTinHopDongService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'hop-dong', '');
+    super(httpClient, 'dx-kh/hop-dong', '/qlnv-gateway/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {
