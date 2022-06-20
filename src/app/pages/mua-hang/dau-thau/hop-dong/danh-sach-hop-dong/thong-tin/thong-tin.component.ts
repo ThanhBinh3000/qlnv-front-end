@@ -125,7 +125,7 @@ export class ThongTinComponent implements OnInit {
         stk: [null],
         tenNguoiDdien: [null],
         chucVu: [null],
-        idNhaThau: ["1/1"],
+        idNthau: [null],
         ghiChu: [null]
       }
     );
@@ -172,39 +172,40 @@ export class ThongTinComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.thongTinHopDong.loadChiTiet(id);
+      let res = await this.thongTinHopDong.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.detail = res.data;
-          if (this.detail.tuNgayHluc && this.detail.denNgayHluc) {
-            this.detail.ngayHieuLuc = [this.detail.tuNgayHluc, this.detail.denNgayHluc];
-          }
-          if (this.detail.tuNgayTdo && this.detail.denNgayTdo) {
-            this.detail.ngayTocDo = [this.detail.tuNgayTdo, this.detail.denNgayTdo];
-          }
-          if (this.detail.children1 && this.detail.children1.length > 0) {
-            this.detail.children1.forEach(element => {
-              if (element.type == 'A') {
-                this.detailChuDauTu = element;
-              }
-              else if (element.type == 'B') {
-                this.detailDviCungCap = element;
-              }
-            });
-          }
-          if (this.detail.children && this.detail.children.length > 0) {
-            this.detail.bangGia = [];
-            this.detail.children.forEach(element => {
-              let item = cloneDeep(element);
-              if (element.children && element.children.length > 0) {
-                item.detail = element.children;
-              }
-              this.detail.bangGia.push(item);
-            });
-          }
-          if (this.detail.children2 && this.detail.children2.length > 0) {
-            this.fileDinhKem = this.detail.children2;
-          }
+          console.log("🚀 ~ file: thong-tin.component.ts ~ line 178 ~ ThongTinComponent ~ loadChiTiet ~ res.data", res.data)
+          // this.detail = res.data;
+          // if (this.detail.tuNgayHluc && this.detail.denNgayHluc) {
+          //   this.detail.ngayHieuLuc = [this.detail.tuNgayHluc, this.detail.denNgayHluc];
+          // }
+          // if (this.detail.tuNgayTdo && this.detail.denNgayTdo) {
+          //   this.detail.ngayTocDo = [this.detail.tuNgayTdo, this.detail.denNgayTdo];
+          // }
+          // if (this.detail.children1 && this.detail.children1.length > 0) {
+          //   this.detail.children1.forEach(element => {
+          //     if (element.type == 'A') {
+          //       this.detailChuDauTu = element;
+          //     }
+          //     else if (element.type == 'B') {
+          //       this.detailDviCungCap = element;
+          //     }
+          //   });
+          // }
+          // if (this.detail.children && this.detail.children.length > 0) {
+          //   this.detail.bangGia = [];
+          //   this.detail.children.forEach(element => {
+          //     let item = cloneDeep(element);
+          //     if (element.children && element.children.length > 0) {
+          //       item.detail = element.children;
+          //     }
+          //     this.detail.bangGia.push(item);
+          //   });
+          // }
+          // if (this.detail.children2 && this.detail.children2.length > 0) {
+          //   this.fileDinhKem = this.detail.children2;
+          // }
         }
       }
     }
@@ -338,7 +339,7 @@ export class ThongTinComponent implements OnInit {
         delete body.tenCloaiVthh;
         delete body.tenVthh;
 
-        body.idNhaThau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
+        body.idNthau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
         if (this.id > 0) {
           let res = await this.thongTinHopDong.update(
             body,
