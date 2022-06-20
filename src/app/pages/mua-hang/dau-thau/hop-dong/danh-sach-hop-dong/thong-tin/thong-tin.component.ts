@@ -153,12 +153,12 @@ export class ThongTinComponent implements OnInit {
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null
     })
-    await this.loadChiTiet(this.id);
     await Promise.all([
       this.loadDonVi(),
       this.loaiHopDongGetAll(),
       this.loaiDonviLienquanAll()
     ]);
+    await this.loadChiTiet(this.id);
   }
 
   validateGhiChu() {
@@ -175,6 +175,38 @@ export class ThongTinComponent implements OnInit {
       let res = await this.thongTinHopDong.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+          const data = res.data;
+          this.formDetailHopDong.patchValue({
+            canCu: data.canCu ?? null,
+            idGoiThau: [null],
+            maHdong: data.soHd ? data.soHd.split('/')[0] : null,
+            tenHd: data.tenHd ?? null,
+            ngayKy: data.ngayKy ?? null,
+            namKh: data.namKh ?? null,
+            ngayHieuLuc: data.tuNgayHluc && data.denNgayHluc ? [data.tuNgayHluc, data.denNgayHluc] : null,
+            soNgayThien: data.soNgayThien ?? null,
+            tenVthh: [null],
+            loaiVthh: data.loaiVthh ?? null,
+            cloaiVthh: data.cloaiVthh ?? null,
+            tenCloaiVthh: [null],
+            soLuong: data.soLuong ?? null,
+            donGiaVat: [null],
+            gtriHdSauVat: data.gtriHdSauVat ?? null,
+
+            maDvi: data.maDvi ?? null,
+            tenDvi: data.tenDvi ?? null,
+            diaChi: data.diaChi ?? null,
+            mst: data.mst ?? null,
+            sdt: data.sdt ?? null,
+            stk: data.stk ?? null,
+            tenNguoiDdien: data.stk ?? null,
+            chucVu: data.stk ?? null,
+            ghiChu: data.ghiChu ?? null
+          })
+          const dvlq = data.idNthau
+          if (dvlq) {
+            this.dvLQuan = this.listDviLquan.find(item => item.id == dvlq.split('/')[0] && item.version == dvlq.split('/')[1])
+          }
           console.log("🚀 ~ file: thong-tin.component.ts ~ line 178 ~ ThongTinComponent ~ loadChiTiet ~ res.data", res.data)
           // this.detail = res.data;
           // if (this.detail.tuNgayHluc && this.detail.denNgayHluc) {
@@ -435,38 +467,38 @@ export class ThongTinComponent implements OnInit {
   }
 
   openDialogKQLCNT() {
-    if (this.id == 0) {
-      const modalQD = this.modal.create({
-        nzTitle: 'Thông tin Kết quả lựa chọn nhà thầu',
-        nzContent: DialogCanCuKQLCNTComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          loaiVthh: this.loaiVthh
-        },
-      });
-      modalQD.afterClose.subscribe((data) => {
-        if (data) {
-          this.formDetailHopDong.patchValue({
-            canCu: data.soQd ?? null,
-            namKh: +data.namKhoach ?? null,
-            idGoiThau: null,
-            soNgayThien: null,
-            tenVthh: null,
-            loaiVthh: null,
-            cloaiVthh: null,
-            tenCloaiVthh: null,
-            soLuong: null,
-            donGiaVat: null,
-          })
-          if (data.children1 && data.children1.length > 0) {
-            this.listGoiThau = data.children1;
-          }
+    // if (this.id == 0) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin Kết quả lựa chọn nhà thầu',
+      nzContent: DialogCanCuKQLCNTComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        loaiVthh: this.loaiVthh
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.formDetailHopDong.patchValue({
+          canCu: data.soQd ?? null,
+          namKh: +data.namKhoach ?? null,
+          idGoiThau: null,
+          soNgayThien: null,
+          tenVthh: null,
+          loaiVthh: null,
+          cloaiVthh: null,
+          tenCloaiVthh: null,
+          soLuong: null,
+          donGiaVat: null,
+        })
+        if (data.children1 && data.children1.length > 0) {
+          this.listGoiThau = data.children1;
         }
-      });
-    }
+      }
+    });
+    // }
   }
 
   async onChangeGoiThau(event) {
@@ -476,14 +508,13 @@ export class ThongTinComponent implements OnInit {
         const data = res.data;
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
-          tenVthh: 'tên tạm',
+          tenVthh: data.tenVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
           cloaiVthh: data.cloaiVthh ?? null,
-          tenCloaiVthh: 'tên tạm',
+          tenCloaiVthh: data.tenCloaiVthh ?? null,
           soLuong: data.soLuong ?? null,
           donGiaVat: data.children3[0].dgiaSauThue ?? null,
         })
-        console.log("🚀 ~ file: thong-tin.component.ts ~ line 373 ~ ThongTinComponent ~ onChangeGoiThau ~ res.data", res.data)
       }
     }
   }
