@@ -19,6 +19,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DataService } from '../data.service';
 
 export class ItemData {
     id: any;
@@ -161,14 +162,13 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.loaiDn = this.routerActive.snapshot.paramMap.get('loaiDn');
-        this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -190,6 +190,13 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
+            await this.dataSource.currentData.subscribe(obj => {
+                this.qdChiTieu = obj?.qdChiTieu;
+                this.loaiDn = obj?.loaiDn;
+            })
+            if (!this.qdChiTieu){
+                this.close();
+            }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
             this.quanLyVonPhiService.maDeNghi().toPromise().then(

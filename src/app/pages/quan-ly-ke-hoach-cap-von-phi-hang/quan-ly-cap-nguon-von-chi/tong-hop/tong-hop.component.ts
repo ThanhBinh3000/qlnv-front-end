@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -86,6 +87,7 @@ export class TongHopComponent implements OnInit {
 		private location: Location,
 		private spinner: NgxSpinnerService,
 		private routerActive: ActivatedRoute,
+		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
@@ -195,8 +197,12 @@ export class TongHopComponent implements OnInit {
 			}
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
+			let obj = {
+				qdChiTieu: this.searchFilter.qdChiTieu,
+			}
+			this.dataSource.changeData(obj);
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + this.searchFilter.qdChiTieu
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
 			])
 		} else {
 			this.router.navigate([

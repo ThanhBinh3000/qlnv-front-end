@@ -13,6 +13,7 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -184,14 +185,13 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
         //lay id cua ban ghi
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
-        this.qdChiTieu = this.routerActive.snapshot.paramMap.get('soQd');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -209,10 +209,18 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             },
         );
-        if (this.maDviTao && this.qdChiTieu) {
+        if (!this.id){
+            await this.dataSource.currentData.subscribe(obj => {
+                this.qdChiTieu = obj?.qdChiTieu;
+                this.maDviTao = obj?.maDvi;
+            })
+            if (!this.qdChiTieu){
+                this.router.navigate([
+                    'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
+                ])
+            }
             await this.tongHop();
             this.trangThai = '1';
-            this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.spinner.show();
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
@@ -228,26 +236,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 },
             );
         } else {
-            if (this.id) {
-                await this.getDetailReport();
-            } else {
-                this.trangThai = '1';
-                this.maDviTao = this.userInfo?.dvql;
-                this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-                this.spinner.show();
-                this.quanLyVonPhiService.maDeNghi().toPromise().then(
-                    (res) => {
-                        if (res.statusCode == 0) {
-                            this.maDeNghi = res.data;
-                        } else {
-                            this.notification.error(MESSAGE.ERROR, res?.msg);
-                        }
-                    },
-                    (err) => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
-            }
+            await this.getDetailReport();
         }
 
         this.getStatusButton();
