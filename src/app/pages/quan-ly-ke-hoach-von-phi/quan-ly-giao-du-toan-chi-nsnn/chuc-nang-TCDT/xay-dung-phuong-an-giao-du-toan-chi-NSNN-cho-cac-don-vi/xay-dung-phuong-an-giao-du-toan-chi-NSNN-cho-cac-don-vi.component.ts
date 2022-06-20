@@ -1,3 +1,5 @@
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -62,6 +64,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   maDviTien: string;
   thuyetMinh: string;
   namDtoan: any;
+  capDvi: string;
   //danh muc
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
@@ -81,8 +84,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusBtnDVCT: boolean;
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
-  statusBtnGiao: boolean ;
-  statusBtnGiaoToanBo: boolean ;
+  statusBtnGiao: boolean;
+  statusBtnGiaoToanBo: boolean;
   statusBtnTongHop: boolean = true;
   statusAn: boolean = true;
   allChecked = false;
@@ -116,6 +119,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  statusBtnGuiDVCT: boolean;
   // them file vao danh sach
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
@@ -153,8 +157,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          console.log(this.donVis);
-
+          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -248,10 +251,17 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     if (this.userInfo?.roles[0]?.code == '3' && this.soQd && this.trangThaiBanGhi == '6') {
       this.statusBtnGiao = false;
-      this.statusBtnGiaoToanBo = false
     } else {
       this.statusBtnGiao = true;
-      this.statusBtnGiaoToanBo = true
+    }
+
+    this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+      if (item.trangThai == "1") {
+        this.statusBtnGiaoToanBo = true;
+      }
+    })
+    if (dVi && dVi.capDvi == "1") {
+      this.statusBtnGuiDVCT = true
     }
   }
 
@@ -345,11 +355,6 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
               e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
             })
           })
-          this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-            if (item.trangThai == "1") {
-              this.statusBtnGiaoToanBo = true;
-            }
-          })
           this.namPa = data.data.namPa;
           this.namDtoan = data.data.namDtoan;
           this.trangThaiBanGhi = data.data.trangThai;
@@ -367,16 +372,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
             this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
-              this.status = false;
+            this.status = false;
           } else {
-              this.status = true;
+            this.status = true;
           }
-          this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-            if (item.trangThai == "1") {
-              this.statusBtnGiaoToanBo = true;
-            }
-          })
-          if(this.soQd && this.trangThaiBanGhi == "6"){
+          if (this.soQd && this.trangThaiBanGhi == "6") {
             this.statusBtnTongHop = false;
           }
           this.updateEditCache();
@@ -498,10 +498,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     });
 
     //get list file url
-		let listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
 
     let tongHopTuIds = [];
     this.lstDviTrucThuoc.forEach(item => {
@@ -547,19 +547,19 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       tongHopTuIds: tongHopTuIds,
     }));
     //get file cong van url
-		let file: any = this.fileDetail;
-		if (file) {
-		  request1.soQd = await this.uploadFile(file);
-		}
+    let file: any = this.fileDetail;
+    if (file) {
+      request1.soQd = await this.uploadFile(file);
+    }
     this.spinner.show();
     if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.router.navigate([
-                '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
-              ])
+            this.router.navigate([
+              '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+            ])
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -680,72 +680,72 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   }
 
   getUnitNameDviTT(maDvi: string) {
-		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-	}
+    return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+  }
 
   getStatusName() {
     return this.getStatusName1(this.trangThaiBanGhi);
   }
 
   getStatusNameDviTT(trangThai: string) {
-		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
-	}
+    return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+  }
 
   xemChiTiet(id: string) {
-		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
-		])
-	}
+    this.router.navigate([
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
+    ])
+  }
 
   // lay ten trang thai theo ma trang thai
   public getStatusName1(id: string) {
     let statusName;
     switch (id) {
-        case Utils.TT_BC_0:
-            statusName = "Đã xóa";
-            break;
-        case Utils.TT_BC_1:
-            statusName = "Đang soạn"
-            break;
-        case Utils.TT_BC_2:
-            statusName = "Trình duyệt"
-            break;
-        case Utils.TT_BC_3:
-            statusName = "Trưởng BP từ chối"
-            break;
-        case Utils.TT_BC_4:
-            statusName = "Trưởng BP duyệt"
-            break;
-        case Utils.TT_BC_5:
-            statusName = "Lãnh đạo từ chối"
-            break;
-        case Utils.TT_BC_6:
-            statusName = "Lãnh đạo duyệt"
-            break;
-        case Utils.TT_BC_7:
-            statusName = "Mới"
-            break;
-        case Utils.TT_BC_8:
-            statusName = "Từ chối"
-            break;
-        case Utils.TT_BC_9:
-            statusName = "Tiếp nhận"
-            break;
-        case Utils.TT_BC_10:
-            statusName = "Điều chỉnh theo số kiểm tra"
-            break;
-        case Utils.TT_BC_11:
-            statusName = "Đã giao"
-            break;
-        case Utils.TT_BC_KT:
-            statusName = "Chưa có"
-            break;
-        default:
-            statusName = id;
-            break;
+      case Utils.TT_BC_0:
+        statusName = "Đã xóa";
+        break;
+      case Utils.TT_BC_1:
+        statusName = "Đang soạn"
+        break;
+      case Utils.TT_BC_2:
+        statusName = "Trình duyệt"
+        break;
+      case Utils.TT_BC_3:
+        statusName = "Trưởng BP từ chối"
+        break;
+      case Utils.TT_BC_4:
+        statusName = "Trưởng BP duyệt"
+        break;
+      case Utils.TT_BC_5:
+        statusName = "Lãnh đạo từ chối"
+        break;
+      case Utils.TT_BC_6:
+        statusName = "Lãnh đạo duyệt"
+        break;
+      case Utils.TT_BC_7:
+        statusName = "Mới"
+        break;
+      case Utils.TT_BC_8:
+        statusName = "Từ chối"
+        break;
+      case Utils.TT_BC_9:
+        statusName = "Tiếp nhận"
+        break;
+      case Utils.TT_BC_10:
+        statusName = "Điều chỉnh theo số kiểm tra"
+        break;
+      case Utils.TT_BC_11:
+        statusName = "Đã giao"
+        break;
+      case Utils.TT_BC_KT:
+        statusName = "Chưa có"
+        break;
+      default:
+        statusName = id;
+        break;
     }
     return statusName;
-}
+  }
 
   getStatusGiao(trangThai: string) {
     return (!this.statusBtnGiao && (trangThai == '0'));
@@ -1335,4 +1335,136 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.spinner.hide();
   }
 
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namDtoan,
+      loaiCopy: ''
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogCopyGiaoDuToanComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  namBcao: obj.namBcao
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
+    console.log(response);
+
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+         maBcaoNew = res.data;
+        //   let sub = "BTC";
+        //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+
+    let tongHopTuIds = [];
+    this.lstDviTrucThuoc.forEach(item => {
+      tongHopTuIds.push(item.id);
+    })
+
+    // gui du lieu trinh duyet len server
+    let lstCtietBcaoTemp: any[] = [];
+    let checkMoneyRange = true;
+    this.lstCtietBcao.forEach(item => {
+      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
+      let data: ItemDvi[] = [];
+      item.lstCtietDvis.forEach(e => {
+        data.push({
+          ...e,
+          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
+        })
+      })
+      lstCtietBcaoTemp.push({
+        ...item,
+        tongCong: mulMoney(item.tongCong, this.maDviTien),
+        lstCtietDvis: data,
+      })
+    })
+
+		let request = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maPa: maBcaoNew,
+      maPaCha: this.maPaCha,
+      namPa: this.namPa,
+      maPhanGiao: "2",
+      trangThai: this.trangThaiBanGhi,
+      thuyetMinh: this.thuyetMinh,
+      ngayTao: this.ngayTao,
+      maLoaiDan: "1",
+      maGiao: this.maGiao,
+      soQd: this.soQd,
+      tongHopTuIds: tongHopTuIds,
+		};
+
+		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+  }
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
 }
