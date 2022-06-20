@@ -46,4 +46,5 @@ export const MESSAGE = {
   NO_REPORT:'',
   RATE_FORM: 'Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!',
   FINISH_FORM: 'Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!',
+  TRANG_THAI_TIEP_NHAN: 'Bản ghi đã được tiếp nhận'
 };

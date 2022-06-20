@@ -1,4 +1,4 @@
-import { DatePipe,Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,12 +14,12 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 // loai trang thai kiem tra
 export const TRANG_THAI_GIAO_DU_TOAN = [
   {
-      id: '1',
-      tenDm: "Chưa nhận",
+    id: '1',
+    tenDm: "Chưa nhận",
   },
   {
-      id: '2',
-      tenDm: "Đã nhận",
+    id: '2',
+    tenDm: "Đã nhận",
   },
 ]
 @Component({
@@ -31,28 +31,28 @@ export const TRANG_THAI_GIAO_DU_TOAN = [
 export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
-  listBcaoKqua:any []=[];
+  listBcaoKqua: any[] = [];
   trangThais: any = TRANG_THAI_GIAO_DU_TOAN;                          // danh muc loai bao cao
-  trangThai!:string;
+  trangThai!: string;
   searchFilter = {
     maPhanGiao: '2',
     maLoai: '1',
     loaiTimKiem: "1",
-    maDvi:'',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
-    trangThais:[],
-    maBcao:'',
-    maLoaiDuAn:'',
-    namBcao:null,
+    maDvi: '',
+    ngayTaoTu: '',
+    ngayTaoDen: '',
+    trangThais: [],
+    maBcao: '',
+    maLoaiDuAn: '',
+    namBcao: null,
     thangBcao: '',
-    dotBcao:'',
+    dotBcao: '',
     paggingReq: {
       limit: 10,
       page: 1
     },
     str: '',
-    donVi:'',
+    donVi: '',
   };
   date: any = new Date()
 
@@ -72,7 +72,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notification:NzNotificationService,
+    private notification: NzNotificationService,
     private location: Location,
     private spinner: NgxSpinnerService,
   ) {
@@ -100,20 +100,20 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   }
 
   // lay ten don vi tao
-  getUnitName(dvitao:any){
+  getUnitName(dvitao: any) {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  async onSubmit(){
+  async onSubmit() {
     this.spinner.show();
-    this.searchFilter.trangThais= [];
-    if(this.trangThai){
+    this.searchFilter.trangThais = [];
+    if (this.trangThai) {
       this.searchFilter.trangThais.push(this.trangThai)
-    }else{
+    } else {
       this.searchFilter.trangThais = ['1', '2']
     }
     await this.quanLyVonPhiService.timBaoCaoGiao(this.searchFilter).toPromise().then(res => {
-      if(res.statusCode==0){
+      if (res.statusCode == 0) {
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
           e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
@@ -124,10 +124,10 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
         })
         this.totalElements = res.data?.totalElements;
         this.totalPages = res.data?.totalPages;
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-    },err =>{
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
@@ -158,22 +158,22 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   public getStatusName1(id: string) {
     let statusName;
     switch (id) {
-        case Utils.TT_BC_1:
-            statusName = "Chưa nhận"
-            break;
-        case Utils.TT_BC_2:
-            statusName = "Đã nhận"
-            break;
-        default:
-            statusName = id;
-            break;
+      case Utils.TT_BC_1:
+        statusName = "Chưa nhận"
+        break;
+      case Utils.TT_BC_2:
+        statusName = "Đã nhận"
+        break;
+      default:
+        statusName = id;
+        break;
     }
     return statusName;
-}
+  }
 
   xemChiTiet(id: string) {
     this.router.navigate([
-        '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
     ])
   }
 }
