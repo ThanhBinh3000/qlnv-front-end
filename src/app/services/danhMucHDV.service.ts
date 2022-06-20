@@ -780,5 +780,12 @@ dMucBcaoDuyet(): Observable<any> {
       this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_PL1",
     );
   }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMMaDuAnPhuLuc3(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/MA_DU_AN_PL3",
+    );
+  }
 }
 

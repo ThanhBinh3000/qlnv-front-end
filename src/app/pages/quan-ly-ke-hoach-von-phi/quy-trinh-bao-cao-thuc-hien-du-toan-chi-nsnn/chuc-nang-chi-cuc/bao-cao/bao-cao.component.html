@@ -476,7 +476,56 @@
                       <td [hidden]="status" nzRight></td>
                       <td [hidden]="status" nzRight></td>
                     </tr>
-                    
+                    <tr>
+                      <td></td>
+                      <td>TỔNG SỐ</td>
+                      <td>{{kphiSdungTcong}}</td>
+                      <td>{{kphiSdungDtoan}}</td>
+                      <td>{{kphiSdungNguonKhac}}</td>
+                      <td>{{kphiSdungNguonQuy}}</td>
+                      <td>{{kphiSdungNstt}}</td>
+                      <td>{{kphiSdungCk}}</td>
+                      <td>{{kphiChuyenSangTcong}}</td>
+                      <td>{{kphiChuyenSangDtoan}}</td>
+                      <td>{{kphiChuyenSangNguonKhac}}</td>
+                      <td>{{kphiChuyenSangNguonQuy}}</td>
+                      <td>{{kphiChuyenSangNstt}}</td>
+                      <td>{{kphiChuyenSangCk}}</td>
+                      <td>{{dtoanGiaoTcong}}</td>
+                      <td>{{dtoanGiaoDtoan}}</td>
+                      <td>{{dtoanGiaoNguonKhac}}</td>
+                      <td>{{dtoanGiaoNguonQuy}}</td>
+                      <td>{{dtoanGiaoNstt}}</td>
+                      <td>{{dtoanGiaoCk}}</td>
+                      <td>{{giaiNganThangBcaoTcong}}</td>
+                      <td>{{giaiNganThangBcaoTcongTle}}</td>
+                      <td>{{giaiNganThangBcaoDtoan}}</td>
+                      <td>{{giaiNganThangBcaoDtoanTle}}</td>
+                      <td>{{giaiNganThangBcaoNguonKhac}}</td>
+                      <td>{{giaiNganThangBcaoNguonKhacTle}}</td>
+                      <td>{{giaiNganThangBcaoNguonQuy}}</td>
+                      <td>{{giaiNganThangBcaoNguonQuyTle}}</td>
+                      <td>{{giaiNganThangBcaoNstt}}</td>
+                      <td>{{giaiNganThangBcaoNsttTle}}</td>
+                      <td>{{giaiNganThangBcaoCk}}</td>
+                      <td>{{giaiNganThangBcaoCkTle}}</td>
+                      <td>{{luyKeGiaiNganTcong}}</td>
+                      <td>{{luyKeGiaiNganTcongTle}}</td>
+                      <td>{{luyKeGiaiNganDtoan}}</td>
+                      <td>{{luyKeGiaiNganDtoanTle}}</td>
+                      <td>{{luyKeGiaiNganNguonKhac}}</td>
+                      <td>{{luyKeGiaiNganNguonKhacTle}}</td>
+                      <td>{{luyKeGiaiNganNguonQuy}}</td>
+                      <td>{{luyKeGiaiNganNguonQuyTle}}</td>
+                      <td>{{luyKeGiaiNganNstt}}</td>
+                      <td>{{luyKeGiaiNganNsttTle}}</td>
+                      <td>{{luyKeGiaiNganCk}}</td>
+                      <td>{{luyKeGiaiNganCkTle}}</td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                    </tr>
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td [nzIndentSize]="data.level * 8">
@@ -1551,7 +1600,7 @@
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let item of maDans">
+                          <div *ngFor="let item of maDanFull">
                             <div *ngIf="item.id == data.maDan">
                               {{item.tenDm}}
                             </div>
@@ -1631,7 +1680,7 @@
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let item of maDans">
+                          <div *ngFor="let item of maDanFull">
                             <div *ngIf="item.id == data.maDan">
                               {{item.tenDm}}
                             </div>
