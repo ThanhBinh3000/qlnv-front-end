@@ -1,3 +1,5 @@
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -1333,4 +1335,136 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.spinner.hide();
   }
 
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namDtoan,
+      loaiCopy: ''
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogCopyGiaoDuToanComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  namBcao: obj.namBcao
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
+    console.log(response);
+
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+         maBcaoNew = res.data;
+        //   let sub = "BTC";
+        //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+
+    let tongHopTuIds = [];
+    this.lstDviTrucThuoc.forEach(item => {
+      tongHopTuIds.push(item.id);
+    })
+
+    // gui du lieu trinh duyet len server
+    let lstCtietBcaoTemp: any[] = [];
+    let checkMoneyRange = true;
+    this.lstCtietBcao.forEach(item => {
+      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
+      let data: ItemDvi[] = [];
+      item.lstCtietDvis.forEach(e => {
+        data.push({
+          ...e,
+          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
+        })
+      })
+      lstCtietBcaoTemp.push({
+        ...item,
+        tongCong: mulMoney(item.tongCong, this.maDviTien),
+        lstCtietDvis: data,
+      })
+    })
+
+		let request = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maPa: maBcaoNew,
+      maPaCha: this.maPaCha,
+      namPa: this.namPa,
+      maPhanGiao: "2",
+      trangThai: this.trangThaiBanGhi,
+      thuyetMinh: this.thuyetMinh,
+      ngayTao: this.ngayTao,
+      maLoaiDan: "1",
+      maGiao: this.maGiao,
+      soQd: this.soQd,
+      tongHopTuIds: tongHopTuIds,
+		};
+
+		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+  }
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
 }

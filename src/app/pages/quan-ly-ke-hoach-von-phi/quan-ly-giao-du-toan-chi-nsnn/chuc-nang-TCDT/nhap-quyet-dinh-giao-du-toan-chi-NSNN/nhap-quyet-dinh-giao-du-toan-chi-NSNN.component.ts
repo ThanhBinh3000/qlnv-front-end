@@ -1,3 +1,5 @@
+import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -248,7 +250,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     }
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
   }
   //upload file
   async uploadFile(file: File) {
@@ -323,7 +324,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -367,7 +368,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();
@@ -501,7 +502,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     }
     this.spinner.show();
     if (!this.id) {
-      this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -1146,6 +1147,117 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         this.total.nguonKhac += item.nguonKhac;
       }
     })
+  }
+
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namPa,
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogCopyGiaoDuToanComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  namBcao: obj.namBcao
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
+    console.log(response);
+
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+         maBcaoNew = res.data;
+          let sub = "BTC";
+         maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+
+		let lstCtietBcaoTemps: any[] = [];
+		this.lstCtietBcao.forEach(data => {
+			lstCtietBcaoTemps.push({
+				...data,
+        tongCong: mulMoney(data.tongCong, this.maDviTien),
+        nguonNsnn: mulMoney(data.nguonNsnn, this.maDviTien),
+        nguonKhac: mulMoney(data.nguonKhac, this.maDviTien),
+				id: null,
+        listCtietDvi: [],
+			})
+		})
+		let request = {
+      id: null,
+      fileDinhKems:[],
+      listIdFiles: [],
+      lstCtiets: lstCtietBcaoTemps,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maPa: maBcaoNew,
+      namPa: this.namPa,
+      maPhanGiao: '1',
+      trangThai: this.trangThaiBanGhi,
+      thuyetMinh: this.thuyetMinh,
+      soQd: this.soQd,
+		};
+
+		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+	}
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
   }
 
 }

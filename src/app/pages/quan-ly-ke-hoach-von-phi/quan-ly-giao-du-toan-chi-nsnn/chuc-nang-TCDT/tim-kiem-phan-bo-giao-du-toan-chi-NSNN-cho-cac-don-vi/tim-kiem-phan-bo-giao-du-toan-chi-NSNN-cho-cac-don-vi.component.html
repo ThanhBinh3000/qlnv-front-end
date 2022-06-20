@@ -52,8 +52,8 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại dự án</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="searchFilter.loaiDuAn"
-              [class]="searchFilter.loaiDuAn ?'' : 'input-error-validate'">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="searchFilter.maLoaiDan"
+              [class]="searchFilter.maLoaiDan ?'' : 'input-error-validate'">
               <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>

@@ -1,3 +1,5 @@
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,8 +19,6 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-
-
 export class ItemData {
   id!: any;
   stt: any;
@@ -47,6 +47,7 @@ export class ItemFile {
   templateUrl: './xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.component.html',
   styleUrls: ['./xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.component.scss']
 })
+
 export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implements OnInit {
   //thong tin dang nhap
   id: any;
@@ -103,7 +104,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   fileList: NzUploadFile[] = [];
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
-
   // before uploaf file
   beforeUploadQdGiaoDuToan = (file: NzUploadFile): boolean => {
     this.fileDetail = file;
@@ -249,12 +249,13 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 1, this.userInfo?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     if (this.userInfo?.roles[0]?.code == '3' && this.soQd && this.trangThaiBanGhi == '6') {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
     }
+
     this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
       if (item.trangThai == "1") {
         this.statusBtnGiaoToanBo = true;
@@ -362,7 +363,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.maPaCha = data.data.maPaCha;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
-          this.ngayTao = data.data.ngayTao;
+          this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
@@ -373,15 +374,11 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
-            this.lstDviChon = [];
-            this.donVis.forEach(item => {
-              if ((this.lstDvi.findIndex(e => e.maDvi == item.maDvi) == -1) && (item.parent?.maDvi === this.maDonViTao)) {
-                this.lstDviChon.push(item);
-              }
-            })
           } else {
             this.status = true;
-            this.statusAn = false;
+          }
+          if (this.soQd && this.trangThaiBanGhi == "6") {
+            this.statusBtnTongHop = false;
           }
           this.updateEditCache();
         } else {
@@ -507,13 +504,11 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       listFile.push(await this.uploadFile(iterator));
     }
 
-    // gan danh sach don vi truc thuoc
     let tongHopTuIds = [];
     this.lstDviTrucThuoc.forEach(item => {
       tongHopTuIds.push(item.id);
     })
 
-    // doi du lieu request thanh kieu string
     let request = JSON.parse(JSON.stringify({
       id: this.id,
       fileDinhKems: this.lstFiles,
@@ -528,7 +523,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       ngayTao: this.ngayTao,
-      maLoaiDan: "1",
+      maLoaiDan: "2",
       maGiao: this.maGiao,
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
@@ -547,7 +542,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       ngayTao: this.ngayTao,
-      maLoaiDan: "1",
+      maLoaiDan: "2",
       maGiao: this.maGiao,
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
@@ -564,7 +559,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.router.navigate([
-              '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+              '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
             ])
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -620,7 +615,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         maDviTien: this.maDviTien,
         soQd: this.soQd,
         listCtiet: lstCtiet,
-        maLoaiDan: "1",
+        maLoaiDan: "2",
         namDtoan: this.namPa,
         ngayGiao: this.ngayTao,
         ngayTao: this.ngayTao,
@@ -650,7 +645,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
               maDviTien: this.maDviTien,
               soQd: this.soQd,
               listCtiet: lstCtiet,
-              maLoaiDan: "1",
+              maLoaiDan: "2",
               namDtoan: this.namPa,
               ngayGiao: this.ngayTao,
               ngayTao: this.ngayTao,
@@ -685,9 +680,22 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     return this.donVis.find((item) => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
-  getStatusName() {
+  getUnitNameDviTT(maDvi: string) {
+    return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+  }
 
+  getStatusName() {
     return this.getStatusName1(this.trangThaiBanGhi);
+  }
+
+  getStatusNameDviTT(trangThai: string) {
+    return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+  }
+
+  xemChiTiet(id: string) {
+    this.router.navigate([
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
+    ])
   }
 
   // lay ten trang thai theo ma trang thai
@@ -1151,6 +1159,14 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     })
   }
 
+  getLowStatus(str: string) {
+    var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+    if (index == -1) {
+      return false;
+    }
+    return true;
+  }
+
   addLine(id: any) {
     var maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
     let obj = {
@@ -1260,7 +1276,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     }
 
     this.router.navigate([
-      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + request.id + "/" + request.namDtoan
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + request.id + "/" + request.namDtoan
     ]);
 
     this.spinner.show();
@@ -1320,4 +1336,136 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.spinner.hide();
   }
 
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namDtoan,
+      loaiCopy: ''
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogCopyGiaoDuToanComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  namBcao: obj.namBcao
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
+    console.log(response);
+
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+         maBcaoNew = res.data;
+        //   let sub = "BTC";
+        //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+
+    let tongHopTuIds = [];
+    this.lstDviTrucThuoc.forEach(item => {
+      tongHopTuIds.push(item.id);
+    })
+
+    // gui du lieu trinh duyet len server
+    let lstCtietBcaoTemp: any[] = [];
+    let checkMoneyRange = true;
+    this.lstCtietBcao.forEach(item => {
+      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
+      let data: ItemDvi[] = [];
+      item.lstCtietDvis.forEach(e => {
+        data.push({
+          ...e,
+          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
+        })
+      })
+      lstCtietBcaoTemp.push({
+        ...item,
+        tongCong: mulMoney(item.tongCong, this.maDviTien),
+        lstCtietDvis: data,
+      })
+    })
+
+		let request = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maPa: maBcaoNew,
+      maPaCha: this.maPaCha,
+      namPa: this.namPa,
+      maPhanGiao: "2",
+      trangThai: this.trangThaiBanGhi,
+      thuyetMinh: this.thuyetMinh,
+      ngayTao: this.ngayTao,
+      maLoaiDan: "2",
+      maGiao: this.maGiao,
+      soQd: this.soQd,
+      tongHopTuIds: tongHopTuIds,
+		};
+
+		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+  }
+
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
 }

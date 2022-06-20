@@ -32,7 +32,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     loai: null,
     trangThais: [],
     maPa: "",
-    loaiDuAn: null,
+    maLoaiDan: null,
     soQd: "",
     paggingReq: {
       limit: 10,
@@ -185,16 +185,16 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
 
   async taoMoi() {
-    if (!this.searchFilter.loaiDuAn) {
+    if (!this.searchFilter.maLoaiDan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (this.searchFilter.loaiDuAn == '1') {
+    if (this.searchFilter.maLoaiDan == '1') {
       this.router.navigate([
         'qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-thong-tin-quyet-toan-giao-du-toan-chi-NSNN-cho-cac-don-vi',
       ]);
     }
-    else if (this.searchFilter.loaiDuAn == '2') {
+    else if (this.searchFilter.maLoaiDan == '2') {
       this.router.navigate([
         'qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-thong-tin-qd-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi',
       ]);

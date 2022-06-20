@@ -48,11 +48,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
+				<a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
 				</a>
