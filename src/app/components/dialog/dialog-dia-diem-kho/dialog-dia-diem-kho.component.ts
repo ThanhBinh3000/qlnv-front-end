@@ -183,22 +183,6 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    // let res = await this.tinhTrangKhoHienThoiService.getTreeKho();
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   if (res.data) {
-    //     if (this.maDvi) {
-    //       let getDataCuc = res.data.child.filter(x => x.maDtqgkv == this.maDvi);
-    //       if (getDataCuc && getDataCuc.length > 0) {
-    //         this.dataTreeKho = getDataCuc[0].child;
-    //       }
-    //     }
-    //     else {
-    //       this.dataTreeKho = res.data;
-    //     }
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
   }
 
   convertTreeToList(root: any): any[] {
