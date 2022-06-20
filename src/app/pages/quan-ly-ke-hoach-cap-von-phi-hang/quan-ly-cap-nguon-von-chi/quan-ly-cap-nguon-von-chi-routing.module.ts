@@ -30,7 +30,7 @@ const routes: Routes = [
 			).then((m) => m.TongHopTuCucKhuVucModule),
 	},
 	{
-		path: 'tong-hop-tu-cuc-khu-vuc/0/:maDvi/:soQd',
+		path: 'tong-hop-tu-cuc-khu-vuc',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tu-cuc-khu-vuc/tong-hop-tu-cuc-khu-vuc.module'
@@ -44,7 +44,7 @@ const routes: Routes = [
 			).then((m) => m.TongHopTaiTongCucModule),
 	},
 	{
-		path: 'tong-hop-tai-tong-cuc/:qdChiTieu',
+		path: 'tong-hop-tai-tong-cuc',
 		loadChildren: () =>
 			import(
 				'./tong-hop-tai-tong-cuc/tong-hop-tai-tong-cuc.module'
@@ -58,7 +58,7 @@ const routes: Routes = [
 			).then((m) => m.TonghopModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-trung-thau/0/:loaiDn/:qdChiTieu',
+		path: 'de-nghi-theo-quyet-dinh-trung-thau',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-trung-thau/de-nghi-theo-quyet-dinh-trung-thau.module'
@@ -79,7 +79,7 @@ const routes: Routes = [
 			).then((m) => m.DeNghiTheoQuyetDinhTrungThauModule),
 	},
 	{
-		path: 'de-nghi-theo-quyet-dinh-don-gia-mua/0/:loaiDn/:qdChiTieu',
+		path: 'de-nghi-theo-quyet-dinh-don-gia-mua',
 		loadChildren: () =>
 			import(
 				'./de-nghi-theo-quyet-dinh-don-gia-mua/de-nghi-theo-quyet-dinh-don-gia-mua.module'

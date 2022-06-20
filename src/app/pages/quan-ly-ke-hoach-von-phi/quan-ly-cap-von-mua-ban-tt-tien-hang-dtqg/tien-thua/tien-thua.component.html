@@ -136,7 +136,7 @@
                                     <th rowspan="2">Tổng số tiền</th>
                                     <th colspan="2">Chia ra</th>
                                     <th rowspan="2">Số tiền (bằng chữ)</th>
-                                    <th rowspan="2"></th>
+                                    <th rowspan="2" [hidden]="statusGui"></th>
                                 </tr>
                                 <tr>
                                     <th>Nộp thuế</th>
@@ -216,7 +216,7 @@
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col nzSpan="24">
                                 <label class="search__label">Thuyết minh</label>
-                                <textarea rows="2" nz-input [(ngModel)]="ttGui.thuyetMinh"></textarea>
+                                <textarea rows="2" nz-input [(ngModel)]="ttGui.thuyetMinh" [disabled]="statusGui"></textarea>
                             </div>
                         </div>
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -303,7 +303,7 @@
                                 </div>
                                 <div nz-col nzSpan="24">
                                     <label class="search__label">Thuyết minh</label>
-                                    <textarea rows="2" nz-input [(ngModel)]="ttNhan.thuyetMinh"></textarea>
+                                    <textarea rows="2" nz-input [(ngModel)]="ttNhan.thuyetMinh" [disabled]="statusNhan"></textarea>
                                 </div>
                             </div>
                             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
