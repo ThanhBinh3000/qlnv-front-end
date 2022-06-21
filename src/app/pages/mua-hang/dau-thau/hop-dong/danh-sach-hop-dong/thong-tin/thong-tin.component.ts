@@ -22,6 +22,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 
 interface DonviLienQuanModel {
   id: number;
@@ -97,7 +99,8 @@ export class ThongTinComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private dauThauGoiThauService: dauThauGoiThauService,
     private uploadFileService: UploadFileService,
-    private donviLienQuanService: DonviLienQuanService
+    private donviLienQuanService: DonviLienQuanService,
+    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
     this.formDetailHopDong = this.fb.group(
       {
@@ -159,6 +162,7 @@ export class ThongTinComponent implements OnInit {
       this.loaiDonviLienquanAll()
     ]);
     await this.loadChiTiet(this.id);
+
   }
 
   validateGhiChu() {
@@ -178,19 +182,19 @@ export class ThongTinComponent implements OnInit {
           const data = res.data;
           this.formDetailHopDong.patchValue({
             canCu: data.canCu ?? null,
-            idGoiThau: [null],
+            idGoiThau: data.idGoiThau ?? null,
             maHdong: data.soHd ? data.soHd.split('/')[0] : null,
             tenHd: data.tenHd ?? null,
             ngayKy: data.ngayKy ?? null,
             namKh: data.namKh ?? null,
             ngayHieuLuc: data.tuNgayHluc && data.denNgayHluc ? [data.tuNgayHluc, data.denNgayHluc] : null,
             soNgayThien: data.soNgayThien ?? null,
-            tenVthh: [null],
+            tenVthh: data.tenVthh ?? null,
             loaiVthh: data.loaiVthh ?? null,
             cloaiVthh: data.cloaiVthh ?? null,
-            tenCloaiVthh: [null],
+            tenCloaiVthh: data.tenCloaiVthh ?? null,
             soLuong: data.soLuong ?? null,
-            donGiaVat: [null],
+            donGiaVat: data.donGiaVat ?? null,
             gtriHdSauVat: data.gtriHdSauVat ?? null,
 
             maDvi: data.maDvi ?? null,
@@ -203,10 +207,12 @@ export class ThongTinComponent implements OnInit {
             chucVu: data.stk ?? null,
             ghiChu: data.ghiChu ?? null
           })
-          const dvlq = data.idNthau
+          const dvlq = data.idNthau;
           if (dvlq) {
             this.dvLQuan = this.listDviLquan.find(item => item.id == dvlq.split('/')[0] && item.version == dvlq.split('/')[1])
           }
+          await this.getListGoiThau(data.canCu)
+
           console.log("🚀 ~ file: thong-tin.component.ts ~ line 178 ~ ThongTinComponent ~ loadChiTiet ~ res.data", res.data)
           // this.detail = res.data;
           // if (this.detail.tuNgayHluc && this.detail.denNgayHluc) {
@@ -560,6 +566,35 @@ export class ThongTinComponent implements OnInit {
 
   onChangeDvlq(event) {
     this.dvLQuan = this.listDviLquan.find(item => item.id == event);
-    console.log("🚀 ~ file: thong-tin.component.ts ~ line 504 ~ ThongTinComponent ~ onChangeDvlq ~ event", event)
   }
+
+  async getListGoiThau(canCu) {
+    const body = {
+      "denNgayQd": null,
+      "loaiVthh": this.loaiVthh,
+      "maDvi": null,
+      "namKhoach": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": PAGE_SIZE_DEFAULT,
+        "orderBy": null,
+        "orderType": null,
+        "page": 0
+      },
+      "soQd": null,
+      "str": null,
+      "trangThai": null,
+      "tuNgayQd": null
+    };
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      const goiThauSelected = data.find(item => item.canCu == canCu);
+      if (!!goiThauSelected) {
+        this.listGoiThau = goiThauSelected.children1;
+      }
+    }
+  }
+
 }
