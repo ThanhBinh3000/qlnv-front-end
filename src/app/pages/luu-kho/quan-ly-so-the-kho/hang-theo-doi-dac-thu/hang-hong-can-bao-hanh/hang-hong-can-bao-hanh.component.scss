@@ -1,0 +1,37 @@
+.hang-theo-doi-dac-thu {
+  .form-item {
+    padding: 6px 10px;
+  }
+}
+
+.group-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-top: 12px;
+
+  h3 {
+    text-transform: uppercase;
+  }
+
+  .buttons {
+    padding: 0 10px;
+
+    .btn-xoa {
+      background-color: rgba($color: #e00606, $alpha: 0.2);
+      color: #e00606;
+      border: 1px solid #e00606 !important;
+    }
+  }
+
+
+}
+
+.data-table {
+  padding: 0 10px;
+  border: 1px solid #f0f0f0 !important;
+
+  .nowrap {
+    padding: 0 10px !important;
+  }
+}
