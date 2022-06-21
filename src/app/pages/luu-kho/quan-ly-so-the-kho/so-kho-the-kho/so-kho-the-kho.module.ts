@@ -5,8 +5,6 @@ import { SoKhoTheKhoComponent } from './so-kho-the-kho.component';
 @NgModule({
   declarations: [SoKhoTheKhoComponent],
   imports: [CommonModule],
-  exports: [
-    SoKhoTheKhoComponent
-  ]
+  exports: [SoKhoTheKhoComponent],
 })
-export class SoKhoTheKhoModule { }
+export class SoKhoTheKhoModule {}
