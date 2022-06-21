@@ -69,6 +69,7 @@
               <th>Mã báo cáo</th>
               <th>Mã báo cáo trước khi điều chỉnh</th>
               <th>Quyết toán năm</th>
+              <th>Thông báo quyết toán năm đối với vốn, phí hàng DTQG</th>
               <th>Số công văn</th>
               <th>Ngày lập</th>
               <th>Ngày trình duyệt</th>
@@ -83,6 +84,9 @@
               <td>{{maBcao}}</td>
               <td>{{maDchinh}}</td>
               <td>{{namQtoan}}</td>
+              <td>
+                <input class="search__input" nz-input [(ngModel)]="thongBao" [class]="thongBao ? '' : 'input-error-validate'" />
+              </td>
               <td>
                 <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                   <button nz-button>

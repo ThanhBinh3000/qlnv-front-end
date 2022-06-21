@@ -199,12 +199,20 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     );
   }
+  // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG theo năm
+  CtietBcaoQuyetToanNam1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
+      'http://192.168.1.105:8094/quyet-toan/tra-cuu' ,
+      request,
+    );
+  }
 
   // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG
   CtietBcaoQuyetToan1(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
-      // 'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
+      'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
     );
   }
 
@@ -353,8 +361,8 @@ export class QuanLyVonPhiService extends BaseService {
   // update báo cáo quyết toán vốn, phí hàng DTQG
   updateBaoCaoQuyetToan1(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/cap-nhat',
-      // 'http://192.168.1.105:8094/quyet-toan/cap-nhat',
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/cap-nhat',
+      'http://192.168.1.105:8094/quyet-toan/cap-nhat',
       request,
     );
   }
@@ -859,8 +867,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approveQuyetToan1(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
-      // 'http://192.168.1.103:8094/quyet-toan/trang-thai',
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
+      'http://192.168.1.105:8094/quyet-toan/trang-thai',
       request,
     );
   }
@@ -1045,8 +1053,8 @@ export class QuanLyVonPhiService extends BaseService {
   //xóa báo cáo nút xóa Báo cáo quyết toán
   xoaBaoCaoLapQuyetToan1(id: any): Observable<any> {
     return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa/' + id
-      // 'http://192.168.1.105:8094/quyet-toan/xoa/' + id
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa/' + id
+      'http://192.168.1.105:8094/quyet-toan/xoa/' + id
     );
   }
 

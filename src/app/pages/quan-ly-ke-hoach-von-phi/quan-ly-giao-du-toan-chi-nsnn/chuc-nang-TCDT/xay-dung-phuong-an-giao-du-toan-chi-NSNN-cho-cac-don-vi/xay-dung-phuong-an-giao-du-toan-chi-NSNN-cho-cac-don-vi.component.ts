@@ -90,6 +90,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusAn: boolean = true;
   allChecked = false;
   lstDviTrucThuoc: any[] = [];
+  checkSumUp: boolean
   //khac
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
   checkGiao: boolean = true;
@@ -366,6 +367,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
+          this.checkSumUp = data.data.checkSumUp;
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||

@@ -20,6 +20,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
+    thongBao: null,
     maBcao: null,
     maPhanBcao: '2',
     namQtoan: null,

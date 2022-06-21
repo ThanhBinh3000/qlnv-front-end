@@ -75,6 +75,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     thanhTien: 0,
     checked: false
   };
+  thongBao: string;
   id: string;
   userInfo: any;
   trangThaiPhuLuc: string;
@@ -280,7 +281,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.CtietBcaoQuyetToan(this.id).toPromise().then(
+    await this.quanLyVonPhiService.CtietBcaoQuyetToan1(this.id).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -303,7 +304,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.congVan = data.data.congVan;
           this.lstFiles = data.data.fileDinhKems;
-
+          this.thongBao = data.data.thongBao;
 					this.listFile = [];;
           this.getTotal()
           this.updateEditCache();
@@ -323,7 +324,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       namQtoan: this.namQtoan
     }
     this.spinner.show();
-    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
+    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam1(res).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           console.log(data);
@@ -420,6 +421,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       maBcao: this.maBcao,
       maDchinh:this.maDchinh,
       maPhanBcao: this.maPhanBcao,
+      thongBao: this.thongBao
     }));
     //get file cong van url
     let file: any = this.fileDetail;
@@ -430,7 +432,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -504,7 +506,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.approveQuyetToan1(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
