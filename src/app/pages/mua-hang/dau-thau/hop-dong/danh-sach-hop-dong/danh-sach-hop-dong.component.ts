@@ -204,8 +204,19 @@ export class DanhSachHopDongComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
-
+      nzOnOk: async () => {
+        const body = {
+          id: item.id,
+        }
+        let res = await this.thongTinHopDong.delete(
+          body,
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.search();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       },
     });
   }
@@ -249,8 +260,9 @@ export class DanhSachHopDongComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   exportData() {
