@@ -59,9 +59,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     congVan: ItemCongVan;
     ngayTao: string;
     ngayTrinh: string;
+    ngayDuyet: string;
     ngayPheDuyet: string;
     trangThai: string;
     maDviTao: string;
+    maDviTien: string = "1";
     thuyetMinh: string;
     lyDoTuChoi: string;
     newDate = new Date();
@@ -81,7 +83,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         tongTienMuoi: null,
         idMuoi: null,
     };
-    tong: ItemData = {
+    tongSo: ItemData = {
         id: null,
         maCucKv: "",
         kphiDaCapThoc: 0,
@@ -101,32 +103,33 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     trangThais: any[] = [
         {
-            id: Utils.TT_BC_1,
-            tenDm: "Đang soạn",
-        },
-        {
-            id: Utils.TT_BC_4,
-            tenDm: "Trình duyệt",
-        },
-        {
-            id: Utils.TT_BC_5,
-            tenDm: "Lãnh đạo từ chối",
-        },
-        {
-            id: Utils.TT_BC_7,
-            tenDm: "Lãnh đạo duyệt",
-        },
-        {
-            id: Utils.TT_BC_8,
-            tenDm: "Từ chối",
-        },
-        {
-            id: Utils.TT_BC_9,
-            tenDm: "Tiếp nhận",
-        }
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_3,
+			tenDm: "Trưởng BP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trưởng BP duyệt",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo phê duyệt",
+		},
     ]
     donVis: any[] = [];
     cucKhuVucs: any[] = [];
+    dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     nguonBcaos: any[] = NGUON_BAO_CAO;
     //trang thai cac nut
@@ -377,13 +380,18 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;
+                    this.total(-1, this.tongSo);
                     this.maDviTao = data.data.maDvi;
                     this.lstCtietBcao = data.data.thopCucKvCtiets;
+                    this.lstCtietBcao.forEach(item => {
+                        this.total(1, item);
+                    })
                     this.maDeNghi = data.data.maDnghi;
                     this.qdChiTieu = data.data.soQdChiTieu;
                     this.congVan = data.data.congVan;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh;
@@ -464,7 +472,8 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             thopCucKvCtiets: this.lstCtietBcao,
             maDvi: this.maDviTao,
             maDnghi: this.maDeNghi,
-            maDviTien: "",
+            maDviTien: "1",
+            congVan: this.congVan,
             loaiDnghi: this.nguonBcao,
             soQdChiTieu: this.qdChiTieu,
             trangThai: this.trangThai,
@@ -497,7 +506,20 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 },
             );
         } else {
-
+            this.quanLyVonPhiService.capNhatDnghiThop(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                            this.getDetailReport();
+                            this.getStatusButton();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
         }
         this.spinner.hide();
     }
@@ -512,8 +534,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.lstCtietBcao = data.data;
                     this.lstCtietBcao.forEach(item => {
-
-                        this.total(item);
+                        this.total(1, item);
                     })
                     this.cucKhuVucs.forEach(item => {
                         if (this.lstCtietBcao.findIndex(e => e.maCucKv == item.maDvi) == -1) {
@@ -533,16 +554,16 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         );
     }
 
-    total(item: ItemData) {
-        this.tong.kphiDaCapThoc += item.kphiDaCapThoc;
-        this.tong.ycauCapThemThoc += item.ycauCapThemThoc;
-        this.tong.tongTienThoc += item.tongTienThoc;
-        this.tong.kphiDaCapGao += item.kphiDaCapGao;
-        this.tong.ycauCapThemGao += item.ycauCapThemGao;
-        this.tong.tongTienGao += item.tongTienGao;
-        this.tong.kphiDaCapMuoi += item.kphiDaCapMuoi;
-        this.tong.ycauCapThemMuoi += item.ycauCapThemMuoi;
-        this.tong.tongTienMuoi += item.tongTienMuoi;
+    total(heSo: number ,item: ItemData) {
+        this.tongSo.kphiDaCapThoc += heSo * item.kphiDaCapThoc;
+        this.tongSo.ycauCapThemThoc += heSo * item.ycauCapThemThoc;
+        this.tongSo.tongTienThoc += heSo * item.tongTienThoc;
+        this.tongSo.kphiDaCapGao += heSo * item.kphiDaCapGao;
+        this.tongSo.ycauCapThemGao += heSo * item.ycauCapThemGao;
+        this.tongSo.tongTienGao += heSo * item.tongTienGao;
+        this.tongSo.kphiDaCapMuoi += heSo * item.kphiDaCapMuoi;
+        this.tongSo.ycauCapThemMuoi += heSo * item.ycauCapThemMuoi;
+        this.tongSo.tongTienMuoi += heSo * item.tongTienMuoi;
     }
 
     //lay ten don vi tạo

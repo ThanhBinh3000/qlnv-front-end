@@ -18,14 +18,14 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
-				<!-- <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Từ chối</span>
 				</a>
 				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Duyệt</span>
-				</button> -->
+				</button>
 				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
@@ -34,14 +34,14 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Phê duyệt</span>
 				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+				<!-- <button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
 					<span>Từ chối</span>
 				</button>
 				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
-				</a>
+				</a> -->
 				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
@@ -67,7 +67,8 @@
 							<th>Công văn</th>
 							<th>Ngày lập</th>
 							<th>Ngày trình duyệt</th>
-							<th>Ngày phê duyệt</th>
+							<th>Ngày trưởng BP duyệt</th>
+							<th>Ngày lãnh đạo phê duyệt</th>
 							<th width>Trạng thái</th>
 						</tr>
 					</thead>
@@ -96,6 +97,7 @@
 							</td>
 							<td>{{ngayTao}}</td>
 							<td>{{ngayTrinh}}</td>
+							<td>{{ngayDuyet}}</td>
 							<td>{{ngayPheDuyet}}</td>
 							<td>
 								<ng-container
@@ -114,6 +116,16 @@
 				<nz-tabset nzType="card" class="tab__container">
 					<nz-tab [nzTitle]="'Kết quả tổng hợp'">
 						<div id="tablePrint">
+							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+								<div nz-col class="gutter-row" [nzSpan]="3">
+									Đơn vị:
+									<div *ngFor="let item of dviTiens">
+										<div *ngIf="item.id == maDviTien">
+											{{item.tenDm}}
+										</div>
+									</div>
+								</div>
+							</div>
 							<nz-table nzBordered class="table__body">
 								<thead>
 									<tr>
@@ -159,33 +171,33 @@
                                         <td></td>
                                         <td>Tổng số</td>
                                         <td>
-											{{tong.kphiDaCapThoc}}
+											{{tongSo.kphiDaCapThoc}}
 										</td>
                                         <td>
-											{{tong.ycauCapThemThoc}}
+											{{tongSo.ycauCapThemThoc}}
 										</td>
                                         <td>
-											{{tong.tongTienThoc}}
-										</td>
-                                        <td></td>
-                                        <td>
-											{{tong.kphiDaCapGao}}
-										</td>
-                                        <td>
-											{{tong.ycauCapThemGao}}
-										</td>
-                                        <td>
-											{{tong.tongTienGao}}
+											{{tongSo.tongTienThoc}}
 										</td>
                                         <td></td>
                                         <td>
-											{{tong.kphiDaCapMuoi}}
+											{{tongSo.kphiDaCapGao}}
 										</td>
                                         <td>
-											{{tong.ycauCapThemMuoi}}
+											{{tongSo.ycauCapThemGao}}
 										</td>
                                         <td>
-											{{tong.tongTienMuoi}}
+											{{tongSo.tongTienGao}}
+										</td>
+                                        <td></td>
+                                        <td>
+											{{tongSo.kphiDaCapMuoi}}
+										</td>
+                                        <td>
+											{{tongSo.ycauCapThemMuoi}}
+										</td>
+                                        <td>
+											{{tongSo.tongTienMuoi}}
 										</td>
                                         <td></td>
                                     </tr>

@@ -46,14 +46,21 @@ export class TongHopComponent implements OnInit {
 			tenDm: "Trình duyệt",
 		},
 		{
+			id: Utils.TT_BC_3,
+			tenDm: "Trưởng BP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trưởng BP duyệt",
+		},
+		{
 			id: Utils.TT_BC_5,
 			tenDm: "Lãnh đạo từ chối",
 		},
 		{
 			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo duyệt",
+			tenDm: "Lãnh đạo phê duyệt",
 		},
-
 	];
 	donVis: any[] = [];
 	loaiDns: any[] = NGUON_BAO_CAO;
@@ -101,7 +108,11 @@ export class TongHopComponent implements OnInit {
 		} else {
 			this.status = true;
 			this.disable = true;
-			this.searchFilter.trangThai = Utils.TT_BC_2;
+			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN){
+				this.searchFilter.trangThai = Utils.TT_BC_2;
+			} else {
+				this.searchFilter.trangThai = Utils.TT_BC_4;
+			}
 		}
 		//lay danh sach danh muc
 		this.danhMuc.dMDonVi().toPromise().then(
