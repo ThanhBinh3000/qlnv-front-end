@@ -45,13 +45,12 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Quyết định chỉ tiêu</label>
 						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu" 
-						[class]=" searchFilter.loaiDn == '5' && !searchFilter.qdChiTieu && !statusBtnNew ? 'input-error-validate' : ''"/>
+						[class]="!searchFilter.qdChiTieu && !statusBtnNew ? 'input-error-validate' : ''"/>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Nguồn báo cáo</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn báo cáo"
-							[(ngModel)]="searchFilter.loaiDn"
-							[class]="statusBtnNew || searchFilter.loaiDn ?'' : 'input-error-validate'">
+							[(ngModel)]="searchFilter.loaiDn">
 							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>

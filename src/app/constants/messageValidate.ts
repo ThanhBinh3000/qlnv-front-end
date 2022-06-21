@@ -6,7 +6,7 @@ export const MESSAGEVALIDATE = {
     INVALIDFORMAT: 'Trường này không được để trống và giá trị từ 1000 đến 2999',
     YEAR: 'Vui lòng nhập từ 1000 đến 2999',
     TYPE_OF_TEXT: 'Vui lòng chọn loại văn bản',
-
+    NOT_NEGATIVE: 'Giá trị tiền không được âm',
     NOTEMPTYS:'Vui lòng nhập đúng giá trị cho các trường bôi đỏ!',
     NOTSAVE:'Vui lòng lưu các trường dữ liệu trong bảng!',
     WRONG_FORMAT: 'Vui lòng nhập năm đúng định dạng số từ 1000 đến 2999',

@@ -37,31 +37,23 @@ export class TimKiemComponent implements OnInit {
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
-        {
-            id: Utils.TT_BC_1,
-            tenDm: "Đang soạn",
-        },
-        {
-            id: Utils.TT_BC_2,
-            tenDm: "Trình duyệt",
-        },
-        {
-            id: Utils.TT_BC_5,
-            tenDm: "Lãnh đạo từ chối",
-        },
-        {
-            id: Utils.TT_BC_7,
-            tenDm: "Lãnh đạo duyệt",
-        },
-        {
-            id: Utils.TT_BC_8,
-            tenDm: "Từ chối",
-        },
-        {
-            id: Utils.TT_BC_9,
-            tenDm: "Tiếp nhận",
-        }
-    ];
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo duyệt",
+		},
+	];
 	donVis: any[] = [];
 	loaiDns: any[] = LOAI_DE_NGHI;
 	canCuGias: any[] = CAN_CU_GIA;
@@ -93,13 +85,13 @@ export class TimKiemComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-		
+
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
 		let newDate = new Date();
-		newDate.setMonth(newDate.getMonth() -1);
+		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
@@ -117,9 +109,9 @@ export class TimKiemComponent implements OnInit {
 			}
 		);
 
-		if (this.loai == "0"){
+		if (this.loai == "0") {
 			this.status = false;
-			if (this.capDvi == Utils.TONG_CUC){
+			if (this.capDvi == Utils.TONG_CUC) {
 				this.trangThais = [
 					{
 						id: Utils.TT_BC_1,
@@ -141,20 +133,10 @@ export class TimKiemComponent implements OnInit {
 			}
 		} else {
 			this.status = true;
-			
-			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN){
-				this.searchFilter.loaiTimKiem = "1";
-				this.searchFilter.trangThai = Utils.TT_BC_7;
-				this.trangThais = [{
-					id: Utils.TT_BC_7,
-					tenDm: "Mới",
-				}]
-			} else {
-				this.searchFilter.trangThai = Utils.TT_BC_2;
-			}
+			this.searchFilter.trangThai = Utils.TT_BC_2;
 		}
 
-		
+
 
 		if (this.capDvi == Utils.TONG_CUC && (this.loai == "0" || this.userInfo?.roles[0]?.code == Utils.LANH_DAO)) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
@@ -270,9 +252,9 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	xemChiTiet(item: any) {
-		if (item.canCuVeGia == Utils.HD_TRUNG_THAU){
+		if (item.canCuVeGia == Utils.HD_TRUNG_THAU) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' +this.loai + '/' + item.id,
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + this.loai + '/' + item.id,
 			])
 		} else {
 			this.router.navigate([
@@ -303,8 +285,7 @@ export class TimKiemComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			this.userInfo?.username == item.nguoiTao) {
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
 			check = true;
 		} else {
 			check = false;
@@ -312,7 +293,7 @@ export class TimKiemComponent implements OnInit {
 		return check;
 	}
 
-	close(){
+	close() {
 		this.router.navigate([
 			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
 		])
