@@ -85,14 +85,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             id: Utils.TT_BC_7,
             tenDm: "Lãnh đạo duyệt",
         },
-        {
-            id: Utils.TT_BC_8,
-            tenDm: "Từ chối",
-        },
-        {
-            id: Utils.TT_BC_9,
-            tenDm: "Tiếp nhận",
-        }
     ]
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
