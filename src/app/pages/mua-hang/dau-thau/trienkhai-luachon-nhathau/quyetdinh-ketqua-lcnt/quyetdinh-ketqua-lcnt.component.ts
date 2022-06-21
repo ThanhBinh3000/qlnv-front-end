@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
@@ -28,10 +28,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService,
-    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
+    public userService: UserService,
+    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
@@ -62,7 +60,9 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isViewDetail: boolean;
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -158,20 +158,25 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/ketqua-dauthau/chinh-sua', id]);
   }
 
-  redirectToChiTiet(id) {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        id,
-      ]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        id,
-      ]);
-    }
+  redirectToChiTiet(id: number, isView?: boolean) {
+    // if (this.router.url.includes(LEVEL.TONG_CUC)) {
+    //   this.router.navigate([
+    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+    //     id,
+    //   ]);
+    // } else if (this.router.url.includes(LEVEL.CUC)) {
+    //   this.router.navigate([
+    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+    //     id,
+    //   ]);
+    // }
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
-
+  showList() {
+    this.isDetail = false;
+  }
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;

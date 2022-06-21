@@ -3,36 +3,36 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output,
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogPhuongAnTrinhTongCucComponent } from 'src/app/components/dialog/dialog-phuong-an-trinh-tong-cuc/dialog-phuong-an-trinh-tong-cuc.component';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinQuyetDinhPheDuyetKHLCNT } from 'src/app/models/ThongTinQuyetDinhPheDuyetKHLCNT';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
-import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
-import { environment } from 'src/environments/environment';
-import { ChiTietFile } from 'src/app/models/ChiTietFile';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { ThongTinQuyetDinhPheDuyetKHLCNT } from 'src/app/models/ThongTinQuyetDinhPheDuyetKHLCNT';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { saveAs } from 'file-saver';
+import { UserService } from 'src/app/services/user.service';
+import { convertTienTobangChu, convertVthhToId } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -43,7 +43,7 @@ import { saveAs } from 'file-saver';
 export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   @Input() loaiVthh: string
-  @Input() id: number;
+  @Input() id: number = 0;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -51,6 +51,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   // visibleTab: boolean = false;
   formData: FormGroup;
   formThongTinDX: FormGroup;
+  formThongTinChung: FormGroup;
+
   editId: string | null = null;
   chiTiet: ThongTinQuyetDinhPheDuyetKHLCNT = new ThongTinQuyetDinhPheDuyetKHLCNT();
   // id: number;
@@ -81,10 +83,34 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   selectedTab: string = 'phe-duyet';
   danhMucDonVi: any;
-  danhsachDx: any;
+  danhsachDx: any[] = [
+    {
+      id: 1,
+      soGthau: 3,
+    }
+  ];
   iconButtonDuyet: string;
   titleButtonDuyet: string;
   titleStatus: string;
+
+  listNam: any[] = [];
+  yearNow: number = 0;
+
+  listOfOption: any[] = [
+    {
+      label: 'a',
+      value: 1
+    }, {
+      label: 'b',
+      value: 2
+    }, {
+      label: 'c',
+      value: 3
+    },
+  ]
+
+  listOfData: DanhSachGoiThau[] = [];
+  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
   constructor(
     private router: Router,
@@ -94,11 +120,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private userService: UserService,
+    public userService: UserService,
     private fb: FormBuilder,
     private helperService: HelperService,
     private dauThauService: DanhSachDauThauService,
-    private uploadFileService: UploadFileService
+    private uploadFileService: UploadFileService,
+    public globals: Globals,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -119,7 +146,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       ghiChu: ['', Validators.required],
       loaiVthh: [''],
       namKhoach: [''],
-      trangThai: ['']
+      trangThai: [''],
+      namKeHoach: [''],
     })
     this.formThongTinDX = this.fb.group({
       hthucLcnt: ['', [Validators.required]],
@@ -133,6 +161,27 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianNhang: ['', [Validators.required]]
     })
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
+    this.formThongTinChung = this.fb.group(
+      {
+        id: [],
+        tenDuAn: [null, [Validators.required]],
+        tenDvi: [null],
+        tongMucDt: [null, [Validators.required]],
+        nguonVon: [null, [Validators.required]],
+        tchuanCluong: [null, [Validators.required]],
+        loaiHdong: [null, [Validators.required]],
+        hthucLcnt: [null, [Validators.required]],
+        pthucLcnt: [null, [Validators.required]],
+        donGia: [null, [Validators.required]],
+        tgianTbao: [null, [Validators.required]],
+        tgianPhatHanh: [null, [Validators.required]],
+        tgianMoThau: [null, [Validators.required]],
+        tgianDongThau: [null, [Validators.required]],
+        tgianThHienHd: [null, [Validators.required]],
+        tgianNhapHang: [null, [Validators.required]],
+        maDvi: [null]
+      }
+    );
   }
 
   async ngOnInit() {
@@ -142,6 +191,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       this.chiTiet.children1 = [];
       this.maQd = this.userInfo.MA_QD;
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       await Promise.all([
         this.loaiHangDTQGGetAll(),
         this.phuongThucDauThauGetAll(),
@@ -157,6 +213,28 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  convertTienTobangChu(tien: number): string {
+    return convertTienTobangChu(tien);
+  }
+
+  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.idVirtual === d.idVirtual)!;
+          target.expand = false;
+          this.collapse2(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  selectNam() {
+    this.yearNow = this.formData.get('namKeHoach').value;
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
@@ -336,7 +414,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async openDialogDeXuat(index) {
     let data = this.danhsachDx[index]
     this.modal.create({
-      nzTitle: 'Thông tin phụ lục KH LNCT cho các Cục DTNN KV',
+      nzTitle: '',
       nzContent: DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -418,8 +496,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
-
 
   tuChoi() {
     const modalTuChoi = this.modal.create({
@@ -689,5 +765,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
-
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
+  }
 }

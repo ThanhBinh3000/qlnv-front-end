@@ -29,7 +29,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
@@ -245,7 +245,23 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    switch (status) {
+      case '00': {
+        return 'Dự thảo'
+      }
+      case '03': {
+        return 'Từ chối'
+      }
+      case '01': {
+        return 'Chờ duyệt - TP'
+      }
+      case '09': {
+        return 'Chờ duyệt - LĐ Cục'
+      }
+      case '02': {
+        return 'Đã duyệt'
+      }
+    }
   }
 
   exportData() {
@@ -320,5 +336,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  checkCanUpdate() {
+    if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02' || this.isCuc) {
+      return true;
+    }
+    return false;
   }
 }

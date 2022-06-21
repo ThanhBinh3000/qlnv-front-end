@@ -3,14 +3,11 @@ import VNnum2words from 'vn-num2words';
 
 export function convertTrangThai(status: string): string {
   if (status == '00') {
-    // return 'Mới tạo';
     return 'Dự thảo';
   } else if (status == '01') {
     return 'Chờ duyệt';
-    return 'Lãnh Đạo Duyệt';
   } else if (status == '02') {
-    // return 'Đã duyệt';
-    return 'Ban Hành';
+    return 'Đã duyệt';
   } else if (status == '03') {
     return 'Từ Chối';
   } else if (status == '04') {

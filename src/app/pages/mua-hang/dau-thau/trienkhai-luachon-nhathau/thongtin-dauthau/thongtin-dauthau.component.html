@@ -34,6 +34,10 @@
                 <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
+            <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
+              <label class="search__label">Đơn vị</label>
+              <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.soQd" />
+            </div>
           </div>
           <div class="cangiua group-button-search">
             <button nz-button class="search__button--clear" (click)="clearFilter()">
@@ -50,7 +54,50 @@
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
             <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách các gói thầu'">
               <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
+                [nzShowPagination]="false" *ngIf="userService.isTongCuc()">
+                <thead>
+                  <tr>
+                    <th width="30px">STT</th>
+                    <th>Tên gói thầu</th>
+                    <th>Đơn vị</th>
+                    <th>Số QĐ PDKHLCNT</th>
+                    <th>Ngày QĐ</th>
+                    <th>Trích yếu</th>
+                    <th>Loại hàng hóa</th>
+                    <th>Chủng loại hàng hóa</th>
+                    <th>Giá gói thầu (đồng)</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Mua gạo</td>
+                    <td>Cục DTNNKV Tây Nam Bộ</td>
+                    <td>1546/QĐ-TCDT</td>
+                    <td>10/03/2022</td>
+                    <td>Nhập gạo</td>
+                    <td>Gạo</td>
+                    <td>abc</td>
+                    <td>20.000.000</td>
+                    <td>Đang cập nhật</td>
+                    <td>
+                      <a>
+                        <i class="fa fa-eye" (click)="redirectToChiTiet(0, false)"></i>
+                      </a>
+                      <a>
+                        <i class="icon htvbdh_soanthao" (click)="redirectToChiTiet(0, false)"></i>
+                      </a>
+                      <a>
+                        <i class="icon htvbdh_xemthem" (click)="redirectToChiTiet(0, false)"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+              <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" *ngIf="userService.isCuc()">
                 <thead>
                   <tr>
                     <th width="30px">STT</th>
@@ -77,14 +124,14 @@
                     <td>20.000.000</td>
                     <td>Đang cập nhật</td>
                     <td>
-                      <a>
-                        <i class="fa fa-eye" (click)="redirectToChiTiet(0, false)"></i>
+                      <a (click)="redirectToChiTiet(0, false)">
+                        <i class="fa fa-eye"></i>
                       </a>
-                      <a>
-                        <i class="icon htvbdh_soanthao" (click)="redirectToChiTiet(0, false)"></i>
+                      <a (click)="redirectToChiTiet(0, false)">
+                        <i class="icon htvbdh_soanthao"></i>
                       </a>
-                      <a>
-                        <i class="icon htvbdh_xemthem" (click)="redirectToChiTiet(0, false)"></i>
+                      <a (click)="redirectToChiTiet(0, false)">
+                        <i class="icon htvbdh_xemthem"></i>
                       </a>
                     </td>
                   </tr>

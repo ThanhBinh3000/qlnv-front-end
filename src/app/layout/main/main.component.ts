@@ -47,29 +47,6 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.getDanhMucDonVi();
-    this.getDiemKho();
-  }
-
-  getDanhMucDonVi() {
-    sessionStorage.setItem("danhMucDonVi", null)
-    // this.donviService.layTatCaDonVi().then((res) => {
-    //   if (res.msg === MESSAGE.SUCCESS) {
-    //     sessionStorage.setItem("danhMucDonVi", JSON.stringify(res.data))
-    //   }
-    // })
-  }
-
-  getDiemKho() {
-    sessionStorage.setItem("ktDiemKho", null)
-    // this.tinhTrangKhoHienThoiService.getAllDiemKho().then((res) => {
-    //   if (res.msg === MESSAGE.SUCCESS) {
-    //     // let body = {
-    //     //   ktDiemKho: res.data
-    //     // }
-    //     // this.observableService.routerSubject.next(body);
-    //   }
-    // })
   }
 
   logOut() {
