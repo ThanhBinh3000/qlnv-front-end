@@ -171,10 +171,27 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     }
 
 
-	xemChiTiet(id: string) {
-		// this.router.navigate([
-		// 	'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/1/' + id,
-		// ])
+	async xemChiTiet(id: string) {
+		await this.quanLyVonPhiService.ctietDeNghi(id).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.loaiDn == Utils.HD_TRUNG_THAU){
+                        this.router.navigate([
+                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id,
+                        ])
+                    } else {
+                        this.router.navigate([
+                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id,
+                        ])
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
 	}
 
 	//doi so trang
