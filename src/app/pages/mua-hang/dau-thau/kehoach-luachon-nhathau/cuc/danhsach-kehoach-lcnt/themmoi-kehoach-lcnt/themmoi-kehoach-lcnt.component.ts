@@ -172,6 +172,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
+  editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
@@ -967,14 +970,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.addModelBaoGia.taiLieu = [];
       }
       else if (id > 0) {
-
+        this.editBaoGiaCache[id].data.taiLieu = [];
+        this.editBaoGiaCache[id].data.tenTlieu = '';
+        this.editBaoGiaCache[id].data.children = [];
+        this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
       }
     } else if (type == 'co-so') {
       if (id == 0) {
         this.addModelCoSo.taiLieu = [];
       }
       else if (id > 0) {
-
+        this.editCoSoCache[id].data.taiLieu = [];
+        this.editCoSoCache[id].data.tenTlieu = '';
+        this.editCoSoCache[id].data.children = [];
+        this.checkDataExistCoSo(this.editCoSoCache[id].data);
       }
     }
   }
@@ -1049,7 +1058,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
       }
       else if (id > 0) {
-
+        this.editBaoGiaCache[id].data.taiLieu = [];
+        this.editBaoGiaCache[id].data.taiLieu = [...this.editBaoGiaCache[id]?.data?.taiLieu, item];
+        this.editBaoGiaCache[id].data.tenTlieu = event.name;
+        this.editBaoGiaCache[id].data.children = [];
+        this.editBaoGiaCache[id].data.children = [...this.editBaoGiaCache[id].data.children, this.editBaoGiaCache[id].data.taiLieu];
       }
     } else if (type == 'co-so') {
       if (id == 0) {
@@ -1057,7 +1070,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
       }
       else if (id > 0) {
-
+        this.editCoSoCache[id].data.taiLieu = [];
+        this.editCoSoCache[id].data.taiLieu = [...this.editCoSoCache[id]?.data?.taiLieu, item];
+        this.editCoSoCache[id].data.tenTlieu = event.name;
+        this.editCoSoCache[id].data.children = [];
+        this.editCoSoCache[id].data.children = [...this.editCoSoCache[id].data.children, this.editCoSoCache[id].data.taiLieu];
       }
     }
     this.cdr.detectChanges();
@@ -1070,21 +1087,19 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   addBaoGia() {
-    console.log(this.addModelBaoGia);
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-    taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.moTa;
+    taiLieuBaoGiaThiTruong.moTa = this.addModelBaoGia?.moTa;
+    taiLieuBaoGiaThiTruong.tenTlieu = (this.addModelBaoGia.taiLieu && this.addModelBaoGia.taiLieu.length > 0) ? this.addModelBaoGia.taiLieu[0].text : '';
     taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
+    taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
     taiLieuBaoGiaThiTruong.children = [];
     taiLieuBaoGiaThiTruong.children = [
       ...taiLieuBaoGiaThiTruong.children,
       this.addModelBaoGia.taiLieu
     ];
-    this.baoGiaThiTruongList = [
-      ...this.baoGiaThiTruongList,
-      taiLieuBaoGiaThiTruong,
-    ];
-
+    this.checkDataExistBaoGia(taiLieuBaoGiaThiTruong);
+    this.clearBaoGia();
   }
 
   clearBaoGia() {
@@ -1094,17 +1109,74 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     };
   }
 
+  editRowBaoGia(id) {
+    this.editBaoGiaCache[id].edit = true;
+    if (this.editBaoGiaCache[id].data.children && this.editBaoGiaCache[id].data.children.length > 0) {
+      this.editBaoGiaCache[id].data.taiLieu = this.editBaoGiaCache[id].data.children[0];
+    }
+  }
+
+  deleteRowBaoGia(data) {
+    this.baoGiaThiTruongList = this.baoGiaThiTruongList.filter((x) => x.id != data.id,);
+  }
+
+  cancelEditBaoGia(id: number): void {
+    const index = this.baoGiaThiTruongList.findIndex(
+      (item) => item.id === id,
+    );
+    this.editBaoGiaCache[id] = {
+      data: { ...this.baoGiaThiTruongList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditBaoGia(id: number): void {
+    this.editBaoGiaCache[id].edit = false;
+    this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
+  }
+
+  updatEditBaoGiaCache(): void {
+    if (this.baoGiaThiTruongList && this.baoGiaThiTruongList.length > 0) {
+      this.baoGiaThiTruongList.forEach((item) => {
+        this.editBaoGiaCache[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  checkDataExistBaoGia(data) {
+    if (this.baoGiaThiTruongList && this.baoGiaThiTruongList.length > 0) {
+      let index = this.baoGiaThiTruongList.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.baoGiaThiTruongList.splice(index, 1);
+      }
+    }
+    else {
+      this.baoGiaThiTruongList = [];
+    }
+    this.baoGiaThiTruongList = [
+      ...this.baoGiaThiTruongList,
+      data,
+    ];
+    this.updatEditBaoGiaCache();
+  }
+
   addCoSo() {
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
-    taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTaiLieu;
+    taiLieuCanCuKhac.moTa = this.addModelCoSo?.moTa;
+    taiLieuCanCuKhac.tenTlieu = (this.addModelCoSo.taiLieu && this.addModelCoSo.taiLieu.length > 0) ? this.addModelCoSo.taiLieu[0].text : '';
     taiLieuCanCuKhac.idVirtual = new Date().getTime();
+    taiLieuCanCuKhac.id = new Date().getTime() + 1;
     taiLieuCanCuKhac.children = [];
     taiLieuCanCuKhac.children = [
       ...taiLieuCanCuKhac.children,
       this.addModelCoSo.taiLieu,
     ];
-    this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
+    this.checkDataExistCoSo(taiLieuCanCuKhac);
+    this.clearCoSo();
   }
 
   clearCoSo() {
@@ -1114,21 +1186,66 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     };
   }
 
+  editRowCoSo(id) {
+    this.editCoSoCache[id].edit = true;
+    if (this.editCoSoCache[id].data.children && this.editCoSoCache[id].data.children.length > 0) {
+      this.editCoSoCache[id].data.taiLieu = this.editCoSoCache[id].data.children[0];
+    }
+  }
+
+  deleteRowCoSo(data) {
+    this.canCuKhacList = this.canCuKhacList.filter((x) => x.id != data.id,);
+  }
+
+  cancelEditCoSo(id: number): void {
+    const index = this.canCuKhacList.findIndex(
+      (item) => item.id === id,
+    );
+    this.editCoSoCache[id] = {
+      data: { ...this.canCuKhacList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditCoSo(id: number): void {
+    this.editCoSoCache[id].edit = false;
+    this.checkDataExistCoSo(this.editCoSoCache[id].data);
+  }
+
+  updatEditCoSoCache(): void {
+    if (this.canCuKhacList && this.canCuKhacList.length > 0) {
+      this.canCuKhacList.forEach((item) => {
+        this.editCoSoCache[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  checkDataExistCoSo(data) {
+    if (this.canCuKhacList && this.canCuKhacList.length > 0) {
+      let index = this.canCuKhacList.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.canCuKhacList.splice(index, 1);
+      }
+    }
+    else {
+      this.canCuKhacList = [];
+    }
+    this.canCuKhacList = [
+      ...this.canCuKhacList,
+      data,
+    ];
+    this.updatEditCoSoCache();
+  }
+
   checkCanUpdate() {
     if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
       return true;
     }
     return false;
   }
-
-  // checkUpdateTatCaVatTu() {
-  //   if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-
 
   deleteTaiLieuDinhKemFormTag(data: any) {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
