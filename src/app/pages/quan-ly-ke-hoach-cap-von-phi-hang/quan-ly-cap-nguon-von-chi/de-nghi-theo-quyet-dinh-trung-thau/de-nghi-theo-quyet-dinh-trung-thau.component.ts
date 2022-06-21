@@ -71,14 +71,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             id: Utils.TT_BC_7,
             tenDm: "Lãnh đạo duyệt",
         },
-        {
-            id: Utils.TT_BC_8,
-            tenDm: "Từ chối",
-        },
-        {
-            id: Utils.TT_BC_9,
-            tenDm: "Tiếp nhận",
-        }
     ];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
@@ -571,8 +563,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThai);
+        return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
 
