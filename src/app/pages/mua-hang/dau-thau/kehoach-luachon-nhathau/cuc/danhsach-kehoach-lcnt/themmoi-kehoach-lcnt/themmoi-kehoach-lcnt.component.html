@@ -505,7 +505,7 @@
                         *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                         <td></td>
                         <td>
-                          <input nz-input [(ngModel)]="addModelBaoGia.moTa" />
+                          <input nz-input [(ngModel)]="addModelBaoGia.tenTlieu" />
                         </td>
                         <td>
                           <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -526,8 +526,8 @@
                       <tr *ngFor="let data of baoGiaThiTruong.data, let i = index" class="editable-row">
                         <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
                           <td>{{i + 1}}</td>
-                          <td>{{data.moTa}}</td>
                           <td>{{data.tenTlieu}}</td>
+                          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
                           <td class="action text-right">
                             <a (click)="downloadFile(data.children[0])">
                               <i class="icon htvbdh_tcdt_import"></i>
@@ -545,7 +545,7 @@
                         <ng-template #editBaoGiaTemplate>
                           <td></td>
                           <td>
-                            <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.moTa" />
+                            <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
                           </td>
                           <td>
                             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -588,7 +588,7 @@
                         *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                         <td></td>
                         <td>
-                          <input nz-input [(ngModel)]="addModelCoSo.moTa" />
+                          <input nz-input [(ngModel)]="addModelCoSo.tenTlieu" />
                         </td>
                         <td>
                           <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -609,8 +609,8 @@
                       <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
                         <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
                           <td>{{i + 1}}</td>
-                          <td>{{data.moTa}}</td>
                           <td>{{data.tenTlieu}}</td>
+                          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
                           <td class="action text-right">
                             <a (click)="downloadFile(data.children[0])">
                               <i class="icon htvbdh_tcdt_import"></i>
@@ -628,7 +628,7 @@
                         <ng-template #editCoSoTemplate>
                           <td></td>
                           <td>
-                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.moTa" />
+                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
                           </td>
                           <td>
                             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"

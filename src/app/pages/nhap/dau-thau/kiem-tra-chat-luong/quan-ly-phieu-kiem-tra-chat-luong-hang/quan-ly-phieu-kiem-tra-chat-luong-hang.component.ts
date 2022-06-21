@@ -56,7 +56,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     soPhieu: '',
     ngayGdinh: '',
     ketLuan: '',
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soBienBan: '',
   };
 
@@ -349,7 +349,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       soPhieu: '',
       ngayGdinh: '',
       ketLuan: '',
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soBienBan: '',
     }
   }
