@@ -71,18 +71,11 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             id: Utils.TT_BC_7,
             tenDm: "Lãnh đạo duyệt",
         },
-        {
-            id: Utils.TT_BC_8,
-            tenDm: "Từ chối",
-        },
-        {
-            id: Utils.TT_BC_9,
-            tenDm: "Tiếp nhận",
-        }
     ];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
     dviTinhs: any[] = [];
+    vatTus: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     //trang thai cac nut
@@ -164,6 +157,20 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             },
         );
+
+        await this.danhMuc.dMVatTu().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.addListVtu(res.data);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            },
+        );
+
         if (this.id) {
             await this.getDetailReport();
         } else {
@@ -190,12 +197,19 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-            this.quanLyVonPhiService.dsachHopDong().toPromise().then(
+            let request = {
+                soQD: this.qdChiTieu,
+            }
+            this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
                 (data) => {
                     if (data.statusCode == 0) {
                         data.data.forEach(item => {
                             this.lstCtietBcao.push({
                                 ...item,
+                                thanhTien: item.soLuong * item.donGia,
+                                maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
+                                dviThanhTien: "1",
+                                donGiaMua: item.donGia,
                                 id: null,
                             })
                         })
@@ -225,10 +239,22 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             },
         );
+
+        
         this.getStatusButton();
         this.spinner.hide();
 
     }
+
+    addListVtu(lstVtu: any){
+        lstVtu.forEach(item => {
+            this.vatTus.push(item);
+            if (item.child){
+                this.addListVtu(item.child);
+            }
+        })
+    }
+
 
     redirectkehoachvonphi() {
         this.location.back()
@@ -446,6 +472,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.kphiDaCap > this.tongTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         //get list file url
         let listFile: any = [];
         for (const iterator of this.listFile) {
@@ -533,8 +563,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     }
 
     getStatusName() {
-        const utils = new Utils();
-        return utils.getStatusName(this.trangThai);
+        return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
 
@@ -542,6 +571,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     close() {
         if (this.id && !this.loai){
             this.location.back();
+        }
+        if (!this.loai){
+            this.loai = "0";
         }
         this.router.navigate([
             'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/' + this.loai

@@ -600,6 +600,9 @@ export class TongHopTaiTongCucComponent implements OnInit {
     }
 
     close() {
+        if (!this.loai){
+            this.loai = "0";
+        }
         this.router.navigate([
             'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/'+ this.loai
         ])

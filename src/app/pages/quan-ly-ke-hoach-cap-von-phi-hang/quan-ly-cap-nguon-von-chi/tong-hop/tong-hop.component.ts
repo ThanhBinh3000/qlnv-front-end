@@ -53,14 +53,7 @@ export class TongHopComponent implements OnInit {
 			id: Utils.TT_BC_7,
 			tenDm: "Lãnh đạo duyệt",
 		},
-		{
-			id: Utils.TT_BC_8,
-			tenDm: "Từ chối",
-		},
-		{
-			id: Utils.TT_BC_9,
-			tenDm: "Tiếp nhận",
-		}
+
 	];
 	donVis: any[] = [];
 	loaiDns: any[] = NGUON_BAO_CAO;
@@ -97,7 +90,7 @@ export class TongHopComponent implements OnInit {
 
 		this.searchFilter.denNgay = new Date();
 		let newDate = new Date();
-		newDate.setMonth(newDate.getMonth() -1);
+		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
@@ -190,11 +183,9 @@ export class TongHopComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
-			if (!this.searchFilter.qdChiTieu) {
-				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-				return;
-			}
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC && !this.searchFilter.qdChiTieu) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			let obj = {
@@ -222,7 +213,7 @@ export class TongHopComponent implements OnInit {
 	xemChiTiet(item: any) {
 		if (item.loaiDnghi == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' +this.loai + '/' + item.id
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + this.loai + '/' + item.id
 			])
 		} else {
 			this.router.navigate([
@@ -270,8 +261,7 @@ export class TongHopComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			this.userInfo?.username == item.nguoiTao) {
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
 			check = true;
 		} else {
 			check = false;

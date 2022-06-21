@@ -59,7 +59,7 @@ export class QuanLyVonPhiService extends BaseService {
   timKiemDeNghiThop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/danh-sach',
-      // 'http://192.168.1.100:8094/thop-cap-von/danh-sach',
+      // 'http://192.168.1.104:8094/thop-cap-von/danh-sach',
       request,
     );
   }
@@ -454,10 +454,11 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //tao ma PA
-  dsachHopDong(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/danh-sach-hop-dong'
-      // 'http://192.168.1.100:8094/de-nghi-cap-von/danh-sach-hop-dong'
+  dsachHopDong(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach',
+      // 'http://192.168.1.104:8094/hop-dong/danh-sach',
+      request,
     );
   }
 
@@ -536,7 +537,7 @@ export class QuanLyVonPhiService extends BaseService {
   ctietDeNghiThop(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/chi-tiet/' + id
-      // 'http://192.168.1.100:8094/thop-cap-von/chi-tiet/' + id
+      // 'http://192.168.1.104:8094/thop-cap-von/chi-tiet/' + id
     );
   }
 
@@ -588,7 +589,7 @@ export class QuanLyVonPhiService extends BaseService {
   themMoiDnghiThop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/them-moi',
-      // 'http://192.168.1.100:8094/thop-cap-von/them-moi',
+      // 'http://192.168.1.104:8094/thop-cap-von/them-moi',
       request);
   }
 
@@ -925,7 +926,7 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDeNghi(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/trang-thai',
-      // 'http://192.168.1.100:8094/de-nghi-cap-von/trang-thai',
+      // 'http://192.168.1.104:8094/de-nghi-cap-von/trang-thai',
       request);
   }
 

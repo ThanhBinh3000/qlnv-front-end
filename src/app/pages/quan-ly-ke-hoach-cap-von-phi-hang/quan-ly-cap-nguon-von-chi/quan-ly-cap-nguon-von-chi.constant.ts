@@ -48,10 +48,6 @@ export const QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST: QuanLyCapNguonVonChiNSNN[] = [
 			},
 			{
 				"unit": Utils.TONG_CUC,
-				"role": Utils.NHAN_VIEN,
-			},
-			{
-				"unit": Utils.TONG_CUC,
 				"role": Utils.LANH_DAO,
 			},
 		],
@@ -70,6 +66,19 @@ export const QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST: QuanLyCapNguonVonChiNSNN[] = [
 			{
 				"unit": Utils.TONG_CUC,
 				"role": Utils.LANH_DAO,
+			},
+		],
+		isDisabled: false, 
+	},
+	{
+		icon: 'htvbdh_tcdt_icon-common',
+		title: 'Tổng hợp danh sách công văn đề nghị cấp vốn từ cục khu vực',
+		description: 'Tổng hợp danh sách công văn đề nghị cấp vốn từ cục khu vực',
+		url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/danh-sach-de-nghi-tu-cuc-khu-cuc`,
+		role: [
+			{
+				"unit": Utils.TONG_CUC,
+				"role": Utils.NHAN_VIEN,
 			},
 		],
 		isDisabled: false, 

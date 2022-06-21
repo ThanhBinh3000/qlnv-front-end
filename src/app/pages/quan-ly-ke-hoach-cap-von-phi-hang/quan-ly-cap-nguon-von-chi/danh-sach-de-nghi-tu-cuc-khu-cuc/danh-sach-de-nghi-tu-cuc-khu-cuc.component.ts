@@ -25,7 +25,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
         loaiTimKiem: '1',
-        trangThai: Utils.TT_BC_9,
+        trangThai: Utils.TT_BC_7,
 		tuNgay: "",
 		denNgay: "",
         qdChiTieu: "",
@@ -34,7 +34,12 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     };
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANG_THAI_TIM_KIEM;
+	trangThais: any[] = [
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo cấp dưới duyệt",
+		}
+	];
 	donVis: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
 	//phan trang
@@ -166,10 +171,27 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     }
 
 
-	xemChiTiet(id: string) {
-		// this.router.navigate([
-		// 	'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/1/' + id,
-		// ])
+	async xemChiTiet(id: string) {
+		await this.quanLyVonPhiService.ctietDeNghi(id).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.loaiDn == Utils.HD_TRUNG_THAU){
+                        this.router.navigate([
+                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id,
+                        ])
+                    } else {
+                        this.router.navigate([
+                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id,
+                        ])
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
 	}
 
 	//doi so trang
