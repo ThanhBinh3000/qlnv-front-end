@@ -1041,7 +1041,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           dataRes.forEach(element => {
             let item = {
               id: element.id,
-              text: element.tenTongKho + " (" + (element.sumTang - element.sumGiam).toString() + ")",
+              text: element.title + " (" + (element.sumTang - element.sumGiam).toString() + ")",
             }
             sumTang = sumTang + element.sumTang;
             sumGiam = sumGiam + element.sumGiam;

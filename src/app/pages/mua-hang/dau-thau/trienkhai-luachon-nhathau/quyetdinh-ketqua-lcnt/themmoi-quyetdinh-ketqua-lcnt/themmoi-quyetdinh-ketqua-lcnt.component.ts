@@ -1,3 +1,4 @@
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
+import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -29,16 +30,6 @@ import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import VNnum2words from 'vn-num2words';
 
-interface ItemData {
-  id: string;
-  stt: string;
-  goiThau: string;
-  soLuong: string;
-  diaDiem: string;
-  donGia: string;
-  thanhTien: string;
-  bangChu: string;
-}
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -107,7 +98,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   userInfo: UserLogin;
 
   selectedTab: string = 'tong-hop';
-
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
+  isTrungThau: boolean = true;
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
@@ -119,7 +113,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     public globals: Globals,
-    private userService: UserService,
+    public userService: UserService,
     private helperService: HelperService,
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
@@ -329,14 +323,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  onChangeSoQdKh(event) {
-    if (event) {
-      let data = this.listPheDuyetKhlcnt.filter(item => item.soQd === event);
-      this.formData.patchValue({
-        ngayQdPd: data[0].ngayQd
-      })
-      this.listGoiThau = data[0].children1;
-    }
+  onChangeSoQdKh() {
+    // if (event) {
+    //   let data = this.listPheDuyetKhlcnt.filter(item => item.soQd === event);
+    //   this.formData.patchValue({
+    //     ngayQdPd: data[0].ngayQd
+    //   })
+    //   this.listGoiThau = data[0].children1;
+    // }
   }
 
   onChangeGoiThau(event) {
@@ -579,5 +573,48 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         }
       },
     });
+  }
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+  chiTiet() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Thông tin gói thầu',
+      nzContent: DialogThemMoiGoiThauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+
+    });
+  }
+  changeThau(event) {
+    this.isTrungThau = event;
+
   }
 }

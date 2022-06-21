@@ -2,7 +2,7 @@
   <div class="contentBor luong-dau-thau-gao__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="2">
               <label class="search__label"> Năm kế hoạch </label>
@@ -10,7 +10,7 @@
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="5">
+            <div nz-col nzSpan="5" *ngIf="userService.isTongCuc()">
               <label class="search__label">Loại hàng DTQG </label>
               <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
                 <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
@@ -98,7 +98,6 @@
                     <th width="60px">STT</th>
                     <th width="130px">Số QĐ</th>
                     <th width="130px">Ngày QĐ</th>
-                    <th width="">Ngày QĐ</th>
                     <th width="175px">Trích yếu</th>
                     <th width="175px" class="text-center">Tên gói thầu</th>
                     <th width="175px" class="text-center">Trúng/hủy thầu</th>
@@ -120,7 +119,6 @@
                     <td>123</td>
                     <td>10/03/2022</td>
                     <td>Gạo 15% tấm,</td>
-                    <td>Trích yếu</td>
                     <td> Gói thầu A1</td>
                     <td>Trúng</td>
                     <td>Công ty A</td>
