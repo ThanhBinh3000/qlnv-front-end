@@ -479,6 +479,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             maDnghi: this.maDeNghi,
             loaiDnghi: this.nguonBcao,
             maDviTien: "",
+            congVan: this.congVan,
             soQdChiTieu: this.qdChiTieu,
             trangThai: this.trangThai,
             thuyetMinh: this.thuyetMinh,

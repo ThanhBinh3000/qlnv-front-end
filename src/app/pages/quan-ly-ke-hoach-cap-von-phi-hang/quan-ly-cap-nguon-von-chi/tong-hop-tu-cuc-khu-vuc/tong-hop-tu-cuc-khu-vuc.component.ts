@@ -465,6 +465,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             maDvi: this.maDviTao,
             maDnghi: this.maDeNghi,
             maDviTien: "",
+            congVan: this.congVan,
             loaiDnghi: this.nguonBcao,
             soQdChiTieu: this.qdChiTieu,
             trangThai: this.trangThai,
@@ -497,7 +498,20 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 },
             );
         } else {
-
+            this.quanLyVonPhiService.capNhatDnghiThop(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                            this.getDetailReport();
+                            this.getStatusButton();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
         }
         this.spinner.hide();
     }
