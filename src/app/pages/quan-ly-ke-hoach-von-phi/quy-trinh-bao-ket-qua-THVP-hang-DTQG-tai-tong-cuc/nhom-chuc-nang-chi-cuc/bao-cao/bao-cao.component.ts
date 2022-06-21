@@ -1016,6 +1016,8 @@ export class BaoCaoComponent implements OnInit {
     let checkPersonReport = true;
     /////////////////////////////
     baoCaoTemp.lstBcaos.forEach((item) => {
+      item.tuNgay = typeof item.tuNgay == 'string' ? new Date(item.tuNgay) : item.tuNgay;
+      item.denNgay = typeof item.denNgay == 'string' ? new Date(item.denNgay) : item.denNgay;
       if (!item.nguoiBcao) {
         checkPersonReport = false;
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);

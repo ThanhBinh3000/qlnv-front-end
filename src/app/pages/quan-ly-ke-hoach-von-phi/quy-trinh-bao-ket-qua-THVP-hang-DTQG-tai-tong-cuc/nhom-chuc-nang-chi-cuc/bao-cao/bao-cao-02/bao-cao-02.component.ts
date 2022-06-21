@@ -794,12 +794,13 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        debugger
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
+        console.log(baoCaoChiTietTemp.tuNgay);
+        
         let checkMoneyRange = true;
         let checkPersonReport = true;
-
+        debugger
         // validate nguoi thuc hien bao cao
         if (!baoCaoChiTietTemp.nguoiBcao) {
             checkPersonReport = false;
@@ -835,6 +836,8 @@ export class BaoCao02Component implements OnInit {
 
         //call service cap nhat phu luc
         this.spinner.show();
+        console.log(baoCaoChiTietTemp.tuNgay.toDateString());
+        
         this.quanLyVonPhiService.baoCaoCapNhatChiTiet(baoCaoChiTietTemp).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {

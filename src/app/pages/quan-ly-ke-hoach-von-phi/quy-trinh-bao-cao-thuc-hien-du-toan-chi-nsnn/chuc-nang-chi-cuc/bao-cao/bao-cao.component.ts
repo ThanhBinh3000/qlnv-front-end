@@ -497,7 +497,7 @@ export class BaoCaoComponent implements OnInit {
       }
     })
     this.addListNoiDung(this.noiDungFull);
-    debugger
+    
     await this.maDans.forEach(item => {
       if (!item.maCha) {
         this.maDanFull.push({
@@ -957,7 +957,7 @@ export class BaoCaoComponent implements OnInit {
   
   changeModel() {
     this.resetTong();
-    debugger
+    
     this.danhSachChiTietPhuLucTemp.forEach(element => {
       if (element?.stt?.split('.').length == 2) {
         //Phu luc 1
