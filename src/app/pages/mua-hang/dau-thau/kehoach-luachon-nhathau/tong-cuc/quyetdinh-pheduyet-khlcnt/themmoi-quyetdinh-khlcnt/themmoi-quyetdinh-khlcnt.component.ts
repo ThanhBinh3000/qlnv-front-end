@@ -588,7 +588,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   getTenDviTable(maDvi: string) {
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi.length > 0 ? donVi[0].tenDvi : null
+    return donVi && donVi.length > 0 ? donVi[0].tenDvi : null
   }
 
   setTitle() {

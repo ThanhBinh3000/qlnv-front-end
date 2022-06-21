@@ -497,7 +497,7 @@
                         <th [width]="35">STT</th>
                         <th>Mô tả chi tiết</th>
                         <th>File đính kèm</th>
-                        <th [width]="90"></th>
+                        <th [width]="130"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -524,22 +524,47 @@
                         </td>
                       </tr>
                       <tr *ngFor="let data of baoGiaThiTruong.data, let i = index" class="editable-row">
-                        <td>{{i + 1}}</td>
-                        <td>{{data.moTa}}</td>
-                        <td>{{data.tenTlieu}}</td>
-                        <td class="action text-right">
-                          <a (click)="downloadFile(data.children[0])">
-                            <i class="icon htvbdh_tcdt_import"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="editCanCuTaiLieuDinhKem(data, 'bao-gia-thi-truong')">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="deleteTaiLieu(i,'bao-gia-thi-truong')">
-                            <i class="fa fa-trash-o do"></i>
-                          </a>
-                        </td>
+                        <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.moTa}}</td>
+                          <td>{{data.tenTlieu}}</td>
+                          <td class="action text-right">
+                            <a (click)="downloadFile(data.children[0])">
+                              <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="editRowBaoGia(data.id)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="deleteRowBaoGia(data)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
+                          </td>
+                        </ng-container>
+                        <ng-template #editBaoGiaTemplate>
+                          <td></td>
+                          <td>
+                            <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.moTa" />
+                          </td>
+                          <td>
+                            <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                              [data]="editBaoGiaCache[data.id]?.data?.taiLieu" type="file"
+                              (selectDataEvent)="openFile($event, data.id, 'bao-gia')"
+                              [trangThai]="formData.value.trangThai"
+                              (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'bao-gia')"
+                              [showDowloadFile]="false">
+                            </multiple-tag>
+                          </td>
+                          <td class="text-right">
+                            <a (click)="saveEditBaoGia(data.id)">
+                              <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="cancelEditBaoGia(data.id)">
+                              <i class="fa fa-times do"></i>
+                            </a>
+                          </td>
+                        </ng-template>
                       </tr>
                     </tbody>
                   </nz-table>
@@ -555,7 +580,7 @@
                         <th [width]="35">STT</th>
                         <th>Mô tả chi tiết</th>
                         <th>File đính kèm</th>
-                        <th [width]="90"></th>
+                        <th [width]="130"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -582,22 +607,47 @@
                         </td>
                       </tr>
                       <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
-                        <td>{{i + 1}}</td>
-                        <td>{{data.moTa}}</td>
-                        <td>{{data.tenTlieu}}</td>
-                        <td class="action text-right">
-                          <a (click)="downloadFile(data.children[0])">
-                            <i class="icon htvbdh_tcdt_import"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="editCanCuTaiLieuDinhKem(data,'can-cu-khac')">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="deleteTaiLieu(i,'can-cu-khac')">
-                            <i class="fa fa-trash-o do"></i>
-                          </a>
-                        </td>
+                        <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.moTa}}</td>
+                          <td>{{data.tenTlieu}}</td>
+                          <td class="action text-right">
+                            <a (click)="downloadFile(data.children[0])">
+                              <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="editRowCoSo(data.id)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="deleteRowCoSo(data)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
+                          </td>
+                        </ng-container>
+                        <ng-template #editCoSoTemplate>
+                          <td></td>
+                          <td>
+                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.moTa" />
+                          </td>
+                          <td>
+                            <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                              [data]="editCoSoCache[data.id]?.data?.taiLieu" type="file"
+                              (selectDataEvent)="openFile($event, data.id, 'co-so')"
+                              [trangThai]="formData.value.trangThai"
+                              (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'co-so')"
+                              [showDowloadFile]="false">
+                            </multiple-tag>
+                          </td>
+                          <td class="text-right">
+                            <a (click)="saveEditCoSo(data.id)">
+                              <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="cancelEditCoSo(data.id)">
+                              <i class="fa fa-times do"></i>
+                            </a>
+                          </td>
+                        </ng-template>
                       </tr>
                     </tbody>
                   </nz-table>
