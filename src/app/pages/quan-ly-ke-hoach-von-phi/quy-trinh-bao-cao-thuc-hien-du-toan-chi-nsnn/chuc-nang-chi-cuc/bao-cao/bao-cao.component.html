@@ -9,6 +9,7 @@
               <th>Mã báo cáo</th>
               <th>Báo cáo năm</th>
               <th>Báo cáo tháng</th>
+              <th>Người tạo</th>
               <th>Ngày lập</th>
               <th>Công văn</th>
               <th>Ngày trình duyệt</th>
@@ -24,6 +25,7 @@
               <td>{{baoCao?.maBcao}}</td>
               <td>{{baoCao?.namBcao}}</td>
               <td>{{baoCao?.thangBcao}}</td>
+              <td>{{baoCao?.nguoiTao}}</td>
               <td>{{baoCao?.ngayTao}}</td>
               <td>
                 <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
@@ -222,7 +224,7 @@
                         <td>{{item.maBcao}}</td>
                         <td>{{item.namBcao}}</td>
                         <td>{{item.thangBcao}}</td>
-                        <td>{{userInfo.fullName}}</td>
+                        <td>{{item.nguoiTao}}</td>
                         <td>{{item.ngayTrinh}}</td>
                         <td>{{item.ngayDuyet}}</td>
                         <td>{{getStatusName(item.trangThai)}}</td>
@@ -528,7 +530,7 @@
                     </tr>
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
@@ -598,7 +600,7 @@
                         </td>
                       </ng-container>
                       <ng-template #editTemplate>
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
@@ -811,7 +813,7 @@
                         </td>
                       </ng-template>
                     </tr>
-                    </tbody>
+                  </tbody>
                 </nz-table>
               </div>
               <div nz-col nzSpan="12">
@@ -1034,7 +1036,7 @@
                     </tr>
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
@@ -1081,7 +1083,7 @@
                         </td>
                       </ng-container>
                       <ng-template #editTemplate>
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
@@ -1594,9 +1596,63 @@
                       <td [hidden]="status" nzRight></td>
                       <td [hidden]="status" nzRight></td>
                     </tr>
+                    <tr>
+                      <td></td>
+                      <td>TỔNG SỐ (A+B)</td>
+                      <td></td>
+                      <td></td>
+                      <td>{{qddtTmdtTso}}</td>
+                      <td>{{qddtTmdtNsnn}}</td>
+                      <td>{{luyKeVonTso}}</td>
+                      <td>{{luyKeVonNsnn}}</td>
+                      <td>{{luyKeVonDt}}</td>
+                      <td>{{luyKeVonThue}}</td>
+                      <td>{{luyKeVonScl}}</td>
+                      <td>{{luyKeGiaiNganHetNamTso}}</td>
+                      <td>{{luyKeGiaiNganHetNamNsnnTso}}</td>
+                      <td>{{luyKeGiaiNganHetNamNsnnKhNamTruoc}}</td>
+                      <td>{{khoachVonNamTruocKeoDaiTso}}</td>
+                      <td>{{khoachVonNamTruocKeoDaiDtpt}}</td>
+                      <td>{{khoachVonNamTruocKeoDaiVonKhac}}</td>
+                      <td>{{khoachNamVonTso}}</td>
+                      <td>{{khoachNamVonNsnn}}</td>
+                      <td>{{khoachNamVonDt}}</td>
+                      <td>{{khoachNamVonThue}}</td>
+                      <td>{{khoachNamVonScl}}</td>
+                      <td>{{kluongThienTso}}</td>
+                      <td>{{kluongThienThangBcao}}</td>
+                      <td>{{giaiNganTso}}</td>
+                      <td>{{giaiNganTsoTle}}</td>
+                      <td>{{giaiNganNsnn}}</td>
+                      <td>{{giaiNganNsnnVonDt}}</td>
+                      <td>{{giaiNganNsnnVonThue}}</td>
+                      <td>{{giaiNganNsnnVonScl}}</td>
+                      <td>{{giaiNganNsnnTle}}</td>
+                      <td>{{giaiNganNsnnTleVonDt}}</td>
+                      <td>{{giaiNganNsnnTleVonThue}}</td>
+                      <td>{{giaiNganNsnnTleVonScl}}</td>
+                      <td>{{luyKeGiaiNganDauNamTso}}</td>
+                      <td>{{luyKeGiaiNganDauNamTsoTle}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnn}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnVonDt}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnVonThue}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnVonScl}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnTle}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnTleVonDt}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnTleVonThue}}</td>
+                      <td>{{luyKeGiaiNganDauNamNsnnTleVonScl}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                      <td [hidden]="status" nzRight></td>
+                    </tr>
                     <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
                       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
@@ -1676,7 +1732,7 @@
 
                       </ng-container>
                       <ng-template #editTemplate>
-                        <td [nzIndentSize]="data.level * 8">
+                        <td>
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>

@@ -1366,6 +1366,7 @@ export class BaoCaoComponent implements OnInit {
         namBcao: this.baoCao.namBcao,
         dotBcao: this.baoCao.dotBcao,
         thangBcao: this.baoCao.thangBcao,
+        checkDvtt: this.baoCao.lstBcaoDviTrucThuocs.length > 0 ? true : false,
       },
     });
     modalTuChoi.afterClose.toPromise().then(async (response) => {

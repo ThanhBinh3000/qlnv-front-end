@@ -16,6 +16,7 @@ export class DialogBaoCaoCopyComponent implements OnInit {
   @Input() namBcao: number;
   @Input() dotBcao: number;
   @Input() thangBcao: number;
+  @Input() checkDvtt: boolean;
   text: string = ""
   baoCaos: any = [];
   request = {

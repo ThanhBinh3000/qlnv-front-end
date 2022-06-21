@@ -31,7 +31,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   listBcaoKqua: any[] = [];
   lenght: any = 0;
   userInfo: any;
-
+  roleUser:string;
 
   searchFilter = {
     maPhanBcao: '0',
@@ -71,10 +71,13 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     await this.getUserInfo(userName); //get user info
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '1';
+      this.roleUser = 'canbo';
     } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '2';
+      this.roleUser = 'truongBoPhan';
     } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '4';
+      this.roleUser = 'lanhDao';
     }
     let date = new Date();
     this.searchFilter.ngayTaoDen = date.toDateString();

@@ -45,6 +45,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   donViTaos: any = [];
   userInfo: any;
+  roleUser:string;
+
   baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 
   constructor(
@@ -64,10 +66,13 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     await this.getUserInfo(userName); //get user info
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '1';
+      this.roleUser = 'canbo';
     } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '2';
+      this.roleUser = 'truongBoPhan';
     } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '4';
+      this.roleUser = 'lanhDao';
     }
     let date = new Date();
     this.searchFilter.ngayTaoDen = date.toDateString();
