@@ -6,7 +6,7 @@
                 <div class="trai">
                 </div>
                 <div class="canphai phai">
-                    <button class="btn btn-main btn-sm waves-effect waves-light">
+                    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
                         <i class="icon  htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
@@ -199,13 +199,12 @@
                             </div>
                         </nz-tab>
                     </nz-tabset>
-                    <nz-form-item class="display-block pd-10">
+                    <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Ghi chú
                         </nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24">
-                            <textarea rows="3" class="search__input" nz-input></textarea>
-                        </nz-form-control>
+                        <textarea nz-input [rows]="3" formControlName="ghiChu" (input)="validateGhiChu()"></textarea>
+                        <span class="error-text" *ngIf="errorGhiChu">{{errorInputRequired}}</span>
                     </nz-form-item>
                 </div>
             </form>
