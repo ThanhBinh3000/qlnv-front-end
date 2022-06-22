@@ -16,6 +16,7 @@ import { FormBuilder } from '@angular/forms';
 import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -43,11 +44,13 @@ export class TongHopKhlcntComponent implements OnInit {
   yearNow: number = 0;
   danhMucDonVi: any;
   searchFilter = {
-    soQdinh: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    trichYeu: ''
+    tenVthh: '',
+    cloaiVthh: '',
+    tenCloaiVthh: '',
+    noiDung: ''
   };
 
   isDetail: boolean = false;
@@ -120,19 +123,20 @@ export class TongHopKhlcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayTao: this.searchFilter.ngayTongHop
+      tuNgayThop: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,
-      denNgayTao: this.searchFilter.ngayTongHop
+      denNgayThop: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh
+      cloaiVthh: this.searchFilter.cloaiVthh,
+      namKhoach: this.searchFilter.namKh,
+      noiDung: this.searchFilter.noiDung
     };
     let res = null;
     if (this.tabSelected == 'phuong-an-tong-hop') {
@@ -201,6 +205,63 @@ export class TongHopKhlcntComponent implements OnInit {
     }
   }
 
+  selectHangHoa() {
+    // let data = this.loaiVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+
+      this.searchFilter.cloaiVthh = data.ma
+      this.searchFilter.tenCloaiVthh = data.ten
+      this.searchFilter.loaiVthh = data.parent.ma
+      this.searchFilter.tenVthh = data.parent.ten
+
+      // this.searchFilter.patchValue({
+      //   maVtu: null,
+      //   tenVtu: null,
+
+      // })
+    }
+    // if (data.loaiHang == "VT") {
+    //   if (data.cap == "3") {
+    //     cloaiVthh = data
+    //     this.formTraCuu.patchValue({
+    //       maVtu: data.ma,
+    //       tenVtu: data.ten,
+    //       cloaiVthh: data.parent.ma,
+    //       tenCloaiVthh: data.parent.ten,
+    //       loaiVthh: data.parent.parent.ma,
+    //       tenVthh: data.parent.parent.ten
+    //     })
+    //   }
+    //   if (data.cap == "2") {
+    //     this.formTraCuu.patchValue({
+    //       maVtu: null,
+    //       tenVtu: null,
+    //       cloaiVthh: data.ma,
+    //       tenCloaiVthh: data.ten,
+    //       loaiVthh: data.parent.ma,
+    //       tenVthh: data.parent.ten
+    //     })
+    //   }
+    // }
+  }
+
   async changePageSize(event) {
     this.spinner.show();
     try {
@@ -252,8 +313,8 @@ export class TongHopKhlcntComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.ngayTongHop = null;
-    this.searchFilter.trichYeu = null;
-    this.searchFilter.soQdinh = null;
+    // this.searchFilter.trichYeu = null;
+    // this.searchFilter.soQdinh = null;
     this.search();
   }
 
@@ -295,7 +356,17 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return status == '01' ? "Đã quyết định" : "Chưa quyết định"
+    switch (status) {
+      case '00': {
+        return 'Chưa tạo QĐ'
+      }
+      case '01': {
+        return 'Đã dự thảo QĐ'
+      }
+      case '02': {
+        return 'Đã ban hành QĐ'
+      }
+    }
   }
 
   exportData() {

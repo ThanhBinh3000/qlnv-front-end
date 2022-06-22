@@ -182,7 +182,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        1000 *
         +this.formData.get('donGia').value,
     });
     this.formData.patchValue({

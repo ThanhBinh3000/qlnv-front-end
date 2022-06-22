@@ -14,11 +14,16 @@
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="guiDuyet()">
+        <button
+          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03' || formData.value.trangThai == '09')"
+          type="button" class="btn btn-sub" (click)="guiDuyet()">
           <i class="icon {{iconButtonDuyet}}"></i>
           <span>{{titleButtonDuyet}}</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save()">
+        <button
+          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == '12')"
+          type="
+          button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -45,7 +50,7 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                    <nz-select formControlName="namKhoach"
+                    <nz-select formControlName="namKhoach" (ngModelChange)="getDataChiTieu()"
                       [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
@@ -419,6 +424,41 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
+                  <div nz-col [nzSpan]="6">
+                  </div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Giá trị bảo đảm dự thầu (%) </nz-form-label>
+                      <nz-form-control [nzErrorTip]="errorTip">
+                        <nz-input-group>
+                          <nz-input-number formControlName="gtriDthau" nz-input [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                          </nz-input-number>
+                        </nz-input-group>
+                        <ng-template #errorTip let-control>
+                          <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                        </ng-template>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Giá trị bảo đảm thực hiện hợp đồng (%)
+                      </nz-form-label>
+                      <nz-form-control [nzErrorTip]="errorTip">
+                        <nz-input-group>
+                          <nz-input-number formControlName="gtriHdong" nz-input [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                          </nz-input-number>
+                        </nz-input-group>
+                        <ng-template #errorTip let-control>
+                          <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                        </ng-template>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
                 </div>
               </form>
               <div nz-col nzSpan="24" class="ml-10 ">
@@ -497,7 +537,7 @@
                         <th [width]="35">STT</th>
                         <th>Mô tả chi tiết</th>
                         <th>File đính kèm</th>
-                        <th [width]="130"></th>
+                        <th [width]="90"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -580,7 +620,7 @@
                         <th [width]="35">STT</th>
                         <th>Mô tả chi tiết</th>
                         <th>File đính kèm</th>
-                        <th [width]="130"></th>
+                        <th [width]="90"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -699,8 +739,8 @@
                       <td>{{ item.soLuongTheoChiTieu }}</td>
                       <td>{{ item.soLuong }}</td>
                       <td>{{ item.donGia }}</td>
-                      <td>{{ item.soLuong * 1000 * item.donGia | number: '1.0-1'}}</td>
-                      <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * 1000 * item.donGia) : '' }}</td>
+                      <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+                      <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
                       <td class="text-right" *ngIf="userService.isCuc()">
                         <div *ngIf="item?.children?.length == 0 || !item?.children">
                           <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"

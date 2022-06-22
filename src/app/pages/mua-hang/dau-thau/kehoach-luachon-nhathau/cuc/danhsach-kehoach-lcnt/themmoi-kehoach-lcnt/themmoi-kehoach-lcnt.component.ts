@@ -221,6 +221,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         tgianBdauTchuc: [null, [Validators.required]],
         tgianMthau: [null, [Validators.required]],
         tgianDthau: [null, [Validators.required]],
+        gtriDthau: [null, [Validators.required]],
+        gtriHdong: [null, [Validators.required]],
         tgianThienHd: [null, [Validators.required]],
         tgianNhang: [null, [Validators.required]],
       }
@@ -250,6 +252,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
@@ -272,6 +275,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.loaiHopDongGetAll(),
       this.getDataChiTieu()
     ]);
+    this.spinner.hide();
   }
 
   initForm(dataDetail?) {
@@ -293,7 +297,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         maVtu: dataDetail ? dataDetail.maVtu : null,
         tenVtu: dataDetail ? dataDetail.tenVtu : null,
         tenDuAn: dataDetail ? dataDetail.tenDuAn : null,
-        tenDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
+        tenDvi: dataDetail ? dataDetail.tenDvi : this.userInfo.TEN_DVI,
         tongMucDt: dataDetail ? dataDetail.tongMucDt : null,
         nguonVon: dataDetail ? dataDetail.nguonVon : null,
         tchuanCluong: dataDetail ? dataDetail.tchuanCluong : null,
@@ -303,30 +307,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         tgianBdauTchuc: dataDetail ? dataDetail.tgianBdauTchuc : null,
         tgianMthau: dataDetail ? dataDetail.tgianMthau : null,
         tgianDthau: dataDetail ? dataDetail.tgianDthau : null,
+        gtriDthau: dataDetail ? dataDetail.gtriDthau : null,
+        gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
         tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
         tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
       }
     );
     if (dataDetail) {
       this.fileDinhKem = dataDetail.fileDinhKems
-      this.convertDsgThau(dataDetail?.dsGtDtlList);
+      this.listOfData = dataDetail.dsGtDtlList;
       this.listOfData.forEach(item => {
         this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
       });
-      this.bindingCanCu(dataDetail.children3);
+      this.bindingCanCu(dataDetail.ccXdgDtlList);
     }
     this.setTitle();
   }
 
-  convertDsgThau(listData) {
-    const groupByCategory = listData.reduce((group, product) => {
-      const { maDvi } = product;
-      group[maDvi] = group[maDvi] ?? [];
-      group[maDvi].push(product);
-      return group;
-    }, {});
-    console.log(groupByCategory);
-  }
+
 
   bindingCanCu(data) {
     if (data && data.length > 0) {
@@ -709,7 +707,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case '00':
-            case '03': {
+            case '03':
+            case '00': {
               body.trangThai = '01';
               break;
             }
@@ -721,6 +720,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               body.trangThai = '02';
             }
           }
+          // this.save()
           let res = await this.dauThauService.updateStatus(body);
           this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
           this.spinner.hide();
@@ -754,7 +754,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case '01': {
-              body.trangThai = '01';
+              body.trangThai = '03';
               break;
             }
             case '09': {
@@ -869,62 +869,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  listOfMapData2: TreeNodeInterface[] = [
-    {
-      key: `Việt trì`,
-      maDvi: '',
-      tenDvi: '',
-      goiThau: '',
-      name: 'John Brown sr.',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
-      children: [
-        {
-          key: `1-1`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park'
-        },
-        {
-          key: `1-2`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'John Brown jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park'
-        },
-        {
-          key: `1-3`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
-        }
-      ]
-    }
-  ];
-
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
-
-  collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
-    if (!$event) {
-      if (data.children) {
-        data.children.forEach(d => {
-          const target = array.find(a => a.key === d.key)!;
-          target.expand = false;
-          this.collapse(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
 
   collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
     if (!$event) {
@@ -974,6 +919,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.editBaoGiaCache[id].data.taiLieu = [];
         this.editBaoGiaCache[id].data.children = [];
         this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
+
       }
     } else if (type == 'co-so') {
       if (id == 0) {
@@ -987,6 +933,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
     }
   }
+
 
   taiLieuDinhKem(type?: string) {
     const modal = this.modal.create({
@@ -1233,6 +1180,15 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
     return false;
   }
+
+  // checkUpdateTatCaVatTu() {
+  //   if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+
 
   deleteTaiLieuDinhKemFormTag(data: any) {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
