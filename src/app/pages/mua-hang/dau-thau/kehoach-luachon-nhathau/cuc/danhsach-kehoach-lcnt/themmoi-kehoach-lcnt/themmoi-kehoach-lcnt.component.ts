@@ -968,20 +968,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (type == 'bao-gia') {
       if (id == 0) {
         this.addModelBaoGia.taiLieu = [];
+        this.addModelBaoGia.children = [];
       }
       else if (id > 0) {
         this.editBaoGiaCache[id].data.taiLieu = [];
-        this.editBaoGiaCache[id].data.tenTlieu = '';
         this.editBaoGiaCache[id].data.children = [];
         this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
       }
     } else if (type == 'co-so') {
       if (id == 0) {
         this.addModelCoSo.taiLieu = [];
+        this.addModelCoSo.children = [];
       }
       else if (id > 0) {
         this.editCoSoCache[id].data.taiLieu = [];
-        this.editCoSoCache[id].data.tenTlieu = '';
         this.editCoSoCache[id].data.children = [];
         this.checkDataExistCoSo(this.editCoSoCache[id].data);
       }
@@ -1052,68 +1052,62 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       id: new Date().getTime(),
       text: event.name,
     };
-    if (type == 'bao-gia') {
-      if (id == 0) {
-        this.addModelBaoGia.taiLieu = [];
-        this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
-      }
-      else if (id > 0) {
-        this.editBaoGiaCache[id].data.taiLieu = [];
-        this.editBaoGiaCache[id].data.taiLieu = [...this.editBaoGiaCache[id]?.data?.taiLieu, item];
-        this.editBaoGiaCache[id].data.tenTlieu = event.name;
-        this.editBaoGiaCache[id].data.children = [];
-        this.editBaoGiaCache[id].data.children = [...this.editBaoGiaCache[id].data.children, this.editBaoGiaCache[id].data.taiLieu];
-      }
-    } else if (type == 'co-so') {
-      if (id == 0) {
-        this.addModelCoSo.taiLieu = [];
-        this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
-      }
-      else if (id > 0) {
-        this.editCoSoCache[id].data.taiLieu = [];
-        this.editCoSoCache[id].data.taiLieu = [...this.editCoSoCache[id]?.data?.taiLieu, item];
-        this.editCoSoCache[id].data.tenTlieu = event.name;
-        this.editCoSoCache[id].data.children = [];
-        this.editCoSoCache[id].data.children = [...this.editCoSoCache[id].data.children, this.editCoSoCache[id].data.taiLieu];
-      }
-    }
-    this.cdr.detectChanges();
     this.uploadFileService.uploadFile(event.file, event.name).then((resUpload) => {
       const fileDinhKem = new FileDinhKem();
       fileDinhKem.fileName = resUpload.filename;
       fileDinhKem.fileSize = resUpload.size;
       fileDinhKem.fileUrl = resUpload.url;
+      if (type == 'bao-gia') {
+        if (id == 0) {
+          this.addModelBaoGia.taiLieu = [];
+          this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
+          this.addModelBaoGia.children = [];
+          this.addModelBaoGia.children = [...this.addModelBaoGia.children, fileDinhKem];
+        }
+        else if (id > 0) {
+          this.editBaoGiaCache[id].data.taiLieu = [];
+          this.editBaoGiaCache[id].data.taiLieu = [...this.editBaoGiaCache[id]?.data?.taiLieu, item];
+          this.editBaoGiaCache[id].data.children = [];
+          this.editBaoGiaCache[id].data.children = [...this.editBaoGiaCache[id].data.children, fileDinhKem];
+        }
+      } else if (type == 'co-so') {
+        if (id == 0) {
+          this.addModelCoSo.taiLieu = [];
+          this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
+          this.addModelCoSo.children = [];
+          this.addModelCoSo.children = [...this.addModelCoSo.children, fileDinhKem];
+        }
+        else if (id > 0) {
+          this.editCoSoCache[id].data.taiLieu = [];
+          this.editCoSoCache[id].data.taiLieu = [...this.editCoSoCache[id]?.data?.taiLieu, item];
+          this.editCoSoCache[id].data.children = [];
+          this.editCoSoCache[id].data.children = [...this.editCoSoCache[id].data.children, fileDinhKem];
+        }
+      }
     });
   }
 
   addBaoGia() {
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-    taiLieuBaoGiaThiTruong.moTa = this.addModelBaoGia?.moTa;
-    taiLieuBaoGiaThiTruong.tenTlieu = (this.addModelBaoGia.taiLieu && this.addModelBaoGia.taiLieu.length > 0) ? this.addModelBaoGia.taiLieu[0].text : '';
-    taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
+    taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.tenTlieu;
     taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
-    taiLieuBaoGiaThiTruong.children = [];
-    taiLieuBaoGiaThiTruong.children = [
-      ...taiLieuBaoGiaThiTruong.children,
-      this.addModelBaoGia.taiLieu
-    ];
+    taiLieuBaoGiaThiTruong.children = this.addModelBaoGia.children;
+    taiLieuBaoGiaThiTruong.taiLieu = this.addModelBaoGia.taiLieu;
     this.checkDataExistBaoGia(taiLieuBaoGiaThiTruong);
     this.clearBaoGia();
   }
 
   clearBaoGia() {
     this.addModelBaoGia = {
-      moTa: '',
+      tenTlieu: '',
       taiLieu: [],
+      children: [],
     };
   }
 
   editRowBaoGia(id) {
     this.editBaoGiaCache[id].edit = true;
-    if (this.editBaoGiaCache[id].data.children && this.editBaoGiaCache[id].data.children.length > 0) {
-      this.editBaoGiaCache[id].data.taiLieu = this.editBaoGiaCache[id].data.children[0];
-    }
   }
 
   deleteRowBaoGia(data) {
@@ -1166,31 +1160,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   addCoSo() {
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
-    taiLieuCanCuKhac.moTa = this.addModelCoSo?.moTa;
-    taiLieuCanCuKhac.tenTlieu = (this.addModelCoSo.taiLieu && this.addModelCoSo.taiLieu.length > 0) ? this.addModelCoSo.taiLieu[0].text : '';
-    taiLieuCanCuKhac.idVirtual = new Date().getTime();
+    taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTlieu;
     taiLieuCanCuKhac.id = new Date().getTime() + 1;
-    taiLieuCanCuKhac.children = [];
-    taiLieuCanCuKhac.children = [
-      ...taiLieuCanCuKhac.children,
-      this.addModelCoSo.taiLieu,
-    ];
+    taiLieuCanCuKhac.children = this.addModelCoSo.children;
+    taiLieuCanCuKhac.taiLieu = this.addModelCoSo.taiLieu;
     this.checkDataExistCoSo(taiLieuCanCuKhac);
     this.clearCoSo();
   }
 
   clearCoSo() {
     this.addModelCoSo = {
-      moTa: '',
+      tenTlieu: '',
       taiLieu: [],
+      children: [],
     };
   }
 
   editRowCoSo(id) {
     this.editCoSoCache[id].edit = true;
-    if (this.editCoSoCache[id].data.children && this.editCoSoCache[id].data.children.length > 0) {
-      this.editCoSoCache[id].data.taiLieu = this.editCoSoCache[id].data.children[0];
-    }
   }
 
   deleteRowCoSo(data) {
