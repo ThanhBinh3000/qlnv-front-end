@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -61,6 +62,16 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   loaiVthh: string = '';
   isDetail: boolean = false;
   selectedId: number = 0;
+  filterTable: any = {
+    soQd: '',
+    soBban: '',
+    ngayLayMau: '',
+    soHd: '',
+    tenKho: '',
+    tenLo: '',
+    tenNgan: '',
+  };
+  dataTableAll: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -203,6 +214,12 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -355,5 +372,33 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   chiTietQuyetDinh(isView: boolean, id: number) {
 
+  }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      soBban: '',
+      ngayLayMau: '',
+      soHd: '',
+      tenKho: '',
+      tenLo: '',
+      tenNgan: '',
+    }
   }
 }

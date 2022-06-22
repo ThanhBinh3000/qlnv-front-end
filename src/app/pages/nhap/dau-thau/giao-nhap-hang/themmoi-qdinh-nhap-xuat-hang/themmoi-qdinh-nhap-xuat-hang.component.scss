@@ -1,5 +1,25 @@
 ::ng-deep {
   .them-moi-nhap-xuat-hang__body {
+    .multiple-box {
+      height: 24px;
+
+      .input-multiple {
+        max-height: 20px !important;
+      }
+
+      .select-tag {
+        min-height: 20px !important;
+      }
+
+      .download-file {
+        height: 21px;
+      }
+
+    }
+
+    .ant-col>.ant-form-item {
+      margin-bottom: 0 !important;
+    }
 
     .table__body,
     .ghi-chu {
@@ -13,17 +33,17 @@
       }
     }
 
-    .ant-form {
-      .ant-row {
-        .ant-col {
-          padding: 0px 9px !important;
-        }
-      }
-    }
+    // .ant-form {
+    //   .ant-row {
+    //     .ant-col {
+    //       padding: 0px 9px !important;
+    //     }
+    //   }
+    // }
 
-    .header-table-nvnh {
-      height: 163px;
-    }
+    // .header-table-nvnh {
+    //   height: 163px;
+    // }
 
     .main-content {
       padding-top: 0;
