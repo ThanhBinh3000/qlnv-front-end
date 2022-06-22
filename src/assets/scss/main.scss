@@ -3197,6 +3197,15 @@ td {
   &:before {
     background: $bg-nhat;
   }
+
+  .tab-link {
+    color: #fff;
+  }
+
+  .tab-link-2 {
+    color: #444;
+  }
+
 }
 
 .ant-modal .ant-tabs-content-holder,

@@ -58,7 +58,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soBb: '',
     ngayNghiemThuShow: '',
     tenDiemkho: '',
@@ -400,8 +400,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   deleteSelect() {
@@ -425,12 +426,13 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -465,7 +467,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soBb: '',
       ngayNghiemThuShow: '',
       tenDiemkho: '',
@@ -476,5 +478,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       tongGiaTri: '',
       trangThaiDuyet: '',
     }
+  }
+
+  print() {
+
   }
 }

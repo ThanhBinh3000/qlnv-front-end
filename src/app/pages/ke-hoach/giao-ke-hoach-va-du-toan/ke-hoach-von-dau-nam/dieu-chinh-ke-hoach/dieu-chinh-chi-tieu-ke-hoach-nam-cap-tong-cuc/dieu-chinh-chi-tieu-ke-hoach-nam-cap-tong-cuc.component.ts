@@ -281,8 +281,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
 
   clearFilter() {
@@ -473,9 +474,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteMultiple(dataDelete);
+            let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

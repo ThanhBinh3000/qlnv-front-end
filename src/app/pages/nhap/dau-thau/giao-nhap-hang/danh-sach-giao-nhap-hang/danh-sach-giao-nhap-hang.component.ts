@@ -169,8 +169,9 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   redirectToChiTiet(id: number) {
 
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   clearFilter() {
     this.searchFilter = {

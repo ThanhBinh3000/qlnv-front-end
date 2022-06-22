@@ -15,8 +15,23 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/tra-cuu`
-    return this.httpClient.post<any>(url, body).toPromise();
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt?`;
+    if (body.denNgayNhapKho)
+      url_ += 'denNgayNhapKho=' + encodeURIComponent('' + body.denNgayNhapKho) + '&';
+    if (body.maDvi)
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.soQdNhap)
+      url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
+    if (body.tuNgayNhapKho)
+      url_ += 'tuNgayNhapKho=' + encodeURIComponent('' + body.tuNgayNhapKho) + '&';
+    if (body.soPhieu)
+      url_ += 'soPhieu=' + encodeURIComponent('' + body.soPhieu) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+    if (body.pageSize)
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+    return this.httpClient.get<any>(url_).toPromise();
   }
 
   loadChiTiet(id: number): Promise<any> {
@@ -25,7 +40,7 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
@@ -39,8 +54,18 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
     return this.httpClient.delete<any>(url).toPromise();
   }
 
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/status`;
     return this.httpClient.put(url, body).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

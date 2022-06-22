@@ -6,15 +6,14 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
-            <i class="icon  htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
-            <span>Trình duyệt</span>
+            <span>Lưu và gửi duyệt</span>
           </button>
           <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
             *ngIf="detail.trangThai == '01' && !isView" (click)="hoanThanh()">
@@ -31,6 +30,11 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
             <span>Quay về</span>
           </a>
@@ -52,9 +56,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định nhập
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.soQuyetDinh"
+                <nz-select [(ngModel)]="detail.qdgnvnxId"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.soQd" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -125,9 +129,9 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngăn (lô) kho
+                  Ngăn lô
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganlo"
+                <nz-select [(ngModel)]="detail.maNganlo" (ngModelChange)="changeNganLo()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let thuKho of listNganLo" [nzValue]="thuKho.maNganlo" [nzLabel]="thuKho.tenNganlo">
                   </nz-option>
@@ -270,7 +274,7 @@
                   </nz-input-number>
                 </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                <td>
+                <td class="text-right">
                   <a (click)="addRow()"
                     [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
                     <i class="fa fa-plus"></i>
@@ -291,7 +295,7 @@
                   <td>{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
                   <td class="bg-gray">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td
+                  <td class="text-right"
                     *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
                     <a (click)="editRow(data.stt)">
                       <i class="fa fa-pencil"></i>
@@ -339,7 +343,7 @@
                     </nz-input-number>
                   </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td>
+                  <td class="text-right">
                     <a (click)="saveEdit(data.stt)" class="save"
                       [class.disabled]="!editDataCache[data.stt]?.data.noiDung || !editDataCache[data.stt]?.data.dvt || editDataCache[data.stt]?.data.noiDung == '' || editDataCache[data.stt]?.data.dvt == ''">
                       <i class="fa fa-save"></i>

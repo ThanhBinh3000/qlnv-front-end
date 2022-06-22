@@ -312,8 +312,9 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   filterInTable(key: string, value: string) {
     if (value && value != '') {

@@ -22,12 +22,13 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   @Input() typeVthh: string;
 
+  qdTCDT: string = MESSAGE.QD_TCDT;
+
   searchFilter = {
     soPhieu: '',
     ngayTongHop: '',
-    tenNguoiGiao: '',
+    ketLuan: '',
     soQuyetDinh: '',
-    soBienBan: '',
   };
 
   optionsDonVi: any[] = [];
@@ -55,7 +56,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     soPhieu: '',
     ngayGdinh: '',
     ketLuan: '',
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soBienBan: '',
   };
 
@@ -73,6 +74,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      if (this.userInfo) {
+        this.qdTCDT = this.userInfo.MA_QD;
+      }
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -115,6 +119,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
+      "ketLuan": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,
@@ -134,8 +139,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "page": this.page - 1
       },
       "soPhieu": this.searchFilter.soPhieu,
+      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
       "str": null,
-      "tenNguoiGiao": this.searchFilter.tenNguoiGiao,
+      "tenNguoiGiao": null,
       "trangThai": null
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
@@ -184,9 +190,8 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.searchFilter = {
       soPhieu: '',
       ngayTongHop: '',
-      tenNguoiGiao: '',
+      ketLuan: '',
       soQuyetDinh: '',
-      soBienBan: '',
     };
     this.search();
   }
@@ -234,8 +239,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   export() {
@@ -243,6 +249,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
+          "ketLuan": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
           "maHangHoa": this.typeVthh,
           "maNganKho": null,
@@ -257,8 +264,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
           "orderDirection": null,
           "paggingReq": null,
           "soPhieu": this.searchFilter.soPhieu,
+          "soQd": this.searchFilter.soQuyetDinh,
           "str": null,
-          "tenNguoiGiao": this.searchFilter.tenNguoiGiao,
+          "tenNguoiGiao": null,
           "trangThai": null
         };
         this.quanLyPhieuKiemTraChatLuongHangService
@@ -298,12 +306,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -341,8 +350,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       soPhieu: '',
       ngayGdinh: '',
       ketLuan: '',
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soBienBan: '',
     }
+  }
+
+  print() {
+
   }
 }

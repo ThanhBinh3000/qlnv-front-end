@@ -5,14 +5,11 @@
         <nz-card class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="4">
-              <label class="search__label">Số Quyết định nhập</label>
-              <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinh" />
-            </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Số biên bản</label>
-              <input class="search__input" placeholder="Nhập Số biên bản" nz-input
-                [(ngModel)]="searchFilter.soBienBan" />
+              <label class="search__label">Số Quyết định</label>
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
+                <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
+                  appNumberOnly />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Số phiếu</label>
@@ -23,8 +20,8 @@
               <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Người giao hàng</label>
-              <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.tenNguoiGiao" />
+              <label class="search__label">Kết quả đánh giá</label>
+              <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.ketLuan" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -50,9 +47,8 @@
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px">STT</th>
-                    <th width="161px">Số quyết định nhập</th>
                     <th width="161px">Số phiếu</th>
-                    <th width="161px">Số biên bản</th>
+                    <th width="161px">Số quyết định nhập</th>
                     <th width="161px">Ngày giám định</th>
                     <th>Kết quả đánh giá</th>
                     <th width="295px">Trạng thái</th>
@@ -65,15 +61,6 @@
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
-                          (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieu"
                           (input)="filterInTable('soPhieu',filterTable.soPhieu)" />
                       </nz-input-group>
@@ -83,8 +70,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
-                          (input)="filterInTable('soBienBan',filterTable.soBienBan)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhNhap"
+                          (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -117,12 +104,11 @@
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.soQuyetDinh }}</td>
                     <td>{{ data.soPhieu }}</td>
-                    <td>{{ data.soBienBan }}</td>
+                    <td>{{ data.soQuyetDinhNhap }}</td>
                     <td>{{ data.ngayGdinh }}</td>
                     <td>{{ data.ketLuan }}</td>
-                    <td>{{ data.trangThaiDuyet }}</td>
+                    <td>{{ data.tenTrangThai }}</td>
                     <td class="text-right">
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
@@ -163,7 +149,11 @@
             </button>
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
+              <span>Xuất file</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="print()">
+              <i class="icon htvbdh_tcdt_print"></i>
+              <span>In</span>
             </button>
             <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
               (click)="redirectToChiTiet(false, 0)">
