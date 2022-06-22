@@ -175,7 +175,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     } else {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
-      this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
+      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.newDate.toISOString().slice(0, 16);
       this.spinner.show();
       this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
@@ -344,7 +344,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.ngayTao = data.data.ngayTao
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
-          this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
+          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           this.updateEditCache();

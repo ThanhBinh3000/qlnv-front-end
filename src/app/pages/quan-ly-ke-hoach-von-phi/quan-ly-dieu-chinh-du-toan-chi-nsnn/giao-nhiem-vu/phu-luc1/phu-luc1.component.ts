@@ -18,7 +18,6 @@ import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../..
 import { LINH_VUC } from './phu-luc1.constant';
 
 export class ItemData {
-
   id: any;
   stt: string;
   level: number;
@@ -155,10 +154,10 @@ export class PhuLuc1Component implements OnInit {
       }
     );
 
-    await this.danhMucService.dMDviTinh().toPromise().then(
+    await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.loaiKhoans = data.data?.content;
+          this.loaiKhoans = data.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -250,7 +249,7 @@ export class PhuLuc1Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

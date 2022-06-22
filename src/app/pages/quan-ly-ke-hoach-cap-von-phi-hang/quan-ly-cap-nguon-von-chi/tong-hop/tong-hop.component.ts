@@ -53,7 +53,7 @@ export class TongHopComponent implements OnInit {
 			id: Utils.TT_BC_7,
 			tenDm: "Lãnh đạo duyệt",
 		},
-		
+
 	];
 	donVis: any[] = [];
 	loaiDns: any[] = NGUON_BAO_CAO;
@@ -179,18 +179,27 @@ export class TongHopComponent implements OnInit {
 
 	taoMoi() {
 		this.statusBtnNew = false;
-		if (!this.searchFilter.qdChiTieu) {
+		if (!this.searchFilter.loaiDn) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		let obj = {
-			qdChiTieu: this.searchFilter.qdChiTieu,
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC && !this.searchFilter.qdChiTieu) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
 		}
-		this.dataSource.changeData(obj);
-		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
-		])
-
+		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
+			let obj = {
+				qdChiTieu: this.searchFilter.qdChiTieu,
+			}
+			this.dataSource.changeData(obj);
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
+			])
+		} else {
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
+			])
+		}
 	}
 
 

@@ -1,6 +1,8 @@
 import { QuanLyThongTinQuyetToan } from './quan-ly-thong-tin-quyet-toan.type';
 import {MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG,MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN} from '../../../constants/routerUrl';
-
+export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
+export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
+export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
 //**************** */ hang so cho cac cap
 //cap chi cuc
 export const CHI_CUC = '3';
@@ -60,7 +62,7 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     unRole: [
       {
 				"unit": TONG_CUC,
-				"role": LANH_DAO,
+				"role": 'TC_KH_VP_LD',
 			},
     ],
 		isDisabled: false,
@@ -73,7 +75,7 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     unRole: [
       {
 				"unit": TONG_CUC,
-				"role": NHAN_VIEN,
+				"role": 'TC_KH_VP_NV',
 			},
     ],
 		isDisabled: false,

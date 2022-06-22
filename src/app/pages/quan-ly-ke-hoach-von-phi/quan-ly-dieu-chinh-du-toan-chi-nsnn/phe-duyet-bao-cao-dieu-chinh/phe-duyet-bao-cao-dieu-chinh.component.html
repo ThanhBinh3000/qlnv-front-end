@@ -45,7 +45,7 @@
 						</nz-date-picker>
 					</div>
           <div nz-col nzSpan="6">
-						<ng-container *ngIf="userRole == '3'">
+						<ng-container *ngIf="userRole == 'TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV'">
 							<label class="search__label">Đơn vị lập</label>
 							<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị lập"
 								[(ngModel)]="searchFilter.donViTao">

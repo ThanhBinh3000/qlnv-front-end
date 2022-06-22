@@ -90,12 +90,12 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachQuyetDinh = data.data.content;
+          this.danhSachQuyetDinh = data.data?.content;
           this.danhSachQuyetDinh.forEach(e => {
             e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
           })
-          this.totalElements = data.data.totalElements;
-          this.totalPages = data.data.totalPages;
+          this.totalElements = data.data?.totalElements;
+          this.totalPages = data.data?.totalPages;
 
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

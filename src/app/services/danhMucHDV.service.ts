@@ -34,8 +34,8 @@ export class DanhMucHDVService extends BaseService {
   //get list don vi tao
   dMDonVi(): Observable<any>{
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
-      this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
+      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
+      // this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
     );
   }
 
@@ -358,16 +358,17 @@ export class DanhMucHDVService extends BaseService {
 
   //danh muc don vi tinh
   dMDviTinh(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/164",
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": ""
-      }
+    return this.httpClient.get(
+      // this.urlDefault + "/qlnv-category/dmuc-khoachvon/164",
+      this.urlDefault + "/qlnv-category/dmuc-dvi-tinh/danh-sach/tat-ca",
+      // {
+      //   "paggingReq": {
+      //     "limit": 1000,
+      //     "page": 1
+      //   },
+      //   "str": "",
+      //   "trangThai": ""
+      // }
     );
   }
   //danh muc nhom
@@ -750,6 +751,48 @@ dMucBcaoDuyet(): Observable<any> {
   xoaDanhMuc(id: any): Observable<any> {
     return this.httpClient.delete(
       this.urlDefault + '/qlnv-category/dmuc-khoachvon/' + id,
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04a)
+  dMNoiDungChi04a(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI04A",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungChi04b(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI04B",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungChi05(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_CHI05",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungPhuLuc1(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_PL1",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMMaDuAnPhuLuc3(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/MA_DU_AN_PL3",
+    );
+  }
+
+  //danh mục loại khoản phụ lục 1 điều chỉnh
+  dMLoaiKhoanPL1DieuChinh(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-loai-khoan",
     );
   }
 }

@@ -72,7 +72,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		this.danhMuc.dMDonVi().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
-					this.donVis = data.data;
+					this.donVis = data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}

@@ -16,6 +16,7 @@ export class DialogBaoCaoCopyComponent implements OnInit {
   @Input() namBcao: number;
   @Input() dotBcao: number;
   @Input() thangBcao: number;
+  @Input() checkDvtt: boolean;
   text: string = ""
   baoCaos: any = [];
   request = {
@@ -32,7 +33,6 @@ export class DialogBaoCaoCopyComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    debugger
     this.request.loaiCopy = 'C';
     this.request.namBcao = this.namBcao;
     this.request.thangBcao = this.thangBcao;

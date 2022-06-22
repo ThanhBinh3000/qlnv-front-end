@@ -99,7 +99,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
+          this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

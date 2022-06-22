@@ -1,6 +1,9 @@
 import { QuanLyGiaoDuToanChiNSNN } from './quan-ly-giao-du-toan-chi-nsnn.type';
 import {MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN} from '../../../constants/routerUrl';
 
+export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
+export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
+export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
 //**************** */ hang so cho cac cap
 //cap chi cuc
 export const CHI_CUC = '3';
@@ -45,35 +48,35 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     unRole: [
       {
 				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
+				"role": 'CC_KH_VP_NV',
 			},
       {
         "unit": CHI_CUC,
-        "role": TRUONG_BP,
+        "role": 'CC_KH_VP_TBP',
       },
       {
         "unit": CHI_CUC,
-        "role": LANH_DAO,
+        "role": 'CC_KH_VP_LD',
       },
       {
 				"unit": CUC_KHU_VUC,
-				"role": NHAN_VIEN,
+				"role": 'C_KH_VP_NV_KH',
 			},
 			{
 				"unit": CUC_KHU_VUC,
-				"role": TRUONG_BP,
+				"role": 'C_KH_VP_TBP_KH',
 			},
 			{
 				"unit": CUC_KHU_VUC,
-				"role": LANH_DAO,
+				"role": 'C_KH_VP_LD',
 			},
 			{
 				"unit": TONG_CUC,
-				"role": TRUONG_BP,
+				"role": 'TC_KH_VP_TBP',
 			},
 			{
 				"unit": LANH_DAO,
-				"role": LANH_DAO,
+				"role": 'TC_KH_VP_LD',
 			},
     ],
 		isDisabled: false,
@@ -86,15 +89,15 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     unRole: [
       {
 				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
+				"role": 'CC_KH_VP_NV',
 			},
       {
         "unit": CHI_CUC,
-        "role": TRUONG_BP,
+        "role": 'CC_KH_VP_TBP',
       },
       {
         "unit": CHI_CUC,
-        "role": LANH_DAO,
+        "role": 'CC_KH_VP_LD',
       },
     ],
 		isDisabled: false,
@@ -115,7 +118,7 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     unRole: [
       {
 				"unit": TONG_CUC,
-				"role": NHAN_VIEN,
+				"role": 'TC_KH_VP_NV',
 			},
     ],
 		isDisabled: false,
@@ -128,15 +131,15 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     unRole: [
       {
 				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
+				"role": 'CC_KH_VP_NV',
 			},
       {
         "unit": CHI_CUC,
-        "role": TRUONG_BP,
+        "role": 'CC_KH_VP_TBP',
       },
       {
         "unit": CHI_CUC,
-        "role": LANH_DAO,
+        "role": 'CC_KH_VP_LD',
       },
     ],
 		isDisabled: false,
@@ -149,15 +152,15 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     unRole: [
       {
 				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
+				"role": 'CC_KH_VP_NV',
 			},
       {
         "unit": CHI_CUC,
-        "role": TRUONG_BP,
+        "role": 'CC_KH_VP_TBP',
       },
       {
         "unit": CHI_CUC,
-        "role": LANH_DAO,
+        "role": 'CC_KH_VP_LD',
       },
     ],
 		isDisabled: false,

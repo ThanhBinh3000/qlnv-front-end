@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO } from './../../../../../Utility/utils';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DatePipe, Location } from '@angular/common';
@@ -190,7 +191,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     else {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
-      this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
+      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.newDate;
       this.spinner.show();
       this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
@@ -250,17 +251,19 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
-    if (this.userInfo?.roles[0]?.code == '3' && this.soQd && this.trangThaiBanGhi == '6') {
+    if (this.userInfo?.roles[0]?.code == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') && this.soQd && this.trangThaiBanGhi == '6') {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
+      this.statusBtnGiaoToanBo = true;
     }
 
-    this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-      if (item.trangThai == "1") {
-        this.statusBtnGiaoToanBo = true;
-      }
-    })
+    // this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+    //   if (this.userInfo?.roles[0]?.code == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') && !this.soQd && item.trangThai == "1" && this.trangThaiBanGhi !== "6" ) {
+    //     this.statusBtnGiaoToanBo = true;
+    //   }
+    // })
+
     if (dVi && dVi.capDvi == "1") {
       this.statusBtnGuiDVCT = true
     }
@@ -367,7 +370,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
-          this.checkSumUp = data.data.checkSumUp;
+          this.checkSumUp = !data.data.checkSumUp;
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -513,7 +516,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     let request = JSON.parse(JSON.stringify({
       id: this.id,
       fileDinhKems: this.lstFiles,
-      listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -555,7 +558,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     }
     this.spinner.show();
     if (this.id && this.namDtoan) {
-      this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan1(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -571,7 +574,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         },
       );
     } else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1303,7 +1306,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
           this.trangThaiBanGhi = '1';
           this.maDonViTao = this.userInfo?.dvql;
-          this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
+          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
+          console.log(this.lstDvi)
           this.ngayTao = this.newDate;
           this.spinner.show();
           this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(

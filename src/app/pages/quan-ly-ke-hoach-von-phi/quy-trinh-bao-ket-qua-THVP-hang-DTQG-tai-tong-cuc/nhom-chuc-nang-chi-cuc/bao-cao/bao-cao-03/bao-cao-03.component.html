@@ -57,10 +57,14 @@
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
       </button>
-      <button type="button" class="btn btn-sub" [hidden]="status">
+      <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
+        <i class="icon htvbdh_tcdt_import"></i>
+        <span>Export</span>
+      </button>
+      <!-- <button type="button" class="btn btn-sub" [hidden]="status">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Import</span>
-      </button>
+      </button> -->
       <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
         <i class="fa fa-trash-o"></i>
         <span>Xóa</span>
@@ -76,7 +80,8 @@
         <th rowspan="2">Số lượng theo kế hoạch</th>
         <th rowspan="2">Số lượng thực tế thực hiện</th>
         <th colspan="3">Đơn giá</th>
-        <th colspan="3">Thành tiền</th>
+        <th colspan="2">Thành tiền</th>
+        <th rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
         <th rowspan="2">Ghi chú</th>
         <th rowspan="2" colspan="3" [hidden]="status"></th>
         <th rowspan="2" [hidden]="status">
@@ -90,7 +95,6 @@
         <th>Giá bán thực tế</th>
         <th>Giá hạch toán</th>
         <th>Giá bán thực tế</th>
-        <th>Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
       </tr>
       <tr>
         <th>A</th>
@@ -116,24 +120,29 @@
         <td><b>I</b></td>
         <td><b>Xuất bản</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXb}}</td>
+        <td>{{soLuongTteXb}}</td>
+        <td>{{dgGiaKhoachXb}}</td>
+        <td>{{dgGiaBanTthieuXb}}</td>
+        <td>{{dgGiaBanTteXb}}</td>
+        <td>{{ttGiaHtoanXb}}</td>
+        <td>{{ttGiaBanTteXb}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXb}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'31')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao031.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'31')"></i>
+          </ng-container>
+        </td>
+
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao031; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate1">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -176,7 +185,7 @@
         </ng-container>
         <ng-template #editTemplate1>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -254,24 +263,28 @@
         <td> <b>II</b> </td>
         <td> <b>Xuất CTVT</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXCTVT}}</td>
+        <td>{{soLuongTteXCTVT}}</td>
+        <td>{{dgGiaKhoachXCTVT}}</td>
+        <td>{{dgGiaBanTthieuXCTVT}}</td>
+        <td>{{dgGiaBanTteXCTVT}}</td>
+        <td>{{ttGiaHtoanXCTVT}}</td>
+        <td>{{ttGiaBanTteXCTVT}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXCTVT}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'32')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao032.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'32')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao032; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate2">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -314,7 +327,7 @@
         </ng-container>
         <ng-template #editTemplate2>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -392,24 +405,28 @@
         <td><b>III</b></td>
         <td><b>Xuất khác</b></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{soLuongKhoachXk}}</td>
+        <td>{{soLuongTteXk}}</td>
+        <td>{{dgGiaKhoachXk}}</td>
+        <td>{{dgGiaBanTthieuXk}}</td>
+        <td>{{dgGiaBanTteXk}}</td>
+        <td>{{ttGiaHtoanXk}}</td>
+        <td>{{ttGiaBanTteXk}}</td>
+        <td>{{ttClechGiaTteVaGiaHtoanXk}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'33')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao033.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'33')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao033; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate3">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -452,7 +469,7 @@
         </ng-container>
         <ng-template #editTemplate3>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">

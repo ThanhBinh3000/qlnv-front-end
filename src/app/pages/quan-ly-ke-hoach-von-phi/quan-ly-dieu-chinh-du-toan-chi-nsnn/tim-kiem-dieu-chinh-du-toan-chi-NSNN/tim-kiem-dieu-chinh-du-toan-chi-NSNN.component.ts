@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -121,7 +122,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.maDviTao = this.userInfo?.dvql;
     // this.trangThai = '1'
 
-    if (this.userRole == Utils.NHAN_VIEN) {
+    if (this.userRole == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
 			this.status = false;
 			this.trangThai = Utils.TT_BC_1;
 			this.searchFilter.loaiTimKiem = '0';
@@ -131,7 +132,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (this.userRole == Utils.TRUONG_BO_PHAN) {
+			if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
 				this.trangThai = Utils.TT_BC_2;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else {

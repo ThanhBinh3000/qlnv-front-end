@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
@@ -106,11 +106,11 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    if (this.userRole == Utils.NHAN_VIEN) {
+    if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
       this.status = false;
       this.searchFilter.trangThai = Utils.TT_BC_7;
       this.searchFilter.loaiTimKiem = '1';
-      this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
+      this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
@@ -119,7 +119,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       this.status = true;
       this.searchFilter.loaiTimKiem = '0';
       this.searchFilter.donViTao = this.maDviTao;
-      if (this.userRole == Utils.TRUONG_BO_PHAN) {
+      if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
         this.searchFilter.trangThai = Utils.TT_BC_2;
         this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_2));
       } else {
@@ -168,7 +168,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
         return;
       }
     }
-    if (this.userRole != Utils.NHAN_VIEN) {
+    if (this.userRole != ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
       this.searchFilter.loaiTimKiem = "0";
     } else {
       if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao) {
@@ -179,9 +179,9 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     }
     let lstTrangThai = [];
     if (!this.searchFilter.trangThai) {
-      if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+      if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
         lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT];
-      } else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+      } else if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
         lstTrangThai = [Utils.TT_BC_2];
       } else {
         lstTrangThai = [Utils.TT_BC_4];

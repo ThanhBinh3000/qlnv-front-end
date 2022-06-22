@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -92,6 +93,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   status: boolean;
   userRole: string;
   maDviTao: string;
+  roleCanBo: string;
   date: any = new Date()
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -114,8 +116,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.tuNgay = this.date.toDateString();
     this.searchFilter.nam = new Date().getFullYear()
-
-    if (this.userRole == Utils.NHAN_VIEN) {
+    if (this.userRole == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
@@ -127,7 +128,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (this.userRole == Utils.TRUONG_BO_PHAN) {
+			if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else {
@@ -139,7 +140,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
-          this.donVis = data.data;
+          this.donVis = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -192,9 +193,9 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     }
     let lstTrangThai = [];
     if (!this.searchFilter.trangThai) {
-      if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+      if (this.userInfo?.roles[0].code == ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
         lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
-      } else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+      } else if (this.userInfo?.roles[0].code == ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
         lstTrangThai = [Utils.TT_BC_2];
       } else {
         lstTrangThai = [Utils.TT_BC_4];
@@ -220,7 +221,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     await this.quanLyVonPhiService.timKiemDieuChinh1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
+          this.danhSachBaoCao = data.data?.content;
           this.danhSachBaoCao.forEach(e => {
             e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
             e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);

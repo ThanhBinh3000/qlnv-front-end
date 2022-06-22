@@ -178,7 +178,7 @@ export class PhuLuc7Component implements OnInit {
     await this.danhMucService.dMDviTinh().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.donViTinhs = data.data?.content;
+          this.donViTinhs = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }

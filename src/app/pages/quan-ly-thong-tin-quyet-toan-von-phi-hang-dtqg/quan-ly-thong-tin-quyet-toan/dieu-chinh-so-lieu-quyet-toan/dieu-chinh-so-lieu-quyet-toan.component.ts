@@ -17,9 +17,46 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../Utility/utils";
-import { TRANG_THAI_TIM_KIEM, Utils } from './../../../../Utility/utils';
+import { Utils } from './../../../../Utility/utils';
 import { NOI_DUNG } from './dieu-chinh-so-lieu-quyet-toan.constant';
-
+export const TRANG_THAI_TIM_KIEM = [
+  {
+      id: "1",
+      tenDm: 'Đang soạn'
+  },
+  {
+      id: "2",
+      tenDm: 'Trình duyệt'
+  },
+  {
+      id: "3",
+      tenDm: 'Trưởng BP từ chối'
+  },
+  {
+      id: "4",
+      tenDm: 'Trưởng BP duyệt'
+  },
+  {
+      id: "5",
+      tenDm: 'Lãnh đạo từ chối'
+  },
+  {
+      id: "6",
+      tenDm: 'Lãnh đạo phê duyệt'
+  },
+  {
+      id: "8",
+      tenDm: 'Đơn vị cấp trên từ chối'
+  },
+  {
+      id: "9",
+      tenDm: 'Đơn vị cấp trên tiếp nhận'
+  },
+  // {
+  //     id: "10",
+  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+  // },
+]
 export class ItemData {
   id!: any;
   stt!: string;
@@ -178,8 +215,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     if (this.id) {
       await this.getDetailReport();
     } else if(this.namQtoan){
-      this.getQuyetToan()
-      await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(
+      await this.getQuyetToan()
+      await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan1(this.maPhanBcao1).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBcao = data.data;
@@ -219,7 +256,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     await this.danhMucService.dMDviTinh().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.donViTinhs = data.data?.content;
+          this.donViTinhs = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -408,9 +445,9 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 		}
 
     let request = JSON.parse(JSON.stringify({
-      id: null,
+      id: this.id,
       fileDinhKems: this.lstFiles,
-			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
       thuyetMinh: this.thuyetMinh,
@@ -941,8 +978,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].soLuong += item.soLuong;
-          this.lstCtietBcao[index].donGiaMua += item.donGiaMua;
+          // this.lstCtietBcao[index].soLuong += item.soLuong;
+          // this.lstCtietBcao[index].donGiaMua += item.donGiaMua;
           this.lstCtietBcao[index].thanhTien += item.thanhTien;
         }
       })
@@ -957,8 +994,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     this.total.thanhTien = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        this.total.soLuong += item.soLuong;
-        this.total.donGiaMua += item.donGiaMua;
+        // this.total.soLuong += item.soLuong;
+        // this.total.donGiaMua += item.donGiaMua;
         this.total.thanhTien += item.thanhTien;
       }
     })

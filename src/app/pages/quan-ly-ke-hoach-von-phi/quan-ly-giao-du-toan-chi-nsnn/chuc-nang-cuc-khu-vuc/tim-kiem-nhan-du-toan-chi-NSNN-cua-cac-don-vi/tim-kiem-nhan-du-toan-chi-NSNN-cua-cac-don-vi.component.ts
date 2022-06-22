@@ -97,7 +97,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
-          this.donVis = data.data;
+          this.donVis = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -114,7 +114,6 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
-          console.log(this.userInfo);
           return data?.data;
 
         } else {

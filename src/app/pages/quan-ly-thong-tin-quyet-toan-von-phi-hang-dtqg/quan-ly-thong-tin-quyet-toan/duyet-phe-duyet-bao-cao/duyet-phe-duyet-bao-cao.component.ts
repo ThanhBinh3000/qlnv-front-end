@@ -1,3 +1,4 @@
+import { ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -69,7 +70,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     this.donViTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
 
-    if (this.userRole == Utils.TRUONG_BO_PHAN) {
+    if (this.userInfo?.roles[0].code == ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
       this.searchFilter.trangThai = Utils.TT_BC_2;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
     } else {
@@ -123,19 +124,12 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
-    // if(this.trangThai){
-    //   searchFilterTemp.trangThais.push(this.trangThai)
-    // }
-    // else{
-    //   searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
-    // }
-    debugger
 
 		if (!this.trangThai){
-      if(this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
+      if(this.userInfo?.roles[0].code == ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
 				searchFilterTemp.trangThais = [Utils.TT_BC_2];
 
-			} else if(this.userInfo?.roles[0].code == Utils.LANH_DAO) {
+			} else if(this.userInfo?.roles[0].code == ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code)) {
 				searchFilterTemp.trangThais = [Utils.TT_BC_4];
 
 			}
