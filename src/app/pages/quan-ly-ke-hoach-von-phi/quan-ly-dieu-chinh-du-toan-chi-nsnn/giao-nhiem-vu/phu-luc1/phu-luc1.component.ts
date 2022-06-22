@@ -249,7 +249,7 @@ export class PhuLuc1Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
+    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

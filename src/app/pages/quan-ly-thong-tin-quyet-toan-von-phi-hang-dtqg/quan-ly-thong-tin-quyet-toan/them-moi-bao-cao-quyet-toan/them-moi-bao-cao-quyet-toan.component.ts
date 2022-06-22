@@ -217,7 +217,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     if (this.id) {
       await this.getDetailReport();
     } else {
-      await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan1(this.maPhanBcao1).toPromise().then(
+      await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBcao = data.data;
@@ -318,7 +318,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.CtietBcaoQuyetToan1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.CtietBcaoQuyetToan(this.id).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -431,7 +431,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -453,7 +453,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -505,7 +505,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveQuyetToan1(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);

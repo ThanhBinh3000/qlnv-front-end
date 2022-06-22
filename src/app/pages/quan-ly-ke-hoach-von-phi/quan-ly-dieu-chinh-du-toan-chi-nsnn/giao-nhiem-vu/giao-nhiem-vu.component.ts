@@ -484,7 +484,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
-			this.quanLyVonPhiService.trinhDuyetDieuChinhService1(request).toPromise().then(
+			this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -506,7 +506,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updateDieuChinh1(request).toPromise().then(
+			this.quanLyVonPhiService.updateDieuChinh(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -591,7 +591,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// call chi tiet bao cao
 	async getDetailReport() {
 		this.spinner.show();
-		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet1(this.id).toPromise().then(
+		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;

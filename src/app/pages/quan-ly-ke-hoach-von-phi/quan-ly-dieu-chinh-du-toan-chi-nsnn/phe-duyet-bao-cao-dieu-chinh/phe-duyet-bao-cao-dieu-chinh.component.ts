@@ -218,7 +218,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timKiemDieuChinh1(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data?.content;

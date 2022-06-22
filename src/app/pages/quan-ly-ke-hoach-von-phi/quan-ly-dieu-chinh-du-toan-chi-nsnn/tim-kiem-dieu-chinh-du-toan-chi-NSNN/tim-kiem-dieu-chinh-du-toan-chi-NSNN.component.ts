@@ -198,7 +198,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       searchFilterTemp.trangThais = [this.trangThai];
     }
     this.spinner.show();
-    await this.quanLyVonPhiService.timKiemDieuChinh1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timKiemDieuChinh(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachDieuChinh = data.data.content;

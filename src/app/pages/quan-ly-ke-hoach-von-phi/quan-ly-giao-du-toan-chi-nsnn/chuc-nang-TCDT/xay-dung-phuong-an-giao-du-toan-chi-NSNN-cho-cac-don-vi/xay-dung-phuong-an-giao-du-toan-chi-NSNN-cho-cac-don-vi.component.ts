@@ -558,7 +558,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     }
     this.spinner.show();
     if (this.id && this.namDtoan) {
-      this.quanLyVonPhiService.giaoDuToan1(request1).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -574,7 +574,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         },
       );
     } else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

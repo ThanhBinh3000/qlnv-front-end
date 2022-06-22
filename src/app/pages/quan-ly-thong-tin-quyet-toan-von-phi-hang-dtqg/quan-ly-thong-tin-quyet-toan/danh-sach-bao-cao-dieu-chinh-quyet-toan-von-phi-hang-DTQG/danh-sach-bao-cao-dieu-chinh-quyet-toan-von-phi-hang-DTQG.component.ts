@@ -180,7 +180,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   }
 
   xoaBaoCao(id: any) {
-    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan1(id).toPromise().then(
+    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(id).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
