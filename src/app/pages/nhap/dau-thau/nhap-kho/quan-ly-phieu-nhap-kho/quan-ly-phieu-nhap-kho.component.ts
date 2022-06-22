@@ -154,14 +154,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  // async changeDiemKho() {
-  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-  //   this.searchFilter.maNganKho = null;
-  //   if (diemKho && diemKho.length > 0) {
-  //     await this.loadNhaKho(diemKho[0].id);
-  //   }
-  // }
-
   async loadNganLo() {
     let body = {
       "maNganLo": null,

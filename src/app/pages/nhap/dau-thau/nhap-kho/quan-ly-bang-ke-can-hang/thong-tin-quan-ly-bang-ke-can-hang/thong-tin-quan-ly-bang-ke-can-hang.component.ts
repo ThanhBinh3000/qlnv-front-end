@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -47,6 +48,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   listThuKho: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
+  listNganKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listSoKho: any[] = [];
@@ -80,11 +82,9 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
-      await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadThuKho(),
         this.loadLoaiKho(),
@@ -93,11 +93,53 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         this.loadSoQuyetDinh(),
         this.loadSoPhieuNhapKho(),
       ]);
+      await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  selectHangHoa() {
+    let data = this.typeVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      this.detail.loaiVthh = data.parent.ma;
+      this.detail.tenLoaiHangHoa = data.parent.ten;
+      this.detail.chungLoaiHangHoa = data.ma;
+      this.detail.tenChungLoaiHang = data.ten;
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        this.detail.loaiVthh = data.parent.parent.ma;
+        this.detail.tenLoaiHangHoa = data.parent.parent.ten;
+        this.detail.chungLoaiHangHoa = data.parent.ma;
+        this.detail.tenChungLoaiHang = data.parent.ten;
+      }
+      if (data.cap == "2") {
+        this.detail.loaiVthh = data.parent.ma;
+        this.detail.tenLoaiHangHoa = data.parent.ten;
+        this.detail.chungLoaiHangHoa = data.ma;
+        this.detail.tenChungLoaiHang = data.ten;
+      }
     }
   }
 
@@ -111,6 +153,51 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           this.idNhapHang = +temp[0];
         }
       }
+    }
+  }
+
+  async loadDiemKho() {
+    let body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDiemKho(fromChiTiet: boolean) {
+    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+    if (!fromChiTiet) {
+      this.detail.maNhaKho = null;
+    }
+    if (diemKho && diemKho.length > 0) {
+      this.listNhaKho = diemKho[0].children;
+      if (fromChiTiet) {
+        this.changeNhaKho(fromChiTiet);
+      }
+    }
+  }
+
+  changeNhaKho(fromChiTiet: boolean) {
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKho = nhaKho[0].children;
+      if (fromChiTiet) {
+        this.changeNganKho();
+      }
+    }
+  }
+
+  changeNganKho() {
+    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLo = nganKho[0].children;
     }
   }
 
@@ -314,7 +401,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           if (this.detail.soKho) {
             this.detail.soKho = +this.detail.soKho;
           }
-          this.loadNhaKho(this.detail.diemKhoId);
+          this.changeDiemKho(true);
         }
       }
     }
@@ -399,69 +486,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           data: { ...item },
         };
       });
-    }
-  }
-
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.detail.maDiemKho);
-    this.detail.maNhaKho = null;
-    if (diemKho && diemKho.length > 0) {
-      await this.loadNhaKho(diemKho[0].id);
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
