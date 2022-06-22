@@ -289,6 +289,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             checkParent = true;
         }
         let roleNguoiTao = this.userInfo?.roles[0]?.code;
+        if (roleNguoiTao != Utils.NHAN_VIEN){
+            this.status = true;
+        }
         const utils = new Utils();
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
         this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
@@ -510,7 +513,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                            this.getDetailReport();
+                            await this.getDetailReport();
                             this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
