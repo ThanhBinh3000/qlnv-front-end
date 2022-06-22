@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,22 +19,10 @@ import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/share
   styleUrls: ['./dieuchinh-luachon-nhathau.component.scss']
 })
 export class DieuchinhLuachonNhathauComponent implements OnInit {
-
-  constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
-    private modal: NzModalService,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService
-  ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
-  }
+  @Input() typeVthh: string;
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
@@ -61,12 +49,27 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
 
-
+  constructor(
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
+    private danhSachDauThauService: DanhSachDauThauService,
+    private modal: NzModalService,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private helperService: HelperService
+  ) {
+    router.events.subscribe((val) => {
+      this.getTitleVthh();
+    })
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+
       this.getTitleVthh();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -170,24 +173,19 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id) {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        id,
-      ]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        id,
-      ]);
-    }
+  redirectToChiTiet(id: number, isView?: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
-
+  async showList() {
+    this.isDetail = false;
+    await this.search()
+  }
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;

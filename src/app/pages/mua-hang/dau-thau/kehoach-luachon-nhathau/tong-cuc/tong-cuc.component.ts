@@ -26,6 +26,7 @@ export class TongCucComponent implements OnInit {
       {
         giaTri: 'Tất cả',
         value: null,
+        ma: "tat-ca"
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();

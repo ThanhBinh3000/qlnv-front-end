@@ -46,6 +46,11 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
     return this.httpClient.delete(url).toPromise();
   }
 
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });

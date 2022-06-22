@@ -71,7 +71,7 @@
                 [nzDisabled]="deXuatDieuChinh.trangThai != '01' || isView">
               </nz-date-picker>
             </div>
-            <div nz-col [nzSpan]="5">
+            <!-- <div nz-col [nzSpan]="5">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hàng hóa
               </nz-form-label>
               <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()"
@@ -80,7 +80,7 @@
                 <nz-option nzValue="01" nzLabel="Điều chỉnh muối dự trữ nhà nước"></nz-option>
                 <nz-option nzValue="02" nzLabel="Điều chỉnh vật tư, thiết bị"></nz-option>
               </nz-select>
-            </div>
+            </div> -->
             <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập text"
@@ -116,14 +116,15 @@
       <div class="tab__luong-thuc" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
         <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" class="tt-chung__container"
-            *ngIf="tabSelected == '00'">
+            (nzClick)="tabSelected = '00'">
 
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" class="ds-goi-thau__container"
-            *ngIf="tabSelected == '01'">
+            (nzClick)="tabSelected = '01'">
 
           </nz-tab>
-          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container" *ngIf="tabSelected == '02'">
+          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container"
+            (nzClick)="tabSelected = '02'">
 
           </nz-tab>
         </nz-tabset>
@@ -137,7 +138,7 @@
                 <th rowspan="2">Chỉ tiêu</th>
                 <th colspan="3">Tổng số quy thóc</th>
                 <th colspan="6">Trong đó</th>
-                <th rowspan="2">Địa điểm kho</th>
+                <th rowspan="2" [width]="500">Địa điểm kho</th>
                 <th [width]="90" rowspan="2"
                   *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView" nzRight>
                   Hành động
@@ -147,12 +148,12 @@
                 <th>Trước điều chỉnh</th>
                 <th [width]="130">Tăng/giảm</th>
                 <th>Sau điều chỉnh</th>
-                <th>Trước điều chỉnh</th>
-                <th [width]="130">Tăng giảm</th>
-                <th>Sau điều chỉnh</th>
-                <th>Trước điều chỉnh</th>
-                <th [width]="130">Tăng/giảm</th>
-                <th>Sau điều chỉnh</th>
+                <th>Số Thóc <br />trước điều chỉnh</th>
+                <th [width]="130">Số Thóc <br /> tăng/giảm</th>
+                <th>Số Thóc <br /> sau điều chỉnh</th>
+                <th>Số gạo <br /> trước điều chỉnh</th>
+                <th [width]="130">Số gạo <br /> tăng giảm</th>
+                <th>Số gạo <br /> sau điều chỉnh</th>
               </tr>
             </thead>
             <tbody>
@@ -169,23 +170,26 @@
                 <td>{{deXuatLT?.sdcTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                 <td>{{deXuatLT?.tdcThoc ?? 0 | number: '1.0-1'}}</td>
                 <td>
-                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
+                  {{deXuatLT?.dcThoc ?? 0 | number: '1.0-1'}}
+                  <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
                     (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcThoc ?? 0)"
                     [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
-                  </nz-input-number>
+                  </nz-input-number> -->
                 </td>
                 <td>{{deXuatLT?.sdcThoc ?? 0 | number: '1.0-1'}}</td>
                 <td>{{deXuatLT?.tdcGao ?? 0 | number: '1.0-1'}}</td>
                 <td>
-                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
+                  {{deXuatLT?.dcGao ?? 0 | number: '1.0-1'}}
+                  <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
                     (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcGao ?? 0)"
                     [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
-                  </nz-input-number>
+                  </nz-input-number> -->
                 </td>
                 <td>{{deXuatLT.sdcGao}}</td>
                 <td>
                   <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1" [data]="deXuatLT.diemKho"
-                    type="dia-diem" (selectDataEvent)="selectHangHoa($event)" [trangThai]="'00'"
+                    type="dia-diem" (selectDataEvent)="selectHangHoa($event, deXuatLT, 'luong-thuc')"
+                    [trangThai]="isView ? 'view-detail' : deXuatDieuChinh.trangThai"
                     (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
                   </multiple-tag>
                 </td>
@@ -237,23 +241,32 @@
                   <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                    {{editLuongThucCache[data.chiTieu].data.dcThoc ?? 0 | number: '1.0-1'}}
+                    <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcThoc"
                       (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
                       [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0)"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number> -->
                   </td>
                   <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0 | number: '1.0-1'}}</td>
                   <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                    {{editLuongThucCache[data.chiTieu].data.dcGao ?? 0 | number: '1.0-1'}}
+                    <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcGao"
                       (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
                       [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0)"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number> -->
                   </td>
                   <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcGao ?? 0 | number: '1.0-1'}}</td>
-                  <td></td>
+                  <td>
+                    <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1"
+                      [data]="editLuongThucCache[data.chiTieu]?.data?.diemKho" type="dia-diem"
+                      (selectDataEvent)="selectHangHoa($event, editLuongThucCache[data.chiTieu]?.data, 'luong-thuc')"
+                      [trangThai]="isView ? 'view-detail' : deXuatDieuChinh.trangThai"
+                      (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
+                    </multiple-tag>
+                  </td>
                   <td nzRight>
                     <a (click)="saveEditLuongThuc(data.chiTieu)" class="save">
                       <i class="fa fa-save"></i>
@@ -278,7 +291,7 @@
                 <th>Trước điều chỉnh (Tấn)</th>
                 <th>Tăng/giảm (Tấn)</th>
                 <th>Sau điều chỉnh (Tấn)</th>
-                <th>Địa điểm kho</th>
+                <th [width]="500">Địa điểm kho</th>
                 <th [width]="90"
                   *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView" nzRight>
                   Hành động
@@ -296,12 +309,19 @@
                 </td>
                 <td>{{deXuatMuoi?.tdc ?? 0 | number: '1.0-1'}}</td>
                 <td>
-                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatMuoi.dc"
+                  {{deXuatMuoi.dc ?? 0 | number: '1.0-1'}}
+                  <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatMuoi.dc"
                     (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
                     [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">
-                  </nz-input-number>
+                  </nz-input-number> -->
                 </td>
                 <td>{{deXuatMuoi?.sdc ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1" [data]="deXuatMuoi.diemKho"
+                    type="dia-diem" (selectDataEvent)="selectHangHoa($event, deXuatMuoi, 'muoi')" [trangThai]="'00'"
+                    (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
+                  </multiple-tag>
+                </td>
                 <td nzRight>
                   <a class="save" (click)="themMoiMuoi()"
                     [ngClass]="{'isDisabled': (!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == '')}">
@@ -320,6 +340,11 @@
                   <td>{{data?.tdc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.dc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.sdc ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1" [data]="data?.diemKho"
+                      type="show-data">
+                    </multiple-tag>
+                  </td>
                   <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView"
                     nzRight>
                     <a (click)="editRowMuoi(data.chiTieu)">
@@ -336,14 +361,22 @@
                   <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '00'">Xuất trong năm</td>
                   <td>{{editMuoiCache[data.chiTieu]?.data?.tdc ?? 0 | number: '1.0-1'}}</td>
                   <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                    {{editMuoiCache[data.chiTieu]?.data.dc ?? 0 | number: '1.0-1'}}
+                    <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="editMuoiCache[data.chiTieu]?.data.dc"
                       (input)="caculatorDieuChinhMuoi(editMuoiCache[data.chiTieu]?.data)"
                       [nzMin]="0 - (editMuoiCache[data.chiTieu]?.data?.tdc ?? 0)" [nzMax]="globals.prop.MAX_INPUT"
                       [nzDisabled]="!editMuoiCache[data.chiTieu]?.data.chiTieu || editMuoiCache[data.chiTieu]?.data.chiTieu == ''">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </td>
                   <td>{{editMuoiCache[data.chiTieu]?.data?.sdc ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1"
+                      [data]="editMuoiCache[data.chiTieu]?.data.diemKho" type="dia-diem"
+                      (selectDataEvent)="selectHangHoa($event, editMuoiCache[data.chiTieu]?.data, 'muoi')"
+                      [trangThai]="'00'" (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
+                    </multiple-tag>
+                  </td>
                   <td nzRight>
                     <a (click)="saveEditMuoi(data.chiTieu)" class="save">
                       <i class="fa fa-save"></i>
@@ -372,6 +405,7 @@
                 <th colspan="3">Chỉ tiêu nhập năm trước điều chỉnh</th>
                 <th rowspan="2" [width]="150">Tăng giảm</th>
                 <th colspan="3">Chỉ tiêu nhập năm sau điều chỉnh</th>
+                <th rowspan="2" [width]="500">Địa điểm kho</th>
                 <th [width]="90" rowspan="2"
                   *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView" nzRight>
                   Hành động
@@ -430,14 +464,21 @@
                 <td>{{deXuatVatTu?.tdcCacNamTruoc ?? 0 | number: '1.0-1'}}</td>
                 <td>{{deXuatVatTu?.tdcKeHoachNam ?? 0 | number: '1.0-1'}}</td>
                 <td>
-                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatVatTu.dc"
+                  {{deXuatVatTu?.dc ?? 0 | number: '1.0-1'}}
+                  <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatVatTu.dc"
                     (input)="caculatorDieuChinhVatTu(deXuatVatTu)" [nzMin]="0 - (deXuatVatTu.tdcKeHoachNam ?? 0)"
                     [nzMax]="globals.prop.MAX_INPUT">
-                  </nz-input-number>
+                  </nz-input-number> -->
                 </td>
                 <td>{{deXuatVatTu?.sdcTongSo ?? 0 | number: '1.0-1'}}</td>
                 <td>{{deXuatVatTu?.sdcCacNamTruoc ?? 0 | number: '1.0-1'}}</td>
                 <td>{{deXuatVatTu?.sdcKeHoachNam ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1" [data]="deXuatVatTu.diemKho"
+                    type="dia-diem" (selectDataEvent)="selectHangHoa($event, deXuatVatTu, 'vat-tu')" [trangThai]="'00'"
+                    (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
+                  </multiple-tag>
+                </td>
                 <td nzRight>
                   <a class="save" (click)="themMoiVatTu()">
                     <i class="icon htvbdh_dau-cong"></i>
@@ -462,6 +503,11 @@
                   <td>{{data?.sdcTongSo ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.sdcCacNamTruoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.sdcKeHoachNam ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1" [data]="data?.diemKho"
+                      type="show-data">
+                    </multiple-tag>
+                  </td>
                   <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc() && !isView"
                     nzRight>
                     <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu)">
@@ -485,17 +531,25 @@
                   <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcKeHoachNam ?? 0 | number: '1.0-1'}}
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                    {{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.dc ?? 0 | number: '1.0-1'}}
+                    <!-- <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="editVatTuCache[data.maVatTuCha + data.maVatTu].data.dc"
                       (input)="caculatorDieuChinhVatTu(editVatTuCache[data.maVatTuCha + data.maVatTu]?.data)"
                       [nzMin]="0 - (editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcKeHoachNam ?? 0)"
                       [nzMax]="globals.prop.MAX_INPUT">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </td>
                   <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcTongSo ?? 0}}</td>
                   <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcCacNamTruoc ?? 0 | number: '1.0-1'}}
                   </td>
                   <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcKeHoachNam ?? 0 | number: '1.0-1'}}
+                  </td>
+                  <td>
+                    <multiple-tag buttonName="" placeHolder="" icon="icon htvbdh_timkiem1"
+                      [data]="editVatTuCache[data.maVatTuCha + data.maVatTu]?.data.diemKho" type="dia-diem"
+                      (selectDataEvent)="selectHangHoa($event, editVatTuCache[data.maVatTuCha + data.maVatTu]?.data, 'vat-tu')"
+                      [trangThai]="'00'" (removeDataEvent)="deleteDiaDiemAdd($event)" [showDowloadFile]="false">
+                    </multiple-tag>
                   </td>
                   <td nzRight>
                     <a (click)="saveEditVatTu(data.maVatTuCha, data.maVatTu)" class="save">

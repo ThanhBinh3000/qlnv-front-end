@@ -143,9 +143,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.formData.controls['canCu'].setValue(
             this.selectedCanCu ? this.selectedCanCu.soQuyetDinh : '',
           );
-          this.formData.controls['soQD'].setValue(
-            this.deXuatDieuChinh.soVanBan.split('/')[0],
-          );
+          if (this.deXuatDieuChinh.soVanBan && this.deXuatDieuChinh.soVanBan.split('/').length > 0) {
+            this.formData.controls['soQD'].setValue(
+              this.deXuatDieuChinh.soVanBan.split('/')[0],
+            );
+          }
           if (this.deXuatDieuChinh.soVanBan && this.deXuatDieuChinh.soVanBan.split('/').length > 1) {
             this.qdTCDT = this.deXuatDieuChinh.soVanBan.split('/')[1];
           }
@@ -183,6 +185,30 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                 this.taiLieuDinhKemList = [];
               }
               this.taiLieuDinhKemList.push(item);
+            });
+          }
+
+          if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
+            this.deXuatDieuChinh.dxDcltList.forEach(element => {
+              if (element.diaDiemKho && element.diaDiemKho != '') {
+                element.diemKho = JSON.parse(element.diaDiemKho);
+              }
+            });
+          }
+
+          if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
+            this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
+              if (element.diaDiemKho && element.diaDiemKho != '') {
+                element.diemKho = JSON.parse(element.diaDiemKho);
+              }
+            });
+          }
+
+          if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
+            this.deXuatDieuChinh.dxDcVtList.forEach(element => {
+              if (element.diaDiemKho && element.diaDiemKho != '') {
+                element.diemKho = JSON.parse(element.diaDiemKho);
+              }
             });
           }
 
@@ -440,17 +466,18 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       this.spinner.show();
       try {
         this.deXuatDieuChinh.id = this.id;
-        this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value + '/' + this.qdTCDT;
-        this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
-        this.deXuatDieuChinh.ngayHieuLuc = this.formData.get('ngayHieuLuc').value;
+        if (this.deXuatDieuChinh.trangThai == '01') {
+          this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value + '/' + this.qdTCDT;
+          this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
+          this.deXuatDieuChinh.ngayHieuLuc = this.formData.get('ngayHieuLuc').value;
+        }
         this.deXuatDieuChinh.namKeHoach = this.formData.get('namKeHoach').value;
         this.deXuatDieuChinh.trichYeu = this.formData.get('trichYeu').value;
         this.deXuatDieuChinh.nguyenNhan = this.formData.get('nguyenNhan').value;
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
-        this.deXuatDieuChinh.loaiHangHoa = this.formData.get('loaiHangHoa').value;
 
         let dxDcLtVtReqList = [];
-        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0 && this.tabSelected == 'luongThuc') {
+        if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
           this.deXuatDieuChinh.dxDcltList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -459,7 +486,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuThoc,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcThoc
+              "soLuong": element?.sdcThoc,
+              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
             let itemGao = {
@@ -469,26 +498,29 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuGao,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcGao
+              "soLuong": element?.sdcGao,
+              "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(itemGao);
           });
         }
-        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0 && this.tabSelected == 'muoi') {
+        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
           this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
               "donViTinh": "Tấn",
               "id": element?.id ?? null,
-              "loai": "01",
+              "loai": "04",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdc
+              "soLuong": element?.sdc,
+              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0 && this.tabSelected == 'vatTu') {
+        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
           this.deXuatDieuChinh.dxDcVtList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
@@ -497,7 +529,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "02",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcKeHoachNam
+              "soLuong": element?.sdcKeHoachNam,
+              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -984,7 +1018,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     }
   }
 
-  selectHangHoa(event) {
+  selectHangHoa(event, data, type) {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Đề xuất điều chỉnh',
       nzContent: DialogDiaDiemKhoComponent,
@@ -994,11 +1028,46 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         maDvi: this.userInfo.MA_DVI,
+        data: data.dxDcLtVtCtList
       },
     });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log(data);
+    modalTuChoi.afterClose.subscribe(async (dataRes) => {
+      if (dataRes) {
+        data.diemKho = [];
+        data.dxDcLtVtCtList = [];
+        let sumTang = 0;
+        let sumGiam = 0;
+        if (dataRes.length > 0) {
+          dataRes.forEach(element => {
+            let item = {
+              id: element.id,
+              text: element.title + " (" + (element.sumTang - element.sumGiam).toString() + ")",
+            }
+            sumTang = sumTang + element.sumTang;
+            sumGiam = sumGiam + element.sumGiam;
+            data.diemKho.push(item);
+            if (element.dataUpdate && element.dataUpdate.length > 0) {
+              data.dxDcLtVtCtList = [
+                ...data.dxDcLtVtCtList,
+                ...element.dataUpdate,
+              ]
+            }
+          });
+        }
+        if (type == 'luong-thuc') {
+          data.dcThoc = sumTang - sumGiam;
+          data.dcGao = sumTang - sumGiam;
+          this.caculatorDieuChinhLT(data);
+        } else if (type == 'muoi') {
+          data.dc = sumTang - sumGiam;
+          this.caculatorDieuChinhMuoi(data);
+        } else if (type == 'vat-tu') {
+          data.dc = sumTang - sumGiam;
+          this.caculatorDieuChinhVatTu(data);
+        }
+        if (data.diemKho && data.diemKho.length > 0) {
+          data.diaDiemKho = JSON.stringify(data.diemKho);
+        }
       }
     });
   }

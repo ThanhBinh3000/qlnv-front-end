@@ -63,6 +63,9 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   async ngOnInit() {
     await this.loadTreeKho();
     await this.loadDonVi();
+    if (this.data && this.data.length > 0) {
+      this.loadDataTree(this.data);
+    }
   }
 
   async loadDonVi() {
@@ -97,10 +100,14 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
     this.searchData.maDvi = this.selectedDonVi.maDvi;
-    await this.loadDiemKho(this.selectedDonVi.id);
+    this.searchData.maDiemKho = '';
+    this.searchData.maNhaKho = '';
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
+    await this.loadDiemKho(this.selectedDonVi);
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.searchData = {
       maDvi: '',
       maDiemKho: '',
@@ -109,153 +116,69 @@ export class DialogDiaDiemKhoComponent implements OnInit {
       maNganLo: '',
     }
     this.inputDonVi = '';
+    await this.loadTreeKho();
   }
 
   handleOk() {
-    this._modalRef.close();
+    this._modalRef.close(this.deXuatCuc);
   }
 
   handleCancel() {
     this._modalRef.close();
   }
 
-  async loadDiemKho(tongKhoId) {
-    // let body = {
-    //   "maDiemKho": null,
-    //   "paggingReq": {
-    //     "limit": 1000,
-    //     "page": 1
-    //   },
-    //   "str": null,
-    //   "tenDiemKho": null,
-    //   "tongKhoId": tongKhoId,
-    //   "trangThai": null
-    // };
-    // let res = await this.tinhTrangKhoHienThoiService.diemKhoGetList(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   if (res.data) {
-    //     this.listDiemKho = res.data;
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
-    if (this.searchData.maDvi && this.searchData.maDvi != '') {
-      let getDataChiCuc = this.dataTreeKho.filter(x => x.maTongKho == this.searchData.maDvi);
-      if (getDataChiCuc && getDataChiCuc.length > 0) {
-        this.listDiemKho = getDataChiCuc[0].child;
+  async loadDiemKho(donVi) {
+    let body = {
+      maDviCha: donVi.maDvi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchData.maDiemKho);
-    this.searchData.maNhaKho = null;
+    let diemKho = this.listDiemKho.filter(x => x.key == this.searchData.maDiemKho);
+    this.searchData.maNhaKho = '';
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
     if (diemKho && diemKho.length > 0) {
-      await this.loadNhaKho(diemKho[0].id);
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.listNhaKho = diemKho[0].children;
     }
   }
 
   async changeNhaKho() {
-    let nhaKho = this.listNhaKho.filter(x => x.maNhakho == this.searchData.maNhaKho);
-    this.searchData.maNganKho = null;
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.searchData.maNhaKho);
+    this.searchData.maNganKho = '';
+    this.searchData.maNganLo = '';
     if (nhaKho && nhaKho.length > 0) {
-      await this.loadNganKho(nhaKho[0].id);
-    }
-  }
-
-  async loadNganKho(nhaKhoId: any) {
-    let body = {
-      "maNganKho": null,
-      "nhaKhoId": nhaKhoId,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.listNganKho = nhaKho[0].children;
     }
   }
 
   async changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.maNgankho == this.searchData.maNganKho);
-    this.searchData.maNganKho = null;
+    let nganKho = this.listNganKho.filter(x => x.key == this.searchData.maNganKho);
+    this.searchData.maNganLo = '';
     if (nganKho && nganKho.length > 0) {
-      await this.loadNganLo(nganKho[0].id);
-    }
-  }
-
-  async loadNganLo(nganKhoId: any) {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": nganKhoId,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.listNganLo = nganKho[0].children;
     }
   }
 
   async loadTreeKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getTreeKho();
+    this.dataTreeKho = [];
+    let body = {
+      maDviCha: this.maDvi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        if (this.maDvi) {
-          let getDataCuc = res.data.child.filter(x => x.maDtqgkv == this.maDvi);
-          if (getDataCuc && getDataCuc.length > 0) {
-            this.dataTreeKho = getDataCuc[0].child;
-          }
-        }
-        else {
-          this.dataTreeKho = res.data;
-        }
-        // this.listOfMapData = [];
-        // this.listOfMapData.push(res.data);
-        // this.listOfMapDataClone = [...this.listOfMapData];
-        // this.listOfMapData.forEach((item) => {
-        //   this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-        // });
+        this.dataTreeKho = res.data;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -270,10 +193,10 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
-      if (node.child) {
-        for (let i = node.child.length - 1; i >= 0; i--) {
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
           stack.push({
-            ...node.child[i],
+            ...node.children[i],
             level: node.level! + 1,
             expand: false,
             parent: node,
@@ -297,8 +220,8 @@ export class DialogDiaDiemKhoComponent implements OnInit {
 
   collapse(array: any[], data: any, $event: boolean): void {
     if (!$event) {
-      if (data.child) {
-        data.child.forEach((d) => {
+      if (data.children) {
+        data.children.forEach((d) => {
           const target = array.find((a) => a.id === d.id)!;
           target.expand = false;
           this.collapse(array, target, false);
@@ -309,21 +232,38 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     }
   }
 
-  search() {
+  async search() {
+    await this.loadTreeKho();
     let dataTree = [];
     if (this.searchData.maDvi && this.searchData.maDvi != '') {
-      let getDataChiCuc = this.dataTreeKho.filter(x => x.maTongKho == this.searchData.maDvi);
+      let getDataChiCuc = this.dataTreeKho.filter(x => x.key == this.searchData.maDvi);
       if (getDataChiCuc && getDataChiCuc.length > 0) {
         dataTree = getDataChiCuc;
         if (this.searchData.maDiemKho && this.searchData.maDiemKho != '') {
-          let getDataDiemKho = dataTree[0].child.filter(x => x.maDiemkho == this.searchData.maDiemKho);
+          let getDataDiemKho = dataTree[0].children.filter(x => x.key == this.searchData.maDiemKho);
           if (getDataDiemKho && getDataDiemKho.length > 0) {
-            dataTree[0].child = getDataDiemKho;
+            dataTree[0].children = getDataDiemKho;
             if (this.searchData.maNhaKho && this.searchData.maNhaKho != '') {
-              if (dataTree[0].child[0].child && dataTree[0].child[0].child.length > 0) {
-                let getDataNhaKho = dataTree[0].child[0].child.filter(x => x.maNhakho == this.searchData.maNhaKho);
+              if (dataTree[0].children[0].children && dataTree[0].children[0].children.length > 0) {
+                let getDataNhaKho = dataTree[0].children[0].children.filter(x => x.key == this.searchData.maNhaKho);
                 if (getDataNhaKho && getDataNhaKho.length > 0) {
-                  dataTree[0].child[0].child = getDataNhaKho;
+                  dataTree[0].children[0].children = getDataNhaKho;
+                  if (this.searchData.maNganKho && this.searchData.maNganKho != '') {
+                    if (dataTree[0].children[0].children[0].children && dataTree[0].children[0].children[0].children.length > 0) {
+                      let getDataNganKho = dataTree[0].children[0].children[0].children.filter(x => x.key == this.searchData.maNganKho);
+                      if (getDataNganKho && getDataNganKho.length > 0) {
+                        dataTree[0].children[0].children[0].children = getDataNganKho;
+                        if (this.searchData.maNganLo && this.searchData.maNganLo != '') {
+                          if (dataTree[0].children[0].children[0].children[0].children && dataTree[0].children[0].children[0].children[0].children.length > 0) {
+                            let getDataNganLo = dataTree[0].children[0].children[0].children[0].children.filter(x => x.key == this.searchData.maNganLo);
+                            if (getDataNganLo && getDataNganLo.length > 0) {
+                              dataTree[0].children[0].children[0].children[0].children = getDataNganLo;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -334,6 +274,8 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     else {
       dataTree = this.dataTreeKho;
     }
+    this.sumGiam = 0;
+    this.sumTang = 0;
     this.listOfMapData = dataTree;
     this.listOfMapDataClone = [...this.listOfMapData];
     this.listOfMapData.forEach((item) => {
@@ -346,35 +288,230 @@ export class DialogDiaDiemKhoComponent implements OnInit {
   }
 
   editDeXuat(data: any) {
-
+    this.listOfMapData = [];
+    this.listOfMapData = [
+      ...this.listOfMapData,
+      data
+    ]
+    this.listOfMapDataClone = [...this.listOfMapData];
+    this.listOfMapData.forEach((item) => {
+      this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+    });
+    this.sumGiam = data.sumGiam;
+    this.sumTang = data.sumTang;
   }
 
   deleteDeXuat(data: any) {
-
+    this.deXuatCuc = this.deXuatCuc.filter(x => x.id != data.id);
   }
 
-  changeValue(type, item) {
+  changeValue(type, item, data) {
     if (type == 'tang') {
-      if (item.oldDataTang && item.oldDataTang >= 0) {
-        this.sumTang = this.sumTang - item.oldDataTang + item.slTang;
+      this.sumTang = 0;
+      let listInput = document.getElementsByClassName('input-tang');
+      if (listInput && listInput.length > 0) {
+        for (let i = 0; i < listInput.length; i++) {
+          this.sumTang = this.sumTang + (isNaN(parseInt(listInput[i].getElementsByTagName('input')[0].value)) ? 0 : parseInt(listInput[i].getElementsByTagName('input')[0].value));
+        }
       }
-      else {
-        this.sumTang += item.slTang;
-      }
-      item.oldDataTang = item.slTang;
     }
     else if (type == 'giam') {
-      if (item.oldDataGiam && item.oldDataGiam >= 0) {
-        this.sumGiam = this.sumGiam - item.oldDataGiam + item.slGiam;
+      this.sumGiam = 0;
+      let listInput = document.getElementsByClassName('input-giam');
+      if (listInput && listInput.length > 0) {
+        for (let i = 0; i < listInput.length; i++) {
+          this.sumGiam = this.sumGiam + (isNaN(parseInt(listInput[i].getElementsByTagName('input')[0].value)) ? 0 : parseInt(listInput[i].getElementsByTagName('input')[0].value));
+        }
       }
-      else {
-        this.sumGiam += item.slGiam;
+    }
+    this.getSetDataTree('set', data, item);
+  }
+
+  saveDataTree(data) {
+    let res = this.getSetDataTree('get', data);
+    if (this.deXuatCuc && this.deXuatCuc.length > 0) {
+      let index = this.deXuatCuc.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.deXuatCuc.splice(index, 1);
       }
-      item.oldDataGiam = item.slGiam;
+    }
+    else {
+      this.deXuatCuc = [];
+    }
+    this.deXuatCuc = [...this.deXuatCuc, res];
+  }
+
+  getSetDataTree(type: string, data: any, item?: any) {
+    let sumTang = 0;
+    let sumGiam = 0;
+    let dataUpdate = [];
+    if (data && data.children && data.children.length > 0) {
+      let itemUpdate = {
+        maDvi: '',
+        maDiemKho: '',
+        maNhaKho: '',
+        maNganKho: '',
+        maLoKho: '',
+        soLuongGiam: 0,
+        soLuongTang: 0
+      };
+      itemUpdate.maDvi = data.key;
+      let hasItem = false;
+      data.children.forEach(elementDiemKho => {
+        itemUpdate.maDiemKho = elementDiemKho.key;
+        if (item && type == 'set' && item.key && elementDiemKho.key == item.key) {
+          elementDiemKho.slTang = item.slTang ?? 0;
+          elementDiemKho.slGiam = item.slGiam ?? 0;
+          hasItem = true;
+        }
+        else if (elementDiemKho && elementDiemKho.children && elementDiemKho.children.length > 0) {
+          elementDiemKho.children.forEach(elementNhaKho => {
+            itemUpdate.maNhaKho = elementNhaKho.key;
+            if (item && type == 'set' && item.key && elementNhaKho.key == item.key) {
+              elementNhaKho.slTang = item.slTang ?? 0;
+              elementNhaKho.slGiam = item.slGiam ?? 0;
+              hasItem = true;
+            }
+            else if (elementNhaKho && elementNhaKho.children && elementNhaKho.children.length > 0) {
+              elementNhaKho.children.forEach(elementNganKho => {
+                itemUpdate.maNganKho = elementNganKho.key;
+                if (item && type == 'set' && item.key && elementNganKho.key == item.key) {
+                  elementNganKho.slTang = item.slTang ?? 0;
+                  elementNganKho.slGiam = item.slGiam ?? 0;
+                  hasItem = true;
+                }
+                else if (elementNganKho && elementNganKho.children && elementNganKho.children.length > 0) {
+                  elementNganKho.children.forEach(elementNganLo => {
+                    itemUpdate.maLoKho = elementNganLo.key;
+                    if (item && type == 'set' && item.key && elementNganLo.key == item.key) {
+                      elementNganLo.slTang = item.slTang ?? 0;
+                      elementNganLo.slGiam = item.slGiam ?? 0;
+                      hasItem = true;
+                    }
+                    else if ((elementNganLo.slTang || elementNganLo.slGiam) && type == 'get') {
+                      sumTang = sumTang + (elementNganLo.slTang ?? 0);
+                      sumGiam = sumGiam + (elementNganLo.slGiam ?? 0);
+                      itemUpdate.soLuongTang = elementNganLo.slTang;
+                      itemUpdate.soLuongGiam = elementNganLo.slGiam;
+                      let add = cloneDeep(itemUpdate);
+                      dataUpdate = [...dataUpdate, add];
+                    }
+                    if (hasItem && type == 'set') {
+                      return;
+                    }
+                  });
+                }
+                else if ((elementNganKho.slTang || elementNganKho.slGiam) && type == 'get') {
+                  sumTang = sumTang + (elementNganKho.slTang ?? 0);
+                  sumGiam = sumGiam + (elementNganKho.slGiam ?? 0);
+                  itemUpdate.soLuongTang = elementNganKho.slTang;
+                  itemUpdate.soLuongGiam = elementNganKho.slGiam;
+                  let add = cloneDeep(itemUpdate);
+                  dataUpdate = [...dataUpdate, add];
+                }
+                if (hasItem && type == 'set') {
+                  return;
+                }
+              });
+            }
+            else if ((elementNhaKho.slTang || elementNhaKho.slGiam) && type == 'get') {
+              sumTang = sumTang + (elementNhaKho.slTang ?? 0);
+              sumGiam = sumGiam + (elementNhaKho.slGiam ?? 0);
+              itemUpdate.soLuongTang = elementNhaKho.slTang;
+              itemUpdate.soLuongGiam = elementNhaKho.slGiam;
+              let add = cloneDeep(itemUpdate);
+              dataUpdate = [...dataUpdate, add];
+            }
+            if (hasItem && type == 'set') {
+              return;
+            }
+          });
+        }
+        else if ((elementDiemKho.slTang || elementDiemKho.slGiam) && type == 'get') {
+          sumTang = sumTang + (elementDiemKho.slTang ?? 0);
+          sumGiam = sumGiam + (elementDiemKho.slGiam ?? 0);
+          itemUpdate.soLuongTang = elementDiemKho.slTang;
+          itemUpdate.soLuongGiam = elementDiemKho.slGiam;
+          let add = cloneDeep(itemUpdate);
+          dataUpdate = [...dataUpdate, add];
+        }
+        if (hasItem && type == 'set') {
+          return;
+        }
+      });
+    }
+    if (type == 'get') {
+      data.sumTang = sumTang;
+      data.sumGiam = sumGiam;
+      data.dataUpdate = dataUpdate;
+      return data;
     }
   }
 
-  saveDataTree(data, item) {
-
+  loadDataTree(data) {
+    this.deXuatCuc = [];
+    if (data && data.length > 0) {
+      const uniqueMaDvi = [...new Set(data.map(item => item.maDvi))];
+      if (uniqueMaDvi && uniqueMaDvi.length > 0) {
+        uniqueMaDvi.forEach(element => {
+          let getDvi = this.dataTreeKho.filter(x => x.key == element);
+          if (getDvi && getDvi.length > 0) {
+            let itemDvi = getDvi[0];
+            itemDvi.sumTang = 0;
+            itemDvi.sumGiam = 0;
+            if (itemDvi && itemDvi.children && itemDvi.children.length > 0) {
+              itemDvi.dataUpdate = [];
+              let listDataCheck = data.filter(x => x.maDvi == element);
+              listDataCheck.forEach(elementCheck => {
+                if (elementCheck.maDiemKho && elementCheck.maDiemKho != '') {
+                  let indexDiemKho = itemDvi.children.findIndex(x => x.key == elementCheck.maDiemKho);
+                  if (indexDiemKho != -1) {
+                    if (elementCheck.maNhaKho && elementCheck.maNhaKho != '' && itemDvi.children[indexDiemKho].children && itemDvi.children[indexDiemKho].children.length > 0) {
+                      let indexNhaKho = itemDvi.children[indexDiemKho].children.findIndex(x => x.key == elementCheck.maNhaKho);
+                      if (indexNhaKho != -1) {
+                        if (elementCheck.maNganKho && elementCheck.maNganKho != '' && itemDvi.children[indexDiemKho].children[indexNhaKho].children && itemDvi.children[indexDiemKho].children[indexNhaKho].children.length > 0) {
+                          let indexNganKho = itemDvi.children[indexDiemKho].children[indexNhaKho].children.findIndex(x => x.key == elementCheck.maNganKho);
+                          if (indexNganKho != -1) {
+                            if (elementCheck.maLoKho && elementCheck.maLoKho != '' && itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].children && itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].children.length > 0) {
+                              let indexNganLo = itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].children.findIndex(x => x.key == elementCheck.maLoKho);
+                              if (indexNganLo != -1) {
+                                itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].children[indexNganLo].slTang = elementCheck.soLuongTang;
+                                itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].children[indexNganLo].slGiam = elementCheck.soLuongGiam;
+                                itemDvi.sumTang = itemDvi.sumTang + elementCheck.soLuongTang;
+                                itemDvi.sumGiam = itemDvi.sumGiam + elementCheck.soLuongGiam;
+                              }
+                            }
+                            else {
+                              itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].slTang = elementCheck.soLuongTang;
+                              itemDvi.children[indexDiemKho].children[indexNhaKho].children[indexNganKho].slGiam = elementCheck.soLuongGiam;
+                              itemDvi.sumTang = itemDvi.sumTang + elementCheck.soLuongTang;
+                              itemDvi.sumGiam = itemDvi.sumGiam + elementCheck.soLuongGiam;
+                            }
+                          }
+                        }
+                        else {
+                          itemDvi.children[indexDiemKho].children[indexNhaKho].slTang = elementCheck.soLuongTang;
+                          itemDvi.children[indexDiemKho].children[indexNhaKho].slGiam = elementCheck.soLuongGiam;
+                          itemDvi.sumTang = itemDvi.sumTang + elementCheck.soLuongTang;
+                          itemDvi.sumGiam = itemDvi.sumGiam + elementCheck.soLuongGiam;
+                        }
+                      }
+                    }
+                    else {
+                      itemDvi.children[indexDiemKho].slTang = elementCheck.soLuongTang;
+                      itemDvi.children[indexDiemKho].slGiam = elementCheck.soLuongGiam;
+                      itemDvi.sumTang = itemDvi.sumTang + elementCheck.soLuongTang;
+                      itemDvi.sumGiam = itemDvi.sumGiam + elementCheck.soLuongGiam;
+                    }
+                  }
+                }
+                itemDvi.dataUpdate.push(elementCheck);
+              });
+              this.deXuatCuc.push(itemDvi);
+            }
+          }
+        });
+      }
+    }
   }
 }

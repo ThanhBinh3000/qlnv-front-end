@@ -309,8 +309,9 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   export() {
 
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   filterInTable(key: string, value: string) {
     if (value && value != '') {

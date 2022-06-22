@@ -37,6 +37,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
+  listNganKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listDanhMucHang: any[] = [];
@@ -71,7 +72,6 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
@@ -113,6 +113,17 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.listSoQuyetDinh = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changePhieuKiemTra() {
+    let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.detail.phieuKtClId);
+    if (phieuKt && phieuKt.length > 0) {
+      this.detail.maDiemKho = phieuKt[0].maDiemKho;
+      this.detail.maNhaKho = phieuKt[0].maNhaKho;
+      this.detail.maNganKho = phieuKt[0].maNganKho;
+      this.detail.maNganLo = phieuKt[0].maNganLo;
+      this.changeDiemKho(true);
     }
   }
 
@@ -176,7 +187,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
-          await this.loadNhaKho(this.detail.diemKhoId);
+          this.changeDiemKho(true);
           if (this.detail.hangHoaRes) {
             this.detail.hangHoaList = this.detail.hangHoaRes;
           }
@@ -298,7 +309,11 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+    let body = {
+      maDviCha: this.detail.maDonVi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listDiemKho = res.data;
@@ -308,57 +323,33 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  async loadNhaKho(diemKhoId: any) {
-    if (diemKhoId && diemKhoId > 0) {
-      let body = {
-        "diemKhoId": diemKhoId,
-        "maNhaKho": null,
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": null,
-        "tenNhaKho": null,
-        "trangThai": null
-      };
-      let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.content) {
-          this.listNhaKho = res.data.content;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+  changeDiemKho(fromChiTiet: boolean) {
+    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+    if (!fromChiTiet) {
+      this.detail.maNhaKho = null;
     }
-  }
-
-  async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.detail.maDiemKho);
-    this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
-      await this.loadNhaKho(diemKho[0].id);
+      this.listNhaKho = diemKho[0].children;
+      if (fromChiTiet) {
+        this.changeNhaKho(fromChiTiet);
+      }
     }
   }
 
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
+  changeNhaKho(fromChiTiet: boolean) {
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKho = nhaKho[0].children;
+      if (fromChiTiet) {
+        this.changeNganKho();
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeNganKho() {
+    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLo = nganKho[0].children;
     }
   }
 
@@ -545,6 +536,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "maDiemKho": this.detail?.maDiemKho,
         "maDvi": this.detail.maDvi,
         "maNganLo": this.detail.maNganLo,
+        "maNganKho": this.detail.maNganKho,
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDvi,
         "ngayLap": null,
@@ -559,7 +551,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "taiKhoanNo": this.detail.taiKhoanNo,
         "tenNganLo": null,
         "tenNguoiGiaoNhan": this.detail.nguoiGiaoHang,
-        "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan
+        "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan,
+        "qdgnvnxId": this.detail.qdgnvnxId,
       };
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
@@ -595,5 +588,9 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  print() {
+
   }
 }

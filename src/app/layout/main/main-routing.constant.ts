@@ -2,6 +2,8 @@ import { RouteInfo } from './main-routing.type';
 
 export const MAIN_ROUTES = {
   kehoach: 'kehoach',
+  capVon: 'cap-von',
+  quyetToan: 'quyet-toan',
   muaHang: 'mua-hang',
   nhap: 'nhap',
   nhapKhac: 'nhap-khac',
@@ -18,21 +20,25 @@ export const MAIN_ROUTES = {
 
 export const LIST_PAGES: RouteInfo[] = [
   {
-    title: 'Kế hoạch và vốn DTQG',
+    title: 'Kế hoạch, vốn và dự toán NSNN',
     route: `${MAIN_ROUTES.kehoach}`,
   },
   {
-    title: 'Lựa chọn nhà cung cấp & ký hợp đồng',
+    title: 'Tình hình cấp vốn, phí hàng',
+    route: `${MAIN_ROUTES.capVon}`,
+  },
+  {
+    title: 'Quyết toán vốn, phí hàng',
+    route: `${MAIN_ROUTES.quyetToan}`,
+  },
+  {
+    title: 'Mua hàng DTQG',
     route: `${MAIN_ROUTES.muaHang}`,
   },
   {
     title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
   },
-  // {
-  //   title: 'Nhập khác',
-  //   route: `${MAIN_ROUTES.nhapKhac}`,
-  // },
   {
     title: 'Lưu kho & QL chất lượng',
     route: MAIN_ROUTES.luuKho,
@@ -45,10 +51,6 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
   },
-  // {
-  //   title: 'Xuất khác',
-  //   route: MAIN_ROUTES.xuatKhac,
-  // },
   {
     title: 'QL Định mức nhập, xuất, bảo quản',
     route: MAIN_ROUTES.dinhMucNhapXuat,
@@ -62,11 +64,11 @@ export const LIST_PAGES: RouteInfo[] = [
     route: MAIN_ROUTES.quanLyKhoTang,
   },
   {
-    title: 'Quản trị hệ thống',
-    route: MAIN_ROUTES.quantrihethong,
+    title: 'QTDM',
+    route: MAIN_ROUTES.danhMuc,
   },
   {
-    title: 'Quản trị danh mục',
-    route: MAIN_ROUTES.danhMuc,
+    title: 'QTHT',
+    route: MAIN_ROUTES.quantrihethong,
   },
 ];

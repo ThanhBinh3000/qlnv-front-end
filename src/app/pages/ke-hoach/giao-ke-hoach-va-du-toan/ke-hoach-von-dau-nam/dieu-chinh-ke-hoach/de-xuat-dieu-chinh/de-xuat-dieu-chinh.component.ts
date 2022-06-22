@@ -99,7 +99,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
       }
       await Promise.all([
         this.search(),
-        this.loadDonVi(),
+        // this.loadDonVi(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -217,8 +217,9 @@ export class DeXuatDieuChinhComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
 
   clearFilter() {
@@ -403,9 +404,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

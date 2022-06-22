@@ -14,6 +14,10 @@ import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/the
 import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau.component';
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
 import { ChucNangKiemTraComponent } from './chuc-nang-kiem-tra/chuc-nang-kiem-tra.component';
+import { BienBanChuanBiKhoComponent } from './bien-ban-chuan-bi-kho/bien-ban-chuan-bi-kho.component';
+import { ThongTinBienBanChuanBiKhoComponent } from './bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho.component';
+import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component';
+import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import { ChucNangKiemTraComponent } from './chuc-nang-kiem-tra/chuc-nang-kiem-tr
     QuanLyPhieuKiemNghiemChatLuongThocComponent,
     ThemMoiBienBanLayMauKhoComponent,
     ThemMoiBienBanBanGiaoMauComponent,
-    ThemMoiPhieuKiemNghiemChatLuongThocComponent
+    ThemMoiPhieuKiemNghiemChatLuongThocComponent,
+    BienBanChuanBiKhoComponent,
+    ThongTinBienBanChuanBiKhoComponent,
+    HoSoKyThuatComponent,
+    ThongTinHoSoKyThuatComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +50,9 @@ import { ChucNangKiemTraComponent } from './chuc-nang-kiem-tra/chuc-nang-kiem-tr
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
     QuanLyBienBanBanGiaoMauComponent,
-    QuanLyPhieuKiemNghiemChatLuongThocComponent
+    QuanLyPhieuKiemNghiemChatLuongThocComponent,
+    BienBanChuanBiKhoComponent,
+    HoSoKyThuatComponent,
   ]
 })
 export class KiemTraChatLuongModule { }

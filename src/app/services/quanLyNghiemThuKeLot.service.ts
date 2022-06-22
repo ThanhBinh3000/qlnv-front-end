@@ -39,6 +39,11 @@ export class QuanLyNghiemThuKeLotService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/bb-nghiemthu-klst/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/bb-nghiemthu-klst/phe-duyet`;
     return this.httpClient.post(url, body).toPromise();
