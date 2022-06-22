@@ -694,9 +694,9 @@ export class BaoCao04anComponent implements OnInit {
         this.setBieuMau(baoCao, phuLuc);
     }
 
-    sortByIndex() {
+    async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.sort((item1, item2) => {
@@ -740,9 +740,9 @@ export class BaoCao04anComponent implements OnInit {
         return this.noiDungChiFull.find(e => e.id == maKM)?.idCha;
     }
 
-    sortWithoutIndex() {
+    async sortWithoutIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             this.setDetail(phuLuc);

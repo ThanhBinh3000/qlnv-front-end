@@ -336,7 +336,6 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
@@ -352,7 +351,6 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: item.level,
                     };
                     this.addLow(id, data, phuLuc);
@@ -622,9 +620,9 @@ export class BaoCao02Component implements OnInit {
         this.setBieuMau(baoCao, phuLuc)
     }
 
-    sortByIndex() {
+    async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.sort((item1, item2) => {
@@ -668,9 +666,9 @@ export class BaoCao02Component implements OnInit {
         return this.lstVatTuFull.find(e => e.id == maKM)?.idCha;
     }
 
-    sortWithoutIndex() {
+    async sortWithoutIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             this.setDetail(phuLuc);

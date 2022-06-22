@@ -419,6 +419,56 @@ export class Utils {
     }
 
     // lay ten trang thai theo ma trang thai
+    public getStatusNameParent(id: string) {
+        let statusName;
+        switch (id) {
+            case Utils.TT_BC_0:
+                statusName = "Đã xóa";
+                break;
+            case Utils.TT_BC_1:
+                statusName = "Đang soạn"
+                break;
+            case Utils.TT_BC_2:
+                statusName = "Trình duyệt"
+                break;
+            case Utils.TT_BC_3:
+                statusName = "Trưởng BP từ chối"
+                break;
+            case Utils.TT_BC_4:
+                statusName = "Trưởng BP duyệt"
+                break;
+            case Utils.TT_BC_5:
+                statusName = "Lãnh đạo từ chối"
+                break;
+            case Utils.TT_BC_6:
+                statusName = "Lãnh đạo phê duyệt"
+                break;
+            case Utils.TT_BC_7:
+                statusName = "Gửi ĐV cấp trên"
+                break;
+            case Utils.TT_BC_8:
+                statusName = "Từ chối"
+                break;
+            case Utils.TT_BC_9:
+                statusName = "Tiếp nhận"
+                break;
+            case Utils.TT_BC_10:
+                statusName = "Điều chỉnh theo số kiểm tra"
+                break;
+            case Utils.TT_BC_11:
+                statusName = "Đã giao"
+                break;
+            case Utils.TT_BC_KT:
+                statusName = "Chưa có"
+                break;
+            default:
+                statusName = id;
+                break;
+        }
+        return statusName;
+    }
+
+    // lay ten trang thai theo ma trang thai
     public getStatusAppendixName(id: any) {
         let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
         return statusName?.ten;

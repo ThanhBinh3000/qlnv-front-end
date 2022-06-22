@@ -635,6 +635,10 @@ export class BaoCaoComponent implements OnInit {
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
+      if (!this.baoCao?.congVan?.fileUrl) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        return;
+      }
       let checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
       if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
@@ -1183,7 +1187,13 @@ export class BaoCaoComponent implements OnInit {
 
   getStatusName(Status: any) {
     const utils = new Utils();
-    return utils.getStatusName(Status == '7' ? '6' : Status);
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfor.dvql) {
+      return utils.getStatusName(Status == '7' ? '6' : Status);
+    }
+    if (dVi && dVi.maDviCha == this.userInfor.dvql) {
+      return utils.getStatusNameParent(Status == '7' ? '6' : Status);
+    }
   };
 
   getStatusAppendixName(id) {

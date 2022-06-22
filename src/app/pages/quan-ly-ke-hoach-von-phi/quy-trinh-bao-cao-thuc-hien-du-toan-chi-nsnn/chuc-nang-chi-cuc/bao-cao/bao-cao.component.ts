@@ -497,7 +497,7 @@ export class BaoCaoComponent implements OnInit {
       }
     })
     this.addListNoiDung(this.noiDungFull);
-    
+
     await this.maDans.forEach(item => {
       if (!item.maCha) {
         this.maDanFull.push({
@@ -510,7 +510,6 @@ export class BaoCaoComponent implements OnInit {
       }
     })
     this.addListMaDuAn(this.maDanFull);
-    console.log(this.maDanFull);
 
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
@@ -647,6 +646,18 @@ export class BaoCaoComponent implements OnInit {
                   data.luyKeGiaiNganNguonQuy = divMoney(data.luyKeGiaiNganNguonQuy, item.maDviTien);
                   data.luyKeGiaiNganNstt = divMoney(data.luyKeGiaiNganNstt, item.maDviTien);
                   data.luyKeGiaiNganCk = divMoney(data.luyKeGiaiNganCk, item.maDviTien);
+                  data.giaiNganThangBcaoTcongTle = Number(data.giaiNganThangBcaoTcong) / Number(data.kphiSdungTcong);
+                  data.giaiNganThangBcaoDtoanTle = Number(data.giaiNganThangBcaoDtoan) / Number(data.kphiSdungTcong);
+                  data.giaiNganThangBcaoNguonKhacTle = Number(data.giaiNganThangBcaoNguonKhac) / Number(data.kphiSdungTcong);
+                  data.giaiNganThangBcaoNguonQuyTle = Number(data.giaiNganThangBcaoNguonQuy) / Number(data.kphiSdungTcong);
+                  data.giaiNganThangBcaoNsttTle = Number(data.giaiNganThangBcaoNstt) / Number(data.kphiSdungTcong);
+                  data.giaiNganThangBcaoCkTle = Number(data.giaiNganThangBcaoCk) / Number(data.kphiSdungTcong);
+                  data.luyKeGiaiNganTcongTle = Number(data.luyKeGiaiNganTcong) / Number(data.kphiSdungTcong);
+                  data.luyKeGiaiNganDtoanTle = Number(data.luyKeGiaiNganDtoan) / Number(data.kphiSdungDtoan);
+                  data.luyKeGiaiNganNguonKhacTle = Number(data.luyKeGiaiNganNguonKhac) / Number(data.kphiSdungNguonKhac);
+                  data.luyKeGiaiNganNguonQuyTle = Number(data.luyKeGiaiNganNguonQuy) / Number(data.kphiSdungNguonQuy);
+                  data.luyKeGiaiNganNsttTle = Number(data.luyKeGiaiNganNstt) / Number(data.kphiSdungNstt);
+                  data.luyKeGiaiNganCkTle = Number(data.luyKeGiaiNganCk) / Number(data.kphiSdungCk);
                   break;
 
                 // phu luc 2
@@ -695,6 +706,16 @@ export class BaoCaoComponent implements OnInit {
                   data.luyKeGiaiNganDauNamNsnnVonDt = divMoney(data.luyKeGiaiNganDauNamNsnnVonDt, item.maDviTien);
                   data.luyKeGiaiNganDauNamNsnnVonThue = divMoney(data.luyKeGiaiNganDauNamNsnnVonThue, item.maDviTien);
                   data.luyKeGiaiNganDauNamNsnnVonScl = divMoney(data.luyKeGiaiNganDauNamNsnnVonScl, item.maDviTien);
+                  data.giaiNganTsoTle = Number(data.giaiNganTso) / Number(data.khoachNamVonTso);
+                  data.giaiNganNsnnTle = Number(data.giaiNganNsnn) / Number(data.khoachNamVonNsnn);
+                  data.giaiNganNsnnTleVonDt = Number(data.giaiNganNsnnVonDt) / Number(data.khoachNamVonDt);
+                  data.giaiNganNsnnTleVonThue = Number(data.giaiNganNsnnVonThue) / Number(data.khoachNamVonThue);
+                  data.giaiNganNsnnTleVonScl = Number(data.giaiNganNsnnVonScl) / Number(data.khoachNamVonScl);
+                  data.luyKeGiaiNganDauNamTsoTle = Number(data.luyKeGiaiNganDauNamTso) / Number(data.khoachNamVonTso);
+                  data.luyKeGiaiNganDauNamNsnnTle = Number(data.luyKeGiaiNganDauNamNsnn) / Number(data.khoachNamVonNsnn);
+                  data.luyKeGiaiNganDauNamNsnnTleVonDt = Number(data.luyKeGiaiNganDauNamNsnnVonDt) / Number(data.khoachNamVonDt);
+                  data.luyKeGiaiNganDauNamNsnnTleVonThue = Number(data.luyKeGiaiNganDauNamNsnnVonThue) / Number(data.khoachNamVonThue);
+                  data.luyKeGiaiNganDauNamNsnnTleVonScl = Number(data.luyKeGiaiNganDauNamNsnnVonScl) / Number(data.khoachNamVonScl);
                   break;
                 default:
                   break;
@@ -731,6 +752,10 @@ export class BaoCaoComponent implements OnInit {
   // chuc nang check role
   async onSubmit(mcn: String, lyDoTuChoi: string) {
     if (this.id) {
+      if (!this.baoCao?.congVan?.fileUrl) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        return;
+      }
       let checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
       if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
@@ -952,12 +977,12 @@ export class BaoCaoComponent implements OnInit {
     }
   }
 
-  
 
-  
+
+
   changeModel() {
     this.resetTong();
-    
+
     this.danhSachChiTietPhuLucTemp.forEach(element => {
       if (element?.stt?.split('.').length == 2) {
         //Phu luc 1
@@ -1027,25 +1052,26 @@ export class BaoCaoComponent implements OnInit {
         this.kluongThienTso += Number(element?.kluongThienTso);
         this.kluongThienThangBcao += Number(element?.kluongThienThangBcao);
         this.giaiNganTso += Number(element?.giaiNganTso);
-        this.giaiNganTsoTle += Number(element?.giaiNganTsoTle);
         this.giaiNganNsnn += Number(element?.giaiNganNsnn);
         this.giaiNganNsnnVonDt += Number(element?.giaiNganNsnnVonDt);
         this.giaiNganNsnnVonThue += Number(element?.giaiNganNsnnVonThue);
         this.giaiNganNsnnVonScl += Number(element?.giaiNganNsnnVonScl);
-        this.giaiNganNsnnTle += Number(element?.giaiNganNsnnTle);
-        this.giaiNganNsnnTleVonDt += Number(element?.giaiNganNsnnTleVonDt);
-        this.giaiNganNsnnTleVonThue += Number(element?.giaiNganNsnnTleVonThue);
-        this.giaiNganNsnnTleVonScl += Number(element?.giaiNganNsnnTleVonScl);
         this.luyKeGiaiNganDauNamTso += Number(element?.luyKeGiaiNganDauNamTso);
-        this.luyKeGiaiNganDauNamTsoTle += Number(element?.luyKeGiaiNganDauNamTsoTle);
         this.luyKeGiaiNganDauNamNsnn += Number(element?.luyKeGiaiNganDauNamNsnn);
         this.luyKeGiaiNganDauNamNsnnVonDt += Number(element?.luyKeGiaiNganDauNamNsnnVonDt);
         this.luyKeGiaiNganDauNamNsnnVonThue += Number(element?.luyKeGiaiNganDauNamNsnnVonThue);
         this.luyKeGiaiNganDauNamNsnnVonScl += Number(element?.luyKeGiaiNganDauNamNsnnVonScl);
-        this.luyKeGiaiNganDauNamNsnnTle += Number(element?.luyKeGiaiNganDauNamNsnnTle);
-        this.luyKeGiaiNganDauNamNsnnTleVonDt += Number(element?.luyKeGiaiNganDauNamNsnnTleVonDt);
-        this.luyKeGiaiNganDauNamNsnnTleVonThue += Number(element?.luyKeGiaiNganDauNamNsnnTleVonThue);
-        this.luyKeGiaiNganDauNamNsnnTleVonScl += Number(element?.luyKeGiaiNganDauNamNsnnTleVonScl);
+
+        this.giaiNganTsoTle = Number(this.giaiNganTso) / Number(this.khoachNamVonTso);
+        this.giaiNganNsnnTle = Number(this.giaiNganNsnn) / Number(this.khoachNamVonNsnn);
+        this.giaiNganNsnnTleVonDt = Number(this.giaiNganNsnnVonDt) / Number(this.khoachNamVonDt);
+        this.giaiNganNsnnTleVonThue = Number(this.giaiNganNsnnVonThue) / Number(this.khoachNamVonThue);
+        this.giaiNganNsnnTleVonScl = Number(this.giaiNganNsnnVonScl) / Number(this.khoachNamVonScl);
+        this.luyKeGiaiNganDauNamTsoTle = Number(this.luyKeGiaiNganDauNamTso) / Number(this.khoachNamVonTso);
+        this.luyKeGiaiNganDauNamNsnnTle = Number(this.luyKeGiaiNganDauNamNsnn) / Number(this.khoachNamVonNsnn);
+        this.luyKeGiaiNganDauNamNsnnTleVonDt = Number(this.luyKeGiaiNganDauNamNsnnVonDt) / Number(this.khoachNamVonDt);
+        this.luyKeGiaiNganDauNamNsnnTleVonThue = Number(this.luyKeGiaiNganDauNamNsnnVonThue) / Number(this.khoachNamVonThue);
+        this.luyKeGiaiNganDauNamNsnnTleVonScl = Number(this.luyKeGiaiNganDauNamNsnnVonScl) / Number(this.khoachNamVonScl);
       }
     });
   }
@@ -1092,7 +1118,16 @@ export class BaoCaoComponent implements OnInit {
   }
 
   changeModelPL3(id) {
-
+    this.editCache[id].data.giaiNganTsoTle = Number(this.editCache[id].data.giaiNganTso) / Number(this.editCache[id].data.khoachNamVonTso);
+    this.editCache[id].data.giaiNganNsnnTle = Number(this.editCache[id].data.giaiNganNsnn) / Number(this.editCache[id].data.khoachNamVonNsnn);
+    this.editCache[id].data.giaiNganNsnnTleVonDt = Number(this.editCache[id].data.giaiNganNsnnVonDt) / Number(this.editCache[id].data.khoachNamVonDt);
+    this.editCache[id].data.giaiNganNsnnTleVonThue = Number(this.editCache[id].data.giaiNganNsnnVonThue) / Number(this.editCache[id].data.khoachNamVonThue);
+    this.editCache[id].data.giaiNganNsnnTleVonScl = Number(this.editCache[id].data.giaiNganNsnnVonScl) / Number(this.editCache[id].data.khoachNamVonScl);
+    this.editCache[id].data.luyKeGiaiNganDauNamTsoTle = Number(this.editCache[id].data.luyKeGiaiNganDauNamTso) / Number(this.editCache[id].data.khoachNamVonTso);
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnTle = Number(this.editCache[id].data.luyKeGiaiNganDauNamNsnn) / Number(this.editCache[id].data.khoachNamVonNsnn);
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonDt = Number(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt) / Number(this.editCache[id].data.khoachNamVonDt);
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonThue = Number(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue) / Number(this.editCache[id].data.khoachNamVonThue);
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonScl = Number(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl) / Number(this.editCache[id].data.khoachNamVonScl);
   }
 
   // xoa phu luc
@@ -1665,7 +1700,13 @@ export class BaoCaoComponent implements OnInit {
   // lay ten trang thai ban ghi
   getStatusName(Status: any) {
     const utils = new Utils();
-    return utils.getStatusName(Status == '7' ? '6' : Status);
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfo.dvql) {
+      return utils.getStatusName(Status == '7' ? '6' : Status);
+    }
+    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+      return utils.getStatusNameParent(Status == '7' ? '6' : Status);
+    }
   };
 
   getStatusAppendixName(id) {
@@ -2426,9 +2467,9 @@ export class BaoCaoComponent implements OnInit {
     await this.setPhuLuc(phuLucTemp, phuLuc)
   }
 
-  sortByIndex() {
+  async sortByIndex() {
     let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
-    idPhuLuc.forEach(async phuLuc => {
+    await idPhuLuc.forEach(async phuLuc => {
       await this.setDetail(phuLuc);
       let phuLucTemp = this.getPhuLuc(phuLuc);
       phuLucTemp.sort((item1, item2) => {
@@ -2486,9 +2527,9 @@ export class BaoCaoComponent implements OnInit {
     }
   }
 
-  sortWithoutIndex() {
+  async sortWithoutIndex() {
     let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
-    idPhuLuc.forEach(async phuLuc => {
+    await idPhuLuc.forEach(async phuLuc => {
       let phuLucTemp = this.getPhuLuc(phuLuc);
       if (phuLucTemp && phuLucTemp.length > 0) {
 
@@ -2502,7 +2543,7 @@ export class BaoCaoComponent implements OnInit {
         danhSachChiTietPhuLucTempTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.id != data.id);
         var lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
-          lstTemp.forEach(item => {
+          lstTemp.forEach(async item => {
             let idCha = this.getIdCha(item.maNdung);
             var index: number = phuLucTemp.findIndex(e => e.maNdung == idCha);
             if (index != -1) {
@@ -2745,25 +2786,26 @@ export class BaoCaoComponent implements OnInit {
             phuLucTemp[index].kluongThienTso += item.kluongThienTso;
             phuLucTemp[index].kluongThienThangBcao += item.kluongThienThangBcao;
             phuLucTemp[index].giaiNganTso += item.giaiNganTso;
-            phuLucTemp[index].giaiNganTsoTle += item.giaiNganTsoTle;
             phuLucTemp[index].giaiNganNsnn += item.giaiNganNsnn;
             phuLucTemp[index].giaiNganNsnnVonDt += item.giaiNganNsnnVonDt;
             phuLucTemp[index].giaiNganNsnnVonThue += item.giaiNganNsnnVonThue;
             phuLucTemp[index].giaiNganNsnnVonScl += item.giaiNganNsnnVonScl;
-            phuLucTemp[index].giaiNganNsnnTle += item.giaiNganNsnnTle;
-            phuLucTemp[index].giaiNganNsnnTleVonDt += item.giaiNganNsnnTleVonDt;
-            phuLucTemp[index].giaiNganNsnnTleVonThue += item.giaiNganNsnnTleVonThue;
-            phuLucTemp[index].giaiNganNsnnTleVonScl += item.giaiNganNsnnTleVonScl;
             phuLucTemp[index].luyKeGiaiNganDauNamTso += item.luyKeGiaiNganDauNamTso;
-            phuLucTemp[index].luyKeGiaiNganDauNamTsoTle += item.luyKeGiaiNganDauNamTsoTle;
             phuLucTemp[index].luyKeGiaiNganDauNamNsnn += item.luyKeGiaiNganDauNamNsnn;
             phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonDt += item.luyKeGiaiNganDauNamNsnnVonDt;
             phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonThue += item.luyKeGiaiNganDauNamNsnnVonThue;
             phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonScl += item.luyKeGiaiNganDauNamNsnnVonScl;
-            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTle += item.luyKeGiaiNganDauNamNsnnTle;
-            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonDt += item.luyKeGiaiNganDauNamNsnnTleVonDt;
-            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonThue += item.luyKeGiaiNganDauNamNsnnTleVonThue;
-            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonScl += item.luyKeGiaiNganDauNamNsnnTleVonScl;
+
+            phuLucTemp[index].giaiNganTsoTle = Number(phuLucTemp[index].giaiNganTso) / Number(phuLucTemp[index].khoachNamVonTso);
+            phuLucTemp[index].giaiNganNsnnTle = Number(phuLucTemp[index].giaiNganNsnn) / Number(phuLucTemp[index].khoachNamVonNsnn);
+            phuLucTemp[index].giaiNganNsnnTleVonDt = Number(phuLucTemp[index].giaiNganNsnnVonDt) / Number(phuLucTemp[index].khoachNamVonDt);
+            phuLucTemp[index].giaiNganNsnnTleVonThue = Number(phuLucTemp[index].giaiNganNsnnVonThue) / Number(phuLucTemp[index].khoachNamVonThue);
+            phuLucTemp[index].giaiNganNsnnTleVonScl = Number(phuLucTemp[index].giaiNganNsnnVonScl) / Number(phuLucTemp[index].khoachNamVonScl);
+            phuLucTemp[index].luyKeGiaiNganDauNamTsoTle = Number(phuLucTemp[index].luyKeGiaiNganDauNamTso) / Number(phuLucTemp[index].khoachNamVonTso);
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTle = Number(phuLucTemp[index].luyKeGiaiNganDauNamNsnn) / Number(phuLucTemp[index].khoachNamVonNsnn);
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonDt = Number(phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonDt) / Number(phuLucTemp[index].khoachNamVonDt);
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonThue = Number(phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonThue) / Number(phuLucTemp[index].khoachNamVonThue);
+            phuLucTemp[index].luyKeGiaiNganDauNamNsnnTleVonScl = Number(phuLucTemp[index].luyKeGiaiNganDauNamNsnnVonScl) / Number(phuLucTemp[index].khoachNamVonScl);
           }
         }
       })
