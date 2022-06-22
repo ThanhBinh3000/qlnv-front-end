@@ -318,9 +318,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
             // if (res.msg == MESSAGE.SUCCESS) {
             //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            //   await this.search();
             // } else {
             //   this.notification.error(MESSAGE.ERROR, res.msg);
             // }
