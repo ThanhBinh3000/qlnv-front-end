@@ -647,7 +647,7 @@ export class QuanLyVonPhiService extends BaseService {
   capNhatDnghiThop(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/cap-nhat',
-      // 'http://192.168.1.100:8094/thop-cap-von/cap-nhat',
+      // 'http://192.168.1.104:8094/thop-cap-von/cap-nhat',
       request);
   }
 
@@ -981,7 +981,7 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDuyetDeNghiTongHop(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/trang-thai',
-      // 'http://192.168.1.100:8094/thop-cap-von/trang-thai',
+      // 'http://192.168.1.104:8094/thop-cap-von/trang-thai',
       request);
   }
 
