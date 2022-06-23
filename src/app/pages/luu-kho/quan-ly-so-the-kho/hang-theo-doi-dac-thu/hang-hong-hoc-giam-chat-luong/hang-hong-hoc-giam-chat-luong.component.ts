@@ -5,9 +5,10 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 @Component({
   selector: 'app-hang-hong-hoc-giam-chat-luong',
   templateUrl: './hang-hong-hoc-giam-chat-luong.component.html',
-  styleUrls: ['./hang-hong-hoc-giam-chat-luong.component.scss']
+  styleUrls: ['./hang-hong-hoc-giam-chat-luong.component.scss'],
 })
 export class HangHongHocGiamChatLuongComponent implements OnInit {
+  isAddNew = false;
   formData: FormGroup;
   allChecked = false;
   indeterminate = false;
@@ -58,10 +59,9 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       ngayTao: new Date(),
       trangThai: 'Chờ duyệt',
     },
+  ];
 
-  ]
-
-  constructor(private readonly fb: FormBuilder) { }
+  constructor(private readonly fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -78,17 +78,18 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     });
   }
 
-  exportData() { }
+  exportData() {}
 
-  xoa() { }
+  xoa() {}
 
-  inDanhSach() { }
+  inDanhSach() {}
 
-  themMoi() { }
+  themMoi() {
+    this.isAddNew = true;
+  }
 
   onAllChecked(checked) {
-    this.dataTable
-      .forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -101,26 +102,33 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) => this.setOfCheckedId.has(id));
-    this.indeterminate = this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) && !this.allChecked;
+    this.allChecked = this.dataTable.every(({ id }) =>
+      this.setOfCheckedId.has(id),
+    );
+    this.indeterminate =
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.allChecked;
   }
 
-  onChangeFilterDate(event) { }
+  onChangeFilterDate(event) {}
 
-  changePageIndex(event) { }
+  changePageIndex(event) {}
 
-  changePageSize(event) { }
+  changePageSize(event) {}
 
-  viewDetail(id: number, isUpdate: boolean) { }
+  viewDetail(id: number, isUpdate: boolean) {}
 
-  xoaItem(id: number) { }
+  xoaItem(id: number) {}
 
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
   }
-}
 
+  onClose() {
+    this.isAddNew = false;
+  }
+}
 
 interface ITrangThai {
   id: number;
@@ -135,4 +143,3 @@ interface IHangHongHocGiamChatLuong {
   ngayTao: Date;
   trangThai: string;
 }
-

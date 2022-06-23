@@ -11,7 +11,8 @@
   margin-top: 12px;
 
   h3 {
-    text-transform: uppercase;
+    margin-bottom: 0;
+    font-size: 16px;
   }
 
   .buttons {
@@ -24,16 +25,16 @@
     }
   }
 
+  .xanh {
+    background-color: #4E5484;
+    color: #fff;
+  }
 
 }
 
 .data-table {
-  padding: 0 10px;
+  padding: 10px;
   border: 1px solid #f0f0f0 !important;
-
-  .nowrap {
-    padding: 0 10px !important;
-  }
 
   .table-icon {
     border: solid 1px #e4e4e4;
@@ -45,5 +46,9 @@
     border-radius: 50%;
     background: #fefefe !important;
     margin: 0 2px;
+  }
+
+  #myTabContent {
+    margin: 0;
   }
 }

@@ -63,8 +63,8 @@
   <h3>Danh sách hàng DTQG đã hết hạn bảo hành, chưa hết hạn lưu kho</h3>
 </div>
 
-<nz-card class="mt-16 flex-card data-table">
-  <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+<nz-card class="mt-16 flex-card data-table card-border-content">
+  <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
         <th class="text-center" style="width: 5%;">STT</th>
@@ -127,7 +127,6 @@
         <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.tenNhaKho }}</td>
         <td>{{ data.tenNganLo }}</td>
-        <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.ngayNhapKho | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.ngayHetHanBaoHanh | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.soLuong }}</td>

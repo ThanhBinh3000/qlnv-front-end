@@ -11,7 +11,8 @@
   margin-top: 12px;
 
   h3 {
-    text-transform: uppercase;
+    margin-bottom: 0;
+    font-size: 16px;
   }
 
   .buttons {
@@ -28,10 +29,10 @@
 }
 
 .data-table {
-  padding: 0 10px;
+  padding: 10px;
   border: 1px solid #f0f0f0 !important;
 
-  .nowrap {
-    padding: 0 10px !important;
+  #myTabContent {
+    margin: 0;
   }
 }
