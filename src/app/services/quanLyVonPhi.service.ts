@@ -1224,9 +1224,12 @@ exportBaoCao(bcaoCtietId: string, bcaoId: string): Observable<any> {
   return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId, { responseType: 'blob' });
 }
 
-// call api chức năng duyet bieu mau
+//call api chức năng duyet bieu mau
 getListUserByManage(request: any): Observable<any> {
   return this.httpClient.post(this.urlDefault + '/qlnv-system/user/findList',request);
 }
 
+getListUser(): Observable<any> {
+  return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/chung/can-bo');
+}
 }

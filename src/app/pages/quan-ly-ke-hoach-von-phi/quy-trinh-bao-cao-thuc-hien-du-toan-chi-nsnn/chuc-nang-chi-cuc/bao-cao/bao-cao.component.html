@@ -154,7 +154,7 @@
                       </nz-select>
                     </ng-container>
                     <ng-template #templateNguoiBcao>
-                      <div *ngFor="let itemDetail of nguoiBcaos">
+                      <div *ngFor="let itemDetail of allUsers">
                         <div *ngIf="itemDetail.username == item.nguoiBcao">
                           {{itemDetail.username}}
                         </div>
@@ -1040,7 +1040,7 @@
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let item of noiDungs">
+                          <div *ngFor="let item of noiDungPL2s">
                             <div *ngIf="item.id == data.maNdung">
                               {{item.tenDm}}
                             </div>
@@ -1087,7 +1087,7 @@
                           {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                          <div *ngFor="let item of noiDungFull">
+                          <div *ngFor="let item of noiDungPL2s">
                             <div *ngIf="item.id == data.maNdung">
                               {{item.tenDm}}
                             </div>

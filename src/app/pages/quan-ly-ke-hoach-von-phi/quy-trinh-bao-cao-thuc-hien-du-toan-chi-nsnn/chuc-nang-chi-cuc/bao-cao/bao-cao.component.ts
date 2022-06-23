@@ -281,6 +281,7 @@ export class BaoCaoComponent implements OnInit {
   tab = TAB_SELECTED;
   lstKhoanMuc: any[] = KHOAN_MUC;
   nguoiBcaos: any[];
+  allUsers: any[];
   selectedIndex: number = 1;
 
   //tong phu luc 1
@@ -544,10 +545,17 @@ export class BaoCaoComponent implements OnInit {
     }
     this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
       if (res.statusCode == 0) {
-        debugger
-        this.nguoiBcaos = res.data.content;
+        this.allUsers = res.data?.content;
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    this.quanLyVonPhiService.getListUser().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.nguoiBcaos = res.data;
       }
     },
       (err) => {

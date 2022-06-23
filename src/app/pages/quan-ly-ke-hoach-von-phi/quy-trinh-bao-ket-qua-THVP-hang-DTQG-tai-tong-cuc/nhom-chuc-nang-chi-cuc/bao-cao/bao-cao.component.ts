@@ -311,6 +311,7 @@ export class BaoCaoComponent implements OnInit {
   lstIdDeleteCols: string = '';
 
   nguoiBcaos: any[];
+  allUsers: any[];
   vatTusBC02 = NOI_DUNG;
   vatTusBC03 = NOI_DUNG;
   noiDungChisBC04 = NOI_DUNG;
@@ -516,15 +517,20 @@ export class BaoCaoComponent implements OnInit {
     }
     this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
       if (res.statusCode == 0) {
-        debugger
-        this.nguoiBcaos = res.data.content;
+        this.allUsers = res.data?.content;
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
-    },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.quanLyVonPhiService.getListUser().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.nguoiBcaos = res.data;
+      }
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 
   getStatusButton() {
@@ -810,6 +816,7 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
       this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
     }
+    this.closeTab();
   }
 
   // getStatusButtonOk() {
@@ -1582,8 +1589,8 @@ export class BaoCaoComponent implements OnInit {
 
 
 
-  closeTab({ index }: { index: number }): void {
-    this.tabs.splice(index - 1, 1);
+  closeTab(): void {
+    this.tabs = []
   }
 
 }
