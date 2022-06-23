@@ -1,17 +1,42 @@
 <nz-tabset nzType="card" class="chuc-nang-nhap-kho mt-16 tab-level-2">
+  <nz-tab [nzTitle]="'Phiếu nhập kho tạm gửi'" *ngIf="typeVthh == '02'">
+    <ng-template nz-tab>
+      <app-phieu-nhap-kho-tam-gui [typeVthh]="typeVthh"></app-phieu-nhap-kho-tam-gui>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản gửi hàng'" *ngIf="typeVthh == '02'">
+    <ng-template nz-tab>
+      <app-bien-ban-gui-hang [typeVthh]="typeVthh"></app-bien-ban-gui-hang>
+    </ng-template>
+  </nz-tab>
   <nz-tab [nzTitle]="'Phiếu nhập kho'">
     <ng-template nz-tab>
       <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Bảng kê cân hàng'">
+  <nz-tab [nzTitle]="'Bảng kê cân hàng'" *ngIf="typeVthh != '02'">
     <ng-template nz-tab>
       <quan-ly-bang-ke-can-hang [typeVthh]="typeVthh"></quan-ly-bang-ke-can-hang>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Biên bản nhập đầy kho'">
+  <nz-tab [nzTitle]="'Biên bản nhập đầy kho'" *ngIf="typeVthh != '02'">
     <ng-template nz-tab>
       <quan-ly-phieu-nhap-day-kho></quan-ly-phieu-nhap-day-kho>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Bảng kê nhập vật tư'" *ngIf="typeVthh == '02'">
+    <ng-template nz-tab>
+      <app-bang-ke-nhap-vat-tu [typeVthh]="typeVthh"></app-bang-ke-nhap-vat-tu>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản kết thúc nhập kho'" *ngIf="typeVthh == '02'">
+    <ng-template nz-tab>
+      <app-bien-ban-ket-thuc-nhap-kho [typeVthh]="typeVthh"></app-bien-ban-ket-thuc-nhap-kho>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản giao nhận'" *ngIf="typeVthh == '02'">
+    <ng-template nz-tab>
+      <app-bien-ban-giao-nhan [typeVthh]="typeVthh"></app-bien-ban-giao-nhan>
     </ng-template>
   </nz-tab>
 </nz-tabset>

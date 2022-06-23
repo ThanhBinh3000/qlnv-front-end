@@ -6,15 +6,14 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
-            <i class="icon  htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
-            <span>Trình duyệt</span>
+            <span>Lưu và gửi duyệt</span>
           </button>
           <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
             *ngIf="detail.trangThai == '01' && !isView" (click)="hoanThanh()">
@@ -27,9 +26,17 @@
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="detail.trangThai == '04'">
+            *ngIf="detail.trangThai == '04' && !isView">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <span>Quay về</span>
           </a>
         </div>
       </div>
@@ -49,9 +56,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Số Quyết định
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.soQuyetDinh"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.soQd" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -61,9 +68,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu nhập kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.soPhieuNhapKho"
+                <nz-select [(ngModel)]="detail.qlPhieuNhapKhoLtId"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listSoPhieuNhapKho" [nzValue]="item.soPhieu" [nzLabel]="item.soPhieu">
+                  <nz-option *ngFor="let item of listSoPhieuNhapKho" [nzValue]="item.id" [nzLabel]="item.soPhieu">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -198,8 +205,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Theo hợp đồng (nếu có)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập" [(ngModel)]="detail.soHd"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập" [(ngModel)]="detail.soHd" [disabled]="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">

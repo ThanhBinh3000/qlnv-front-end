@@ -309,7 +309,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         this.quanLyPhieuNhapKhoService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

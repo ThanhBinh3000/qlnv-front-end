@@ -25,7 +25,7 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/phe-duyet`
+    let url = `http://localhost:8099/dx-kh/qd-lcnt/phe-duyet`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

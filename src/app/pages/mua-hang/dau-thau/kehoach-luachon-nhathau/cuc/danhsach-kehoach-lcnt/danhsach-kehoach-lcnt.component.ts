@@ -250,7 +250,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         return 'Dự thảo'
       }
       case '03': {
-        return 'Từ chối'
+        return 'Từ chối - TP'
+      }
+      case '12': {
+        return 'Từ chối - LĐ Cục'
       }
       case '01': {
         return 'Chờ duyệt - TP'
@@ -260,6 +263,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       }
       case '02': {
         return 'Đã duyệt'
+      }
+      case '05': {
+        return 'Tổng hợp'
       }
     }
   }

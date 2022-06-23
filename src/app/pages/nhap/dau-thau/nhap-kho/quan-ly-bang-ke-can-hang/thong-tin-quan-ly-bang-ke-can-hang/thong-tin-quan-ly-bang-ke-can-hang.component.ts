@@ -18,6 +18,7 @@ import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyP
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -42,6 +43,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   idNhapHang: number = 0;
+  detailGiaoNhap: any = {};
+  detailHopDong: any = {};
 
   listDonViTinh: any[] = [];
   listLoaiKho: any[] = [];
@@ -73,6 +76,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     private quanLyPhieuSoKhoService: QuanLyPhieuSoKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    private thongTinHopDongService: ThongTinHopDongService,
     public globals: Globals,
   ) { }
 
@@ -260,6 +264,30 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.listSoQuyetDinh = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeSoQuyetDinh() {
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
+    if (quyetDinh && quyetDinh.length > 0) {
+      this.detailGiaoNhap = quyetDinh[0];
+      this.detail.soHd = this.detailGiaoNhap.soHd;
+      // await this.getHopDong(this.detailGiaoNhap.soHd);
+    }
+  }
+
+  async getHopDong(id) {
+    if (id) {
+      let body = {
+        "str": id
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -669,6 +697,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "donViTinh": this.detail.donViTinh,
         "id": this.id,
         "maDiemKho": this.detail.maDiemKho,
+        "maNganKho": this.detail.maNganKho,
         "maDonVi": this.detail.maDvi,
         "maHang": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
@@ -676,14 +705,14 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDvi,
         "maThuKho": this.detail.maThuKho,
-        "ngayNhapXuat": this.detail?.ngayNhapXuat ? dayjs(this.detail?.ngayNhapXuat).format('YYYY-MM-DD') : null,
-        "qlPhieuNhapKhoLtId": 0,
-        "qdgnvnxId": this.idNhapHang,
+        "ngayNhap": this.detail?.ngayNhapXuat ? dayjs(this.detail?.ngayNhapXuat).format('YYYY-MM-DD') : null,
+        "qlPhieuNhapKhoLtId": this.detail.qlPhieuNhapKhoLtId,
+        "qdgnvnxId": this.detail.qdgnvnxId,
         "soBangKe": this.detail.soBangKe,
         "soHd": this.detail.soHd,
         "soKho": this.detail.soKho,
         "tenHang": null,
-        "tenNguoiGiaoHang": this.detail.donViTinh,
+        "tenNguoiGiaoHang": this.detail.tenNguoiGiaoHang,
         "thoiGianGiaoHang": null
       };
       if (this.id > 0) {
@@ -720,5 +749,9 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  print() {
+
   }
 }
