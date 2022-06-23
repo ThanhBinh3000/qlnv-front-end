@@ -106,9 +106,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Họ tên thủ kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maThuKho"
+                <nz-select [(ngModel)]="detail.thuKho"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
+                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.tenThukho"
+                    [nzLabel]="thuKho.tenThukho">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -166,7 +167,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa điểm
                 </nz-form-label>
-                <input nz-input placeholder="Nhập địa điểm" [(ngModel)]="detail.diaChi"
+                <input nz-input placeholder="Nhập địa điểm" [(ngModel)]="detail.diaDiem"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
@@ -215,7 +216,7 @@
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
-                  nzPlaceHolder="Ngày nhập" [(ngModel)]="detail.ngayNhapXuat">
+                  nzPlaceHolder="Ngày nhập" [(ngModel)]="detail.ngayNhap">
                 </nz-date-picker>
               </nz-form-item>
             </div>

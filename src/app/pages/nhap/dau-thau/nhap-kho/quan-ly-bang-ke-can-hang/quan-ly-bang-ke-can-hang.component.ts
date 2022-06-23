@@ -49,7 +49,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   filterTable: any = {
     soQuyetDinhNhap: '',
-    soPhieu: '',
+    soPhieuNhapKho: '',
     ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
@@ -375,7 +375,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQuyetDinhNhap: '',
-      soPhieu: '',
+      soPhieuNhapKho: '',
       ngayNhapKho: '',
       tenDiemKho: '',
       tenNhaKho: '',

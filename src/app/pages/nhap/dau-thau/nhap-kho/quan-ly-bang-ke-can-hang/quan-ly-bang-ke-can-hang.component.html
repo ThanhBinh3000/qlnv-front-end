@@ -126,8 +126,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieuNhap"
-                          (input)="filterInTable('soPhieuNhap',filterTable.soPhieuNhap)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieuNhapKho"
+                          (input)="filterInTable('soPhieuNhapKho',filterTable.soPhieuNhapKho)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -149,7 +149,7 @@
                     <td>{{ data.tenNhaKho }}</td>
                     <td>{{ data.tenNganLo }}</td>
                     <td>{{ data.soHd }}</td>
-                    <td>{{ data.soPhieuNhap }}</td>
+                    <td>{{ data.soPhieuNhapKho }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-right">
                       <a (click)="redirectToChiTiet(true, data.id)">

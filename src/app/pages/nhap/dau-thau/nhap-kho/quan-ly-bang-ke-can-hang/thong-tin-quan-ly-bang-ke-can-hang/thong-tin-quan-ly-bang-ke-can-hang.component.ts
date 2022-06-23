@@ -85,7 +85,11 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     try {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+      if (this.id == 0) {
+        this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+        this.detail.tenDvi = this.userInfo.TEN_DVI;
+        this.detail.maDvi = this.userInfo.MA_DVI;
+      }
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -336,10 +340,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -431,10 +433,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           this.changeDiemKho(true);
         }
       }
-    }
-    else {
-      this.detail.tenDvi = this.userInfo.TEN_DVI;
-      this.detail.maDvi = this.userInfo.MA_DVI;
     }
     this.updateEditCache();
   }
@@ -695,7 +693,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     try {
       let body = {
         "chiTiets": this.detail.chiTiets,
-        "diaChi": this.detail.diaChi,
+        "diaDiem": this.detail.diaDiem,
         "diaChiNguoiGiao": this.detail.diaChiNguoiGiao,
         "donViTinh": this.detail.donViTinh,
         "id": this.id,
@@ -707,8 +705,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "maLhKho": this.detail.maLhKho,
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDvi,
-        "maThuKho": this.detail.maThuKho,
-        "ngayNhap": this.detail?.ngayNhapXuat ? dayjs(this.detail?.ngayNhapXuat).format('YYYY-MM-DD') : null,
+        "thuKho": this.detail.thuKho,
+        "ngayNhap": this.detail?.ngayNhap ? dayjs(this.detail?.ngayNhap).format('YYYY-MM-DD') : null,
         "qlPhieuNhapKhoLtId": this.detail.qlPhieuNhapKhoLtId,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soBangKe": this.detail.soBangKe,
@@ -716,6 +714,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "soKho": this.detail.soKho,
         "tenHang": null,
         "tenNguoiGiaoHang": this.detail.tenNguoiGiaoHang,
+        "maVatTu": this.detail.maVatTu,
+        "maVatTuCha": this.detail.maVatTuCha,
         "thoiGianGiaoHang": null
       };
       if (this.id > 0) {
