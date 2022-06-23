@@ -154,14 +154,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  // async changeDiemKho() {
-  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-  //   this.searchFilter.maNganKho = null;
-  //   if (diemKho && diemKho.length > 0) {
-  //     await this.loadNhaKho(diemKho[0].id);
-  //   }
-  // }
-
   async loadNganLo() {
     let body = {
       "maNganLo": null,
@@ -317,7 +309,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         this.quanLyPhieuNhapKhoService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

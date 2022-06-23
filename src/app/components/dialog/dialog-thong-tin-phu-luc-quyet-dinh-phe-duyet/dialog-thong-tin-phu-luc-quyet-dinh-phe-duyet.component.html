@@ -1,20 +1,20 @@
 <nz-card class="pd-10 mb-16 mt-16">
-  <div class="specical-title">
+  <!-- <div class="specical-title">
     Thông tin Phụ lục QĐ phê duyệt KHLCNT
-  </div>
+  </div> -->
   <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
     <thead>
       <tr>
         <th [width]="218">Chi cục</th>
         <th>Tên gói thầu</th>
-        <th>Điểm kho</th>
+        <th>Địa điểm nhập kho</th>
         <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
         <th>Đã lên kế hoạch mua</th>
         <th>Số lượng tấn</th>
         <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
         <th>Thành tiền</th>
         <th>Bằng chữ</th>
-        <th>Giá trị bảo đảm dự thầu (%)</th>
+        <!-- <th>Giá trị bảo đảm dự thầu (%)</th> -->
       </tr>
     </thead>
     <tbody>
@@ -31,16 +31,15 @@
             <td>{{ item.soLuongTheoChiTieu }}</td>
             <td>{{ item.soLuong }}</td>
             <td>{{ item.donGia }}</td>
-            <td>{{ item.soLuong * 1000 * item.donGia | number: '1.0-1'}}</td>
-            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * 1000 * item.donGia) : '' }}</td>
-            <td></td>
+            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
           </tr>
         </ng-container>
       </ng-container>
     </tbody>
   </nz-table>
 </nz-card>
-<nz-card class="pd-10 mb-16">
+<nz-card *ngIf="isEdit" class="pd-10 mb-16">
   <div class="specical-title">
     Chỉnh sửa thông tin phụ lục QĐ phê duyệt khlcnt
   </div>
@@ -164,7 +163,7 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="onCancel()" class="modal__button--save">
+      <button *ngIf="isEdit" nz-button (click)="onCancel()" class="modal__button--save">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

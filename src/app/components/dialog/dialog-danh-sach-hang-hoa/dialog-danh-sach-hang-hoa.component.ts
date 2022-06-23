@@ -27,7 +27,6 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
     this.loadDanhMucHang();
   }
 
@@ -50,11 +49,10 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
         this.listOfMapDataClone = [...this.listOfMapData];
         this.listOfMapData.forEach((item) => {
           // Với TH là thóc và gạo
-          if (this.data.length > 2) {
+          if (this.data && this.data.length > 2) {
             item.child = item.child.filter(item => item.ma == this.data);
           }
           this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-          console.log(this.mapOfExpandedData[item.id]);
         });
       }
     });

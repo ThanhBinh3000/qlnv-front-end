@@ -68,7 +68,6 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
@@ -76,6 +75,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
       ]);
+      await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -310,7 +310,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
 
   async loadDiemKho() {
     let body = {
-      maDviCha: this.detail.maDonVi,
+      maDviCha: this.detail.maDvi,
       trangThai: '01',
     }
     const res = await this.donViService.getAll(body);

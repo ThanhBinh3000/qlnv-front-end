@@ -28,14 +28,12 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   yearNow = dayjs().get('year');
   searchFilter = {
     soQd: null,
-    namKh: dayjs().get('year'),
-    soQdinh: null,
-    ngayTongHop: null,
     loaiVthh: null,
     ngayQd: null,
-    namKhoach: null,
-    trangThai: null,
-    veViec: null
+    namKhoach: dayjs().get('year'),
+    trichYeu: null,
+    tuNgayQd: null,
+    denNgayQd: null
   };
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -91,7 +89,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         });
       }
       this.loadDanhMucHang();
-      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
       await this.search();
       this.spinner.hide();
     }
@@ -244,24 +241,26 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   async search() {
     this.dataTable = [];
-    let body = this.searchFilter;
-    body.namKhoach = body.namKh;
-    let res;
-    if (this.tabSelected == 'quyet-dinh') {
-      body.trangThai = null;
-      res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-    } else {
-      body.trangThai = '00';
-      res = await this.tongHopDeXuatKHLCNTService.search(body);
-    }
+    let body = {
+      tuNgayQd: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+        : null,
+      denNgayQd: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
+        : null,
+      loaiVthh: this.searchFilter.loaiVthh,
+      namKhoach: this.searchFilter.namKhoach,
+      trichYeu: this.searchFilter.trichYeu,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+    };
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
-        if (this.tabSelected == 'quyet-dinh') {
-          this.dataTable = data.content;
-        } else {
-          this.dataTableNo = data.content;
-        }
+        this.dataTable = data.content;
       }
       this.totalRecord = data.totalElements;
     } else {
@@ -316,7 +315,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
             ? dayjs(this.endValue).format('DD/MM/YYYY')
             : null,
           "loaiVthh": this.selectHang.ma ?? "00",
-          "namKhoach": this.searchFilter.namKh,
+          "namKhoach": this.searchFilter.namKhoach,
           "paggingReq": null,
           "soQd": this.searchFilter.soQd,
           "str": null,

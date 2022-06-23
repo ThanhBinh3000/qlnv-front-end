@@ -165,11 +165,11 @@
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && checkCanUpdate()"
+                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' || data.trangThai=='12')"
                         (click)="detail(data)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00' && checkCanUpdate()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
