@@ -310,7 +310,7 @@ export class BaoCaoComponent implements OnInit {
   cols: number = 0;
   lstIdDeleteCols: string = '';
 
-  nguoiBcaos: any[] = LISTCANBO;
+  nguoiBcaos: any[];
   vatTusBC02 = NOI_DUNG;
   vatTusBC03 = NOI_DUNG;
   noiDungChisBC04 = NOI_DUNG;
@@ -324,6 +324,7 @@ export class BaoCaoComponent implements OnInit {
     let lbc = this.router.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
+    this.getListUser();
     if (this.idDialog) {
       this.id = this.idDialog;
       this.statusBtnClose = true;
@@ -499,6 +500,32 @@ export class BaoCaoComponent implements OnInit {
   //   this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
   //   this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
   // }
+
+  getListUser() {
+    let request = {
+      dvql: this.userInfor?.dvql,
+      fullName: "",
+      paggingReq: {
+        limit: 1000,
+        page: 1
+      },
+      roleId: "",
+      status: "",
+      sysType: "",
+      username: ""
+    }
+    this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        debugger
+        this.nguoiBcaos = res.data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+  }
 
   getStatusButton() {
     let checkParent = false;
@@ -1553,7 +1580,7 @@ export class BaoCaoComponent implements OnInit {
     );
   }
 
-  
+
 
   closeTab({ index }: { index: number }): void {
     this.tabs.splice(index - 1, 1);

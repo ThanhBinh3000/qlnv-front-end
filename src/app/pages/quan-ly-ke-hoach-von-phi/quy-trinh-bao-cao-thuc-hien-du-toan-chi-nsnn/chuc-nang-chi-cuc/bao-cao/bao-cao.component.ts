@@ -280,7 +280,7 @@ export class BaoCaoComponent implements OnInit {
   danhSachChiTietPhuLucTemp: any[] = [];
   tab = TAB_SELECTED;
   lstKhoanMuc: any[] = KHOAN_MUC;
-  nguoiBcaos: any[] = LISTCANBO;
+  nguoiBcaos: any[];
   selectedIndex: number = 1;
 
   //tong phu luc 1
@@ -386,6 +386,7 @@ export class BaoCaoComponent implements OnInit {
     let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
+    this.getListUser();
     if (this.idDialog) {
       this.id = this.idDialog;
       this.statusBtnClose = true;
@@ -527,6 +528,33 @@ export class BaoCaoComponent implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   }
+
+  getListUser() {
+    let request = {
+      dvql: this.userInfo?.dvql,
+      fullName: "",
+      paggingReq: {
+        limit: 1000,
+        page: 1
+      },
+      roleId: "",
+      status: "",
+      sysType: "",
+      username: ""
+    }
+    this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        debugger
+        this.nguoiBcaos = res.data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+  }
+
   addListNoiDung(noiDungTemp) {
     let a = [];
     noiDungTemp.forEach(item => {

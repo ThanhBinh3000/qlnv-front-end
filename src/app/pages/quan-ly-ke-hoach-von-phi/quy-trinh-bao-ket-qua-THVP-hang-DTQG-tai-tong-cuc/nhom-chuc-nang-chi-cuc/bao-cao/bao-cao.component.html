@@ -144,14 +144,14 @@
                       *ngIf="userInfor?.username == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện" [(ngModel)]="item.nguoiBcao"
                         [class]="item.nguoiBcao ?'' : 'input-error-validate' ">
-                        <nz-option *ngFor="let item of nguoiBcaos" [nzValue]="item.tenDm" [nzLabel]="item.tenDm">
+                        <nz-option *ngFor="let item of nguoiBcaos" [nzValue]="item.username" [nzLabel]="item.username">
                         </nz-option>
                       </nz-select>
                     </ng-container>
                     <ng-template #templateNguoiBcao>
                       <div *ngFor="let itemDetail of nguoiBcaos">
-                        <div *ngIf="itemDetail.tenDm == item.nguoiBcao">
-                          {{itemDetail.tenDm}}
+                        <div *ngIf="itemDetail.username == item.nguoiBcao">
+                          {{itemDetail.username}}
                         </div>
                       </div>
                     </ng-template>

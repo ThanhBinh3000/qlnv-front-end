@@ -833,9 +833,7 @@ export class BaoCao02Component implements OnInit {
         }
 
         //call service cap nhat phu luc
-        this.spinner.show();
-        console.log(baoCaoChiTietTemp.tuNgay.toDateString());
-        
+        this.spinner.show();        
         this.quanLyVonPhiService.baoCaoCapNhatChiTiet(baoCaoChiTietTemp).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
