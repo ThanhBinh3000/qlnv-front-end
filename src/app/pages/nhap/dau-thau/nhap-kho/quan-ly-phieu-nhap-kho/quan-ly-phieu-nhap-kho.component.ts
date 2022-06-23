@@ -51,7 +51,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soPhieu: '',
     ngayNhapKho: '',
     tenDiemKho: '',
@@ -367,12 +367,16 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soPhieu: '',
       ngayNhapKho: '',
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
     }
+  }
+
+  print() {
+
   }
 }

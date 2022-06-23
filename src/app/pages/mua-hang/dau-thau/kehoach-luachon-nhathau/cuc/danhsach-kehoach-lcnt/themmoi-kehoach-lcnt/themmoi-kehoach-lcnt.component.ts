@@ -172,6 +172,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
+  editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
@@ -218,6 +221,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         tgianBdauTchuc: [null, [Validators.required]],
         tgianMthau: [null, [Validators.required]],
         tgianDthau: [null, [Validators.required]],
+        gtriDthau: [null, [Validators.required]],
+        gtriHdong: [null, [Validators.required]],
         tgianThienHd: [null, [Validators.required]],
         tgianNhang: [null, [Validators.required]],
       }
@@ -247,6 +252,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
@@ -269,6 +275,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.loaiHopDongGetAll(),
       this.getDataChiTieu()
     ]);
+    this.spinner.hide();
   }
 
   initForm(dataDetail?) {
@@ -290,7 +297,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         maVtu: dataDetail ? dataDetail.maVtu : null,
         tenVtu: dataDetail ? dataDetail.tenVtu : null,
         tenDuAn: dataDetail ? dataDetail.tenDuAn : null,
-        tenDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
+        tenDvi: dataDetail ? dataDetail.tenDvi : this.userInfo.TEN_DVI,
         tongMucDt: dataDetail ? dataDetail.tongMucDt : null,
         nguonVon: dataDetail ? dataDetail.nguonVon : null,
         tchuanCluong: dataDetail ? dataDetail.tchuanCluong : null,
@@ -300,30 +307,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         tgianBdauTchuc: dataDetail ? dataDetail.tgianBdauTchuc : null,
         tgianMthau: dataDetail ? dataDetail.tgianMthau : null,
         tgianDthau: dataDetail ? dataDetail.tgianDthau : null,
+        gtriDthau: dataDetail ? dataDetail.gtriDthau : null,
+        gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
         tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
         tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
       }
     );
     if (dataDetail) {
       this.fileDinhKem = dataDetail.fileDinhKems
-      this.convertDsgThau(dataDetail?.dsGtDtlList);
+      this.listOfData = dataDetail.dsGtDtlList;
       this.listOfData.forEach(item => {
         this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
       });
-      this.bindingCanCu(dataDetail.children3);
+      this.bindingCanCu(dataDetail.ccXdgDtlList);
     }
     this.setTitle();
   }
 
-  convertDsgThau(listData) {
-    const groupByCategory = listData.reduce((group, product) => {
-      const { maDvi } = product;
-      group[maDvi] = group[maDvi] ?? [];
-      group[maDvi].push(product);
-      return group;
-    }, {});
-    console.log(groupByCategory);
-  }
+
 
   bindingCanCu(data) {
     if (data && data.length > 0) {
@@ -706,7 +707,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case '00':
-            case '03': {
+            case '03':
+            case '00': {
               body.trangThai = '01';
               break;
             }
@@ -718,6 +720,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               body.trangThai = '02';
             }
           }
+          // this.save()
           let res = await this.dauThauService.updateStatus(body);
           this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
           this.spinner.hide();
@@ -751,7 +754,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case '01': {
-              body.trangThai = '01';
+              body.trangThai = '03';
               break;
             }
             case '09': {
@@ -866,62 +869,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  listOfMapData2: TreeNodeInterface[] = [
-    {
-      key: `Việt trì`,
-      maDvi: '',
-      tenDvi: '',
-      goiThau: '',
-      name: 'John Brown sr.',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
-      children: [
-        {
-          key: `1-1`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park'
-        },
-        {
-          key: `1-2`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'John Brown jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park'
-        },
-        {
-          key: `1-3`,
-          maDvi: '',
-          tenDvi: '',
-          goiThau: '',
-          name: 'Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
-        }
-      ]
-    }
-  ];
-
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
-
-  collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
-    if (!$event) {
-      if (data.children) {
-        data.children.forEach(d => {
-          const target = array.find(a => a.key === d.key)!;
-          target.expand = false;
-          this.collapse(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
 
   collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
     if (!$event) {
@@ -965,19 +913,27 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (type == 'bao-gia') {
       if (id == 0) {
         this.addModelBaoGia.taiLieu = [];
+        this.addModelBaoGia.children = [];
       }
       else if (id > 0) {
+        this.editBaoGiaCache[id].data.taiLieu = [];
+        this.editBaoGiaCache[id].data.children = [];
+        this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
 
       }
     } else if (type == 'co-so') {
       if (id == 0) {
         this.addModelCoSo.taiLieu = [];
+        this.addModelCoSo.children = [];
       }
       else if (id > 0) {
-
+        this.editCoSoCache[id].data.taiLieu = [];
+        this.editCoSoCache[id].data.children = [];
+        this.checkDataExistCoSo(this.editCoSoCache[id].data);
       }
     }
   }
+
 
   taiLieuDinhKem(type?: string) {
     const modal = this.modal.create({
@@ -1043,75 +999,179 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       id: new Date().getTime(),
       text: event.name,
     };
-    if (type == 'bao-gia') {
-      if (id == 0) {
-        this.addModelBaoGia.taiLieu = [];
-        this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
-      }
-      else if (id > 0) {
-
-      }
-    } else if (type == 'co-so') {
-      if (id == 0) {
-        this.addModelCoSo.taiLieu = [];
-        this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
-      }
-      else if (id > 0) {
-
-      }
-    }
-    this.cdr.detectChanges();
     this.uploadFileService.uploadFile(event.file, event.name).then((resUpload) => {
       const fileDinhKem = new FileDinhKem();
       fileDinhKem.fileName = resUpload.filename;
       fileDinhKem.fileSize = resUpload.size;
       fileDinhKem.fileUrl = resUpload.url;
+      if (type == 'bao-gia') {
+        if (id == 0) {
+          this.addModelBaoGia.taiLieu = [];
+          this.addModelBaoGia.taiLieu = [...this.addModelBaoGia.taiLieu, item];
+          this.addModelBaoGia.children = [];
+          this.addModelBaoGia.children = [...this.addModelBaoGia.children, fileDinhKem];
+        }
+        else if (id > 0) {
+          this.editBaoGiaCache[id].data.taiLieu = [];
+          this.editBaoGiaCache[id].data.taiLieu = [...this.editBaoGiaCache[id]?.data?.taiLieu, item];
+          this.editBaoGiaCache[id].data.children = [];
+          this.editBaoGiaCache[id].data.children = [...this.editBaoGiaCache[id].data.children, fileDinhKem];
+        }
+      } else if (type == 'co-so') {
+        if (id == 0) {
+          this.addModelCoSo.taiLieu = [];
+          this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
+          this.addModelCoSo.children = [];
+          this.addModelCoSo.children = [...this.addModelCoSo.children, fileDinhKem];
+        }
+        else if (id > 0) {
+          this.editCoSoCache[id].data.taiLieu = [];
+          this.editCoSoCache[id].data.taiLieu = [...this.editCoSoCache[id]?.data?.taiLieu, item];
+          this.editCoSoCache[id].data.children = [];
+          this.editCoSoCache[id].data.children = [...this.editCoSoCache[id].data.children, fileDinhKem];
+        }
+      }
     });
   }
 
   addBaoGia() {
-    console.log(this.addModelBaoGia);
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-    taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.moTa;
-    taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
-    taiLieuBaoGiaThiTruong.children = [];
-    taiLieuBaoGiaThiTruong.children = [
-      ...taiLieuBaoGiaThiTruong.children,
-      this.addModelBaoGia.taiLieu
-    ];
-    this.baoGiaThiTruongList = [
-      ...this.baoGiaThiTruongList,
-      taiLieuBaoGiaThiTruong,
-    ];
-
+    taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.tenTlieu;
+    taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
+    taiLieuBaoGiaThiTruong.children = this.addModelBaoGia.children;
+    taiLieuBaoGiaThiTruong.taiLieu = this.addModelBaoGia.taiLieu;
+    this.checkDataExistBaoGia(taiLieuBaoGiaThiTruong);
+    this.clearBaoGia();
   }
 
   clearBaoGia() {
     this.addModelBaoGia = {
-      moTa: '',
+      tenTlieu: '',
       taiLieu: [],
+      children: [],
     };
+  }
+
+  editRowBaoGia(id) {
+    this.editBaoGiaCache[id].edit = true;
+  }
+
+  deleteRowBaoGia(data) {
+    this.baoGiaThiTruongList = this.baoGiaThiTruongList.filter((x) => x.id != data.id,);
+  }
+
+  cancelEditBaoGia(id: number): void {
+    const index = this.baoGiaThiTruongList.findIndex(
+      (item) => item.id === id,
+    );
+    this.editBaoGiaCache[id] = {
+      data: { ...this.baoGiaThiTruongList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditBaoGia(id: number): void {
+    this.editBaoGiaCache[id].edit = false;
+    this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
+  }
+
+  updatEditBaoGiaCache(): void {
+    if (this.baoGiaThiTruongList && this.baoGiaThiTruongList.length > 0) {
+      this.baoGiaThiTruongList.forEach((item) => {
+        this.editBaoGiaCache[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  checkDataExistBaoGia(data) {
+    if (this.baoGiaThiTruongList && this.baoGiaThiTruongList.length > 0) {
+      let index = this.baoGiaThiTruongList.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.baoGiaThiTruongList.splice(index, 1);
+      }
+    }
+    else {
+      this.baoGiaThiTruongList = [];
+    }
+    this.baoGiaThiTruongList = [
+      ...this.baoGiaThiTruongList,
+      data,
+    ];
+    this.updatEditBaoGiaCache();
   }
 
   addCoSo() {
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
-    taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTaiLieu;
-    taiLieuCanCuKhac.idVirtual = new Date().getTime();
-    taiLieuCanCuKhac.children = [];
-    taiLieuCanCuKhac.children = [
-      ...taiLieuCanCuKhac.children,
-      this.addModelCoSo.taiLieu,
-    ];
-    this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
+    taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTlieu;
+    taiLieuCanCuKhac.id = new Date().getTime() + 1;
+    taiLieuCanCuKhac.children = this.addModelCoSo.children;
+    taiLieuCanCuKhac.taiLieu = this.addModelCoSo.taiLieu;
+    this.checkDataExistCoSo(taiLieuCanCuKhac);
+    this.clearCoSo();
   }
 
   clearCoSo() {
     this.addModelCoSo = {
-      moTa: '',
+      tenTlieu: '',
       taiLieu: [],
+      children: [],
     };
+  }
+
+  editRowCoSo(id) {
+    this.editCoSoCache[id].edit = true;
+  }
+
+  deleteRowCoSo(data) {
+    this.canCuKhacList = this.canCuKhacList.filter((x) => x.id != data.id,);
+  }
+
+  cancelEditCoSo(id: number): void {
+    const index = this.canCuKhacList.findIndex(
+      (item) => item.id === id,
+    );
+    this.editCoSoCache[id] = {
+      data: { ...this.canCuKhacList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditCoSo(id: number): void {
+    this.editCoSoCache[id].edit = false;
+    this.checkDataExistCoSo(this.editCoSoCache[id].data);
+  }
+
+  updatEditCoSoCache(): void {
+    if (this.canCuKhacList && this.canCuKhacList.length > 0) {
+      this.canCuKhacList.forEach((item) => {
+        this.editCoSoCache[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  checkDataExistCoSo(data) {
+    if (this.canCuKhacList && this.canCuKhacList.length > 0) {
+      let index = this.canCuKhacList.findIndex(x => x.id == data.id);
+      if (index != -1) {
+        this.canCuKhacList.splice(index, 1);
+      }
+    }
+    else {
+      this.canCuKhacList = [];
+    }
+    this.canCuKhacList = [
+      ...this.canCuKhacList,
+      data,
+    ];
+    this.updatEditCoSoCache();
   }
 
   checkCanUpdate() {

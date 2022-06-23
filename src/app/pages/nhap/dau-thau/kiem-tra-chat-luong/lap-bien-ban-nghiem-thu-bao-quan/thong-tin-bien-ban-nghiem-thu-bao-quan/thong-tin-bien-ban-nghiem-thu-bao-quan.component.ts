@@ -40,7 +40,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
-  idNhapHang: number = 0;
 
   listThuKho: any[] = [];
   listNganLo: any[] = [];
@@ -144,6 +143,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       return sum ?? 0;
     }
     return 0;
+  }
+
+  changeNganLo() {
+    let nganLo = this.listNganLo.filter(x => x.maNganlo == this.detail.maNganlo);
+    if (nganLo && nganLo.length > 0) {
+      this.detail.tichLuong = nganLo[0].tichLuongChua ?? 0;
+    }
   }
 
   caculatorThanhTienQT() {
@@ -528,7 +534,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
         "pthucBquan": this.detail?.pthucBquan,
-        "qdgnvnxId": this.idNhapHang,
+        "qdgnvnxId": this.detail?.qdgnvnxId,
         "slThucNhap": this.detail?.slThucNhap,
         "soBb": this.detail?.soBb,
         "thuKho": this.detail?.thuKho,
@@ -583,5 +589,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
     }
+  }
+
+  print() {
+
   }
 }

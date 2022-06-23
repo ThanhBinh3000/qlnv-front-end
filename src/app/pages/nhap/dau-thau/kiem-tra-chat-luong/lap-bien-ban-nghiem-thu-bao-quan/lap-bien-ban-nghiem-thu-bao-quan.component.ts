@@ -58,7 +58,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soBb: '',
     ngayNghiemThuShow: '',
     tenDiemkho: '',
@@ -400,8 +400,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   deleteSelect() {
@@ -465,7 +466,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soBb: '',
       ngayNghiemThuShow: '',
       tenDiemkho: '',

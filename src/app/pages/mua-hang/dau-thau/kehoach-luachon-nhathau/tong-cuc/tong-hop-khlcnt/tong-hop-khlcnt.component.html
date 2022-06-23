@@ -12,11 +12,17 @@
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Loại hàng hóa</label>
-              <input class="search__input" placeholder="" nz-input />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Chủng loại hàng hóa</label>
-              <input class="search__input" placeholder="" nz-input />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Nội dung tổng hợp</label>
@@ -52,18 +58,17 @@
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="30px">STT</th>
-                    <th width="180px">Mã tổng hợp</th>
-                    <th width="180px">Ngày tổng hợp</th>
-                    <th width="180px">Nội dung tổng hợp</th>
-                    <th width="180px">Năm kế hoạch</th>
-                    <th width="180px">Số quyết định giao chỉ tiêu</th>
-                    <th width="180px">Loại hàng hóa</th>
-                    <th width="180px">Chủng loại hàng hóa</th>
-                    <th width="180px">Hình thức LCNT</th>
-                    <th width="180px">Phương thức LCNT</th>
-                    <th width="180px">Loại hợp đồng</th>
-                    <th width="180px">Nguồn vốn</th>
-                    <th width="180px">Tiêu chuẩn chất lượng</th>
+                    <th>Mã tổng hợp</th>
+                    <th>Ngày tổng hợp</th>
+                    <th>Nội dung tổng hợp</th>
+                    <th>Năm kế hoạch</th>
+                    <th>Loại hàng hóa</th>
+                    <th>Chủng loại hàng hóa</th>
+                    <th>Hình thức LCNT</th>
+                    <th>Phương thức LCNT</th>
+                    <th>Loại hợp đồng</th>
+                    <th>Nguồn vốn</th>
+                    <th>Trạng thái</th>
                     <th width="90px" class="text-right">Hành động</th>
                   </tr>
                 </thead>
@@ -161,25 +166,24 @@
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td></td>
+                    <td>{{data.id}}</td>
                     <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                    <td></td>
+                    <td>{{ data.noiDung }}</td>
                     <td>{{ data.namKhoach }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ data.tenVthh }}</td>
+                    <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.tenHthucLcnt }}</td>
-                    <td>{{ data.pthucLcnt }}</td>
-                    <td>{{ data.loaiHdong }}</td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-right">
+                    <td>{{ data.tenPthucLcnt }}</td>
+                    <td>{{ data.tenLoaiHdong }}</td>
+                    <td>{{ data.tenNguonVon }}</td>
+                    <td>{{ convertTrangThai(data.trangThai) }}</td>
+                    <td class="text-left">
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
                       <a *ngIf="(data.trangThai=='00' || data.trangThai=='03')"
                         (click)="redirectToChiTiet(false, data.id)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="icon htvbdh_tcdt_tao-qd"></i>
                       </a>
                       <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>

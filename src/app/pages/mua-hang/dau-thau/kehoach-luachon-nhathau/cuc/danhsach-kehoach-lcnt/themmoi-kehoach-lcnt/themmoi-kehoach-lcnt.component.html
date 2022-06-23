@@ -14,11 +14,16 @@
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="guiDuyet()">
+        <button
+          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03' || formData.value.trangThai == '09')"
+          type="button" class="btn btn-sub" (click)="guiDuyet()">
           <i class="icon {{iconButtonDuyet}}"></i>
           <span>{{titleButtonDuyet}}</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save()">
+        <button
+          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == '12')"
+          type="
+          button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -45,7 +50,7 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                    <nz-select formControlName="namKhoach"
+                    <nz-select formControlName="namKhoach" (ngModelChange)="getDataChiTieu()"
                       [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
@@ -419,6 +424,41 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
+                  <div nz-col [nzSpan]="6">
+                  </div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Giá trị bảo đảm dự thầu (%) </nz-form-label>
+                      <nz-form-control [nzErrorTip]="errorTip">
+                        <nz-input-group>
+                          <nz-input-number formControlName="gtriDthau" nz-input [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                          </nz-input-number>
+                        </nz-input-group>
+                        <ng-template #errorTip let-control>
+                          <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                        </ng-template>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Giá trị bảo đảm thực hiện hợp đồng (%)
+                      </nz-form-label>
+                      <nz-form-control [nzErrorTip]="errorTip">
+                        <nz-input-group>
+                          <nz-input-number formControlName="gtriHdong" nz-input [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                          </nz-input-number>
+                        </nz-input-group>
+                        <ng-template #errorTip let-control>
+                          <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                        </ng-template>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
                 </div>
               </form>
               <div nz-col nzSpan="24" class="ml-10 ">
@@ -505,7 +545,7 @@
                         *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                         <td></td>
                         <td>
-                          <input nz-input [(ngModel)]="addModelBaoGia.moTa" />
+                          <input nz-input [(ngModel)]="addModelBaoGia.tenTlieu" />
                         </td>
                         <td>
                           <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -524,22 +564,47 @@
                         </td>
                       </tr>
                       <tr *ngFor="let data of baoGiaThiTruong.data, let i = index" class="editable-row">
-                        <td>{{i + 1}}</td>
-                        <td>{{data.moTa}}</td>
-                        <td>{{data.tenTlieu}}</td>
-                        <td class="action text-right">
-                          <a (click)="downloadFile(data.children[0])">
-                            <i class="icon htvbdh_tcdt_import"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="editCanCuTaiLieuDinhKem(data, 'bao-gia-thi-truong')">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="deleteTaiLieu(i,'bao-gia-thi-truong')">
-                            <i class="fa fa-trash-o do"></i>
-                          </a>
-                        </td>
+                        <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.tenTlieu}}</td>
+                          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
+                          <td class="action text-right">
+                            <a (click)="downloadFile(data.children[0])">
+                              <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="editRowBaoGia(data.id)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="deleteRowBaoGia(data)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
+                          </td>
+                        </ng-container>
+                        <ng-template #editBaoGiaTemplate>
+                          <td></td>
+                          <td>
+                            <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
+                          </td>
+                          <td>
+                            <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                              [data]="editBaoGiaCache[data.id]?.data?.taiLieu" type="file"
+                              (selectDataEvent)="openFile($event, data.id, 'bao-gia')"
+                              [trangThai]="formData.value.trangThai"
+                              (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'bao-gia')"
+                              [showDowloadFile]="false">
+                            </multiple-tag>
+                          </td>
+                          <td class="text-right">
+                            <a (click)="saveEditBaoGia(data.id)">
+                              <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="cancelEditBaoGia(data.id)">
+                              <i class="fa fa-times do"></i>
+                            </a>
+                          </td>
+                        </ng-template>
                       </tr>
                     </tbody>
                   </nz-table>
@@ -563,7 +628,7 @@
                         *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                         <td></td>
                         <td>
-                          <input nz-input [(ngModel)]="addModelCoSo.moTa" />
+                          <input nz-input [(ngModel)]="addModelCoSo.tenTlieu" />
                         </td>
                         <td>
                           <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -582,22 +647,47 @@
                         </td>
                       </tr>
                       <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
-                        <td>{{i + 1}}</td>
-                        <td>{{data.moTa}}</td>
-                        <td>{{data.tenTlieu}}</td>
-                        <td class="action text-right">
-                          <a (click)="downloadFile(data.children[0])">
-                            <i class="icon htvbdh_tcdt_import"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="editCanCuTaiLieuDinhKem(data,'can-cu-khac')">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
-                            (click)="deleteTaiLieu(i,'can-cu-khac')">
-                            <i class="fa fa-trash-o do"></i>
-                          </a>
-                        </td>
+                        <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.tenTlieu}}</td>
+                          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
+                          <td class="action text-right">
+                            <a (click)="downloadFile(data.children[0])">
+                              <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="editRowCoSo(data.id)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                              (click)="deleteRowCoSo(data)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
+                          </td>
+                        </ng-container>
+                        <ng-template #editCoSoTemplate>
+                          <td></td>
+                          <td>
+                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
+                          </td>
+                          <td>
+                            <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                              [data]="editCoSoCache[data.id]?.data?.taiLieu" type="file"
+                              (selectDataEvent)="openFile($event, data.id, 'co-so')"
+                              [trangThai]="formData.value.trangThai"
+                              (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'co-so')"
+                              [showDowloadFile]="false">
+                            </multiple-tag>
+                          </td>
+                          <td class="text-right">
+                            <a (click)="saveEditCoSo(data.id)">
+                              <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="cancelEditCoSo(data.id)">
+                              <i class="fa fa-times do"></i>
+                            </a>
+                          </td>
+                        </ng-template>
                       </tr>
                     </tbody>
                   </nz-table>
@@ -649,8 +739,8 @@
                       <td>{{ item.soLuongTheoChiTieu }}</td>
                       <td>{{ item.soLuong }}</td>
                       <td>{{ item.donGia }}</td>
-                      <td>{{ item.soLuong * 1000 * item.donGia | number: '1.0-1'}}</td>
-                      <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * 1000 * item.donGia) : '' }}</td>
+                      <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+                      <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
                       <td class="text-right" *ngIf="userService.isCuc()">
                         <div *ngIf="item?.children?.length == 0 || !item?.children">
                           <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
