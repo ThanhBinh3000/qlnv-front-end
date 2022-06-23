@@ -88,7 +88,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item class="display-block">
-                <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên hợp đồng </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Căn cứ trên hợp đồng </nz-form-label>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
                   <input class="search__input" [readonly]="true" nz-input formControlName="canCu" readonly />
                 </nz-input-group>
@@ -166,7 +166,7 @@
             </td>
 
             <td>
-              <!-- <nz-form-control nzErrorTip="Vui lòng nhập mã hàng hóa">
+              <nz-form-control nzErrorTip="Vui lòng nhập mã hàng hóa">
                 <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                   class="search__input autocomplete__input donvi__input w-300">
                   <input placeholder="Chọn mã hàng hóa" nz-input (input)="onInputHangHoa($event)"
@@ -181,8 +181,8 @@
                     {{ option.ten }}
                   </nz-auto-option>
                 </nz-autocomplete>
-              </nz-form-control> -->
-              {{quyetDinhNhapXuatDetailCreate.maVthh}}
+              </nz-form-control>
+              <!-- {{quyetDinhNhapXuatDetailCreate.maVthh}} -->
             </td>
 
             <td>{{quyetDinhNhapXuatDetailCreate.tenVthh}}</td>

@@ -47,7 +47,8 @@
                   <thead>
                     <tr>
                       <th width="45px">
-                        <label nz-checkbox></label>
+                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                          [nzIndeterminate]="indeterminate"></label>
                       </th>
                       <th class="text-center" width="60px">STT</th>
                       <th>Số quyết định</th>
@@ -112,7 +113,8 @@
                     </tr>
                     <tr *ngFor="let data of basicTable.data; let i = index">
                       <th width="45px">
-                        <label nz-checkbox></label>
+                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                          [nzDisabled]="data.trangThai != '00'"></label>
                       </th>
                       <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                       <td>{{ data.soQd }}</td>
@@ -155,7 +157,7 @@
               </nz-tab>
             </nz-tabset>
             <div class="action-giao-chi-tieu">
-              <button type="button" class="btn btn-do">
+              <button type="button" class="btn btn-do" (click)="deleteSelect()">
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
               </button>

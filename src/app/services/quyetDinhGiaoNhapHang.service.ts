@@ -11,7 +11,7 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhGiaoNhapHang','');
+    super(httpClient, 'QuyetDinhGiaoNhapHang', '');
   }
 
   timKiem(body: any): Promise<any> {
@@ -52,5 +52,9 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
   getLoaiNhapXuat(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/loai-nhap-xuat`;
     return this.httpClient.get<any>(url).toPromise();
+  }
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
   }
 }

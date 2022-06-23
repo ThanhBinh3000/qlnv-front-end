@@ -14,7 +14,7 @@ import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhap
 export class DialogCanCuHopDongComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
-  page: number = 1;
+  page: number = 0;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
@@ -60,7 +60,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
 
     let body = {
       "denNgayKy": "",
-      "loaiVthh": "00",
+      "loaiVthh": "",
       "maDvi": "",
       "maDviB": "",
       "orderBy": "",
