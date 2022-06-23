@@ -2,8 +2,10 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCanCuQDPheDuyetKHLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
 import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -33,7 +35,8 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
-    private dauThauGoiThauService: dauThauGoiThauService
+    private dauThauGoiThauService: dauThauGoiThauService,
+    private modal: NzModalService
   ) {
     this.formGoiThau = this.fb.group({
       idGoiThau: [''],
@@ -161,6 +164,62 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       });
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  openDialogQDPDKHLCNT() {
+    // if (this.id == 0) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin căn cứ quyết định phê duyệt KHLCNT',
+      nzContent: DialogCanCuQDPheDuyetKHLCNTComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.loadChiTietCanCu(data.id);
+      }
+    });
+    // }
+  }
+
+  async loadChiTietCanCu(id) {
+    if (id > 0) {
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          console.log("🚀 ~ file: themmoi-dieuchinh.component.ts ~ line 194 ~ ThemMoiDieuChinhComponent ~ loadChiTietCanCu ~ res.data", res.data)
+          // this.formDetailHopDong.patchValue({
+          //   canCu: this.detail.canCu ?? null,
+          //   idGoiThau: this.detail.idGoiThau ?? null,
+          //   maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
+          //   tenHd: this.detail.tenHd ?? null,
+          //   ngayKy: this.detail.ngayKy ?? null,
+          //   namKh: this.detail.namKh ?? null,
+          //   ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
+          //   soNgayThien: this.detail.soNgayThien ?? null,
+          //   tenVthh: this.detail.tenVthh ?? null,
+          //   loaiVthh: this.detail.loaiVthh ?? null,
+          //   cloaiVthh: this.detail.cloaiVthh ?? null,
+          //   tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
+          //   soLuong: this.detail.soLuong ?? null,
+          //   donGiaVat: this.detail.donGiaVat ?? null,
+          //   gtriHdSauVat: this.detail.gtriHdSauVat ?? null,
+          //   maDvi: this.detail.maDvi ?? null,
+          //   tenDvi: this.detail.tenDvi ?? null,
+          //   diaChi: this.detail.diaChi ?? null,
+          //   mst: this.detail.mst ?? null,
+          //   sdt: this.detail.sdt ?? null,
+          //   stk: this.detail.stk ?? null,
+          //   tenNguoiDdien: this.detail.stk ?? null,
+          //   chucVu: this.detail.stk ?? null,
+          //   ghiChu: this.detail.ghiChu ?? null
+          // })
+        }
+      }
     }
   }
 

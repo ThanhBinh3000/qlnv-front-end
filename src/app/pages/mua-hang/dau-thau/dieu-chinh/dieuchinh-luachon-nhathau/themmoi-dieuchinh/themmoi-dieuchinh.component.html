@@ -70,14 +70,12 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="6">
-                                <nz-form-item class="display-block">
+                            <div nz-col [nzSpan]="6">
+                                <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
-                                    <nz-form-control>
-                                        <nz-input-group>
-                                            <input nz-input formControlName="soQdPD" />
-                                        </nz-input-group>
-                                    </nz-form-control>
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQDPDKHLCNT()">
+                                        <input nz-input [readonly]="true" formControlName="soQdPD" />
+                                    </nz-input-group>
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="4">
