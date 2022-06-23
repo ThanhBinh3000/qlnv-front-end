@@ -30,8 +30,8 @@
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Phụ lục số</label>
-                                <input class="search__input" placeholder="Số phiếu" nz-input
-                                    formControlName="phuLucSo" />
+                                <input class="search__input" placeholder="Phụ lục số" nz-input
+                                    formControlName="soPluc" />
                             </div>
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Ngày ký</label>
@@ -40,7 +40,7 @@
                             </div>
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Ngày hiệu lực</label>
-                                <nz-date-picker class="search__input" formControlName="ngayHieuLuc"></nz-date-picker>
+                                <nz-date-picker class="search__input" formControlName="ngayHluc"></nz-date-picker>
                             </div>
                             <div nz-col nzSpan="6"></div>
                             <div nz-col nzSpan="24">
@@ -49,11 +49,11 @@
                             </div>
                             <div nz-col nzSpan="12">
                                 <label class="search__label">Số hợp đồng</label>
-                                <input placeholder="Số hợp đồng" nz-input formControlName="soHdong" />
+                                <input placeholder="Số hợp đồng" nz-input formControlName="soHd" readonly />
                             </div>
                             <div nz-col nzSpan="12">
                                 <label class="search__label">Tên hợp đồng</label>
-                                <input placeholder="Tên hợp đồng" nz-input formControlName="tenHdong" />
+                                <input placeholder="Tên hợp đồng" nz-input formControlName="tenHd" readonly />
                             </div>
                         </div>
                     </nz-card>
@@ -62,36 +62,40 @@
                         <nz-tab [nzTitle]="'Điều chỉnh thời gian thực hiện'">
                             <div nz-row [nzGutter]="24">
                                 <div nz-col nzSpan="6">
-                                    <label class="search__label">Ngày hiệu lực đến trước điều chỉnh</label>
-                                    <nz-date-picker class="search__input" formControlName="ngayHLDtdc"></nz-date-picker>
+                                    <label class="search__label">Ngày hiệu lực đến ngày trước điều chỉnh</label>
+                                    <nz-date-picker class="search__input" formControlName="denNgayHlucTrc"
+                                        [nzDisabled]="true">
+                                    </nz-date-picker>
                                 </div>
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Ngày hiệu lực đến ngày sau điều chỉnh</label>
-                                    <nz-date-picker class="search__input" formControlName="ngayHLDsdc"></nz-date-picker>
+                                    <nz-date-picker class="search__input" formControlName="denNgayHlucDc">
+                                    </nz-date-picker>
                                 </div>
                             </div>
                             <div nz-row [nzGutter]="24">
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Ngày hiệu lực từ ngày trước điều chỉnh</label>
-                                    <nz-date-picker class="search__input" formControlName="ngayHLTNtdc">
+                                    <nz-date-picker class="search__input" formControlName="tuNgayHlucTrc"
+                                        [nzDisabled]="true">
                                     </nz-date-picker>
                                 </div>
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Ngày hiệu lực từ ngày sau điều chỉnh</label>
-                                    <nz-date-picker class="search__input" formControlName="ngayHLTNsdc">
+                                    <nz-date-picker class="search__input" formControlName="tuNgayHlucDc">
                                     </nz-date-picker>
                                 </div>
                             </div>
                             <div nz-row [nzGutter]="24">
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Số ngày thực hiện trước điều chỉnh</label>
-                                    <input placeholder="Số ngày thực hiện trước điều chỉnh" nz-input
-                                        formControlName="soNgaytdc" />
+                                    <input placeholder="Số ngày thực hiện trước điều chỉnh" nz-input readonly
+                                        formControlName="tgianThienHdTrc" />
                                 </div>
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Số ngày thực hiện sau điều chỉnh</label>
                                     <input placeholder="Số ngày thực hiện sau điều chỉnh" nz-input
-                                        formControlName="soNgaysdc" />
+                                        formControlName="tgianThienHdDc" />
                                 </div>
                             </div>
                         </nz-tab>
@@ -170,7 +174,8 @@
                                 <div nz-col nzSpan="6"></div>
                                 <div nz-col nzSpan="24">
                                     <label class="search__label">Nội dung điều chỉnh</label>
-                                    <textarea rows="3" nz-input class="search__input"></textarea>
+                                    <textarea rows="3" nz-input class="search__input"
+                                        formControlName="noiDung"></textarea>
                                 </div>
                                 <div nz-col [nzSpan]="6" class="btn-tep">
                                     <nz-form-control>

@@ -348,12 +348,13 @@ export class ThongTinComponent implements OnInit {
 
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
-    this.id = id;
+    this.idPhuLuc = id;
   }
 
   showChiTiet() {
     this.isViewPhuLuc = false;
     this.tabSelected = 'thong-tin-chung';
+    this.loadChiTiet(this.id);
   }
 
   openDialogBang(data) {

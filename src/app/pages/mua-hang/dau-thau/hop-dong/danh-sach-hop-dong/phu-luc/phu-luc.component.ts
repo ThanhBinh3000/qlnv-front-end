@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MESSAGE } from 'src/app/constants/message';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHopDong.service';
 
 @Component({
   selector: 'app-phu-luc',
@@ -19,6 +20,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 })
 export class PhuLucComponent implements OnInit {
   @Input() idPhuLuc: number;
+  @Input() detailHopDong: any = {};
   @Input() isViewPhuLuc: boolean;
   @Input() typeVthh: string;
   @Output()
@@ -33,23 +35,26 @@ export class PhuLucComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService
   ) {
     this.formPhuLuc = this.fb.group(
       {
-        phuLucSo: [null],
+        loaiVthh: [null],
+        cloaiVthh: [null],
+        soPluc: [null],
         ngayKy: [null],
-        ngayHieuLuc: [null],
+        ngayHluc: [null],
         veViec: [null],
-        soHdong: [null],
-        tenHdong: [null],
-        ngayHLDtdc: [null],
-        ngayHLDsdc: [null],
-        ngayHLTNtdc: [null],
-        ngayHLTNsdc: [null],
-        soNgaytdc: [null],
-        soNgaysdc: [null],
-        nDungdc: [null],
+        soHd: [null],
+        tenHd: [null],
+        tuNgayHlucTrc: [null],
+        denNgayHlucTrc: [null],
+        tuNgayHlucDc: [null],
+        denNgayHlucDc: [null],
+        tgianThienHdTrc: [null],
+        tgianThienHdDc: [null],
+        noiDung: [null],
         ghiChu: [null]
       }
     );
@@ -57,6 +62,44 @@ export class PhuLucComponent implements OnInit {
 
   ngOnInit() {
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
+    if (this.detailHopDong) {
+      this.formPhuLuc.patchValue({
+        loaiVthh: this.detailHopDong.loaiVthh,
+        cloaiVthh: this.detailHopDong.cloaiVthh,
+        soHd: this.detailHopDong.soHd ?? null,
+        tenHd: this.detailHopDong.tenHd ?? null,
+        denNgayHlucTrc: this.detailHopDong.denNgayHluc ?? null,
+        tuNgayHlucTrc: this.detailHopDong.tuNgayHluc ?? null,
+        tgianThienHdTrc: this.detailHopDong.soNgayThien ?? null,
+      })
+    }
+    if (!!this.idPhuLuc) {
+      this.loadPhuLuc(this.idPhuLuc)
+    }
+  }
+
+  async loadPhuLuc(id) {
+    if (id > 0) {
+      let res = await this.thongTinPhuLucHopDongService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.formPhuLuc.patchValue({
+            soPluc: data.soPluc ?? null,
+            ngayKy: data.ngayKy ?? null,
+            ngayHluc: data.ngayHluc ?? null,
+            veViec: data.veViec ?? null,
+            soHd: data.soHd ?? null,
+            tenHd: data.tenHd ?? null,
+            tuNgayHlucDc: data.tuNgayHlucDc ?? null,
+            denNgayHlucDc: data.denNgayHlucDc ?? null,
+            tgianThienHdDc: data.tgianThienHdDc ?? null,
+            noiDung: data.noiDung ?? null,
+            ghiChu: data.ghiChu ?? null
+          })
+        }
+      }
+    }
   }
 
   thongTinPhuLuc() {
@@ -111,55 +154,40 @@ export class PhuLucComponent implements OnInit {
     this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index)
   }
 
-  save() {
+  async save() {
     this.spinner.show();
     try {
       if (!this.formPhuLuc.value.ghiChu && this.formPhuLuc.value.ghiChu == '') {
         this.errorGhiChu = true;
-      }
-      else {
+      } else {
         let body = this.formPhuLuc.value;
-        console.log("🚀 ~ file: phu-luc.component.ts ~ line 122 ~ PhuLucComponent ~ save ~ body", body)
-        // body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
-        // body.fileDinhKems = this.fileDinhKem,
-        //   body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
-        //   body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
-        //   delete body.ngayHieuLuc;
-        // delete body.maHdong;
-        // delete body.tenCloaiVthh;
-        // delete body.tenVthh;
-
-        // body.idNthau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
-        // if (this.id > 0) {
-        //   let res = await this.thongTinHopDong.update(
-        //     body,
-        //   );
-        //   if (res.msg == MESSAGE.SUCCESS) {
-        //     if (!isOther) {
-        //       this.notification.success(
-        //         MESSAGE.SUCCESS,
-        //         MESSAGE.UPDATE_SUCCESS,
-        //       );
-        //       this.back();
-        //     }
-        //   } else {
-        //     this.notification.error(MESSAGE.ERROR, res.msg);
-        //   }
-        // } else {
-        //   let res = await this.thongTinHopDong.create(
-        //     body,
-        //   );
-        //   if (res.msg == MESSAGE.SUCCESS) {
-        //     if (!isOther) {
-        //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        //       this.back();
-        //     }
-        //   } else {
-        //     this.notification.error(MESSAGE.ERROR, res.msg);
-        //   }
-        // }
+        body.fileDinhKems = this.fileDinhKem;
+        if (this.idPhuLuc > 0) {
+          body.id = this.idPhuLuc;
+          let res = await this.thongTinPhuLucHopDongService.update(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS)
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } else {
+          let res = await this.thongTinPhuLucHopDongService.create(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+        this.spinner.hide();
       }
-      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
