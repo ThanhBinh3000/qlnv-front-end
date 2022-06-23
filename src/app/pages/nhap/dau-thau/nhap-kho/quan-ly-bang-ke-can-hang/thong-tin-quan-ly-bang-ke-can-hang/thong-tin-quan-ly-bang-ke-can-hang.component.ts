@@ -86,7 +86,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
-      this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -126,23 +125,23 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
 
   async bindingDataHangHoa(data) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
-      this.detail.loaiVthh = data.parent.ma;
-      this.detail.tenLoaiHangHoa = data.parent.ten;
-      this.detail.chungLoaiHangHoa = data.ma;
-      this.detail.tenChungLoaiHang = data.ten;
+      this.detail.maVatTuCha = data.parent.ma;
+      this.detail.tenVatTuCha = data.parent.ten;
+      this.detail.maVatTu = data.ma;
+      this.detail.tenVatTu = data.ten;
     }
     if (data.loaiHang == "VT") {
       if (data.cap == "3") {
-        this.detail.loaiVthh = data.parent.parent.ma;
-        this.detail.tenLoaiHangHoa = data.parent.parent.ten;
-        this.detail.chungLoaiHangHoa = data.parent.ma;
-        this.detail.tenChungLoaiHang = data.parent.ten;
+        this.detail.maVatTuCha = data.parent.parent.ma;
+        this.detail.tenVatTuCha = data.parent.parent.ten;
+        this.detail.maVatTu = data.parent.ma;
+        this.detail.tenVatTu = data.parent.ten;
       }
       if (data.cap == "2") {
-        this.detail.loaiVthh = data.parent.ma;
-        this.detail.tenLoaiHangHoa = data.parent.ten;
-        this.detail.chungLoaiHangHoa = data.ma;
-        this.detail.tenChungLoaiHang = data.ten;
+        this.detail.maVatTuCha = data.parent.ma;
+        this.detail.tenVatTuCha = data.parent.ten;
+        this.detail.maVatTu = data.ma;
+        this.detail.tenVatTu = data.ten;
       }
     }
   }
@@ -432,6 +431,10 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           this.changeDiemKho(true);
         }
       }
+    }
+    else {
+      this.detail.tenDvi = this.userInfo.TEN_DVI;
+      this.detail.maDvi = this.userInfo.MA_DVI;
     }
     this.updateEditCache();
   }
