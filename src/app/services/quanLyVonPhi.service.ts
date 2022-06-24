@@ -929,8 +929,12 @@ export class QuanLyVonPhiService extends BaseService {
   //tim kiem giao danh sách nội dung khoản mục
   xoaBanGhiGiaoBTC(id: any): Observable<any> {
     return this.httpClient.delete(
-      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
-      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa/' + id,
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa/' + id,
+    )
+  }
+  //tim kiem giao danh sách nội dung khoản mục
+  xoaBanGhiGiaoBTC1(id: any): Observable<any> {
+    return this.httpClient.delete(
       'http://192.168.1.105:8094/giao_du_toan/xoa/' + id,
 
     )
