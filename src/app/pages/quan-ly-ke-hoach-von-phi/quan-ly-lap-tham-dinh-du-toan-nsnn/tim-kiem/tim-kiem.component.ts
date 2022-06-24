@@ -58,11 +58,11 @@ export class TimKiemComponent implements OnInit {
 		},
 		{
 			id: Utils.TT_BC_8,
-			tenDm: "Từ chối",
+			tenDm: "Đơn vị cấp trên từ chối",
 		},
 		{
 			id: Utils.TT_BC_9,
-			tenDm: "Tiếp nhận",
+			tenDm: "Đơn vị cấp trên tiếp nhận",
 		},
 	];
 	//phan trang

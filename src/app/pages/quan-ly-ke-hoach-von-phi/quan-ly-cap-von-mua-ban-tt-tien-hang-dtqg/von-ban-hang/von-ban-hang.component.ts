@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DataService } from '../data.service';
 import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -230,20 +230,15 @@ export class VonBanHangComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (
-            this.trangThaiBanGhi == Utils.TT_BC_1 ||
-            this.trangThaiBanGhi == Utils.TT_BC_3 ||
-            this.trangThaiBanGhi == Utils.TT_BC_5
-        ) {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole)) && this.statusBtnParent) {
             this.statusGui = false;
         } else {
             this.statusGui = true;
         }
-        if (
-            this.trangThaiCha == Utils.TT_BC_1 ||
-            this.trangThaiCha == Utils.TT_BC_3 ||
-            this.trangThaiCha == Utils.TT_BC_5
-        ) {
+        if ((this.trangThaiCha == Utils.TT_BC_1 || this.trangThaiCha == Utils.TT_BC_3 || this.trangThaiCha == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole)) && !this.statusBtnParent) {
             this.statusNhan = false;
         } else {
             this.statusNhan = true;
@@ -253,23 +248,21 @@ export class VonBanHangComponent implements OnInit {
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
             checkChirld = true;
         }
-
-        let nguoiDangNhap = this.userInfo?.roles[0]?.code;
         const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
-        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
-        if (this.statusBtnParent){
-            this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, nguoiDangNhap);
+        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
+        if (this.statusBtnParent) {
+            this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
         } else {
             this.statusBtnCopy = true;
         }
         //
-        this.statusSaveParent = utils.getRoleSave(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
-        this.statusApproveParent = utils.getRoleApprove(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
-        this.statusTBPParent = utils.getRoleTBP(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
-        this.statusLDParent = utils.getRoleLD(this.trangThaiCha, !this.statusBtnParent, nguoiDangNhap);
+        this.statusSaveParent = utils.getRoleSave(this.trangThaiCha, !this.statusBtnParent, userRole);
+        this.statusApproveParent = utils.getRoleApprove(this.trangThaiCha, !this.statusBtnParent, userRole);
+        this.statusTBPParent = utils.getRoleTBP(this.trangThaiCha, !this.statusBtnParent, userRole);
+        this.statusLDParent = utils.getRoleLD(this.trangThaiCha, !this.statusBtnParent, userRole);
     }
 
     //upload file
@@ -361,7 +354,7 @@ export class VonBanHangComponent implements OnInit {
                     this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
                     let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-                    if (dVi && dVi?.parent?.maDvi == this.userInfo?.dvql) {
+                    if (dVi && dVi?.maDviCha == this.userInfo?.dvql) {
                         this.statusBtnParent = false;
                     } else {
                         this.statusBtnParent = true;
@@ -435,7 +428,7 @@ export class VonBanHangComponent implements OnInit {
                     }
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }
@@ -604,6 +597,9 @@ export class VonBanHangComponent implements OnInit {
     }
 
     close() {
+        if (!this.loai){ 
+            this.loai = "0";
+        }
         if (this.statusBtnParent) {
             this.router.navigate([
                 '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/'+this.loai

@@ -15,9 +15,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { ItemCongVan, ItemDataMau02 } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 
 export class ItemData {
@@ -210,20 +210,27 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole))) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
         let checkChirld = false;
         let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
             checkChirld = true;
         }
         const utils = new Utils();
-        this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        if (this.userInfo?.roles[0]?.code == '3' && this.soQdCv) {
+        this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
+        if (ROLE_CAN_BO.includes(userRole) && this.soQdCv) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
@@ -343,16 +350,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     this.soQdCv = data.data.soQdCv;
                     this.maGiao = data.data.maGiao;
                     this.namGiao = data.data.namGiao;
-                    if (
-                        this.trangThaiBanGhi == Utils.TT_BC_1 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_3 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_5 ||
-                        this.trangThaiBanGhi == Utils.TT_BC_8
-                    ) {
-                        this.status = false;
-                    } else {
-                        this.status = true;
-                    }
                     this.updateEditCache();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

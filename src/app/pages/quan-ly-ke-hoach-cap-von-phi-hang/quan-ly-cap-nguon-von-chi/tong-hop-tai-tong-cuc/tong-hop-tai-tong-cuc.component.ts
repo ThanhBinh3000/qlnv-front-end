@@ -9,18 +9,14 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
-import { TRANG_THAI_TIM_KIEM_CON } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
-import { ItemDataMau02 } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
@@ -133,10 +129,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
     statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnGuiDVCT: boolean = true;                   // trang thai nut gui don vi cap tren
-    statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
     statusBtnCopy: boolean = true;                      // trang thai copy
-    statusBtnPrint: boolean = true;                     // trang thai print
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -202,7 +195,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     this.donVis = res.data;
-                    this.cucKhuVucs = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
+                    this.cucKhuVucs = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -286,11 +279,9 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.trangThai == Utils.TT_BC_1 ||
-            this.trangThai == Utils.TT_BC_3 ||
-            this.trangThai == Utils.TT_BC_5 ||
-            this.trangThai == Utils.TT_BC_8 ||
-            this.trangThai == Utils.TT_BC_10) {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
@@ -301,22 +292,15 @@ export class TongHopTaiTongCucComponent implements OnInit {
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
         }
-        if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
             checkParent = true;
         }
-        let roleNguoiTao = this.userInfo?.roles[0]?.code;
-        if (roleNguoiTao != Utils.NHAN_VIEN){
-            this.status = true;
-        }
         const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnDVCT = utils.getRoleDVCT(this.trangThai, checkParent, roleNguoiTao);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThai, checkChirld, roleNguoiTao);
+        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
+        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
+        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, userRole);
+        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
+        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
     }
 
     //upload file
@@ -454,7 +438,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                     this.trangThai = mcn;
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }

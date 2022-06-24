@@ -10,7 +10,7 @@ import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { NGUON_BAO_CAO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -22,6 +22,7 @@ import { NGUON_BAO_CAO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils 
 export class TongHopComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: any;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -108,7 +109,7 @@ export class TongHopComponent implements OnInit {
 		} else {
 			this.status = true;
 			this.disable = true;
-			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN){
+			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)){
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -135,7 +136,8 @@ export class TongHopComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -272,7 +274,8 @@ export class TongHopComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
 		} else {
 			check = false;

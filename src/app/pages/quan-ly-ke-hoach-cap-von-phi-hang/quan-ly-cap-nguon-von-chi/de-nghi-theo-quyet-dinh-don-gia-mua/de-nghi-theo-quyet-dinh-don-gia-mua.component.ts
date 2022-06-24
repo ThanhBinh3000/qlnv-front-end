@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
 
@@ -96,12 +96,8 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     statusBtnDel: boolean;
     statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
     statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-    // statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnGuiDVCT: boolean = true;                   // trang thai nut gui don vi cap tren
-    statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
     statusBtnCopy: boolean = true;                      // trang thai copy
-    statusBtnPrint: boolean = true;                     // trang thai print
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -202,18 +198,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                 },
             );
         }
-        await this.danhMuc.dMDviTinh().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    this.dviTinhs = res.data?.content;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            },
-        );
 
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
@@ -263,11 +247,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.trangThai == Utils.TT_BC_1 ||
-            this.trangThai == Utils.TT_BC_3 ||
-            this.trangThai == Utils.TT_BC_5 ||
-            this.trangThai == Utils.TT_BC_8 ||
-            this.trangThai == Utils.TT_BC_10) {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
@@ -278,27 +260,18 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
         }
-        if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
             checkParent = true;
         }
-        let roleNguoiTao = this.userInfo?.roles[0]?.code;
-        if (roleNguoiTao != Utils.NHAN_VIEN){
-            this.status = true;
-        }
         const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
-        // this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        if (this.trangThai == Utils.TT_BC_2) {
-            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, roleNguoiTao);
+        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
+        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
+        if (this.trangThai == Utils.TT_BC_2){
+            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, userRole);
         } else {
-            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
+            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
         }
-
-        this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnDVCT = utils.getRoleDVCT(this.trangThai, checkParent, roleNguoiTao);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThai, checkChirld, roleNguoiTao);
+        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
     }
 
     //upload file
@@ -424,7 +397,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     this.trangThai = mcn;
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }

@@ -165,9 +165,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 
 	close() {
-        this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/0'
-        ])
+		this.location.back();
     }
 
 
