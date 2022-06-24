@@ -48,6 +48,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -73,6 +74,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.typeVthh == 'tat-ca') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;

@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -7,13 +8,16 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -43,6 +47,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   listDanhMucHang: any[] = [];
   listSoQuyetDinh: any[] = [];
 
+  taiLieuDinhKemList: any[] = [];
+
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -60,6 +66,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private uploadFileService: UploadFileService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) { }
 
   async ngOnInit() {
@@ -592,5 +600,59 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
 
   print() {
 
+  }
+
+  deleteTaiLieuDinhKemTag(data: any) {
+    if (!this.isView) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
+      );
+      this.detail.fileDinhKems = this.detail.fileDinhKems.filter((x) => x.idVirtual !== data.id);
+    }
+  }
+
+  openFile(event) {
+    if (!this.isView) {
+      let item = {
+        id: new Date().getTime(),
+        text: event.name,
+      };
+      if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
+        this.uploadFileService
+          .uploadFile(event.file, event.name)
+          .then((resUpload) => {
+            if (!this.detail.fileDinhKems) {
+              this.detail.fileDinhKems = [];
+            }
+            const fileDinhKem = new FileDinhKem();
+            fileDinhKem.fileName = resUpload.filename;
+            fileDinhKem.fileSize = resUpload.size;
+            fileDinhKem.fileUrl = resUpload.url;
+            fileDinhKem.idVirtual = item.id;
+            this.detail.fileDinhKems.push(fileDinhKem);
+            this.taiLieuDinhKemList.push(item);
+          });
+      }
+    }
+  }
+
+  downloadFileKeHoach(event) {
+    let body = {
+      "dataType": "",
+      "dataId": 0
+    }
+    switch (event) {
+      case 'tai-lieu-dinh-kem':
+        body.dataType = this.detail.fileDinhKems[0].dataType;
+        body.dataId = this.detail.fileDinhKems[0].dataId;
+        if (this.taiLieuDinhKemList.length > 0) {
+          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
+            saveAs(blob, this.detail.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.detail.fileDinhKems[0].fileName);
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

@@ -129,11 +129,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03')"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -159,7 +159,7 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -171,8 +171,7 @@
               <i class="icon htvbdh_tcdt_print"></i>
               <span>In</span>
             </button>
-            <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-              (click)="redirectToChiTiet(false, 0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

@@ -21,7 +21,7 @@
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản nhập đầy kho'" *ngIf="typeVthh != '02'">
     <ng-template nz-tab>
-      <quan-ly-phieu-nhap-day-kho></quan-ly-phieu-nhap-day-kho>
+      <quan-ly-phieu-nhap-day-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-day-kho>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Bảng kê nhập vật tư'" *ngIf="typeVthh == '02'">

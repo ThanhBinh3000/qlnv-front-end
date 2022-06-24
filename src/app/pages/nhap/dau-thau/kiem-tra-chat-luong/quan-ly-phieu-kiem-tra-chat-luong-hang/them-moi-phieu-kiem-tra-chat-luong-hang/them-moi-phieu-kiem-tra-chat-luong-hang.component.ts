@@ -25,6 +25,7 @@ import { Globals } from 'src/app/shared/globals';
 export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
+  @Input() isTatCa: boolean;
   @Input() typeVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
