@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, LOAI_VON, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -93,7 +93,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // them file vao danh sach
     handleUpload(): void {
-        this.fileList.forEach((file: any) => {    
+        this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             console.log({ id: id, fileName: file?.name });
             this.lstFiles.push({ id: id, fileName: file?.name });
@@ -134,7 +134,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     this.donVis = res.data;
-                    this.unitChilds = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
+                    this.unitChilds = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -152,7 +152,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             await this.dataSource.currentData.subscribe(obj => {
                 this.maCvUvTren = obj?.maCvUv;
             })
-            if (!this.maCvUvTren){
+            if (!this.maCvUvTren) {
                 this.close();
             }
             this.spinner.show();
@@ -196,11 +196,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.trangThai == Utils.TT_BC_1 ||
-            this.trangThai == Utils.TT_BC_3 ||
-            this.trangThai == Utils.TT_BC_5 ||
-            this.trangThai == Utils.TT_BC_8 ||
-            this.trangThai == Utils.TT_BC_10) {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
+            && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
@@ -211,16 +209,16 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
         }
-        if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
             checkParent = true;
         }
-        let roleNguoiTao = this.userInfo?.roles[0]?.code;
         const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, roleNguoiTao);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, roleNguoiTao);
+        this.statusBtnDel = utils.getRoleDel(this.trangThai, checkChirld, userRole);
+        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
+        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
+        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, userRole);
+        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
+        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
     }
 
     //upload file
@@ -299,7 +297,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh,
-                    this.lstFiles = data.data.lstFiles;
+                        this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                     this.updateEditCache();
                 } else {
@@ -327,12 +325,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThai = mcn;
                     this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                    if (mcn == Utils.TT_BC_3 || mcn == Utils.TT_BC_5) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }
-                    if (mcn == Utils.TT_BC_7){
+                    if (mcn == Utils.TT_BC_7) {
                         this.capToanBo();
                     }
                 } else {
@@ -368,7 +366,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien){
+        if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -376,7 +374,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         let checkSave = true;
 
         this.lstCtietBcao.forEach(item => {
-            if (this.editCache[item.id].edit){
+            if (this.editCache[item.id].edit) {
                 checkSave = false;
                 return;
             }
@@ -393,7 +391,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         var lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT){
+            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -405,13 +403,13 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             })
         })
 
-        if (!checkMoneyRange){
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
-        
+
         lstCtietBcaoTemp.forEach(item => {
-            if (item.id?.length == 38){
+            if (item.id?.length == 38) {
                 item.id = null;
             }
         })
@@ -451,7 +449,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 async data => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                        this.getDetailReport();
+                        await this.getDetailReport();
                         this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -556,7 +554,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     saveEdit(id: string): void {
         if (!this.editCache[id].data.dviNhan ||
             !this.editCache[id].data.loai ||
-            (!this.editCache[id].data.ttChoDviHuong && this.editCache[id].data.ttChoDviHuong !== 0) ) {
+            (!this.editCache[id].data.ttChoDviHuong && this.editCache[id].data.ttChoDviHuong !== 0)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -601,12 +599,15 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     close() {
+        if (!this.loai){
+            this.loai = "0";
+        }
         this.router.navigate([
             'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-cap-von-ung-von-cho-don-vi-cap-duoi/' + this.loai
         ])
     }
 
-    async capToanBo(){
+    async capToanBo() {
         var maCvUvDuoi: string;
         await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
             (res) => {
@@ -669,32 +670,32 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     async showDialogCopy() {
         let requestReport = {
-			loaiTimKiem: "0",
-			maCapUngVonTuCapTren: "",
-			maDvi: this.userInfo?.dvql,
-			maLoai: "1",
-			ngayLap: "",
-			ngayTaoDen: "",
-			ngayTaoTu: "",
-			paggingReq: {
-				limit: 1000,
-				page: 1,
-			},
-			trangThais: [Utils.TT_BC_7],
-		};
+            loaiTimKiem: "0",
+            maCapUngVonTuCapTren: "",
+            maDvi: this.userInfo?.dvql,
+            maLoai: "1",
+            ngayLap: "",
+            ngayTaoDen: "",
+            ngayTaoTu: "",
+            paggingReq: {
+                limit: 1000,
+                page: 1,
+            },
+            trangThais: [Utils.TT_BC_7],
+        };
         let danhSach = [];
-		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-					danhSach = data.data.content;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
+        await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    danhSach = data.data.content;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
         let obj = {
             maCvUv: this.maCvUvTren,
             danhSach: danhSach,
@@ -732,7 +733,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             },
         );
 
-        if (!this.maDviTien){
+        if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -740,7 +741,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         let checkSave = true;
 
         this.lstCtietBcao.forEach(item => {
-            if (this.editCache[item.id].edit){
+            if (this.editCache[item.id].edit) {
                 checkSave = false;
                 return;
             }
@@ -752,7 +753,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         var lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT){
+            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -765,11 +766,11 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             })
         })
 
-        if (!checkMoneyRange){
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
-        
+
         // gui du lieu trinh duyet len server
         let request = JSON.parse(JSON.stringify({
             id: null,

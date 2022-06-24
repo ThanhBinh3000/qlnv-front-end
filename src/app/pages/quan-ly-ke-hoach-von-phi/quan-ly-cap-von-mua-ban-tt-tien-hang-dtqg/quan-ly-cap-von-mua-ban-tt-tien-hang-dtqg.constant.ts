@@ -1,50 +1,50 @@
 import { QuanLyCapVonMuaBanTtTienHangDtqg } from './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.type';
 import { MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_CAP_VON_MUA_BAN_TT_TIEN_HANG_DTQG } from '../../../constants/routerUrl';
-import { Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 
 export const NHAN_VIEN_CC = {
 	unit: Utils.CHI_CUC,
-	role: Utils.NHAN_VIEN,
+	role: ROLE_CAN_BO,
 }
 
 export const TRUONG_BP_CC = {
 	unit: Utils.CHI_CUC,
-	role: Utils.TRUONG_BO_PHAN,
+	role: ROLE_TRUONG_BO_PHAN,
 }
 
 export const LANH_DAO_CC = {
 	unit: Utils.CHI_CUC,
-	role: Utils.LANH_DAO,
+	role: ROLE_LANH_DAO,
 }
 
 export const NHAN_VIEN_CKV = {
 	unit: Utils.CUC_KHU_VUC,
-	role: Utils.NHAN_VIEN,
+	role: ROLE_CAN_BO,
 }
 
 export const TRUONG_BP_CKV = {
 	unit: Utils.CUC_KHU_VUC,
-	role: Utils.TRUONG_BO_PHAN,
+	role: ROLE_TRUONG_BO_PHAN,
 }
 
 export const LANH_DAO_CKV = {
 	unit: Utils.CUC_KHU_VUC,
-	role: Utils.LANH_DAO,
+	role: ROLE_LANH_DAO,
 }
 
 export const NHAN_VIEN_TC = {
 	unit: Utils.TONG_CUC,
-	role: Utils.NHAN_VIEN,
+	role: ROLE_CAN_BO,
 }
 
 export const TRUONG_BP_TC = {
 	unit: Utils.TONG_CUC,
-	role: Utils.TRUONG_BO_PHAN,
+	role: ROLE_TRUONG_BO_PHAN,
 }
 
 export const LANH_DAO_TC = {
 	unit: Utils.TONG_CUC,
-	role: Utils.LANH_DAO,
+	role: ROLE_LANH_DAO,
 }
 
 export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanTtTienHangDtqg[] = [

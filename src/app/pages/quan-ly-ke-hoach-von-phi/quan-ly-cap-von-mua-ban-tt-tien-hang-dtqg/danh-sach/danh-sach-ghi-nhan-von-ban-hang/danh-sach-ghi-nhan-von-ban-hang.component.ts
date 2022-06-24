@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -20,6 +20,7 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: any;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -68,7 +69,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 
 		this.searchFilter.denNgay = new Date();
 		let newDate = new Date();
-		newDate.setMonth(newDate.getMonth() -1);
+		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
@@ -76,7 +77,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
-					this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
+					this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -93,7 +94,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 			this.status = false;
 			this.disable = true;
 
-			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -108,7 +109,8 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -182,7 +184,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/'+ this.loai + '/' + id,
+			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/' + this.loai + '/' + id,
 		])
 	}
 
@@ -209,7 +211,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
 		if ((item.trangThaiDviCha == Utils.TT_BC_1 || item.trangThaiDviCha == Utils.TT_BC_3 || item.trangThaiDviCha == Utils.TT_BC_5) &&
-			this.userInfo?.username == item.nguoiTao) {
+			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
 		} else {
 			check = false;

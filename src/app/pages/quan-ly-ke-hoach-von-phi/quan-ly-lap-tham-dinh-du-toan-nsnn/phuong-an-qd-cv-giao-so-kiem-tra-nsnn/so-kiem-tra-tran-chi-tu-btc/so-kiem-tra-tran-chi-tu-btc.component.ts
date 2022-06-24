@@ -14,7 +14,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
@@ -47,7 +47,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     maPa: string;
     maPaBtc: string;
     namPa: number;
-    soQdCv: ItemCongVan;
+    soQdCv!: ItemCongVan;
     trangThaiBanGhi: string = '1';
     newDate = new Date();
     maDviTien: string;
@@ -211,7 +211,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.id) {
+        let userRole = this.userInfo?.roles[0]?.code;
+        if (this.id && !ROLE_CAN_BO.includes(userRole)) {
             this.status = true;
         } else {
             this.status = false;
@@ -223,7 +224,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             checkChirld = true;
         }
         const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
         if (this.id) {
             this.statusBtnSave = true;
         }
@@ -239,8 +240,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 this.statusBtnEdit = false;
             }
         }
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
+        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
     }
 
     //upload file
@@ -471,6 +472,11 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         let file: any = this.fileDetail;
         if (file) {
             request.soQdCv = await this.uploadFile(file);
+        }
+
+        if (!request.soQdCv){
+            this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
+            return;
         }
         this.spinner.show();
         if (!this.id) {

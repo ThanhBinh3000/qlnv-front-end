@@ -3,6 +3,6 @@ export type QuanLyCapNguonVonChiNSNN = {
   title: string;
   description: string;
   url: string;
-  role?: any[];
+  Role?: any[];
   isDisabled?: boolean;
 };

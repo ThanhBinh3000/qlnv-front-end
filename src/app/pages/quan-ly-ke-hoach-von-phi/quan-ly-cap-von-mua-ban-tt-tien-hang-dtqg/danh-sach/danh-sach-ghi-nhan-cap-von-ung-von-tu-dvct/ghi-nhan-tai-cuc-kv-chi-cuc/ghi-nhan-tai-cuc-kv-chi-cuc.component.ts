@@ -6,7 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
 import { DataService } from '../../../data.service';
@@ -20,6 +20,7 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../../quan-ly-cap-von-mua-ban-tt-tie
 export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: any;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -81,7 +82,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -109,7 +110,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 			maCapUngVonChoCapDuoi: "",
 			ngayTaoTu: "",
 			ngayTaoDen: "",
-			maDvi: this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.parent?.maDvi,
+			maDvi: this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.maDviCha,
 			trangThai: Utils.TT_BC_7,
 			paggingReq: {
 				limit: 1000,
@@ -135,7 +136,8 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -150,10 +152,6 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		this.statusNew = true;
-		// let trangThais = [];
-		// if (this.searchFilter.trangThai) {
-		// 	trangThais = [this.searchFilter.trangThai];
-		// }
 		let requestReport = {
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maDvi: this.userInfo?.dvql,
@@ -168,7 +166,6 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 			trangThai: this.searchFilter.trangThai,
 		};
 		this.spinner.show();
-		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
 		await this.quanLyVonPhiService.timKiemVonMuaBan(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
@@ -206,21 +203,6 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		this.onSubmit();
 	}
 
-	// taoMoi() {
-	// 	this.statusNew = false;
-	// 	if (!this.searchFilter.maCvUv) {
-	// 		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-	// 		return;
-	// 	}
-	// 	let obj = {
-	// 		maCvUv: this.searchFilter.maCvUv,
-	// 	}
-	// 	this.dataSource.changeData(obj);
-	// 	this.router.navigate([
-	// 		'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc',
-	// 	]);
-	// }
-
 	xemChiTiet(id: string) {
 		this.router.navigate([
 			'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc/' + this.loai + '/' + id,
@@ -249,8 +231,8 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			this.userInfo?.username == item.nguoiTao) {
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) 
+			 && ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
 		} else {
 			check = false;

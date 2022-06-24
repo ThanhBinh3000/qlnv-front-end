@@ -95,8 +95,8 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
       });
     }
     this.QuanLyCapVonNguonChiNsnnList.forEach(data => {
-			data.role.forEach(item => {
-				if (this.userInfo?.roles[0]?.code == item.role && this.capDvi == item.unit){
+			data.Role.forEach(item => {
+				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
 					data.isDisabled = true;
 					return;
 				}

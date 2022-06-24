@@ -84,7 +84,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 		);
 		this.QuanLyLapThamDinhDuToanNSNNList.forEach(data => {
 			data.unRole.forEach(item => {
-				if (this.userInfo?.roles[0]?.code == item.role && this.capDvi == item.unit){
+				if (item?.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
 					data.isDisabled = true;
 					return;
 				}
