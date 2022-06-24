@@ -293,14 +293,6 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    // if (!isView) {
-    //   let urlChiTiet = this.router.url + '/thong-tin'
-    //   this.router.navigate([urlChiTiet, id,]);
-    // }
-    // else {
-    //   let urlChiTiet = this.router.url + '/xem-chi-tiet'
-    //   this.router.navigate([urlChiTiet, id,]);
-    // }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

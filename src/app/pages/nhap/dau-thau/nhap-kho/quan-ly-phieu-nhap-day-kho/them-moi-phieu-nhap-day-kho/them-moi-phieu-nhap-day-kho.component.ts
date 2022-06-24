@@ -25,7 +25,6 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   @Input() id: number;
-  // @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;

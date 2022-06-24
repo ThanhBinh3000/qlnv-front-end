@@ -56,6 +56,7 @@ export class FileDinhKem {
   fileSize: string;
   fileUrl: string;
   id: number;
+  idVirtual: number;
 }
 
 export class ThongTinChung {

@@ -17,9 +17,9 @@ import { ThongTinBienBanGiaoNhanComponent } from './bien-ban-giao-nhan/thong-tin
 import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
 import { ThongTinBienBanGuiHangComponent } from './bien-ban-gui-hang/thong-tin-bien-ban-gui-hang/thong-tin-bien-ban-gui-hang.component';
 import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
-import { ThongTinBienBanKetThucNhapKhoComponent } from '../vat-tu/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
 import { ThongTinPhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/thong-tin-phieu-nhap-kho-tam-gui/thong-tin-phieu-nhap-kho-tam-gui.component';
+import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 
 @NgModule({
   declarations: [
