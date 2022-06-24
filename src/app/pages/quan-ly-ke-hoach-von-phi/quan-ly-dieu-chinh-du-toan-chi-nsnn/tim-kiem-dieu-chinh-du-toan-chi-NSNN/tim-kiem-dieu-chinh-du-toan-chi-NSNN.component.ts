@@ -1,4 +1,4 @@
-import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN } from './../../../../Utility/utils';
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -122,23 +122,32 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.maDviTao = this.userInfo?.dvql;
     // this.trangThai = '1'
 
-    if (this.userRole == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
+    //  check va lay gia tri role trong list role
+    let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
+    let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
+    let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
+
+    if (this.userRole == roleUserCB[0]) {
 			this.status = false;
 			this.trangThai = Utils.TT_BC_1;
 			this.searchFilter.loaiTimKiem = '0';
-			this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
+			this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
 			this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
-		} else {
+		}
+    else {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
+			if (this.userRole == roleUserTPB[0]) {
 				this.trangThai = Utils.TT_BC_2;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
-			} else {
+			} else if (this.userRole == roleUserLD[0]){
 				this.trangThai = Utils.TT_BC_4;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
-			}
+			} else {
+        this.trangThai = null;
+        this.searchFilter.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6];
+      }
 		}
     this.onSubmit();
   }

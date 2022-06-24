@@ -275,11 +275,11 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
 
   // luu
   async save() {
-    debugger
-    if (this.trangThai = '2') {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.TRANG_THAI_TIEP_NHAN);
-      return this.getStatusName()
-    }
+
+    // if (this.trangThai = '2') {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGE.TRANG_THAI_TIEP_NHAN);
+    //   return this.getStatusName()
+    // }
 
     let request = {
       id: this.id,
@@ -288,7 +288,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
       maLoai: "1"
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

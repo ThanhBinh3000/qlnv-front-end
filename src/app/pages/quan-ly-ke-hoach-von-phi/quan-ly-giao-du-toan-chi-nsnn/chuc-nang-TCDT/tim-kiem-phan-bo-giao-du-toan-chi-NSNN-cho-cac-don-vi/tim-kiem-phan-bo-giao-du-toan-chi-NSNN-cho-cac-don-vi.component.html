@@ -73,8 +73,8 @@
             <tr>
               <th width="60px">STT</th>
               <th width="150px">Mã phương án</th>
-              <th width="150px">Số QĐ</th>
-              <th width="150px">Ngày lập</th>
+              <!-- <th width="150px">Số QĐ</th> -->
+              <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
               <th width="150px">Trạng thái</th>
             </tr>
@@ -87,9 +87,9 @@
                   {{ item.maPa}}
                 </a>
               </td>
-              <td>
+              <!-- <td>
                 {{item.fileSoQdCv?.fileName}}
-              </td>
+              </td> -->
               <td>
                 {{item.ngayTao}}
               </td>
@@ -98,6 +98,19 @@
               </td>
               <td>
                 {{getStatusName(item.trangThai)}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id, item.maLoaiDan)">
+                  <!-- <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span> -->
+                    Xem
+                </button>
+                <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <span>Xóa</span>
+                </button>
+
               </td>
             </tr>
           </tbody>

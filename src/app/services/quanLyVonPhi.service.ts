@@ -316,7 +316,7 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   giaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.103:8094/giao_du_toan/them-moi',
+      'http://192.168.1.105:8094/giao_du_toan/them-moi',
       request,
     );
   }
@@ -931,7 +931,8 @@ export class QuanLyVonPhiService extends BaseService {
   xoaBanGhiGiaoBTC(id: any): Observable<any> {
     return this.httpClient.delete(
       // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
-      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/xoa/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa/' + id,
+      'http://192.168.1.105:8094/giao_du_toan/xoa/' + id,
 
     )
   }

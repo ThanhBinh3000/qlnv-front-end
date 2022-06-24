@@ -1,5 +1,3 @@
-import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,7 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -19,7 +17,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { ItemCongVan, ItemDataMau02 } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 
 
 export class ItemData {
@@ -178,7 +177,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.newDate.toISOString().slice(0, 16);
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -235,7 +234,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     const utils = new Utils();
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     if (this.id) {
-      this.statusBtnSave = true;
+      this.statusBtnSave = false;
     }
     if (!this.id) {
       this.statusBtnNew = true;
@@ -324,7 +323,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -368,7 +367,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();
@@ -502,7 +501,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     }
     this.spinner.show();
     if (!this.id) {
-      this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+      this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -525,7 +524,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       );
     }
     else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -946,10 +945,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   async linkToPaPbo() {
     let listCtietDvi: any[] = [];
     let maPaCha = this.maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    let maPa
+    await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
-          this.maPa = res.data;
+          maPa = res.data;
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
           return;
@@ -996,7 +996,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maPa: this.maPa,
+      maPa: maPa,
       maPaCha: maPaCha,
       namPa: this.namPa,
       maPhanGiao: "2",
@@ -1005,7 +1005,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       thuyetMinh: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+    this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -1026,10 +1026,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   async linkToPaGiaoDC() {
     let listCtietDvi: any[] = [];
     let maPaCha = this.maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    let maPa
+    await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
-          this.maPa = res.data;
+          maPa = res.data;
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
           return;
@@ -1076,7 +1077,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maPa: this.maPa,
+      maPa: maPa,
       maPaCha: maPaCha,
       namPa: this.namPa,
       maPhanGiao: "2",
@@ -1085,7 +1086,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       thuyetMinh: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+    this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -1175,7 +1176,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     console.log(response);
 
 		var maBcaoNew: string;
-		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+		await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
          maBcaoNew = res.data;
@@ -1216,7 +1217,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       soQd: this.soQd,
 		};
 
-		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+		this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

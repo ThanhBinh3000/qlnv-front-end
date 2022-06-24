@@ -72,7 +72,7 @@
               <th nzWidth="200px">Ngày tạo</th>
               <th nzWidth="150px">Năm báo cáo</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
-              <th colspan="2"></th>
+              <th colspan="2" [hidden]="status"></th>
             </tr>
           </thead>
           <tbody>
@@ -92,7 +92,7 @@
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
-              <td>
+              <td [hidden]="status">
                 <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
                   <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
