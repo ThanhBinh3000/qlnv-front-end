@@ -38,46 +38,61 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     private dauThauGoiThauService: dauThauGoiThauService,
     private modal: NzModalService
   ) {
+    const yearNow = new Date().getUTCFullYear();
     this.formGoiThau = this.fb.group({
-      idGoiThau: [''],
-      tenGoiThau: [''],
-      soQdPD: [''],
-      ngayQd: [''],
-      maDvi: [''],
-      tenDvi: [''],
-      loaiVthh: [''],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      tgianPhanh: ['', [Validators.required]],
-      tgianTbao: ['', [Validators.required]],
-      tgianDthau: ['', [Validators.required]],
-      tgianMthau: ['', [Validators.required]],
-      tgianNhang: ['', [Validators.required]],
-      soLuong: [''],
-      dViTinh: ['Tấn'],
-      tgianDongThau: [''],
-      tgianMoThau: [''],
-      tgianThien: [''],
-      giaGoiThau: [''],
-      donGia: [''],
-      tongTien: [''],
-      tChuanCluong: [''],
-      ghiChu: [''],
-      dgiaHdong: [''],
-      VAT: [''],
-      dgianHdongSauThue: [''],
-      giaHdongSauThue: [''],
-      giaHdongTruocThue: [''],
-      ngayKy: [''],
-      nhaThauTthao: ['']
+      namKhoach: [yearNow],
+      soQdPD: [null],
+      trichYeu: [null],
+      ngayQd: [null],
+      ngayHluc: [null],
+      canCu: [null],
+      loaiVthh: [null],
+      cLoaiVthh: [null],
+      hthucLcnt: [null],
+      pthucLcnt: [null],
+      loaiHdong: [null],
+      nguonVon: [null],
+      tgianPhanh: [null],
+      tgianDthau: [null],
+      tgianMthau: [null],
+      tgianNhang: [null],
+      ghiChu: [null]
+      // tenGoiThau: [''],
+      // maDvi: [''],
+      // tenDvi: [''],
+      // loaiVthh: [''],
+      // hthucLcnt: ['', [Validators.required]],
+      // pthucLcnt: ['', [Validators.required]],
+      // loaiHdong: ['', [Validators.required]],
+      // nguonVon: ['', [Validators.required]],
+      // tgianPhanh: ['', [Validators.required]],
+      // tgianTbao: ['', [Validators.required]],
+      // tgianDthau: ['', [Validators.required]],
+      // tgianMthau: ['', [Validators.required]],
+      // tgianNhang: ['', [Validators.required]],
+      // soLuong: [''],
+      // dViTinh: ['Tấn'],
+      // tgianDongThau: [''],
+      // tgianMoThau: [''],
+      // tgianThien: [''],
+      // giaGoiThau: [''],
+      // donGia: [''],
+      // tongTien: [''],
+      // tChuanCluong: [''],
+      // ghiChu: [''],
+      // dgiaHdong: [''],
+      // VAT: [''],
+      // dgianHdongSauThue: [''],
+      // giaHdongSauThue: [''],
+      // giaHdongTruocThue: [''],
+      // ngayKy: [''],
+      // nhaThauTthao: ['']
     });
-    this.formDauThau = this.fb.group({
-      tenDvi: [''],
-      soQdPD: [''],
-      loaiVthh: ['']
-    })
+    // this.formDauThau = this.fb.group({
+    //   tenDvi: [''],
+    //   soQdPD: [''],
+    //   loaiVthh: ['']
+    // })
   }
   // timeDefaultValue = setHours(new Date(), 0);
   tabSelected: string = 'phuong-an-tong-hop';
@@ -191,8 +206,9 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+          const data = res.data;
           console.log("🚀 ~ file: themmoi-dieuchinh.component.ts ~ line 194 ~ ThemMoiDieuChinhComponent ~ loadChiTietCanCu ~ res.data", res.data)
-          // this.formDetailHopDong.patchValue({
+          // this.formGoiThau.patchValue({
           //   canCu: this.detail.canCu ?? null,
           //   idGoiThau: this.detail.idGoiThau ?? null,
           //   maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
