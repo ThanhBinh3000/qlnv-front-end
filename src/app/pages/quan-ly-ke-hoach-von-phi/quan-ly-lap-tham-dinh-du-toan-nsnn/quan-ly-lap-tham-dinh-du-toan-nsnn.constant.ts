@@ -1,47 +1,51 @@
 import { QuanLyLapThamDinhDuToanNSNN } from './quan-ly-lap-tham-dinh-du-toan-nsnn.type';
 import { MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN } from '../../../constants/routerUrl';
+import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 
-//**************** */ hang so cho cac cap
-//cap chi cuc
-export const CHI_CUC = '3';
-//cap cuc khu vuc
-export const CUC_KHU_VUC = '2';
-//cap tong cuc
-export const TONG_CUC = '1';
+export const NHAN_VIEN_CC = {
+	unit: Utils.CHI_CUC,
+	role: ROLE_CAN_BO,
+}
 
-//**************** */ role cua cac can bo
-//nhan vien
-export const NHAN_VIEN = '3';
-//truong bo phan
-export const TRUONG_BP = '2';
-//lanh dao
-export const LANH_DAO = '1';
+export const TRUONG_BP_CC = {
+	unit: Utils.CHI_CUC,
+	role: ROLE_TRUONG_BO_PHAN,
+}
 
-//**************** */ cac trang thai cua bao cao
-//trang thai dang soan
-export const TT_DANG_SOAN = '1';
-//trang thai trinh duyet
-export const TT_TRINH_DUYET = '2';
-//trang thai truong bo phan tu choi
-export const TT_TBP_TU_CHOI = '3';
-//trang thai truong bo phan chap nhan
-export const TT_TBP_CHAP_NHAN = '4';
-//trang thai lanh dao tu choi
-export const TT_LD_TU_CHOI = '5';
-//trang thai lanh dao chap nhan
-export const TT_LD_CHAP_NHAN = '6';
-//trang thai don vi cap tren tu choi
-export const TT_TU_CHOI = '7';
-//trang thai don vi cap tren chap nhan
-export const TT_CHAP_NHAN = '8';
+export const LANH_DAO_CC = {
+	unit: Utils.CHI_CUC,
+	role: ROLE_LANH_DAO,
+}
 
-//**************** */ cac trang thai cua bieu mau
-//trang thai moi hoac chua danh gia
-export const TT_MOI = '1';
-//trang thai dang nhap lieu hoac not ok
-export const TT_NOT_OK = '2';
-//trang thai hoan tat nhap lieu hoac ok
-export const TT_OK = '3';
+export const NHAN_VIEN_CKV = {
+	unit: Utils.CUC_KHU_VUC,
+	role: ROLE_CAN_BO,
+}
+
+export const TRUONG_BP_CKV = {
+	unit: Utils.CUC_KHU_VUC,
+	role: ROLE_TRUONG_BO_PHAN,
+}
+
+export const LANH_DAO_CKV = {
+	unit: Utils.CUC_KHU_VUC,
+	role: ROLE_LANH_DAO,
+}
+
+export const NHAN_VIEN_TC = {
+	unit: Utils.TONG_CUC,
+	role: ROLE_CAN_BO,
+}
+
+export const TRUONG_BP_TC = {
+	unit: Utils.TONG_CUC,
+	role: ROLE_TRUONG_BO_PHAN,
+}
+
+export const LANH_DAO_TC = {
+	unit: Utils.TONG_CUC,
+	role: ROLE_LANH_DAO,
+}
 
 
 export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] = [
@@ -59,10 +63,7 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Phê duyệt dự toán NSNN hàng năm và KHTC 03 năm',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/phe-duyet`,
 		unRole: [
-			{
-				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
-			},
+			NHAN_VIEN_CC,
 		],
 		isDisabled: false,
 	},
@@ -72,34 +73,13 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Tổng hợp số liệu dự toán NSNN hàng năm và KHTC 03 năm',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tong-hop`,
 		unRole: [
-			{
-				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": LANH_DAO,
-			},
-			{
-				"unit": CUC_KHU_VUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CUC_KHU_VUC,
-				"role": LANH_DAO,
-			},
-			{
-				"unit": LANH_DAO,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": LANH_DAO,
-				"role": LANH_DAO,
-			},
+			NHAN_VIEN_CC,
+			TRUONG_BP_CC,
+			LANH_DAO_CC,
+			TRUONG_BP_CKV,
+			LANH_DAO_CKV,
+			TRUONG_BP_TC,
+			LANH_DAO_TC,
 		],
 		isDisabled: false,
 	},
@@ -109,30 +89,12 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Danh sách số kiểm tra trần chi giao từ Bộ tài chính',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/0`,
 		unRole: [
-			{
-				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": LANH_DAO,
-			},
-			{
-				"unit": CUC_KHU_VUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": CUC_KHU_VUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CUC_KHU_VUC,
-				"role": LANH_DAO,
-			},
+			NHAN_VIEN_CC,
+			TRUONG_BP_CC,
+			LANH_DAO_CC,
+			NHAN_VIEN_CKV,
+			TRUONG_BP_CKV,
+			LANH_DAO_CKV,
 		],
 		isDisabled: false,
 	},
@@ -142,18 +104,9 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN tại các đơn vị',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1`,
 		unRole: [
-			{
-				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": LANH_DAO,
-			},
+			NHAN_VIEN_CC,
+			TRUONG_BP_CC,
+			LANH_DAO_CC,
 		],
 		isDisabled: false,
 	},
@@ -163,18 +116,9 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Danh sách số kiểm tra chi NSNN tại các đơn vị',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-so-kiem-tra-chi-nsnn`,
 		unRole: [
-			{
-				"unit": CHI_CUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": CHI_CUC,
-				"role": LANH_DAO,
-			},
+			NHAN_VIEN_CC,
+			TRUONG_BP_CC,
+			LANH_DAO_CC,
 		],
 		isDisabled: false,
 	},
@@ -184,18 +128,9 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		description: 'Danh sách nhận số kiểm tra chi NSNN tại các đơn vị',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/nhan-so-kiem-tra-chi-nsnn`,
 		unRole: [
-			{
-				"unit": TONG_CUC,
-				"role": NHAN_VIEN,
-			},
-			{
-				"unit": TONG_CUC,
-				"role": TRUONG_BP,
-			},
-			{
-				"unit": TONG_CUC,
-				"role": LANH_DAO,
-			},
+			NHAN_VIEN_TC,
+			TRUONG_BP_TC,
+			LANH_DAO_TC,
 		],
 		isDisabled: false,
 	},

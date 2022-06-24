@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, LOAI_DE_NGHI, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { DataService } from '../data.service';
@@ -20,6 +20,7 @@ import { DataService } from '../data.service';
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: any;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -111,34 +112,12 @@ export class TimKiemComponent implements OnInit {
 
 		if (this.loai == "0") {
 			this.status = false;
-			if (this.capDvi == Utils.TONG_CUC) {
-				this.trangThais = [
-					{
-						id: Utils.TT_BC_1,
-						tenDm: "Đang soạn",
-					},
-					{
-						id: Utils.TT_BC_2,
-						tenDm: "Trình duyệt",
-					},
-					{
-						id: Utils.TT_BC_5,
-						tenDm: "Lãnh đạo từ chối",
-					},
-					{
-						id: Utils.TT_BC_7,
-						tenDm: "Lãnh đạo duyệt",
-					},
-				]
-			}
 		} else {
 			this.status = true;
 			this.searchFilter.trangThai = Utils.TT_BC_2;
 		}
 
-
-
-		if (this.capDvi == Utils.TONG_CUC && (this.loai == "0" || this.userInfo?.roles[0]?.code == Utils.LANH_DAO)) {
+		if (this.capDvi == Utils.TONG_CUC && (this.loai == "0" || ROLE_LANH_DAO.includes(this.userRole))) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
 			this.searchFilter.loaiDn = Utils.MUA_VTU;
 			this.disable = true;
@@ -156,7 +135,8 @@ export class TimKiemComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -285,7 +265,8 @@ export class TimKiemComponent implements OnInit {
 
 	checkDeleteReport(item: any): boolean {
 		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
 		} else {
 			check = false;

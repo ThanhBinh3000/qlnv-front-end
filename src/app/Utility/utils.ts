@@ -30,7 +30,7 @@ export class Utils {
     public static TT_BC_3 = "3"; // Trưởng BP từ chối,
     public static TT_BC_4 = "4"; // Trưởng BP duyệt,
     public static TT_BC_5 = "5"; // Lãnh đạo từ chối,
-    public static TT_BC_6 = "6"; // Lãnh đạo duyệt,
+    public static TT_BC_6 = "6"; // Lãnh đạo phê duyệt,
     public static TT_BC_7 = "7"; // Gửi ĐV cấp trên,
     public static TT_BC_8 = "8"; // ĐV cấp trên từ chối,
     public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
@@ -61,135 +61,268 @@ export class Utils {
     public static UNG_VON = "2";
     //role xoa
     //role xoa
-    public static btnRoleDel = {
+    // public static btnRoleDel = {
+    //     "status": ['1', '3', '5', '8', '10'],
+    //     "unit": [1, 2],
+    //     "role": ['3'],
+    // }
+
+    // //role luu
+    // public static btnRoleSave = {
+    //     "status": ['1', '3', '5', '8', '10'],
+    //     "unit": [1, 2],
+    //     "role": ['3'],
+    // }
+
+    // //role trinh duyet
+    // public static btnRoleApprove = {
+    //     "status": ['1'],
+    //     "unit": [1, 2],
+    //     "role": ['3'],
+    // }
+
+    // //role truong bo phan
+    // public static btnRoleTBP = {
+    //     "status": ['2'],
+    //     "unit": [1, 2],
+    //     "role": ['2'],
+    // }
+
+    // //role lanh dao
+    // public static btnRoleLD = {
+    //     "status": ['4'],
+    //     "unit": [1, 2],
+    //     "role": ['1'],
+    // }
+
+    // //role gui don vi cap tren
+    // public static btnRoleGuiDVCT = {
+    //     "status": ['6'],
+    //     "unit": [1, 2],
+    //     "role": ['1'],
+    // }
+
+    // //role don vi cap tren
+    // public static btnRoleDVCT = {
+    //     "status": ['7'],
+    //     "unit": [1, 2],
+    //     "role": ['3'],
+    // }
+
+    // //role lanh dao dieu chinh
+    // public static btnRoleLDDC = {
+    //     "status": ['4'],
+    //     "unit": [1, 2],
+    //     "role": ['1'],
+    // }
+
+    // //role copy
+    // public static btnRoleCOPY = {
+    //     "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
+    //     "unit": [1, 2],
+    //     "role": ['3'],
+    // }
+
+    // //role in
+    // public static btnRolePRINT = {
+    //     "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
+    //     "unit": [1, 2],
+    //     "role": ['1', '2', '3'],
+    // }
+
+    // //role copy
+    // public static btnRoleOK = {
+    //     "statusBaoCao": ['2', '4', '7'],
+    //     "statusChiTiet": ['2'],
+    //     "unit": ['1']
+    // }
+
+    // //get role xoa
+    // public getRoleDel(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
+    // }
+
+    // //get role luu
+    // public getRoleSave(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleSave.status.includes(status) && unit == true && Utils.btnRoleSave.role.includes(role));
+    // }
+
+    // //get role trinh duyet
+    // public getRoleApprove(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleApprove.status.includes(status) && unit == true && Utils.btnRoleApprove.role.includes(role));
+    // }
+
+    // //get role truong bo phan
+    // public getRoleTBP(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleTBP.status.includes(status) && unit == true && Utils.btnRoleTBP.role.includes(role));
+    // }
+
+    // //get role button lanh dao
+    // public getRoleLD(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleLD.status.includes(status) && unit == true && Utils.btnRoleLD.role.includes(role));
+    // }
+
+    // //get role button gui don vi cap tren
+    // public getRoleGuiDVCT(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleGuiDVCT.status.includes(status) && unit == true && Utils.btnRoleGuiDVCT.role.includes(role));
+    // }
+
+    // //get role button don vi cap tren
+    // public getRoleDVCT(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleDVCT.status.includes(status) && unit == true && Utils.btnRoleDVCT.role.includes(role));
+    // }
+
+    // //role lanh dao dieu chinh
+    // public getRoleLDDC(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleLDDC.status.includes(status) && unit == true && Utils.btnRoleLDDC.role.includes(role));
+    // }
+
+    // //role copy
+    // public getRoleCopy(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRoleCOPY.status.includes(status) && unit == true && Utils.btnRoleCOPY.role.includes(role));
+    // }
+
+    // //role in
+    // public getRolePrint(status: any, unit: any, role: any) {
+    //     return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
+    // }
+
+    // //role OK/not Ok
+    // public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
+    //     return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
+    // }
+
+
+    //role xoa
+    public btnRoleDel = {
         "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
-        "role": ['3'],
+        "role": ROLE_CAN_BO,
     }
 
     //role luu
-    public static btnRoleSave = {
+    public btnRoleSave = {
         "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
-        "role": ['3'],
+        "role": ROLE_CAN_BO,
     }
 
     //role trinh duyet
-    public static btnRoleApprove = {
+    public btnRoleApprove = {
         "status": ['1'],
         "unit": [1, 2],
-        "role": ['3'],
+        "role": ROLE_CAN_BO,
     }
 
     //role truong bo phan
-    public static btnRoleTBP = {
+    public btnRoleTBP = {
         "status": ['2'],
         "unit": [1, 2],
-        "role": ['2'],
+        "role": ROLE_TRUONG_BO_PHAN,
     }
 
     //role lanh dao
-    public static btnRoleLD = {
+    public btnRoleLD = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": ['1'],
+        "role": ROLE_LANH_DAO,
     }
 
     //role gui don vi cap tren
-    public static btnRoleGuiDVCT = {
+    public btnRoleGuiDVCT = {
         "status": ['6'],
         "unit": [1, 2],
-        "role": ['1'],
+        "role": ROLE_LANH_DAO,
     }
 
     //role don vi cap tren
-    public static btnRoleDVCT = {
+    public btnRoleDVCT = {
         "status": ['7'],
         "unit": [1, 2],
-        "role": ['3'],
+        "role": ROLE_CAN_BO,
     }
 
     //role lanh dao dieu chinh
-    public static btnRoleLDDC = {
+    public btnRoleLDDC = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": ['1'],
+        "role": ROLE_LANH_DAO,
     }
 
     //role copy
-    public static btnRoleCOPY = {
+    public btnRoleCOPY = {
         "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
-        "role": ['3'],
+        "role": ROLE_CAN_BO,
     }
 
     //role in
-    public static btnRolePRINT = {
+    public btnRolePRINT = {
         "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
-        "role": ['1', '2', '3'],
+        "role": ROLE_CAN_BO.concat(ROLE_TRUONG_BO_PHAN).concat(ROLE_LANH_DAO),
     }
 
     //role copy
-    public static btnRoleOK = {
+    public btnRoleOK = {
         "statusBaoCao": ['2', '4', '7'],
         "statusChiTiet": ['2'],
-        "unit": ['1']
+        "unit": ROLE_LANH_DAO
     }
 
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
+        return !(this.btnRoleDel.status.includes(status) && unit == true && this.btnRoleDel.role.includes(role));
     }
 
     //get role luu
     public getRoleSave(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleSave.status.includes(status) && unit == true && Utils.btnRoleSave.role.includes(role));
+        return !(this.btnRoleSave.status.includes(status) && unit == true && this.btnRoleSave.role.includes(role));
     }
 
     //get role trinh duyet
     public getRoleApprove(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleApprove.status.includes(status) && unit == true && Utils.btnRoleApprove.role.includes(role));
+        return !(this.btnRoleApprove.status.includes(status) && unit == true && this.btnRoleApprove.role.includes(role));
     }
 
     //get role truong bo phan
     public getRoleTBP(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleTBP.status.includes(status) && unit == true && Utils.btnRoleTBP.role.includes(role));
+        return !(this.btnRoleTBP.status.includes(status) && unit == true && this.btnRoleTBP.role.includes(role));
     }
 
     //get role button lanh dao
     public getRoleLD(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleLD.status.includes(status) && unit == true && Utils.btnRoleLD.role.includes(role));
+        return !(this.btnRoleLD.status.includes(status) && unit == true && this.btnRoleLD.role.includes(role));
     }
 
     //get role button gui don vi cap tren
     public getRoleGuiDVCT(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleGuiDVCT.status.includes(status) && unit == true && Utils.btnRoleGuiDVCT.role.includes(role));
+        return !(this.btnRoleGuiDVCT.status.includes(status) && unit == true && this.btnRoleGuiDVCT.role.includes(role));
     }
 
     //get role button don vi cap tren
     public getRoleDVCT(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleDVCT.status.includes(status) && unit == true && Utils.btnRoleDVCT.role.includes(role));
+        return !(this.btnRoleDVCT.status.includes(status) && unit == true && this.btnRoleDVCT.role.includes(role));
     }
 
     //role lanh dao dieu chinh
     public getRoleLDDC(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleLDDC.status.includes(status) && unit == true && Utils.btnRoleLDDC.role.includes(role));
+        return !(this.btnRoleLDDC.status.includes(status) && unit == true && this.btnRoleLDDC.role.includes(role));
     }
 
     //role copy
     public getRoleCopy(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleCOPY.status.includes(status) && unit == true && Utils.btnRoleCOPY.role.includes(role));
+        return !(this.btnRoleCOPY.status.includes(status) && unit == true && this.btnRoleCOPY.role.includes(role));
     }
 
     //role in
     public getRolePrint(status: any, unit: any, role: any) {
-        return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
+        return !(this.btnRolePRINT.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
     }
 
     //role OK/not Ok
     public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
-        return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
+        return !(this.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && this.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
     // lay quyen
     public getRole(id: number) {
@@ -258,7 +391,7 @@ export class Utils {
                 statusName = "Lãnh đạo từ chối"
                 break;
             case Utils.TT_BC_6:
-                statusName = "Lãnh đạo duyệt"
+                statusName = "Lãnh đạo phê duyệt"
                 break;
             case Utils.TT_BC_7:
                 statusName = "Gửi ĐV cấp trên"
@@ -582,7 +715,7 @@ export const TRANG_THAI = [
     },
     {
         id: 6,
-        tenDm: 'Lãnh đạo duyệt'
+        tenDm: 'Lãnh đạo phê duyệt'
     },
     {
         id: 7,
@@ -629,20 +762,16 @@ export const TRANG_THAI_TIM_KIEM = [
         tenDm: 'Lãnh đạo từ chối'
     },
     {
-        id: "6",
-        tenDm: 'Lãnh đạo duyệt'
-    },
-    {
         id: "7",
-        tenDm: 'Gửi ĐV cấp trên'
+        tenDm: 'Lãnh đạo phê duyệt'
     },
     {
         id: "8",
-        tenDm: 'Từ chối'
+        tenDm: 'Đơn vị cấp trên từ chối'
     },
     {
         id: "9",
-        tenDm: 'Tiếp nhận'
+        tenDm: 'Đơn vị cấp trên tiếp nhận'
     },
     // {
     //     id: "10",

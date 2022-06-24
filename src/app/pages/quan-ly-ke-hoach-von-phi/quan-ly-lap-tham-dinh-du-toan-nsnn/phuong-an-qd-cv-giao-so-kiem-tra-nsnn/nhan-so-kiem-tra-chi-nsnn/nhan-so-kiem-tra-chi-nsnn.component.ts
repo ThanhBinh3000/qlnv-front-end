@@ -63,7 +63,6 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         this.searchFilter.maDviNhan = this.userInfo?.dvql;
 
         this.searchFilter.denNgay = new Date();
-        console.log(this.searchFilter.denNgay);
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
@@ -71,8 +70,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
-                    this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
-                    console.log(this.donVis);
+                    this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
