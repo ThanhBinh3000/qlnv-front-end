@@ -330,6 +330,8 @@ export class BaoCao04anComponent implements OnInit {
         let obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
+            baoCaos : baoCao,
+            tab : '7',
         }
 
         const modalIn = this.modal.create({
