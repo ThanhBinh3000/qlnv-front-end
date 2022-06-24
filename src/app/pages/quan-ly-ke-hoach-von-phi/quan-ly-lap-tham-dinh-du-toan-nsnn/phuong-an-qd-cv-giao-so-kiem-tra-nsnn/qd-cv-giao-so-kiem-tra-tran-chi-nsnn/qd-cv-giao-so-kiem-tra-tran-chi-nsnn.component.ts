@@ -255,10 +255,16 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             request.soQdCv = await this.uploadFile(file);
         }
 
+        if (!request.soQdCv){
+            this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
+            return;
+        }
+
         if (!this.id) {
             this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    this.dong();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
@@ -20,7 +20,7 @@ export class PheDuyetComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
 	//thong tin tim kiem
-	userRole: string;
+	userRole: any;
 	maDviTao: string;
 	searchFilter = {
 		loaiTimKiem: "",
@@ -62,11 +62,11 @@ export class PheDuyetComponent implements OnInit {
 	async ngOnInit() {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+
 		this.maDviTao = this.userInfo?.dvql;
 		this.searchFilter.denNgay = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.tuNgay = this.newDate;
-		this.userRole = this.userInfo?.roles[0].code;
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(
 			data => {
@@ -80,11 +80,11 @@ export class PheDuyetComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
-		if (this.userRole == Utils.NHAN_VIEN) {
+		if (ROLE_CAN_BO.includes(this.userRole)) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
-			this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
+			this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
 			this.trangThais.push({
 				id: Utils.TT_BC_7,
 				tenDm: "Mới",
@@ -95,7 +95,7 @@ export class PheDuyetComponent implements OnInit {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (this.userRole == Utils.TRUONG_BO_PHAN) {
+			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else {
@@ -112,7 +112,8 @@ export class PheDuyetComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0].code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -132,7 +133,7 @@ export class PheDuyetComponent implements OnInit {
 				return;
 			}
 		}
-		if (this.userRole != Utils.NHAN_VIEN){
+		if (!ROLE_CAN_BO.includes(this.userRole)){
 			this.searchFilter.loaiTimKiem = "0";
 		} else {
 			if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao){

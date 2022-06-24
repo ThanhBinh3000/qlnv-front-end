@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { DataService } from '../../data.service';
@@ -21,6 +21,7 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: any;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -81,7 +82,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.userInfo?.roles[0]?.code == Utils.NHAN_VIEN) {
+			if (ROLE_CAN_BO.includes(this.userRole)) {
 				this.searchFilter.trangThai = Utils.TT_BC_7;
 				this.trangThais = [
 					{
@@ -90,7 +91,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 					}
 				]
 			} else {
-				if (this.userInfo?.roles[0]?.code == Utils.TRUONG_BO_PHAN) {
+				if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
 					this.searchFilter.trangThai = Utils.TT_BC_2;
 				} else {
 					this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -135,7 +136,8 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
