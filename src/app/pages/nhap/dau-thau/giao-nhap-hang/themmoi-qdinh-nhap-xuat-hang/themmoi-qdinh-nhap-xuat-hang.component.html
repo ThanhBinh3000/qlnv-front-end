@@ -42,6 +42,11 @@
   <div class="contentDetail">
     <div class="main-content">
       <div class="title-chi-tieu">
+        <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+          Dự Thảo
+        </span>
+        <span *ngIf="id > 0"
+          [ngClass]="thongTinTrangThai(quyetDinhNhapXuat.trangThai)">{{quyetDinhNhapXuat.tenTrangThai}}</span>
         <span class="title-form">Thông tin quyết định giao nhiệm vụ nhập hàng</span>
       </div>
       <nz-card class="flex-card p-lr16">
@@ -119,7 +124,8 @@
               </nz-form-item>
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu" icon="icon htvbdh_tcdt_tep"
                 [data]="taiLieuDinhKemList" [trangThai]="quyetDinhNhapXuat.trangThai" type="file" [disable]="isDetail()"
-                (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"
+                [showDowloadFile]="false">
               </multiple-tag>
             </div>
           </div>

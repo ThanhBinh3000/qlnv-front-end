@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -22,7 +22,8 @@ import dayjs from 'dayjs';
 export class DanhSachGiaoNhapHangComponent implements OnInit {
   @Input()
   typeVthh: string;
-
+  @Output()
+  getCount = new EventEmitter<any>();
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -80,9 +81,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     private donViService: DonviService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
-    private router: Router,
     private modal: NzModalService,
-    private route: ActivatedRoute,
     public userService: UserService,
   ) {
   }
@@ -98,19 +97,19 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      let res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          var item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      // let res = await this.donViService.layTatCaDonVi();
+      // this.optionsDonVi = [];
+      // if (res.msg == MESSAGE.SUCCESS) {
+      //   for (let i = 0; i < res.data.length; i++) {
+      //     var item = {
+      //       ...res.data[i],
+      //       labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+      //     };
+      //     this.optionsDonVi.push(item);
+      //   }
+      // } else {
+      //   this.notification.error(MESSAGE.ERROR, res.msg);
+      // }
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -121,6 +120,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   getTitleVthh() {
+    console.log(this.typeVthh);
+
     this.loaiVthh = convertTenVthh(this.typeVthh);
     if (this.typeVthh == 'thoc') {
       this.maVthh = "0101";
@@ -173,6 +174,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
+    this.getCount.emit();
     await this.search()
   }
   clearFilter() {
@@ -194,6 +196,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "loaiQd": null,
       "maDvi": null,
       "maVthh": null,
+      "loaiVthh": this.typeVthh ?? null,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "ngayQd": null,
       "orderBy": null,
@@ -280,6 +283,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
                 MESSAGE.DELETE_SUCCESS,
               );
               this.search();
+              this.getCount.emit();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -302,28 +306,29 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           "denNgayQd": this.searchFilter.ngayQuyetDinh
             ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
             : null,
-          "loaiQd": "",
-          "maDvi": "",
-          "maVthh": "",
-          "namNhap": this.searchFilter.namNhap,
-          "ngayQd": "",
-          "orderBy": "",
-          "orderDirection": "",
+          "loaiQd": null,
+          "maDvi": null,
+          "maVthh": null,
+          "loaiVthh": this.typeVthh ?? null,
+          "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
+          "ngayQd": null,
+          "orderBy": null,
+          "orderDirection": null,
           "paggingReq": {
-            "limit": null,
-            "orderBy": "",
-            "orderType": "",
-            "page": null
+            "limit": this.pageSize,
+            "orderBy": null,
+            "orderType": null,
+            "page": this.page - 1
           },
-          "soHd": "",
-          "soQd": this.searchFilter.soQd.trim(),
-          "str": "",
-          "trangThai": "",
+          "soHd": null,
+          "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
+          "str": null,
+          "trangThai": null,
           "tuNgayQd": this.searchFilter.ngayQuyetDinh
             ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
             : null,
-          "trichYeu": this.searchFilter.trichYeu,
-          "veViec": ''
+          "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+          "veViec": null
         }
         this.quyetDinhGiaoNhapHangService
           .exportList(body)
@@ -460,6 +465,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

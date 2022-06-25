@@ -109,7 +109,6 @@
                         </ng-template>
                       </td>
                       <td></td>
-                      <td></td>
                     </tr>
                     <tr *ngFor="let data of basicTable.data; let i = index">
                       <th width="45px">
@@ -126,10 +125,10 @@
                         <a (click)="redirectToThongTin(data.id, true)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
-                        <a (click)="redirectToThongTin(data.id, false)">
+                        <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc()">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="xoaItem(data)">
+                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc()">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -157,11 +156,11 @@
               </nz-tab>
             </nz-tabset>
             <div class="action-giao-chi-tieu">
-              <button type="button" class="btn btn-do" (click)="deleteSelect()">
+              <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
               </button>
-              <button type="button" class="btn btn-sub">
+              <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isCuc()">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
               </button>
@@ -177,6 +176,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
+  <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+    [typeVthh]="typeVthh">
   </app-themmoi-qdinh-nhap-xuat-hang>
 </div>

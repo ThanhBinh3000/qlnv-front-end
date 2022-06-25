@@ -3,7 +3,7 @@ import {
   FormBuilder, FormGroup,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -18,7 +18,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { UserLogin } from 'src/app/models/userlogin';
-import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
@@ -32,6 +31,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   @Input() id: number;
+  @Input() typeVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -63,7 +63,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   listNam: any[] = [];
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private modal: NzModalService,
     private donViService: DonviService,
@@ -90,9 +89,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     if (this.id > 0) {
       this.loadThongTinQdNhapXuatHang(this.id);
     }
-    this.loadDonVi("chi-cuc");
-    this.loadDonVi("all");
-    this.loadDanhMucHang();
+    this.formData.patchValue({
+      donVi: this.userInfo.TEN_DVI,
+      maDonVi: this.userInfo.MA_DVI,
+    });
     this.newObjectQdNhapXuat();
   }
 
@@ -364,6 +364,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
     this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
+    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
     this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
     if (this.quyetDinhNhapXuat.id > 0) {
       const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();
@@ -377,6 +378,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       quyetDinhNhapXuatInput.soHd = this.quyetDinhNhapXuat.soHd;
       quyetDinhNhapXuatInput.namNhap = this.quyetDinhNhapXuat.namNhap;
       quyetDinhNhapXuatInput.veViec = this.quyetDinhNhapXuat.veViec;
+      quyetDinhNhapXuatInput.loaiVthh = this.quyetDinhNhapXuat.loaiVthh;
       quyetDinhNhapXuatInput.trichYeu = this.quyetDinhNhapXuat.trichYeu;
       quyetDinhNhapXuatInput.maDvi = this.quyetDinhNhapXuat.maDvi;
       this.quyetDinhNhapXuatService
@@ -485,7 +487,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           );
           this.initForm();
           this.formData.patchValue({
-            soQdinh: this.quyetDinhNhapXuat.soQd?.split('/')[0]
+            soQdinh: this.quyetDinhNhapXuat.soQd?.split('/')[0],
+            donVi: this.quyetDinhNhapXuat.tenDvi,
+            maDonVi: this.quyetDinhNhapXuat.maDvi,
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -649,5 +653,17 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     return (
       this.isViewDetail
     );
+  }
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
   }
 }
