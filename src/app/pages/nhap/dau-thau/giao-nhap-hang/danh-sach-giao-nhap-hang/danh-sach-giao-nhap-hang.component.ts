@@ -49,10 +49,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   selectedCanCu: any = null;
   searchFilter = {
-    soQD: '',
+    soQd: '',
     ngayQuyetDinh: '',
     namNhap: '',
-    noiDungCongVan: ''
+    trichYeu: ''
   };
   listNam: any[] = [];
   routerUrl: string;
@@ -74,6 +74,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   dataTableAll: any[] = [];
   allChecked = false;
   indeterminate = false;
+  isViewDetail: boolean;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -164,23 +165,22 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  redirectToThongTin(id: number) {
+  redirectToThongTin(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
-  redirectToChiTiet(id: number) {
 
-  }
   async showList() {
     this.isDetail = false;
     await this.search()
   }
   clearFilter() {
     this.searchFilter = {
-      soQD: '',
+      soQd: '',
       ngayQuyetDinh: '',
       namNhap: '',
-      noiDungCongVan: ''
+      trichYeu: ''
     }
     this.search();
   }
@@ -191,27 +191,28 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "denNgayQd": this.searchFilter.ngayQuyetDinh
         ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
         : null,
-      "loaiQd": "",
-      "maDvi": "",
-      "maVthh": this.maVthh,
-      "namNhap": this.searchFilter.namNhap,
-      "ngayQd": "",
-      "orderBy": "",
-      "orderDirection": "",
+      "loaiQd": null,
+      "maDvi": null,
+      "maVthh": null,
+      "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
+      "ngayQd": null,
+      "orderBy": null,
+      "orderDirection": null,
       "paggingReq": {
         "limit": this.pageSize,
-        "orderBy": "",
-        "orderType": "",
+        "orderBy": null,
+        "orderType": null,
         "page": this.page - 1
       },
-      "soHd": "",
-      "soQd": this.searchFilter.soQD.trim(),
-      "str": "",
-      "trangThai": "",
+      "soHd": null,
+      "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
+      "str": null,
+      "trangThai": null,
       "tuNgayQd": this.searchFilter.ngayQuyetDinh
         ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
         : null,
-      "veViec": this.searchFilter.noiDungCongVan.trim()
+      "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+      "veViec": null
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -315,13 +316,14 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
             "page": null
           },
           "soHd": "",
-          "soQd": this.searchFilter.soQD.trim(),
+          "soQd": this.searchFilter.soQd.trim(),
           "str": "",
           "trangThai": "",
           "tuNgayQd": this.searchFilter.ngayQuyetDinh
             ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
             : null,
-          "veViec": this.searchFilter.noiDungCongVan.trim()
+          "trichYeu": this.searchFilter.trichYeu,
+          "veViec": ''
         }
         this.quyetDinhGiaoNhapHangService
           .exportList(body)
@@ -382,7 +384,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }
         });

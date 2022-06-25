@@ -8,14 +8,17 @@ export class QuyetDinhNhapXuat {
     maDvi: string;
     ngayHluc: string;
     ngayKy: string;
+    ngayQdinh: string;
     soHd: string;
     soQd: string;
     veViec: string;
+    trichYeu: string;
     fileDinhKems: Array<FileDinhKem>;
     detail: Array<DetailQuyetDinhNhapXuat>;
     tenDonVi: string;
     trangThai: string;
     hopDongId: number;
+    namNhap: number;
     constructor(
         fileDinhKemReqs: Array<FileDinhKem> = [],
         details: Array<DetailQuyetDinhNhapXuat> = []
@@ -40,4 +43,5 @@ export class DetailQuyetDinhNhapXuat {
     thoiGianNhapKhoMuonNhat: string;
     isEdit: boolean;
     stt: number;
+    chungLoaiHh: string;
 }

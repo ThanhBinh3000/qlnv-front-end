@@ -14,13 +14,13 @@
               </div>
               <div nz-col nzSpan="5">
                 <label class="search__label">Số quyết định</label>
-                <nz-input-group nzAddOnAfter="/KH-CDTVT">
-                  <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định" />
-                </nz-input-group>
+                <!-- <nz-input-group nzAddOnAfter="/KH-CDTVT"> -->
+                <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
+                <!-- </nz-input-group> -->
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Trích yếu</label>
-                <input nz-input [(ngModel)]="searchFilter.noiDungCongVan" />
+                <input nz-input [(ngModel)]="searchFilter.trichYeu" />
               </div>
               <div nz-col nzSpan="5">
                 <label class="search__label">Ngày quyết định</label>
@@ -101,8 +101,8 @@
                       </td>
                       <td>
                         <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                            (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                            (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                         </nz-input-group>
                         <ng-template #suffixTemplateInfo>
                           <i nz-icon nzType="search"></i>
@@ -118,15 +118,15 @@
                       </th>
                       <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                       <td>{{ data.soQd }}</td>
-                      <td>{{ data.ngayQdinh }}</td>
+                      <td>{{ data.ngayQdinh | date: 'dd/MM/YYYY'}}</td>
                       <td>{{ data.namNhap }}</td>
-                      <td>{{ data.veViec }}</td>
+                      <td>{{ data.trichYeu }}</td>
                       <td>{{ data.tenTrangThai }}</td>
                       <td class="text-right">
-                        <a (click)="redirectToThongTin(data.id)">
+                        <a (click)="redirectToThongTin(data.id, true)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
-                        <a (click)="redirectToThongTin(data.id)">
+                        <a (click)="redirectToThongTin(data.id, false)">
                           <i class="fa fa-pencil"></i>
                         </a>
                         <a (click)="xoaItem(data)">
@@ -177,6 +177,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()">
+  <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
   </app-themmoi-qdinh-nhap-xuat-hang>
 </div>

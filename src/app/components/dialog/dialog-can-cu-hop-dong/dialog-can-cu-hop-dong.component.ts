@@ -14,7 +14,7 @@ import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhap
 export class DialogCanCuHopDongComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
-  page: number = 0;
+  page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
@@ -69,11 +69,11 @@ export class DialogCanCuHopDongComponent implements OnInit {
         "limit": this.pageSize,
         "orderBy": "",
         "orderType": "",
-        "page": this.page
+        "page": this.page - 1
       },
       "soHd": this.text,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayKy": ""
     }
     let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
