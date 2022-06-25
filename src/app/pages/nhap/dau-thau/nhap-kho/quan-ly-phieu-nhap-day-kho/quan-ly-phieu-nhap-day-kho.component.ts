@@ -132,7 +132,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     let param =
     {
       "maDvi": this.userInfo.MA_DVI,
-      "maHang": this.isTatCa ? null : this.maVthh,
+      "maVatTuCha": this.isTatCa ? null : this.maVthh,
       "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
       "ngayKetThucNhapDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
       "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
@@ -301,7 +301,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       try {
         let body = {
           "maDvi": this.userInfo.MA_DVI,
-          "maHang": this.isTatCa ? null : this.maVthh,
+          "maVatTuCha": this.isTatCa ? null : this.maVthh,
           "ngayKetThucNhapDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
           "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
           "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
