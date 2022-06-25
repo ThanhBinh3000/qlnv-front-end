@@ -85,8 +85,11 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     try {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
-      this.detail.maDvi = this.userInfo.MA_DVI;
+      if (this.id == 0) {
+        this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+        this.detail.tenDvi = this.userInfo.TEN_DVI;
+        this.detail.maDvi = this.userInfo.MA_DVI;
+      }
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -126,23 +129,23 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
 
   async bindingDataHangHoa(data) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
-      this.detail.loaiVthh = data.parent.ma;
-      this.detail.tenLoaiHangHoa = data.parent.ten;
-      this.detail.chungLoaiHangHoa = data.ma;
-      this.detail.tenChungLoaiHang = data.ten;
+      this.detail.maVatTuCha = data.parent.ma;
+      this.detail.tenVatTuCha = data.parent.ten;
+      this.detail.maVatTu = data.ma;
+      this.detail.tenVatTu = data.ten;
     }
     if (data.loaiHang == "VT") {
       if (data.cap == "3") {
-        this.detail.loaiVthh = data.parent.parent.ma;
-        this.detail.tenLoaiHangHoa = data.parent.parent.ten;
-        this.detail.chungLoaiHangHoa = data.parent.ma;
-        this.detail.tenChungLoaiHang = data.parent.ten;
+        this.detail.maVatTuCha = data.parent.parent.ma;
+        this.detail.tenVatTuCha = data.parent.parent.ten;
+        this.detail.maVatTu = data.parent.ma;
+        this.detail.tenVatTu = data.parent.ten;
       }
       if (data.cap == "2") {
-        this.detail.loaiVthh = data.parent.ma;
-        this.detail.tenLoaiHangHoa = data.parent.ten;
-        this.detail.chungLoaiHangHoa = data.ma;
-        this.detail.tenChungLoaiHang = data.ten;
+        this.detail.maVatTuCha = data.parent.ma;
+        this.detail.tenVatTuCha = data.parent.ten;
+        this.detail.maVatTu = data.ma;
+        this.detail.tenVatTu = data.ten;
       }
     }
   }
@@ -337,10 +340,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -692,7 +693,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     try {
       let body = {
         "chiTiets": this.detail.chiTiets,
-        "diaChi": this.detail.diaChi,
+        "diaDiem": this.detail.diaDiem,
         "diaChiNguoiGiao": this.detail.diaChiNguoiGiao,
         "donViTinh": this.detail.donViTinh,
         "id": this.id,
@@ -704,8 +705,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "maLhKho": this.detail.maLhKho,
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDvi,
-        "maThuKho": this.detail.maThuKho,
-        "ngayNhap": this.detail?.ngayNhapXuat ? dayjs(this.detail?.ngayNhapXuat).format('YYYY-MM-DD') : null,
+        "thuKho": this.detail.thuKho,
+        "ngayNhap": this.detail?.ngayNhap ? dayjs(this.detail?.ngayNhap).format('YYYY-MM-DD') : null,
         "qlPhieuNhapKhoLtId": this.detail.qlPhieuNhapKhoLtId,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soBangKe": this.detail.soBangKe,
@@ -713,6 +714,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "soKho": this.detail.soKho,
         "tenHang": null,
         "tenNguoiGiaoHang": this.detail.tenNguoiGiaoHang,
+        "maVatTu": this.detail.maVatTu,
+        "maVatTuCha": this.detail.maVatTuCha,
         "thoiGianGiaoHang": null
       };
       if (this.id > 0) {

@@ -15,8 +15,27 @@ export class QuanLyPhieuNhapDayKhoService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/tra-cuu`;
-    return this.httpClient.post<any>(url, body).toPromise();
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt?`;
+    if (body.maDvi)
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.ngayKetThucNhapTu)
+      url_ += 'ngayKetThucNhapTu=' + encodeURIComponent('' + body.ngayKetThucNhapTu) + '&';
+    if (body.ngayKetThucNhapDen)
+      url_ += 'ngayKetThucNhapDen=' + encodeURIComponent('' + body.ngayKetThucNhapDen) + '&';
+    if (body.ngayNhapDayKhoDen)
+      url_ += 'ngayNhapDayKhoDen=' + encodeURIComponent('' + body.ngayNhapDayKhoDen) + '&';
+    if (body.ngayNhapDayKhoTu)
+      url_ += 'ngayNhapDayKhoTu=' + encodeURIComponent('' + body.ngayNhapDayKhoTu) + '&';
+    if (body.soBienBan)
+      url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
+    if (body.soQdNhap)
+      url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+    if (body.pageSize)
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+    return this.httpClient.get<any>(url_).toPromise();
   }
 
   chiTiet(id: number): Promise<any> {
@@ -25,7 +44,7 @@ export class QuanLyPhieuNhapDayKhoService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
@@ -39,13 +58,18 @@ export class QuanLyPhieuNhapDayKhoService extends BaseService {
     return this.httpClient.delete<any>(url).toPromise();
   }
 
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/status`;
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/ket-xuat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/export/lis`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }
