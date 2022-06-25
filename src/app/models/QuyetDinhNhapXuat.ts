@@ -6,16 +6,22 @@ export class QuyetDinhNhapXuat {
     ldoTuchoi: string;
     loaiQd: string;
     maDvi: string;
+    tenDvi: string;
     ngayHluc: string;
     ngayKy: string;
+    ngayQdinh: string;
     soHd: string;
     soQd: string;
     veViec: string;
+    trichYeu: string;
+    loaiVthh: string;
     fileDinhKems: Array<FileDinhKem>;
     detail: Array<DetailQuyetDinhNhapXuat>;
     tenDonVi: string;
     trangThai: string;
+    tenTrangThai: string;
     hopDongId: number;
+    namNhap: number;
     constructor(
         fileDinhKemReqs: Array<FileDinhKem> = [],
         details: Array<DetailQuyetDinhNhapXuat> = []
@@ -40,4 +46,5 @@ export class DetailQuyetDinhNhapXuat {
     thoiGianNhapKhoMuonNhat: string;
     isEdit: boolean;
     stt: number;
+    chungLoaiHh: string;
 }

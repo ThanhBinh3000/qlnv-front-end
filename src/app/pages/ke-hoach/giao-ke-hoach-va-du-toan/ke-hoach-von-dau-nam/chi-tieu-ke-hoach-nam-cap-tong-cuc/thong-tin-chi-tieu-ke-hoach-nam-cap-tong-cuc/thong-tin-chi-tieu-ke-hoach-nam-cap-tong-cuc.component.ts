@@ -15,6 +15,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DanhSachQuyetDinhPhanBoComponent } from 'src/app/components/dialog/dialog-ds-qd-phan-bo/dialog-ds-qd-phan-bo.component';
 import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
@@ -2473,22 +2474,35 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
   openFileCanCu(event) {
-    let item = {
-      id: new Date().getTime(),
-      text: event.name,
-    };
-    if (!this.canCuList.find((x) => x.text === item.text)) {
-      this.uploadFileService
-        .uploadFile(event.file, event.name)
-        .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          this.thongTinChiTieuKeHoachNam.canCus.push(fileDinhKem);
-          this.canCuList.push(item);
-        });
-    }
+    // let item = {
+    //   id: new Date().getTime(),
+    //   text: event.name,
+    // };
+    // if (!this.canCuList.find((x) => x.text === item.text)) {
+    //   this.uploadFileService
+    //     .uploadFile(event.file, event.name)
+    //     .then((resUpload) => {
+    //       const fileDinhKem = new FileDinhKem();
+    //       fileDinhKem.fileName = resUpload.filename;
+    //       fileDinhKem.fileSize = resUpload.size;
+    //       fileDinhKem.fileUrl = resUpload.url;
+    //       this.thongTinChiTieuKeHoachNam.canCus.push(fileDinhKem);
+    //       this.canCuList.push(item);
+    //     });
+    // }
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách QĐ phân bổ vốn và giao dự toán của BTC cho TCDTNN',
+      nzContent: DanhSachQuyetDinhPhanBoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+      }
+    });
   }
   thongTinTrangThai(trangThai: string): string {
     if (

@@ -131,7 +131,7 @@
               <nz-form-control [nzErrorTip]="namKeHoachError">
                 <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
                   [data]="canCuList" [trangThai]="isViewDetail ? 'view-detail' :  thongTinChiTieuKeHoachNam.trangThai"
-                  [type]="userService.isTongCuc() ? 'file' : 'chi-tieu'"
+                  [type]="userService.isTongCuc() ? 'chi-tieu' : 'chi-tieu'"
                   (selectDataEvent)="userService.isTongCuc() ? openFileCanCu($event) : openDialogGiaoChiTieu()"
                   (removeDataEvent)="deleteCanCuTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
                   typeFile="can-cu" [showDowloadFile]="userService.isTongCuc() ? true : false">

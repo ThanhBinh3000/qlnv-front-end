@@ -60,7 +60,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
 
     let body = {
       "denNgayKy": "",
-      "loaiVthh": "00",
+      "loaiVthh": "",
       "maDvi": "",
       "maDviB": "",
       "orderBy": "",
@@ -69,11 +69,11 @@ export class DialogCanCuHopDongComponent implements OnInit {
         "limit": this.pageSize,
         "orderBy": "",
         "orderType": "",
-        "page": this.page
+        "page": this.page - 1
       },
       "soHd": this.text,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayKy": ""
     }
     let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
