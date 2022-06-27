@@ -48,9 +48,9 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       canCu: [null],
       loaiVthh: [null],
       cLoaiVthh: [null],
-      hthucLcnt: [null],
-      pthucLcnt: [null],
-      loaiHdong: [null],
+      loaiHdong: [null, [Validators.required]],
+      hthucLcnt: [null, [Validators.required]],
+      pthucLcnt: [null, [Validators.required]],
       nguonVon: [null],
       tgianPhanh: [null],
       tgianDthau: [null],
@@ -119,6 +119,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
 
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
@@ -142,10 +143,10 @@ export class ThemMoiDieuChinhComponent implements OnInit {
         });
       }
       await Promise.all([
-        // this.phuongThucDauThauGetAll(),
-        // this.nguonVonGetAll(),
-        // this.hinhThucDauThauGetAll(),
-        // this.loaiHopDongGetAll(),
+        this.phuongThucDauThauGetAll(),
+        this.nguonVonGetAll(),
+        this.hinhThucDauThauGetAll(),
+        this.loaiHopDongGetAll(),
         // this.getDetail(),
       ]);
       this.spinner.hide();
@@ -154,6 +155,14 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async hinhThucDauThauGetAll() {
+    this.listHinhThucDauThau = [];
+    let res = await this.danhMucService.hinhThucDauThauGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucDauThau = res.data;
     }
   }
 
@@ -207,33 +216,17 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          console.log("🚀 ~ file: themmoi-dieuchinh.component.ts ~ line 194 ~ ThemMoiDieuChinhComponent ~ loadChiTietCanCu ~ res.data", res.data)
-          // this.formGoiThau.patchValue({
-          //   canCu: this.detail.canCu ?? null,
-          //   idGoiThau: this.detail.idGoiThau ?? null,
-          //   maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
-          //   tenHd: this.detail.tenHd ?? null,
-          //   ngayKy: this.detail.ngayKy ?? null,
-          //   namKh: this.detail.namKh ?? null,
-          //   ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
-          //   soNgayThien: this.detail.soNgayThien ?? null,
-          //   tenVthh: this.detail.tenVthh ?? null,
-          //   loaiVthh: this.detail.loaiVthh ?? null,
-          //   cloaiVthh: this.detail.cloaiVthh ?? null,
-          //   tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
-          //   soLuong: this.detail.soLuong ?? null,
-          //   donGiaVat: this.detail.donGiaVat ?? null,
-          //   gtriHdSauVat: this.detail.gtriHdSauVat ?? null,
-          //   maDvi: this.detail.maDvi ?? null,
-          //   tenDvi: this.detail.tenDvi ?? null,
-          //   diaChi: this.detail.diaChi ?? null,
-          //   mst: this.detail.mst ?? null,
-          //   sdt: this.detail.sdt ?? null,
-          //   stk: this.detail.stk ?? null,
-          //   tenNguoiDdien: this.detail.stk ?? null,
-          //   chucVu: this.detail.stk ?? null,
-          //   ghiChu: this.detail.ghiChu ?? null
-          // })
+          this.formGoiThau.patchValue({
+            loaiVthh: data.loaiVthh ?? null,
+            cLoaiVthh: data.cloaiVthh ?? null,
+            loaiHdong: data.loaiHdong ?? null,
+            hthucLcnt: data.hthucLcnt ?? null,
+            pthucLcnt: data.pthucLcnt ?? null,
+            nguonVon: data.nguonVon ?? null,
+            tgianDthau: data.tgianDthau ?? null,
+            tgianMthau: data.tgianMthau ?? null,
+            tgianNhang: data.tgianNhang ?? null,
+          })
         }
       }
     }
@@ -296,14 +289,6 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     let res = await this.danhMucService.nguonVonGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = res.data;
-    }
-  }
-
-  async hinhThucDauThauGetAll() {
-    this.listHinhThucDauThau = [];
-    let res = await this.danhMucService.hinhThucDauThauGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = res.data;
     }
   }
 

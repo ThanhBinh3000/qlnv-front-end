@@ -129,51 +129,70 @@
                                     <div nz-row [nzGutter]="[16, 12]">
                                         <div nz-col [nzSpan]="6">
                                             <nz-form-item>
-                                                <nz-form-label [nzNoColon]="true"> Hình thức lựa chọn nhà thầu
-                                                </nz-form-label>
-                                                <nz-form-control>
-                                                    <nz-select formControlName="hthucLcnt">
-                                                        <nz-option *ngFor="let p of listHinhThucDauThau"
-                                                            [nzValue]="p.id" [nzLabel]="p.ten">
-                                                        </nz-option>
-                                                    </nz-select>
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                        </div>
-                                        <div nz-col [nzSpan]="6">
-                                            <nz-form-item>
-                                                <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu
-                                                </nz-form-label>
-                                                <nz-form-control>
-                                                    <nz-select formControlName="pthucLcnt">
-                                                        <nz-option *ngFor="let p of listPhuongThucDauThau"
-                                                            [nzValue]="p.id" [nzLabel]="p.ten">
-                                                        </nz-option>
-                                                    </nz-select>
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                        </div>
-                                        <div nz-col [nzSpan]="6">
-                                            <nz-form-item>
-                                                <nz-form-label [nzNoColon]="true"> Loại hợp đồng
-                                                </nz-form-label>
-                                                <nz-form-control>
-                                                    <nz-select formControlName="loaiHdong">
-                                                        <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.id"
-                                                            [nzLabel]="p.ten">
-                                                        </nz-option>
-                                                    </nz-select>
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                        </div>
-                                        <div nz-col [nzSpan]="6">
-                                            <nz-form-item>
-                                                <nz-form-label [nzNoColon]="true"> Nguồn vốn
-                                                </nz-form-label>
-                                                <nz-form-control>
+                                                <nz-form-label nzRequired [nzNoColon]="true"> Hình thức lựa chọn nhà
+                                                    thầu </nz-form-label>
+                                                <nz-form-control [nzErrorTip]="hthucLcntError">
                                                     <nz-input-group>
-                                                        <input nz-input formControlName="nguonVon" />
+                                                        <nz-select formControlName="hthucLcnt">
+                                                            <nz-option *ngFor="let p of listHinhThucDauThau"
+                                                                [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                                            </nz-option>
+                                                        </nz-select>
                                                     </nz-input-group>
+                                                    <ng-template #hthucLcntError let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{errorInputRequired}}</ng-container>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-form-item>
+                                                <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà
+                                                    thầu </nz-form-label>
+                                                <nz-form-control [nzErrorTip]="pthucLcntError">
+                                                    <nz-input-group>
+                                                        <nz-select formControlName="pthucLcnt">
+                                                            <nz-option *ngFor="let p of listPhuongThucDauThau"
+                                                                [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                                            </nz-option>
+                                                        </nz-select>
+                                                    </nz-input-group>
+                                                    <ng-template #pthucLcntError let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{errorInputRequired}}</ng-container>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-form-item>
+                                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng
+                                                </nz-form-label>
+                                                <nz-form-control [nzErrorTip]="loaiHdongError">
+                                                    <nz-input-group>
+                                                        <nz-select formControlName="loaiHdong">
+                                                            <nz-option *ngFor="let p of listLoaiHopDong"
+                                                                [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                                            </nz-option>
+                                                        </nz-select>
+                                                    </nz-input-group>
+                                                    <ng-template #loaiHdongError let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{errorInputRequired}}</ng-container>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-form-item>
+                                                <nz-form-label [nzNoColon]="true">Nguồn vốn</nz-form-label>
+                                                <nz-form-control>
+                                                    <nz-select formControlName="nguonVon" [nzDisabled]="true">
+                                                        <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma"
+                                                            [nzLabel]="p.giaTri">
+                                                        </nz-option>
+                                                    </nz-select>
                                                 </nz-form-control>
                                             </nz-form-item>
                                         </div>
