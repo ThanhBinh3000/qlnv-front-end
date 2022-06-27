@@ -12,11 +12,11 @@
     border-right: 1px solid #c4c9cc;
     width: calc(100% - 45px);
     float: left;
-    min-height: 24px;
+    max-height: 24px;
 
     .download-file {
       background: #f8f9fa;
-      padding: 2px 13px;
+      padding: 1px 13px;
       border-left: 1px solid #c4c9cc;
       cursor: pointer;
       color: #828282;

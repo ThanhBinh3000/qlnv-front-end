@@ -100,6 +100,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { DialogThongTinPhuLucBangGiaHopDongComponent } from './dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
 import { DialogCanCuKQLCNTComponent } from './dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
 import { DialogDiaDiemKhoComponent } from './dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
+import { DanhSachQuyetDinhPhanBoComponent } from './dialog/dialog-ds-qd-phan-bo/dialog-ds-qd-phan-bo.component';
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import { DialogDiaDiemKhoComponent } from './dialog/dialog-dia-diem-kho/dialog-d
     DialogCanCuKQLCNTComponent,
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
+    DanhSachQuyetDinhPhanBoComponent,
     //pipes
     FilterPipe,
   ],
