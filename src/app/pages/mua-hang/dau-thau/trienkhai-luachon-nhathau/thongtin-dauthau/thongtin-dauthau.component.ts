@@ -8,11 +8,12 @@ import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SI
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DauThauService } from 'src/app/services/dauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -27,6 +28,7 @@ export class ThongtinDauthauComponent implements OnInit {
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
+    private dauThauService: DauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
@@ -44,16 +46,12 @@ export class ThongtinDauthauComponent implements OnInit {
   yearNow: number = 0;
 
   searchFilter = {
-    soQdinh: '',
-    namKh: dayjs().get('year'),
-    ngayTongHop: '',
-    loaiVthh: '',
+    namKhoach: dayjs().get('year'),
+    soQdPd: '',
     ngayQd: '',
-    soQd: '',
-    trangThai: '11',
-    namKhoach: 0,
-    tuNgayQd: '',
-    denNgayQd: ''
+    loaiVthh: '',
+    maDvi: '',
+    trichYeu: ''
   };
 
   listVthh: any[] = [];
@@ -105,13 +103,24 @@ export class ThongtinDauthauComponent implements OnInit {
 
   async search() {
     this.dataTable = [];
-    let body = this.searchFilter;
-    body.namKhoach = body.namKh;
-    body.tuNgayQd = body.ngayQd[0];
-    body.denNgayQd = body.ngayQd[1];
-    let res;
-    res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-
+    let body = {
+      tuNgayQd: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+        : null,
+      denNgayQd: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
+        : null,
+      loaiVthh: this.searchFilter.loaiVthh,
+      namKhoach: this.searchFilter.namKhoach,
+      trichYeu: this.searchFilter.trichYeu,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+      soQdPd: this.searchFilter.soQdPd,
+      maDvi: this.searchFilter.maDvi
+    }
+    let res = await this.dauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
@@ -146,6 +155,7 @@ export class ThongtinDauthauComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -167,19 +177,6 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    // if (this.router.url.includes(LEVEL.TONG_CUC)) {
-    //   this.router.navigate([
-    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-    //     id,
-    //   ]);
-    // } else if (this.router.url.includes(LEVEL.CUC)) {
-    //   this.router.navigate([
-    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-    //     id,
-    //   ]);
-    // }
-    // let loatVthh = this.router.url.split('/')[4]
-    // this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau/chinh-sua', id]);
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
@@ -232,8 +229,8 @@ export class ThongtinDauthauComponent implements OnInit {
     return '';
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
+  statusGoiThau(status: string) {
+    return convertTrangThaiGt(status);
   }
 
   exportData() {
