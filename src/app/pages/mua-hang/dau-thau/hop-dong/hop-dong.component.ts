@@ -18,7 +18,12 @@ export class HopDongComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        value: null,
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {

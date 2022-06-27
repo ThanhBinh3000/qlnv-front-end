@@ -39,11 +39,6 @@ export class dauThauGoiThauService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  create(body: any): Promise<any> {
-    let url = `http://localhost:8099/dx-kh/ttin-dthau-gthau/them-moi`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
   xoa(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/xoa`
     return this.httpClient.post<any>(url, body).toPromise();

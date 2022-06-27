@@ -47,7 +47,6 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-
   }
 
   logOut() {
