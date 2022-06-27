@@ -15,7 +15,7 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
   }
 
   getDetailGoiThau(id: number): Promise<any> {
-    let url = `http://localhost:8099/dx-kh/qd-lcnt/chi-tiet/goi-thau/${id}`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/chi-tiet/goi-thau/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 

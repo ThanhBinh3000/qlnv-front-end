@@ -35,7 +35,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
   }
 
   create(body: any): Promise<any> {
-    let url = `http://localhost:8099/dx-kh/qd-pduyet-kqlcnt/them-moi`;
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-pduyet-kqlcnt/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
