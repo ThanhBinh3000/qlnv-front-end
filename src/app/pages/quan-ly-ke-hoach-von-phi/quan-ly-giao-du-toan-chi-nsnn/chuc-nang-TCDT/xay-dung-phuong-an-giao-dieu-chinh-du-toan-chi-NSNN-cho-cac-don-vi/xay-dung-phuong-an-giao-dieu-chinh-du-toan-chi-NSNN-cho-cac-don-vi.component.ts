@@ -66,6 +66,25 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   thuyetMinh: string;
   namDtoan: any;
   capDvi: string;
+  initItem: ItemData = {
+    id: null,
+    stt: "0",
+    level: 0,
+    maNdung: 0,
+    tongCong: 0,
+    lstCtietDvis: [],
+    checked: false,
+  };
+
+  toTal1: ItemData = {
+    id: null,
+    stt: "0",
+    level: 0,
+    maNdung: 0,
+    tongCong: 0,
+    lstCtietDvis: [],
+    checked: false,
+  };
   //danh muc
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
@@ -906,6 +925,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     var stt: string;
     if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
       stt = data.stt + '.1';
+      this.sum(stt);
     } else {
       index = this.findVt(data.stt);
       for (var i = this.lstCtietBcao.length - 1; i >= 0; i--) {
@@ -963,6 +983,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
     var nho: string = this.lstCtietBcao[index].stt;
     var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+    var stt: string = this.lstCtietBcao[index].stt;
     //xóa phần tử và con của nó
     this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
     //update lại số thức tự cho các phần tử cần thiết
@@ -973,6 +994,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       }
     }
     this.replaceIndex(lstIndex, -1);
+    this.sum(stt);
     this.updateEditCache();
   }
 
@@ -1021,6 +1043,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       lstCtietDvis: data,
     }
     this.total(id);
+    this.sum(this.lstCtietBcao[index].stt);
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
   }
 
@@ -1473,4 +1496,41 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     WindowPrt.print();
     WindowPrt.close();
   }
+
+  sum(stt: string) {
+    stt = this.getHead(stt);
+    while (stt != '0') {
+        var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        let data = this.lstCtietBcao[index];
+        var mm: any[] = [];
+        data.lstCtietDvis.forEach(item => {
+            mm.push({
+                ...item,
+                soTranChi: 0,
+            })
+        })
+        this.lstCtietBcao[index] = {
+            id: data.id,
+            stt: data.stt,
+            level: data.stt,
+            maNdung: data.maNdung,
+            tongCong: 0,
+            lstCtietDvis: mm,
+            checked: false,
+        }
+        this.lstCtietBcao.forEach(item => {
+            if (this.getHead(item.stt) == stt) {
+                item.lstCtietDvis.forEach(e => {
+                    let ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
+                    this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
+                })
+            }
+        })
+        this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+            this.lstCtietBcao[index].tongCong += item.soTranChi;
+        })
+        stt = this.getHead(stt);
+    }
+  }
+
 }
