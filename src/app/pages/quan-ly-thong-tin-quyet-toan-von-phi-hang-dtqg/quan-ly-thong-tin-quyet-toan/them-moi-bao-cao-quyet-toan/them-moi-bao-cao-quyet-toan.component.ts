@@ -1,3 +1,5 @@
+import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -407,6 +409,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
+    if(this.congVan.fileName == null){
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
+      return
+    }
 
     let request = JSON.parse(JSON.stringify({
       id: this.id,
@@ -1065,4 +1071,92 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   close() {
     this.location.back();
   }
+
+  showDialogCopy(){
+		let obj = {
+			namBcao: this.namQtoan,
+		}
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Copy Báo Cáo',
+			nzContent: DialogCopyQuyetToanVonPhiHangDtqgComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			  namBcao: obj.namBcao
+			},
+		  });
+		  modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res){
+				this.doCopy(res);
+			}
+		  });
+	}
+
+	async doCopy(response: any) {
+    console.log(response);
+
+		var maBcaoNew: string;
+		await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          maBcaoNew = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+
+		let lstCtietBcaoTemps: any[] = [];
+		this.lstCtietBcao.forEach(data => {
+			lstCtietBcaoTemps.push({
+				...data,
+        donGiaMua: mulMoney(data.donGiaMua, this.maDviTien),
+        thanhTien: mulMoney(data.thanhTien, this.maDviTien),
+				id: null,
+			})
+		})
+		let request = {
+      id: null,
+      fileDinhKems: [],
+			listIdFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCtiet: lstCtietBcaoTemps,
+      maDviTien: this.maDviTien,
+      thuyetMinh: this.thuyetMinh,
+      trangThai: this.trangThaiBaoCao,
+      congVan: this.congVan,
+      maDvi: this.maDviTao,
+      namQtoan: response.namBcao,
+      maBcao: maBcaoNew,
+      maPhanBcao: this.maPhanBcao,
+		};
+
+		this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+						  maBcao: maBcaoNew
+						},
+					  });
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+	}
 }
