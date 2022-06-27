@@ -25,12 +25,28 @@
     }
   }
 
+  .xanh {
+    background-color: #4E5484;
+    color: #fff;
+  }
 
 }
 
 .data-table {
   padding: 10px;
   border: 1px solid #f0f0f0 !important;
+
+  .table-icon {
+    border: solid 1px #e4e4e4;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fefefe !important;
+    margin: 0 2px;
+  }
 
   #myTabContent {
     margin: 0;

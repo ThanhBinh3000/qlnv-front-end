@@ -8,6 +8,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./hang-hong-can-bao-hanh.component.scss'],
 })
 export class HangHongCanBaoHanhComponent implements OnInit {
+  isAddNew = false;
   formData: FormGroup;
   allChecked = false;
   indeterminate = false;
@@ -83,7 +84,9 @@ export class HangHongCanBaoHanhComponent implements OnInit {
 
   inDanhSach() {}
 
-  themMoi() {}
+  themMoi() {
+    this.isAddNew = true;
+  }
 
   onAllChecked(checked) {
     this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
@@ -120,6 +123,10 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
+  }
+
+  onClose() {
+    this.isAddNew = false;
   }
 }
 
