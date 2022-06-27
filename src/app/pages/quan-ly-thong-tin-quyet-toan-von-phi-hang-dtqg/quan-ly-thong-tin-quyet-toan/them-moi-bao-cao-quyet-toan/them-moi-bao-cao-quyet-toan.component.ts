@@ -409,9 +409,9 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 		}
 
     let request = JSON.parse(JSON.stringify({
-      id: null,
+      id: this.id,
       fileDinhKems: this.lstFiles,
-			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
       thuyetMinh: this.thuyetMinh,
