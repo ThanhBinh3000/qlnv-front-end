@@ -70,11 +70,11 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 @Component({
-  selector: 'app-themmoi-kehoach-lcnt',
-  templateUrl: './themmoi-kehoach-lcnt.component.html',
-  styleUrls: ['./themmoi-kehoach-lcnt.component.scss']
+  selector: 'app-themmoi-kehoach-lcnt-tong-cuc',
+  templateUrl: './themmoi-kehoach-lcnt-tong-cuc.component.html',
+  styleUrls: ['./themmoi-kehoach-lcnt-tong-cuc.component.scss']
 })
-export class ThemmoiKehoachLcntComponent implements OnInit {
+export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
@@ -574,11 +574,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let body = this.formData.value;
     body.soDxuat = body.soDxuat + this.maTrinh;
     body.fileDinhKemReq = this.fileDinhKem;
-    // let dataDetail = [];
-    // this.listOfData.forEach(item => {
-    //   item.children.forEach(itemChild => { dataDetail = [...dataDetail, itemChild] })
-    // });
-    body.dsGtReq = this.listOfData;
+    let dataDetail = [];
+    this.listOfData.forEach(item => {
+      item.children.forEach(itemChild => { dataDetail = [...dataDetail, itemChild] })
+    });
+    body.dsGtReq = dataDetail;
     body.ccXdgReq = [...this.baoGiaThiTruongList, ... this.canCuKhacList];
     let res = null;
     if (this.formData.get('id').value) {
