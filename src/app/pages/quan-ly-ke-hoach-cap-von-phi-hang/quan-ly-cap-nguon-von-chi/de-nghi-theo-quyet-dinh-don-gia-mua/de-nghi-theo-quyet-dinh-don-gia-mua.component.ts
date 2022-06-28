@@ -74,7 +74,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             tenDm: "Đang soạn",
         },
         {
-            id: Utils.TT_BC_4,
+            id: Utils.TT_BC_2,
             tenDm: "Trình duyệt",
         },
         {
