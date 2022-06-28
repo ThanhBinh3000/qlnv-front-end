@@ -74,11 +74,11 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQDPDKHLCNT()">
-                                        <input nz-input [readonly]="true" formControlName="soQdPD" />
+                                        <input nz-input [readonly]="true" formControlName="canCu" />
                                     </nz-input-group>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="4">
+                            <!-- <div nz-col nzSpan="4">
                                 <nz-form-item class="display-block">
                                     <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                                     <nz-form-control>
@@ -98,7 +98,34 @@
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
+                            </div> -->
+                            <div nz-col [nzSpan]="5">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
+                                        <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                                            <input class="search__input" [readonly]="true" nz-input
+                                                formControlName="tenVthh" />
+                                        </nz-input-group>
+                                        <ng-template #loaiVthhError let-control>
+                                            <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
                             </div>
+                            <div nz-col [nzSpan]="5" *ngIf="typeHangHoa !== '02'">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                    <nz-form-control nz-col [nzSpan]="24">
+                                        <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                                            <input class="search__input" [readonly]="true" nz-input
+                                                formControlName="tenCloaiVthh" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
                             <div nz-col nzSpan="24" *ngIf="typeHangHoa === '02'">
                                 <nz-form-item class="display-block">
                                     <nz-form-label [nzNoColon]="true"> Quy chuẩn kỹ thuật </nz-form-label>

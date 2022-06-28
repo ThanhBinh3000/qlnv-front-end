@@ -6,10 +6,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuQDPheDuyetKHLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
-import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { API_STATUS_CODE, DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserService } from 'src/app/services/user.service';
@@ -36,7 +38,8 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
     private dauThauGoiThauService: dauThauGoiThauService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private dmTieuChuanService: DanhMucTieuChuanService
   ) {
     const yearNow = new Date().getUTCFullYear();
     this.formGoiThau = this.fb.group({
@@ -46,8 +49,10 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       ngayQd: [null],
       ngayHluc: [null],
       canCu: [null],
+      tenVthh: [null],
       loaiVthh: [null],
       cLoaiVthh: [null],
+      tenCloaiVthh: [null],
       loaiHdong: [null, [Validators.required]],
       hthucLcnt: [null, [Validators.required]],
       pthucLcnt: [null, [Validators.required]],
@@ -112,7 +117,6 @@ export class ThemMoiDieuChinhComponent implements OnInit {
   listLoaiHopDong: any[] = []
   listVthh: any[] = [];
   formGoiThau: FormGroup
-  formDauThau: FormGroup
   isDetail = false;
   dataTable: any[] = [];
   dataDetail: any;
@@ -171,11 +175,11 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dataDetail = res.data;
       this.dataTable = res.data.children1;
-      this.formDauThau.patchValue({
-        loaiVthh: res.data.loaiVthh,
-        soQdPD: res.data.soQd,
-        tenDvi: res.data.maDvi
-      });
+      // this.formDauThau.patchValue({
+      //   loaiVthh: res.data.loaiVthh,
+      //   soQdPD: res.data.soQd,
+      //   tenDvi: res.data.maDvi
+      // });
       this.formGoiThau.patchValue({
         loaiVthh: res.data.loaiVthh,
         soQdPD: res.data.soQd,
@@ -204,32 +208,23 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        this.loadChiTietCanCu(data.id);
+        this.formGoiThau.patchValue({
+          canCu: data.soQd ?? null,
+          loaiVthh: data.loaiVthh ?? null,
+          tenVthh: data.tenVthh ?? null,
+          cLoaiVthh: data.cloaiVthh ?? null,
+          tenCloaiVthh: data.tenCloaiVthh ?? null,
+          loaiHdong: data.loaiHdong ?? null,
+          hthucLcnt: data.hthucLcnt ?? null,
+          pthucLcnt: data.pthucLcnt ?? null,
+          nguonVon: data.nguonVon ?? null,
+          tgianDthau: data.tgianDthau ?? null,
+          tgianMthau: data.tgianMthau ?? null,
+          tgianNhang: data.tgianNhang ?? null,
+        })
       }
     });
     // }
-  }
-
-  async loadChiTietCanCu(id) {
-    if (id > 0) {
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          const data = res.data;
-          this.formGoiThau.patchValue({
-            loaiVthh: data.loaiVthh ?? null,
-            cLoaiVthh: data.cloaiVthh ?? null,
-            loaiHdong: data.loaiHdong ?? null,
-            hthucLcnt: data.hthucLcnt ?? null,
-            pthucLcnt: data.pthucLcnt ?? null,
-            nguonVon: data.nguonVon ?? null,
-            tgianDthau: data.tgianDthau ?? null,
-            tgianMthau: data.tgianMthau ?? null,
-            tgianNhang: data.tgianNhang ?? null,
-          })
-        }
-      }
-    }
   }
 
   redirectToChiTiet(data) {
@@ -265,6 +260,63 @@ export class ThemMoiDieuChinhComponent implements OnInit {
 
   huy() {
     this.showListEvent.emit();
+  }
+
+  selectHangHoa() {
+    let data = this.typeHangHoa;
+    const modal = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modal.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    this.typeHangHoa = data.ma.slice(0, 2);
+    let cloaiVthh = null;
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      cloaiVthh = data.ma;
+      this.formGoiThau.patchValue({
+        maVtu: null,
+        tenVtu: null,
+        cloaiVthh: data.ma,
+        tenCloaiVthh: data.ten,
+        loaiVthh: data.parent.ma,
+        tenVthh: data.parent.ten
+      })
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        cloaiVthh = data
+        this.formGoiThau.patchValue({
+          maVtu: data.ma,
+          tenVtu: data.ten,
+          cloaiVthh: data.parent.ma,
+          tenCloaiVthh: data.parent.ten,
+          loaiVthh: data.parent.parent.ma,
+          tenVthh: data.parent.parent.ten
+        })
+      }
+      if (data.cap == "2") {
+        this.formGoiThau.patchValue({
+          maVtu: null,
+          tenVtu: null,
+          cloaiVthh: data.ma,
+          tenCloaiVthh: data.ten,
+          loaiVthh: data.parent.ma,
+          tenVthh: data.parent.ten
+        })
+      }
+    }
   }
 
   async phuongThucDauThauGetAll() {
