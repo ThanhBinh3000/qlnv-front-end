@@ -52,11 +52,12 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     ngayTaoDen: "",
     maPa: "",
     donViTao: "",
-    trangThai: "",
+    // trangThai: "",
     paggingReq: {
       limit: 10,
       page: 1
     },
+    trangThais: [],
   };
   //danh muc
   danhSachBaoCao: any = [];
@@ -72,6 +73,8 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   //trang thai
   status: boolean;
   date: any = new Date()
+  trangThai!: string;
+  roleUser:string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -106,27 +109,21 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
+
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+      this.roleUser = 'canbo';
       this.status = false;
-      this.searchFilter.trangThai = Utils.TT_BC_7;
+      this.trangThai = Utils.TT_BC_7;
       this.searchFilter.loaiTimKiem = '1';
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
-    } else {
-      this.status = true;
-      this.searchFilter.loaiTimKiem = '0';
-      this.searchFilter.donViTao = this.maDviTao;
-      if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
-        this.searchFilter.trangThai = Utils.TT_BC_2;
-        this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_2));
-      } else {
-        this.searchFilter.trangThai = Utils.TT_BC_4;
-        this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_4));
-      }
     }
+    this.onSubmit();
+
   }
 
   //get user info
@@ -168,45 +165,18 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
         return;
       }
     }
-    if (this.userRole != ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
-      this.searchFilter.loaiTimKiem = "0";
-    } else {
-      if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao) {
-        this.searchFilter.loaiTimKiem = "0";
-      } else {
-        this.searchFilter.loaiTimKiem = "1";
-      }
-    }
-    let lstTrangThai = [];
-    if (!this.searchFilter.trangThai) {
-      if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
-        lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT];
-      } else if (this.userRole == ('TC_KH_VP_NV'|| 'C_KH_VP_NV_KH' ||'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
-        lstTrangThai = [Utils.TT_BC_2];
-      } else {
-        lstTrangThai = [Utils.TT_BC_4];
-      }
-    } else {
-      lstTrangThai = [this.searchFilter.trangThai];
-    }
-    let requestReport = {
-      loaiTimKiem: this.searchFilter.loaiTimKiem,
-      maBcao: this.searchFilter.maPa,
-      maDvi: this.searchFilter.donViTao,
-      namBcao: this.searchFilter.namPa,
-      ngayTaoDen: this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR),
-      ngayTaoTu: this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR),
-      paggingReq: {
-        limit: this.pages.size,
-        page: this.pages.page,
-      },
-      trangThais: lstTrangThai,
-      maPhanGiao: '2',
-      maLoai: '2',
-    };
+    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    searchFilterTemp.trangThais = [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     this.spinner.show();
+    if (this.trangThai) {
+      searchFilterTemp.trangThais.push(this.trangThai)
+    } else {
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9,Utils.TT_BC_KT]
+    }
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -219,7 +189,6 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
-
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -247,7 +216,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maPa = null
-    this.searchFilter.trangThai = null
+    // this.searchFilter.trangThai = null
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {

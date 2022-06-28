@@ -77,16 +77,17 @@
           <thead>
             <tr>
               <th width="60px">STT</th>
-              <th>Mã phương án</th>
-              <th>Ngày lập</th>
-              <th>Năm giao</th>
-              <th>Trạng thái</th>
-              <th></th>
+              <th width="150px">Mã phương án</th>
+              <th width="150px">Ngày lập</th>
+              <th width="150px">Năm giao</th>
+              <th width="150px">Trạng thái</th>
+              <th width="150px">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>
                 {{ item.maPa}}
               </td>
@@ -126,12 +127,6 @@
           </div>
         </div>
       </nz-card>
-      <!-- <ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
-					<i class="icon htvbdh_dau-cong"></i>
-					<span>Tạo mới</span>
-				</button>
-			</ng-template> -->
     </div>
   </div>
 </div>

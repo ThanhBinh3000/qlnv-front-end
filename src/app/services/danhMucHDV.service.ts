@@ -792,7 +792,14 @@ dMucBcaoDuyet(): Observable<any> {
   //danh mục loại khoản phụ lục 1 điều chỉnh
   dMLoaiKhoanPL1DieuChinh(): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-loai-khoan",
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-loai-khoan-dieu-chinh-pl1",
+    );
+  }
+
+  //danh mục nội dung kinh phí phụ lục 1 điều chỉnh
+  dMNoiDungKinhPhiPL1DieuChinh(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-noi-dung-kinh-phi-dieu-chinh-pl1",
     );
   }
 }

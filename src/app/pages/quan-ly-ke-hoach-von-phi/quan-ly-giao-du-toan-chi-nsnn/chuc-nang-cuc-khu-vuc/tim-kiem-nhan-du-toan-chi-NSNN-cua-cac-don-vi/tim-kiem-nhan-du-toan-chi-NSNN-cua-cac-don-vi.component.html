@@ -79,7 +79,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>
                 {{ item.maPa}}
               </td>
@@ -119,12 +119,6 @@
           </div>
         </div>
       </nz-card>
-      <!-- <ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
-					<i class="icon htvbdh_dau-cong"></i>
-					<span>Tạo mới</span>
-				</button>
-			</ng-template> -->
     </div>
   </div>
 </div>

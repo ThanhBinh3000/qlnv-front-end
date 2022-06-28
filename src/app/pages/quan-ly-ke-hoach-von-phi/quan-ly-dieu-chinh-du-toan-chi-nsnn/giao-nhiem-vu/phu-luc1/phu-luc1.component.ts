@@ -44,6 +44,8 @@ export class PhuLuc1Component implements OnInit {
   //danh muc
   donVis: any = [];
   noiDungs: any[] = LINH_VUC;
+  // noiDungs: any[] = [];
+  noiDungFull: any[] = [];
   loaiKhoans: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
@@ -154,20 +156,67 @@ export class PhuLuc1Component implements OnInit {
       }
     );
 
-    await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.loaiKhoans = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-    this.getStatusButton();
-    this.spinner.hide();
+    // //lấy danh sách nội dung chi
+    // await this.danhMucService.dMNoiDungKinhPhiPL1DieuChinh().toPromise().then(res => {
+    //   if (res.statusCode == 0) {
+    //       this.noiDungs = res.data;
+    //   } else {
+    //       this.notification.error(MESSAGE.ERROR, res?.msg);
+    //   }
+    // }, err => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    // })
+
+    // await this.noiDungs.forEach(item => {
+    //     if (item.maCha == "string") {
+    //         this.noiDungFull.push({
+    //             ...item,
+    //             tenDm: item.giaTri,
+    //             // ten: item.giaTri,
+    //             level: 0,
+    //             idCha: 0,
+    //         })
+    //     }
+    // })
+    // await this.addListNoiDungChi(this.noiDungFull);
+
+  //   await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
+  //     (data) => {
+  //       if (data.statusCode == 0) {
+  //         this.loaiKhoans = data.data;
+  //         console.log(this.loaiKhoans )
+  //       } else {
+  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //       }
+  //     },
+  //     (err) => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     }
+  //   );
+  //   this.getStatusButton();
+  //   this.spinner.hide();
+  // }
+
+  // addListNoiDungChi(noiDungChiTemp) {
+  //   let a = [];
+  //   noiDungChiTemp.forEach(item => {
+  //       this.noiDungs.forEach(el => {
+  //           if (item.ma == el.maCha) {
+  //               el = {
+  //                   ...el,
+  //                   tenDm: el.giaTri,
+  //                   // ten: el.giaTri,
+  //                   level: item.level + 1,
+  //                   idCha: item.id,
+  //               }
+  //               this.noiDungFull.push(el);
+  //               a.push(el);
+  //           }
+  //       });
+  //   })
+  //   if (a.length > 0) {
+  //       this.addListNoiDungChi(a);
+  //   }
   }
 
   getStatusButton() {
