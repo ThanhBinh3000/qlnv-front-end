@@ -16,4 +16,5 @@ export const MESSAGEVALIDATE = {
     WARNING_FINISH_INPUT: 'Vui lòng hoàn tất nhập liệu trước khi thực hiện trình duyệt' ,
     DOCUMENTARY: 'Vui lòng đính kèm file công văn' ,
     ERROR_DATA: "Vui lòng nhập đúng dữ liệu: Bản ghi ",
+    OVER_SIZE: "Kích thước file không vượt quá 2MB",
   };
