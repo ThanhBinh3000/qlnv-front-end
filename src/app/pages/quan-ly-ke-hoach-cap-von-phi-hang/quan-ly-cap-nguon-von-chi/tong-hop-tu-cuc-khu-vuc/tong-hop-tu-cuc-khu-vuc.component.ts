@@ -449,7 +449,17 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     // luu
     async save() {
         //get list file url
-        let listFile: any = [];
+        let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE){
+                checkFile = false;
+            }
+        }
+        if (!checkFile){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
+        let listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
@@ -471,7 +481,12 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         //get file cong van url
         let file: any = this.fileDetail;
         if (file) {
-            request.congVan = await this.uploadFile(file);
+            if (file.size > Utils.FILE_SIZE){
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+            } else {
+                request.congVan = await this.uploadFile(file);
+            }
         }
         if (!request.congVan){
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
