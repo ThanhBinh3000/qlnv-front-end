@@ -1,7 +1,79 @@
 ::ng-deep {
     .thong-tin-phieu-nhap-kho-tam-gui {
+        .list-file {
+            .nowrap.ant-table-wrapper {
+                overflow: unset !important;
+            }
+
+            .ant-table table .ant-table-tbody>tr>td {
+                height: 30px !important;
+            }
+
+            .ant-table-content {
+                table {
+                    width: 50%;
+                    border: 0px !important;
+                }
+            }
+
+            .ant-table-cell {
+                border: 0px !important;
+            }
+        }
+
         label.ant-form-item-no-colon {
             margin-bottom: 0px !important;
+        }
+
+        .select-file {
+            position: relative;
+            border: 1px solid #C4C9CC;
+            height: 24px;
+            width: 155px;
+            padding: 0px 10px;
+        }
+
+        .file-layer-1 {
+            position: absolute;
+            z-index: 0;
+
+            &>span,
+            .htvbdh_tcdt_tep {
+                color: #2196F3;
+                font-weight: lighter;
+            }
+
+            .htvbdh_tcdt_tep {
+                margin-right: 10px;
+            }
+        }
+
+        .file-layer-2 {
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+
+            input {
+                width: 100%;
+            }
+        }
+
+        .download-file {
+            border: 1px solid #C4C9CC;
+            padding: 0px 5px;
+
+            .icon {
+                border: unset !important;
+                border-radius: unset !important;
+                background: unset !important;
+                margin: unset !important;
+            }
+        }
+
+        .action-file {
+            .btn.btn-do {
+                padding: 0px !important;
+            }
         }
     }
 
@@ -69,42 +141,5 @@
     .comment-last {
         margin-top: 16px !important;
         margin-bottom: 60px !important;
-    }
-
-    .title-chi-tieu {
-        display: flex;
-        align-items: center;
-
-        .du-thao-va-lanh-dao-duyet {
-            color: #ff4d4f;
-            font-weight: 500;
-            font-size: 13px;
-            padding: 4px;
-            border-radius: 0px;
-            border: 1px solid #eaeaea;
-            text-transform: uppercase;
-            margin-right: 8px;
-            background: #fff;
-        }
-
-        .da-ban-hanh {
-            color: #24e837;
-            font-weight: 500;
-            font-size: 13px;
-            padding: 4px;
-            border-radius: 0px;
-            border: 1px solid #24e837;
-            text-transform: uppercase;
-            margin-right: 8px;
-            background: #efffec;
-        }
-
-        &>span:nth-child(2) {
-            text-transform: uppercase;
-            color: #444444;
-            font-weight: 500;
-            font-size: 16px;
-            padding: 4px;
-        }
     }
 }

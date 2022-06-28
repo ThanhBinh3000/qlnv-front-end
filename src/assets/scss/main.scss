@@ -2812,24 +2812,24 @@ h3 {
 }
 
 %nuttron {
-  border: solid 1px $border-btn;
+  // border: solid 1px $border-btn;
   width: $input-h;
   height: $input-h;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #fefefe !important;
+  // background: #fefefe !important;
   margin: 0 2px;
 
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1);
     display: inline-flex;
     text-shadow: 1px 1px 2px rgb(0 0 0 / 20%);
     opacity: 1;
-    background: $maincolor $i;
-    color: #fff $i;
-    border-color: $maincolor $i;
+    // background: $maincolor $i;
+    // color: #fff $i;
+    // border-color: $maincolor $i;
   }
 }
 
