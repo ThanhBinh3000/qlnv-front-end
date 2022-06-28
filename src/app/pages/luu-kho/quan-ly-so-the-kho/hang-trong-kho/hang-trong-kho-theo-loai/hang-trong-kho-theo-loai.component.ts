@@ -12,6 +12,12 @@ import { TreeTableService } from 'src/app/services/tree-table.service';
 import { DonviService } from '../../../../../services/donvi.service';
 import { DanhMucService } from '../../../../../services/danhmuc.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { isEmpty } from 'lodash';
+import { DANH_MUC_LEVEL } from '../../../luu-kho.constant';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-hang-trong-kho-theo-loai',
@@ -20,15 +26,29 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
   @Input('idLoaiVthh') idLoaiVthh: string;
-  dsLoaiHangHoa: ISelectOptionItem[] = [];
-  dsChungLoaiHangHoa: ISelectOptionItem[] = [];
-  dsCuc: ISelectOptionItem[] = [];
-  dsChiCuc: ISelectOptionItem[] = [];
-  dsNhaKho: ISelectOptionItem[] = [];
-  dsNganKho: ISelectOptionItem[] = [];
-  dsLoKho: ISelectOptionItem[] = [];
+  userInfo: UserLogin;
+  detail: any = {};
+  dsTong;
+  dsLoaiHangHoa = [];
+  dsChungLoaiHangHoa = [];
+  dsCuc = [];
+  dsChiCuc = [];
+  dsChiCucDataSource = [];
+  dsNhaKho = [];
+  dsNganKho = [];
+  dsNganLo = [];
   formData: FormGroup;
   errorMessage = '';
+  searchInTable: any = {
+    donVi: null,
+    chungLoaiHH: null,
+    tonDauKy: null,
+    nhapTrongKy: null,
+    xuatTrongKy: null,
+    tonCuoiKy: null,
+    donViTinh: null,
+  };
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -591,17 +611,26 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
+    private readonly userService: UserService,
+    private readonly notification: NzNotificationService,
     public treeTableService: TreeTableService<HangTrongKhoRowItem>,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.initForm();
-    // this.initData();
-    this.dataExample.forEach((item) => {
-      this.mapOfExpandedData[item.id] =
-        this.treeTableService.convertTreeToList(item);
-    });
-    this.dataTable = [...this.dataExample];
+    try {
+      this.spinner.show();
+      this.initForm();
+      await this.initData();
+      this.dataExample.forEach((item) => {
+        this.mapOfExpandedData[item.id] =
+          this.treeTableService.convertTreeToList(item);
+      });
+      this.dataTable = [...this.dataExample];
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -623,32 +652,87 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     });
   }
 
-  async initData(): Promise<void> {
-    // this.spinner.show();
-    const result = await Promise.all([
-      this.danhMucService.loaiVatTuHangHoaGetAll(),
-      this.donviService.layTatCaDonViCha(),
-      this.donviService.layDonViChiCuc(),
-      this.tinhTrangKhoHienThoiService.nhaKhoGetList({}),
-      this.tinhTrangKhoHienThoiService.nganKhoGetList({}),
-      this.tinhTrangKhoHienThoiService.nganLoGetList({}),
-    ]);
-    // this.spinner.hide();
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
+  }
 
-    this.dsLoaiHangHoa = this.transformToSelectOptItem(
-      result[0],
-      'loaiHangHoa',
-    );
-    this.dsCuc = this.transformToSelectOptItem(result[1], 'cuc');
-    this.dsChiCuc = this.transformToSelectOptItem(result[2], 'chiCuc');
-    this.dsNhaKho = this.transformToSelectOptItem(result[3], 'nhaKHo');
-    this.dsNganKho = this.transformToSelectOptItem(result[4], 'nganKho');
-    this.dsLoKho = this.transformToSelectOptItem(result[5], 'loKho');
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
+      this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.dsChiCucDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
+        (item) => item.tenDvi,
+      );
+      // this.dsNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+      // this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+      // this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
+    }
+  }
+
+  onChangeChiCuc(id) {
+    const chiCuc = this.dsChiCuc.find((item) => item.id === Number(id));
+    if (chiCuc) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+      };
+      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+    } else {
+      this.dsNhaKho = [];
+    }
+  }
+
+  onChangeNhaKho(id) {
+    const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
+    if (nhaKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
+      };
+      this.dsNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
+    } else {
+      this.dsNganKho = [];
+    }
+  }
+
+  onChangeNganKho(id) {
+    const nganKho = this.dsNganKho.find((item) => item.id === Number(id));
+    if (nganKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, nganKho),
+      };
+      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
+    } else {
+      this.dsNganLo = [];
+    }
+  }
+
+  onChangeAutoComplete(e) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this.dsChiCucDataSource = this.dsChiCuc
+        .filter((item) =>
+          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.tenDvi);
+    } else {
+      this.dsChiCucDataSource = this.dsChiCuc.map((item) => item.tenDvi);
+    }
   }
 
   search() {}
 
-  clearFilter() {}
+  clearFilter() {
+    this.formData.reset();
+  }
 
   changePageIndex(event) {}
 
@@ -656,24 +740,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
 
   viewDetail(data: HangTrongKhoRowItem) {}
 
-  transformToSelectOptItem(
-    data: any[],
-    fieldName: string,
-  ): ISelectOptionItem[] {
-    return data?.map((item) => ({
-      fieldName,
-      id: item.id,
-      giaTri: item.giaTri,
-    }));
-  }
-
   exportData() {}
-}
-
-interface ISelectOptionItem {
-  id: number;
-  giaTri: string;
-  fieldName: string;
 }
 
 interface IHangTrongKho {

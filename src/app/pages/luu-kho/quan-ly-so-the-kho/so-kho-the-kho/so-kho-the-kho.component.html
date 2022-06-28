@@ -26,7 +26,10 @@
             <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
             <nz-form-control>
               <nz-input-group id="ten-don-vi">
-                <input type="text" nz-input formControlName="tenDonVi" />
+                <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto"
+                  (input)="onChangeAutoComplete($event, 'dsDonViDataSource', 'dsDonVi')" />
+                <nz-autocomplete #donViAuto [nzDataSource]="dsDonViDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -118,51 +121,76 @@
             <th></th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.nam"
+                  [nzAutocomplete]="namAuto" (input)="onChangeAutoComplete($event, 'dsNamDataSource', 'dsNam')" />
+                <nz-autocomplete #namAuto [nzDataSource]="dsNamDataSource">
+                </nz-autocomplete>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-date-picker [(ngModel)]="searchInTable.tuNgay" (ngModelChange)="onChangeFilterDate($event)">
+              </nz-date-picker>
+            </th>
+            <th>
+              <nz-date-picker [(ngModel)]="searchInTable.denNgay" (ngModelChange)="onChangeFilterDate($event)">
+              </nz-date-picker>
+            </th>
+            <th class="text-center">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Tìm kiếm" />
+              </nz-input-group>
+            </th>
+            <th class="text-center">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" />
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker [(ngModel)]="filterDate" (ngModelChange)="onChangeFilterDate($event)"></nz-date-picker>
-            </th>
-            <th>
-              <nz-date-picker [(ngModel)]="filterDate" (ngModelChange)="onChangeFilterDate($event)"></nz-date-picker>
+              <nz-date-picker [(ngModel)]="searchInTable.ngayTao" (ngModelChange)="onChangeFilterDate($event)">
+              </nz-date-picker>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.donVi"
+                  [nzAutocomplete]="dvAuto" (input)="onChangeAutoComplete($event, 'dsDonViDataSource', 'dsDonVi')" />
+                <nz-autocomplete #dvAuto [nzDataSource]="dsDonViDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-date-picker [(ngModel)]="filterDate" (ngModelChange)="onChangeFilterDate($event)"></nz-date-picker>
-            </th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.diemKho"
+                  [nzAutocomplete]="diemKhoAuto"
+                  (input)="onChangeAutoComplete($event, 'dsDiemKhoDataSource', 'dsDiemKho')" />
+                <nz-autocomplete #diemKhoAuto [nzDataSource]="dsDiemKhoDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.nhaKho"
+                  [nzAutocomplete]="nhaKhoAuto"
+                  (input)="onChangeAutoComplete($event, 'dsNhaKhoDataSource', 'dsNhaKho')" />
+                <nz-autocomplete #nhaKhoAuto [nzDataSource]="dsNhaKhoDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.nganLo"
+                  [nzAutocomplete]="nganLoAuto"
+                  (input)="onChangeAutoComplete($event, 'dsNganLoDataSource', 'dsNganLo')" />
+                <nz-autocomplete #nganLoAuto [nzDataSource]="dsNganLoDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.trangThai"
+                  [nzAutocomplete]="trangThaiAuto"
+                  (input)="onChangeAutoComplete($event, 'dsTrangThaiDataSource', 'dsTrangThai')" />
+                <nz-autocomplete #trangThaiAuto [nzDataSource]="dsTrangThaiDataSource">
+                </nz-autocomplete>
               </nz-input-group>
             </th>
             <th></th>
@@ -224,5 +252,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-so-kho-the-kho (close)="onClose()"></app-them-so-kho-the-kho>
+  <app-them-so-kho-the-kho (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa"
+    [dsChungLoaiHangHoa]="dsChungLoaiHangHoa"></app-them-so-kho-the-kho>
 </ng-template>
