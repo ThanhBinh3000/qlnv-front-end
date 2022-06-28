@@ -6,11 +6,17 @@
                     <span class="title-form">
                         {{userService.isCuc() ? 'THÔNG TIN ĐẤU THẦU' : 'CẬP NHẬT THÔNG TIN ĐẤU THẦU' }}</span>
                     <div class="btn-action">
-                        <button type="button" class="btn btn-sub" (click)="quayLaiDauThau()">
+                        <button type="button" class="btn btn-sub" (click)="quayLai()">
+                            <i class="fa fa-arrow-left"></i>
+                            <span>Quay lại</span>
+                        </button>
+                        <button *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                            type="button" class="btn btn-sub" (click)="save('02')">
                             <i class="icon htvbdh_checkfile2"></i>
                             <span>Hoàn thành cập nhật</span>
                         </button>
-                        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="saveDthauGthau()">
+                        <button *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                            class="btn btn-main btn-sm waves-effect waves-light" (click)="save('01')">
                             <i class="icon htvbdh_tcdt_save"></i>
                             <span>Lưu</span>
                         </button>
@@ -25,7 +31,7 @@
                                     <nz-form-label [nzNoColon]="true"> Tên gói thầu </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="tenGoiThau" />
+                                            <input nz-input formControlName="tenGthau" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -36,7 +42,7 @@
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="soQdPdKhlcnt" />
+                                            <input nz-input formControlName="soQdPdKhlcnt" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -46,7 +52,7 @@
                                     <nz-form-label [nzNoColon]="true"> Ngày quyết định phê duyệt KHLCNT
                                     </nz-form-label>
                                     <nz-form-control>
-                                        <nz-date-picker formControlName="ngayQdKhlcnt" nzFormat="dd/MM/yyyy">
+                                        <nz-date-picker formControlName="ngayQdPdKhlcnt" nzFormat="dd/MM/yyyy" readonly>
                                         </nz-date-picker>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -57,7 +63,7 @@
                                     <nz-form-label [nzNoColon]="true"> Mã đơn vị </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="maDvi" />
+                                            <input nz-input formControlName="maDvi" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -67,7 +73,7 @@
                                     <nz-form-label [nzNoColon]="true"> Tên đơn vị </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="tenDvi" />
+                                            <input nz-input formControlName="tenDvi" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -99,7 +105,7 @@
                                     <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="dViTinh" />
+                                            <input nz-input formControlName="dViTinh" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -109,7 +115,7 @@
                                     <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="soLuong" />
+                                            <input nz-input formControlName="soLuong" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -119,7 +125,7 @@
                                     <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="donGia" />
+                                            <input nz-input formControlName="donGia" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -129,7 +135,7 @@
                                     <nz-form-label [nzNoColon]="true"> Giá gói thầu gồm thuế (đồng) </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="thanhTien" />
+                                            <input nz-input formControlName="tongTien" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -139,11 +145,7 @@
                                     <nz-form-label [nzNoColon]="true"> Tiêu chuẩn chất lượng </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-select formControlName="loaiHdong">
-                                                <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma"
-                                                    [nzLabel]="p.giaTri">
-                                                </nz-option>
-                                            </nz-select>
+                                            <input nz-input formControlName="tchuanCluong" [readonly]="true" />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -153,7 +155,7 @@
                                     <nz-form-label [nzNoColon]="true">Nguồn vốn</nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-select formControlName="nguonVon">
+                                            <nz-select formControlName="nguonVon" nzDisabled>
                                                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma"
                                                     [nzLabel]="p.giaTri">
                                                 </nz-option>
@@ -168,7 +170,7 @@
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-select formControlName="hthucLcnt">
+                                            <nz-select formControlName="hthucLcnt" nzDisabled>
                                                 <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma"
                                                     [nzLabel]="p.giaTri">
                                                 </nz-option>
@@ -183,7 +185,7 @@
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-select formControlName="pthucLcnt">
+                                            <nz-select formControlName="pthucLcnt" nzDisabled>
                                                 <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma"
                                                     [nzLabel]="p.giaTri">
                                                 </nz-option>
@@ -197,7 +199,7 @@
                                     <nz-form-label [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-select formControlName="loaiHdong">
+                                            <nz-select formControlName="loaiHdong" nzDisabled>
                                                 <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma"
                                                     [nzLabel]="p.giaTri">
                                                 </nz-option>
@@ -213,7 +215,8 @@
                                     <nz-form-control>
                                         <nz-input-group>
                                             <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1"
-                                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+                                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                                                nzDisabled>
                                             </nz-input-number>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -225,7 +228,8 @@
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy">
+                                            <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy"
+                                                nzDisabled>
                                             </nz-date-picker>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -239,7 +243,8 @@
                                     <nz-form-control>
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianDthau"
-                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true">
+                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
+                                                [nzDisabled]=" formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01'">
                                             </nz-date-picker>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -252,7 +257,8 @@
                                     <nz-form-control>
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianMthau"
-                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true">
+                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
+                                                [nzDisabled]=" formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01' ">
                                             </nz-date-picker>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -487,10 +493,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr
+                                            *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'">
                                             <td></td>
                                             <td>
-                                                <nz-select [(ngModel)]="itemRow.id"
+                                                <nz-select [(ngModel)]="itemRow.idNhaThau"
                                                     (ngModelChange)="changeNhaThau($event)">
                                                     <nz-option *ngFor="let p of listNhaThau" [nzValue]="p.id"
                                                         [nzLabel]="p.tenDvi">
@@ -532,19 +539,19 @@
                                                 <td class="text-center">{{i+1}}</td>
                                                 <td><input type="text" nz-input [(ngModel)]="editCache[i].data.ten" />
                                                 </td>
-                                                <td><input type="text" nz-input
-                                                        [(ngModel)]="editCache[i].data.soThue" />
+                                                <td>{{editCache[i].data.tenDvi}}
                                                 </td>
-                                                <td><input type="text" nz-input
-                                                        [(ngModel)]="editCache[i].data.diaChi" />
+                                                <td>{{editCache[i].data.diaChi}}
                                                 </td>
-                                                <td><input type="text" nz-input [(ngModel)]="editCache[i].data.soDt" />
+                                                <td>{{editCache[i].data.sdt}}
                                                 </td>
                                                 <td class="text-center">
-                                                    <a (click)="saveEdit(i)" class="save">
+                                                    <a *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                                                        (click)="saveEdit(i)" class="save">
                                                         <i class="icon htvbdh_tcdt_save"></i>
                                                     </a>
-                                                    <a (click)="cancelEdit(i)">
+                                                    <a *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                                                        (click)="cancelEdit(i)">
                                                         <i class="fa fa-ban do"></i>
                                                     </a>
                                                 </td>
@@ -566,7 +573,8 @@
                                                 <nz-form-control>
                                                     <nz-date-picker formControlName="ngayKyBban" class="search__input"
                                                         nzFormat="dd/MM/yyyy"
-                                                        nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                        nzPlaceHolder="Ngày ký biên bản thương thảo"
+                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01'">
                                                     </nz-date-picker>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -577,9 +585,10 @@
                                                     thảo
                                                 </nz-form-label>
                                                 <nz-form-control>
-                                                    <nz-select formControlName="idNhaThau">
-                                                        <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
-                                                            [nzLabel]="p.tenDvi">
+                                                    <nz-select formControlName="idNhaThau"
+                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01'">
+                                                        <nz-option *ngFor="let p of listNthauNopHs"
+                                                            [nzValue]="p.idNhaThau" [nzLabel]="p.tenDvi">
                                                         </nz-option>
                                                     </nz-select>
                                                 </nz-form-control>
@@ -593,9 +602,10 @@
                                                     trước thuế (đồng)
                                                 </nz-form-label>
                                                 <nz-form-control>
-                                                    <nz-input-number (change)="calendarGia()" formControlName="donGia"
-                                                        nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                                        [nzStep]="1" [nzSize]="'small'">
+                                                    <nz-input-number (change)="calendarGia()"
+                                                        formControlName="donGiaTrcVat" nz-input [nzMin]="1"
+                                                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01'">
                                                     </nz-input-number>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -606,9 +616,10 @@
                                                 </nz-form-label>
                                                 <nz-form-control>
                                                     <nz-input-group nzAddOnAfter="%">
-                                                        <nz-input-number (change)="calendarGia()" formControlName="VAT"
+                                                        <nz-input-number (change)="calendarGia()" formControlName="vat"
                                                             nz-input [nzMin]="1" [nzMax]="100" [nzStep]="1"
-                                                            [nzSize]="'small'">
+                                                            [nzSize]="'small'"
+                                                            [nzDisabled]="formGoiThau.value.trangThai != '00' || formGoiThau.value.trangThai != '01'">
                                                         </nz-input-number>
                                                     </nz-input-group>
                                                 </nz-form-control>
@@ -620,9 +631,9 @@
                                                     thuế (đồng)
                                                 </nz-form-label>
                                                 <nz-form-control>
-                                                    <nz-input-number formControlName="dgianHdongSauThue" nz-input
-                                                        [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-                                                        [nzSize]="'small'" nzDisabled>
+                                                    <nz-input-number formControlName="donGiaSauVat" nz-input [nzMin]="1"
+                                                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                                                        nzDisabled>
                                                     </nz-input-number>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -634,7 +645,7 @@
                                                 <nz-form-label [nzNoColon]="true"> Giá hợp đồng trước thuế (đồng)
                                                 </nz-form-label>
                                                 <nz-form-control>
-                                                    <nz-input-number formControlName="giaHdongTrcVAT" nz-input
+                                                    <nz-input-number formControlName="tongTienTrcVat" nz-input
                                                         [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
                                                         [nzSize]="'small'" nzDisabled>
                                                     </nz-input-number>
@@ -647,7 +658,7 @@
                                                     thuế (đồng)
                                                 </nz-form-label>
                                                 <nz-form-control>
-                                                    <nz-input-number formControlName="giaHdongSauThue" nz-input
+                                                    <nz-input-number formControlName="tongTienSauVat" nz-input
                                                         [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
                                                         [nzSize]="'small'" nzDisabled>
                                                     </nz-input-number>

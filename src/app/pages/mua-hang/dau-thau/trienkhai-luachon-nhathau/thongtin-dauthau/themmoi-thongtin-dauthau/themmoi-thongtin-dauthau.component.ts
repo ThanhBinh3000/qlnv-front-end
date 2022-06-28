@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -24,8 +24,9 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
 })
 export class ThemmoiThongtinDauthauComponent implements OnInit {
-  @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
 
   constructor(
     private router: Router,
@@ -43,13 +44,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
     private dauThauGoiThauService: dauThauGoiThauService,
-    private donviLienQuanService: DonviLienQuanService
+    private donviLienQuanService: DonviLienQuanService,
   ) {
     this.formGoiThau = this.fb.group({
+      id: [''],
       idGoiThau: [''],
-      tenGoiThau: [''],
+      tenGthau: [''],
       soQdPdKhlcnt: [''],
-      ngayQdKhlcnt: [''],
+      ngayQdPdKhlcnt: [''],
       maDvi: [''],
       tenDvi: [''],
       loaiVthh: [''],
@@ -59,8 +61,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       dViTinh: [''],
       soLuong: [''],
       donGia: [''],
-      thanhTien: [''],
-      tChuanCluong: [''],
+      tongTien: [''],
+      tchuanCluong: [''],
       nguonVon: [''],
       hthucLcnt: [''],
       pthucLcnt: [''],
@@ -71,11 +73,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       tgianNhang: [''],
       ngayKyBban: [''],
       idNhaThau: [''],
+      donGiaTrcVat: [''],
+      vat: [''],
+      donGiaSauVat: [''],
+      tongTienSauVat: [''],
+      tongTienTrcVat: [''],
       ghiChu: [''],
-      giaHdongTrcVAT: [''],
-      VAT: [''],
-      dgianHdongSauThue: [''],
-      giaHdongSauThue: [''],
+      diaDiemNhap: [[]],
+      trangThai: ['']
     });
   }
 
@@ -120,7 +125,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
-      // this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -146,81 +150,98 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   }
 
   async getDetail() {
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(this.idInput);
+    const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
-      console.log(dataDetail);
-      this.formGoiThau.patchValue({
-        tenGoiThau: dataDetail.goiThau,
-        loaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiVthh,
-        tenVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenVthh,
-        cloaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.cloaiVthh,
-        tenCloaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
-        soQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.soQd,
-        ngayQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.ngayQd,
-        maDvi: dataDetail.hhQdKhlcntDtl.maDvi,
-        tenDvi: dataDetail.hhQdKhlcntDtl.tenDvi,
-        dviTinh: dataDetail.dviTinh,
-        tchuanCluong: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tchuanCluong,
-        pthucLcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.pthucLcnt,
-        hthucLcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.hthucLcnt,
-        nguonVon: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.nguonVon,
-        donGia: dataDetail.donGia,
-        soLuong: dataDetail.soLuong,
-        thanhTien: dataDetail.thanhTien,
-        tgianThienHd: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianThienHd,
-        loaiHdong: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiHdong,
-        tgianNhang: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianNhang,
-        tgianDthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianDthau,
-        tgianMthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianMthau,
-      });
-      let stringConcat = ''
-      dataDetail.children.forEach(item => {
-        stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
-      });
-      this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-        tenDvi: dataDetail.tenDvi,
-        noiDung: stringConcat.substring(0, stringConcat.length - 2)
-      }]
-      console.log(stringConcat);
+      // Trang thái đã cập nhập thông tin gói thầu hoặc hoàn thành cập nhập tt gt
+      if (dataDetail.trangThai == "00") {
+        this.formGoiThau.patchValue({
+          idGoiThau: dataDetail.id,
+          tenGthau: dataDetail.goiThau,
+          loaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiVthh,
+          tenVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenVthh,
+          cloaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.cloaiVthh,
+          tenCloaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
+          soQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.soQd,
+          ngayQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.ngayQd,
+          maDvi: dataDetail.hhQdKhlcntDtl.maDvi,
+          tenDvi: dataDetail.hhQdKhlcntDtl.tenDvi,
+          dviTinh: dataDetail.dviTinh,
+          tchuanCluong: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tchuanCluong,
+          pthucLcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.pthucLcnt,
+          hthucLcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.hthucLcnt,
+          nguonVon: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.nguonVon,
+          donGia: dataDetail.donGia,
+          soLuong: dataDetail.soLuong,
+          tongTien: dataDetail.thanhTien,
+          tgianThienHd: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianThienHd,
+          loaiHdong: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiHdong,
+          tgianNhang: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianNhang,
+          tgianDthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianDthau,
+          tgianMthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianMthau,
+          diaDiemNhap: dataDetail.children,
+          trangThai: dataDetail.trangThai
+        });
+        let stringConcat = ''
+        dataDetail.children.forEach(item => {
+          stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
+        });
+        this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+          tenDvi: dataDetail.tenDvi,
+          noiDung: stringConcat.substring(0, stringConcat.length - 2)
+        }]
+      } else {
+        const res = await this.dauThauGoiThauService.chiTietByGoiThauId(this.idInput);
+        const dataThongTinGt = res.data;
+        this.listNthauNopHs = dataThongTinGt.nthauDuThauList;
+        this.formGoiThau.patchValue({
+          id: dataThongTinGt.id,
+          idGoiThau: dataThongTinGt.idGoiThau,
+          tenGthau: dataThongTinGt.tenGthau,
+          loaiVthh: dataThongTinGt.loaiVthh,
+          tenVthh: dataThongTinGt.tenVthh,
+          cloaiVthh: dataThongTinGt.cloaiVthh,
+          tenCloaiVthh: dataThongTinGt.tenCloaiVthh,
+          soQdPdKhlcnt: dataThongTinGt.soQdPdKhlcnt,
+          ngayQdPdKhlcnt: dataThongTinGt.ngayQdPdKhlcnt,
+          maDvi: dataDetail.hhQdKhlcntDtl.maDvi,
+          tenDvi: dataDetail.hhQdKhlcntDtl.tenDvi,
+          dviTinh: dataThongTinGt.dviTinh,
+          tchuanCluong: dataThongTinGt.tchuanCluong,
+          pthucLcnt: dataThongTinGt.pthucLcnt,
+          hthucLcnt: dataThongTinGt.hthucLcnt,
+          nguonVon: dataThongTinGt.nguonVon,
+          donGia: dataThongTinGt.donGia,
+          soLuong: dataThongTinGt.soLuong,
+          tongTien: dataThongTinGt.tongTien,
+          tgianThienHd: dataThongTinGt.tgianThienHd,
+          loaiHdong: dataThongTinGt.loaiHdong,
+          tgianNhang: dataThongTinGt.tgianNhang,
+          tgianDthau: dataThongTinGt.tgianDthau,
+          tgianMthau: dataThongTinGt.tgianMthau,
+          trangThai: dataDetail.trangThai,
+
+          ngayKyBban: dataThongTinGt.ngayKyBban,
+          vat: dataThongTinGt.vat,
+          donGiaTrcVat: dataThongTinGt.donGiaTrcVat,
+          idNhaThau: dataThongTinGt.idNhaThau,
+        });
+        let stringConcat = ''
+        dataDetail.children.forEach(item => {
+          stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
+        });
+        this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+          tenDvi: dataDetail.tenDvi,
+          noiDung: stringConcat.substring(0, stringConcat.length - 2)
+        }];
+
+        this.calendarGia();
+      }
+      console.log(this.listNthauNopHs);
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-  }
-
-  redirectToChiTiet(data) {
-    console.log(data);
-    this.isDetail = true;
-    this.formGoiThau.patchValue({
-      idGoiThau: data.id,
-      tenGoiThau: data.tenDuAn,
-      tenDvi: data.tenDvi,
-      maDvi: data.maDvi,
-      donGia: data.donGia,
-      soLuong: data.soLuong,
-      tongTien: data.tongTien,
-    });
-    this.listNthauNopHs = [{
-      ten: '',
-      soThue: '',
-      diaChi: '',
-      soDt: ''
-    }]
-    this.listDiaDiemNhapHang = [{
-      maDvi: '',
-      maDiemKho: '',
-      maKho: '',
-    }]
-    this.updateEditCache();
-  }
-
-  quayLaiSearch() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau']);
-  }
-
-  quayLaiDauThau() {
-    this.isDetail = false;
   }
 
   async phuongThucDauThauGetAll() {
@@ -238,6 +259,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
         data: { ...value }
       };
     })
+  }
+
+  quayLai() {
+    this.showListEvent.emit();
   }
 
   async nguonVonGetAll() {
@@ -280,14 +305,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       ...this.listNthauNopHs,
       this.itemRow
     ];
-    this.i++;
     this.listNthauNopHs.forEach((value, index) => {
       this.editCache[index] = {
         edit: false,
         data: { ...value }
       };
     })
-    this.editCache[this.i].edit = true;
+    console.log(this.listNthauNopHs);
     this.clearItemRow();
   }
 
@@ -312,7 +336,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   }
 
   startEdit(index: number): void {
-    console.log(index);
     this.editCache[index].edit = true;
   }
 
@@ -336,35 +359,45 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     this.editCache[index].edit = false;
   }
 
-  async saveDthauGthau() {
+  async save(trangThaiLuu) {
     let body = this.formGoiThau.value;
-    console.log(body)
-    body.children = this.listNthauNopHs;
+    body.nthauDuThauList = this.listNthauNopHs;
+    body.trangThaiLuu = trangThaiLuu
     let res = await this.dauThauGoiThauService.create(body);
-    console.log(res);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.formGoiThau.get('id').value) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        this.quayLai();
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.quayLai();
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   calendarGia() {
-    let donGia = this.formGoiThau.get('donGia').value;
-    let VAT = this.formGoiThau.get('VAT').value;
+    let donGia = this.formGoiThau.get('donGiaTrcVat').value;
+    let VAT = this.formGoiThau.get('vat').value;
     let soLuong = this.formGoiThau.get('soLuong').value;
     if (donGia >= 0 && VAT >= 0) {
       this.formGoiThau.patchValue({
-        dgianHdongSauThue: (donGia + (donGia * VAT / 100)),
-        giaHdongTruocThue: donGia * soLuong,
-        giaHdongSauThue: (donGia + (donGia * VAT / 100)) * soLuong,
+        donGiaSauVat: (donGia + (donGia * VAT / 100)),
+        tongTienTrcVat: donGia * soLuong,
+        tongTienSauVat: (donGia + (donGia * VAT / 100)) * soLuong,
       })
     }
   }
 
   changeNhaThau(event) {
-    console.log(event);
     let data = this.listNhaThau.filter(item => item.id === event);
-    this.itemRow.id = event.id;
+    this.itemRow.idNhaThau = event;
     this.itemRow.tenDvi = data[0].tenDvi;
     this.itemRow.mst = data[0].mst;
     this.itemRow.diaChi = data[0].diaChi;
     this.itemRow.sdt = data[0].sdt;
+    this.itemRow.version = data[0].version;
   }
 
 }

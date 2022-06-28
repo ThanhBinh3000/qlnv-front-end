@@ -77,14 +77,12 @@
                     <td>{{data.thanhGiaGoiThau}}</td>
                     <td>{{ statusGoiThau(data.trangThai) }}</td>
                     <td class="text-left">
-                      <a (click)="redirectToChiTiet(data.idGt, false)">
+                      <a (click)="redirectToChiTiet(data.idGt)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(data.idGt, false)">
+                      <a *ngIf="data.trangThai == '00' || data.trangThai == '01'"
+                        (click)="redirectToChiTiet(data.idGt)">
                         <i class="icon htvbdh_soanthao"></i>
-                      </a>
-                      <a (click)="redirectToChiTiet(data.idGt, false)">
-                        <i class="icon htvbdh_xemthem"></i>
                       </a>
                     </td>
                   </tr>
@@ -121,6 +119,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-thongtin-dauthau [idInput]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
+  <app-themmoi-thongtin-dauthau [idInput]="selectedId" (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau>
 </div>
