@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -153,14 +154,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  // async changeDiemKho() {
-  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-  //   this.searchFilter.maNganKho = null;
-  //   if (diemKho && diemKho.length > 0) {
-  //     await this.loadNhaKho(diemKho[0].id);
-  //   }
-  // }
-
   async loadNganLo() {
     let body = {
       "maNganLo": null,
@@ -189,8 +182,9 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   async changePageIndex(event) {
@@ -267,24 +261,17 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   async search() {
     let body = {
-      "denNgay": null,
-      "maDonVi": this.userInfo.MA_DVI,
-      "ngayGiaoNhanHang": null,
-      "ngayNhapKho": null,
-      "ngayTaoPhieu": null,
+      "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
+      "maDvi": this.userInfo.MA_DVI,
       "orderBy": null,
       "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
+      "pageNumber": this.page,
+      "pageSize": this.pageSize,
       "soPhieu": this.searchFilter.soPhieu,
+      "soQdNhap": this.searchFilter.soQuyetDinh,
       "str": null,
       "trangThai": null,
-      "tuNgay": null,
-      "maHangHoa": this.typeVthh
+      "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
     };
     let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -303,7 +290,36 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   export() {
-
+    if (this.totalRecord && this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body =
+        {
+          "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
+          "maDvi": this.userInfo.MA_DVI,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soPhieu": this.searchFilter.soPhieu,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "str": null,
+          "trangThai": null,
+          "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
+        }
+        this.quanLyPhieuNhapKhoService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
@@ -327,12 +343,13 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyPhieuNhapKhoService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

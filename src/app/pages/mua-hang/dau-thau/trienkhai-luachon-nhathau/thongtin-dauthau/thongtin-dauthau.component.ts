@@ -181,8 +181,9 @@ export class ThongtinDauthauComponent implements OnInit {
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   clearFilter() {
     // this.namKeHoach = null;

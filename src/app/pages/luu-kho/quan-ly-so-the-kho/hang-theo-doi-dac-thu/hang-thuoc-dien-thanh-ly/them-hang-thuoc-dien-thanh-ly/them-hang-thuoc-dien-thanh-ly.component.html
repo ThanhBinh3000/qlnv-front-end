@@ -1,0 +1,196 @@
+<nz-card class="mt16 flex-card p-lr16">
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
+    <div class="search__body" nz-row [nzGutter]="24">
+      <nz-form-item nz-col nzSpan="3" class="form-item">
+        <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
+        <nz-form-control>
+          <nz-input-group id="ma-don-vi" [nzSuffix]="suffixIconOpenFolder">
+            <input type="text" nz-input formControlName="idDonVi" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item nz-col nzSpan="9" class="form-item">
+        <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
+        <nz-form-control>
+          <nz-input-group id="ten-don-vi">
+            <input type="text" nz-input formControlName="tenDonVi" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item nz-col nzSpan="4" class="form-item">
+        <nz-form-label nzFor="ma-danh-sach">Mã danh sách</nz-form-label>
+        <nz-form-control>
+          <nz-input-group id="ma-danh-sach" [nzSuffix]="suffixIconOpenFolder">
+            <input type="text" nz-input formControlName="idDanhSach" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item nz-col nzSpan="4" class="form-item">
+        <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+          </nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <ng-template #suffixIconOpenFolder>
+      <i nz-icon nzType="folder-open"></i>
+    </ng-template>
+  </form>
+</nz-card>
+
+<div class="group-button">
+  <h3>Danh sách hàng thuộc diện thanh lý</h3>
+  <div class="buttons">
+    <button type="button" class="btn btn-sub btn-xoa" (click)="huy()">
+      <i class="fa fa-times do"></i>
+      <span>Huỷ bỏ</span>
+    </button>
+    <button type="button" class="btn btn-sub" (click)="exportData()">
+      <i class="icon htvbdh_chuyen-xu-ly"></i>
+      <span>Xuất file</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh" (click)="luu()">
+      <i class="fa fa-floppy-o"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</div>
+
+<nz-card class="mt-16 flex-card data-table card-border-content">
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 5%;">STT</th>
+        <th style="width: 10%;">Loại hàng hoá</th>
+        <th style="width: 10%;">Tên hàng hoá</th>
+        <th style="width: 10%;">Điểm kho</th>
+        <th style="width: 10%;">Nhà kho</th>
+        <th style="width: 10%;">Ngăn lô</th>
+        <th style="width: 10%;">Số lượng tồn</th>
+        <th style="width: 10%;">Số lượng thanh lý</th>
+        <th style="width: 10%;">Đơn vị tính</th>
+        <th style="width: 10%;">Lý do</th>
+        <th style="width: 5%;">Hành động</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập loại hàng hoá" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập tên hàng hoá" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập điểm kho" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập nhà kho" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập ngăn lô" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="number" nz-input placeholder="Nhập số lượng" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="number" nz-input placeholder="Nhập số lượng" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập đơn vị tính" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Nhập lý do" />
+          </nz-input-group>
+        </th>
+        <th style="text-align: center;">
+          <a (click)="themMoiItem()">
+            <i class="table-icon icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="clearData()">
+            <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of editRowTable.data; let idx = index">
+        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.loaiHangHoa }}</td>
+          <td>{{ data.tenHangHoa }}</td>
+          <td>{{ data.tenDiemKho }}</td>
+          <td>{{ data.tenNhaKho }}</td>
+          <td>{{ data.tenNganLo }}</td>
+          <td>{{ data.soLuongTon }}</td>
+          <td>{{ data.soLuongThanhLy }}</td>
+          <td>{{ data.donVi }}</td>
+          <td>{{ data.lyDo }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(data.id)">
+              <i class="table-icon fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(data.id)">
+              <i class="table-icon fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td>
+            <input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.loaiHangHoa" />
+          </td>
+          <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenHangHoa" /></td>
+          <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenDiemKho" /></td>
+          <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenNhaKho" /></td>
+          <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenNganLo" /></td>
+          <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.soLuongTon" /></td>
+          <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.soLuongThanhLy" /></td>
+          <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.donVi" /></td>
+          <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.lyDo" /></td>
+
+          <td>
+            <a (click)="luuEdit(data.id)" class="save">Lưu</a>
+            <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between">
+      <div class="trai">
+
+      </div>
+      <div class="canphai">
+        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+          [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+          (nzPageSizeChange)="changePageSize($event)">
+          <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+          </ng-template>
+        </nz-pagination>
+      </div>
+    </div>
+  </div>
+</nz-card>

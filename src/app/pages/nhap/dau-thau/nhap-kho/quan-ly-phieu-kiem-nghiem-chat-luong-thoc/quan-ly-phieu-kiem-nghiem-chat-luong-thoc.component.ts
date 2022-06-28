@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -19,10 +19,12 @@ import * as dayjs from 'dayjs';
   styleUrls: ['./quan-ly-phieu-kiem-nghiem-chat-luong-thoc.component.scss'],
 })
 export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
+  @Input() typeVthh: string;
+
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
-    soQd: '',
+    soQdNhap: '',
     ngayLayMau: '',
     soHopDong: '',
     diemkho: '',
@@ -45,7 +47,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     soBienBan: '',
   };
   filterTable = {
-    soQd: '',
+    soQdNhap: '',
     soPhieu: '',
     ngayKnghiem: '',
     soBbanKthucNhap: '',
@@ -63,6 +65,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   maVthh: string;
   idVthh: number;
   routerVthh: string;
+  isTatCa: boolean = false;
 
   userInfo: UserLogin;
   page: number = 1;
@@ -70,6 +73,10 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   totalRecord: number = 0;
   isDetail: boolean = false;
   selectedId: number = 0;
+
+  allChecked = false;
+  indeterminate = false;
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -84,6 +91,9 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.typeVthh == 'tat-ca') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDiemKho(),
@@ -98,20 +108,49 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
   async search() {
     this.spinner.show();
     let body = {
-      maDvi: null,
-      maHhoa: null,
-      maKho: null,
-      maNgan: null,
-      ngayKnghiemDenNgay: this.searchFilter.ngayKiemNghiem ?
+      maDvi: this.userInfo.MA_DVI,
+      maVatTuCha: this.isTatCa ? null : this.typeVthh,
+      ngayBanGiaoMauDen: this.searchFilter.ngayKiemNghiem ?
         dayjs(this.searchFilter.ngayKiemNghiem[0]).format('YYYY-MM-DD') : null,
-      ngayKnghiemTuNgay: this.searchFilter.ngayKiemNghiem ?
+      ngayBanGiaoMauTu: this.searchFilter.ngayKiemNghiem ?
         dayjs(this.searchFilter.ngayKiemNghiem[1]).format('YYYY-MM-DD') : null,
-      orderBy: null,
-      orderDirection: null,
       soPhieu: this.searchFilter.soPhieu ?? null,
+      soQdNhap: this.searchFilter.soQdNhap,
       str: null,
       trangThai: null,
       pageNumber: this.page,
@@ -133,6 +172,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -160,9 +200,10 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
+      soQdNhap: '',
       ngayLayMau: '',
       soHopDong: '',
       diemkho: '',
@@ -186,6 +227,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     };
     this.search();
   }
+
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -218,6 +260,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       },
     });
   }
+
   async loadDiemKho() {
     let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
     if (res.msg == MESSAGE.SUCCESS) {
@@ -312,9 +355,12 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
   }
-  showList() {
+
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -332,9 +378,10 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
+      soQdNhap: '',
       soPhieu: '',
       ngayKnghiem: '',
       soBbanKthucNhap: '',

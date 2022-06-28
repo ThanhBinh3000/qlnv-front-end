@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -48,7 +49,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   filterTable: any = {
     soQuyetDinhNhap: '',
-    soPhieu: '',
+    soPhieuNhapKho: '',
     ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
@@ -117,6 +118,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   async search() {
     let param = {
       "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+      "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
       "maHang": this.typeVthh,
       "pageSize": this.pageSize,
@@ -245,14 +247,6 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  // async changeDiemKho() {
-  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-  //   this.searchFilter.maNhaKho = null;
-  //   if (diemKho && diemKho.length > 0) {
-  //     await this.loadNhaKho(diemKho[0].id);
-  //   }
-  // }
-
   async loadNganLo() {
     let body = {
       "maNganLo": null,
@@ -281,12 +275,41 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
 
   export() {
-
+    if (this.totalRecord && this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "denNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+          "maDvi": this.userInfo.MA_DVI,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soBangKe": this.searchFilter.soBangKe,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "str": null,
+          "trangThai": null,
+          "tuNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+        }
+        this.quanLyBangKeCanHangService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-bang-ke-can-hang.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
@@ -310,12 +333,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyBangKeCanHangService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -351,7 +375,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQuyetDinhNhap: '',
-      soPhieu: '',
+      soPhieuNhapKho: '',
       ngayNhapKho: '',
       tenDiemKho: '',
       tenNhaKho: '',
@@ -363,3 +387,4 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   }
 }
+
