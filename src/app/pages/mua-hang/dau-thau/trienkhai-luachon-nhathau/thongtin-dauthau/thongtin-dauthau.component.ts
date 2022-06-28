@@ -176,15 +176,16 @@ export class ThongtinDauthauComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
   }
+
   async showList() {
     this.isDetail = false;
     await this.search()
   }
+
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;
