@@ -6,27 +6,17 @@
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="2">
               <label class="search__label"> Năm kế hoạch </label>
-              <nz-select [(ngModel)]="searchFilter.namKh">
+              <nz-select [(ngModel)]="searchFilter.namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Quyết định phê duyệt KHLCNT</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
+              <label class="search__label">Số quyết định phê duyệt KHLCNT</label>
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPd" />
             </div>
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="4">
               <label class="search__label">Ngày quyết định</label>
-              <!-- <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
-              <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày quyết định">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="16">
-              <label class="search__label">Trích yếu</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
-            </div>
-            <div nz-col nzSpan="5">
-              <label class="search__label">Tên gói thầu</label>
-              <input class="search__input" placeholder="Tên gói thầu" nz-input [(ngModel)]="searchFilter.soQd" />
+              <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Loại hàng hóa </label>
@@ -36,7 +26,11 @@
             </div>
             <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
               <label class="search__label">Đơn vị</label>
-              <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.soQd" />
+              <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.maDvi" />
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Trích yếu</label>
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -54,7 +48,7 @@
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
             <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách các gói thầu'">
               <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" *ngIf="userService.isTongCuc()">
+                [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th width="30px">STT</th>
@@ -67,71 +61,28 @@
                     <th>Chủng loại hàng hóa</th>
                     <th>Giá gói thầu (đồng)</th>
                     <th>Trạng thái</th>
-                    <th>Hành động</th>
+                    <th width="90px">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Mua gạo</td>
-                    <td>Cục DTNNKV Tây Nam Bộ</td>
-                    <td>1546/QĐ-TCDT</td>
-                    <td>10/03/2022</td>
-                    <td>Nhập gạo</td>
-                    <td>Gạo</td>
-                    <td>abc</td>
-                    <td>20.000.000</td>
-                    <td>Đang cập nhật</td>
-                    <td>
-                      <a>
-                        <i class="fa fa-eye" (click)="redirectToChiTiet(0, false)"></i>
-                      </a>
-                      <a>
-                        <i class="icon htvbdh_soanthao" (click)="redirectToChiTiet(0, false)"></i>
-                      </a>
-                      <a>
-                        <i class="icon htvbdh_xemthem" (click)="redirectToChiTiet(0, false)"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </nz-table>
-              <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" *ngIf="userService.isCuc()">
-                <thead>
-                  <tr>
-                    <th width="30px">STT</th>
-                    <th>Tên gói thầu</th>
-                    <th>Số QĐ PDKHLCNT</th>
-                    <th>Ngày QĐ</th>
-                    <th>Trích yếu</th>
-                    <th>Loại hàng hóa</th>
-                    <th>Chủng loại hàng hóa</th>
-                    <th>Giá gói thầu (đồng)</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Mua gạo</td>
-                    <td>1546/QĐ-TCDT</td>
-                    <td>10/03/2022</td>
-                    <td>Nhập gạo</td>
-                    <td>Gạo</td>
-                    <td>abc</td>
-                    <td>20.000.000</td>
-                    <td>Đang cập nhật</td>
-                    <td>
-                      <a (click)="redirectToChiTiet(0, false)">
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+                    <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                    <td>{{ data.goiThau }}</td>
+                    <td>{{ data.tenDvi }}</td>
+                    <td>{{ data.soQdPdKhlcnt }}</td>
+                    <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{ data.trichYeu }}</td>
+                    <td>{{data.tenVthh}}</td>
+                    <td>{{data.tenCloaiVthh}}</td>
+                    <td>{{data.thanhGiaGoiThau}}</td>
+                    <td>{{ statusGoiThau(data.trangThai) }}</td>
+                    <td class="text-left">
+                      <a (click)="redirectToChiTiet(data.idGt)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(0, false)">
+                      <a *ngIf="data.trangThai == '00' || data.trangThai == '01'"
+                        (click)="redirectToChiTiet(data.idGt)">
                         <i class="icon htvbdh_soanthao"></i>
-                      </a>
-                      <a (click)="redirectToChiTiet(0, false)">
-                        <i class="icon htvbdh_xemthem"></i>
                       </a>
                     </td>
                   </tr>
@@ -168,6 +119,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-thongtin-dauthau [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
+  <app-themmoi-thongtin-dauthau [idInput]="selectedId" (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau>
 </div>

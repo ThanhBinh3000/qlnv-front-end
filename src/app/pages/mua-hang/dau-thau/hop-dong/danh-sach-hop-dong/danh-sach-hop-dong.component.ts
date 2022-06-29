@@ -262,7 +262,7 @@ export class DanhSachHopDongComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search();
+    await this.search()
   }
 
   exportData() {
@@ -290,7 +290,7 @@ export class DanhSachHopDongComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // let res = await this.deXuatDieuChinhService.deleteMultiple({ids: dataDelete});
             // if (res.msg == MESSAGE.SUCCESS) {
             //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             // } else {

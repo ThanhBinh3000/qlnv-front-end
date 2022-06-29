@@ -2,135 +2,136 @@
   <div class="contentDetail">
     <div class="main-content">
       <div nz-row [nzGutter]="24">
-          <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
-            <nz-card nzTitle="Đơn vị"  class="card-tree">
-              <nz-input-group [nzSuffix]="suffixIcon">
-                <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <!--có Search: https://ng.ant.design/components/tree-view/en -->
-              <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
-                (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
-                (nzExpandChange)="nzCheck($event)" [nzSearchValue]="searchValue">
-              </nz-tree>
-            </nz-card>
-          </div>
-          <!-- Thông tin đơn vị  -->
-          <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
-            <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
-                <form nz-form [formGroup]="detailDonVi"  [nzLayout]="'vertical'">
-                  <div nz-row [nzGutter]="24">
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
-                        <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
-                          <input nz-input formControlName="tenDvi" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label>Mã đơn vị</nz-form-label>
-                          <input nz-input formControlName="maDvi" [readonly]="true" />
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label >Mã QHNS</nz-form-label>
-                        <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
-                          <input nz-input formControlName="maQhns" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
-                      <nz-form-item>
-                        <nz-form-label>Địa chỉ</nz-form-label>
-                        <input nz-input formControlName="diaChi" />
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
-                      <nz-form-item>
-                        <nz-form-label>Ghi chú</nz-form-label>
-                        <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
-                          <input nz-input formControlName="ghiChu" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngIf="nodeDetail?.maDviCha">
-                      <nz-form-item>
-                        <nz-form-label>Đơn vị cấp trên</nz-form-label>
-                        <nz-form-control nzErrorTip="Tên Tiếng anh là bắt buộc!">
-                          <nz-tree-select #nzTreeSelectComponent [nzNodes]="nodes" [nzDefaultExpandAll]="true" [nzDropdownMatchSelectWidth]="true"
-                            nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha" >
-                          </nz-tree-select>
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    
-                  </div>
-                  <div nz-row [nzGutter]="24">
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label >Mã QĐ</nz-form-label>
-                        <nz-form-control nzErrorTip="Hình thức đơn vị là bắt buộc!">
-                          <input nz-input formControlName="maQd" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label >Mã TR</nz-form-label>
-                        <nz-form-control nzErrorTip="Kiểu phòng ban là bắt buộc!">
-                          <input nz-input formControlName="maTr" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label>MÃ KHQLH</nz-form-label>
-                        <nz-form-control>
-                          <input nz-input formControlName="maKhqlh" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label>MÃ KTBQ</nz-form-label>
-                        <nz-form-control>
-                          <input nz-input formControlName="maKtbq" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label>MÃ TCKT</nz-form-label>
-                        <nz-form-control>
-                          <input nz-input formControlName="maTckt" />
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-                      <nz-form-item>
-                        <nz-form-label>Trạng thái</nz-form-label>
-                        <label nz-checkbox formControlName="trangThai">hoạt động/không hoạt động</label>
-                      </nz-form-item>
-                    </div>
-                  </div>
-                </form>
-                <div class="cangiua group-button-search">
-                  <button nz-button class="search__button--search" (click)="update()">
-                    <i nz-icon nzType="save"></i>
-                    Lưu
-                  </button>
-                  <button nz-button class="search__button--delete" (click)="delete()">
-                    <i nz-icon nzType="delete"></i>
-                    Xóa
-                  </button>
+        <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+          <nz-card nzTitle="Đơn vị" class="card-tree">
+            <nz-input-group [nzSuffix]="suffixIcon">
+              <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <!--có Search: https://ng.ant.design/components/tree-view/en -->
+            <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+              (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
+              (nzExpandChange)="nzCheck($event)" [nzSearchValue]="searchValue">
+            </nz-tree>
+          </nz-card>
+        </div>
+        <!-- Thông tin đơn vị  -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+          <nz-card class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <form nz-form [formGroup]="detailDonVi" [nzLayout]="'vertical'">
+              <div nz-row [nzGutter]="24">
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+                    <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+                      <input nz-input formControlName="tenDvi" />
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
-            </nz-card>
-          </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>Mã đơn vị</nz-form-label>
+                    <input nz-input formControlName="maDvi" [readonly]="true" />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>Mã QHNS</nz-form-label>
+                    <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
+                      <input nz-input formControlName="maQhns" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                  <nz-form-item>
+                    <nz-form-label>Địa chỉ</nz-form-label>
+                    <input nz-input formControlName="diaChi" />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                  <nz-form-item>
+                    <nz-form-label>Ghi chú</nz-form-label>
+                    <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
+                      <input nz-input formControlName="ghiChu" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngIf="nodeDetail?.maDviCha">
+                  <nz-form-item>
+                    <nz-form-label>Đơn vị cấp trên</nz-form-label>
+                    <nz-form-control nzErrorTip="Tên Tiếng anh là bắt buộc!">
+                      <nz-tree-select #nzTreeSelectComponent [nzNodes]="nodes" [nzDefaultExpandAll]="true"
+                        [nzDropdownMatchSelectWidth]="true" nzShowSearch nzVirtualHeight="300px"
+                        nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha">
+                      </nz-tree-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+              </div>
+              <div nz-row [nzGutter]="24">
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>Mã QĐ</nz-form-label>
+                    <nz-form-control nzErrorTip="Hình thức đơn vị là bắt buộc!">
+                      <input nz-input formControlName="maQd" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>Mã TR</nz-form-label>
+                    <nz-form-control nzErrorTip="Kiểu phòng ban là bắt buộc!">
+                      <input nz-input formControlName="maTr" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>MÃ KHQLH</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="maKhqlh" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>MÃ KTBQ</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="maKtbq" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>MÃ TCKT</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="maTckt" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+                  <nz-form-item>
+                    <nz-form-label>Trạng thái</nz-form-label>
+                    <label nz-checkbox formControlName="trangThai">hoạt động/không hoạt động</label>
+                  </nz-form-item>
+                </div>
+              </div>
+            </form>
+            <div class="cangiua group-button-search">
+              <button nz-button class="search__button--search" (click)="update()">
+                <i nz-icon nzType="save"></i>
+                Lưu
+              </button>
+              <button nz-button class="search__button--delete" (click)="delete()">
+                <i nz-icon nzType="delete"></i>
+                Xóa
+              </button>
+            </div>
+          </nz-card>
+        </div>
       </div>
       <ng-template #tableCard1>
         <button type="button" class="btn btn-main" (click)="create()">

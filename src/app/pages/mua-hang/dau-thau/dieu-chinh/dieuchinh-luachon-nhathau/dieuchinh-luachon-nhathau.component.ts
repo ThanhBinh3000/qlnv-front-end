@@ -182,8 +182,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   clearFilter() {
     // this.namKeHoach = null;

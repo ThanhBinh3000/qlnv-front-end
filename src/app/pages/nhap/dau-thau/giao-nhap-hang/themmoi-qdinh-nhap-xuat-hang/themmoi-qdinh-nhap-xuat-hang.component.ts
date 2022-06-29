@@ -3,7 +3,7 @@ import {
   FormBuilder, FormGroup,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -18,7 +18,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { UserLogin } from 'src/app/models/userlogin';
-import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
@@ -32,8 +31,10 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   @Input() id: number;
+  @Input() typeVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewDetail: boolean;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   formData: FormGroup;
   chiTietQDGiaoNhapXuatHang: any = [];
@@ -59,9 +60,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   idVthh: number;
   routerVthh: string;
   today = new Date();
+  listNam: any[] = [];
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private modal: NzModalService,
     private donViService: DonviService,
@@ -72,68 +73,37 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
-
-
   ) { }
 
   ngOnInit(): void {
-    this.getTitleVthh();
+    let dayNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayNow - i,
+        text: dayNow - i,
+      });
+    }
     this.userInfo = this.userService.getUserLogin();
     this.routerUrl = this.router.url;
-    if (this.routerUrl.includes('/xem-chi-tiet/')) {
-      this.isChiTiet = true;
-    } else {
-      this.isChiTiet = false;
-    }
-    this.id = +this.activatedRoute.snapshot.paramMap.get('id');
-    this.type = this.activatedRoute.snapshot.paramMap.get('type');
     this.initForm();
     if (this.id > 0) {
       this.loadThongTinQdNhapXuatHang(this.id);
     }
-    this.loadDonVi("chi-cuc");
-    this.loadDonVi("all");
-    this.loadDanhMucHang();
+    this.formData.patchValue({
+      donVi: this.userInfo.TEN_DVI,
+      maDonVi: this.userInfo.MA_DVI,
+    });
     this.newObjectQdNhapXuat();
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.idVthh = 2;
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.idVthh = 6;
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.idVthh = 78;
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
-  redirectToDanhSachDauThau() {
-    this.router.navigate([`nhap/dau-thau/danh-sach-dau-thau/${this.type}`]);
   }
 
   initForm() {
     this.formData = this.fb.group({
       soQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soQd : null, [Validators.required]],
-      // ngayQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ngayKy : null, [Validators.required]],
-      ngayQdinh: [dayjs(), [Validators.required]],
+      ngayQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ngayQdinh : null, [Validators.required]],
       canCu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soHd : null, [Validators.required]],
       veViec: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.veViec : null],
+      trichYeu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.trichYeu : null, [Validators.required]],
+      namNhap: [dayjs().get('year')],
       donVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.tenDonVi : null],
       maDonVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.maDvi : null],
       ghiChu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ghiChu : null],
@@ -141,12 +111,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
-  // dateValidator = (control: FormControl): { [s: string]: boolean } => {
-  //   if (control.value && !moment(control.value, 'DD/MM/YYYY', true).isValid()) {
-  //     return { invalid: true };
-  //   }
-  //   return {};
-  // };
 
   openDialogQuyetDinhGiaoChiTieu() {
     if (this.isChiTiet) {
@@ -375,22 +339,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       );
     }
   }
-
-  selectHangHoa(option) { }
-
-  changeMaHangHoa() { }
-
-  onInputDonViTinh(e: Event): void {
-    // const value = (e.target as HTMLInputElement).value;
-    // if (!value || value.indexOf('@') >= 0) {
-    //   this.optionsDonVi = [];
-    // } else {
-    //   this.optionsDonVi = this.optionsFullDonVi.filter(
-    //     (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-    //   );
-    // }
-  }
-
   saveEditQdNhapXuat(i: number): void {
     this.dsQuyetDinhNhapXuatDetailClone[i].isEdit = false;
     Object.assign(
@@ -407,14 +355,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       return;
     }
     this.spinner.show();
-    this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value;
-    this.quyetDinhNhapXuat.loaiQd = "00";
-    this.quyetDinhNhapXuat.ngayKy = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : dayjs().toString();
+    this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value + '/QĐ-CDTVT';
+    this.quyetDinhNhapXuat.namNhap = dayjs().get('year');
+    this.quyetDinhNhapXuat.ngayQdinh = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : dayjs().toString();
     this.quyetDinhNhapXuat.soHd = this.formData.get('canCu').value;
     this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
+    this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
     this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
+    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
     this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
     if (this.quyetDinhNhapXuat.id > 0) {
       const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();
@@ -424,9 +374,12 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       quyetDinhNhapXuatInput.id = this.quyetDinhNhapXuat.id;
       quyetDinhNhapXuatInput.soQd = this.quyetDinhNhapXuat.soQd;
       quyetDinhNhapXuatInput.loaiQd = this.quyetDinhNhapXuat.loaiQd;
-      quyetDinhNhapXuatInput.ngayKy = this.quyetDinhNhapXuat.ngayKy;
+      quyetDinhNhapXuatInput.ngayQdinh = this.quyetDinhNhapXuat.ngayQdinh;
       quyetDinhNhapXuatInput.soHd = this.quyetDinhNhapXuat.soHd;
+      quyetDinhNhapXuatInput.namNhap = this.quyetDinhNhapXuat.namNhap;
       quyetDinhNhapXuatInput.veViec = this.quyetDinhNhapXuat.veViec;
+      quyetDinhNhapXuatInput.loaiVthh = this.quyetDinhNhapXuat.loaiVthh;
+      quyetDinhNhapXuatInput.trichYeu = this.quyetDinhNhapXuat.trichYeu;
       quyetDinhNhapXuatInput.maDvi = this.quyetDinhNhapXuat.maDvi;
       this.quyetDinhNhapXuatService
         .sua(quyetDinhNhapXuatInput)
@@ -505,13 +458,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
   redirectQdNhapXuat() {
-    if (this.routerUrl.includes("thoc")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}`]);
-    } else if (this.routerUrl.includes("gao")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}`]);
-    } else if (this.routerUrl.includes("muoi")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}`]);
-    }
+    this.showListEvent.emit();
   }
   loadThongTinQdNhapXuatHang(id: number) {
     this.quyetDinhNhapXuatService
@@ -539,6 +486,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             this.quyetDinhNhapXuat.detail,
           );
           this.initForm();
+          this.formData.patchValue({
+            soQdinh: this.quyetDinhNhapXuat.soQd?.split('/')[0],
+            donVi: this.quyetDinhNhapXuat.tenDvi,
+            maDonVi: this.quyetDinhNhapXuat.maDvi,
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -679,18 +631,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   huyBo() {
-    // this.modal.confirm({
-    //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: 'Bạn có chắc chắn muốn hủy bỏ các thao tác đang làm?',
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 310,
-    //   nzOnOk: () => {
-    //     this.redirectQdNhapXuat();
-    //   },
-    // });
     this.showListEvent.emit();
   }
   disabledDate = (current: Date): boolean =>
@@ -708,5 +648,22 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       result.push(i);
     }
     return result;
+  }
+  isDetail(): boolean {
+    return (
+      this.isViewDetail
+    );
+  }
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
   }
 }

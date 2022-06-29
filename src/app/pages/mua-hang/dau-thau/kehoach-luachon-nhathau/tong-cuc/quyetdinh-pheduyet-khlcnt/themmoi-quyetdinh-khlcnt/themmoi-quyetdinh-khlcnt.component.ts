@@ -464,6 +464,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.soQd = body.soQd + "/" + this.maQd;
     body.dsDeXuat = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
+
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
@@ -473,6 +474,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.formData.get('id').value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        this.quayLai()
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
@@ -501,7 +503,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
             lyDo: text,
             trangThai: '03',
           };
-          const res = await this.quyetDinhPheDuyetKeHoachLCNTService.updateStatus(body);
+          const res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             let loatVthh = this.router.url.split('/')[4]
@@ -564,7 +566,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
             "id": this.id,
             "trangThai": trangThai
           }
-          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.updateStatus(body);
+          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.loadChiTiet(res.data.id);
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
@@ -643,7 +645,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianDthau: [data.tgianDthauTu, data.denTgianDthauDen],
       tgianMthau: [data.tgianMthauTu, data.tgianMthauDen],
       tgianNhang: [data.tgianNhangTu, data.tgianNhangDen],
-    });
+    }); ''
     this.formData.patchValue({
       loaiHdong: data.loaiHdong,
       pthucLcnt: data.pthucLcnt,
@@ -683,7 +685,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.chiTiet(id);
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       let data = res.data;
       this.formData.patchValue({
         id: data.id,
@@ -707,7 +709,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         tenCloaiVthh: data.tenCloaiVthh,
         namKhoach: data.namKhoach,
         ghiChu: data.ghiChu,
-        trangThai: data.trangThai
+        trangThai: data.trangThai,
+        trichYeu: data.trichYeu
       })
       this.danhsachDx = data.children1;
       let dataDX = await this.tongHopDeXuatKHLCNTService.getDetail(data.idThHdr);

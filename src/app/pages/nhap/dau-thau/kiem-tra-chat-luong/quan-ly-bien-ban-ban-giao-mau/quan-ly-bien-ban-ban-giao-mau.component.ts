@@ -211,8 +211,9 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
   async loadDiemKho() {
     let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();

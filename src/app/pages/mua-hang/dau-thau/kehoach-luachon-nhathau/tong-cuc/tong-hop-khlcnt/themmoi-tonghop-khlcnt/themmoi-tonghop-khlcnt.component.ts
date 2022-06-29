@@ -228,8 +228,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
         tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
         ghiChu: dataDetail.ghiChu,
-        trangThai: dataDetail.trangThai
+        trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai
       })
+      console.log(this.formData.get('trangThai').value);
       this.isTongHop = true;
     }
   }

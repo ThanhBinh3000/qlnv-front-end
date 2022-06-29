@@ -29,6 +29,20 @@ export function convertTrangThai(status: string): string {
   }
 }
 
+export function convertTrangThaiGt(status: string): string {
+  if (status == '00') {
+    return 'Chưa cập nhật';
+  } else if (status == '01') {
+    return 'Đang cập nhật';
+  } else if (status == '02') {
+    return 'Hoàn thành cập nhật';
+  } else if (status == '03') {
+    return 'Trúng thầu';
+  } else if (status == '04') {
+    return 'Hủy thầu';
+  }
+}
+
 export function convertTrangThaiUser(status: string): string {
   if (status == '00') {
     return 'Khóa';

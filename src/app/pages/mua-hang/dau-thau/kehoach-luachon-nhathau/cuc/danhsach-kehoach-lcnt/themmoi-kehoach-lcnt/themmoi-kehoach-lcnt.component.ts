@@ -574,11 +574,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let body = this.formData.value;
     body.soDxuat = body.soDxuat + this.maTrinh;
     body.fileDinhKemReq = this.fileDinhKem;
-    let dataDetail = [];
-    this.listOfData.forEach(item => {
-      item.children.forEach(itemChild => { dataDetail = [...dataDetail, itemChild] })
-    });
-    body.dsGtReq = dataDetail;
+    // let dataDetail = [];
+    // this.listOfData.forEach(item => {
+    //   item.children.forEach(itemChild => { dataDetail = [...dataDetail, itemChild] })
+    // });
+    body.dsGtReq = this.listOfData;
     body.ccXdgReq = [...this.baoGiaThiTruongList, ... this.canCuKhacList];
     let res = null;
     if (this.formData.get('id').value) {
@@ -1263,9 +1263,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
+            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
             // if (res.msg == MESSAGE.SUCCESS) {
             //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            //   await this.search();
             // } else {
             //   this.notification.error(MESSAGE.ERROR, res.msg);
             // }

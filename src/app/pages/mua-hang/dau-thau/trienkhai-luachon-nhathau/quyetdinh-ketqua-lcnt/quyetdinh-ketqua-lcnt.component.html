@@ -10,7 +10,7 @@
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="5" *ngIf="userService.isTongCuc()">
+            <div nz-col nzSpan="5">
               <label class="search__label">Loại hàng DTQG </label>
               <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
                 <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
