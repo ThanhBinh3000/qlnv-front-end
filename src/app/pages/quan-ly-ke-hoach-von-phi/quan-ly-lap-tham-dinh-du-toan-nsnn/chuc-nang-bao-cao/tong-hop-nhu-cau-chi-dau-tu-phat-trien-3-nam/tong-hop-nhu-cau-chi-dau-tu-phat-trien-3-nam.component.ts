@@ -163,9 +163,9 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 data1.ncauNamDtoanN - data2.ncauNamDtoanN != data3.ncauNamDtoanN ||
                 data1.ncauNamN1 - data2.ncauNamN1 != data3.ncauNamN1 ||
                 data1.ncauNamN2 - data2.ncauNamN2 != data3.ncauNamN2) {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA + 
-                        this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
-                    return;
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
+                    this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
+                return;
             }
         }
         let checkSaveEdit;
@@ -424,7 +424,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 }
             }
         }
-        
+
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -492,6 +492,13 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if (this.editCache[id].data.thNamHienHanhN1 < 0 ||
+            this.editCache[id].data.ncauNamDtoanN < 0 ||
+            this.editCache[id].data.ncauNamN1 < 0 ||
+            this.editCache[id].data.ncauNamN2 < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data

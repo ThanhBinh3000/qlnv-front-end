@@ -1005,34 +1005,38 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaCapVon(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/cap-ung-von/xoa/' + id
-      // 'http://192.168.1.104:8094/cap-ung-von/xoa/' + id
+  xoaCapVon(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/cap-ung-von/xoa',
+      // 'http://192.168.1.104:8094/cap-ung-von/xoa',
+      request
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaVonMuaBan(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa/' + id
-      // 'http://192.168.1.104:8094/nhap-ghi-nhan-von/xoa/' + id
+  xoaVonMuaBan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa',
+      // 'http://192.168.1.104:8094/nhap-ghi-nhan-von/xoa',
+      request
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaDeNghi(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/xoa/' + id
-      // 'http://192.168.1.104:8094/de-nghi-cap-von/xoa/' + id
+  xoaDeNghi(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/xoa',
+      // 'http://192.168.1.104:8094/de-nghi-cap-von/xoa',
+      request,
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaDeNghiThop(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa/' + id
-      // 'http://192.168.1.104:8094/thop-cap-von/xoa/' + id
+  xoaDeNghiThop(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa',
+      // 'http://192.168.1.104:8094/thop-cap-von/xoa',
+      request,
     );
   }
 

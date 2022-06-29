@@ -449,11 +449,11 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -481,15 +481,15 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
         let file: any = this.fileDetail;
         if (file) {
-            if (file.size > Utils.FILE_SIZE){
+            if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
+                return;
             } else {
                 request.soQdCv = await this.uploadFile(file);
             }
         }
 
-        if (!request.soQdCv){
+        if (!request.soQdCv) {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
             return;
         }
@@ -708,6 +708,16 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if ((!this.editCache[id].data.nguonNsnn && this.editCache[id].data.nguonNsnn !== 0) ||
+            (!this.editCache[id].data.nguonKhac && this.editCache[id].data.nguonKhac !== 0)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        if (this.editCache[id].data.nguonKhac < 0 ||
+            this.editCache[id].data.nguonNsnn < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
@@ -896,7 +906,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
                 }
             })
-            this.lstCtietBcao[index].tongSo = this.lstCtietBcao[index].nguonKhac + this.lstCtietBcao[index].nguonNsnn; 
+            this.lstCtietBcao[index].tongSo = this.lstCtietBcao[index].nguonKhac + this.lstCtietBcao[index].nguonNsnn;
             stt = this.getHead(stt);
         }
     }

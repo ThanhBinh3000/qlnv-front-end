@@ -63,6 +63,7 @@ export class TongHopComponent implements OnInit {
 			tenDm: "Lãnh đạo phê duyệt",
 		},
 	];
+	listIdDelete: string[] = [];
 	donVis: any[] = [];
 	loaiDns: any[] = NGUON_BAO_CAO;
 	//phan trang
@@ -170,7 +171,20 @@ export class TongHopComponent implements OnInit {
 		await this.quanLyVonPhiService.timKiemDeNghiThop(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.danhSachBaoCao = data.data.content;
+					this.danhSachBaoCao = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSachBaoCao.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSachBaoCao.push({
+								...item, 
+								checked: true,
+							})
+						}
+					})
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
 						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -256,10 +270,17 @@ export class TongHopComponent implements OnInit {
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
 
-	xoaDeNghi(id: any) {
-		this.quanLyVonPhiService.xoaDeNghiThop(id).toPromise().then(
+	xoaDeNghi(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaDeNghiThop(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
+					this.listIdDelete = [];
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.onSubmit();
 				} else {
@@ -281,5 +302,33 @@ export class TongHopComponent implements OnInit {
 			check = false;
 		}
 		return check;
+	}
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id); 
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachBaoCao.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachBaoCao.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
 	}
 }

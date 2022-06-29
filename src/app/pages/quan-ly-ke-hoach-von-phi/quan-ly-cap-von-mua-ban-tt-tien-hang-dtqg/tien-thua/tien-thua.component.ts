@@ -500,16 +500,16 @@ export class TienThuaComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.ttGui.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
         for (const iterator of this.ttNhan.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -604,6 +604,11 @@ export class TienThuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.ttGuiCache.nopThue < 0 ||
+            this.ttGuiCache.ttChoDviHuong < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -623,7 +628,7 @@ export class TienThuaComponent implements OnInit {
     }
 
     close() {
-        if (!this.loai){ 
+        if (!this.loai) {
             this.loai = "0";
         }
         if (this.statusBtnParent) {

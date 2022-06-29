@@ -446,7 +446,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 }
             }
         }
-        
+
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -514,6 +514,16 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if (this.editCache[id].data.thNamHienHanhN1 < 0 ||
+            this.editCache[id].data.tranChiN < 0 ||
+            this.editCache[id].data.ncauChiN < 0 ||
+            this.editCache[id].data.tranChiN1 < 0 ||
+            this.editCache[id].data.ncauChiN1 < 0 ||
+            this.editCache[id].data.tranChiN2 < 0 ||
+            this.editCache[id].data.ncauChiN2 < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
