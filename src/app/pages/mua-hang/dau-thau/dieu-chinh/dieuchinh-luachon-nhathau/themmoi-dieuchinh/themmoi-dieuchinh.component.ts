@@ -2,12 +2,16 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DialogCanCuQDPheDuyetKHLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { API_STATUS_CODE, DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserService } from 'src/app/services/user.service';
@@ -33,48 +37,67 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
-    private dauThauGoiThauService: dauThauGoiThauService
+    private dauThauGoiThauService: dauThauGoiThauService,
+    private modal: NzModalService,
+    private dmTieuChuanService: DanhMucTieuChuanService
   ) {
+    const yearNow = new Date().getUTCFullYear();
     this.formGoiThau = this.fb.group({
-      idGoiThau: [''],
-      tenGoiThau: [''],
-      soQdPD: [''],
-      ngayQd: [''],
-      maDvi: [''],
-      tenDvi: [''],
-      loaiVthh: [''],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      tgianPhanh: ['', [Validators.required]],
-      tgianTbao: ['', [Validators.required]],
-      tgianDthau: ['', [Validators.required]],
-      tgianMthau: ['', [Validators.required]],
-      tgianNhang: ['', [Validators.required]],
-      soLuong: [''],
-      dViTinh: ['Tấn'],
-      tgianDongThau: [''],
-      tgianMoThau: [''],
-      tgianThien: [''],
-      giaGoiThau: [''],
-      donGia: [''],
-      tongTien: [''],
-      tChuanCluong: [''],
-      ghiChu: [''],
-      dgiaHdong: [''],
-      VAT: [''],
-      dgianHdongSauThue: [''],
-      giaHdongSauThue: [''],
-      giaHdongTruocThue: [''],
-      ngayKy: [''],
-      nhaThauTthao: ['']
+      namKhoach: [yearNow],
+      soQdPD: [null],
+      trichYeu: [null],
+      ngayQd: [null],
+      ngayHluc: [null],
+      canCu: [null],
+      tenVthh: [null],
+      loaiVthh: [null],
+      cLoaiVthh: [null],
+      tenCloaiVthh: [null],
+      loaiHdong: [null, [Validators.required]],
+      hthucLcnt: [null, [Validators.required]],
+      pthucLcnt: [null, [Validators.required]],
+      nguonVon: [null],
+      tgianPhanh: [null],
+      tgianDthau: [null],
+      tgianMthau: [null],
+      tgianNhang: [null],
+      ghiChu: [null]
+      // tenGoiThau: [''],
+      // maDvi: [''],
+      // tenDvi: [''],
+      // loaiVthh: [''],
+      // hthucLcnt: ['', [Validators.required]],
+      // pthucLcnt: ['', [Validators.required]],
+      // loaiHdong: ['', [Validators.required]],
+      // nguonVon: ['', [Validators.required]],
+      // tgianPhanh: ['', [Validators.required]],
+      // tgianTbao: ['', [Validators.required]],
+      // tgianDthau: ['', [Validators.required]],
+      // tgianMthau: ['', [Validators.required]],
+      // tgianNhang: ['', [Validators.required]],
+      // soLuong: [''],
+      // dViTinh: ['Tấn'],
+      // tgianDongThau: [''],
+      // tgianMoThau: [''],
+      // tgianThien: [''],
+      // giaGoiThau: [''],
+      // donGia: [''],
+      // tongTien: [''],
+      // tChuanCluong: [''],
+      // ghiChu: [''],
+      // dgiaHdong: [''],
+      // VAT: [''],
+      // dgianHdongSauThue: [''],
+      // giaHdongSauThue: [''],
+      // giaHdongTruocThue: [''],
+      // ngayKy: [''],
+      // nhaThauTthao: ['']
     });
-    this.formDauThau = this.fb.group({
-      tenDvi: [''],
-      soQdPD: [''],
-      loaiVthh: ['']
-    })
+    // this.formDauThau = this.fb.group({
+    //   tenDvi: [''],
+    //   soQdPD: [''],
+    //   loaiVthh: ['']
+    // })
   }
   // timeDefaultValue = setHours(new Date(), 0);
   tabSelected: string = 'phuong-an-tong-hop';
@@ -94,13 +117,13 @@ export class ThemMoiDieuChinhComponent implements OnInit {
   listLoaiHopDong: any[] = []
   listVthh: any[] = [];
   formGoiThau: FormGroup
-  formDauThau: FormGroup
   isDetail = false;
   dataTable: any[] = [];
   dataDetail: any;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
 
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
@@ -124,10 +147,10 @@ export class ThemMoiDieuChinhComponent implements OnInit {
         });
       }
       await Promise.all([
-        // this.phuongThucDauThauGetAll(),
-        // this.nguonVonGetAll(),
-        // this.hinhThucDauThauGetAll(),
-        // this.loaiHopDongGetAll(),
+        this.phuongThucDauThauGetAll(),
+        this.nguonVonGetAll(),
+        this.hinhThucDauThauGetAll(),
+        this.loaiHopDongGetAll(),
         // this.getDetail(),
       ]);
       this.spinner.hide();
@@ -139,16 +162,24 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     }
   }
 
+  async hinhThucDauThauGetAll() {
+    this.listHinhThucDauThau = [];
+    let res = await this.danhMucService.hinhThucDauThauGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucDauThau = res.data;
+    }
+  }
+
   async getDetail() {
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.id);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dataDetail = res.data;
       this.dataTable = res.data.children1;
-      this.formDauThau.patchValue({
-        loaiVthh: res.data.loaiVthh,
-        soQdPD: res.data.soQd,
-        tenDvi: res.data.maDvi
-      });
+      // this.formDauThau.patchValue({
+      //   loaiVthh: res.data.loaiVthh,
+      //   soQdPD: res.data.soQd,
+      //   tenDvi: res.data.maDvi
+      // });
       this.formGoiThau.patchValue({
         loaiVthh: res.data.loaiVthh,
         soQdPD: res.data.soQd,
@@ -162,6 +193,38 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  openDialogQDPDKHLCNT() {
+    // if (this.id == 0) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin căn cứ quyết định phê duyệt KHLCNT',
+      nzContent: DialogCanCuQDPheDuyetKHLCNTComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.formGoiThau.patchValue({
+          canCu: data.soQd ?? null,
+          loaiVthh: data.loaiVthh ?? null,
+          tenVthh: data.tenVthh ?? null,
+          cLoaiVthh: data.cloaiVthh ?? null,
+          tenCloaiVthh: data.tenCloaiVthh ?? null,
+          loaiHdong: data.loaiHdong ?? null,
+          hthucLcnt: data.hthucLcnt ?? null,
+          pthucLcnt: data.pthucLcnt ?? null,
+          nguonVon: data.nguonVon ?? null,
+          tgianDthau: data.tgianDthau ?? null,
+          tgianMthau: data.tgianMthau ?? null,
+          tgianNhang: data.tgianNhang ?? null,
+        })
+      }
+    });
+    // }
   }
 
   redirectToChiTiet(data) {
@@ -199,6 +262,63 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     this.showListEvent.emit();
   }
 
+  selectHangHoa() {
+    let data = this.typeHangHoa;
+    const modal = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modal.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    this.typeHangHoa = data.ma.slice(0, 2);
+    let cloaiVthh = null;
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      cloaiVthh = data.ma;
+      this.formGoiThau.patchValue({
+        maVtu: null,
+        tenVtu: null,
+        cloaiVthh: data.ma,
+        tenCloaiVthh: data.ten,
+        loaiVthh: data.parent.ma,
+        tenVthh: data.parent.ten
+      })
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        cloaiVthh = data
+        this.formGoiThau.patchValue({
+          maVtu: data.ma,
+          tenVtu: data.ten,
+          cloaiVthh: data.parent.ma,
+          tenCloaiVthh: data.parent.ten,
+          loaiVthh: data.parent.parent.ma,
+          tenVthh: data.parent.parent.ten
+        })
+      }
+      if (data.cap == "2") {
+        this.formGoiThau.patchValue({
+          maVtu: null,
+          tenVtu: null,
+          cloaiVthh: data.ma,
+          tenCloaiVthh: data.ten,
+          loaiVthh: data.parent.ma,
+          tenVthh: data.parent.ten
+        })
+      }
+    }
+  }
+
   async phuongThucDauThauGetAll() {
     this.listPhuongThucDauThau = [];
     let res = await this.danhMucService.phuongThucDauThauGetAll();
@@ -221,14 +341,6 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     let res = await this.danhMucService.nguonVonGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = res.data;
-    }
-  }
-
-  async hinhThucDauThauGetAll() {
-    this.listHinhThucDauThau = [];
-    let res = await this.danhMucService.hinhThucDauThauGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = res.data;
     }
   }
 
