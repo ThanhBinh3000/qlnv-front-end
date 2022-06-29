@@ -25,7 +25,7 @@ export class DialogCanCuQDPheDuyetKHLCNTComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -63,7 +63,7 @@ export class DialogCanCuQDPheDuyetKHLCNTComponent implements OnInit {
       trangThai: '01',
       tuNgayQd: null,
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.timKiem(body);
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {

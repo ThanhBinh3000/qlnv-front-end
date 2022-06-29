@@ -20,6 +20,8 @@ import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bie
 import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
 import { ThongTinPhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/thong-tin-phieu-nhap-kho-tam-gui/thong-tin-phieu-nhap-kho-tam-gui.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
+import { QuanLyPhieuKiemNghiemChatLuongThocComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong-thoc/quan-ly-phieu-kiem-nghiem-chat-luong-thoc.component';
+import { ThemMoiPhieuKiemNghiemChatLuongThocComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong-thoc/them-moi-phieu-kiem-nghiem-chat-luong-thoc/them-moi-phieu-kiem-nghiem-chat-luong-thoc.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap
     ThongTinBienBanKetThucNhapKhoComponent,
     PhieuNhapKhoTamGuiComponent,
     ThongTinPhieuNhapKhoTamGuiComponent,
+    QuanLyPhieuKiemNghiemChatLuongThocComponent,
+    ThemMoiPhieuKiemNghiemChatLuongThocComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +62,7 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap
     BienBanGuiHangComponent,
     BienBanKetThucNhapKhoComponent,
     PhieuNhapKhoTamGuiComponent,
+    QuanLyPhieuKiemNghiemChatLuongThocComponent,
   ]
 })
 export class NhapKhoModule { }

@@ -81,6 +81,12 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.tenDvi = this.userInfo.TEN_DVI;
+      if (this.isTatCa) {
+        this.detail.maVatTuCha = null;
+      }
+      else {
+        this.detail.maVatTuCha = this.typeVthh;
+      }
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -178,7 +184,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
     if (this.detail.trangThai == '01' || this.detail.trangThai == '02' || this.detail.trangThai == '04' || this.isView) {
       return;
     }
-    let data = this.typeVthh;
+    let data = this.detail.maVatTuCha;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,

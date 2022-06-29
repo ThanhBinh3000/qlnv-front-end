@@ -16,6 +16,7 @@ import { PhuongAnKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/phuo
 import { ThemmoiPhuonganKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/phuong-an-khlcnt/themmoi-phuongan-khlcnt/themmoi-phuongan-khlcnt.component';
 import { QuyetdinhPheduyetKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/quyetdinh-pheduyet-khlcnt/quyetdinh-pheduyet-khlcnt.component';
 import { ThemmoiQuyetdinhKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/themmoi-quyetdinh-khlcnt.component';
+import { ThemmoiKehoachLcntTongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/themmoi-kehoach-lcnt-tong-cuc/themmoi-kehoach-lcnt-tong-cuc.component';
 import { TongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-cuc.component';
 import { ThemmoiTonghopKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
 import { TongHopKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
@@ -38,7 +39,8 @@ import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trien
     ThemmoiQuyetdinhKhlcntComponent,
     MainTongCucComponent,
     ThemmoiTonghopKhlcntComponent,
-    MainCucComponent
+    MainCucComponent,
+    ThemmoiKehoachLcntTongCucComponent
   ],
   imports: [
     CommonModule,

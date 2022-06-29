@@ -1,4 +1,4 @@
-<div *ngIf="userService.isCuc() && !isDetail">
+<div *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -150,12 +150,11 @@
                     <td>{{ data.nhaCungCap }}</td>
                     <td>{{ data.gtriHdSauVat }}</td>
                     <td>{{ data.trangThai }}</td>
-                    <td class="text-right">
-                      <a (click)="redirectToChiTiet(false, data.id)">
+                    <td class="text-left">
+                      <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai=='00'">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(true, data.id)"
-                        *ngIf="data.trangThai=='00' || data.trangThai=='03'">
+                      <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
                       <a (click)="xoaItem(data)" *ngIf="data.trangThai=='00'">
@@ -194,8 +193,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-              *ngIf="userService.isCuc()">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm mới</span>
             </button>
