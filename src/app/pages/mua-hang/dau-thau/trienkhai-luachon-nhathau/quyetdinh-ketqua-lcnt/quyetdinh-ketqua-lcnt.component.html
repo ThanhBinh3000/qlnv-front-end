@@ -12,10 +12,9 @@
             </div>
             <div nz-col nzSpan="5">
               <label class="search__label">Loại hàng DTQG </label>
-              <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
-                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
-                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
-                <nz-option [nzValue]="muoiIdDefault" nzLabel="Muối"></nz-option>
+              <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="searchFilter.loaiVthh" nzAllowClear>
+                <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="12">
@@ -78,7 +77,7 @@
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="edit(data.id)">
+                      <a (click)="redirectToChiTiet(data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
                       <a (click)="xoaItem(data)">
@@ -116,25 +115,25 @@
                       <label nz-checkbox nz-checkbox></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>123</td>
-                    <td>10/03/2022</td>
-                    <td>Gạo 15% tấm,</td>
-                    <td> Gói thầu A1</td>
-                    <td>Trúng</td>
-                    <td>Công ty A</td>
-                    <td>Không có nhà thầu tham dự</td>
-                    <td>1.000.000.000</td>
-                    <td>Hợp đồng trọn gói</td>
-                    <td>180</td>
-                    <td>Dự thảo</td>
-                    <td class="text-center">
+                    <td>{{ data.soQd}}</td>
+                    <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{ data.trichYeu }}</td>
+                    <td>{{ data.tenGthau }}</td>
+                    <td>{{ statusGoiThau(data.statusGthau) }}</td>
+                    <td>{{ data.tenNhaThau }}</td>
+                    <td>{{ data.lyDoHuy }}</td>
+                    <td>{{ (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) * data.soLuong }}</td>
+                    <td>{{ data.tenHdong }}</td>
+                    <td>{{ data.tgianThienHd }}</td>
+                    <td>{{ convertTrangThai(data.trangThai) }}</td>
+                    <td class="text-left">
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="edit(data.id)">
+                      <a *ngIf="data.trangThai == '00'" (click)="redirectToChiTiet(data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -180,6 +179,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-quyetdinh-ketqua-lcnt [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
+  <app-themmoi-quyetdinh-ketqua-lcnt [idInput]="selectedId" (showListEvent)="showList()">
   </app-themmoi-quyetdinh-ketqua-lcnt>
 </div>
