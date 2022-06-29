@@ -457,6 +457,10 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.ttGuiCache.soTien < 0){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
         this.changeDate();

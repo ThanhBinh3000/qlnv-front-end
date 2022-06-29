@@ -862,6 +862,24 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        let checkNull = true;
+        let checkNegative = true;
+        this.editCache[id].data.listCtietDvi.forEach(item => {
+            if (!item.soTranChi && item.soTranChi !== 0 ){
+                checkNull = false;
+            }
+            if (item.soTranChi < 0){
+                checkNegative = false;
+            }
+        })
+        if (!checkNull){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        if (!checkNegative){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         let data: ItemDvi[] = [];

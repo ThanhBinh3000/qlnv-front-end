@@ -155,23 +155,20 @@
                                             <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" nzSize="small"
-                                                [(ngModel)]="ttGuiCache.maNguonNs">
-                                            </nz-input-number>
+                                            <input nz-input type="number" class="search__input"
+                                                [(ngModel)]="ttGuiCache.maNguonNs" />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" nzSize="small"
-                                                [(ngModel)]="ttGuiCache.maChuong">
-                                            </nz-input-number>
+                                            <input nz-input type="number" class="search__input"
+                                                [(ngModel)]="ttGuiCache.maChuong" />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" nzSize="small"
-                                                [(ngModel)]="ttGuiCache.maNdkt">
-                                            </nz-input-number>
+                                            <input nz-input type="number" class="search__input"
+                                                [(ngModel)]="ttGuiCache.maNdkt" />
                                         </td>
                                         <td>
                                             <nz-input-number class="search__input"
-                                                [class]="ttGuiCache.soTien || ttGuiCache.soTien === 0 ?'' : 'input-error-validate' "
+                                                [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.soTien">
                                             </nz-input-number>
                                         </td>
@@ -179,10 +176,9 @@
                                             <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input"
+                                            <input nz-input type="number" class="search__input"
                                                 [class]="ttGuiCache.taiKhoan || ttGuiCache.taiKhoan === 0 ?'' : 'input-error-validate' "
-                                                nzSize="small" [(ngModel)]="ttGuiCache.taiKhoan">
-                                            </nz-input-number>
+                                                [(ngModel)]="ttGuiCache.taiKhoan" />
                                         </td>
                                         <td [hidden]="status">
                                             <a (click)="saveEdit()" class="save">Lưu</a>

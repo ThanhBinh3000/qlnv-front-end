@@ -409,7 +409,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             }
         }
 
-        
+
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -482,8 +482,15 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             (!this.editCache[id].data.ncauNamDtoanN && this.editCache[id].data.ncauNamDtoanN !== 0) ||
             (!this.editCache[id].data.ncauNamN1 && this.editCache[id].data.ncauNamN1 !== 0) ||
             (!this.editCache[id].data.ncauNamN2 && this.editCache[id].data.ncauNamN2 !== 0)) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-                return;
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+            return;
+        }
+        if (this.editCache[id].data.thNamHienHanhN1 < 0 ||
+            this.editCache[id].data.ncauNamDtoanN < 0 ||
+            this.editCache[id].data.ncauNamN1 < 0 ||
+            this.editCache[id].data.ncauNamN2 < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
         }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua

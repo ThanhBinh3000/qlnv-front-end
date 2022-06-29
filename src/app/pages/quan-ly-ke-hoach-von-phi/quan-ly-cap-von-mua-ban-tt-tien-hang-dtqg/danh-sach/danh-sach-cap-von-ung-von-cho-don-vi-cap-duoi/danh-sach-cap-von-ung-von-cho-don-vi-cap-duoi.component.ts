@@ -33,6 +33,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		maDvi: "",
 	};
 	//danh muc
+	listIdDelete: string[] = [];
 	danhSach: any[] = [];
 	trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
 	danhSachMaVon: any[];
@@ -173,7 +174,20 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		await this.quanLyVonPhiService.timKiemCapVon(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.danhSach = data.data.content;
+					this.danhSach = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSach.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSach.push({
+								...item, 
+								checked: true,
+							})
+						}
+					})
 					this.danhSach.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
 						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -230,10 +244,17 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	xoaBaoCao(id: any) {
-		this.quanLyVonPhiService.xoaCapVon(id).toPromise().then(
+	xoaBaoCao(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaCapVon(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
+					this.listIdDelete = [];
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.onSubmit();
 				} else {
@@ -255,6 +276,34 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 			check = false;
 		}
 		return check;
+	}
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id); 
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSach.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSach.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
 	}
 
 	close() {

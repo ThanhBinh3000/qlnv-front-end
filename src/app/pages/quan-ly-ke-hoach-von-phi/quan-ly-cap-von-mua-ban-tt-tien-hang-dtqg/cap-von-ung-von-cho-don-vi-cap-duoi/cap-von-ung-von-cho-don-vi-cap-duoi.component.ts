@@ -389,11 +389,11 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -572,6 +572,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             return;
         }
 
+        if (this.editCache[id].data.ttChoDviHuong < 0 ||
+            this.editCache[id].data.nopThue < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
+
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
@@ -612,7 +618,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     close() {
-        if (!this.loai){
+        if (!this.loai) {
             this.loai = "0";
         }
         this.router.navigate([
