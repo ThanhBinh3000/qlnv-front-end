@@ -87,6 +87,8 @@ export class ThongTinComponent implements OnInit {
   };
   titleStatus: string = '';
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
+  diaDiemNhapListCuc = [];
+  donGiaCore: number = 0;
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -115,6 +117,7 @@ export class ThongTinComponent implements OnInit {
         namKh: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
+        tgianNkho: [null],
         tenVthh: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
@@ -138,12 +141,18 @@ export class ThongTinComponent implements OnInit {
     );
     this.formDetailHopDong.controls['donGiaVat'].valueChanges.subscribe(value => {
       if (value) {
+        this.donGiaCore = value;
         const gtriHdSauVat = this.formDetailHopDong.controls.donGiaVat.value * this.formDetailHopDong.controls.soLuong.value;
         this.formDetailHopDong.controls['gtriHdSauVat'].setValue(gtriHdSauVat);
       } else {
+        this.donGiaCore = 0;
         this.formDetailHopDong.controls['gtriHdSauVat'].setValue(0);
       }
     });
+  }
+
+  calculateGiaSauThue(soLuong, donGia) {
+    return soLuong * donGia;
   }
 
   async ngOnInit() {
@@ -212,11 +221,8 @@ export class ThongTinComponent implements OnInit {
               dviTinh: this.detail.dviTinh ?? null
             })
           }
-          const dvlq = this.detail.idNthau;
-          if (dvlq) {
-            this.dvLQuan = this.listDviLquan.find(item => item.id == dvlq.split('/')[0] && item.version == dvlq.split('/')[1])
-          }
-          await this.getListGoiThau(this.detail.canCu)
+          this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
+          await this.getListGoiThau(this.detail.id);
         }
       }
     }
@@ -293,7 +299,8 @@ export class ThongTinComponent implements OnInit {
         delete body.tenCloaiVthh;
         delete body.tenVthh;
 
-        body.idNthau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
+        body.idNthau = `${this.dvLQuan.id}`;
+        body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
         if (this.id > 0) {
           let res = await this.thongTinHopDong.update(
             body,
@@ -421,9 +428,14 @@ export class ThongTinComponent implements OnInit {
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
           soLuong: data.soLuong ?? null,
-          donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null
+          donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null,
         })
-        if (this.userService.isTongCuc) {
+        this.onChangeDvlq(data.idNhaThau);
+        this.diaDiemNhapListCuc = data.diaDiemNhapList;
+        this.diaDiemNhapListCuc.forEach(element => {
+          delete element.id
+        });
+        if (this.userService.isTongCuc()) {
           this.formDetailHopDong.patchValue({
             dviTinh: data.dviTinh ?? null
           })
