@@ -223,18 +223,18 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             );
         }
 
-        await this.danhMuc.dMDviTinh().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    this.dviTinhs = res.data?.content;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            },
-        );
+        // await this.danhMuc.dMDviTinh().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             this.dviTinhs = res.data?.content;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //     },
+        // );
 
         
         this.getStatusButton();

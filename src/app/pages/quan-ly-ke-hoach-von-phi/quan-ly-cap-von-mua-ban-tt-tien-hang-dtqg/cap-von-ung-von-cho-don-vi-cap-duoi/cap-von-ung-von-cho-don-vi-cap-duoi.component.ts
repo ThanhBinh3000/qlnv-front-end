@@ -168,6 +168,27 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
+            this.unitChilds.forEach(item => {
+                this.lstCtietBcao.push({
+                    id: uuid.v4() + 'FE',
+                    stt: '',
+                    dviNhan: item.maDvi,
+                    ngayLap: null,
+                    ngayLapTemp: "",
+                    loai: "",
+                    ngayNhan: null,
+                    ngayNhanTemp: "",
+                    noiDung: "",
+                    maNguonNs: "",
+                    nienDoNs: "",
+                    tongSoTien: 0,
+                    nopThue: 0,
+                    ttChoDviHuong: 0,
+                    soTienBangChu: "",
+                    checked: false,
+                })
+            })
+            this.updateEditCache();
         }
         this.getStatusButton();
         this.spinner.hide();
@@ -474,70 +495,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             );
         }
         this.spinner.hide();
-    }
-
-    // them dong moi
-    addLine(id: number): void {
-        let item: ItemData = {
-            id: uuid.v4() + 'FE',
-            stt: '',
-            dviNhan: '',
-            ngayLap: null,
-            ngayLapTemp: "",
-            loai: "",
-            ngayNhan: null,
-            ngayNhanTemp: "",
-            noiDung: "",
-            maNguonNs: "",
-            nienDoNs: "",
-            tongSoTien: 0,
-            nopThue: 0,
-            ttChoDviHuong: 0,
-            soTienBangChu: "",
-            checked: false,
-        }
-
-        this.lstCtietBcao.splice(id, 0, item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-    }
-
-    // xoa dong
-    deleteById(id: any): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-    }
-
-    // xóa với checkbox
-    deleteSelected() {
-        // delete object have checked = true
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
-        this.allChecked = false;
-    }
-
-    // click o checkbox all
-    updateAllChecked(): void {
-        if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-                ...item,
-                checked: true
-            }));
-        } else {
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-                ...item,
-                checked: false
-            }));
-        }
-    }
-
-    // click o checkbox single
-    updateSingleChecked(): void {
-        if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-            this.allChecked = true;
-        } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-            this.allChecked = false;
-        }
     }
 
     redirectChiTieuKeHoachNam() {
