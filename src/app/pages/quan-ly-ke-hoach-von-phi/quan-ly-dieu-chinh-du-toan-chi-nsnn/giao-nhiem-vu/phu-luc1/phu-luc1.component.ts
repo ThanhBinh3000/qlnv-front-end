@@ -88,6 +88,7 @@ export class PhuLuc1Component implements OnInit {
     kphiDchinhGiam: 0,
     checked: false,
   };
+
   //trang thai cac nut
   status: boolean = false;
   statusBtnFinish: boolean;
@@ -180,22 +181,21 @@ export class PhuLuc1Component implements OnInit {
     // })
     // await this.addListNoiDungChi(this.noiDungFull);
 
-  //   await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
-  //     (data) => {
-  //       if (data.statusCode == 0) {
-  //         this.loaiKhoans = data.data;
-  //         console.log(this.loaiKhoans )
-  //       } else {
-  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //       }
-  //     },
-  //     (err) => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //     }
-  //   );
-  //   this.getStatusButton();
-  //   this.spinner.hide();
-  // }
+    await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.loaiKhoans = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+    this.getStatusButton();
+    this.spinner.hide();
+  }
 
   // addListNoiDungChi(noiDungChiTemp) {
   //   let a = [];
@@ -217,7 +217,7 @@ export class PhuLuc1Component implements OnInit {
   //   if (a.length > 0) {
   //       this.addListNoiDungChi(a);
   //   }
-  }
+  // }
 
   getStatusButton() {
     if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
@@ -234,6 +234,7 @@ export class PhuLuc1Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCtietBcao.forEach(element => {

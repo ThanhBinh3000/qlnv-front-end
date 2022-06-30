@@ -463,7 +463,6 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     });
   }
 
-
   // luu
   async save() {
     let checkSaveEdit;
@@ -694,8 +693,6 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       }
     )
   }
-
-
 
   //lay ten don vi tạo
   getUnitName() {
