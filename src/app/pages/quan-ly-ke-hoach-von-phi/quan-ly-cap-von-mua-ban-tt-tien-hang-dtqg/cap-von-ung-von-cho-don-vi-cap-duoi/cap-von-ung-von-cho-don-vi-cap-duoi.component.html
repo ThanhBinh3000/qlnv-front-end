@@ -206,10 +206,7 @@
 											</nz-select>
 										</td>
 										<td>
-											<nz-date-picker class="search__input"
-												[(ngModel)]="editCache[data.id].data.ngayNhan" nzFormat="dd/MM/yyyy"
-												(ngModelChange)="changeDate(data.id)">
-											</nz-date-picker>
+											{{data.ngayNhanTemp}}
 										</td>
 										<td>
 											<input nz-input class="search__input"

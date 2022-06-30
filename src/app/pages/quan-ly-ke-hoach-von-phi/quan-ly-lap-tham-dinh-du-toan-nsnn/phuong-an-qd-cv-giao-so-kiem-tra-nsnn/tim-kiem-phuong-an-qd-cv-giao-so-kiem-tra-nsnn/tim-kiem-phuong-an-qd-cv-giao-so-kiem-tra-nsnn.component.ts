@@ -9,7 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 
@@ -79,6 +79,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }//
     status: boolean;
     statusBtnBcao: boolean = true;
+    statusTaoMoi: boolean = true;
 
     fileDetail: NzUploadFile;
 
@@ -126,6 +127,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+
+        if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
+			this.statusTaoMoi = false;
+		}
+        
         this.onSubmit();
     }
 

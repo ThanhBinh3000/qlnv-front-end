@@ -584,28 +584,28 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     async capToanBo() {
-        var maCvUvDuoi: string;
-        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-                    var str: string;
-                    if (capDvi == Utils.TONG_CUC) {
-                        str = "CKV";
-                    } else {
-                        str = "CC";
-                    }
-                    maCvUvDuoi = res.data;
-                    let mm = maCvUvDuoi.split('.');
-                    maCvUvDuoi = mm[0] + str + '.' + mm[1];
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+        // var maCvUvDuoi: string;
+        // await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+        //             var str: string;
+        //             if (capDvi == Utils.TONG_CUC) {
+        //                 str = "CKV";
+        //             } else {
+        //                 str = "CC";
+        //             }
+        //             maCvUvDuoi = res.data;
+        //             let mm = maCvUvDuoi.split('.');
+        //             maCvUvDuoi = mm[0] + str + '.' + mm[1];
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     },
+        // );
         let request: any[] = [];
         this.lstCtietBcao.forEach(item => {
             request.push({
@@ -615,7 +615,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 maLoai: "1",
                 maDvi: item.dviNhan,
                 maDviTien: this.maDviTien,
-                maCapUngVonTuCapTren: maCvUvDuoi,
+                maCapUngVonTuCapTren: this.maCvUvDuoi,
                 ngayLap: this.ngayTaoTemp,
                 ngayNhan: null,
                 loaiCap: item.loai,

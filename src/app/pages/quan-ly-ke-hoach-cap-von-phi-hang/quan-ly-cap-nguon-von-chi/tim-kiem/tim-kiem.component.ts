@@ -68,6 +68,7 @@ export class TimKiemComponent implements OnInit {
 	}
 	//trangThai
 	statusBtnNew: boolean = true;
+	statusTaoMoi: boolean = true;
 	status: boolean;
 	disable: boolean;
 
@@ -112,6 +113,9 @@ export class TimKiemComponent implements OnInit {
 		);
 
 		if (this.loai == "0") {
+			if (ROLE_CAN_BO.includes(this.userRole)){
+				this.statusTaoMoi = false;
+			}
 			this.status = false;
 		} else {
 			this.status = true;

@@ -48,6 +48,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	//trang thai
 	status: boolean;
 	statusBtnNew: boolean = true;
+	statusTaoMoi: boolean = true;
 	disable: boolean;
 
 	constructor(
@@ -78,6 +79,9 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 
 		if (this.loai == "0") {
+			if (ROLE_CAN_BO.includes(this.userRole)){
+				this.statusTaoMoi = false;
+			}
 			this.status = true;
 			this.disable = false;
 		} else {

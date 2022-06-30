@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
@@ -73,6 +73,8 @@ export class TimKiemComponent implements OnInit {
 		page: 1,
 	}
 
+	statusTaoMoi: boolean = true;
+
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
@@ -94,6 +96,10 @@ export class TimKiemComponent implements OnInit {
 		let newDate = new Date();
 		newDate.setMonth(newDate.getMonth() -1);
 		this.searchFilter.tuNgay = newDate;
+
+		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
+			this.statusTaoMoi = false;
+		}
 		
 		this.searchFilter.donViTao = this.userInfo?.dvql;	
 		this.onSubmit();	

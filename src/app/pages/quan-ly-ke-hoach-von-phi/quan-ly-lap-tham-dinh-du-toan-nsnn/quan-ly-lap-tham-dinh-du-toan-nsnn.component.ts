@@ -44,6 +44,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 	noParent = true;
 	searchValue = '';
 	QuanLyLapThamDinhDuToanNSNNList = QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST;
+	danhSach: any[] = [];
 	searchFilter = {
 		soDeXuat: '',
 	};
@@ -83,14 +84,12 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 			}
 		);
 		this.QuanLyLapThamDinhDuToanNSNNList.forEach(data => {
-			data.unRole.forEach(item => {
+			data.Role.forEach(item => {
 				if (item?.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
-					data.isDisabled = true;
-					return;
+					this.danhSach.push(data);
 				}
 			})
 		})
-		this.QuanLyLapThamDinhDuToanNSNNList = this.QuanLyLapThamDinhDuToanNSNNList.filter(item => item.isDisabled == false);
 		/////////
 		const data = [];
 		for (let i = 0; i < 100; i++) {
