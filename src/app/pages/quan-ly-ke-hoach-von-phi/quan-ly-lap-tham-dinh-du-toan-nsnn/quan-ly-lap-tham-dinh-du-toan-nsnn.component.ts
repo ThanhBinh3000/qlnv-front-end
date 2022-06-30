@@ -87,6 +87,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 			data.Role.forEach(item => {
 				if (item?.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
 					this.danhSach.push(data);
+					return;
 				}
 			})
 		})
