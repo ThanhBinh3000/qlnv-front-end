@@ -161,9 +161,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   ]
 
   taiLieuDinhKemList: any[] = [];
-  dataGoiThau: any[] = [
-    { id: 1 }
-  ];
+  dataGoiThau: any[] = [];
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -1225,7 +1223,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   }
 
   openDialogGoiThau(data?: any) {
-    this.modal.create({
+    const modal = this.modal.create({
       nzTitle: 'Thông tin gói thầu',
       nzContent: DialogThemMoiGoiThauComponent,
       nzMaskClosable: false,
@@ -1238,6 +1236,13 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         vatTuChaId: this.formData.get('tenVthh').value
       },
     });
+    modal.afterClose.subscribe((res) => {
+      if (res) {
+        console.log("🚀 ~ file: themmoi-kehoach-lcnt-tong-cuc.component.ts ~ line 1243 ~ ThemmoiKehoachLcntTongCucComponent ~ modal.afterClose.subscribe ~ res", res)
+        this.dataGoiThau.push(res);
+      }
+    });
+
   }
 
   xoaItem(data: any) {
