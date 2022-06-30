@@ -50,6 +50,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	status: boolean;
 	disable: boolean;
 	statusNew: boolean = true;
+	statusTaoMoi: boolean = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -77,6 +78,9 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
 		if (this.loai == "0") {
+			if (ROLE_CAN_BO.includes(this.userRole)){
+				this.statusTaoMoi = false;
+			}
 			this.status = true;
 			this.disable = false;
 		} else {

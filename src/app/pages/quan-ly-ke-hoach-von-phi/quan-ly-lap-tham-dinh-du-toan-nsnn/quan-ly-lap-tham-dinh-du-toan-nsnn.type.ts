@@ -3,6 +3,6 @@ export type QuanLyLapThamDinhDuToanNSNN = {
   title: string;
   description: string;
   url: string;
-  unRole: any[];
+  Role: any[];
   isDisabled?: boolean;
 };

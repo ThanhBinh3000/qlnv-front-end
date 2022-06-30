@@ -42,6 +42,7 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
   noParent = true;
   searchValue = '';
   QuanLyCapVonNguonChiNsnnList = QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST;
+  danhSach: any[] = [];
   searchFilter = {
     soDeXuat: '',
   };
@@ -97,12 +98,10 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
     this.QuanLyCapVonNguonChiNsnnList.forEach(data => {
 			data.Role.forEach(item => {
 				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
-					data.isDisabled = true;
-					return;
+					this.danhSach.push(data);
 				}
 			})
 		})
-    this.QuanLyCapVonNguonChiNsnnList = this.QuanLyCapVonNguonChiNsnnList.filter(e => e.isDisabled == true);
     this.listOfData = data;
     //////////////
   }

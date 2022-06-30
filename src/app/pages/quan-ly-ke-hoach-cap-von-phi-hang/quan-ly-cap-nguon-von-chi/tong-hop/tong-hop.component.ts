@@ -75,6 +75,7 @@ export class TongHopComponent implements OnInit {
 	}
 	//trang thai
 	statusBtnNew: boolean = true;
+	statusTaoMoi: boolean = true;
 	status: boolean;
 	disable: boolean;
 
@@ -105,6 +106,9 @@ export class TongHopComponent implements OnInit {
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
 		if (this.loai == "0") {
+			if (ROLE_CAN_BO.includes(this.userRole)){
+				this.statusTaoMoi = false;
+			}
 			this.status = false;
 			this.disable = false;
 		} else {
