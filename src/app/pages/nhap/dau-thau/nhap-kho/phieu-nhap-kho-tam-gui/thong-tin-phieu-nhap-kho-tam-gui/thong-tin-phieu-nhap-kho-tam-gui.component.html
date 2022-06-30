@@ -339,6 +339,154 @@
             <div nz-col nzSpan="24" class="text-summary">Chứng từ kèm theo</div>
             <div nz-col nzSpan="24">
               <!-- <textarea nz-input [(ngModel)]="detail.ketLuan"></textarea> -->
+              <div class="list-file">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                  [nzData]="detail?.detail" [nzBordered]="false">
+                  <tbody>
+                    <tr>
+                      <th colspan="3">
+                        <input type="text" placeholder="Nhập tên file" nz-input />
+                      </th>
+                      <th [width]="170">
+                        <div class="select-file d-flex align-items-center">
+                          <div class="file-layer-1 d-flex align-items-center">
+                            <i class="icon htvbdh_tcdt_tep"></i>
+                            <span>Chọn file</span>
+                          </div>
+                          <div class="file-layer-2">
+                            <input type="file" name="abc">
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        text
+                      </td>
+                      <td>
+                        ten file
+                      </td>
+                      <td class="d-flex align-items-center action-file">
+                        <div class="download-file">
+                          <i class="icon htvbdh_tcdt_import"></i>
+                          <span>Tải về văn bản</span>
+                        </div>
+                        <button type="button" class="btn btn-do">
+                          <i class="fa fa-trash-o do"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        text
+                      </td>
+                      <td>
+                        ten file
+                      </td>
+                      <td class="d-flex align-items-center action-file">
+                        <div class="download-file">
+                          <i class="icon htvbdh_tcdt_import"></i>
+                          <span>Tải về văn bản</span>
+                        </div>
+                        <button type="button" class="btn btn-do">
+                          <i class="fa fa-trash-o do"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        text
+                      </td>
+                      <td>
+                        ten file
+                      </td>
+                      <td class="d-flex align-items-center action-file">
+                        <div class="download-file">
+                          <i class="icon htvbdh_tcdt_import"></i>
+                          <span>Tải về văn bản</span>
+                        </div>
+                        <button type="button" class="btn btn-do">
+                          <i class="fa fa-trash-o do"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        text
+                      </td>
+                      <td>
+                        ten file
+                      </td>
+                      <td class="d-flex align-items-center action-file">
+                        <div class="download-file">
+                          <i class="icon htvbdh_tcdt_import"></i>
+                          <span>Tải về văn bản</span>
+                        </div>
+                        <button type="button" class="btn btn-do">
+                          <i class="fa fa-trash-o do"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        text
+                      </td>
+                      <td>
+                        ten file
+                      </td>
+                      <td class="d-flex align-items-center action-file">
+                        <div class="download-file">
+                          <i class="icon htvbdh_tcdt_import"></i>
+                          <span>Tải về văn bản</span>
+                        </div>
+                        <button type="button" class="btn btn-do">
+                          <i class="fa fa-trash-o do"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <!-- <div class="header d-flex align-items-center" nz-row [nzGutter]="[18, 6]">
+                  <div nz-col nzSpan="8">
+                    <input type="text" placeholder="Nhập tên file" nz-input />
+                  </div>
+                  <div class="select-file d-flex align-items-center" nz-col nzSpan="2">
+                    <div class="file-layer-1 d-flex align-items-center">
+                      <i class="icon htvbdh_tcdt_tep"></i>
+                      <span>Chọn file</span>
+                    </div>
+                    <div class="file-layer-2">
+                      <input type="file" name="abc">
+                    </div>
+                  </div>
+                </div>
+                <div class="header d-flex align-items-center" nz-row [nzGutter]="[18, 6]">
+                  <div nz-col nzSpan="1">
+                    1
+                  </div>
+                  <div class="" nz-col nzSpan="2">
+                    Nội dung text
+                  </div>
+                  <div class="" nz-col nzSpan="5">
+                    Tên file
+                  </div>
+                  <div class="select-file d-flex align-items-center" nz-col nzSpan="2">
+                    <div class="download-file">
+                      <i class="icon htvbdh_tcdt_import"></i>
+                      <span>Tải về văn bản</span>
+                    </div>
+                    <button type="button" class="btn btn-do">
+                      <i class="fa fa-trash-o do"></i>
+                      <span>Xóa</span>
+                    </button>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div>
         </div>

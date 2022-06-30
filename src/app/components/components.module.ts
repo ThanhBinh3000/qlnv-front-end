@@ -1,3 +1,4 @@
+import { FileListComponent } from './file-list/file-list.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -149,6 +150,7 @@ import { DanhSachQuyetDinhPhanBoComponent } from './dialog/dialog-ds-qd-phan-bo/
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
     DanhSachQuyetDinhPhanBoComponent,
+    FileListComponent,
     //pipes
     FilterPipe,
   ],
@@ -264,7 +266,8 @@ import { DanhSachQuyetDinhPhanBoComponent } from './dialog/dialog-ds-qd-phan-bo/
     FilterPipe,
     NzAlertModule,
     MultipleTagComponent,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    FileListComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

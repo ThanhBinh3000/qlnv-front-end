@@ -1,0 +1,43 @@
+.file-list {
+  width: 50%;
+  overflow: unset;
+}
+
+.header-file {
+  display: grid;
+  grid-template-columns: 390px 390px 30px 30px 30px;
+  grid-gap: 10px;
+}
+
+.icon-plus,
+.icon-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F8F9FA;
+  border: 1px solid #C4C9CC;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.icon-xoa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF3F3;
+  border: 1px solid #FF4D4F;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.body-file {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 15px 365px 350px 30px 30px 30px;
+  grid-gap: 10px 10px;
+
+  .ten-file {
+    font-size: 13px;
+    color: #2196F3;
+  }
+}
