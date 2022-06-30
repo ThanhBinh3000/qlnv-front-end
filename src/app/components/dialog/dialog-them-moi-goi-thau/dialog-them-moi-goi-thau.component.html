@@ -1,17 +1,15 @@
-<form nz-form>
+<form nz-form [formGroup]="formGoiThau">
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
-        <nz-select>
-          <nz-option nzValue="1111" nzLabel="1111"></nz-option>
-        </nz-select>
+        <input nz-input formControlName="tenGThau" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-        <nz-select>
+        <nz-select formControlName="loaiHh">
           <nz-option nzValue="Nhà bạt cứu sinh loại 16m2" nzLabel="Nhà bạt cứu sinh loại 16m2"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -21,16 +19,16 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-        <nz-select>
-          <nz-option nzValue="nb24" nzLabel="nb24">
-          </nz-option>
+        <nz-select formControlName="cLoaiVThh" (ngModelChange)="changeChungLoai($event)"
+          [ngModelOptions]="{standalone: true}">
+          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.maVatTu"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-        <nz-select>
+        <nz-select formControlName="dvTinh">
           <nz-option nzValue="Chiếc" nzLabel="Chiếc"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -38,31 +36,25 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
-        <input nz-input />
+        <input nz-input formControlName="sLuong" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
-        <input nz-input />
+        <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
+        <input nz-input formControlName="donGia" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
-        <input nz-input />
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="24">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thành tiền bằng chữ </nz-form-label>
-        <input nz-input />
+        <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
+        <input nz-input formControlName="thanhTien" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Hình thức LCNT </nz-form-label>
-        <nz-select>
+        <nz-select formControlName="hThuc">
           <nz-option nzValue="Đấu thầu rộng rãi trong nước qua mạng" nzLabel="Đấu thầu rộng rãi trong nước qua mạng">
           </nz-option>
         </nz-select>
@@ -71,7 +63,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
-        <nz-select>
+        <nz-select formControlName="pThucLCNT">
           <nz-option nzValue="Một giai đoạn hai túi hồ sơ" nzLabel="Một giai đoạn hai túi hồ sơ"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -79,13 +71,13 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <input nz-input />
+        <input nz-input formControlName="tgianBatDau" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
-        <nz-select>
+        <nz-select formControlName="loaiHdong">
           <nz-option nzValue="Hợp đồng trọn gói" nzLabel="Hợp đồng trọn gói"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -93,15 +85,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
-        <input nz-input />
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="24">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thời gian thực hiện hợp đồng </nz-form-label>
-        <textarea rows="3" nz-input></textarea>
+        <input nz-input formControlName="tgianThucHien" />
       </nz-form-item>
     </div>
   </div>
@@ -121,7 +105,9 @@
           <tr>
             <td></td>
             <td>
-              <input nz-input />
+              <nz-select>
+                <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.maDvi"></nz-option>
+              </nz-select>
             </td>
             <td>
               <input nz-input />

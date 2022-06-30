@@ -27,7 +27,6 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-
         <!-- *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03' || formData.value.trangThai == '09') && checkCanUpdate()" -->
       </div>
     </div>
@@ -176,10 +175,10 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                      <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh"
-                        readonly="true" />
-                    </nz-input-group>
+                    <nz-select formControlName="tenVthh" (ngModelChange)="changeHangHoa($event)">
+                      <nz-option *ngFor="let p of listVatTuUniq" [nzValue]="p.maVatTuCha" [nzLabel]="p.maVatTuCha">
+                      </nz-option>
+                    </nz-select>
                     <ng-template #loaiVthhError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                     </ng-template>
@@ -785,21 +784,22 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let data of basicTable.data; let i = index">
+                  <tr *ngFor="let data of dataGoiThau; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{data.tenGThau}}</td>
+                    <td>{{data.donGia}}</td>
+                    <td>{{data.nguonVon}}</td>
+                    <td>{{data.hThuc}}</td>
+                    <td>{{data.pThucLCNT}}</td>
+                    <td>{{data.tgianBatDau}}</td>
+                    <td>{{data.loaiHdong}}</td>
+                    <td>{{data.tgianThucHien}}</td>
+                    <td>{{data.diaDiemNhap}}</td>
+
                     <td class="text-right">
                       <a (click)="openDialogGoiThau(data)">
                         <i class="fa fa-pencil"></i>
