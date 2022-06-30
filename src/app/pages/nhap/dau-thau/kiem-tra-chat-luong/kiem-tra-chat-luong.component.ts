@@ -17,6 +17,7 @@ export class KiemTraChatLuongComponent implements OnInit {
   ngOnInit() {
     this.loaiVTHHGetAll();
   }
+
   async loaiVTHHGetAll() {
     this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();

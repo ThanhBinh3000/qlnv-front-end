@@ -68,6 +68,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     noiDung: '',
   }
   dataTableAll: any[] = [];
+
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
@@ -129,8 +130,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
 
   async search() {
-    let param =
-    {
+    let param = {
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.maVthh,
       "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,

@@ -15,29 +15,29 @@ export class QuanLyBienBanLayMauService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/tra-cuu?`
-    if (body.ngayLayMau) {
-      url_ += 'ngayLapBbanTuNgay=' + encodeURIComponent('' + body.ngayLapBbanTuNgay) + '&';
-      url_ += 'ngayLapBbanDenNgay=' + encodeURIComponent('' + body.ngayLapBbanDenNgay) + '&';
+    if (body.maDvi) {
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
     }
-    if (body.soHopDong)
-      url_ += 'soHopDong=' + encodeURIComponent('' + body.soHopDong) + '&';
-    if (body.diemkho)
-      url_ += 'diemkho=' + encodeURIComponent('' + body.diemkho) + '&';
-    if (body.nhaKho)
-      url_ += 'nhaKho=' + encodeURIComponent('' + body.nhaKho) + '&';
-    if (body.nganLoBaoQuan)
-      url_ += 'nganLoBaoQuan=' + encodeURIComponent('' + body.nganLoBaoQuan) + '&';
-    if (body.trangThai)
-      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
+    if (body.maVatTuCha)
+      url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
+    if (body.soQuyetDinhNhap)
+      url_ += 'soQuyetDinhNhap=' + encodeURIComponent('' + body.soQuyetDinhNhap) + '&';
+    if (body.soBienBan)
+      url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
+    if (body.ngayLayMauTu)
+      url_ += 'ngayLayMauTu=' + encodeURIComponent('' + body.ngayLayMauTu) + '&';
+    if (body.ngayLayMauDen)
+      url_ += 'ngayLayMauDen=' + encodeURIComponent('' + body.ngayLayMauDen) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
       url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
+
   loadChiTiet(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/chi-tiet?id=${id}`;
     return this.httpClient.get<any>(url_).toPromise();
@@ -70,4 +70,14 @@ export class QuanLyBienBanLayMauService extends BaseService {
     return this.httpClient.put<any>(url_, null).toPromise();
   }
 
+
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
 }

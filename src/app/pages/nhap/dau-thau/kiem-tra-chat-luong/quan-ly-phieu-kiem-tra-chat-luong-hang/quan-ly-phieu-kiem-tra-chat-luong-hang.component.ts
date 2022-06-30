@@ -125,7 +125,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     let body = {
       "ketLuan": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
+      "maHangHoa": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
