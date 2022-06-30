@@ -5,7 +5,7 @@
 
 .header-file {
   display: grid;
-  grid-template-columns: 390px 390px 30px 30px 30px;
+  grid-template-columns: 10fr 10fr 1fr 1fr;
   grid-gap: 10px;
 }
 
@@ -35,7 +35,7 @@
 .body-file {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: 15px 365px 350px 30px 30px 30px;
+  grid-template-columns: 1fr 9fr 9fr 1fr 1fr 1fr;
   grid-gap: 10px 10px;
 
   .ten-file {
