@@ -255,12 +255,25 @@
             </div>
           </div>
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="24" class="text-summary">Chứng từ kèm theo</div>
-            <div nz-col nzSpan="24">
-              <!-- <textarea nz-input [(ngModel)]="detail.ketLuan"></textarea> -->
-              <div class="list-file">
-                <file-list></file-list>
-              </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Căn cứ
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list></file-list>
+                </div>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  File đính kèm khác
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list></file-list>
+                </div>
+              </nz-form-item>
             </div>
           </div>
           <div nz-col nzSpan="24">
@@ -270,13 +283,12 @@
               </nz-form-label>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="8">
+          <div nz-col nzSpan="24">
             <nz-form-item class="d-flex flex-column">
               <nz-form-label [nzNoColon]="true" class="d-flex">
                 Kết luận
               </nz-form-label>
-              <input nz-input [(ngModel)]="detail.keToan"
-                [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+              <textarea nz-input [rows]="3" placeholder="Nhập nội dung kết luận"></textarea>
             </nz-form-item>
           </div>
         </nz-card>
