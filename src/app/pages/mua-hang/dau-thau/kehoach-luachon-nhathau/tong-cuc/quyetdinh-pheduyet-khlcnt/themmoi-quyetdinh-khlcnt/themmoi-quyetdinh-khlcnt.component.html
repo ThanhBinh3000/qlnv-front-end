@@ -45,7 +45,7 @@
               <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
-                <nz-select formControlName="namKhoach" (ngModelChange)="danhSachTongHopGetAll()" nzAllowClear>
+                <nz-select formControlName="namKhoach" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
                 <ng-template #namKeHoachError let-control>
@@ -86,7 +86,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker class="search__input" formControlName="ngayQd" nzFormat="dd/MM/yyyy"
+                  <nz-date-picker class="search__input" formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
                     [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                   </nz-date-picker>
                   <ng-template #error let-control>
@@ -123,7 +123,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp </nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idThHdr" (ngModelChange)="selectMaTongHop($event)"
+                  <nz-select formControlName="idThHdr"
                     [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                     <nz-option *ngFor="let p of listDanhSachTongHop" [nzValue]="p.id" [nzLabel]="p.id">
                     </nz-option>
@@ -151,10 +151,7 @@
                   Tiêu chuẩn kỹ thuật
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-select nzMode="multiple">
-                    <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value">
-                    </nz-option>
-                  </nz-select>
+                  <input nz-input formControlName="tchuanCluong" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -263,7 +260,7 @@
                         <nz-form-label [nzNoColon]="true">
                           Thời điểm đóng thầu
                         </nz-form-label>
-                        <nz-range-picker formControlName="tgianMthau" class="search__input" nzFormat="dd/MM/yyyy"
+                        <nz-range-picker formControlName="tgianDthau" class="search__input" nzFormat="dd/MM/yyyy"
                           [nzDisabled]="true">
                         </nz-range-picker>
                       </nz-form-item>
@@ -273,7 +270,7 @@
                         <nz-form-label [nzNoColon]="true">
                           Thời điểm mở thầu
                         </nz-form-label>
-                        <nz-range-picker formControlName="tgianDthau" class="search__input" nzFormat="dd/MM/yyyy"
+                        <nz-range-picker formControlName="tgianMthau" class="search__input" nzFormat="dd/MM/yyyy"
                           [nzDisabled]="true">
                         </nz-range-picker>
                       </nz-form-item>
@@ -387,22 +384,6 @@
                     <div nz-col [nzSpan]="12">
                       <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
-                          Thời điểm mở thầu
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="tgianMthauErr">
-                          <nz-date-picker formControlName="tgianMthau" nzFormat="dd/MM/yyyy" class="search__input"
-                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                          </nz-date-picker>
-                          <ng-template #tgianMthauErr let-control>
-                            <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                          </ng-template>
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12"></div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
                           Thời điểm đóng thầu
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="tgianDthauErr">
@@ -415,6 +396,23 @@
                         </nz-form-control>
                       </nz-form-item>
                     </div>
+                    <div nz-col [nzSpan]="12"></div>
+                    <div nz-col [nzSpan]="12">
+                      <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true">
+                          Thời điểm mở thầu
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="tgianMthauErr">
+                          <nz-date-picker formControlName="tgianMthau" nzFormat="dd/MM/yyyy" class="search__input"
+                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                          </nz-date-picker>
+                          <ng-template #tgianMthauErr let-control>
+                            <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                          </ng-template>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+
                     <div nz-col [nzSpan]="12"></div>
                     <div nz-col [nzSpan]="12">
                       <nz-form-item class="display-block">

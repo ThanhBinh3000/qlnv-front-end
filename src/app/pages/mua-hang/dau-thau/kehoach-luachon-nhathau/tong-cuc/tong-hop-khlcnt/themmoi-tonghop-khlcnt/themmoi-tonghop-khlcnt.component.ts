@@ -64,8 +64,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
 
   idPA: number = 0;
   tabSelected: string = 'thongTinChung';
-
+  selectedId: number = 0;
   errorInputRequired: string = null;
+  isQuyetDinh: boolean = false;
 
   userInfo: UserLogin;
   dataDeXuat: any[] = [];
@@ -113,6 +114,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       tgianNhang: ['', [Validators.required]],
       ghiChu: ['', [Validators.required]],
       trangThai: [''],
+      tenVthh: [''],
+      tenCloaiVthh: [''],
+      tchuanCluong: ['']
     })
   }
 
@@ -228,7 +232,10 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
         tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
         ghiChu: dataDetail.ghiChu,
-        trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai
+        trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai,
+        tenVthh: dataDetail.tenVthh,
+        tenCloaiVthh: dataDetail.tenCloaiVthh,
+        tchuanCluong: dataDetail.tchuanCluong
       })
       console.log(this.formData.get('trangThai').value);
       this.isTongHop = true;
@@ -373,9 +380,17 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   taoQdinh() {
-
+    let elem = document.getElementById('selectedTab');
+    let tabActive = elem.getElementsByClassName('ant-tabs-tab-active')[0];
+    tabActive.classList.remove('ant-tabs-tab-active')
+    let setActive = elem.getElementsByClassName('ant-tabs-tab')[2];
+    setActive.classList.add('ant-tabs-tab-active');
+    this.isQuyetDinh = true;
   }
 
+  showTongHop() {
+    this.isQuyetDinh = false;
+  }
 }
 
 function VNnum2words(tien: number): string {
