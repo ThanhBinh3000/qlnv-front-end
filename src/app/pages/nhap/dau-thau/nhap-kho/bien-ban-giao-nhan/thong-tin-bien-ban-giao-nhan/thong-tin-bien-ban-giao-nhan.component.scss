@@ -1,0 +1,11 @@
+.file-list {
+    width: 100%;
+}
+
+::ng-deep {
+    .thong-tin-bien-ban-giao-nhan {
+        .ant-form-item-no-colon {
+            margin-bottom: 0px !important;
+        }
+    }
+}
