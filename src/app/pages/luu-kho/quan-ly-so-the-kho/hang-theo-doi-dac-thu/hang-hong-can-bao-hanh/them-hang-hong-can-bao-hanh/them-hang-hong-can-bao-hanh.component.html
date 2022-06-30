@@ -14,7 +14,11 @@
         <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
         <nz-form-control>
           <nz-input-group id="ten-don-vi">
-            <input type="text" nz-input formControlName="tenDonVi" />
+            <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -81,47 +85,69 @@
         <th></th>
         <th class="text-center" width="350px">
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập loại hàng hoá" />
+            <!-- <input type="text" nz-input placeholder="Nhập loại hàng hoá" /> -->
+            <nz-select [(ngModel)]="rowItem.idLoaiHangHoa" placeholder="Nhập loại hàng hoá">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập tên hàng hoá" />
+            <input type="text" [(ngModel)]="rowItem.tenHangHoa" nz-input placeholder="Nhập tên hàng hoá" />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập điểm kho" />
+            <!-- <input type="text" nz-input placeholder="Nhập điểm kho" /> -->
+            <nz-select [(ngModel)]="rowItem.idDiemKho" placeholder="Nhập điểm kho"
+              (ngModelChange)="onChangeDiemKho($event)">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDiemKho">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập nhà kho" />
+            <!-- <input type="text" nz-input placeholder="Nhập nhà kho" /> -->
+            <nz-select [(ngModel)]="rowItem.idNhaKho" placeholder="Nhập nhà kho"
+              (ngModelChange)="onChangeNhaKho($event)">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNhaKho">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập ngăn lô" />
+            <!-- <input type="text" nz-input placeholder="Nhập ngăn lô" /> -->
+            <nz-select [(ngModel)]="rowItem.idNganLo" placeholder="Nhập ngăn lô">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganLo">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="number" nz-input placeholder="Nhập số lượng" />
+            <input type="number" [(ngModel)]="rowItem.soLuongTon" nz-input placeholder="Nhập số lượng" />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="number" nz-input placeholder="Nhập số lượng" />
+            <input type="number" [(ngModel)]="rowItem.soLuongThanhLy" nz-input placeholder="Nhập số lượng" />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập đơn vị tính" />
+            <input type="text" [(ngModel)]="rowItem.donVi" nz-input placeholder="Nhập đơn vị tính" />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Nhập lý do" />
+            <input type="text" [(ngModel)]="rowItem.lyDo" nz-input placeholder="Nhập lý do" />
           </nz-input-group>
         </th>
         <th style="text-align: center;">

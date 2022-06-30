@@ -15,7 +15,9 @@
           <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
           <nz-form-control>
             <nz-input-group id="ten-don-vi">
-              <input type="text" nz-input formControlName="tenDonVi" />
+              <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto"
+                (input)="onChangeAutoComplete($event)" />
+              <nz-autocomplete #donViAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -33,7 +35,10 @@
           <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
           <nz-form-control>
             <nz-input-group id="loai-hang-hoa">
-              <input type="text" nz-input formControlName="loaiHangHoa" />
+              <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto"
+                (input)="onChangeAutoCompleteLoaiHH($event)" />
+              <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource">
+              </nz-autocomplete>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -49,7 +54,7 @@
       </div>
     </form>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>
@@ -83,33 +88,63 @@
         <tr>
           <th></th>
           <th class="text-center">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <!-- <input type="text" nz-input placeholder="Tìm kiếm" /> -->
+              <nz-select [(ngModel)]="searchInTable.idDonVi" (ngModelChange)="onChangeDonVi($event)"
+                [nzShowArrow]="false" placeholder="Tìm kiếm">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <!-- <input type="text" nz-input placeholder="Tìm kiếm" /> -->
+              <nz-select [(ngModel)]="searchInTable.idLoaiHangHoa" placeholder="Tìm kiếm" [nzShowArrow]="false">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th></th>
           <th>
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <!-- <input type="text" nz-input placeholder="Tìm kiếm" /> -->
+              <nz-select [(ngModel)]="searchInTable.idDiemKho" (ngModelChange)="onChangeDiemKho($event)"
+                [nzShowArrow]="false" placeholder="Tìm kiếm">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDiemKho">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <!-- <input type="text" nz-input placeholder="Tìm kiếm" /> -->
+              <nz-select [(ngModel)]="searchInTable.idNhaKho" (ngModelChange)="onChangeNhaKho($event)"
+                [nzShowArrow]="false" placeholder="Tìm kiếm">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNhaKho">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <!-- <input type="text" nz-input placeholder="Tìm kiếm" /> -->
+              <nz-select [(ngModel)]="searchInTable.idNganLo" placeholder="Tìm kiếm" [nzShowArrow]="false"
+                [nzShowArrow]="false">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganLo">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-date-picker [(ngModel)]="filterDate" (ngModelChange)="onChangeFilterDate($event)"></nz-date-picker>
+            <nz-date-picker [(ngModel)]="searchInTable.ngayNhapKho" (ngModelChange)="onChangeFilterDate($event)">
+            </nz-date-picker>
           </th>
           <th></th>
           <th></th>
