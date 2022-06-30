@@ -21,9 +21,9 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-        <nz-select>
-          <nz-option nzValue="nb24" nzLabel="nb24">
-          </nz-option>
+        <nz-select [(ngModel)]="cLoaiVThh" (ngModelChange)="changeChungLoai($event)"
+          [ngModelOptions]="{standalone: true}">
+          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.maVatTu"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
@@ -121,7 +121,9 @@
           <tr>
             <td></td>
             <td>
-              <input nz-input />
+              <nz-select>
+                <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.maDvi"></nz-option>
+              </nz-select>
             </td>
             <td>
               <input nz-input />

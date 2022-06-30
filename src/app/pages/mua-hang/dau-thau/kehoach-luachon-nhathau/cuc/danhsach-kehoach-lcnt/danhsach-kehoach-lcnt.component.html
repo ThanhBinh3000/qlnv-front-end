@@ -196,7 +196,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="checkCanUpdate()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -204,7 +204,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="checkCanUpdate()">
+            <button type="button" class="btn btn-main" (click)="themMoi()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

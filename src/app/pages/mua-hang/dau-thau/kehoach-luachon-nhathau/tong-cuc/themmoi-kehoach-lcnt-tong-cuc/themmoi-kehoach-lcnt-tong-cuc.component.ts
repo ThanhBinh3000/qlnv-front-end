@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { uniqBy } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -175,6 +175,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
+  listVatTu = [];
+  listVatTuUniq = [];
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
@@ -251,7 +253,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
@@ -267,14 +269,13 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     } else {
       this.initForm();
     }
-    Promise.all([
-      this.loaiVTHHGetAll(),
-      this.nguonVonGetAll(),
-      this.phuongThucDauThauGetAll(),
-      this.hinhThucDauThauGetAll(),
-      this.loaiHopDongGetAll(),
-      this.getDataChiTieu()
-    ]);
+
+    await this.loaiVTHHGetAll()
+    await this.nguonVonGetAll()
+    await this.phuongThucDauThauGetAll()
+    await this.hinhThucDauThauGetAll()
+    await this.loaiHopDongGetAll()
+    await this.getDataChiTieu()
     this.spinner.hide();
   }
 
@@ -528,7 +529,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       nzComponentParams: {
         thongtinDauThau: data,
         dataChiTieu: this.dataChiTieu,
-        loaiVthh: this.formData.get('loaiVthh').value
+        loaiVthh: this.formData.get('loaiVthh').value,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -643,6 +644,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKhoach').value)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
+      this.listVatTu = res2.data.khVatTuList;
+      this.listVatTuUniq = uniqBy(res2.data.khVatTuList, 'maVatTuCha');
       this.formData.patchValue({
         soQd: this.dataChiTieu.soQuyetDinh,
       });
@@ -1175,10 +1178,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   }
 
   checkCanUpdate() {
-    if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   // checkUpdateTatCaVatTu() {
@@ -1234,6 +1234,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         data: data,
+        listVatTu: this.listVatTu,
+        vatTuChaId: this.formData.get('tenVthh').value
       },
     });
   }
@@ -1340,5 +1342,9 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  changeHangHoa(event) {
+    console.log("🚀 ~ file: themmoi-kehoach-lcnt-tong-cuc.component.ts ~ line 1345 ~ ThemmoiKehoachLcntTongCucComponent ~ changeHangHoa ~ event", event)
   }
 }
