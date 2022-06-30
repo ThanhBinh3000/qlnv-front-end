@@ -9,16 +9,20 @@
               <div class="trai">
               </div>
               <div class="canphai phai">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+                  <span>Quay về</span>
+                </a>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="approve()"
+                  *ngIf="(detail.trangThai == '00' && id > 0) && !isView">
+                  <i class="icon htvbdh_trinh"></i>
+                  <span>Ký</span>
+                </button>
                 <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
                   *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
                   <i class="icon  htvbdh_tcdt_save"></i>
                   <span>Lưu</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="approve()"
-                  *ngIf="(detail.trangThai == '00' && id > 0) && !isView">
-                  <i class="icon htvbdh_trinh"></i>
-                  <span>Đã ký</span>
-                </button>
+
                 <!-- <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
                   *ngIf="detail.trangThai == '01' && !isView">
                   <i class="icon  htvbdh_da-xu-ly"></i>
@@ -34,9 +38,7 @@
                   <i class="icon htvbdh_tcdt_tuchoi"></i>
                   <span>Từ chối</span>
                 </a> -->
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-                  <span>Quay về</span>
-                </a>
+
               </div>
             </div>
           </div>
@@ -169,7 +171,7 @@
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị hợp đồng sau thuế </nz-form-label>
-                      <input nz-input [readonly]="true" formControlName="gtriHdSauVat" />
+                      <input nz-input [readonly]="true" type="string" appNumberOnly formControlName="gtriHdSauVat" />
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6" class="btn-tep">
