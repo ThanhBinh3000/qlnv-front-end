@@ -113,7 +113,7 @@ export class TimKiemComponent implements OnInit {
 		);
 
 		if (this.loai == "0") {
-			if (ROLE_CAN_BO.includes(this.userRole)){
+			if (ROLE_CAN_BO.includes(this.userRole)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -181,14 +181,14 @@ export class TimKiemComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = [];
 					data.data.content.forEach(item => {
-						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1) {
 							this.danhSachBaoCao.push({
 								...item,
 								checked: false,
 							})
 						} else {
 							this.danhSachBaoCao.push({
-								...item, 
+								...item,
 								checked: true,
 							})
 						}
@@ -198,7 +198,6 @@ export class TimKiemComponent implements OnInit {
 						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
 					})
-					console.log(this.danhSachBaoCao);
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
 				} else {
@@ -222,6 +221,18 @@ export class TimKiemComponent implements OnInit {
 	onPageSizeChange(size) {
 		this.pages.size = size;
 		this.onSubmit();
+	}
+
+	xoaDieuKien() {
+		this.searchFilter.maDn = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.qdChiTieu = null
+		if (!this.disable) {
+			this.searchFilter.canCuGia = null
+			this.searchFilter.loaiDn = null
+		}
 	}
 
 	taoMoi() {
@@ -268,7 +279,7 @@ export class TimKiemComponent implements OnInit {
 
 	xoaDeNghi(id: string) {
 		let request = [];
-		if (!id){
+		if (!id) {
 			request = this.listIdDelete;
 		} else {
 			request = [id];
@@ -300,28 +311,28 @@ export class TimKiemComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: any){
-		if (this.listIdDelete.findIndex(e => e == id) == -1){
-			this.listIdDelete.push(id); 
+	changeListIdDelete(id: any) {
+		if (this.listIdDelete.findIndex(e => e == id) == -1) {
+			this.listIdDelete.push(id);
 		} else {
 			this.listIdDelete = this.listIdDelete.filter(e => e != id);
 		}
 	}
 
-	checkAll(){
+	checkAll() {
 		let check = true;
 		this.danhSachBaoCao.forEach(item => {
-			if (item.checked){
+			if (item.checked) {
 				check = false;
 			}
 		})
 		return check;
 	}
 
-	updateAllCheck(){
+	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
 			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-			&& ROLE_CAN_BO.includes(this.userRole)){
+				&& ROLE_CAN_BO.includes(this.userRole)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}
