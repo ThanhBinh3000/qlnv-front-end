@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,6 +19,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./quan-ly-bien-ban-ban-giao-mau.component.scss'],
 })
 export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
+  @Input() typeVthh: string;
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -43,6 +45,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   routerVthh: string;
 
   userInfo: UserLogin;
+  isTatCa: boolean = false;
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -59,6 +62,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     tenLo: '',
     tenNgan: '',
   };
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -75,10 +79,11 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     this.routerUrl = this.router.url;
     this.spinner.show();
     try {
-      let res = await this.donViService.layTatCaDonVi();
+      if (this.typeVthh == 'tat-ca') {
+        this.isTatCa = true;
+      }
       await Promise.all([
         this.loadDiemKho(),
-        // this.loadNhaKho(null),
         this.loadNganLo(),
         this.search(),
       ]);
