@@ -70,13 +70,14 @@
     <tr *ngFor="let data of lstDchinh; let i = index">
       <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
         <td> {{i + 1}}</td>
-        <td>
+        <!-- <td>
           <div *ngFor="let item of congTrinhs">
             <div *ngIf="item.id == data.maCongTrinh">
               {{item.tenDm}}
             </div>
           </div>
-        </td>
+        </td> -->
+        <td>{{data.maCongTrinh}}</td>
         <td>{{data.kh2021}}</td>
         <td>{{data.lkeVcap}}</td>
         <td>{{data.gtriCtrinh}}</td>
@@ -102,14 +103,15 @@
       </ng-container>
       <ng-template #editTemplate>
         <td>{{i + 1}}</td>
-        <td>
+        <!-- <td>
           <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
             [(ngModel)]="editCache[data.id].data.maCongTrinh"
             [class]="editCache[data.id].data.maCongTrinh?'' : 'input-error-validate'">
             <nz-option *ngFor="let item of congTrinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
             </nz-option>
           </nz-select>
-        </td>
+        </td> -->
+        <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maCongTrinh" [class]="editCache[data.id].data.maCongTrinh?'' : 'input-error-validate'" />
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kh2021"
             (ngModelChange)="changeModel(data.id)"

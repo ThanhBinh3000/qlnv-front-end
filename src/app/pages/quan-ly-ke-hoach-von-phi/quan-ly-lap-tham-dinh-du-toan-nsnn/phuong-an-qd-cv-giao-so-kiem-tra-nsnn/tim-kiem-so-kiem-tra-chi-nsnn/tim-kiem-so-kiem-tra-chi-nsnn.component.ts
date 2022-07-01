@@ -70,7 +70,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                     this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
-                    console.log(this.donVis);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -154,6 +153,16 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     onPageSizeChange(size) {
         this.pages.size = size;
         this.onSubmit();
+    }
+
+    xoaDieuKien(){
+        this.searchFilter.namGiao = null
+        this.searchFilter.tuNgay = null
+        this.searchFilter.denNgay = null
+        this.searchFilter.maDviNhan = null
+        this.searchFilter.trangThai = null
+        this.searchFilter.maPa = null
+        this.searchFilter.maBcao = null
     }
 
     taoMoi() {

@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 import { DialogDieuChinhCopyComponent } from './../../../../components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -118,16 +119,16 @@ export class GiaoNhiemVuComponent implements OnInit {
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[] = [
 		{
-			id: "51520",
-			fullName: "canbo1",
+			id: "10008",
+			fullName: "canbocc",
 		},
 		{
-			id: "51550",
-			fullName: "canbo2",
+			id: "10005",
+			fullName: "canboc",
 		},
 		{
-			id: "51480",
-			fullName: "canbo",
+			id: "10002",
+			fullName: "canbotc",
 		}
 	];
 	lstFiles: any[] = []; //show file ra man hinh
@@ -249,7 +250,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
 				this.spinner.show();
-				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+				this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 					(data) => {
 						if (data.statusCode == 0) {
 							this.maBaoCao = data.data;
@@ -323,15 +324,15 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
 		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent) ||
-			(this.trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld) ||
-			(this.trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld)) {
+		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent) ||
+			(this.trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld) ||
+			(this.trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld)) {
 			this.statusBtnOk = true;
 		} else {
 			this.statusBtnOk = false;
 		}
 		if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
-			&& roleNguoiTao == '3' && checkChirld) {
+			&& ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
 			this.statusBtnFinish = false;
 		} else {
 			this.statusBtnFinish = true;
@@ -460,7 +461,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		let request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: this.lstFiles,
-			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstDchinh: this.lstDieuChinhs,
 			maBcao: this.maBaoCao,
 			maDvi: this.maDviTao,
@@ -768,6 +769,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			let item = this.lstDieuChinhs.find(e => e.maLoai == id);
 			this.data = {
 				...item,
+        maDviTao: this.maDviTao,
 				namHienHanh: this.namHienHanh,
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,
@@ -787,6 +789,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.getDetailReport();
 			this.data = {
 				...this.lstDieuChinhs[index],
+        maDviTao: this.maDviTao,
 				namHienHanh: this.namHienHanh,
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,

@@ -127,31 +127,6 @@ export class PhuLuc3Component implements OnInit {
       })
     })
     this.updateEditCache();
-    this.danhMucService.dMNoiDung().toPromise().then(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.matHangs = res.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-    //get danh muc dự án
-    this.danhMucService.dMLoaiChi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.nhomChis = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {

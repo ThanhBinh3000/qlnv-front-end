@@ -16,10 +16,12 @@ import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import * as uuid from 'uuid';
 import { DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
     id: any;
+    stt: number;
     maCucKv: string;
     kphiDaCapThoc: number;
     ycauCapThemThoc: number;
@@ -68,6 +70,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     newDate = new Date();
     initItem: ItemData = {
         id: null,
+        stt: 0,
         maCucKv: "",
         kphiDaCapThoc: null,
         ycauCapThemThoc: null,
@@ -84,6 +87,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     };
     tongSo: ItemData = {
         id: null,
+        stt: 0,
         maCucKv: "",
         kphiDaCapThoc: 0,
         ycauCapThemThoc: 0,
@@ -102,29 +106,29 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     trangThais: any[] = [
         {
-			id: Utils.TT_BC_1,
-			tenDm: "Đang soạn",
-		},
-		{
-			id: Utils.TT_BC_2,
-			tenDm: "Trình duyệt",
-		},
-		{
-			id: Utils.TT_BC_3,
-			tenDm: "Trưởng BP từ chối",
-		},
-		{
-			id: Utils.TT_BC_4,
-			tenDm: "Trưởng BP duyệt",
-		},
-		{
-			id: Utils.TT_BC_5,
-			tenDm: "Lãnh đạo từ chối",
-		},
-		{
-			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo phê duyệt",
-		},
+            id: Utils.TT_BC_1,
+            tenDm: "Đang soạn",
+        },
+        {
+            id: Utils.TT_BC_2,
+            tenDm: "Trình duyệt",
+        },
+        {
+            id: Utils.TT_BC_3,
+            tenDm: "Trưởng BP từ chối",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Trưởng BP duyệt",
+        },
+        {
+            id: Utils.TT_BC_5,
+            tenDm: "Lãnh đạo từ chối",
+        },
+        {
+            id: Utils.TT_BC_7,
+            tenDm: "Lãnh đạo phê duyệt",
+        },
     ]
     donVis: any[] = [];
     cucKhuVucs: any[] = [];
@@ -208,12 +212,12 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             },
         );
-        if (!this.id){
+        if (!this.id) {
             await this.dataSource.currentData.subscribe(obj => {
                 this.qdChiTieu = obj?.qdChiTieu;
                 this.maDviTao = obj?.maDvi;
             })
-            if (!this.qdChiTieu){
+            if (!this.qdChiTieu) {
                 this.router.navigate([
                     'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
                 ])
@@ -239,6 +243,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         }
 
         this.getStatusButton();
+
         this.spinner.hide();
 
     }
@@ -372,6 +377,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                     this.lstCtietBcao.forEach(item => {
                         this.total(1, item);
                     })
+                    this.updateListCtietBcao();
                     this.maDeNghi = data.data.maDnghi;
                     this.qdChiTieu = data.data.soQdChiTieu;
                     this.congVan = data.data.congVan;
@@ -451,11 +457,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -481,17 +487,22 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         //get file cong van url
         let file: any = this.fileDetail;
         if (file) {
-            if (file.size > Utils.FILE_SIZE){
+            if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
+                return;
             } else {
                 request.congVan = await this.uploadFile(file);
             }
         }
-        if (!request.congVan){
+        if (!request.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
+        request.thopCucKvCtiets.forEach(item => {
+            if (item.id.length == 38){
+                item.id = null;
+            }
+        })
         this.spinner.show();
         if (!this.id) {
             this.quanLyVonPhiService.themMoiDnghiThop(request).toPromise().then(
@@ -514,8 +525,8 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                            await this.getDetailReport();
-                            this.getStatusButton();
+                        await this.getDetailReport();
+                        this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -538,6 +549,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.lstCtietBcao = data.data;
                     this.lstCtietBcao.forEach(item => {
+                        item.id = uuid.v4() + 'FE';
+                    })
+                    this.lstCtietBcao.forEach(item => {
                         this.total(1, item);
                     })
                     this.cucKhuVucs.forEach(item => {
@@ -545,9 +559,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                             this.lstCtietBcao.push({
                                 ...this.initItem,
                                 maCucKv: item.maDvi,
+                                id: uuid.v4() + 'FE',
                             })
                         }
                     })
+                    this.updateListCtietBcao();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -558,7 +574,40 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         );
     }
 
-    total(heSo: number ,item: ItemData) {
+    updateListCtietBcao() {
+        this.lstCtietBcao.sort((item1, item2) => {
+            if (item1.maCucKv > item2.maCucKv) {
+                return 1;
+            }
+            if (item1.maCucKv < item2.maCucKv) {
+                return -1;
+            }
+            return 0;
+        })
+        this.lstCtietBcao[0].stt = 1;
+        for (var i = 1; i < this.lstCtietBcao.length; i++) {
+            if (this.lstCtietBcao[i].maCucKv != this.lstCtietBcao[i - 1].maCucKv) {
+                this.lstCtietBcao[i].stt = this.lstCtietBcao[i - 1].stt + 1;
+            } else {
+                this.lstCtietBcao[i].stt = this.lstCtietBcao[i-1].stt;
+            }
+        }
+    }
+
+    checkEqual(id: any){
+        var index: number = this.lstCtietBcao.findIndex(e => e.id == id);
+        if (index == 0){
+            return true;
+        } else {
+            if (this.lstCtietBcao[index].stt != this.lstCtietBcao[index-1].stt){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    total(heSo: number, item: ItemData) {
         this.tongSo.kphiDaCapThoc += heSo * item.kphiDaCapThoc;
         this.tongSo.ycauCapThemThoc += heSo * item.ycauCapThemThoc;
         this.tongSo.tongTienThoc += heSo * item.tongTienThoc;
@@ -579,11 +628,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
     }
 
-    async xemChiTiet(id: any){
+    async xemChiTiet(id: any) {
         await this.quanLyVonPhiService.ctietDeNghi(id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    if (data.data.loaiDn == Utils.HD_TRUNG_THAU){
+                    if (data.data.loaiDn == Utils.HD_TRUNG_THAU) {
                         this.router.navigate([
                             '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id,
                         ])
@@ -603,7 +652,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     close() {
-        if (!this.id){
+        if (!this.id) {
             this.location.back();
         }
         this.router.navigate([

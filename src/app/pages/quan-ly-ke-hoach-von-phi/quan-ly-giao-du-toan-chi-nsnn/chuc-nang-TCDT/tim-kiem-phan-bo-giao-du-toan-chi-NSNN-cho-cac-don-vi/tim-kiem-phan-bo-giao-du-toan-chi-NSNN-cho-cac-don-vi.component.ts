@@ -8,10 +8,53 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { Utils, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 // import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+// trang thai ban ghi
+export const TRANG_THAI_TIM_KIEM = [
+  {
+      id: "1",
+      tenDm: 'Đang soạn'
+  },
+  {
+      id: "2",
+      tenDm: 'Trình duyệt'
+  },
+  {
+      id: "3",
+      tenDm: 'Trưởng BP từ chối'
+  },
+  {
+      id: "4",
+      tenDm: 'Trưởng BP duyệt'
+  },
+  {
+      id: "5",
+      tenDm: 'Lãnh đạo từ chối'
+  },
+  {
+      id: "6",
+      tenDm: 'Lãnh đạo phê duyệt'
+  },
+  {
+      id: "7",
+      tenDm: 'Gửi đơn vị cấp trên'
+  },
+  {
+      id: "8",
+      tenDm: 'Đơn vị cấp trên từ chối'
+  },
+  {
+      id: "9",
+      tenDm: 'Đơn vị cấp trên tiếp nhận'
+  },
+  // {
+  //     id: "10",
+  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+  // },
+]
 @Component({
   selector: 'app-tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi',
   templateUrl: './tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi.component.html',
@@ -63,6 +106,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     page: 1,
   }
   date: any = new Date()
+  roleUser:string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -83,12 +127,22 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+      this.roleUser = 'canbo';
+    } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '2';
+      this.roleUser = 'truongBoPhan';
+    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '4';
+      this.roleUser = 'lanhDao';
+    }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          this.donViTaos = this.donVis.filter(e => e.parent?.maDvi === this.userInfo?.dvql);
+          this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.dvql);
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -97,6 +151,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    // this.onSubmit()@
   }
 
   //get user info
@@ -220,6 +275,24 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
 
   getUnitName(maDvi: string) {
     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+  }
+
+  async xoaQuyetDinh(id: any){
+    this.spinner.show();
+    await this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.onSubmit()
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+    this.spinner.hide();
   }
 
 }

@@ -202,9 +202,15 @@
                                         <td></td>
                                     </tr>
 									<tr *ngFor="let data of lstCtietBcao; let i = index">
-										<td>{{ i + 1 }}</td>
 										<td>
-											{{getUnitName(data.maCucKv)}}
+											<ng-container *ngIf="checkEqual(data.id)">
+												{{data.stt}}
+											</ng-container>
+										</td>
+										<td>
+											<ng-container *ngIf="checkEqual(data.id)">
+												{{getUnitName(data.maCucKv)}}
+											</ng-container>
 										</td>
 										<td>
 											{{data.kphiDaCapThoc}}

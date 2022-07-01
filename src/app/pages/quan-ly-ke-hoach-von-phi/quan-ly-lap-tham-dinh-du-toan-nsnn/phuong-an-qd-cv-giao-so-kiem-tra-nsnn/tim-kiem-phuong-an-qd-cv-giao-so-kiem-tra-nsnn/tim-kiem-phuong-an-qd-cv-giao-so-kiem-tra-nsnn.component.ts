@@ -233,6 +233,16 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.onSubmit();
     }
 
+    xoaDieuKien(){
+        this.searchFilter.namPa = null
+        this.searchFilter.tuNgay = null
+        this.searchFilter.denNgay = null
+        this.searchFilter.trangThai = null
+        this.searchFilter.maBaoCao = null
+        this.searchFilter.maPa = null
+        this.searchFilter.maPaBtc = null
+    }
+
     async taoMoi() {
         this.statusBtnBcao = false;
         if (this.loai == "0" && !this.searchFilter.maBaoCao) {

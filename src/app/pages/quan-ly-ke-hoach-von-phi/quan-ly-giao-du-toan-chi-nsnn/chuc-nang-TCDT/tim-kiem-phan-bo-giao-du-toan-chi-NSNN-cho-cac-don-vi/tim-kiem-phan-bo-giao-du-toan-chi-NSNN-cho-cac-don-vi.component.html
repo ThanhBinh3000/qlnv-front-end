@@ -73,22 +73,20 @@
             <tr>
               <th width="60px">STT</th>
               <th width="150px">Mã phương án</th>
-              <th width="150px">Số QĐ</th>
-              <th width="150px">Ngày lập</th>
+              <!-- <th width="150px">Số QĐ</th> -->
+              <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
-              <th width="150px">Trạng thái</th>
+              <th width="150px" style="text-align: center">Trạng thái</th>
+              <th width="150px">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>
                 <a (click)="xemChiTiet(item.id, item.maLoaiDan)" style="color: #1890ff;">
                   {{ item.maPa}}
                 </a>
-              </td>
-              <td>
-                {{item.fileSoQdCv?.fileName}}
               </td>
               <td>
                 {{item.ngayTao}}
@@ -96,8 +94,18 @@
               <td>
                 {{item.namPa}}
               </td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
-                {{getStatusName(item.trangThai)}}
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id, item.maLoaiDan)">
+                    Xem
+                </button>
+                <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <span>Xóa</span>
+                </button>
+
               </td>
             </tr>
           </tbody>

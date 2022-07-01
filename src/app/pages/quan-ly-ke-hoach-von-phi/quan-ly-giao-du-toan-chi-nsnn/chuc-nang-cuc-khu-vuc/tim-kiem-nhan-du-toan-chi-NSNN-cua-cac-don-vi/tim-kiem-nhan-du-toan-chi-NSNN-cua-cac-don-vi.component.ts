@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_GIAO, Utils, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 export const TRANG_THAI_GIAO_DU_TOAN = [
@@ -72,6 +72,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     page: 1,
   }
   date: any = new Date()
+  roleUser: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -92,11 +93,21 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namGiao = new Date().getFullYear()
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+      this.roleUser = 'canbo';
+    } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+      this.roleUser = 'truongBoPhan';
+    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+      this.trangThai = '1';
+      this.roleUser = 'lanhDao';
+    }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
-          this.donVis = data.data;
+          this.donVis = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -105,6 +116,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.onSubmit()
   }
 
   //get user info
@@ -113,7 +125,6 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
-          console.log(this.userInfo);
           return data?.data;
 
         } else {

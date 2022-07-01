@@ -186,6 +186,16 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maCvUv = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.loaiVon = null
+		this.searchFilter.soLenhChiTien = null
+		this.searchFilter.ngayLap = null
+	}
+
 	taoMoi() {
 		this.statusBtnNew = false;
 		if (!this.searchFilter.loaiVon || !this.searchFilter.soLenhChiTien || !this.searchFilter.ngayLap) {

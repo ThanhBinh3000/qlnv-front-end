@@ -98,7 +98,7 @@
         <td>
           <div *ngFor="let item of donViTinhs">
             <div *ngIf="item.id == data.maDviTinh">
-              {{item.tenDm}}
+              {{item.tenDviTinh}}
             </div>
           </div>
         </td>
@@ -146,7 +146,7 @@
           <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại nội dung"
             [(ngModel)]="editCache[data.id].data.maDviTinh"
             [class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate'">
-            <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
+            <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
             </nz-option>
           </nz-select>
         </td>

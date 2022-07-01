@@ -59,21 +59,34 @@
               <th width="150px">Mã phương án</th>
               <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
+              <th width="150px">Hành động </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachQuyetDinh; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>
-                <a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-                  {{ item.maPa}}
-                </a>
+                {{ item.maPa}}
               </td>
               <td>
                 {{item.ngayTao}}
               </td>
               <td>
                 {{item.namPa}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                  <!-- <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span> -->
+                    Xem
+                </button>
+                <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <span>Xóa</span>
+                </button>
+
               </td>
             </tr>
           </tbody>

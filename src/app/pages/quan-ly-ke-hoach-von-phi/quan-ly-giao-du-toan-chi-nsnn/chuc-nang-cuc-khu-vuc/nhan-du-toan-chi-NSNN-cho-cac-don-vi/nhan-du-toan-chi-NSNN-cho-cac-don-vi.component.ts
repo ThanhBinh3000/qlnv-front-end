@@ -164,12 +164,8 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
           this.namDtoan = data.data.namDtoan;
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDviNhan;
-          // this.trangThai = data.data.trangThai;
-
           this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
-          this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
-          console.log(this.lstDvi);
-
+          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDviTao);
           this.trangThai = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
 
         } else {
@@ -279,11 +275,11 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
 
   // luu
   async save() {
-    debugger
-    if (this.trangThai = '2') {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.TRANG_THAI_TIEP_NHAN);
-      return this.getStatusName()
-    }
+
+    // if (this.trangThai = '2') {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGE.TRANG_THAI_TIEP_NHAN);
+    //   return this.getStatusName()
+    // }
 
     let request = {
       id: this.id,
@@ -292,7 +288,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
       maLoai: "1"
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

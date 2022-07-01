@@ -358,16 +358,17 @@ export class DanhMucHDVService extends BaseService {
 
   //danh muc don vi tinh
   dMDviTinh(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/164",
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": ""
-      }
+    return this.httpClient.get(
+      // this.urlDefault + "/qlnv-category/dmuc-khoachvon/164",
+      this.urlDefault + "/qlnv-category/dmuc-dvi-tinh/danh-sach/tat-ca",
+      // {
+      //   "paggingReq": {
+      //     "limit": 1000,
+      //     "page": 1
+      //   },
+      //   "str": "",
+      //   "trangThai": ""
+      // }
     );
   }
   //danh muc nhom
@@ -785,6 +786,20 @@ dMucBcaoDuyet(): Observable<any> {
   dMMaDuAnPhuLuc3(): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/MA_DU_AN_PL3",
+    );
+  }
+
+  //danh mục loại khoản phụ lục 1 điều chỉnh
+  dMLoaiKhoanPL1DieuChinh(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-loai-khoan-dieu-chinh-pl1",
+    );
+  }
+
+  //danh mục nội dung kinh phí phụ lục 1 điều chỉnh
+  dMNoiDungKinhPhiPL1DieuChinh(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-noi-dung-kinh-phi-dieu-chinh-pl1",
     );
   }
 }

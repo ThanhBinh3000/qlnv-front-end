@@ -203,6 +203,14 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maCvUv = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.ngayLap = null
+	}
+
 	xemChiTiet(id: string) {
 		this.router.navigate([
 			'qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/ghi-nhan-von-tai-ckv-cc/' + this.loai + '/' + id,

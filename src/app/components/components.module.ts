@@ -1,3 +1,4 @@
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyGiaoDuToanComponent } from './dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
@@ -182,6 +183,7 @@ import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.co
     DialogDoCopyComponent,
     DialogDieuChinhCopyComponent,
     DialogCopyGiaoDuToanComponent,
+    DialogCopyQuyetToanVonPhiHangDtqgComponent,
   ],
   imports: [
     CommonModule,

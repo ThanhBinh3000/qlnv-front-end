@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO } from './../../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -43,6 +44,8 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     page: 1,
   }
   date: any = new Date()
+  userRole: string;
+  status: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -90,12 +93,12 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachQuyetDinh = data.data.content;
+          this.danhSachQuyetDinh = data.data?.content;
           this.danhSachQuyetDinh.forEach(e => {
             e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
           })
-          this.totalElements = data.data.totalElements;
-          this.totalPages = data.data.totalPages;
+          this.totalElements = data.data?.totalElements;
+          this.totalPages = data.data?.totalPages;
 
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -131,4 +134,23 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
       '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + id,
     ])
   }
+
+  async xoaQuyetDinh(id: any) {
+    this.spinner.show();
+    await this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.onSubmit()
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+    this.spinner.hide();
+  }
+
 }
