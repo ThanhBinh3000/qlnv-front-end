@@ -1,3 +1,4 @@
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -6,10 +7,48 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import {  Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
-
+// trang thai ban ghi
+export const TRANG_THAI_TIM_KIEM = [
+  {
+      id: "1",
+      tenDm: 'Đang soạn'
+  },
+  {
+      id: "2",
+      tenDm: 'Trình duyệt'
+  },
+  {
+      id: "3",
+      tenDm: 'Trưởng BP từ chối'
+  },
+  {
+      id: "4",
+      tenDm: 'Trưởng BP duyệt'
+  },
+  {
+      id: "5",
+      tenDm: 'Lãnh đạo từ chối'
+  },
+  {
+      id: "6",
+      tenDm: 'Lãnh đạo phê duyệt'
+  },
+  {
+      id: "8",
+      tenDm: 'Đơn vị cấp trên từ chối'
+  },
+  {
+      id: "9",
+      tenDm: 'Đơn vị cấp trên tiếp nhận'
+  },
+  // {
+  //     id: "10",
+  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+  // },
+]
 @Component({
   selector: 'app-danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
   templateUrl: './danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.component.html',
@@ -47,6 +86,11 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   donViTao!: any;
   trangThai!:string;
   newDate = new Date();
+  userRole: string;
+  status: boolean;
+  donVis: any[] = [];
+  maDviTao: string;
+  listIdDelete: string[] = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -60,11 +104,36 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   async ngOnInit() {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    this.searchFilter.namQtoan = new Date().getFullYear()
+    this.searchFilter.namQtoan = new Date().getFullYear() -1
     this.searchFilter.ngayTaoDen = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.dvql;
+    this.userRole = this.userInfo?.roles[0].code;
+    //  check va lay gia tri role trong list role
+    let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
+    let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
+    let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
+
+    if (this.userRole == roleUserCB[0]) {
+			this.status = false;
+			this.trangThai = Utils.TT_BC_1;
+			this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
+			this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
+		}
+    else {
+			this.status = true;
+			if (this.userRole == roleUserTPB[0]) {
+				this.trangThai = Utils.TT_BC_2;
+				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+			} else if (this.userRole == roleUserLD[0]){
+				this.trangThai = Utils.TT_BC_4;
+				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+			} else {
+        this.trangThai = null;
+        this.searchFilter.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6];
+      }
+		}
     this.onSubmit();
   }
 
@@ -117,10 +186,29 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     }else{
       searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
     }
+    if (!this.trangThai) {
+      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    } else {
+      searchFilterTemp.trangThais = [this.trangThai];
+    }
     await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
+          // this.danhSachBaoCao = data.data.content;
+          this.danhSachBaoCao = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSachBaoCao.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSachBaoCao.push({
+								...item,
+								checked: true,
+							})
+						}
+					})
           this.danhSachBaoCao.forEach(e => {
             e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
             e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
@@ -177,30 +265,82 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     return this.trangThais.find(e => e.id == trangThai).tenDm;
   }
 
-  xoaBaoCao(id: any) {
-    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan1(id).toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-          this.onSubmit();
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    )
-  }
+  // xoaBaoCao(id: any) {
+  //   this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(id).toPromise().then(
+  //     data => {
+  //       if (data.statusCode == 0) {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+  //         this.onSubmit();
+  //       } else {
+  //         this.notification.error(MESSAGE.ERROR, data?.msg);
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     }
+  //   )
+  // }
+
+  xoaBaoCao(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.listIdDelete = [];
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id);
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachBaoCao.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachBaoCao.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
+	}
 
   checkDeleteReport(item: any): boolean {
-    var check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      this.userInfo?.username == item.nguoiTao) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
-  }
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			ROLE_CAN_BO.includes(this.userRole)) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
 }

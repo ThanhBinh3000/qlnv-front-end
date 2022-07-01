@@ -57,7 +57,7 @@
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
+      <nz-card nzTitle="" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <div class="row">
           <div class="col-lg-12 form-group">
@@ -72,12 +72,13 @@
               <th nzWidth="200px">Ngày tạo</th>
               <th nzWidth="150px">Năm báo cáo</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
-              <th colspan="2"></th>
+              <th nzWidth="200px" colspan="2" [hidden]="status">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachDieuChinh; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
+              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
               <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">{{ item.maBcao}}</a></td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
@@ -92,12 +93,11 @@
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
-              <td>
+              <td [hidden]="status">
                 <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
+                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
                   <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
                   <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
-
                 </button>
                 <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)"
                   *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">

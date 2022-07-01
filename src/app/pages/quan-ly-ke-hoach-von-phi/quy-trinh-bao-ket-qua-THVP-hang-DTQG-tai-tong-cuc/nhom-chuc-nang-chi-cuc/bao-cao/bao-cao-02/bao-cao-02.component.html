@@ -36,7 +36,6 @@
       </div>
     </ng-template>
     <div nz-col class="gutter-row canphai phai" [nzSpan]="15" style="display:flex; justify-content: end;">
-
       <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
@@ -57,10 +56,14 @@
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
       </button>
-      <button type="button" class="btn btn-sub" [hidden]="status">
+      <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
+        <i class="icon htvbdh_tcdt_import"></i>
+        <span>Export</span>
+      </button>
+      <!-- <button type="button" class="btn btn-sub" [hidden]="status">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Import</span>
-      </button>
+      </button> -->
       <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
         <i class="fa fa-trash-o"></i>
         <span>Xóa</span>
@@ -88,7 +91,7 @@
         <th>Giá mua tối đa <br>Tổng cục QĐ</th>
         <th>Thành tiền (Đã bao gồm thuế GTGT) </th>
         <th>Số lượng</th>
-        <th>Tối đa <br>Tổng cục QĐ</th>
+        <th>Đơn giá mua thực tế</th>
         <th>Thành tiền (Đã bao gồm thuế GTGT)</th>
       </tr>
       <tr>
@@ -115,22 +118,26 @@
         <td><b>Đơn vị mua</b></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{khSoLuongDv}}</td>
+        <td>{{ khGiaMuaTdDv}}</td>
+        <td>{{ khTtienDv}}</td>
+        <td>{{ thSoLuongDv}}</td>
+        <td>{{ thGiaMuaTdDv}}</td>
+        <td>{{ thTtienDv}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'21')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao021.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'21')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao021; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate01">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -172,7 +179,7 @@
         </ng-container>
         <ng-template #editTemplate01>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -245,22 +252,26 @@
         <td> <b>Tổng cục mua</b></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{khSoLuongTc}}</td>
+        <td>{{ khGiaMuaTdTc}}</td>
+        <td>{{ khTtienTc}}</td>
+        <td>{{ thSoLuongTc}}</td>
+        <td>{{ thGiaMuaTdTc}}</td>
+        <td>{{ thTtienTc}}</td>
         <td></td>
         <td [hidden]="status"></td>
         <td [hidden]="status"></td>
-        <td [hidden]="status"><i class="fa fa-plus" (click)="addLine(null,'22')"></i></td>
+        <td [hidden]="status">
+          <ng-container *ngIf="lstCtietBcao022.length == 0">
+            <i class="fa fa-plus" (click)="addLine(null,'22')"></i>
+          </ng-container>
+        </td>
         <td [hidden]="status"></td>
       </tr>
       <tr *ngFor="let item of lstCtietBcao022; let i = index">
         <ng-container *ngIf="!editCache[item.id].edit; else editTemplate02">
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -302,7 +313,7 @@
         </ng-container>
         <ng-template #editTemplate02>
           <td [nzIndentSize]="item.level * 8">
-            {{getChiMuc(item.stt)}}
+            {{getChiMuc(item.stt,'1')}}
           </td>
           <td>
             <div *ngFor="let vtu of lstVatTuFull">
@@ -370,6 +381,23 @@
           </td>
         </ng-template>
       </tr>
+      <tr>
+      <td></td>
+      <td>Tổng cộng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ tongDvTc}}</td>
+      <td></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+      <td [hidden]="status"></td>
+    </tr>
     </tbody>
   </nz-table>
 </div>

@@ -42,11 +42,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
+				<a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
 				</a>
@@ -61,7 +61,7 @@
 
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
-    <div class="main-content">
+    <div class="main-content" id="tablePrint">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -69,6 +69,7 @@
               <th>Mã báo cáo</th>
               <th>Mã báo cáo trước khi điều chỉnh</th>
               <th>Quyết toán năm</th>
+              <th>Thông báo quyết toán năm đối với vốn, phí hàng DTQG</th>
               <th>Số công văn</th>
               <th>Ngày lập</th>
               <th>Ngày trình duyệt</th>
@@ -83,6 +84,9 @@
               <td>{{maBcao}}</td>
               <td>{{maDchinh}}</td>
               <td>{{namQtoan}}</td>
+              <td>
+                <input class="search__input" nz-input [(ngModel)]="thongBao" [class]="thongBao ? '' : 'input-error-validate'" />
+              </td>
               <td>
                 <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                   <button nz-button>
@@ -134,7 +138,7 @@
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
-                  <th nzWidth="100px">STT</th>
+                  <th nzWidth="50px">STT</th>
                   <th nzWidth="200px">Tên hàng dự trữ quốc gia</th>
                   <th nzWidth="100px">Đơn vị tính</th>
                   <th>Số lượng</th>
@@ -173,7 +177,7 @@
                     <td>
                       <div *ngFor="let item of donViTinhs">
                         <div *ngIf="item.id == data.maDviTinh">
-                          {{item.tenDm}}
+                          {{item.tenDviTinh}}
                         </div>
                       </div>
                     </td>
@@ -212,7 +216,7 @@
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache[data.id].data.maDviTinh"
                         [class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate'">
-                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                         </nz-option>
                       </nz-select>
                     </td>
@@ -246,6 +250,18 @@
                         (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Tổng cộng lũy kế</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{total.thanhTien}}</td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
                 </tr>
               </tbody>
             </nz-table>

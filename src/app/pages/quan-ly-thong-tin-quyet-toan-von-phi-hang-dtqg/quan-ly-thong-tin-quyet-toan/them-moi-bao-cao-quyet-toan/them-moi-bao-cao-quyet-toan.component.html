@@ -42,11 +42,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
+				<a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
 				</a>
@@ -61,7 +61,7 @@
 
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
-    <div class="main-content">
+    <div class="main-content" id="tablePrint">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -171,7 +171,7 @@
                     <td>
                       <div *ngFor="let item of donViTinhs">
                         <div *ngIf="item.id == data.maDviTinh">
-                          {{item.tenDm}}
+                          {{item.tenDviTinh}}
                         </div>
                       </div>
                     </td>
@@ -210,7 +210,7 @@
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache[data.id].data.maDviTinh"
                         [class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate'">
-                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                         </nz-option>
                       </nz-select>
                     </td>
@@ -244,6 +244,18 @@
                         (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Tổng cộng lũy kế</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{total.thanhTien}}</td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
                 </tr>
               </tbody>
             </nz-table>
@@ -292,7 +304,6 @@
                     </tr>
                   </tbody>
                 </nz-table>
-
               </div>
             </div>
           </nz-tab>

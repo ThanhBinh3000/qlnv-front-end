@@ -62,7 +62,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td class="text-center">{{item.tenDvi}}</td>
               <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">{{ item.maBcao }}</a></td>
               <td>{{item.namHienHanh}}</td>

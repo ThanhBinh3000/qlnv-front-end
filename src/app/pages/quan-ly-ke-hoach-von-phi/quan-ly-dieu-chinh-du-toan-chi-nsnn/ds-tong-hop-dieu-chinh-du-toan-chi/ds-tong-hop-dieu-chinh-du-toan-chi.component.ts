@@ -93,7 +93,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
-          this.donViTaos = data.data;
+          this.donViTaos = data?.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

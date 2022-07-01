@@ -59,7 +59,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
@@ -82,13 +82,13 @@
               <th nzWidth="150px">Mã phương án</th>
               <th nzWidth="150px">Ngày tạo</th>
               <th nzWidth="150px">Năm dự toán</th>
-              <th nzWidth="150px">Trạng thái</th>
+              <th nzWidth="150px" style="text-align:center;">Trạng thái</th>
               <th nzWidth="50px" class="text-center"></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>
                 {{getUnitName(item.maDvi)}}
               </td>
@@ -97,8 +97,9 @@
               <td>
                 {{item.namDtoan}}
               </td>
-              <td>
-                {{getStatusName(item.trangThai)}}
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do:
+                  {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
                 <ng-container *ngIf="item.trangThai == '7'; else xem">
@@ -107,7 +108,7 @@
                   </button>
                 </ng-container>
                 <ng-template #xem>
-                  <ng-container *ngIf="item.trangThai == '7' && item.maLoaiDan == '1'; else thongbao">
+                  <ng-container *ngIf="(item.trangThai == '7' || item.trangThai == '9') && (item.maLoaiDan == '1' || item.maLoaiDan == '2'); else thongbao">
                     <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)">
                       Xem
                     </button>
