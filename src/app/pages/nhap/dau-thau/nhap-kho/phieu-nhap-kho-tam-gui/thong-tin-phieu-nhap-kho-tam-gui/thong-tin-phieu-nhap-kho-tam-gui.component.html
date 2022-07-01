@@ -56,7 +56,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định nhập
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -76,7 +76,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="detail.maDonVi" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -84,8 +84,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.soPhieu" [disabled]="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -94,7 +93,7 @@
                   Ngày nhập kho
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayNghiemThu"
+                  nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayNhapKho"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                 </nz-date-picker>
               </nz-form-item>
@@ -104,8 +103,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Nợ
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="detail.no" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -113,8 +114,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Có
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.keToan"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="detail.co" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -122,7 +125,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Người giao hàng
                 </nz-form-label>
-                <input placeholder="Nhập họ tên người giao hàng" nz-input [(ngModel)]="detail.kyThuatVien"
+                <input placeholder="Nhập họ tên người giao hàng" nz-input [(ngModel)]="detail.nguoiGiaoHang"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
@@ -131,10 +134,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Thời gian giao nhận hàng
                 </nz-form-label>
-                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  [(ngModel)]="detail.ngayNghiemThu"
+                <nz-time-picker [(ngModel)]="detail.thoiGianGiaoNhanHang"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                </nz-date-picker>
+                </nz-time-picker>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -143,8 +145,7 @@
                   Ngày tạo phiếu
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  [(ngModel)]="detail.ngayNghiemThu"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  [(ngModel)]="detail.ngayTaoPhieu" [disabled]="true">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -153,9 +154,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho"
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
+                  <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -165,9 +166,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho"
+                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -177,9 +178,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho"
+                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
+                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -187,11 +188,11 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Lô kho
+                  Ngăn lô
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho"
+                <nz-select [(ngModel)]="detail.maNganLo"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
+                  <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -211,7 +212,6 @@
                 <th colSpan="2" class="text-center">Số lượng</th>
                 <th rowspan="2" class="text-center">Đơn giá</th>
                 <th rowSpan="2" class="text-center">Thành tiền<br />(4) = (2) x (3)</th>
-                <th rowSpan="2" class="text-center">Hành động</th>
               </tr>
               <tr>
                 <th class="text-center">Theo chứng từ<br />(1)</th>
@@ -239,15 +239,6 @@
                     [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                 </td>
                 <td></td>
-                <td class="text-right">
-                  <a (click)="addRow()"
-                    [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
-                    <i class="fa fa-plus"></i>
-                  </a>
-                  <a (click)="clearItemRow()">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
               </tr>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
@@ -260,15 +251,6 @@
                   <td>{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
                   <td class="bg-gray">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right"
-                    *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
-                    <a (click)="editRow(data.stt)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a (click)="deleteRow(data)">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
                 </ng-container>
                 <ng-template #editTemplate>
                   <td></td>
@@ -338,155 +320,7 @@
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24" class="text-summary">Chứng từ kèm theo</div>
             <div nz-col nzSpan="24">
-              <!-- <textarea nz-input [(ngModel)]="detail.ketLuan"></textarea> -->
-              <div class="list-file">
-                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-                  [nzData]="detail?.detail" [nzBordered]="false">
-                  <tbody>
-                    <tr>
-                      <th colspan="3">
-                        <input type="text" placeholder="Nhập tên file" nz-input />
-                      </th>
-                      <th [width]="170">
-                        <div class="select-file d-flex align-items-center">
-                          <div class="file-layer-1 d-flex align-items-center">
-                            <i class="icon htvbdh_tcdt_tep"></i>
-                            <span>Chọn file</span>
-                          </div>
-                          <div class="file-layer-2">
-                            <input type="file" name="abc">
-                          </div>
-                        </div>
-                      </th>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        text
-                      </td>
-                      <td>
-                        ten file
-                      </td>
-                      <td class="d-flex align-items-center action-file">
-                        <div class="download-file">
-                          <i class="icon htvbdh_tcdt_import"></i>
-                          <span>Tải về văn bản</span>
-                        </div>
-                        <button type="button" class="btn btn-do">
-                          <i class="fa fa-trash-o do"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        text
-                      </td>
-                      <td>
-                        ten file
-                      </td>
-                      <td class="d-flex align-items-center action-file">
-                        <div class="download-file">
-                          <i class="icon htvbdh_tcdt_import"></i>
-                          <span>Tải về văn bản</span>
-                        </div>
-                        <button type="button" class="btn btn-do">
-                          <i class="fa fa-trash-o do"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        text
-                      </td>
-                      <td>
-                        ten file
-                      </td>
-                      <td class="d-flex align-items-center action-file">
-                        <div class="download-file">
-                          <i class="icon htvbdh_tcdt_import"></i>
-                          <span>Tải về văn bản</span>
-                        </div>
-                        <button type="button" class="btn btn-do">
-                          <i class="fa fa-trash-o do"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        text
-                      </td>
-                      <td>
-                        ten file
-                      </td>
-                      <td class="d-flex align-items-center action-file">
-                        <div class="download-file">
-                          <i class="icon htvbdh_tcdt_import"></i>
-                          <span>Tải về văn bản</span>
-                        </div>
-                        <button type="button" class="btn btn-do">
-                          <i class="fa fa-trash-o do"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        text
-                      </td>
-                      <td>
-                        ten file
-                      </td>
-                      <td class="d-flex align-items-center action-file">
-                        <div class="download-file">
-                          <i class="icon htvbdh_tcdt_import"></i>
-                          <span>Tải về văn bản</span>
-                        </div>
-                        <button type="button" class="btn btn-do">
-                          <i class="fa fa-trash-o do"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </nz-table>
-                <!-- <div class="header d-flex align-items-center" nz-row [nzGutter]="[18, 6]">
-                  <div nz-col nzSpan="8">
-                    <input type="text" placeholder="Nhập tên file" nz-input />
-                  </div>
-                  <div class="select-file d-flex align-items-center" nz-col nzSpan="2">
-                    <div class="file-layer-1 d-flex align-items-center">
-                      <i class="icon htvbdh_tcdt_tep"></i>
-                      <span>Chọn file</span>
-                    </div>
-                    <div class="file-layer-2">
-                      <input type="file" name="abc">
-                    </div>
-                  </div>
-                </div>
-                <div class="header d-flex align-items-center" nz-row [nzGutter]="[18, 6]">
-                  <div nz-col nzSpan="1">
-                    1
-                  </div>
-                  <div class="" nz-col nzSpan="2">
-                    Nội dung text
-                  </div>
-                  <div class="" nz-col nzSpan="5">
-                    Tên file
-                  </div>
-                  <div class="select-file d-flex align-items-center" nz-col nzSpan="2">
-                    <div class="download-file">
-                      <i class="icon htvbdh_tcdt_import"></i>
-                      <span>Tải về văn bản</span>
-                    </div>
-                    <button type="button" class="btn btn-do">
-                      <i class="fa fa-trash-o do"></i>
-                      <span>Xóa</span>
-                    </button>
-                  </div>
-                </div> -->
-              </div>
+              <file-list></file-list>
             </div>
           </div>
         </div>

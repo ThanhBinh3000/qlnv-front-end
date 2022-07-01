@@ -59,3 +59,11 @@
     width: 50%;
   }
 }
+
+::ng-deep {
+  .list-file {
+    .ant-input-group-addon:last-child {
+      padding: 0px 8px !important;
+    }
+  }
+}
