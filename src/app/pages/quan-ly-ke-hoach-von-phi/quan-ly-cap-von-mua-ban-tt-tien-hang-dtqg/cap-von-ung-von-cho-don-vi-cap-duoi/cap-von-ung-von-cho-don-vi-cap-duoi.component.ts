@@ -168,6 +168,27 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
+            this.unitChilds.forEach(item => {
+                this.lstCtietBcao.push({
+                    id: uuid.v4() + 'FE',
+                    stt: '',
+                    dviNhan: item.maDvi,
+                    ngayLap: null,
+                    ngayLapTemp: "",
+                    loai: "",
+                    ngayNhan: null,
+                    ngayNhanTemp: "",
+                    noiDung: "",
+                    maNguonNs: "",
+                    nienDoNs: "",
+                    tongSoTien: 0,
+                    nopThue: 0,
+                    ttChoDviHuong: 0,
+                    soTienBangChu: "",
+                    checked: false,
+                })
+            })
+            this.updateEditCache();
         }
         this.getStatusButton();
         this.spinner.hide();
@@ -324,6 +345,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             await this.quanLyVonPhiService.trinhDuyetCapVon(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThai = mcn;
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_3 || mcn == Utils.TT_BC_5) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
@@ -384,6 +408,16 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             return;
         }
         //get list file url
+        let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        if (!checkFile) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
         let listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
@@ -463,70 +497,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.spinner.hide();
     }
 
-    // them dong moi
-    addLine(id: number): void {
-        let item: ItemData = {
-            id: uuid.v4() + 'FE',
-            stt: '',
-            dviNhan: '',
-            ngayLap: null,
-            ngayLapTemp: "",
-            loai: "",
-            ngayNhan: null,
-            ngayNhanTemp: "",
-            noiDung: "",
-            maNguonNs: "",
-            nienDoNs: "",
-            tongSoTien: 0,
-            nopThue: 0,
-            ttChoDviHuong: 0,
-            soTienBangChu: "",
-            checked: false,
-        }
-
-        this.lstCtietBcao.splice(id, 0, item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-    }
-
-    // xoa dong
-    deleteById(id: any): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-    }
-
-    // xóa với checkbox
-    deleteSelected() {
-        // delete object have checked = true
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
-        this.allChecked = false;
-    }
-
-    // click o checkbox all
-    updateAllChecked(): void {
-        if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-                ...item,
-                checked: true
-            }));
-        } else {
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-                ...item,
-                checked: false
-            }));
-        }
-    }
-
-    // click o checkbox single
-    updateSingleChecked(): void {
-        if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-            this.allChecked = true;
-        } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-            this.allChecked = false;
-        }
-    }
-
     redirectChiTieuKeHoachNam() {
         this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
         this.location.back()
@@ -556,6 +526,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             !this.editCache[id].data.loai ||
             (!this.editCache[id].data.ttChoDviHuong && this.editCache[id].data.ttChoDviHuong !== 0)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        if (this.editCache[id].data.ttChoDviHuong < 0 ||
+            this.editCache[id].data.nopThue < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
 
@@ -599,7 +575,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     close() {
-        if (!this.loai){
+        if (!this.loai) {
             this.loai = "0";
         }
         this.router.navigate([
@@ -608,28 +584,28 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     async capToanBo() {
-        var maCvUvDuoi: string;
-        await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-                    var str: string;
-                    if (capDvi == Utils.TONG_CUC) {
-                        str = "CKV";
-                    } else {
-                        str = "CC";
-                    }
-                    maCvUvDuoi = res.data;
-                    let mm = maCvUvDuoi.split('.');
-                    maCvUvDuoi = mm[0] + str + '.' + mm[1];
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+        // var maCvUvDuoi: string;
+        // await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+        //             var str: string;
+        //             if (capDvi == Utils.TONG_CUC) {
+        //                 str = "CKV";
+        //             } else {
+        //                 str = "CC";
+        //             }
+        //             maCvUvDuoi = res.data;
+        //             let mm = maCvUvDuoi.split('.');
+        //             maCvUvDuoi = mm[0] + str + '.' + mm[1];
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     },
+        // );
         let request: any[] = [];
         this.lstCtietBcao.forEach(item => {
             request.push({
@@ -639,7 +615,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 maLoai: "1",
                 maDvi: item.dviNhan,
                 maDviTien: this.maDviTien,
-                maCapUngVonTuCapTren: maCvUvDuoi,
+                maCapUngVonTuCapTren: this.maCvUvDuoi,
                 ngayLap: this.ngayTaoTemp,
                 ngayNhan: null,
                 loaiCap: item.loai,

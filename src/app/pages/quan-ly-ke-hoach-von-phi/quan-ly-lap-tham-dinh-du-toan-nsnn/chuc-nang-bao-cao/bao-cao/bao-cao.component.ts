@@ -424,6 +424,16 @@ export class BaoCaoComponent implements OnInit {
 		})
 
 		//get list file url
+		let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE){
+                checkFile = false;
+            }
+        }
+        if (!checkFile){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -445,8 +455,13 @@ export class BaoCaoComponent implements OnInit {
 		//get file cong van url
 		let file: any = this.fileDetail;
 		if (file) {
-			request.congVan = await this.uploadFile(file);
-		}
+            if (file.size > Utils.FILE_SIZE){
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+            } else {
+                request.congVan = await this.uploadFile(file);
+            }
+        }
 
 		if (!request.congVan){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
@@ -530,6 +545,10 @@ export class BaoCaoComponent implements OnInit {
 			await this.quanLyVonPhiService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
+					this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetTBP = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.getStatusButton();
 					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

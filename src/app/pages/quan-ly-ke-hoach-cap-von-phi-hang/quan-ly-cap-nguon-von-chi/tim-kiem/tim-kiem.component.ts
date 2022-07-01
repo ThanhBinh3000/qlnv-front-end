@@ -35,6 +35,7 @@ export class TimKiemComponent implements OnInit {
 		loaiTimKiem: "0",
 	};
 	capDvi: string;
+	listIdDelete: any[] = [];
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -67,6 +68,7 @@ export class TimKiemComponent implements OnInit {
 	}
 	//trangThai
 	statusBtnNew: boolean = true;
+	statusTaoMoi: boolean = true;
 	status: boolean;
 	disable: boolean;
 
@@ -111,6 +113,9 @@ export class TimKiemComponent implements OnInit {
 		);
 
 		if (this.loai == "0") {
+			if (ROLE_CAN_BO.includes(this.userRole)){
+				this.statusTaoMoi = false;
+			}
 			this.status = false;
 		} else {
 			this.status = true;
@@ -174,12 +179,26 @@ export class TimKiemComponent implements OnInit {
 		await this.quanLyVonPhiService.timKiemDeNghi(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.danhSachBaoCao = data.data.content;
+					this.danhSachBaoCao = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSachBaoCao.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSachBaoCao.push({
+								...item, 
+								checked: true,
+							})
+						}
+					})
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
 						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
 					})
+					console.log(this.danhSachBaoCao);
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
 				} else {
@@ -247,11 +266,18 @@ export class TimKiemComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	xoaDeNghi(id: any) {
-		this.quanLyVonPhiService.xoaDeNghi(id).toPromise().then(
+	xoaDeNghi(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaDeNghi(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.listIdDelete = [];
 					this.onSubmit();
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -272,6 +298,34 @@ export class TimKiemComponent implements OnInit {
 			check = false;
 		}
 		return check;
+	}
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id); 
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachBaoCao.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachBaoCao.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
 	}
 
 	close() {

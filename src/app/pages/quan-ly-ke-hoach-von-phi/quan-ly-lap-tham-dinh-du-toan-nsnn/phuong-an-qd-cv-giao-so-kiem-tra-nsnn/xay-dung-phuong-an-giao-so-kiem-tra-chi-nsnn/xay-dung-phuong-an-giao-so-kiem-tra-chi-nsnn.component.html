@@ -185,7 +185,7 @@
 													<div *ngIf="e.maBcao == item.maBcao">
 														<nz-input-number class="search__input" nzSize="small"
 															[(ngModel)]="e.soTranChi"
-															[class]="e.soTranChi || e.soTranChi === 0 ?'' : 'input-error-validate'"
+															[class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
 															(ngModelChange)="changeModel(data.id)">
 														</nz-input-number>
 													</div>

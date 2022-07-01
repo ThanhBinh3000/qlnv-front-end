@@ -91,6 +91,18 @@
 							<th>Ngày phê duyệt</th>
 							<th>Trạng thái</th>
 							<th></th>
+							<th [hidden]="status">
+								<ng-container *ngIf="checkAll(); else xoa">
+									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
+										<span>Tất cả</span>
+									</button>
+								</ng-container>
+								<ng-template #xoa>
+									<button type="button" class="btn btn-main" (click)="xoaDeNghi('')">
+										<span>Xóa</span>
+									</button>
+								</ng-template>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -131,8 +143,9 @@
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.trangThai =='3' || item.trangThai == '5' || item.trangThai == '8'">
-									<br/>
+								<ng-container
+									*ngIf="item.trangThai =='3' || item.trangThai == '5' || item.trangThai == '8'">
+									<br />
 									Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
@@ -158,6 +171,12 @@
 									</button>
 								</ng-template>
 							</td>
+							<td [hidden]="status">
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+									(ngModelChange)="changeListIdDelete(item.id)"></label>
+								</ng-container>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
@@ -182,7 +201,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
+				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="statusTaoMoi">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>

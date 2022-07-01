@@ -168,12 +168,14 @@
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
+                            [class]="editCache[data.id].data.ncauChiChiaRaChiCs1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs1"
                             (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
+                            [class]="editCache[data.id].data.ncauChiChiaRaChiMoi1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
                             (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
@@ -183,11 +185,13 @@
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
+                            [class]="editCache[data.id].data.ncauChiChiaRaChiCs2 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs2"
-                            (ngModelChange)="changeModel(data.id)" ></nz-input-number>
+                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
+                            [class]="editCache[data.id].data.ncauChiChiaRaChiMoi2 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi2"
                             (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>

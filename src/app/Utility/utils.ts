@@ -59,6 +59,8 @@ export class Utils {
     //loai von
     public static CAP_VON = "1";
     public static UNG_VON = "2";
+
+    public static FILE_SIZE = 2097152;
     //role xoa
     //role xoa
     // public static btnRoleDel = {

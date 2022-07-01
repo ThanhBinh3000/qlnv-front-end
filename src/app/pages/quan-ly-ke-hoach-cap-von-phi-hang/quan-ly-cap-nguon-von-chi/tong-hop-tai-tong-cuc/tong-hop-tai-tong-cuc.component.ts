@@ -95,29 +95,29 @@ export class TongHopTaiTongCucComponent implements OnInit {
     dviTinhs: any[] = [];
     trangThais: any[] = [
         {
-			id: Utils.TT_BC_1,
-			tenDm: "Đang soạn",
-		},
-		{
-			id: Utils.TT_BC_2,
-			tenDm: "Trình duyệt",
-		},
-		{
-			id: Utils.TT_BC_3,
-			tenDm: "Trưởng BP từ chối",
-		},
-		{
-			id: Utils.TT_BC_4,
-			tenDm: "Trưởng BP duyệt",
-		},
-		{
-			id: Utils.TT_BC_5,
-			tenDm: "Lãnh đạo từ chối",
-		},
-		{
-			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo phê duyệt",
-		},
+            id: Utils.TT_BC_1,
+            tenDm: "Đang soạn",
+        },
+        {
+            id: Utils.TT_BC_2,
+            tenDm: "Trình duyệt",
+        },
+        {
+            id: Utils.TT_BC_3,
+            tenDm: "Trưởng BP từ chối",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Trưởng BP duyệt",
+        },
+        {
+            id: Utils.TT_BC_5,
+            tenDm: "Lãnh đạo từ chối",
+        },
+        {
+            id: Utils.TT_BC_7,
+            tenDm: "Lãnh đạo phê duyệt",
+        },
     ]
     nguonBcaos: any[] = NGUON_BAO_CAO;
     dviTiens: any[] = DON_VI_TIEN;
@@ -436,6 +436,9 @@ export class TongHopTaiTongCucComponent implements OnInit {
             await this.quanLyVonPhiService.trinhDuyetDeNghiTongHop(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThai = mcn;
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
@@ -524,7 +527,19 @@ export class TongHopTaiTongCucComponent implements OnInit {
             }
         })
         //get list file url
-        let listFile: any = [];
+        //get list file url
+        let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        if (!checkFile) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
+
+        let listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
@@ -547,7 +562,12 @@ export class TongHopTaiTongCucComponent implements OnInit {
         //get file cong van url
         let file: any = this.fileDetail;
         if (file) {
-            request.congVan = await this.uploadFile(file);
+            if (file.size > Utils.FILE_SIZE) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+                return;
+            } else {
+                request.congVan = await this.uploadFile(file);
+            }
         }
         if (!request.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
@@ -614,6 +634,19 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if (this.editCache[id].data.vonCapThoc < 0 ||
+            this.editCache[id].data.vonUngThoc < 0 ||
+            this.editCache[id].data.giaoDuToanGao < 0 ||
+            this.editCache[id].data.vonUngGao < 0 ||
+            this.editCache[id].data.vonCapGao < 0 ||
+            this.editCache[id].data.giaoDuToanMuoi < 0 ||
+            this.editCache[id].data.vonUngMuoi < 0 ||
+            this.editCache[id].data.vonCapMuoi < 0 ||
+            this.editCache[id].data.capVonVttb < 0 ||
+            this.editCache[id].data.tcGiaoVonHoanUngNam < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
         this.total(-1, this.lstCtietBcao[index]);

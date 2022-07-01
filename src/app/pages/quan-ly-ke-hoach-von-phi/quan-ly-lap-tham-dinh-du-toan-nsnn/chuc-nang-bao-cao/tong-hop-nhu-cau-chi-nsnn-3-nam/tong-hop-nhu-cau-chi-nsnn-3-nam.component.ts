@@ -176,8 +176,8 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 data1.ncauChiN1 - data2.ncauChiN1 != data3.ncauChiN1 ||
                 data1.tranChiN2 - data2.tranChiN2 != data3.tranChiN2 ||
                 data1.ncauChiN2 - data2.ncauChiN2 != data3.ncauChiN2) {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA + 
-                        this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
+                    this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
                 return;
             }
         }
@@ -453,7 +453,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 }
             }
         }
-        
+
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -525,8 +525,19 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             (!this.editCache[id].data.namHienHanhUocThien && this.editCache[id].data.namHienHanhUocThien !== 0) ||
             (!this.editCache[id].data.ncauChiN && this.editCache[id].data.ncauChiN !== 0) ||
             (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-                return;
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+            return;
+        }
+        if (this.editCache[id].data.namHienHanhDtoan < 0 ||
+            this.editCache[id].data.namHienHanhUocThien < 0 ||
+            this.editCache[id].data.tranChiN < 0 ||
+            this.editCache[id].data.ncauChiN < 0 ||
+            this.editCache[id].data.tranChiN1 < 0 ||
+            this.editCache[id].data.ncauChiN1 < 0 ||
+            this.editCache[id].data.tranChiN2 < 0 ||
+            this.editCache[id].data.ncauChiN2 < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
         }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
@@ -767,7 +778,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                     this.lstCtietBcao[index].tranChiN2 += item.tranChiN2;
                     this.lstCtietBcao[index].ncauChiN2 += item.ncauChiN2;
                     this.lstCtietBcao[index].clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
-                    if (!this.lstCtietBcao[index].namHienHanhUocThien){
+                    if (!this.lstCtietBcao[index].namHienHanhUocThien) {
                         this.lstCtietBcao[index].ssanhNcauNVoiN1 = 0;
                     } else {
                         this.lstCtietBcao[index].ssanhNcauNVoiN1 = Number((this.lstCtietBcao[index].tranChiN / this.lstCtietBcao[index].namHienHanhUocThien).toFixed(Utils.ROUND));
@@ -781,7 +792,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
         this.editCache[id].data.clechTranChiVsNcauChiN = Number(this.editCache[id].data.tranChiN) - Number(this.editCache[id].data.ncauChiN);
-        if (!this.editCache[id].data.namHienHanhUocThien){
+        if (!this.editCache[id].data.namHienHanhUocThien) {
             this.editCache[id].data.ssanhNcauNVoiN1 = 0;
         } else {
             this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN / this.editCache[id].data.namHienHanhUocThien).toFixed(Utils.ROUND));

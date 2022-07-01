@@ -8,62 +8,63 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST } from './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 interface DataItem {
-  name: string;
-  age: number;
-  street: string;
-  building: string;
-  number: number;
-  companyAddress: string;
-  companyName: string;
-  gender: string;
+	name: string;
+	age: number;
+	street: string;
+	building: string;
+	number: number;
+	companyAddress: string;
+	companyName: string;
+	gender: string;
 }
 @Component({
-  selector: 'app-quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg',
-  templateUrl: './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.component.html',
-  styleUrls: ['./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.component.scss'],
+	selector: 'app-quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg',
+	templateUrl: './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.component.html',
+	styleUrls: ['./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.component.scss'],
 })
 export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  detailDonVi: FormGroup;
-  noParent = true;
-  searchValue = '';
-  QuanLyCapVonMuaBanTtTienHangDtqgList = QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST;
-  searchFilter = {
-    soDeXuat: '',
-  };
-  userInfo: any;
-  capDvi: string;
-  donVis: any[] = [];
-  ////////
-  listOfData: DataItem[] = [];
-  sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
-  nameFilterFn = (list: string[], item: DataItem): boolean =>
-    list.some((name) => item.name.indexOf(name) !== -1);
-  filterName = [
-    { text: 'Joe', value: 'Joe' },
-    { text: 'John', value: 'John' },
-  ];
-  /////////
+	@ViewChild('nzTreeComponent', { static: false })
+	nzTreeComponent!: NzTreeComponent;
+	visible = false;
+	nodes: any = [];
+	nodeDetail: any;
+	listDonViDuoi = [];
+	cureentNodeParent: any = [];
+	datasNguoiDung: any = [];
+	nodeSelected: any = [];
+	listHTDV: any = [];
+	listKPB: any = [];
+	detailDonVi: FormGroup;
+	noParent = true;
+	searchValue = '';
+	QuanLyCapVonMuaBanTtTienHangDtqgList = QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST;
+	danhSach: any[] = [];
+	searchFilter = {
+		soDeXuat: '',
+	};
+	userInfo: any;
+	capDvi: string;
+	donVis: any[] = [];
+	////////
+	listOfData: DataItem[] = [];
+	sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
+	nameFilterFn = (list: string[], item: DataItem): boolean =>
+		list.some((name) => item.name.indexOf(name) !== -1);
+	filterName = [
+		{ text: 'Joe', value: 'Joe' },
+		{ text: 'John', value: 'John' },
+	];
+	/////////
 
-  constructor(
-    private router: Router,
-    private userService: UserService,
+	constructor(
+		private router: Router,
+		private userService: UserService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
-  ) {}
+	) { }
 
-  async ngOnInit(): Promise<void> {
-    let userName = this.userService.getUserName();
+	async ngOnInit(): Promise<void> {
+		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(
@@ -81,32 +82,31 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 		);
 		this.QuanLyCapVonMuaBanTtTienHangDtqgList.forEach(data => {
 			data.Role.forEach(item => {
-				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit){
-					data.isDisabled = true;
+				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit) {
+					this.danhSach.push(data);
 					return;
 				}
 			})
 		})
-		this.QuanLyCapVonMuaBanTtTienHangDtqgList = this.QuanLyCapVonMuaBanTtTienHangDtqgList.filter(e => e.isDisabled == true);
-    /////////
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        name: 'John Brown',
-        age: i + 1,
-        street: 'Lake Park',
-        building: 'C',
-        number: 2035,
-        companyAddress: 'Lake Street 42',
-        companyName: 'SoftLake Co',
-        gender: 'M',
-      });
-    }
-    this.listOfData = data;
-    //////////////
-  }
+		/////////
+		const data = [];
+		for (let i = 0; i < 100; i++) {
+			data.push({
+				name: 'John Brown',
+				age: i + 1,
+				street: 'Lake Park',
+				building: 'C',
+				number: 2035,
+				companyAddress: 'Lake Street 42',
+				companyName: 'SoftLake Co',
+				gender: 'M',
+			});
+		}
+		this.listOfData = data;
+		//////////////
+	}
 
-  //get user info
+	//get user info
 	async getUserInfo(username: string) {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
@@ -123,10 +123,10 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 		);
 	}
 
-  redirectThongTinChiTieuKeHoachNam() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      1,
-    ]);
-  }
+	redirectThongTinChiTieuKeHoachNam() {
+		this.router.navigate([
+			'/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+			1,
+		]);
+	}
 }

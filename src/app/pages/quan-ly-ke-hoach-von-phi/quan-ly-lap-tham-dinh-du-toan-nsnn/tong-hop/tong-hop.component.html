@@ -116,7 +116,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="tongHop()">
+				<button type="button" class="btn btn-main" (click)="tongHop()" [hidden]="statusTaoMoi">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tổng hợp</span>
 				</button>
