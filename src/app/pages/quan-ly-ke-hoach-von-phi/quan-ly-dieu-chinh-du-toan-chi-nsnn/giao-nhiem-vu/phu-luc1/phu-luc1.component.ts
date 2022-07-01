@@ -832,6 +832,7 @@ export class PhuLuc1Component implements OnInit {
   }
 
   getTotal() {
+
     this.total.tongNcauDtoanKphi = 0;
     this.total.dtoanKphiNtruoc = 0;
     this.total.dtoanKphiDaGiao = 0;
@@ -840,7 +841,7 @@ export class PhuLuc1Component implements OnInit {
     this.total.kphiDchinhTang = 0;
     this.total.kphiDchinhGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if (item.level == 0) {
+      if (!item.level) {
         this.total.tongNcauDtoanKphi += item.tongNcauDtoanKphi;
         this.total.dtoanKphiNtruoc += item.dtoanKphiNtruoc;
         this.total.dtoanKphiDaGiao += item.dtoanKphiDaGiao;

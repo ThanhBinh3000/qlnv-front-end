@@ -82,18 +82,17 @@
       </th>
       <th></th>
       <th>{{total.tongNcauDtoanKphi}}</th>
-      <th>2</th>
-      <th>3</th>
-      <th>4=2+3</th>
-      <th>5</th>
-      <th>6</th>
-      <th>7</th>
+      <th>{{total.dtoanKphiNtruoc}}</th>
+      <th>{{total.dtoanKphiDaGiao}}</th>
+      <th>{{total.dtoanKphiCong}}</th>
+      <th>{{total.kphiUocThien}}</th>
+      <th>{{total.kphiDchinhTang}}</th>
+      <th>{{total.kphiDchinhGiam}}</th>
       <th [hidden]="status"></th>
       <th [hidden]="status"></th>
       <th [hidden]="status"></th>
       <th [hidden]="status"></th>
     </tr>
-
   </thead>
   <tbody>
     <tr *ngFor="let data of lstCtietBcao; let i = index">

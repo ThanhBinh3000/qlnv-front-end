@@ -1070,6 +1070,13 @@ export class QuanLyVonPhiService extends BaseService {
       // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
     );
   }
+  //xóa báo cáo nút xóa Báo cáo
+  xoaDuToanDieuChinh1(id: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/xoa/' + id
+    );
+  }
 
   //download file tu he thong chung
   downloadFile(fileUrl: any): Observable<any> {
