@@ -185,6 +185,16 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maCvUv = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.maTienThua = null
+		this.searchFilter.ngayLap = null
+		this.searchFilter.maDviGui = null
+	}
+
 	xemChiTiet(id: string) {
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/tien-thua/' + this.loai + '/' + id,

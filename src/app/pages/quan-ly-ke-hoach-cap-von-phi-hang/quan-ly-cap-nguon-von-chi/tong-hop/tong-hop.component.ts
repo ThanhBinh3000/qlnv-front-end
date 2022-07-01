@@ -208,6 +208,15 @@ export class TongHopComponent implements OnInit {
 		this.spinner.hide();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maDeNghi = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.qdChiTieu = null
+		this.searchFilter.loaiDn = null
+	}
+
 	taoMoi() {
 		this.statusBtnNew = false;
 		if (!this.searchFilter.loaiDn) {

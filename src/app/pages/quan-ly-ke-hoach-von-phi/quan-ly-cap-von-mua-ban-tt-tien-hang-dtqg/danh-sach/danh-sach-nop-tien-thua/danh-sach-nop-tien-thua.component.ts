@@ -219,6 +219,15 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maCvUv = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.maTienThua = null
+		this.searchFilter.ngayLap = null
+	}
+
 	taoMoi() {
 		this.statusNew = false;
 		if (!this.searchFilter.maCvUv) {
