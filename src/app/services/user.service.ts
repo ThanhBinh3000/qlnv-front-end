@@ -51,22 +51,28 @@ export class UserService {
   getUserLogin(): UserLogin {
     var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
     var decoded = jwt_decode(token);
-    if (decoded && decoded["userinfo"]) {
-      var userInfo = decodeURIComponent(escape(window.atob(decoded["userinfo"])));
-      return new UserLogin(JSON.parse(userInfo));
-    }
-    return new UserLogin({})
+    // if (decoded && decoded["userinfo"]) {
+    //   var userInfo = decodeURIComponent(escape(window.atob(token)));
+    //   return new UserLogin(JSON.parse(userInfo));
+    // }
+    // return new UserLogin({})
+    // var userInfo = decodeURIComponent(escape(window.atob(decoded.toString())));
+      return new UserLogin(decoded);
   }
 
-  //get user name
-  getUserName() {
-    var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
-    var decoded = jwt_decode(token);
-    if (decoded && decoded["sub"]) {
-      var userName = decoded["sub"];
-      return userName;
-    }
-    return null;
+  isTongCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "1"
+  }
+
+  isCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "2"
+  }
+
+  isChiCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "3"
   }
 
   //get user info
@@ -82,4 +88,18 @@ export class UserService {
       }
     );
   }
+
+  //get user name
+  getUserName() {
+    var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
+    var decoded = jwt_decode(token);
+    if (decoded && decoded["sub"]) {
+      var userName = decoded["sub"];
+      return userName;
+    }
+    return null;
+  }
+
+
+
 }

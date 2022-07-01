@@ -13,59 +13,46 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang');
+    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang', '');
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt?`;
-    if (body.maDonVi)
-      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.maHangHoa)
-      url_ += 'maHangHoa=' + encodeURIComponent('' + body.maHangHoa) + '&';
-    if (body.maNganKho)
-      url_ += 'maNganKho=' + encodeURIComponent('' + body.maNganKho) + '&';
-    if (body.ngayKiemTraDenNgay)
-      url_ +=
-        'ngayKiemTraDenNgay=' +
-        encodeURIComponent('' + body.ngayKiemTraDenNgay) +
-        '&';
-    if (body.ngayKiemTraTuNgay)
-      url_ +=
-        'ngayKiemTraTuNgay=' +
-        encodeURIComponent('' + body.ngayKiemTraTuNgay) +
-        '&';
-    if (body.pageNumber)
-      url_ +=
-        'pageable.pageNumber=' + encodeURIComponent('' + body.pageNumber) + '&';
-    if (body.offset)
-      url_ += 'pageable.offset=' + encodeURIComponent('' + body.offset) + '&';
-    if (body.pageSize)
-      url_ +=
-        'pageable.pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
-    if (body.paged)
-      url_ += 'pageable.paged=' + encodeURIComponent('' + body.paged) + '&';
-    if (body.sorted)
-      url_ +=
-        'pageable.sort.sorted=' + encodeURIComponent('' + body.sorted) + '&';
-    if (body.unsorted)
-      url_ +=
-        'pageable.sort.unsorted=' +
-        encodeURIComponent('' + body.unsorted) +
-        '&';
-    if (body.unpaged)
-      url_ += 'pageable.unpaged=' + encodeURIComponent('' + body.unpaged) + '&';
-    if (body.soPhieu)
-      url_ += 'soPhieu=' + encodeURIComponent('' + body.soPhieu) + '&';
-    url_ = url_.replace(/[?&]$/, '');
-    return this.httpClient.get<any>(url_).toPromise();
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/tra-cuu`
+    return this.httpClient.post<any>(url, body).toPromise();
   }
-  themMoiChiTieuKeHoach(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+
+  chiTiet(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  them(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/them-moi`;
     return this.httpClient.post(url, body).toPromise();
   }
 
-  chinhSuaChiTieuKeHoach(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+  sua(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt`;
     return this.httpClient.put(url, body).toPromise();
+  }
+
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/status`;
+    return this.httpClient.put(url, body).toPromise();
+  }
+
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/${id}`;
+    return this.httpClient.delete(url).toPromise();
+  }
+
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

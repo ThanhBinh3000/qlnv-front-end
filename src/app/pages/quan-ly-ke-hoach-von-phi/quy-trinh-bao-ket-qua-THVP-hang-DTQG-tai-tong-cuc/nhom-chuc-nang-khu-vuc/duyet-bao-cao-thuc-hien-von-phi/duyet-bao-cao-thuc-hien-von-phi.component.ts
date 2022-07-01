@@ -1,4 +1,4 @@
-import { DatePipe, Location} from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import {  LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 import * as fileSaver from 'file-saver';
 
 @Component({
@@ -26,36 +26,36 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string ='/bao-cao/';
+  url: string = '/bao-cao/';
 
-  userInfor:any;
-  maDonVi:any;
-  listDonViTao:any []=[];
-  listBcaoKqua:any []=[];
-  lenght:any=0;
+  userInfor: any;
+  maDonVi: any;
+  listDonViTao: any[] = [];
+  listBcaoKqua: any[] = [];
+  lenght: any = 0;
 
   trangThais: any = TRANG_THAI_GUI_DVCT;                          // danh muc loai bao cao
   trangThai!: string;
 
   searchFilter = {
-    dotBcao:'',
-    maBcao:'',
-    maDvi:'',
-    maLoaiBcao:'',
-    maPhanBcao:'1',
-    namBcao:null,
-    ngayTaoDen:'',
-    ngayTaoTu:'',
+    dotBcao: '',
+    maBcao: '',
+    maDvi: '',
+    maLoaiBcao: '',
+    maPhanBcao: '1',
+    namBcao: null,
+    ngayTaoDen: '',
+    ngayTaoTu: '',
     paggingReq: {
       limit: 20,
       page: 1
     },
     str: '',
-    thangBcao:null,
+    thangBcao: null,
     trangThais: [],
-    loaiTimKiem:'1',
+    loaiTimKiem: '1',
     donVi: '',
-    };
+  };
 
 
   pages = {
@@ -69,8 +69,8 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notification:NzNotificationService,
-    private nguoiDungSerivce : UserService,
+    private notification: NzNotificationService,
+    private nguoiDungSerivce: UserService,
     private spinner: NgxSpinnerService,
     private location: Location,
   ) {
@@ -80,7 +80,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     let date = new Date();
     this.searchFilter.namBcao = date.getFullYear();
     this.trangThai = '7';
-    this.searchFilter.maLoaiBcao='1';
+    this.searchFilter.maLoaiBcao = '1';
     this.onSubmit();
     let userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
@@ -98,8 +98,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       }
     );
 
-    let objectDonViThuocQuanLy={
-      
+    let objectDonViThuocQuanLy = {
       capDvi: null,
       kieuDvi: null,
       loaiDvi: null,
@@ -116,18 +115,18 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       str: '',
       tenDvi: '',
       trangThai: '01'
-  }
-  
-  this.danhMuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
-    if(res.statusCode==0){
-     this.listDonViTao = res?.data;
-     
-    }else{
-      this.notification.error(MESSAGE.ERROR, res?.msg);
     }
-  },err =>{
-    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-  })
+
+    this.danhMuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listDonViTao = res?.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    })
   }
 
 
@@ -151,14 +150,14 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       );
   }
   // lay ten don vi tao
-  getUnitName(dvitao:any){
+  getUnitName(dvitao: any) {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
   async onSubmit() {
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
-    searchFilterTemp.trangThais= [];
+    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    searchFilterTemp.trangThais = [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {
@@ -170,7 +169,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
-          e.congVan = JSON.parse(e.congVan);          
+          e.congVan = JSON.parse(e.congVan);
           e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
           e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
           e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
@@ -187,16 +186,16 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     })
     this.spinner.hide();
   }
-  themMoi(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+  themMoi() {
+    if (this.searchFilter.maLoaiBcao == '') {
+      this.notification.error('Thêm mới', 'Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url])
   }
 
   //set url khi
-  setUrl(lbaocao:any) {
+  setUrl(lbaocao: any) {
     console.log(lbaocao)
     switch (lbaocao) {
       case 1:
@@ -234,7 +233,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   async downloadFileCv(fileUrl, fileName) {
     await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
       (data) => {
-        fileSaver.saveAs(data,fileName);
+        fileSaver.saveAs(data, fileName);
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

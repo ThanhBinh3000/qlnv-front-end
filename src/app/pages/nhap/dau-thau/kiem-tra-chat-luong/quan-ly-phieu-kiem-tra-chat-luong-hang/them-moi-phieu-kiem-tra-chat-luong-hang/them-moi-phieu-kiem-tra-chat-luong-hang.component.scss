@@ -1,0 +1,57 @@
+::ng-deep {
+  .hh__container {
+    .ant-card-body {
+      padding-right: 0px !important;
+      padding-left: 0px !important;
+    }
+  }
+  .title-form-chi-tiet {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+  .text-title-specical {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+  }
+  .table-ket-qua .ant-table-wrapper {
+    margin: 0 !important;
+  }
+  .title-chi-tieu {
+    display: flex;
+    align-items: center;
+    .du-thao-va-lanh-dao-duyet {
+      color: #ff4d4f;
+      font-weight: 500;
+      font-size: 13px;
+      padding: 4px;
+      border-radius: 5px;
+      border: 1px solid #eaeaea;
+      text-transform: uppercase;
+      margin-right: 8px;
+      background: #fff;
+    }
+    .da-ban-hanh {
+      color: #24e837;
+      font-weight: 500;
+      font-size: 13px;
+      padding: 4px;
+      border-radius: 5px;
+      border: 1px solid #24e837;
+      text-transform: uppercase;
+      margin-right: 8px;
+      background: #efffec;
+    }
+    & > span:nth-child(2) {
+      text-transform: uppercase;
+      color: #444444;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 4px;
+    }
+  }
+}

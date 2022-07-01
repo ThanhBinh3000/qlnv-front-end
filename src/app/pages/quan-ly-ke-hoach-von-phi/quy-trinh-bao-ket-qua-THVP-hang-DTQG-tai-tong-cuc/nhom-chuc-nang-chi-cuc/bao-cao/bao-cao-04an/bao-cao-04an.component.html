@@ -42,7 +42,7 @@
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
+      <button type="button" class="btn btn-sub" (click)="export()" [hidden]="statusBtnExport">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Export</span>
       </button>
@@ -139,26 +139,26 @@
             </div>
           </td>
           <td>
-            <nz-input-number type="number" class="search__input" nzSize="small"
+            <nz-input-number [nzMin]="0" type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
           </td>
 
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
                   (ngModelChange)="tinhTong(item.id)"></nz-input-number>
               </td>
             </ng-container>
           </ng-container>
           <td>
-            <nz-input-number type="number" class="search__input" nzSize="small"
+            <nz-input-number [nzMin]="0" type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
           </td>
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 1">
               <td>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
+                <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
                   (ngModelChange)="tinhTong(item.id)"></nz-input-number>
               </td>
             </ng-container>

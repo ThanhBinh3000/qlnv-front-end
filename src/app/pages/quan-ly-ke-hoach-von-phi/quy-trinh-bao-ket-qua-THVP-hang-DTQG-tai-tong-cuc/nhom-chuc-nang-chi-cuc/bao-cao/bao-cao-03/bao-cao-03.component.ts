@@ -73,7 +73,7 @@ export class BaoCao03Component implements OnInit {
     status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-
+    statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
     soLuongKhoachXb = 0;
@@ -116,6 +116,7 @@ export class BaoCao03Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
@@ -328,6 +329,8 @@ export class BaoCao03Component implements OnInit {
         let obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
+            baoCaos : baoCao,
+            tab : '5',
         }
 
         const modalIn = this.modal.create({
@@ -350,7 +353,6 @@ export class BaoCao03Component implements OnInit {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
@@ -367,7 +369,6 @@ export class BaoCao03Component implements OnInit {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: item.level,
                     };
                     this.addLow(id, data, phuLuc);
@@ -641,9 +642,9 @@ export class BaoCao03Component implements OnInit {
         this.setBieuMau(baoCao, phuLuc);
     }
 
-    sortByIndex() {
+    async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.sort((item1, item2) => {
@@ -687,9 +688,9 @@ export class BaoCao03Component implements OnInit {
         return this.lstVatTuFull.find(e => e.id == maKM)?.idCha;
     }
 
-    sortWithoutIndex() {
+    async sortWithoutIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             var level = 0;

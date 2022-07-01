@@ -47,7 +47,7 @@
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="./bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayPheDuyet}}</td>
@@ -59,10 +59,10 @@
                 <button type="button" class="btn btn-main" *ngIf="item.trangThai == '-1'">
                   <span>Thông báo đến đơn vị cấp dưới</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '7'">
+                <button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}" *ngIf="item.trangThai == '7'">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '8' || item.trangThai == '9'">
+                <button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}" *ngIf="item.trangThai == '8' || item.trangThai == '9'">
                   <span>Xem</span>
                 </button>
               </td>

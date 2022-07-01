@@ -9,5 +9,6 @@ import { DuyetBaoCaoThucHienVonPhiRoutingModule } from './duyet-bao-cao-thuc-hie
 @NgModule({
   declarations: [DuyetBaoCaoThucHienVonPhiComponent],
   imports: [CommonModule, DuyetBaoCaoThucHienVonPhiRoutingModule, ComponentsModule],
+  exports:[DuyetBaoCaoThucHienVonPhiComponent]
 })
 export class DuyetBaoCaoThucHienVonPhiModule {}

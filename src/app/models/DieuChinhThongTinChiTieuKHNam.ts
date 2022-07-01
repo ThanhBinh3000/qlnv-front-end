@@ -1,3 +1,4 @@
+import { FileDinhKem } from "./DeXuatKeHoachuaChonNhaThau";
 import { QuyetDinhChiTieuKHNam } from "./QuyetDinhChiTieuKHNam";
 
 export class DieuChinhThongTinChiTieuKHNam {
@@ -7,4 +8,10 @@ export class DieuChinhThongTinChiTieuKHNam {
     ghiChu: string;
     trangThai: string;
     tenTrangThai: string;
+    fileDinhKemReqs: Array<FileDinhKem>;
+    constructor(
+        fileDinhKemReqs: Array<FileDinhKem> = [],
+    ) {
+        this.fileDinhKemReqs = fileDinhKemReqs;
+    }
 }

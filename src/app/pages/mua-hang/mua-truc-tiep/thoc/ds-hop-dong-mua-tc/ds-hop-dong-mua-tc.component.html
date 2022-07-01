@@ -1,0 +1,140 @@
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số HĐ</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+          </div>
+          <div nz-col nzSpan="18"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Vật tư hàng hóa</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="18">
+            <label class="search__label">Tên vật tư hàng hóa</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Mã đơn vị</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="18">
+            <label class="search__label">Tên đơn vị</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày ký từ ngày</label>
+            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
+              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
+              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue"></nz-date-picker>
+          </div>
+        </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i nz-icon nzType="close"></i>
+            Xóa điều kiện
+          </button>
+        </div>
+      </nz-card>
+      <div class="tab__container mt-16">
+        <nz-tabset nzType="card">
+          <nz-tab [nzTitle]="'Danh sách hợp đồng của tổng cục DTNN'">
+            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="130px">Số hợp đồng</th>
+                  <th width="175px">Tên hàng hóa</th>
+                  <th width="175px">Ngày ký</th>
+                  <th width="" class="text-center">Số QĐ phê duyệt kết quả đấu thầu</th>
+                  <th width="" class="text-center">Nhà thầu trúng thầu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Số 2</td>
+                  <td>Nhà bạt</td>
+                  <td>17/02/2022</td>
+                  <td class="text-center">13.020</td>
+                  <td class="text-center">Cục DTNNKV Tây Nam Bộ</td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Danh sách hợp đồng của Cục DTNNKV'">
+            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="130px">Số hợp đồng</th>
+                  <th width="175px">Tên hàng hóa</th>
+                  <th width="175px">Ngày ký</th>
+                  <th width="" class="text-center">Số QĐPDKH mua trực tiếp</th>
+                  <th width="" class="text-center">Số QĐ phê duyệt kết quả mua trực tiếp</th>
+                  <th width="" class="text-center">Đơn vị ký hợp đồng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Số 2</td>
+                  <td>Nhà bạt</td>
+                  <td>17/02/2022</td>
+                  <td class="text-center">123</td>
+                  <td class="text-center">Cục DTNNKV Tây Nam Bộ</td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Danh sách hợp đồng của Chi cục DTNNKV'">
+            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="130px">Số hợp đồng</th>
+                  <th width="175px">Tên hàng hóa</th>
+                  <th width="175px">Ngày ký</th>
+                  <th width="" class="text-center">Số QĐPDKH mua trực tiếp</th>
+                  <th width="" class="text-center">Số lệnh nhập</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Số 2</td>
+                  <td>Nhà bạt</td>
+                  <td>17/02/2022</td>
+                  <td class="text-center">123</td>
+                  <td class="text-center">444</td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+        </nz-tabset>
+        <div class="action">
+          <button type="button" class="btn btn-main" (click)="themMoi()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

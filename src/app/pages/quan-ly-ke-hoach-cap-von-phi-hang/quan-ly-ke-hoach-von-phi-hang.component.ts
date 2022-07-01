@@ -23,7 +23,6 @@ export class QuanLyKeHoachVonPhiHangComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
   }
 
   ngAfterViewInit() {

@@ -8,5 +8,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 @NgModule({
   declarations: [TimKiemBaoCaoThucHienVonPhiHangDTQGComponent],
   imports: [CommonModule, TimKiemBaoCaoThucHienVonPhiHangDTQGRoutingModule, ComponentsModule],
+  exports:[TimKiemBaoCaoThucHienVonPhiHangDTQGComponent]
 })
 export class TimKiemBaoCaoThucHienVonPhiHangDTQGModule {}

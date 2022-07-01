@@ -23,7 +23,6 @@ export class QuanLyThongTinQuyetToanVonPhiHangDtqgComponent implements OnInit, A
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
   }
 
   ngAfterViewInit() {

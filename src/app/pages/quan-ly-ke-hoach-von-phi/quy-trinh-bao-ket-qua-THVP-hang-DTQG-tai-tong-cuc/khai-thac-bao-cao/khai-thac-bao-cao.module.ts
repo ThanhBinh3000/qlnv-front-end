@@ -8,5 +8,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 @NgModule({
   declarations: [KhaiThacBaoCaoComponent],
   imports: [CommonModule, KhaiThacBaoCaoRoutingModule, ComponentsModule],
+  exports:[KhaiThacBaoCaoComponent]
 })
 export class KhaiThacBaoCaoModule {}

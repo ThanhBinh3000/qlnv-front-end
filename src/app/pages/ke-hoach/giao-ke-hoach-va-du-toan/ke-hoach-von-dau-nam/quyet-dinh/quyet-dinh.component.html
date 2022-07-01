@@ -1,0 +1,126 @@
+<nz-tabset nzType="card" class="tab-level-2">
+  <nz-tab [nzTitle]="'TTCP'">
+    <nz-card class="mt16 flex-card p-lr16">
+      <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số QĐ</label>
+          <input class="search__input" nz-input />
+        </div>
+        <div nz-col nzSpan="2">
+          <label class="search__label">Năm QĐ</label>
+          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký từ ngày">
+          </nz-date-picker>
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày QĐ</label>
+          <nz-range-picker nzFormat="dd/MM/yyyy">
+          </nz-range-picker>
+        </div>
+        <div nz-col nzSpan="14">
+          <label class="search__label">Trích yếu</label>
+          <input class="search__input" nz-input />
+        </div>
+      </div>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </nz-card>
+
+    <nz-tabset nzType="card" class="tab-level-3 mr-10">
+      <nz-tab [nzTitle]="'Danh sách quyết định của Thủ tướng'">
+        <nz-table #basicTable class="nowrap table__container-tt" [nzFrontPagination]="false" [nzShowPagination]="false"
+          nzBordered>
+          <thead>
+            <tr>
+              <th width="60px">STT</th>
+              <th width="130px">Số quyết định</th>
+              <th width="175px">Năm QĐ</th>
+              <th width="175px">Ngày QĐ</th>
+              <th width="" class="text-center">Trích yếu</th>
+              <th width="175px" class="text-center">Tài liệu đính kèm</th>
+              <th width="130px" class="text-right"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="first-row">
+              <td></td>
+              <td>
+                <input class="search__input" nz-input nzSize="small" />
+              </td>
+              <td>
+                <input class="search__input" nz-input nzSize="small" />
+              </td>
+              <td>
+                <input class="search__input" nz-input nzSize="small" />
+              </td>
+              <td>
+                <input class="search__input" nz-input nzSize="small" />
+              </td>
+              <td>
+                <input class="search__input" nz-input nzSize="small" />
+              </td>
+              <td class="text-right">
+                <a>
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a>
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <td>1</td>
+              <td>111</td>
+              <td>2021</td>
+              <td>17/02/2022</td>
+              <td>Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</td>
+              <td>Tài liệu đính kèm</td>
+              <td class="text-right">
+                <a>
+                  <i class="icon htvbdh_tcdt_import"></i>
+                </a>
+                <a>
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a>
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai"></div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="1" nzShowSizeChanger [nzPageSize]="10"
+                [nzShowTotal]="rangeTemplate">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </nz-tab>
+  <nz-tab [nzTitle]="'BTC'">
+
+  </nz-tab>
+  <nz-tab [nzTitle]="'Chi thường xuyên của BTC giao TCDT'" class="vat-tu__container">
+
+  </nz-tab>
+  <nz-tab [nzTitle]="'Chi mua hàng DTQG của BTC giao TCDT'" class="vat-tu__container">
+
+  </nz-tab>
+</nz-tabset>

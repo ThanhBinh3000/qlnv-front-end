@@ -1,6 +1,17 @@
+import { IconConfig } from "ng-zorro-antd/core/config";
+
+export class Menu {
+    icon: string;
+    title: string;
+    url: string;
+    hasChild: boolean;
+    children?: Array<ChiTietMenu>;
+}
+
 export class ChiTietMenu {
     icon: string;
     title: string;
+    loaiVthh?: string;
     url: string;
     dropdown: string;
     idHover: string;
@@ -10,6 +21,7 @@ export class ChiTietMenu {
 
 export class ChiTietMenuItem {
     title: string;
+    loaiVthh?: string;
     icon: string;
     hasChild: boolean;
     url: string;

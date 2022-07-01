@@ -9,5 +9,6 @@ import { DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent } from './ds-bao-cao-tinh-
 @NgModule({
   declarations: [DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent],
   imports: [CommonModule, DsBaoCaoTinhHinhSdDtoanThangNamTuCCRoutingModule, ComponentsModule],
+  exports:[DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent]
 })
 export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCModule {}

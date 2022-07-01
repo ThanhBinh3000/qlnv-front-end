@@ -1,0 +1,104 @@
+
+
+<!-- <div > -->
+  <form nz-form [formGroup]="formDonVi" [nzLayout]="'vertical'">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+          <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+            <input type="text" nz-input formControlName="tenDvi" [readonly]="!!dataDetail" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã QHNS</nz-form-label>
+          <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
+            <input type="text" nz-input formControlName="maQhns"  [readonly]="!!dataDetail"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Địa chỉ</nz-form-label>
+          <input type="text" nz-input formControlName="diaChi" [readonly]="!!dataDetail" />
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Ghi chú</nz-form-label>
+          <input type="text" nz-input formControlName="ghiChu" [readonly]="!!dataDetail" />
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã QD</nz-form-label>
+          <input type="text" nz-input formControlName="maQd" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã TR</nz-form-label>
+          <input type="text" nz-input formControlName="maTr" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã KHQLH</nz-form-label>
+          <input type="text" nz-input formControlName="maKhqlh" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã KTBQ</nz-form-label>
+          <input type="text" nz-input formControlName="maKtbq" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Mã TCKT</nz-form-label>
+          <input type="text" nz-input formControlName="maTckt" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Trạng thái</nz-form-label>
+          <label nz-checkbox formControlName="trangThai">hoạt động/không hoạt động</label>
+        </nz-form-item>
+      </div>
+    </div>
+    
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Đơn vị cấp trên</nz-form-label>
+          <nz-form-control>
+            <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true" [nzDefaultExpandAll]="true"
+              nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha" >
+            </nz-tree-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <div class="m-footer" *ngIf="!dataDetail">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+          <div *ngIf="!data">
+            <i class="htvbdh_them-moi1 icon" aria-hidden="true"></i>
+            Thêm
+          </div>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+  </div>
