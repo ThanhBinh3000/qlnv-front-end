@@ -90,6 +90,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   status: boolean;
   donVis: any[] = [];
   maDviTao: string;
+  listIdDelete: string[] = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -193,7 +194,21 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
+          // this.danhSachBaoCao = data.data.content;
+          this.danhSachBaoCao = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSachBaoCao.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSachBaoCao.push({
+								...item,
+								checked: true,
+							})
+						}
+					})
           this.danhSachBaoCao.forEach(e => {
             e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
             e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
@@ -250,30 +265,82 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     return this.trangThais.find(e => e.id == trangThai).tenDm;
   }
 
-  xoaBaoCao(id: any) {
-    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(id).toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-          this.onSubmit();
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    )
-  }
+  // xoaBaoCao(id: any) {
+  //   this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(id).toPromise().then(
+  //     data => {
+  //       if (data.statusCode == 0) {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+  //         this.onSubmit();
+  //       } else {
+  //         this.notification.error(MESSAGE.ERROR, data?.msg);
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     }
+  //   )
+  // }
+
+  xoaBaoCao(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.listIdDelete = [];
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id);
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachBaoCao.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachBaoCao.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
+	}
 
   checkDeleteReport(item: any): boolean {
-    var check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      this.userInfo?.username == item.nguoiTao) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
-  }
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			ROLE_CAN_BO.includes(this.userRole)) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
 }
