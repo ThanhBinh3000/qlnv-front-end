@@ -428,8 +428,14 @@ export class TienThuaComponent implements OnInit {
                 if (data.statusCode == 0) {
                     if (this.statusBtnParent) {
                         this.trangThaiBanGhi = mcn;
+                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     } else {
                         this.trangThaiCha = mcn;
+                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDviCha, Utils.FORMAT_DATE_STR);
+                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyetDviCha, Utils.FORMAT_DATE_STR);
+                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR);
                     }
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
@@ -492,6 +498,21 @@ export class TienThuaComponent implements OnInit {
             return;
         }
         //get list file url
+        let checkFile = true;
+        for (const iterator of this.ttGui.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        for (const iterator of this.ttNhan.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        if (!checkFile) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
         let listFileGui: any = [];
         for (const iterator of this.ttGui.listFile) {
             listFileGui.push(await this.uploadFile(iterator));
@@ -583,6 +604,11 @@ export class TienThuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.ttGuiCache.nopThue < 0 ||
+            this.ttGuiCache.ttChoDviHuong < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -602,7 +628,7 @@ export class TienThuaComponent implements OnInit {
     }
 
     close() {
-        if (!this.loai){ 
+        if (!this.loai) {
             this.loai = "0";
         }
         if (this.statusBtnParent) {

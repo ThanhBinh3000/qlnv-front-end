@@ -117,7 +117,7 @@
 							</td>
 							<td>
 								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item); else xem">
+									<!-- <ng-container *ngIf="checkDeleteReport(item); else xem">
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Nhập/Sửa dữ liệu</span>
 										</button>
@@ -125,11 +125,11 @@
 											<span>Xóa</span>
 										</button>
 									</ng-container>
-									<ng-template #xem>
+									<ng-template #xem> -->
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Xem</span>
 										</button>
-									</ng-template>
+									<!-- </ng-template> -->
 								</ng-container>
 								<ng-template #pheDuyet>
 									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">

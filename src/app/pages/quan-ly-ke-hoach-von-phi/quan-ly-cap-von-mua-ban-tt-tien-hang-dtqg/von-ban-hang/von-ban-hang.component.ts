@@ -30,20 +30,20 @@ export class ItemGui {
     nopThue: number;
     ttChoDviHuong: number;
     thuyetMinh: string;
-    lstFiles: any[] = []; 
-    listFile: File[] = [];                     
+    lstFiles: any[] = [];
+    listFile: File[] = [];
     fileList: NzUploadFile[] = [];
-    listIdFilesDelete: any = [];   
+    listIdFilesDelete: any = [];
 }
 
 export class ItemNhan {
     ngayNhan: string;
     taiKhoanNhan: number;
     thuyetMinh: string;
-    lstFiles: any[] = []; 
-    listFile: File[] = [];                     
+    lstFiles: any[] = [];
+    listFile: File[] = [];
     fileList: NzUploadFile[] = [];
-    listIdFilesDelete: any = []; 
+    listIdFilesDelete: any = [];
 }
 
 @Component({
@@ -173,7 +173,7 @@ export class VonBanHangComponent implements OnInit {
             this.dataSource.currentData.subscribe(obj => {
                 this.ngayLapTemp = obj?.ngayLap;
             })
-            if (!this.ngayLapTemp){
+            if (!this.ngayLapTemp) {
                 this.close();
             }
             this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
@@ -423,8 +423,14 @@ export class VonBanHangComponent implements OnInit {
                 if (data.statusCode == 0) {
                     if (this.statusBtnParent) {
                         this.trangThaiBanGhi = mcn;
+                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     } else {
                         this.trangThaiCha = mcn;
+                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDviCha, Utils.FORMAT_DATE_STR);
+                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyetDviCha, Utils.FORMAT_DATE_STR);
+                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR);
                     }
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
@@ -471,7 +477,7 @@ export class VonBanHangComponent implements OnInit {
             }
         }
 
-        if (this.statusEdit){
+        if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
@@ -486,6 +492,21 @@ export class VonBanHangComponent implements OnInit {
             return;
         }
         //get list file url
+        let checkFile = true;
+        for (const iterator of this.ttGui.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        for (const iterator of this.ttNhan.listFile) {
+            if (iterator.size > Utils.FILE_SIZE) {
+                checkFile = false;
+            }
+        }
+        if (!checkFile) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
         let listFileGui: any = [];
         for (const iterator of this.ttGui.listFile) {
             listFileGui.push(await this.uploadFile(iterator));
@@ -578,6 +599,11 @@ export class VonBanHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        if (this.ttGuiCache.nopThue < 0 ||
+            this.ttGuiCache.ttChoDviHuong < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -597,16 +623,16 @@ export class VonBanHangComponent implements OnInit {
     }
 
     close() {
-        if (!this.loai){ 
+        if (!this.loai) {
             this.loai = "0";
         }
         if (this.statusBtnParent) {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/'+this.loai
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-nhap-von-ban-hang/' + this.loai
             ]);
         } else {
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/'+this.loai
+                '/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/danh-sach-ghi-nhan-von-ban-hang/' + this.loai
             ]);
         }
 
@@ -619,10 +645,10 @@ export class VonBanHangComponent implements OnInit {
     changeModel() {
         var nopThue: number = 0;
         var ttChoDviHuong: number = 0;
-        if (this.ttGuiCache.nopThue){
+        if (this.ttGuiCache.nopThue) {
             nopThue = Number(this.ttGuiCache.nopThue);
         }
-        if (this.ttGuiCache.ttChoDviHuong){
+        if (this.ttGuiCache.ttChoDviHuong) {
             ttChoDviHuong = Number(this.ttGuiCache.ttChoDviHuong);
         }
         this.ttGuiCache.soTien = nopThue + ttChoDviHuong;
@@ -656,7 +682,7 @@ export class VonBanHangComponent implements OnInit {
             },
         );
 
-        if (this.statusEdit){
+        if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }

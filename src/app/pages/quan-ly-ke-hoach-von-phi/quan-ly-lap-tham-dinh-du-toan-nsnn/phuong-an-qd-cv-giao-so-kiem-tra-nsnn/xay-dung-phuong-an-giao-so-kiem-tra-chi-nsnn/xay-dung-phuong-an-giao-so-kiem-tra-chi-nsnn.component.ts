@@ -466,6 +466,16 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         });
         //get list file url
+        let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE){
+                checkFile = false;
+            }
+        }
+        if (!checkFile){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
         let listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
@@ -852,6 +862,24 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        let checkNull = true;
+        let checkNegative = true;
+        this.editCache[id].data.listCtietDvi.forEach(item => {
+            if (!item.soTranChi && item.soTranChi !== 0 ){
+                checkNull = false;
+            }
+            if (item.soTranChi < 0){
+                checkNegative = false;
+            }
+        })
+        if (!checkNull){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        if (!checkNegative){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         let data: ItemDvi[] = [];

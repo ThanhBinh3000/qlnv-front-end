@@ -60,7 +60,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             tenDm: "Đang soạn",
         },
         {
-            id: Utils.TT_BC_4,
+            id: Utils.TT_BC_2,
             tenDm: "Trình duyệt",
         },
         {
@@ -223,18 +223,18 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             );
         }
 
-        await this.danhMuc.dMDviTinh().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    this.dviTinhs = res.data?.content;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            },
-        );
+        // await this.danhMuc.dMDviTinh().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             this.dviTinhs = res.data?.content;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //     },
+        // );
 
         
         this.getStatusButton();
@@ -418,6 +418,8 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             await this.quanLyVonPhiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThai = mcn;
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
@@ -466,10 +468,22 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             return;
         }
         //get list file url
-        let listFile: any = [];
+        let checkFile = true;
+        for (const iterator of this.listFile) {
+            console.log(iterator);
+            if (iterator.size > Utils.FILE_SIZE){
+                checkFile = false;
+            }
+        }
+        if (!checkFile){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
+        let listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
+
         let lstCtietBcaoTemp = [];
         this.lstCtietBcao.forEach(item => {
 
@@ -498,7 +512,12 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         //get file cong van url
         let file: any = this.fileDetail;
         if (file) {
-            request.congVan = await this.uploadFile(file);
+            if (file.size > Utils.FILE_SIZE){
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+            } else {
+                request.congVan = await this.uploadFile(file);
+            }
         }
         if (!request.congVan){
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);

@@ -112,15 +112,15 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  // call api nút chức năng
-  approve(request: any): Observable<any> {
-    return this.httpClient.put(
-      // 'http://192.168.1.110:8094/lap-tham-dinh-du-toan/trang-thai',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/trang-thai',
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/trang-thai',
-      request,
-    );
-  }
+  // // call api nút chức năng
+  // approve(request: any): Observable<any> {
+  //   return this.httpClient.put(
+  //     // 'http://192.168.1.110:8094/lap-tham-dinh-du-toan/trang-thai',
+  //     // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/trang-thai',
+  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/trang-thai',
+  //     request,
+  //   );
+  // }
   // call api nút chức năng giao dự toán chi NSNN
   approveGiao(request: any): Observable<any> {
     return this.httpClient.put(
@@ -132,15 +132,15 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  // call api nút chức năng cho văn bản
-  approveVB(request: any): Observable<any> {
-    return this.httpClient.put(
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/chuc-nang-van-ban',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang-van-ban',
-      request,
-    );
-  }
+  // // call api nút chức năng cho văn bản
+  // approveVB(request: any): Observable<any> {
+  //   return this.httpClient.put(
+  //     // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/chuc-nang-van-ban',
+  //     // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
+  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang-van-ban',
+  //     request,
+  //   );
+  // }
 
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
@@ -150,12 +150,13 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  bCLapThamDinhDuToanChiTiet1(id: any): Observable<any> {
-    return this.httpClient.get(
-      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-      'http://192.168.1.100:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
-    );
-  }
+  // bCLapThamDinhDuToanChiTiet1(id: any): Observable<any> {
+  //   return this.httpClient.get(
+  //     //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
+  //     'http://192.168.1.100:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
+  //   );
+  // }
+
   bCDieuChinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
@@ -235,8 +236,8 @@ export class QuanLyVonPhiService extends BaseService {
   //sinh ma bao cao
   sinhMaBaoCao(): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/sinh-ma',
-      'http://192.168.1.100:8094/lap-tham-dinh/sinh-ma',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/sinh-ma',
+      // 'http://192.168.1.104:8094/lap-tham-dinh/sinh-ma',
     );
   }
 
@@ -813,30 +814,30 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     );
   }
-  timDsachVban(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
-      request,
-    );
-  }
+  // timDsachVban(request: any): Observable<any> {
+  //   return this.httpClient.post(
+  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
+  //     // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
+  //     request,
+  //   );
+  // }
 
-  ctietVban(id: number): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet-van-ban/' + id
-    );
-  }
+  // ctietVban(id: number): Observable<any> {
+  //   return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet-van-ban/' + id
+  //   );
+  // }
 
-  themMoiVban(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi-van-ban',
-      request
-    );
-  }
+  // themMoiVban(request: any): Observable<any> {
+  //   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi-van-ban',
+  //     request
+  //   );
+  // }
 
-  capNhatVban(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat-van-ban',
-      request
-    );
-  }
+  // capNhatVban(request: any): Observable<any> {
+  //   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat-van-ban',
+  //     request
+  //   );
+  // }
 
 
 
@@ -1017,34 +1018,38 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaCapVon(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/cap-ung-von/xoa/' + id
-      // 'http://192.168.1.104:8094/cap-ung-von/xoa/' + id
+  xoaCapVon(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/cap-ung-von/xoa',
+      // 'http://192.168.1.104:8094/cap-ung-von/xoa',
+      request
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaVonMuaBan(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa/' + id
-      // 'http://192.168.1.104:8094/nhap-ghi-nhan-von/xoa/' + id
+  xoaVonMuaBan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa',
+      // 'http://192.168.1.104:8094/nhap-ghi-nhan-von/xoa',
+      request
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaDeNghi(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/xoa/' + id
-      // 'http://192.168.1.104:8094/de-nghi-cap-von/xoa/' + id
+  xoaDeNghi(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/xoa',
+      // 'http://192.168.1.104:8094/de-nghi-cap-von/xoa',
+      request,
     );
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaDeNghiThop(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa/' + id
-      // 'http://192.168.1.104:8094/thop-cap-von/xoa/' + id
+  xoaDeNghiThop(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa',
+      // 'http://192.168.1.104:8094/thop-cap-von/xoa',
+      request,
     );
   }
 
@@ -1083,14 +1088,14 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(this.urlDefault + '/qlnv-core/file/' + fileUrl, { responseType: 'blob' });
   }
 
-  // trinh duyet
-  themDeNghiCapVon(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.100:8094/cap-nguon-von-chi/dncv',
-      request,
-    );
-  }
+  // // trinh duyet
+  // themDeNghiCapVon(request: any): Observable<any> {
+  //   return this.httpClient.post(
+  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+  //     // 'http://192.168.1.100:8094/cap-nguon-von-chi/dncv',
+  //     request,
+  //   );
+  // }
 
 
   // tim kiem danh sach quyet dinh giao phan bo du toan 3.2.6

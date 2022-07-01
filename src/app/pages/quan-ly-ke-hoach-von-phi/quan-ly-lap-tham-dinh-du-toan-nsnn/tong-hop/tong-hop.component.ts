@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -51,6 +51,7 @@ export class TongHopComponent implements OnInit {
 	}
 
 	statusBtnValidate: boolean = true;
+	statusTaoMoi: boolean = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -81,6 +82,11 @@ export class TongHopComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+
+		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
+			this.statusTaoMoi = false;
+		}
+		
 		this.onSubmit();
 	}
 

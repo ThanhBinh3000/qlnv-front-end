@@ -123,7 +123,6 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 			trangThais: trangThais,
 		};
 		this.spinner.show();
-		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
 		await this.quanLyVonPhiService.timKiemDeNghi(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
