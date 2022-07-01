@@ -130,7 +130,10 @@
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Loại hình nhập xuất
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <input nz-input [(ngModel)]="loaiNx" name="loaiNx" />
+                      <nz-select (ngModelChange)="selectLoaiNX($event)" [(ngModel)]="loaiNx" name="loaiNx">
+                        <nz-option *ngFor="let nx of optionsLoaiNX" [nzValue]="nx.ma" [nzLabel]="nx.ten">
+                        </nz-option>
+                      </nz-select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -169,7 +172,7 @@
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <nz-select (ngModelChange)="selectDonViTinh($event)" [(ngModel)]="donViTinh" name="donViTinh">
-                        <nz-option *ngFor="let donVi of optionsDonViTinh" [nzValue]="donVi.maDviTinh"
+                        <nz-option *ngFor="let donVi of optionsDonViTinh" [nzValue]="donVi.tenDviTinh"
                           [nzLabel]="donVi.tenDviTinh">
                         </nz-option>
                       </nz-select>

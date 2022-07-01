@@ -19,7 +19,6 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { BAO_CAO_DOT, BAO_CAO_NAM, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NOT_OK, OK, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { LISTCANBO } from '../../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, NOI_DUNG, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
 
 export class ItemDanhSach {
@@ -175,7 +174,7 @@ export class BaoCaoComponent implements OnInit {
 
   statusBtnFinish: boolean = true;                    // trang thai hoan tat nhap lieu
   statusBtnOk: boolean = true;                        // trang thai ok/ not ok
-
+  statusBtnExport: boolean = true;                        // trang thai export
   lstFiles: any = [];                          // list File de day vao api
 
   maDviTien: string = "1";                    // ma don vi tien
@@ -310,7 +309,8 @@ export class BaoCaoComponent implements OnInit {
   cols: number = 0;
   lstIdDeleteCols: string = '';
 
-  nguoiBcaos: any[] = LISTCANBO;
+  nguoiBcaos: any[];
+  allUsers: any[];
   vatTusBC02 = NOI_DUNG;
   vatTusBC03 = NOI_DUNG;
   noiDungChisBC04 = NOI_DUNG;
@@ -324,6 +324,7 @@ export class BaoCaoComponent implements OnInit {
     let lbc = this.router.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
+    this.getListUser();
     if (this.idDialog) {
       this.id = this.idDialog;
       this.statusBtnClose = true;
@@ -500,6 +501,37 @@ export class BaoCaoComponent implements OnInit {
   //   this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
   // }
 
+  getListUser() {
+    let request = {
+      dvql: this.userInfor?.dvql,
+      fullName: "",
+      paggingReq: {
+        limit: 1000,
+        page: 1
+      },
+      roleId: "",
+      status: "",
+      sysType: "",
+      username: ""
+    }
+    this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.allUsers = res.data?.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.quanLyVonPhiService.getListUser().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.nguoiBcaos = res.data;
+      }
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
+
   getStatusButton() {
     let checkParent = false;
     let checkChirld = false;
@@ -635,6 +667,10 @@ export class BaoCaoComponent implements OnInit {
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
+      if (!this.baoCao?.congVan?.fileUrl) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        return;
+      }
       let checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
       if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
@@ -753,6 +789,7 @@ export class BaoCaoComponent implements OnInit {
         trangThaiBaoCao: this.baoCao.trangThai,
         statusBtnOk: this.statusBtnOk,
         statusBtnFinish: this.statusBtnFinish,
+        statusBtnExport: this.statusBtnExport,
         status: this.status,
         idBaoCao: this.baoCao.id,
       }
@@ -779,6 +816,7 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
       this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
     }
+    this.closeTab();
   }
 
   // getStatusButtonOk() {
@@ -841,6 +879,7 @@ export class BaoCaoComponent implements OnInit {
     } else {
       this.statusBtnFinish = true;
     }
+    this.statusBtnExport = utils.getRoleExport(trangThaiBaoCao,true,roleNguoiTao);
   }
 
   updateSingleChecked() {
@@ -1016,6 +1055,8 @@ export class BaoCaoComponent implements OnInit {
     let checkPersonReport = true;
     /////////////////////////////
     baoCaoTemp.lstBcaos.forEach((item) => {
+      item.tuNgay = typeof item.tuNgay == 'string' ? new Date(item.tuNgay) : item.tuNgay;
+      item.denNgay = typeof item.denNgay == 'string' ? new Date(item.denNgay) : item.denNgay;
       if (!item.nguoiBcao) {
         checkPersonReport = false;
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);
@@ -1181,7 +1222,13 @@ export class BaoCaoComponent implements OnInit {
 
   getStatusName(Status: any) {
     const utils = new Utils();
-    return utils.getStatusName(Status == '7' ? '6' : Status);
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfor.dvql) {
+      return utils.getStatusName(Status == '7' ? '6' : Status);
+    }
+    if (dVi && dVi.maDviCha == this.userInfor.dvql) {
+      return utils.getStatusNameParent(Status == '7' ? '6' : Status);
+    }
   };
 
   getStatusAppendixName(id) {
@@ -1541,10 +1588,10 @@ export class BaoCaoComponent implements OnInit {
     );
   }
 
-  
 
-  closeTab({ index }: { index: number }): void {
-    this.tabs.splice(index - 1, 1);
+
+  closeTab(): void {
+    this.tabs = []
   }
 
 }

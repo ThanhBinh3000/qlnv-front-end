@@ -1,4 +1,4 @@
-export const MAIN_ROUTE_DANH_MUC = 'danhmuc';
+export const MAIN_ROUTE_DANH_MUC = 'danh-muc';
 export const ROUTE_LIST_DANH_MUC = [
   {
     icon: 'htvbdh_tcdt_icon-common',

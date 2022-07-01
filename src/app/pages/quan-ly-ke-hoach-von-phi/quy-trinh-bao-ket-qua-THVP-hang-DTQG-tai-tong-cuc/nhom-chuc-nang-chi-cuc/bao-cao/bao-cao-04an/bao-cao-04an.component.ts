@@ -87,7 +87,7 @@ export class BaoCao04anComponent implements OnInit {
     status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-
+    statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau0405 } } = {};
 
@@ -107,6 +107,7 @@ export class BaoCao04anComponent implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         // 04an
         await this.lstCTietBaoCaoTemp?.filter(async el => {
@@ -330,6 +331,8 @@ export class BaoCao04anComponent implements OnInit {
         let obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
+            baoCaos : baoCao,
+            tab : '7',
         }
 
         const modalIn = this.modal.create({
@@ -694,9 +697,9 @@ export class BaoCao04anComponent implements OnInit {
         this.setBieuMau(baoCao, phuLuc);
     }
 
-    sortByIndex() {
+    async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.sort((item1, item2) => {
@@ -740,9 +743,9 @@ export class BaoCao04anComponent implements OnInit {
         return this.noiDungChiFull.find(e => e.id == maKM)?.idCha;
     }
 
-    sortWithoutIndex() {
+    async sortWithoutIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             this.setDetail(phuLuc);

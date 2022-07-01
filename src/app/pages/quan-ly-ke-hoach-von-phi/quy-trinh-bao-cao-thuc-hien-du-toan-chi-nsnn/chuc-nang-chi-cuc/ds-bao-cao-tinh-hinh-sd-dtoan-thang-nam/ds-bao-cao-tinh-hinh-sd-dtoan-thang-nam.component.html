@@ -88,7 +88,7 @@
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
-              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="./bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayTao}}</td>
@@ -101,15 +101,15 @@
                   {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}"
+                <button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}"
                   *ngIf="(item.trangThai == '2' && roleUser == 'truongBoPhan') || (item.trangThai == '4' && roleUser == 'lanhDao')">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}"
+                <button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}"
                   *ngIf="(item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8') && roleUser == 'canBo'">
                   <span>Nhập/Sửa dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
+                <button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}">
                   <span>Xem</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="deleteReport(item.id)"

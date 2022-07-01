@@ -1,0 +1,23 @@
+.canh-bao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 24px;
+  svg {
+    margin-bottom: 20px;
+  }
+  .number {
+    color: #ffa51e;
+    font-weight: bold;
+  }
+  .text-canh-bao > span {
+    color: #2196f3;
+    font-weight: bold;
+  }
+}
+.canphai {
+  button.btn.btn-outline-grey {
+    margin: 0px !important;
+  }
+}

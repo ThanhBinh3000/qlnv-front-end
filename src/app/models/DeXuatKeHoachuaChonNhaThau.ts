@@ -24,6 +24,14 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   children2?: Array<DanhSachGoiThau> = [];
   children3?: Array<CanCuXacDinh> = [];
   ghiChu: string;
+  tgianNhapHang: string;
+  tenDuAn: string = '';
+  tgianDongThau: string;
+  tgianMoThau: string;
+  tgianTbao: string;
+  tgianThHienHd: string;
+  tongMucDt: number;
+  tuNgayThHien: string;
 }
 export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   id: number;
@@ -87,21 +95,31 @@ export class ThongTinChung {
 }
 
 export class DanhSachGoiThau {
+  maDvi: string;
+  tenDvi: string;
+  maDiemKho: string;
+  tenDiemKho: string;
   diaDiemNhap: string;
   donGia: number;
   goiThau: string;
   id: number;
   soLuong: number;
+  soLuongTheoChiTieu: number;
   thanhTien: string;
   bangChu: string;
   idVirtual?: number;
   isEdit: boolean;
+  children?: DanhSachGoiThau[];
+  level?: number;
+  expand?: boolean;
+  parent?: DanhSachGoiThau
 }
 export class CanCuXacDinh {
   id: number;
   idVirtual: number;
   loaiCanCu: string;
   tenTlieu: string;
+  moTa: string;
   fileDinhKems: Array<FileDinhKem>;
   children: Array<FileDinhKem>;
 }

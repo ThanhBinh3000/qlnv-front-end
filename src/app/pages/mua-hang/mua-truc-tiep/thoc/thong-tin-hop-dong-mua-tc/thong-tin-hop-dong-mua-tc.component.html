@@ -1,0 +1,453 @@
+<div class="luong-thuc__danh-sach">
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Hủy bỏ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin hợp đồng mua" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="24">
+              <label nz-checkbox>Chào giá</label>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Số hợp đồng
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ngày ký
+                </nz-form-label>
+                <nz-date-picker class="search__input" name="denNgayThHien">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  QĐPDKH mua trực tiếp
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Giá trị hợp đồng (Bao gồm GTGT)
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  QĐPDKH mua trực tiếp
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Giá trị hợp đồng (Bao gồm GTGT)
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  QĐ giá
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Thuế GTGT
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  QĐPDKQ đơn vị thực hiện
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ngày bắt đầu
+                </nz-form-label>
+                <nz-date-picker class="search__input" name="denNgayThHien">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ngày kết thúc
+                </nz-form-label>
+                <nz-date-picker class="search__input" name="denNgayThHien">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Số ngày thực hiện
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Căn cứ khác
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Tiến độ cung cấp từ ngày
+                </nz-form-label>
+                <nz-date-picker class="search__input" name="denNgayThHien">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Đến ngày
+                </nz-form-label>
+                <nz-date-picker class="search__input" name="denNgayThHien">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Số ngày tiến độ
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Tình trạng hợp đồng
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Nước sản xuất / Xuất xứ
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Tiêu chuẩn chất lượng
+                </nz-form-label>
+                <textarea rows="3" class="search__input" nz-input></textarea>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <div class="tab__thong-tin-quyet-dinh-gia mt-16">
+          <nz-tabset nzType="card" class="mt-16">
+            <nz-tab [nzTitle]="'Thông tin chung'" (nzClick)="tabSelected = 'thong-tin-chung'">
+              <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                <div nz-col nzSpan="24">
+                  <nz-form-label [nzNoColon]="true">
+                    Chủ đầu tư (bên A )
+                  </nz-form-label>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Tên cơ quan
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="18">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Địa chỉ
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Điện thoại
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Fax
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Số tài khoản
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Mã số thuế
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Mở tại HN/KB
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Đại diện
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Chức vụ
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                </div>
+                <div nz-col nzSpan="24">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Nhà thầu (bên B )
+                    </nz-form-label>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Tên cơ quan
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="18">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Địa chỉ
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Điện thoại
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Fax
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Số tài khoản
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Mã số thuế
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Mở tại HN/KB
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Đại diện
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Chức vụ
+                    </nz-form-label>
+                    <input nz-input />
+                  </nz-form-item>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách vật tư hàng hóa'" (nzClick)="tabSelected = 'ds-vat-tu-hang-hoa'">
+              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" class="mt-16">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="60px">Tên gói thầu</th>
+                    <th>Tên VTHH</th>
+                    <th>Tên đơn vị</th>
+                    <th>Số lượng</th>
+                    <th class="text-center">Đon giá</th>
+                    <th class="text-center">Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Gói thầu số 04: Mua 100 bộ áo phao cứu sinh</td>
+                    <td>Áo phao cứu sinh</td>
+                    <td>Cục DTNNKV Tây Nam Bộ</td>
+                    <td>100</td>
+                    <td class="text-center">13.020</td>
+                    <td class="text-center">13.020</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách chi cục thực hiện hợp đồng'"
+              (nzClick)="tabSelected = 'ds-chi-cuc-thuc-hien-hop-dong'">
+              <nz-table class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" #expandTable
+                [nzData]="listOfMapData" nzTableLayout="fixed" class="mt-16">
+                <thead>
+                  <tr>
+                    <th>Mã đơn vị</th>
+                    <th>Tên đơn vị</th>
+                    <th>Mã điểm kho</th>
+                    <th>Tên điểm kho</th>
+                    <th>SL thực hiện</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let data of expandTable.data">
+                    <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                      <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                        <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children"
+                          [(nzExpand)]="item.expand"
+                          (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                          {{ item.name }}
+                        </td>
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.age }}</td>
+                        <td>{{ item.age }}</td>
+                        <td>{{ item.address }}</td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách phụ lục hợp đồng'" (nzClick)="tabSelected = 'ds-phu-luc-hop-dong'">
+              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" class="mt-16">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="130px">Số phụ lục hợp đồng</th>
+                    <th width="175px">Ngày ký</th>
+                    <th width="175px">Thời gian hết hiệu lực</th>
+                    <th width="" class="text-center">Giá trị phụ lục</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Số 2</td>
+                    <td>17/02/2022</td>
+                    <td>17/02/2022</td>
+                    <td class="text-center">444</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+          </nz-tabset>
+          <div class="action">
+            <button type="button" class="btn btn-main" (click)="themMoi()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+        </div>
+        <div class="ghi-chu">
+          <nz-form-label nzRequired [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <textarea rows="3" class="search__input" nz-input></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

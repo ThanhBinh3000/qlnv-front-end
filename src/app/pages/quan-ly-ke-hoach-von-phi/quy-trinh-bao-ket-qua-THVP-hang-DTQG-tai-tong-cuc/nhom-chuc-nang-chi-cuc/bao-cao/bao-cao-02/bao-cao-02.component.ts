@@ -70,7 +70,7 @@ export class BaoCao02Component implements OnInit {
     status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-
+    statusBtnExport : boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
 
@@ -105,6 +105,7 @@ export class BaoCao02Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
@@ -314,6 +315,8 @@ export class BaoCao02Component implements OnInit {
         let obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
+            baoCaos : baoCao,
+            tab : '4',
         }
 
         const modalIn = this.modal.create({
@@ -336,7 +339,6 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
@@ -352,7 +354,6 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
-                        maDviTinh: this.listDonvitinh[0].id,
                         level: item.level,
                     };
                     this.addLow(id, data, phuLuc);
@@ -622,9 +623,9 @@ export class BaoCao02Component implements OnInit {
         this.setBieuMau(baoCao, phuLuc)
     }
 
-    sortByIndex() {
+    async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.sort((item1, item2) => {
@@ -668,9 +669,9 @@ export class BaoCao02Component implements OnInit {
         return this.lstVatTuFull.find(e => e.id == maKM)?.idCha;
     }
 
-    sortWithoutIndex() {
+    async sortWithoutIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[0].lstId;
-        idPhuLuc.forEach(async phuLuc => {
+        await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             this.setDetail(phuLuc);
@@ -794,12 +795,13 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-        debugger
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
+        console.log(baoCaoChiTietTemp.tuNgay);
+        
         let checkMoneyRange = true;
         let checkPersonReport = true;
-
+        debugger
         // validate nguoi thuc hien bao cao
         if (!baoCaoChiTietTemp.nguoiBcao) {
             checkPersonReport = false;
@@ -834,7 +836,7 @@ export class BaoCao02Component implements OnInit {
         }
 
         //call service cap nhat phu luc
-        this.spinner.show();
+        this.spinner.show();        
         this.quanLyVonPhiService.baoCaoCapNhatChiTiet(baoCaoChiTietTemp).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
@@ -870,36 +872,37 @@ export class BaoCao02Component implements OnInit {
 
     }
 
+    // tinh len tren nhung hang fix cung I,II
     async changeModel() {
-        this.khSoLuongDv = 0;
-        this.khGiaMuaTdDv = 0;
-        this.khTtienDv = 0;
-        this.thSoLuongDv = 0;
-        this.thGiaMuaTdDv = 0;
-        this.thTtienDv = 0;
-        this.khSoLuongTc = 0;
-        this.khGiaMuaTdTc = 0;
-        this.khTtienTc = 0;
-        this.thSoLuongTc = 0;
-        this.thGiaMuaTdTc = 0;
-        this.thTtienTc = 0;
+        this.khSoLuongDv = null;
+        this.khGiaMuaTdDv = null;
+        this.khTtienDv = null;
+        this.thSoLuongDv = null;
+        this.thGiaMuaTdDv = null;
+        this.thTtienDv = null;
+        this.khSoLuongTc = null;
+        this.khGiaMuaTdTc = null;
+        this.khTtienTc = null;
+        this.thSoLuongTc = null;
+        this.thGiaMuaTdTc = null;
+        this.thTtienTc = null;
         await this.lstCtietBcao021.forEach(element => {
             if (element?.stt?.split('.').length == 2) {
-                this.khSoLuongDv += Number(element.khSoLuong);
-                this.khGiaMuaTdDv += Number(element.khGiaMuaTd);
-                this.khTtienDv += Number(element.khTtien);
-                this.thSoLuongDv += Number(element.thSoLuong);
-                this.thGiaMuaTdDv += Number(element.thGiaMuaTd);
+                // this.khSoLuongDv += Number(element.khSoLuong);
+                // this.khGiaMuaTdDv += Number(element.khGiaMuaTd);
+                // this.khTtienDv += Number(element.khTtien);
+                // this.thSoLuongDv += Number(element.thSoLuong);
+                // this.thGiaMuaTdDv += Number(element.thGiaMuaTd);
                 this.thTtienDv += Number(element.thTtien);
             }
         })
         await this.lstCtietBcao022.forEach(element => {
             if (element?.stt?.split('.').length == 2) {
-                this.khSoLuongTc += Number(element.khSoLuong);
-                this.khGiaMuaTdTc += Number(element.khGiaMuaTd);
-                this.khTtienTc += Number(element.khTtien);
-                this.thSoLuongTc += Number(element.thSoLuong);
-                this.thGiaMuaTdTc += Number(element.thGiaMuaTd);
+                // this.khSoLuongTc += Number(element.khSoLuong);
+                // this.khGiaMuaTdTc += Number(element.khGiaMuaTd);
+                // this.khTtienTc += Number(element.khTtien);
+                // this.thSoLuongTc += Number(element.thSoLuong);
+                // this.thGiaMuaTdTc += Number(element.thGiaMuaTd);
                 this.thTtienTc += Number(element.thTtien);
             }
         });
@@ -928,12 +931,18 @@ export class BaoCao02Component implements OnInit {
             }
             baoCaoTemp.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    baoCaoTemp[index].khSoLuong += item.khSoLuong;
-                    baoCaoTemp[index].khGiaMuaTd += item.khGiaMuaTd;
+                    debugger
+                    if(item.level == 2){
+                        baoCaoTemp[index].khSoLuong += item.khSoLuong;
+                        baoCaoTemp[index].thSoLuong += item.thSoLuong;    
+                    }else{
+                        baoCaoTemp[index].khSoLuong = null;
+                        baoCaoTemp[index].thSoLuong = null;    
+                    }
                     baoCaoTemp[index].khTtien += item.khTtien;
-                    baoCaoTemp[index].thSoLuong += item.thSoLuong;
-                    baoCaoTemp[index].thGiaMuaTd += item.thGiaMuaTd;
                     baoCaoTemp[index].thTtien += item.thTtien;
+                    baoCaoTemp[index].thGiaMuaTd = null;
+                    baoCaoTemp[index].khGiaMuaTd = null;
                 }
             })
             stt = this.getHead(stt);
