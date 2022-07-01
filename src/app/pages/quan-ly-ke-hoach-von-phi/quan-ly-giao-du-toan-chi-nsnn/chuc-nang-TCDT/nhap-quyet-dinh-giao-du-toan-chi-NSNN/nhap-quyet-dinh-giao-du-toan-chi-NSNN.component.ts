@@ -469,6 +469,17 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     });
     //get list file url
+		let checkFile = true;
+    for (const iterator of this.listFile) {
+        if (iterator.size > Utils.FILE_SIZE){
+            checkFile = false;
+        }
+    }
+    if (!checkFile){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
+    }
+    //get list file url
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -490,15 +501,31 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       thuyetMinh: this.thuyetMinh,
       soQd: this.soQd,
     }));
-    if (this.soQd.fileName == null) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-      return
-    }
+
+
+
     //get file cong van url
     let file: any = this.fileDetail;
+    //get file cong van url
+		if (file) {
+      if (file.size > Utils.FILE_SIZE){
+          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+      } else {
+          request.congVan = await this.uploadFile(file);
+      }
+  }
+  if (this.soQd.fileName == null) {
+  this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+  return
+  }
     if (file) {
       request.soQd = await this.uploadFile(file);
     }
+    if (!request.soQd){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
     this.spinner.show();
     if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(

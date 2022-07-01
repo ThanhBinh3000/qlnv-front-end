@@ -227,12 +227,23 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
       return;
     }
     //get list file url
+    //get list file url
+		let checkFile = true;
+    for (const iterator of this.listFile) {
+        if (iterator.size > Utils.FILE_SIZE){
+            checkFile = false;
+        }
+    }
+    if (!checkFile){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
+    }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
 
-    let request = {
+    let request = JSON.parse(JSON.stringify({
       id: this.id,
       namDtoan: this.namGiao,
       maPa: this.maPa,
@@ -240,7 +251,24 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
       fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       maGiao: this.maGiao,
+    }))
+    //get file cong van url
+    let file: any = this.fileDetail;
+    if (file) {
+      if (file.size > Utils.FILE_SIZE){
+          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+      } else {
+          request.soQd = await this.uploadFile(file);
+      }
     }
+    if (file) {
+      request.soQd = await this.uploadFile(file);
+    }
+    if (!request.soQd){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
     if (!this.id) {
       this.quanLyVonPhiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
         if (data.statusCode == 0) {
