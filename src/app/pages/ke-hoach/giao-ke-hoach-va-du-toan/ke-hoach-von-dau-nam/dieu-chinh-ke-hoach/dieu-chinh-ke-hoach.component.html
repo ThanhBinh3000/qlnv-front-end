@@ -1,0 +1,14 @@
+<nz-tabset nzType="card" class="tab-level-2" [nzSelectedIndex]="tabSelect">
+  <nz-tab [nzTitle]="'Đề xuất điều chỉnh chỉ tiêu KH'" *ngIf="!userService.isChiCuc()">
+    <ng-template nz-tab>
+      <app-de-xuat-dieu-chinh (showDieuChinhEvent)="selectTabDieuChinh($event)"></app-de-xuat-dieu-chinh>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Quyết định điều chỉnh chỉ tiêu KH'">
+    <ng-template nz-tab>
+      <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc [isDetail]="isDetail" [selectedId]="selectedId"
+        [deXuatId]="deXuatId" [isView]="isView">
+      </app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

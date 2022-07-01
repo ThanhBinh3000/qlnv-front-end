@@ -1,0 +1,131 @@
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số quyết định phê duyệt KH mua trực tiếp</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số quyết định phê duyệt KH chào giá</label>
+            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="startValue"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Bắt đầu từ ngày</label>
+            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
+              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6"></div>
+          <div nz-col nzSpan="24">
+            <label class="search__label">Đến ngày</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="24" class="search-advanced" *ngIf="type == 1">
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="Tìm kiếm nâng cao">
+                <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                  <div nz-col nzSpan="12">
+                    <label class="search__label">Đơn vị quản lý</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="12">
+                    <label class="search__label">Tên đơn vị</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="6">
+                    <label class="search__label">Vật tư hàng hóa</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="18">
+                    <label class="search__label">Tên vật tư</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="12">
+                    <label class="search__label">Cơ quan ban hành</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="12">
+                    <label class="search__label">Tên đối tượng mua</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="6">
+                    <label class="search__label">Số lượng</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                  <div nz-col nzSpan="6">
+                    <label class="search__label">Tiêu chuẩn chất lượng</label>
+                    <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+        </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i nz-icon nzType="close"></i>
+            Xóa điều kiện
+          </button>
+        </div>
+      </nz-card>
+      <nz-card nzTitle="Danh sách thông tin mua trực tiếp" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th width="60px">STT</th>
+              <th width="45px">
+                <label nz-checkbox></label>
+              </th>
+              <th width="130px">Số quyết định phê duyệt KH chào giá</th>
+              <th width="175px">Số quyết định phê duyệt kế hoạch</th>
+              <th width="175px">Ngày ký</th>
+              <th width="" class="text-center">Ghi chú</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>
+                <label nz-checkbox></label>
+              </td>
+              <td>10/QĐTVP</td>
+              <td>13/QĐTVP</td>
+              <td>17/02/2022</td>
+              <td class="text-center">Gói thầu số 1; 2; 3: Mua gạo DTQG cho Cục DTNN KV Tây Nam Bộ</td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-card>
+      <ng-template #tableCard1>
+        <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -49,18 +49,18 @@
     }
     nz-tabset.ant-tabs.ant-tabs-card.ant-tabs-top.ant-tabs-default {
       box-shadow: 0px 2px 12px rgb(0 0 0 / 25%) !important;
-      border-radius: 0px 0px 6px 6px !important;
+      border-radius: 0px !important;
     }
     .ant-tabs-content-holder {
       border: none !important;
     }
     .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab,
     .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
-      border-top-left-radius: 8px !important;
-      border-top-right-radius: 8px !important;
+      border-top-left-radius: 0px !important;
+      border-top-right-radius: 0px !important;
     }
     .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-      color: #19797b !important;
+      color: #4e5484 !important;
     }
     .ant-tabs-tab-btn {
       color: lighten($color: #444444, $amount: 50);
@@ -84,8 +84,8 @@
     .ant-card.card-tree {
       margin: 0px 0px 0px 0px;
       padding: 0 16px 16px 16px;
-      border: solid 1px #b8f0f1 !important;
-      border-radius: 8px;
+      border: solid 1px #4e5484 !important;
+      border-radius: 0px;
       margin-bottom: 24px;
     }
     .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {

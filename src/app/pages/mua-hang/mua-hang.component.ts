@@ -6,6 +6,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 import { MUA_HANG_ROUTE_LIST } from './mua-hang.constant';
 @Component({
     selector: 'app-mua-hang',
@@ -16,16 +17,39 @@ export class MuaHangComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
     routes = MUA_HANG_ROUTE_LIST;
     routerUrl: string = "";
-    defaultUrl: string = '/nhap/mua-hang/'
+    defaultUrl: string = '/mua-hang'
 
     constructor(
+        private userService: UserService,
         private router: Router,
-    ) { }
+    ) {
+        router.events.subscribe((val) => {
+            if (this.router.url) {
+                this.routerUrl = this.router.url;
+            }
+        })
+    }
 
     ngOnInit(): void {
         if (this.router.url) {
             this.routerUrl = this.router.url;
         }
+    }
+
+    filterRole(url) {
+        if (url.includes('/dau-thau/kehoach-luachon-nhathau/') && (this.userService.isTongCuc() || this.userService.isCuc)) {
+            return true;
+        }
+        if (url.includes('/dau-thau/trienkhai-luachon-nhathau/') && this.userService.isCuc()) {
+            return true;
+        }
+        if (url.includes('/dau-thau/dieuchinh-luachon-nhathau/') && this.userService.isTongCuc()) {
+            return true;
+        }
+        if (url.includes('/hop-dong/') && this.userService.isCuc()) {
+            return true;
+        }
+        return false;
     }
 
     ngAfterViewInit() {

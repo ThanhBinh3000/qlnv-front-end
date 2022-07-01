@@ -1,5 +1,5 @@
-@import "../../../assets/scss/default.scss";
-@import "../../../assets/scss/common/tab.scss";
+@import '../../../assets/scss/default.scss';
+@import '../../../assets/scss/common/tab.scss';
 ::ng-deep {
   .display-tab {
     width: 100%;
@@ -30,13 +30,13 @@
     }
     .icon {
       font-size: 42px;
-      color: #19797b;
+      color: #4e5484;
     }
     .card-tree {
       padding-top: 24px;
-      border-radius: 8px;
+      border-radius: 0px;
       cursor: pointer;
-      border-color: #b8f0f1;
+      border-color: #4e5484;
       background: #f8fefe;
     }
     .content-item {
@@ -44,6 +44,9 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      .content-item-title {
+        padding-bottom: 16px;
+      }
       .htvbdh_tcdt_icon-common {
         color: $maincolor;
         font-size: $font-size42;
@@ -138,6 +141,25 @@
   }
   .card-tree .icon {
     font-size: 42px;
-    color: #19797b;
+    color: #4e5484;
+  }
+  .nav-tabs .nav-link.active,
+  .nav-tabs .nav-link:hover {
+    .title-menu-2 {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 12px;
+      color: #353a64;
+    }
+  }
+  .title-menu-2 {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 12px;
+    color: #ffffff;
+  }
+  .nav-tabs .nav-link i,
+  .nav-tabs .nav-link .icon {
+    font-size: 14px;
   }
 }

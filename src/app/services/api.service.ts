@@ -9,7 +9,7 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   login(body) {
-    const url = `${environment.SERVICE_API}/qlnv-security/login`;
+    const url = `${environment.AUTHEN_API}/qlnv-gateway/qlnv-security/login`;
     return this.httpClient.post(url, body);
   }
 

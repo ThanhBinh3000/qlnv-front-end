@@ -12,6 +12,11 @@ export const STATUS_CODE = {
   UNAUTHORIZED: 401,
 };
 
+export const API_STATUS_CODE = {
+  SUCCESS: 0,
+  ERROR: 1,
+};
+
 export const API_STATUS = {
   SUCCESS: 1,
   ERROR: 0,
@@ -152,11 +157,61 @@ export const STATUS_TYPE_CHECK = {
 
 export const LOAI_QUYET_DINH = {
   NHAP: '00',
-  XUAT: '01'
-}
+  XUAT: '01',
+};
 
 export const LOAI_HANG_DTQG = {
-  GAO: '00',
-  THOC: '01',
-  MUOI: '02'
-}
+  GAO: '0102',
+  THOC: '0101',
+  MUOI: '04',
+  VAT_TU: '02',
+};
+
+export const TEN_HANG_DTQG = {
+  GAO: 'gao',
+  THOC: 'thoc',
+  MUOI: 'muoi',
+  VAT_TU: 'vat-tu'
+};
+
+export const STATUS_USER = {
+  HOAT_DONG: '01',
+  KHOA: '00',
+};
+export const LEVEL = {
+  TONG_CUC: 'tong-cuc',
+  CUC: 'cuc',
+  CHI_CUC: 'chi-cuc',
+  TONG_CUC_SHOW: 'Tổng cục',
+  CUC_SHOW: 'Cục',
+  CHI_CUC_SHOW: 'Chi cục',
+};
+export const LEVEL_USER = {
+  ADMIN: '1',
+  CAN_BO_TONG_CUC: '1',
+  CUC: '2',
+  CHI_CUC: '3',
+};
+export const LIST_VAT_TU_HANG_HOA = [
+  {
+    value: LOAI_HANG_DTQG.THOC,
+    text: 'Thóc',
+    title: 'Thóc'
+  },
+  {
+    value: LOAI_HANG_DTQG.GAO,
+    text: 'Gạo',
+    title: 'Gạo'
+  },
+  {
+    value: LOAI_HANG_DTQG.MUOI,
+    text: 'Muối',
+    title: 'Muối'
+  },
+  {
+    value: LOAI_HANG_DTQG.VAT_TU,
+    text: 'Vật tư',
+    title: 'Vật tư'
+  }
+]
+

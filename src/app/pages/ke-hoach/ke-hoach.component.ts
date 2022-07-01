@@ -4,12 +4,18 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { LEVEL } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { ROUTE_LIST_KE_HOACH } from './ke-hoach.constant';
+import {
+  CHI_TIEU_KE_HOACH_NAM,
+  DE_XUAT_DIEU_CHINH,
+  DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
+  ROUTE_LIST_KE_HOACH,
+} from './ke-hoach.constant';
 @Component({
   selector: 'app-ke-hoach',
   templateUrl: './ke-hoach.component.html',
@@ -17,24 +23,32 @@ import { ROUTE_LIST_KE_HOACH } from './ke-hoach.constant';
 })
 export class KeHoachComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
-  routerUrl: string = "";
-  defaultUrl: string = '/ke-hoach/'
+  routerUrl: string = '';
+  defaultUrl: string = '/ke-hoach/';
+  listRouter: any[] = [];
+  lastRouter: any = {};
 
-  constructor(
-    private userService: UserService,
-    private router: Router,
-  ) {
-  }
+  constructor(public userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+  }
+
+  filterRole(url) {
+    if (
+      (url.includes(`/${CHI_TIEU_KE_HOACH_NAM}`) ||
+        url.includes(`/${DE_XUAT_DIEU_CHINH}`) ||
+        url.includes(`/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`)) &&
+      (this.userService.isTongCuc() || this.userService.isCuc())
+    ) {
+      return true;
+    }
+    return false;
   }
 
   ngAfterViewInit() {
@@ -89,6 +103,7 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   }
 
   redirect(url: string) {
-    this.router.navigate([this.defaultUrl + url]);
+    this.routerUrl = url;
+    this.router.navigate([url]);
   }
 }

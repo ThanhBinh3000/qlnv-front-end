@@ -871,36 +871,37 @@ export class BaoCao02Component implements OnInit {
 
     }
 
+    // tinh len tren nhung hang fix cung I,II
     async changeModel() {
-        this.khSoLuongDv = 0;
-        this.khGiaMuaTdDv = 0;
-        this.khTtienDv = 0;
-        this.thSoLuongDv = 0;
-        this.thGiaMuaTdDv = 0;
-        this.thTtienDv = 0;
-        this.khSoLuongTc = 0;
-        this.khGiaMuaTdTc = 0;
-        this.khTtienTc = 0;
-        this.thSoLuongTc = 0;
-        this.thGiaMuaTdTc = 0;
-        this.thTtienTc = 0;
+        this.khSoLuongDv = null;
+        this.khGiaMuaTdDv = null;
+        this.khTtienDv = null;
+        this.thSoLuongDv = null;
+        this.thGiaMuaTdDv = null;
+        this.thTtienDv = null;
+        this.khSoLuongTc = null;
+        this.khGiaMuaTdTc = null;
+        this.khTtienTc = null;
+        this.thSoLuongTc = null;
+        this.thGiaMuaTdTc = null;
+        this.thTtienTc = null;
         await this.lstCtietBcao021.forEach(element => {
             if (element?.stt?.split('.').length == 2) {
-                this.khSoLuongDv += Number(element.khSoLuong);
-                this.khGiaMuaTdDv += Number(element.khGiaMuaTd);
-                this.khTtienDv += Number(element.khTtien);
-                this.thSoLuongDv += Number(element.thSoLuong);
-                this.thGiaMuaTdDv += Number(element.thGiaMuaTd);
+                // this.khSoLuongDv += Number(element.khSoLuong);
+                // this.khGiaMuaTdDv += Number(element.khGiaMuaTd);
+                // this.khTtienDv += Number(element.khTtien);
+                // this.thSoLuongDv += Number(element.thSoLuong);
+                // this.thGiaMuaTdDv += Number(element.thGiaMuaTd);
                 this.thTtienDv += Number(element.thTtien);
             }
         })
         await this.lstCtietBcao022.forEach(element => {
             if (element?.stt?.split('.').length == 2) {
-                this.khSoLuongTc += Number(element.khSoLuong);
-                this.khGiaMuaTdTc += Number(element.khGiaMuaTd);
-                this.khTtienTc += Number(element.khTtien);
-                this.thSoLuongTc += Number(element.thSoLuong);
-                this.thGiaMuaTdTc += Number(element.thGiaMuaTd);
+                // this.khSoLuongTc += Number(element.khSoLuong);
+                // this.khGiaMuaTdTc += Number(element.khGiaMuaTd);
+                // this.khTtienTc += Number(element.khTtien);
+                // this.thSoLuongTc += Number(element.thSoLuong);
+                // this.thGiaMuaTdTc += Number(element.thGiaMuaTd);
                 this.thTtienTc += Number(element.thTtien);
             }
         });
@@ -929,12 +930,18 @@ export class BaoCao02Component implements OnInit {
             }
             baoCaoTemp.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    baoCaoTemp[index].khSoLuong += item.khSoLuong;
-                    baoCaoTemp[index].khGiaMuaTd += item.khGiaMuaTd;
+                    debugger
+                    if(item.level == 2){
+                        baoCaoTemp[index].khSoLuong += item.khSoLuong;
+                        baoCaoTemp[index].thSoLuong += item.thSoLuong;    
+                    }else{
+                        baoCaoTemp[index].khSoLuong = null;
+                        baoCaoTemp[index].thSoLuong = null;    
+                    }
                     baoCaoTemp[index].khTtien += item.khTtien;
-                    baoCaoTemp[index].thSoLuong += item.thSoLuong;
-                    baoCaoTemp[index].thGiaMuaTd += item.thGiaMuaTd;
                     baoCaoTemp[index].thTtien += item.thTtien;
+                    baoCaoTemp[index].thGiaMuaTd = null;
+                    baoCaoTemp[index].khGiaMuaTd = null;
                 }
             })
             stt = this.getHead(stt);

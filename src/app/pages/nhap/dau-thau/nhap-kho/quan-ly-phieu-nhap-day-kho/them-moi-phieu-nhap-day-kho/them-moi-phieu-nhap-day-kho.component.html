@@ -1,0 +1,311 @@
+<div class="luong-thuc__danh-sach">
+  <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <!-- <div class="title-chi-tieu">
+            <span [ngClass]="thongTinTrangThai(bienBanNhapDayKho.trangThai)">{{bienBanNhapDayKho.tenTrangThai}}</span>
+            <div class="title-form-chi-tiet">biên bản nhập đầy kho</div>
+          </div> -->
+        </div>
+        <div class="canphai phai" *ngIf="!viewChiTiet">
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="isAction()">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="isAction()" (click)="guiDuyet()">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Gửi duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
+            *ngIf="bienBanNhapDayKho.trangThai == globals.prop.LANH_DAO_DUYET">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Ban hành</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+            *ngIf="bienBanNhapDayKho.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+            *ngIf="bienBanNhapDayKho.trangThai == globals.prop.LANH_DAO_DUYET || bienBanNhapDayKho.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </a>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectbienBanNhapDayKho()">
+            <i class="icon htvbdh_tcdt_delete"></i>
+            <span>Quay về</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <div class="title-chi-tieu">
+          <!-- <span [ngClass]="thongTinTrangThai(bienBanLayMau.trangThai)">{{bienBanLayMau.tenTrangThai ? bienBanLayMau.tenTrangThai : 'SOẠN THẢO'}}</span> -->
+          <span class="title-form">Biên bản nhập đầy kho</span>
+        </div>
+        <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số quyết định nhập
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.soQd" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đơn vị
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.tenDonVi" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Mã QHNS
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.maDonVi" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số biên bản
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.soBienBan" placeholder="Nhập số biên bản"
+                  [disabled]="!isAction()" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày nhập đầy kho
+                </nz-form-label>
+                <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày nhập đầy kho"
+                  [(ngModel)]="bienBanNhapDayKho.ngayNhapDayKho" [disabled]="!isAction()">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Thủ trưởng đơn vị
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.thuTruong" placeholder="Nhập tên thủ trưởng"
+                  [disabled]="!isAction()" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kế toán đơn vị
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.keToan" placeholder="Nhập tên kế toán đơn vị"
+                  [disabled]="!isAction()" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kỹ thuật viên bảo quản
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.kyThuatVien" placeholder="Nhập tên kỹ thuật viên"
+                  [disabled]="!isAction()" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Thủ kho
+                </nz-form-label>
+                <input nz-input placeholder="Nhập tên thủ kho" [(ngModel)]="bienBanNhapDayKho.thuKho"
+                  [disabled]="!isAction()" />
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chủng loại hàng hóa nhập kho
+                </nz-form-label>
+                <textarea rows="3"
+                  placeholder="Ghi đầy đủ thông tin, ví dụ thóc Đông xuân năm...loại hạt dài hoặc gạo Nam bộ... % tấm v.v..."
+                  class="search__input" nz-input [(ngModel)]="bienBanNhapDayKho.chungLoaiHangHoa"
+                  [readonly]="viewChiTiet" [ngClass]="!isAction() ? 'disable' : ''"></textarea>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Điểm kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanNhapDayKho.maDiemKho" (ngModelChange)="changeDiemKho()"
+                  [disabled]="!isAction()">
+                  <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Nhà kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanNhapDayKho.maNhaKho" [disabled]="!isAction()">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngăn/Lô bảo quản
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanNhapDayKho.maNganLo" [disabled]="!isAction()">
+                  <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày bắt đầu nhập
+                </nz-form-label>
+                <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày bắt đầu nhập"
+                  [(ngModel)]="bienBanNhapDayKho.ngayBatDauNhap" [nzDisabledDate]="disabledStartDate"
+                  [disabled]="!isAction()">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày kết thúc nhập
+                </nz-form-label>
+                <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày kết thúc nhập"
+                  [(ngModel)]="bienBanNhapDayKho.ngayKetThucNhap" [nzDisabledDate]="disabledEndDate"
+                  [disabled]="!isAction()">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24" class="bien-ban-day-kho">
+              <nz-table #basicTable class="mt-16 table__body" #bbNhapDayKhoDetail nzBordered
+                [nzData]="dsBienBanNhapDayKhoDetailClone" [nzFrontPagination]="false" [nzShowPagination]="false">
+                <thead>
+                  <tr>
+                    <th rowSpan="2" class="text-center">STT <br> (A)</th>
+                    <th colspan="3" class="text-center">KẾT QUẢ NHẬP KHO</th>
+                    <th rowspan="2" class="text-center">GHI CHÚ <br> (A)</th>
+                    <th rowspan="2" class="text-center" *ngif="!viewChiTiet">HÀNH ĐỘNG</th>
+                  </tr>
+                  <tr>
+                    <th class="text-center"> SỐ LƯỢNG <br>
+                      (1)</th>
+                    <th class="text-center"> ĐƠN GIÁ <br>
+                      (2)</th>
+                    <th class="text-center"> THÀNH TIỀN <br>
+                      (3) = (1)x(2)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr [ngClass]="viewChiTiet ? 'row-disabled' : ''">
+                    <td></td>
+                    <td>
+                      <nz-input-number type="text" nz-input name="soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                        [nzSize]="'small'" [(ngModel)]="bienBanNhapDayKhoDetailCreate.soLuong">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number type="text" nz-input name="soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                        [nzSize]="'small'" [(ngModel)]="bienBanNhapDayKhoDetailCreate.donGia">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      {{calculatorThanhTienCreate()}}
+                    </td>
+                    <td>
+                      <input nz-input [(ngModel)]="bienBanNhapDayKhoDetailCreate.ghiChu" />
+                    </td>
+                    <td class="text-center" *ngIf="!viewChiTiet">
+                      <a class="save" (click)="themmoi()"
+                        [ngClass]="{'isDisabled': bienBanNhapDayKhoDetailCreate.thanhTien === 0 || !bienBanNhapDayKhoDetailCreate.thanhTien}">
+                        <i class="icon htvbdh_dau-cong"></i>
+                      </a>
+                      <a (click)="clearNew()"
+                        [ngClass]="{'isDisabled': bienBanNhapDayKhoDetailCreate.thanhTien === 0 || !bienBanNhapDayKhoDetailCreate.thanhTien}">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let dataBBNhapDayKho of bbNhapDayKhoDetail.data, let i = index">
+                    <ng-container *ngIf="!dsBienBanNhapDayKhoDetailClone[i].isEdit; else editTemplate">
+                      <td>{{dataBBNhapDayKho.stt | number: '1.0-1'}}</td>
+                      <td>{{dataBBNhapDayKho.soLuong | number: '1.0-1'}}</td>
+                      <td>{{dataBBNhapDayKho.donGia | number: '1.0-1'}}</td>
+                      <td>{{dataBBNhapDayKho.thanhTien | number: '1.0-1'}}</td>
+                      <td>{{dataBBNhapDayKho.ghiChu}}</td>
+                      <td class="text-center" *ngIf="!viewChiTiet">
+                        <a (click)="startEdit(i)">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a (click)="deleteData(dataBBNhapDayKho.stt)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <ng-template #editTemplate>
+                      <td>{{dataBBNhapDayKho.stt }}</td>
+                      <td>
+                        <nz-input-number type="text" nz-input name="goiThau" [nzMin]="0" [nzMax]="" [nzSize]="'small'"
+                          [(ngModel)]="dsBienBanNhapDayKhoDetailClone[i].soLuong">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number type="text" nz-input name="goiThau" [nzMin]="0" [nzMax]="" [nzSize]="'small'"
+                          [(ngModel)]="dsBienBanNhapDayKhoDetailClone[i].donGia">
+                        </nz-input-number>
+                      </td>
+                      <td>{{calculatorThanhTienEdit(i)}}</td>
+                      <td>
+                        <input nz-input [(ngModel)]="dsBienBanNhapDayKhoDetailClone[i].ghiChu" />
+                      </td>
+                      <td class="text-center" *ngIf="!viewChiTiet">
+                        <a (click)="saveEditBBDayKho(i)">
+                          <i class="fa fa-save"></i>
+                        </a>
+                        <a (click)="cancelEditBBDayKho(i)">
+                          <i class="fa fa-times do"></i>
+                        </a>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+          </div>
+          <div class="comment-last" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="4" class="text-summary">Phiếu kiểm tra chất lượng hàng</div>
+            <div nz-col nzSpan="20">
+              <button class="btn btn-tep btn-sm waves-effect waves-light file-dinh-kem" [disabled]="viewChiTiet">
+                <i class="icon htvbdh_tcdt_tep"></i>
+                <span>Chọn file</span>
+              </button>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+</div>

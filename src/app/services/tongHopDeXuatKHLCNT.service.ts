@@ -15,13 +15,13 @@ import { BaseService } from './base.service';
 export class TongHopDeXuatKHLCNTService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'TongHopDeXuatKHLCNT');
+    super(httpClient, 'dx-kh/thop-dlieu', '/qlnv-gateway/qlnv-hang');
   }
 
-  timKiem(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/tra-cuu`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
+  // timKiem(body: any): Promise<any> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/tra-cuu`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
 
   loadChiTiet(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/chi-tiet/${id}`;
@@ -48,8 +48,13 @@ export class TongHopDeXuatKHLCNTService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  xoa(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/xoa`;
-    return this.httpClient.post<any>(url, body).toPromise();
+  // xoa(body: any): Promise<any> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/xoa`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/ket-xuat`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

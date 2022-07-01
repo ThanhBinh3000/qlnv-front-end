@@ -1,21 +1,26 @@
-<div class="contentBor dau-thau">
+<div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <div class="main-content-dau-thau">
-      <nz-tabset nzType="card">
-        <nz-tab>
-          <div nz-row [nzGutter]="24" class="vat-tu">
-            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let menu of QuyTrinhBaoCaoThucHienDuToanChiNSNNList">
-              <nz-card class="card-tree">
-                <a routerLinkActive="active" [routerLink]="menu.url">
-                  <div class="content-item">
-                    <span class="icon" [ngClass]="menu.icon"></span>
-                    <div class="content-item-title">{{menu.title}}</div>
-                    <div class="content-item-description">{{menu.description}}</div>
-                  </div>
-                </a>
-              </nz-card>
-            </div>
-          </div>
+    <div class="main-content tab-menu-new">
+      <nz-tabset nzType="card" class="tab-level-0">
+        <nz-tab [nzTitle]="'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm'">
+          <ng-template nz-tab>
+            <app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam></app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam>
+          </ng-template>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ đơn vị dưới'">
+          <ng-template nz-tab>
+            <app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC></app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC>
+          </ng-template>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Kiểm tra báo cáo thực hiện dự toán (giải ngân) tháng/năm từ các đơn vị dưới'">
+          <ng-template nz-tab>
+            <app-kiem-tra></app-kiem-tra>
+          </ng-template>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm'">
+          <ng-template nz-tab>
+            <app-tong-hop-bc-tinh-hinh-su-dung-dtc-tu-cc></app-tong-hop-bc-tinh-hinh-su-dung-dtc-tu-cc>
+          </ng-template>
         </nz-tab>
       </nz-tabset>
     </div>

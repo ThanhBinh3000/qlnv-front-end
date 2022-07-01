@@ -2,7 +2,7 @@ export const NHAP_MAIN_ROUTE = 'quan-tri-he-thong';
 export const NHAP_ROUTE_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh Sach',
+    title: 'Quản lý NSD',
     url: `/${NHAP_MAIN_ROUTE}/danh-sach`,
     dropdown: 'danh-sach',
     idHover: 'danhsach',
@@ -70,5 +70,6 @@ export const NHAP_ROUTE_LIST = [
     dropdown: 'nhapxuat-dieuchinh-gia',
     idHover: 'nhapxuatdieuchinhgia',
   },
+
 
 ];

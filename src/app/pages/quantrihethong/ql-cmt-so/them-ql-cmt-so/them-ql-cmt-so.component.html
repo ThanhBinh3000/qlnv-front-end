@@ -1,0 +1,106 @@
+<form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+  <div nz-row [nzGutter]="24">
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Mã hóa người dùng</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Đơn vị</nz-form-label>
+        <nz-form-control nzErrorTip="Đơn vị quản lý là bắt buộc!">
+          <nz-input-group nzSize="large" class="search__input autocomplete__input">
+            <input placeholder="Đơn vị" nz-input formControlName="dvql" (input)="onInput($event)"
+              [nzAutocomplete]="auto" />
+          </nz-input-group>
+        </nz-form-control>
+
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <h6>Thông tin chứng thư số </h6>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Nhà cung cấp</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Ngày hiệu lực</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Ngày hết hạn</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Serial</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Token</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Trạng thái</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="trangThai">
+            <label nz-radio nzValue="01">Mở</label>
+            <label nz-radio nzValue="00">Khóa</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="m-footer">
+      <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="themmoi()">
+            <i class="icon htvbdh_luu" aria-hidden="true"></i>
+            Lưu
+          </a>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huy()">
+            <i aria-hidden="true" class="fa fa-sign-out"></i>
+            <span>Hủy</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>

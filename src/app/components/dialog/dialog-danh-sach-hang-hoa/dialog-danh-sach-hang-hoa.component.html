@@ -22,7 +22,7 @@
             <td>{{ item.ma }}</td>
             <td style="text-align: center">
               <div *ngIf="item?.child?.length == 0 || !item?.child">
-                <i nz-icon nzType="plus" nzTheme="outline" nzColo></i>
+                <i nz-icon nzType="plus" nzTheme="outline" nzColo (click)="selectHangHoa(item)"></i>
               </div>
             </td>
           </tr>

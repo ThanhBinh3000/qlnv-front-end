@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-dau-thau',
   templateUrl: './dau-thau.component.html',
@@ -10,6 +11,7 @@ export class DauThauComponent implements OnInit {
   visibleTab: boolean = true;
 
   constructor(
+    public userService: UserService,
   ) { }
 
   ngOnInit(): void {
