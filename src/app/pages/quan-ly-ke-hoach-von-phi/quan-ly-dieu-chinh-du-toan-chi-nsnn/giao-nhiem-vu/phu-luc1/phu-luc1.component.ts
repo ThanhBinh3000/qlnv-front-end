@@ -44,12 +44,14 @@ export class PhuLuc1Component implements OnInit {
   //danh muc
   donVis: any = [];
   noiDungs: any[] = LINH_VUC;
-  // noiDungs: any[] = [];
+  listNoiDung: any[] = [];
+  lstNoiDungFull = [];
   noiDungFull: any[] = [];
   loaiKhoans: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   soLaMa: any[] = LA_MA;
+  maDviTao!:string;
   //thong tin chung
   id: any;
   namBcao: number;
@@ -121,6 +123,7 @@ export class PhuLuc1Component implements OnInit {
     this.namBcao = this.data?.namBcao;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
+    this.maDviTao = this.data?.maDviTao
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -157,29 +160,29 @@ export class PhuLuc1Component implements OnInit {
       }
     );
 
-    // //lấy danh sách nội dung chi
-    // await this.danhMucService.dMNoiDungKinhPhiPL1DieuChinh().toPromise().then(res => {
-    //   if (res.statusCode == 0) {
-    //       this.noiDungs = res.data;
-    //   } else {
-    //       this.notification.error(MESSAGE.ERROR, res?.msg);
-    //   }
-    // }, err => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // })
+    //lấy danh sách nội dung chi
+    await this.danhMucService.dMNoiDungKinhPhiPL1DieuChinh().toPromise().then(res => {
+      if (res.statusCode == 0) {
+          this.listNoiDung = res.data;
+      } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
 
-    // await this.noiDungs.forEach(item => {
-    //     if (item.maCha == "string") {
-    //         this.noiDungFull.push({
-    //             ...item,
-    //             tenDm: item.giaTri,
-    //             // ten: item.giaTri,
-    //             level: 0,
-    //             idCha: 0,
-    //         })
-    //     }
-    // })
-    // await this.addListNoiDungChi(this.noiDungFull);
+    await this.listNoiDung.forEach(item => {
+        if (item.maCha == "string") {
+            this.noiDungFull.push({
+                ...item,
+                tenDm: item.giaTri,
+                ten: item.giaTri,
+                level: 0,
+                idCha: 0,
+            })
+        }
+    })
+    await this.addListNoiDungChi(this.noiDungFull);
 
     await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
       (data) => {
@@ -197,27 +200,29 @@ export class PhuLuc1Component implements OnInit {
     this.spinner.hide();
   }
 
-  // addListNoiDungChi(noiDungChiTemp) {
-  //   let a = [];
-  //   noiDungChiTemp.forEach(item => {
-  //       this.noiDungs.forEach(el => {
-  //           if (item.ma == el.maCha) {
-  //               el = {
-  //                   ...el,
-  //                   tenDm: el.giaTri,
-  //                   // ten: el.giaTri,
-  //                   level: item.level + 1,
-  //                   idCha: item.id,
-  //               }
-  //               this.noiDungFull.push(el);
-  //               a.push(el);
-  //           }
-  //       });
-  //   })
-  //   if (a.length > 0) {
-  //       this.addListNoiDungChi(a);
-  //   }
-  // }
+  addListNoiDungChi(noiDungChiTemp) {
+    let a = [];
+    noiDungChiTemp.forEach(item => {
+        this.listNoiDung.forEach(el => {
+            if (item.ma == el.maCha) {
+                el = {
+                    ...el,
+                    tenDm: el.giaTri,
+                    ten: el.giaTri,
+                    level: item.level + 1,
+                    idCha: item.id,
+                }
+                this.noiDungFull.push(el);
+                a.push(el);
+            }
+        });
+    })
+    if (a.length > 0) {
+        this.addListNoiDungChi(a);
+    }
+    console.log(this.noiDungFull);
+
+  }
 
   getStatusButton() {
     if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
@@ -380,24 +385,24 @@ export class PhuLuc1Component implements OnInit {
     let chiSo: any = str.split('.');
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
+    // if (n == 0) {
+    //   for (var i = 0; i < this.soLaMa.length; i++) {
+    //     while (k >= this.soLaMa[i].gTri) {
+    //       xau += this.soLaMa[i].kyTu;
+    //       k -= this.soLaMa[i].gTri;
+    //     }
+    //   }
+    // };
+    // if (n == 1) {
+    //   xau = chiSo[n];
+    // };
+    // if (n == 2) {
+    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    // };
     if (n == 0) {
-      for (var i = 0; i < this.soLaMa.length; i++) {
-        while (k >= this.soLaMa[i].gTri) {
-          xau += this.soLaMa[i].kyTu;
-          k -= this.soLaMa[i].gTri;
-        }
-      }
-    };
-    if (n == 1) {
-      xau = chiSo[n];
-    };
-    if (n == 2) {
-      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    };
-    if (n == 3) {
       xau = String.fromCharCode(k + 96);
     }
-    if (n == 4) {
+    if (n == 1) {
       xau = "-";
     }
     return xau;
@@ -740,10 +745,12 @@ export class PhuLuc1Component implements OnInit {
   }
 
   addLine(id: any) {
+    let lstNoiDungTemp
     var maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+    lstNoiDungTemp = this.noiDungFull;
     let obj = {
       maKhoanMuc: maNdung,
-      lstKhoanMuc: this.noiDungs,
+      lstKhoanMuc: lstNoiDungTemp,
     }
 
     const modalIn = this.modal.create({

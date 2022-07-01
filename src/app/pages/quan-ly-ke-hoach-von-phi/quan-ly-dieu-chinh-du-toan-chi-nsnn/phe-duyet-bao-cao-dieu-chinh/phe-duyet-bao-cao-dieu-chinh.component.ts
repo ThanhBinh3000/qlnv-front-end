@@ -15,40 +15,40 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 // trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
   {
-      id: "1",
-      tenDm: 'Đang soạn'
+    id: "1",
+    tenDm: 'Đang soạn'
   },
   {
-      id: "2",
-      tenDm: 'Trình duyệt'
+    id: "2",
+    tenDm: 'Trình duyệt'
   },
   {
-      id: "3",
-      tenDm: 'Trưởng BP từ chối'
+    id: "3",
+    tenDm: 'Trưởng BP từ chối'
   },
   {
-      id: "4",
-      tenDm: 'Trưởng BP duyệt'
+    id: "4",
+    tenDm: 'Trưởng BP duyệt'
   },
   {
-      id: "5",
-      tenDm: 'Lãnh đạo từ chối'
+    id: "5",
+    tenDm: 'Lãnh đạo từ chối'
   },
   {
-      id: "6",
-      tenDm: 'Lãnh đạo duyệt'
+    id: "6",
+    tenDm: 'Lãnh đạo duyệt'
   },
   {
-      id: "7",
-      tenDm: 'Mới'
+    id: "7",
+    tenDm: 'Mới'
   },
   {
-      id: "8",
-      tenDm: 'Từ chối'
+    id: "8",
+    tenDm: 'Từ chối'
   },
   {
-      id: "9",
-      tenDm: 'Tiếp nhận'
+    id: "9",
+    tenDm: 'Tiếp nhận'
   },
   // {
   //     id: "10",
@@ -109,33 +109,33 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 
   async ngOnInit() {
     let userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-		this.maDviTao = this.userInfo?.dvql;
-		this.userRole = this.userInfo?.roles[0].code;
+    await this.getUserInfo(userName); //get user info
+    this.maDviTao = this.userInfo?.dvql;
+    this.userRole = this.userInfo?.roles[0].code;
     this.searchFilter.denNgay = new Date().toDateString();
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.tuNgay = this.date.toDateString();
     this.searchFilter.nam = new Date().getFullYear()
-    if (this.userRole == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' ||'CC_KH_VP_NV')) {
-			this.status = false;
-			this.searchFilter.trangThai = Utils.TT_BC_7;
-			this.searchFilter.loaiTimKiem = '1';
-			this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
-			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
-			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
-			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
-		} else {
-			this.status = true;
-			this.searchFilter.loaiTimKiem = '0';
-			this.searchFilter.donViTao = this.maDviTao;
-			if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
-				this.searchFilter.trangThai = Utils.TT_BC_2;
-				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
-			} else {
-				this.searchFilter.trangThai = Utils.TT_BC_4;
-				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
-			}
-		}
+    if (this.userRole == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV')) {
+      this.status = false;
+      this.searchFilter.trangThai = Utils.TT_BC_7;
+      this.searchFilter.loaiTimKiem = '1';
+      this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.maDviTao);
+      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
+    } else {
+      this.status = true;
+      this.searchFilter.loaiTimKiem = '0';
+      this.searchFilter.donViTao = this.maDviTao;
+      if (this.userRole == ('TC_KH_VP_TBP' || 'C_KH_VP_TBP_TVQT' || 'C_KH_VP_TBP_KH' || 'CC_KH_VP_TBP')) {
+        this.searchFilter.trangThai = Utils.TT_BC_2;
+        this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+      } else {
+        this.searchFilter.trangThai = Utils.TT_BC_4;
+        this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+      }
+    }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {

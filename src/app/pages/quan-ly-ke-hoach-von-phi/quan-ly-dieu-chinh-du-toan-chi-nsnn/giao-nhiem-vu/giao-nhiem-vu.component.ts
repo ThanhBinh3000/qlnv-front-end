@@ -769,6 +769,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			let item = this.lstDieuChinhs.find(e => e.maLoai == id);
 			this.data = {
 				...item,
+        maDviTao: this.maDviTao,
 				namHienHanh: this.namHienHanh,
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,
@@ -788,6 +789,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.getDetailReport();
 			this.data = {
 				...this.lstDieuChinhs[index],
+        maDviTao: this.maDviTao,
 				namHienHanh: this.namHienHanh,
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,

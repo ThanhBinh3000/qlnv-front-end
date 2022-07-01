@@ -409,7 +409,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             }
         }
 
-        
+
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {

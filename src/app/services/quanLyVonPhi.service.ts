@@ -90,7 +90,7 @@ export class QuanLyVonPhiService extends BaseService {
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
-      'http://192.168.1.103:8094/giao_du_toan/danh-sach',
+      'http://192.168.1.105:8094/giao_du_toan/danh-sach',
       request,
     );
   }
@@ -780,13 +780,11 @@ export class QuanLyVonPhiService extends BaseService {
   timKiemDieuChinh(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
-      // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
   timKiemDieuChinh1(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
-      // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/danh-sach',
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
 

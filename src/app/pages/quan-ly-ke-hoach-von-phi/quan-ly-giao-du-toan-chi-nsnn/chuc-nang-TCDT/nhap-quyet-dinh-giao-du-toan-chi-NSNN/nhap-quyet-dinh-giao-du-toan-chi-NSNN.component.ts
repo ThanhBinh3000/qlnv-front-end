@@ -939,7 +939,10 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.editCache[id].data.tongCong = Number(this.editCache[id].data.nguonNsnn) + Number(this.editCache[id].data.nguonKhac);
   }
   close() {
-    this.location.back();
+    // this.location.back();
+    this.router.navigate([
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN'
+    ]);
   }
 
   async linkToPaPbo() {
@@ -1150,38 +1153,38 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     })
   }
 
-  showDialogCopy(){
-		let obj = {
-			namBcao: this.namPa,
-		}
-		const modalTuChoi = this.modal.create({
-			nzTitle: 'Copy Báo Cáo',
-			nzContent: DialogCopyGiaoDuToanComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '900px',
-			nzFooter: null,
-			nzComponentParams: {
-			  namBcao: obj.namBcao
-			},
-		  });
-		  modalTuChoi.afterClose.toPromise().then(async (res) => {
-			if (res){
-				this.doCopy(res);
-			}
-		  });
-	}
+  showDialogCopy() {
+    let obj = {
+      namBcao: this.namPa,
+    }
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Copy Báo Cáo',
+      nzContent: DialogCopyGiaoDuToanComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        namBcao: obj.namBcao
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (res) => {
+      if (res) {
+        this.doCopy(res);
+      }
+    });
+  }
 
-	async doCopy(response: any) {
+  async doCopy(response: any) {
     console.log(response);
 
-		var maBcaoNew: string;
-		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    var maBcaoNew: string;
+    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
-         maBcaoNew = res.data;
+          maBcaoNew = res.data;
           let sub = "BTC";
-         maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+          maBcaoNew = maBcaoNew.slice(0, 2) + sub + maBcaoNew.slice(2);
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -1191,20 +1194,20 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       },
     );
 
-		let lstCtietBcaoTemps: any[] = [];
-		this.lstCtietBcao.forEach(data => {
-			lstCtietBcaoTemps.push({
-				...data,
+    let lstCtietBcaoTemps: any[] = [];
+    this.lstCtietBcao.forEach(data => {
+      lstCtietBcaoTemps.push({
+        ...data,
         tongCong: mulMoney(data.tongCong, this.maDviTien),
         nguonNsnn: mulMoney(data.nguonNsnn, this.maDviTien),
         nguonKhac: mulMoney(data.nguonKhac, this.maDviTien),
-				id: null,
+        id: null,
         listCtietDvi: [],
-			})
-		})
-		let request = {
+      })
+    })
+    let request = {
       id: null,
-      fileDinhKems:[],
+      fileDinhKems: [],
       listIdFiles: [],
       lstCtiets: lstCtietBcaoTemps,
       maDvi: this.maDonViTao,
@@ -1215,32 +1218,32 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       soQd: this.soQd,
-		};
+    };
 
-		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
-			async data => {
-				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					const modalCopy = this.modal.create({
-						nzTitle: MESSAGE.ALERT,
-						nzContent: DialogCopyComponent,
-						nzMaskClosable: false,
-						nzClosable: false,
-						nzWidth: '900px',
-						nzFooter: null,
-						nzComponentParams: {
-						  maBcao: maBcaoNew
-						},
-					  });
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
-	}
+    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          const modalCopy = this.modal.create({
+            nzTitle: MESSAGE.ALERT,
+            nzContent: DialogCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              maBcao: maBcaoNew
+            },
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+  }
 
   // action print
   doPrint() {

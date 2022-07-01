@@ -266,7 +266,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     if (dVi && dVi.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
-    if (dVi && dVi.capDvi == "2" && this.trangThaiBanGhi == "7" || this.trangThaiBanGhi == "9") {
+    if(dVi && dVi.capDvi == "1"){
+      this.statusBtnGuiDVCT = true
+    }
+    if (dVi && dVi.capDvi == "2"  && this.trangThaiBanGhi == "7" || this.trangThaiBanGhi == "9") {
       this.statusBtnGuiDVCT = true
     }
     const utils = new Utils();

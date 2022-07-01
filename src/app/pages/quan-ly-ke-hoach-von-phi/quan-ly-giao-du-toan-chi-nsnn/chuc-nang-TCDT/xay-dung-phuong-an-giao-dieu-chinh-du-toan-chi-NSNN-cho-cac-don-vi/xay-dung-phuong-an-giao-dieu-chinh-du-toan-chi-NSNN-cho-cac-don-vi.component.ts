@@ -265,6 +265,9 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     if (dVi && dVi.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
+    if(dVi && dVi.capDvi == "1"){
+      this.statusBtnGuiDVCT = true
+    }
     if (dVi && dVi.capDvi == "2" && this.trangThaiBanGhi == "7" || this.trangThaiBanGhi == "9") {
       this.statusBtnGuiDVCT = true
     }

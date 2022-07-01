@@ -45,7 +45,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
   date: any = new Date()
   userRole: string;
-  status: boolean ;
+  status: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -135,7 +135,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     ])
   }
 
-  async xoaQuyetDinh(id: any){
+  async xoaQuyetDinh(id: any) {
     this.spinner.show();
     await this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(
       (data) => {
