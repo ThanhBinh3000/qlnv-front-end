@@ -272,6 +272,12 @@ export class Utils {
         "unit": ROLE_LANH_DAO
     }
 
+    //role copy
+    public btnRoleExport = {
+        "status": ['6', '9'],
+        "role": ['KH_VP_BC_KQTH_EX']
+    }
+
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
         return !(this.btnRoleDel.status.includes(status) && unit == true && this.btnRoleDel.role.includes(role));
@@ -320,6 +326,11 @@ export class Utils {
     //role in
     public getRolePrint(status: any, unit: any, role: any) {
         return !(this.btnRolePRINT.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
+    }
+
+    //role export
+    public getRoleExport(status: any, unit: any, role: any) {
+        return !(this.btnRoleExport.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
     }
 
     //role OK/not Ok

@@ -73,7 +73,7 @@ export class BaoCao03Component implements OnInit {
     status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-
+    statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
     soLuongKhoachXb = 0;
@@ -116,6 +116,7 @@ export class BaoCao03Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;

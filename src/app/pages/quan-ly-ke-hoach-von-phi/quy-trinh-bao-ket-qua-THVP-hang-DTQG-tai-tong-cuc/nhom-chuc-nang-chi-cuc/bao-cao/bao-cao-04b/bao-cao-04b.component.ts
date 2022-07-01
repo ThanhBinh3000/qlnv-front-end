@@ -90,7 +90,7 @@ export class BaoCao04bComponent implements OnInit {
     status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-
+    statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau0405 } } = {};
 
@@ -110,6 +110,7 @@ export class BaoCao04bComponent implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         // 04b
         await this.lstCTietBaoCaoTemp?.filter(async el => {

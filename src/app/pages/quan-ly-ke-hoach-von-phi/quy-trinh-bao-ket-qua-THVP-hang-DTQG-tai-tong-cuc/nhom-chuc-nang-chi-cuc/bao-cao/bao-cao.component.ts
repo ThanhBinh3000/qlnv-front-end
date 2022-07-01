@@ -174,7 +174,7 @@ export class BaoCaoComponent implements OnInit {
 
   statusBtnFinish: boolean = true;                    // trang thai hoan tat nhap lieu
   statusBtnOk: boolean = true;                        // trang thai ok/ not ok
-
+  statusBtnExport: boolean = true;                        // trang thai export
   lstFiles: any = [];                          // list File de day vao api
 
   maDviTien: string = "1";                    // ma don vi tien
@@ -789,6 +789,7 @@ export class BaoCaoComponent implements OnInit {
         trangThaiBaoCao: this.baoCao.trangThai,
         statusBtnOk: this.statusBtnOk,
         statusBtnFinish: this.statusBtnFinish,
+        statusBtnExport: this.statusBtnExport,
         status: this.status,
         idBaoCao: this.baoCao.id,
       }
@@ -878,6 +879,7 @@ export class BaoCaoComponent implements OnInit {
     } else {
       this.statusBtnFinish = true;
     }
+    this.statusBtnExport = utils.getRoleExport(trangThaiBaoCao,true,roleNguoiTao);
   }
 
   updateSingleChecked() {

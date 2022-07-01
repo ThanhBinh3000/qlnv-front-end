@@ -9,5 +9,6 @@ import { KiemTraTinhTrangPheDuyetBaoCaoTuChiCucRoutingModule } from './kiem-tra-
 @NgModule({
   declarations: [KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent],
   imports: [CommonModule, KiemTraTinhTrangPheDuyetBaoCaoTuChiCucRoutingModule, ComponentsModule],
+  exports:[KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent]
 })
 export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucModule {}
