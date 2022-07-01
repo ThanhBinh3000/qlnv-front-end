@@ -182,6 +182,15 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maNop = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.maDviGui = null
+		this.searchFilter.ngayLap = null
+	}
+
 	xemChiTiet(id: string) {
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg/von-ban-hang/' + this.loai + '/' + id,

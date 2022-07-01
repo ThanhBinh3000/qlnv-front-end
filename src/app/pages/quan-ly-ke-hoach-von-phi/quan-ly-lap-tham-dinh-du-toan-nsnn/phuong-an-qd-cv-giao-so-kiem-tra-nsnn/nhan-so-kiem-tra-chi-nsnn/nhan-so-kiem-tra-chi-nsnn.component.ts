@@ -156,6 +156,15 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         this.onSubmit();
     }
 
+    xoaDieuKien(){
+        this.searchFilter.namGiao = null
+        this.searchFilter.tuNgay = null
+        this.searchFilter.denNgay = null
+        this.searchFilter.trangThai = null
+        this.searchFilter.maPa = null
+        this.searchFilter.maBcao = null
+    }
+
     taoMoi() {
         this.router.navigate([
             '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn/',

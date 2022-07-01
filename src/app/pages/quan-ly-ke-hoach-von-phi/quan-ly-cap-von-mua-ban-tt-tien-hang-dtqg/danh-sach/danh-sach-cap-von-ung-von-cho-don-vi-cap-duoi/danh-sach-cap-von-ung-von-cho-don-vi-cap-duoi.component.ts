@@ -223,6 +223,14 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	xoaDieuKien(){
+		this.searchFilter.maTren = null
+		this.searchFilter.trangThai = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.maDuoi = null
+	}
+
 	taoMoi() {
 		this.statusBtnNew = false;
 		if (!this.searchFilter.maTren) {
