@@ -1,16 +1,16 @@
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({
@@ -25,9 +25,8 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
 
   searchFilter = {
     soPhieu: '',
-    ngayTongHop: '',
-    ketLuan: '',
     soQuyetDinh: '',
+    ngayNhapKho: '',
   };
 
   optionsDonVi: any[] = [];
@@ -54,18 +53,18 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
 
   filterTable: any = {
     soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
-    soBienBan: '',
+    soQuyetDinh: '',
+    ngayNhapKho: '',
+    diemKho: '',
+    nhaKho: '',
+    nganLo: '',
+    trangThai: '',
   };
 
   constructor(
     private spinner: NgxSpinnerService,
-    private donViService: DonviService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
     private notification: NzNotificationService,
-    private router: Router,
     private modal: NzModalService,
     public userService: UserService,
   ) { }
@@ -73,9 +72,6 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.typeVthh == 'tat-ca') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -122,32 +118,13 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
-      "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
+      soPhieu: this.searchFilter.soPhieu,
+      soQuyetDinh: this.searchFilter.soQuyetDinh,
+      ngayNhapKho: this.searchFilter.ngayNhapKho,
+      pageSize: this.pageSize,
+      pageNumber: this.page
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.phieuNhapKhoTamGuiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -192,9 +169,8 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soPhieu: '',
-      ngayTongHop: '',
-      ketLuan: '',
       soQuyetDinh: '',
+      ngayNhapKho: '',
     };
     this.search();
   }
@@ -215,7 +191,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
+          this.phieuNhapKhoTamGuiService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -252,27 +228,28 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+          "loaiVthh": this.typeVthh,
+          "maDvi": this.userInfo.MA_DVI,
+          "ngayNhapKhoDen": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1
+            ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD')
             : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+          "ngayNhapKhoTu": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1
+            ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD')
             : null,
-          "ngayLapPhieu": null,
           "orderBy": null,
           "orderDirection": null,
-          "paggingReq": null,
+          "paggingReq": {
+            "limit": 20,
+            "orderBy": null,
+            "orderType": null,
+            "page": 0
+          },
           "soPhieu": this.searchFilter.soPhieu,
-          "soQd": this.searchFilter.soQuyetDinh,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
           "str": null,
-          "tenNguoiGiao": null,
           "trangThai": null
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
+        this.phieuNhapKhoTamGuiService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
@@ -309,7 +286,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.phieuNhapKhoTamGuiService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -351,10 +328,12 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
-      soBienBan: '',
+      soQuyetDinh: '',
+      ngayNhapKho: '',
+      diemKho: '',
+      nhaKho: '',
+      nganLo: '',
+      trangThai: '',
     }
   }
 
