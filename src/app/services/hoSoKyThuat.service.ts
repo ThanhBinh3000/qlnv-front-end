@@ -7,27 +7,29 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class QuanLyBangKeCanHangService extends BaseService {
+export class HoSoKyThuatService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyBangKeCanHang', '');
+    super(httpClient, 'HoSoKyThuat', '');
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt?`
-    if (body.denNgay)
-      url_ += 'denNgayNhap=' + encodeURIComponent('' + body.denNgay) + '&';
-    if (body.maDonVi)
-      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat?`;
+    if (body.maDvi)
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.maVatTu)
+      url_ += 'maVatTu=' + encodeURIComponent('' + body.maVatTu) + '&';
     if (body.maVatTuCha)
       url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
+    if (body.ngayKiemTraDenNgay)
+      url_ += 'ngayKiemTraDenNgay=' + encodeURIComponent('' + body.ngayKiemTraDenNgay) + '&';
+    if (body.ngayKiemTraTuNgay)
+      url_ += 'ngayKiemTraTuNgay=' + encodeURIComponent('' + body.ngayKiemTraTuNgay) + '&';
+    if (body.soBienBan)
+      url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
     if (body.soQdNhap)
       url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
-    if (body.soBangKe)
-      url_ += 'soBangKe=' + encodeURIComponent('' + body.soBangKe) + '&';
-    if (body.tuNgay)
-      url_ += 'tuNgayNhap=' + encodeURIComponent('' + body.tuNgay) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
@@ -37,37 +39,37 @@ export class QuanLyBangKeCanHangService extends BaseService {
   }
 
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat`;
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
-  xoa(id: number): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/${id}`;
+  deleteData(id: number): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat/${id}`;
     return this.httpClient.delete<any>(url).toPromise();
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/delete/multiple`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/status`;
-    return this.httpClient.put<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat/status`;
+    return this.httpClient.put(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/export/list`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

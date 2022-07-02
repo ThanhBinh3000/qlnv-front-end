@@ -53,6 +53,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -84,6 +85,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.typeVthh == 'tat-ca') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
@@ -224,7 +228,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
         ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
       "maNganKho": this.nganLo,
       "maNganlo": this.nganLo,

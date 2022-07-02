@@ -13,6 +13,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 @Component({
   selector: 'app-ho-so-ky-thuat',
   templateUrl: './ho-so-ky-thuat.component.html',
@@ -24,10 +26,13 @@ export class HoSoKyThuatComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
-    soPhieu: '',
+    soQdNhap: '',
+    soBienBan: '',
+    tenVatTuCha: '',
+    maVatTuCha: '',
+    tenVatTu: '',
+    maVatTu: '',
     ngayTongHop: '',
-    ketLuan: '',
-    soQuyetDinh: '',
   };
 
   optionsDonVi: any[] = [];
@@ -63,7 +68,7 @@ export class HoSoKyThuatComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private hoSoKyThuatService: HoSoKyThuatService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -122,32 +127,17 @@ export class HoSoKyThuatComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
-      "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
+      "maDvi": this.userInfo.MA_DVI,
+      "maVatTu": this.searchFilter.maVatTu,
+      "maVatTuCha": this.searchFilter.maVatTuCha,
+      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
+      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+      "pageSize": this.pageSize,
+      "pageNumber": this.page,
+      "soBienBan": this.searchFilter.soBienBan,
+      "soQdNhap": this.searchFilter.soQdNhap,
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.hoSoKyThuatService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -160,6 +150,47 @@ export class HoSoKyThuatComponent implements OnInit {
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  selectHangHoa() {
+    let data = this.typeVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      this.searchFilter.maVatTuCha = data.parent.ma;
+      this.searchFilter.tenVatTuCha = data.parent.ten;
+      this.searchFilter.maVatTu = data.ma;
+      this.searchFilter.tenVatTu = data.ten;
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        this.searchFilter.maVatTuCha = data.parent.parent.ma;
+        this.searchFilter.tenVatTuCha = data.parent.parent.ten;
+        this.searchFilter.maVatTu = data.parent.ma;
+        this.searchFilter.tenVatTu = data.parent.ten;
+      }
+      if (data.cap == "2") {
+        this.searchFilter.maVatTuCha = data.parent.ma;
+        this.searchFilter.tenVatTuCha = data.parent.ten;
+        this.searchFilter.maVatTu = data.ma;
+        this.searchFilter.tenVatTu = data.ten;
+      }
     }
   }
 
@@ -191,10 +222,13 @@ export class HoSoKyThuatComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soPhieu: '',
+      soQdNhap: '',
+      soBienBan: '',
+      tenVatTuCha: '',
+      maVatTuCha: '',
+      tenVatTu: '',
+      maVatTu: '',
       ngayTongHop: '',
-      ketLuan: '',
-      soQuyetDinh: '',
     };
     this.search();
   }
@@ -215,7 +249,7 @@ export class HoSoKyThuatComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
+          this.hoSoKyThuatService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -252,30 +286,18 @@ export class HoSoKyThuatComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayLapPhieu": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQd": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "tenNguoiGiao": null,
-          "trangThai": null
+          "maVatTu": this.searchFilter.maVatTu,
+          "maVatTuCha": this.searchFilter.maVatTuCha,
+          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
+          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+          "soBienBan": this.searchFilter.soBienBan,
+          "soQdNhap": this.searchFilter.soQdNhap,
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
+        this.hoSoKyThuatService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'danh-sach-ho-so-ky-thuat.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -309,7 +331,7 @@ export class HoSoKyThuatComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.hoSoKyThuatService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

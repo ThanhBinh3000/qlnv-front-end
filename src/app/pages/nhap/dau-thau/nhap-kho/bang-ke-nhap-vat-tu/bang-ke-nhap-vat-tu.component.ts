@@ -43,6 +43,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -69,6 +70,9 @@ export class BangKeNhapVatTuComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.typeVthh == 'tat-ca') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         // this.loadDiemKho(),
@@ -120,7 +124,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
       "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHang": this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,

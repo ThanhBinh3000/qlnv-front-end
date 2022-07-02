@@ -59,7 +59,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định nhập
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -69,10 +69,13 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số biên bản gửi hàng
+                  Số biên bản bàn giao hàng
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-select [(ngModel)]="detail.bienBanGiaoMauId" (ngModelChange)="changeBanGiaoMau()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listBanGiaoMau" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  </nz-option>
+                </nz-select>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8"></div>
@@ -81,7 +84,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
+                <input nz-input [(ngModel)]="detail.tenDvi" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -97,8 +100,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBienBan" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -106,8 +108,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.loaiVthh" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -115,8 +116,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số hợp đồng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.soHd" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -124,8 +124,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày hợp đồng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.ngayHopDong" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -133,8 +132,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị cung cấp hàng
                 </nz-form-label>
-                <input placeholder="Nhập họ tên người giao hàng" nz-input [(ngModel)]="detail.kyThuatVien"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.donViCungCap" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -143,7 +141,7 @@
                   Ngày kiểm tra
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  [(ngModel)]="detail.ngayNghiemThu"
+                  [(ngModel)]="detail.ngayKiemTra"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                 </nz-date-picker>
               </nz-form-item>
@@ -153,7 +151,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa điểm kiểm tra
                 </nz-form-label>
-                <input placeholder="Nhập họ tên người giao hàng" nz-input [(ngModel)]="detail.kyThuatVien"
+                <input placeholder="Nhập địa điểm lấy mẫu" nz-input [(ngModel)]="detail.diaDiemKiemTra"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
@@ -173,11 +171,18 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện cục dữ trữ nhà nước
                 </nz-form-label>
-                <div class="line d-flex">
-                  <input nz-input [(ngModel)]="detail.keToan"
+                <div class="line d-flex" *ngFor="let item of listDaiDienCuc;let i = index">
+                  <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-                  <div class="btn-plus">
+                  <div class="btn-plus"
+                    *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="addDaiDien(capCuc)">
                     <i class="icon htvbdh_dau-cong"></i>
+                  </div>
+                  <div class="btn-plus"
+                    *ngIf="i != 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="xoaDaiDien(item)">
+                    <i class="fa fa-trash-o do"></i>
                   </div>
                 </div>
               </nz-form-item>
@@ -187,11 +192,18 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện chi cục dữ trữ nhà nước
                 </nz-form-label>
-                <div class="line d-flex">
-                  <input nz-input [(ngModel)]="detail.keToan"
+                <div class="line d-flex" *ngFor="let item of listDaiDienChiCuc;let i = index">
+                  <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-                  <div class="btn-plus">
+                  <div class="btn-plus"
+                    *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="addDaiDien(capChiCuc)">
                     <i class="icon htvbdh_dau-cong"></i>
+                  </div>
+                  <div class="btn-plus"
+                    *ngIf="i != 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="xoaDaiDien(item)">
+                    <i class="fa fa-trash-o do"></i>
                   </div>
                 </div>
               </nz-form-item>
@@ -201,11 +213,18 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện đơn vị cung cấp
                 </nz-form-label>
-                <div class="line d-flex">
-                  <input nz-input [(ngModel)]="detail.keToan"
+                <div class="line d-flex" *ngFor="let item of listDaiDienDonVi;let i = index">
+                  <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-                  <div class="btn-plus">
+                  <div class="btn-plus"
+                    *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="addDaiDien(capDonVi)">
                     <i class="icon htvbdh_dau-cong"></i>
+                  </div>
+                  <div class="btn-plus"
+                    *ngIf="i != 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
+                    (click)="xoaDaiDien(item)">
+                    <i class="fa fa-trash-o do"></i>
                   </div>
                 </div>
               </nz-form-item>
@@ -222,8 +241,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Tên hàng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.keToan"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                  <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenVatTuCha"
+                    readonly="true" />
+                </nz-input-group>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
@@ -231,8 +252,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Chủng loại hàng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.keToan"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                  <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenVatTu"
+                    readonly="true" />
+                </nz-input-group>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -240,8 +263,10 @@
                 <nz-form-label [nzNoColon]="true">
                   Số lượng thực nhập
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.keToan"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-input-number type="text" nz-input
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
+                  [nzSize]="'small'" [(ngModel)]="detail.soLuongThucNhap" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -249,7 +274,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Thời gian nhập
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong"
+                <input nz-input [(ngModel)]="detail.thoiGianNhap"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
@@ -288,7 +313,8 @@
               <nz-form-label [nzNoColon]="true" class="d-flex">
                 Kết luận
               </nz-form-label>
-              <textarea nz-input [rows]="3" placeholder="Nhập nội dung kết luận"></textarea>
+              <textarea nz-input [rows]="3" [(ngModel)]="detail.ketLuan"
+                placeholder="Nhập nội dung kết luận"></textarea>
             </nz-form-item>
           </div>
         </nz-card>
