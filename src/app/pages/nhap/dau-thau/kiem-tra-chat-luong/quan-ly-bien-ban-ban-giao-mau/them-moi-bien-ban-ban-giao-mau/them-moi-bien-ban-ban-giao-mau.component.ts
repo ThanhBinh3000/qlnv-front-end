@@ -1,24 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Globals } from 'src/app/shared/globals';
-import { UserLogin } from 'src/app/models/userlogin';
-import dayjs from 'dayjs';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
-import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
+import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuanLyBienBanBanGiaoService } from 'src/app/services/quanLyBienBanBanGiao.service';
+import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+
 
 @Component({
   selector: 'them-moi-bien-ban-ban-giao-mau',
@@ -27,21 +26,47 @@ import { MESSAGE } from 'src/app/constants/message';
 })
 export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   @Input() id: number;
-  @Input() isViewDetail: boolean;
+  @Input() isView: boolean;
+  @Input() isTatCa: boolean;
+  @Input() typeVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-  bienBanLayMau: BienBanLayMau;
+
+  bienBanLayMau: any;
   routerUrl: string;
   userInfo: UserLogin;
-  detail: any = {};
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   maVthh: string;
   phuongPhapLayMaus: Array<PhuongPhapLayMau>;
-  viewChiTiet: boolean = false;
+  listSoQuyetDinh: any[] = [];
+  listBienBanLayMau: any[] = [];
+
+  capCuc: string = '2';
+  capChiCuc: string = '3';
+  listDaiDienCuc: any[] = [];
+  listDaiDienChiCuc: any[] = [];
+  listHangHoa: any[] = [];
+  listDaiDien: any[] = [
+    {
+      "bbLayMauId": null,
+      "daiDien": null,
+      "id": null,
+      "idTemp": 1,
+      "loaiDaiDien": '2'
+    },
+    {
+      "bbLayMauId": null,
+      "daiDien": null,
+      "id": null,
+      "idTemp": 1,
+      "loaiDaiDien": '3'
+    }
+  ];
+
   constructor(
     private spinner: NgxSpinnerService,
-    private bienBanLayMauService: QuanLyBienBanLayMauService,
+    private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -51,86 +76,171 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     private thongTinHopDongService: ThongTinHopDongService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
-
+    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
+    private bienBanLayMauService: QuanLyBienBanLayMauService,
   ) { }
 
   async ngOnInit() {
     this.routerUrl = this.router.url;
-    // this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
     this.newObjectBienBanLayMau();
-    this.checkIsView();
-    this.bienBanLayMau.maDonVi = this.userInfo.MA_DVI;
-    this.bienBanLayMau.tenDonVi = this.userInfo.TEN_DVI;
+    this.bienBanLayMau.maDvi = this.userInfo.MA_DVI;
+    this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
+    this.bienBanLayMau.maVatTuCha = this.typeVthh;
     await Promise.all([
-      this.getIdNhap(),
-      this.loadPhuongPhapLayMau()
+      this.loadSoQuyetDinh(),
+      this.loaiVTHHGetAll(),
+      this.loadBienbanLayMau(),
     ]);
     if (this.id > 0) {
-      this.loadBienbanLayMau();
+      await this.loadDetail();
+    }
+    else {
+      this.loadDaiDien();
     }
   }
-  checkIsView() {
-    this.viewChiTiet = false;
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/xem-chi-tiet/");
-      if (index != -1) {
-        this.viewChiTiet = true;
+
+  async loadBienbanLayMau() {
+    let param = {
+      "maDvi": this.userInfo.MA_DVI,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
+      "pageNumber": 1,
+      "pageSize": 1000,
+    }
+    let res = await this.bienBanLayMauService.timKiem(param);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listBienBanLayMau = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        if (this.isTatCa) {
+          this.listHangHoa = res.data;
+          this.bienBanLayMau.maVatTuCha = this.listHangHoa[0].ma;
+        }
+        else {
+          this.listHangHoa = res.data.filter(x => x.ma == this.typeVthh);
+        }
       }
     }
   }
+
+  loadDaiDien() {
+    if (this.listDaiDien && this.listDaiDien.length > 0) {
+      this.listDaiDienCuc = this.listDaiDien.filter(x => x.loaiDaiDien == this.capCuc);
+      this.listDaiDienChiCuc = this.listDaiDien.filter(x => x.loaiDaiDien == this.capChiCuc);
+    }
+  }
+
+  changeBienBanMau() {
+    let layMau = this.listBienBanLayMau.filter(x => x.id == this.bienBanLayMau.bbLayMauId);
+    if (layMau && layMau.length > 0) {
+      this.bienBanLayMau.soLuongMau = layMau[0].soLuongMau;
+      this.bienBanLayMau.chiTieuKiemTra = layMau[0].chiTieuKiemTra;
+    }
+    if (this.listDaiDien && this.listDaiDien.length > 0) {
+      this.listDaiDien.forEach((item) => {
+        item.bbLayMauId = this.bienBanLayMau.bbLayMauId;
+      });
+      this.loadDaiDien();
+    }
+  }
+
+  addDaiDien(type) {
+    if (!this.listDaiDien) {
+      this.listDaiDien = [];
+    }
+    let item = {
+      "bbLayMauId": this.bienBanLayMau.bbLayMauId,
+      "daiDien": null,
+      "id": null,
+      "idTemp": new Date().getTime(),
+      "loaiDaiDien": type
+    }
+    this.listDaiDien.push(item);
+    this.loadDaiDien();
+  }
+
+  xoaDaiDien(item) {
+    this.listDaiDien = this.listDaiDien.filter(x => x.idTemp != item.idTemp);
+    this.loadDaiDien();
+  }
+
+  async loadSoQuyetDinh() {
+    let body = {
+      "denNgayQd": null,
+      "loaiQd": "",
+      "maDvi": this.userInfo.MA_DVI,
+      "maVthh": this.typeVthh,
+      "namNhap": null,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      },
+      "soHd": "",
+      "soQd": null,
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": null,
+      "veViec": null
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeSoQuyetDinh() {
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanLayMau.qdgnvnxId);
+    if (quyetDinh && quyetDinh.length > 0) {
+      this.detailGiaoNhap = quyetDinh[0];
+      // await this.getHopDong(this.detailGiaoNhap.soHd);
+    }
+  }
+
   newObjectBienBanLayMau() {
     this.bienBanLayMau = new BienBanLayMau();
   }
+
   isAction(): boolean {
     return (
       this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
-      !this.isViewDetail
+      !this.isView
     );
   }
+
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
     let body = {
-      "canCu": null,
-      "ccuQdinhGiaoNvuNhap": null,
-      "ctieuKtra": null,
-      "cvuDdienCcap": null,
-      "cvuDdienNhan": null,
-      "ddiemKtra": null,
-      "ddiemLayMau": this.bienBanLayMau.ddiemLayMau,
-      "ddienBenNhan": this.bienBanLayMau.ddienBenNhan,
-      "ddienCucDtruBenGiao": this.bienBanLayMau.ddienCucDtruBenGiao,
-      "ddienCucDtruNnuoc": this.bienBanLayMau.ddienCucDtruNnuoc,
-      "ddienDviTchucBenNhan": this.bienBanLayMau.ddienDviTchucBenNhan,
-      "id": this.bienBanLayMau.id ?? null,
-      "kquaNiemPhongMau": null,
-      "maDonVi": this.bienBanLayMau.maDonVi,
-      "maDviCcap": this.bienBanLayMau.maDviCcap,
-      "maDviNhan": null,
-      "maHhoa": null,
-      "maKho": null,
-      "maLo": null,
-      "maNgan": null,
-      "maQHNS": null,
-      "ngayBgiaoMau": this.bienBanLayMau.ngayBgiaoMau,
-      "ngayLapBban": null,
-      "ngayLayMau": this.bienBanLayMau.ngayLayMau ? dayjs(this.bienBanLayMau.ngayLayMau).format('YYYY-MM-DD') : null,
-      "pphapLayMau": this.bienBanLayMau.pphapLayMau,
-      "sluongLMau": this.bienBanLayMau.sluongLMau,
-      "soBban": this.bienBanLayMau.soBban,
-      "soHd": this.bienBanLayMau.soHd,
-      "soTrang": this.bienBanLayMau.soTrang,
-      "tenDdienCcap": null,
-      "tenDdienNhan": null,
-      "tinhTrang": this.bienBanLayMau.tinhTrang,
-      "tphongKthuatBquan": this.bienBanLayMau.tphongKthuatBquan,
-      "soQd": this.bienBanLayMau.soQd ?? null,
-      "chiTieuChatLuongCanKiemTra": this.bienBanLayMau.chiTieuChatLuongCanKiemTra ?? null,
+      "bbLayMauId": this.bienBanLayMau.bbLayMauId,
+      "chiTiets": this.listDaiDien,
+      "chiTieuKiemTra": this.bienBanLayMau.chiTieuKiemTra,
+      "id": this.id,
+      "maVatTu": null,
+      "maVatTuCha": this.bienBanLayMau.maVatTuCha,
+      "ngayBanGiaoMau": this.bienBanLayMau.ngayBanGiaoMau ? dayjs(this.bienBanLayMau.ngayBanGiaoMau).format('YYYY-MM-DD') : null,
+      "qdgnvnxId": this.bienBanLayMau.qdgnvnxId,
+      "soBienBan": this.bienBanLayMau.soBienBan,
+      "soLuongMau": this.bienBanLayMau.soLuongMau,
+      "tenDviBenNhan": this.bienBanLayMau.tenDviBenNhan,
+      "tniemPhongMauHang": this.bienBanLayMau.tniemPhongMauHang,
     }
     if (this.id > 0) {
-      this.bienBanLayMauService.sua(
-        body,
-      ).then((res) => {
+      this.quanLyBienBanBanGiaoService.sua(body).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (isGuiDuyet) {
             let body = {
@@ -138,7 +248,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
               lyDo: null,
               trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
             };
-            this.bienBanLayMauService.updateStatus(body);
+            this.quanLyBienBanBanGiaoService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -167,9 +277,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      this.bienBanLayMauService.them(
-        body,
-      ).then((res) => {
+      this.quanLyBienBanBanGiaoService.them(body).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (isGuiDuyet) {
             let body = {
@@ -177,7 +285,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
               lyDo: null,
               trangThai: this.globals.prop.LANH_DAO_DUYET,
             };
-            this.bienBanLayMauService.updateStatus(body);
+            this.quanLyBienBanBanGiaoService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectBienBanLayMau();
@@ -203,6 +311,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
         });
     }
   }
+
   guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -225,6 +334,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       },
     });
   }
+
   pheDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -242,7 +352,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
             lyDo: null,
             trangThai: this.globals.prop.LANH_DAO_DUYET,
           };
-          const res = await this.bienBanLayMauService.updateStatus(body);
+          const res = await this.quanLyBienBanBanGiaoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
             this.redirectBienBanLayMau();
@@ -258,6 +368,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       },
     });
   }
+
   banHanh() {
     this.modal.confirm({
       nzClosable: false,
@@ -275,7 +386,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: this.globals.prop.BAN_HANH,
           };
-          const res = await this.bienBanLayMauService.updateStatus(body);
+          const res = await this.quanLyBienBanBanGiaoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
             this.redirectBienBanLayMau();
@@ -311,7 +422,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
             lyDo: text,
             trangThai: this.globals.prop.TU_CHOI,
           };
-          const res = await this.bienBanLayMauService.updateStatus(body);
+          const res = await this.quanLyBienBanBanGiaoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectBienBanLayMau();
@@ -341,14 +452,8 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       },
     });
   }
+
   redirectBienBanLayMau() {
-    // if (this.router.url && this.router.url != null) {
-    //   let index = this.router.url.indexOf("/thong-tin/");
-    //   if (index != -1) {
-    //     let url = this.router.url.substring(0, index);
-    //     this.router.navigate([url]);
-    //   }
-    // }
     this.showListEvent.emit();
   };
 
@@ -362,68 +467,40 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
         this.bienBanLayMau.canCu = this.detailHopDong.canCu;
-        this.bienBanLayMau.ngayHd = this.detailHopDong.ngayKy;
-        this.bienBanLayMau.soHd = this.detailHopDong.soHd;
+        this.bienBanLayMau.ngayHopDong = this.detailHopDong.ngayKy;
+        this.bienBanLayMau.hopDongId = this.detailHopDong.id;
+        this.bienBanLayMau.soHopDong = this.detailHopDong.soHd;
         this.bienBanLayMau.tenDonViCCHang = this.detailHopDong.tenDvi;
-        this.bienBanLayMau.sluongLMau = this.detailHopDong.soLuong;
+        this.bienBanLayMau.soLuongMau = this.detailHopDong.soLuong;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
   }
-  async getIdNhap() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/chi-tiet/");
-      if (index != -1) {
-        let url = this.router.url.substring(index + 10);
-        let temp = url.split("/");
-        if (temp && temp.length > 0) {
-          this.detail.quyetDinhNhapId = +temp[0];
-          let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.quyetDinhNhapId);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.detailGiaoNhap = res.data;
-            await this.getHopDong(this.detailGiaoNhap.soHd);
+
+  async loadDetail() {
+    let res = await this.quanLyBienBanBanGiaoService.loadChiTiet(this.id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.bienBanLayMau = res.data;
+      this.bienBanLayMau.ppLayMau = +res.data.ppLayMau;
+      if (this.bienBanLayMau.chiTiets && this.bienBanLayMau.chiTiets.length > 0) {
+        this.listDaiDien = [];
+        this.bienBanLayMau.chiTiets.forEach((element, index) => {
+          let item = {
+            ...element,
+            "idTemp": new Date().getTime() + index,
           }
-          else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
+          this.listDaiDien.push(item);
+        });
+        this.loadDaiDien();
       }
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  loadPhuongPhapLayMau() {
-    this.danhMucService.danhMucChungGetAll("PP_LAY_MAU").then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.phuongPhapLayMaus = res.data;
-      }
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    })
-  }
-  // changePPLayMau(event) {
-  //   console.log(event);
-
-  // }
-  loadBienbanLayMau() {
-    this.bienBanLayMauService
-      .loadChiTiet(this.id)
-      .then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data);
-          this.bienBanLayMau = res.data;
-          this.bienBanLayMau.pphapLayMau = +res.data.pphapLayMau;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      }).catch(err => {
-        this.notification.error(MESSAGE.ERROR, err.msg);
-      })
-  }
   thongTinTrangThai(trangThai: string): string {
     if (
       trangThai === this.globals.prop.DU_THAO ||

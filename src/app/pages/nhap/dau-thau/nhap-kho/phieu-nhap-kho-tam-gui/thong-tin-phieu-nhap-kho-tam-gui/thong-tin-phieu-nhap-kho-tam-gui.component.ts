@@ -1,26 +1,23 @@
-import { cloneDeep } from 'lodash';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { DialogThemBienbanNghiemThuKeLotComponent } from 'src/app/components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import VNnum2words from 'vn-num2words';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
-import * as dayjs from 'dayjs';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
@@ -41,44 +38,86 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
 
-  listThuKho: any[] = [];
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganKho: any[] = [];
   listNganLo: any[] = [];
+
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
   listSoQuyetDinh: any[] = [];
-
+  detailGiaoNhap: any = {};
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
+  detailHopDong: any = {};
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
     private modal: NzModalService,
     private userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
+    private thongTinHopDongService: ThongTinHopDongService,
     public globals: Globals,
   ) { }
 
+  async loadDiemKho() {
+    let body = {
+      maDviCha: this.detail.maDonVi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDiemKho(fromChiTiet: boolean) {
+    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+    this.detail.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      this.listNhaKho = diemKho[0].children;
+      if (fromChiTiet) {
+        this.changeNhaKho(fromChiTiet);
+      }
+    }
+  }
+
+  changeNhaKho(fromChiTiet: boolean) {
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKho = nhaKho[0].children;
+      if (fromChiTiet) {
+        this.changeNganKho();
+      }
+    }
+  }
+
+  changeNganKho() {
+    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLo = nganKho[0].children;
+    }
+  }
   async ngOnInit() {
     this.spinner.show();
     try {
       this.create.dvt = "Tấn";
-      this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.trangThai = "00";
+      this.detail.maDonVi = this.userInfo.MA_DVI;
+      this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
       await Promise.all([
-        this.loadThuKho(),
-        this.loadNganLo(),
-        this.loadLoaiKho(),
-        this.loadPTBaoQuan(),
-        this.loadDonViTinh(),
+        this.loadDiemKho(),
         this.loadSoQuyetDinh(),
       ]);
       await this.loadChiTiet(this.id);
@@ -121,16 +160,41 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+  async changeSoQuyetDinh() {
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
+    if (quyetDinh && quyetDinh.length > 0) {
+      this.detailGiaoNhap = quyetDinh[0];
+      await this.getHopDong(this.detailGiaoNhap.soHd);
+    }
+  }
+
+  async getHopDong(id) {
+    if (id) {
+      let body = {
+        "str": id
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
+        this.detail.maHangHoa = this.detailHopDong.loaiVthh;
+        this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
+        this.detail.maHangHoa = this.typeVthh;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyNghiemThuKeLotService.loadChiTiet(id);
+      let res = await this.phieuNhapKhoTamGuiService.chiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
-          if (this.detail.children) {
-            this.detail.detail = this.detail.children;
-          }
+          this.changeDiemKho(true);
         }
       }
     }
@@ -274,49 +338,6 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     }
   }
 
-  async loadThuKho() {
-    let body = {
-      "maThukho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenThukho": null,
-      "trangThai": null
-    };
-    let res = await this.danhMucService.danhMucThuKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listThuKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
   async loadDonViTinh() {
     try {
       const res = await this.donViService.loadDonViTinh();
@@ -359,7 +380,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.phieuNhapKhoTamGuiService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -396,7 +417,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.phieuNhapKhoTamGuiService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -433,7 +454,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.phieuNhapKhoTamGuiService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -472,7 +493,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.phieuNhapKhoTamGuiService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -514,36 +535,40 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "detail": this.detail?.detail ?? [],
-        "dinhMuc": this.detail?.dinhMuc,
+        "chiTiets": [
+          // {
+          //   "donGia": 0,
+          //   "donViTinh": "string",
+          //   "id": 0,
+          //   "maSo": "string",
+          //   "phieuNkTgId": 0,
+          //   "soLuongChungTu": 0,
+          //   "soLuongThucNhap": 0,
+          //   "stt": 0,
+          //   "thanhTien": 0,
+          //   "vthh": "string"
+          // }
+        ],
+        "co": this.detail.co,
         "fileDinhKems": [],
-        "hthucBquan": this.detail?.hthucBquan,
-        "hthucKlot": this.detail?.hthucKlot,
         "id": this.id,
-        "keToan": this.detail?.keToan,
-        "ketLuan": this.detail?.ketLuan,
-        "kieuKlot": this.detail?.kieuKlot,
-        "kyThuatVien": this.detail?.kyThuatVien,
-        "ldoTuchoi": null,
-        "lhKho": this.detail?.lhKho,
         "loaiVthh": this.typeVthh,
-        "maDvi": this.detail?.maDvi,
-        "maNganlo": this.detail?.maNganlo,
-        "maVthh": this.typeVthh,
-        "ngayKthuc": null,
-        "ngayLap": null,
-        "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
-        "pthucBquan": this.detail?.pthucBquan,
-        "qdgnvnxId": this.detail?.qdgnvnxId,
-        "slThucNhap": this.detail?.slThucNhap,
-        "soBb": this.detail?.soBb,
-        "thuKho": this.detail?.thuKho,
-        "thuTruong": this.detail?.thuTruong,
-        "tichLuong": this.detail?.tichLuong,
-        "trangThaiNhap": null
+        "maDiemKho": this.detail.maDiemKho,
+        "maNganKho": this.detail.maNganKho,
+        "maNganLo": this.detail.maNganLo,
+        "maNhaKho": this.detail.maNhaKho,
+        "ngayNhapKho": this.detail.ngayNhapKho ? dayjs(this.detail.ngayNhapKho).format("YYYY-MM-DD") : null,
+        "ngayTaoPhieu": this.detail.ngayTaoPhieu ? dayjs(this.detail.ngayTaoPhieu).format("YYYY-MM-DD") : null,
+        "nguoiGiaoHang": this.detail.nguoiGiaoHang,
+        "no": this.detail.no,
+        "qdgnvnxId": this.detail.qdgnvnxId,
+        "soPhieu": this.detail.soPhieu,
+        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang ? dayjs(this.detail.thoiGianGiaoNhanHang).format("YYYY-MM-DD") : null,
+        "tongSoLuong": this.detail.tongSoLuong,
+        "tongSoTien": this.detail.tongSoTien,
       };
       if (this.id > 0) {
-        let res = await this.quanLyNghiemThuKeLotService.sua(
+        let res = await this.phieuNhapKhoTamGuiService.chinhSua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -558,7 +583,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyNghiemThuKeLotService.them(
+        let res = await this.phieuNhapKhoTamGuiService.themMoi(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
