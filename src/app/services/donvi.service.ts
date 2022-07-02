@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { OldResponseData } from '../interfaces/response';
+import { last } from 'lodash';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DonviService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-category'
+  GATEWAY = '/qlnv-gateway/qlnv-category';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dmuc-donvi', '/qlnv-gateway/qlnv-category');
   }
@@ -41,5 +42,84 @@ export class DonviService extends BaseService {
   loadDonViTinh(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-dvi-tinh/danh-sach/tat-ca`;
     return this.httpClient.get<any>(url).toPromise();
+  }
+
+  async layDonViTheoCapDo(
+    body: any,
+    capDv?: number | string,
+  ): Promise<{ [capDv: string]: any[] }> {
+    const dsDonViCha = await this.getAll(body);
+    const data = dsDonViCha?.data || [];
+    let dsTong: any[] = [];
+    if (data.length) {
+      for (const dvCha of data) {
+        dsTong = [...dsTong, ...this._getChild(dvCha, capDv)];
+      }
+
+      return dsTong.reduce((prev, cur) => {
+        if (!prev[cur.capDvi]) {
+          prev[cur.capDvi] = [cur];
+        } else {
+          prev[cur.capDvi].push(cur);
+        }
+
+        return prev;
+      }, {});
+    }
+    return null;
+  }
+
+  private _getChild(parent: any, capDv?: number | string): any {
+    let parentTemp = parent;
+    const result = [];
+    const stack = [parentTemp];
+
+    while (stack.length) {
+      const parent = stack.pop();
+      result.push(parent);
+      if (parent.children?.length && parent.capDvi !== capDv) {
+        for (const child of parent.children) {
+          stack.push(child);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  layPhanTuCha(dsTong, ptuHienTai: any): any {
+    const maxLevel = Object.keys(dsTong)
+      .filter((item) => item)
+      .map((item) => Number(item))[0];
+    const result = { [ptuHienTai.capDvi]: ptuHienTai };
+    let maDviCha = ptuHienTai.maDviCha;
+    for (let i = Number(ptuHienTai.capDvi); i >= maxLevel; i--) {
+      let dsCha = dsTong[i].find((item) => item.key === maDviCha);
+      if (dsCha) {
+        result[i] = [dsCha];
+        maDviCha = dsCha.maDviCha;
+      }
+    }
+
+    return result;
+  }
+
+  layDsPhanTuCon(dsTong, ptuHienTai: any): any {
+    const minLevel = last(
+      Object.keys(dsTong)
+        .filter((item) => item)
+        .map((item) => Number(item)),
+    );
+    const result = { [ptuHienTai.capDvi]: ptuHienTai };
+    let dsCha = [ptuHienTai.key];
+    for (let i = Number(ptuHienTai.capDvi) + 1; i <= minLevel; i++) {
+      let dsCon = dsTong[i].filter((item) => dsCha.includes(item.maDviCha));
+      if (dsCon?.length) {
+        result[i] = dsCon;
+        dsCha = dsCon.map((item) => item.key);
+      }
+    }
+
+    return result;
   }
 }

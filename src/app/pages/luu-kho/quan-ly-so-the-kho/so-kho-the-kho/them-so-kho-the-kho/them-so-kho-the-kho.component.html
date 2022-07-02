@@ -34,9 +34,10 @@
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
           <nz-form-control>
-            <nz-input-group id="ten-don-vi">
-              <input type="text" nz-input formControlName="tenDonVi" />
-            </nz-input-group>
+            <nz-select formControlName="idDonVi" id="don-vi" (ngModelChange)="onChangeDonVi($event)">
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
 
@@ -69,7 +70,7 @@
         <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="loaiHangHoa" id="loai-hang-hoa">
+            <nz-select formControlName="idLoaiHangHoa" id="loai-hang-hoa">
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
               </nz-option>
             </nz-select>
@@ -79,7 +80,7 @@
         <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="chungLoaiHangHoa" id="chung-loai-hang-hoa">
+            <nz-select formControlName="idChungLoaiHangHoa" id="chung-loai-hang-hoa">
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsChungLoaiHangHoa">
               </nz-option>
             </nz-select>
@@ -89,8 +90,8 @@
         <nz-form-item nz-col nzSpan="2" class="form-item">
           <nz-form-label nzFor="ngan-lo">Ngăn lô</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="nganLo" id="ngan-lo">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsNganLo">
+            <nz-select formControlName="idNganLo" id="ngan-lo">
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganLo">
               </nz-option>
             </nz-select>
           </nz-form-control>

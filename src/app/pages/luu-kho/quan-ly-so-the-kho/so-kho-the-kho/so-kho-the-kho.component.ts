@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import * as dayjs from 'dayjs';
+import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
+import { DANH_MUC_LEVEL } from '../../luu-kho.constant';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -8,6 +17,8 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./so-kho-the-kho.component.scss'],
 })
 export class SoKhoTheKhoComponent implements OnInit {
+  userInfo: UserLogin;
+  detail: any = {};
   formData: FormGroup;
   isAddNew = false;
   allChecked = false;
@@ -19,9 +30,33 @@ export class SoKhoTheKhoComponent implements OnInit {
     { id: 2, giaTri: 'Chờ duyệt' },
     { id: 3, giaTri: 'Đã duyệt' },
   ];
-
-  dsNam: number[] = [2019, 2020, 2021, 2022];
-
+  dsTong: any;
+  dsTrangThaiDataSource = [];
+  dsNam: string[] = [];
+  dsNamDataSource: string[] = [];
+  dsDonVi = [];
+  dsDonViDataSource = [];
+  dsLoaiHangHoa = [];
+  dsChungLoaiHangHoa = [];
+  dsDiemKho = [];
+  dsDiemKhoDataSource = [];
+  dsNhaKho = [];
+  dsNhaKhoDataSource = [];
+  dsNganLo = [];
+  dsNganLoDataSource = [];
+  searchInTable: any = {
+    nam: null,
+    tuNgay: new Date(),
+    denNgay: new Date(),
+    loaiHangHoa: null,
+    chungLoaiHangHoa: null,
+    ngayTao: new Date(),
+    donVi: null,
+    diemKho: null,
+    nhaKho: null,
+    nganLo: null,
+    trangThai: null,
+  };
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -111,11 +146,25 @@ export class SoKhoTheKhoComponent implements OnInit {
     },
   ];
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly donviService: DonviService,
+    private readonly spinner: NgxSpinnerService,
+    private readonly notification: NzNotificationService,
+    private readonly userService: UserService,
+  ) {}
 
-  ngOnInit(): void {
-    this.initForm();
-    this.dataTable = [...this.dataExample];
+  async ngOnInit(): Promise<void> {
+    try {
+      this.spinner.show();
+      this.initForm();
+      await this.initData();
+      this.dataTable = [...this.dataExample];
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   initForm(): void {
@@ -127,6 +176,61 @@ export class SoKhoTheKhoComponent implements OnInit {
       chungLoaiHangHoa: [null],
       ngayTao: [[new Date(), new Date()]],
     });
+  }
+
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
+    this.loadDsNam();
+  }
+
+  loadDsNam() {
+    let thisYear = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.dsNam.push((thisYear - i).toString());
+      this.dsNamDataSource = [...this.dsNam];
+    }
+  }
+
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+      this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+      this.dsDiemKhoDataSource = this.dsDiemKho.map((item) => item.tenDvi);
+      this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+      this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
+      this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
+      this.dsNganLoDataSource = this.dsNganLo.map((item) => item.tenDvi);
+      this.dsTrangThaiDataSource = this.dsTrangThai.map((item) => item.giaTri);
+    }
+  }
+
+  onChangeAutoComplete(e, srcFieldName: string, rootFieldName: string) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this[srcFieldName] = this[rootFieldName]
+        .filter(
+          (item) =>
+            item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()) ||
+            item?.toLowerCase()?.includes(value.toLowerCase()) ||
+            item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.tenDvi || item.giaTri || item);
+    } else {
+      this[srcFieldName] = this[rootFieldName].map(
+        (item) => item.tenDvi || item.giaTri || item,
+      );
+    }
   }
 
   exportData() {}
