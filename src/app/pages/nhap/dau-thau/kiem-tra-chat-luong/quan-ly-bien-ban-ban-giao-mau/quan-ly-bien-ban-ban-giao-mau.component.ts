@@ -63,10 +63,10 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     soQuyetDinhNhap: '',
     soBienBan: '',
     ngayBanGiaoMau: '',
-    soHopDong: '',
-    tenDiemKho: '',
+    tenDviBenNhan: '',
+    tenDvi: '',
     tenNganKho: '',
-    tenNganLo: '',
+    soLuongMau: '',
     tenTrangThai: '',
   };
 
@@ -411,10 +411,10 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
       soQuyetDinhNhap: '',
       soBienBan: '',
       ngayBanGiaoMau: '',
-      soHopDong: '',
-      tenDiemKho: '',
+      tenDviBenNhan: '',
+      tenDvi: '',
       tenNganKho: '',
-      tenNganLo: '',
+      soLuongMau: '',
       tenTrangThai: '',
     }
   }
