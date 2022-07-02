@@ -9,9 +9,7 @@
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-        <nz-select formControlName="loaiHh">
-          <nz-option nzValue="Nhà bạt cứu sinh loại 16m2" nzLabel="Nhà bạt cứu sinh loại 16m2"></nz-option>
-        </nz-select>
+        <input nz-input formControlName="tenVthh" readonly />
       </nz-form-item>
     </div>
   </div>
@@ -19,9 +17,9 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-        <nz-select formControlName="cLoaiVThh" (ngModelChange)="changeChungLoai($event)"
-          [ngModelOptions]="{standalone: true}">
-          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.maVatTu"></nz-option>
+        <nz-select formControlName="cloaiVthh" (ngModelChange)="changeChungLoai($event)"
+          [ngModelOptions]="{standalone: true}" [mzDisabled]="dataTable.length > 0">
+          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.tenVatTu"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
@@ -36,7 +34,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
-        <input nz-input formControlName="sLuong" />
+        <input nz-input formControlName="soLuong" readonly />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -48,7 +46,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="thanhTien" />
+        <input nz-input formControlName="thanhTien" readonly />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="16">
@@ -89,72 +87,68 @@
       </nz-form-item>
     </div>
   </div>
-  <div nz-col [nzSpan]="24" class="mt-16">
-    <nz-card nzTitle="Danh sách địa điểm nhập" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
-      <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzFrontPagination]="false"
-        [nzShowPagination]="false">
-        <thead>
-          <tr>
-            <th width="60px">STT</th>
-            <th>Tên đơn vị </th>
-            <th>Số lượng nhập</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td>
-              <nz-select>
-                <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.maDvi"></nz-option>
-              </nz-select>
-            </td>
-            <td>
-              <input nz-input />
-            </td>
-            <td>
-              <a>
-                <i class="icon htvbdh_dau-cong"></i>
-              </a>
-              <a>
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Cục DTNNKV Hà Nội</td>
-            <td>150</td>
-            <td>
-              <a>
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a>
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-      <div class="tab-content tab-menu" id="myTabContent">
-        <div class="tab-pane fade show active justify-content-between">
-          <div class="trai">
-          </div>
-          <div class="canphai">
-            <!-- begin phân trang  -->
-            <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger [nzPageSize]="5"
-              [nzShowTotal]="rangeTemplate">
-              <ng-template #rangeTemplate let-range="range" let-total>
-                3-3 of 4 items
-              </ng-template>
-            </nz-pagination>
-            <!-- end phân trang  -->
-          </div>
-        </div>
-      </div>
-    </nz-card>
-  </div>
 </form>
+<div nz-col [nzSpan]="24" class="mt-16">
+  <nz-card nzTitle="Danh sách địa điểm nhập" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
+    <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzFrontPagination]="false" [nzShowPagination]="false"
+      [nzData]="dataTable">
+      <thead>
+        <tr>
+          <th width="60px">STT</th>
+          <th width="300px">Tên đơn vị </th>
+          <th width="120px">Số lượng nhập</th>
+          <th>SL chỉ tiêu KH</th>
+          <th>SL đã lên KH mua</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td>
+            <nz-select [(ngModel)]="thongtinDauThau.maDvi">
+              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
+            </nz-select>
+          </td>
+          <td>
+            <nz-input-number [(ngModel)]="thongtinDauThau.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+              [nzSize]="'small'">
+            </nz-input-number>
+          </td>
+          <td>
+            189
+          </td>
+          <td>
+            189
+          </td>
+          <td class="text-center">
+            <a (click)="addDiemKho()">
+              <i class="icon htvbdh_dau-cong xanhla"></i>
+            </a>
+            <a (click)="clearDiemKho()">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>189</td>
+          <td>189</td>
+          <td>
+            <a>
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a>
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">

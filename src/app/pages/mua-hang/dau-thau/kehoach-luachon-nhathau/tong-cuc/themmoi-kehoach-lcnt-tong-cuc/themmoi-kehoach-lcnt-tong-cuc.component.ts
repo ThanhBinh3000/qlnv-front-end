@@ -643,7 +643,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.listVatTu = res2.data.khVatTuList;
-      this.listVatTuUniq = uniqBy(res2.data.khVatTuList, 'maVatTuCha');
+      this.listVatTuUniq = uniqBy(res2.data.khVatTuList, 'maVatTuCha', 'tenVatTuCha');
       this.formData.patchValue({
         soQd: this.dataChiTieu.soQuyetDinh,
       });
@@ -1175,19 +1175,6 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     this.updatEditCoSoCache();
   }
 
-  checkCanUpdate() {
-    return true;
-  }
-
-  // checkUpdateTatCaVatTu() {
-  //   if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02') {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-
-
   deleteTaiLieuDinhKemFormTag(data: any) {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
       (x) => x.id !== data.id,
@@ -1233,7 +1220,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       nzComponentParams: {
         data: data,
         listVatTu: this.listVatTu,
-        vatTuChaId: this.formData.get('tenVthh').value
+        vatTuChaId: this.formData.get('loaiVthh').value
       },
     });
     modal.afterClose.subscribe((res) => {

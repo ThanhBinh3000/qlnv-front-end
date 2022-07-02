@@ -348,9 +348,21 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     let res = await this.tongHopDeXuatKHLCNTService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDanhSachTongHop = [...this.listDanhSachTongHop, ...res.data];
+      let data = [];
+      res.data.forEach(item => {
+        if (!this.maTongHopExis(this.listDanhSachTongHop, item.id)) {
+          this.listDanhSachTongHop.push({ id: item.id })
+        }
+      })
     }
   }
+
+  maTongHopExis(listDxTh, id) {
+    return listDxTh.some(function (el) {
+      return el.id === id;
+    });
+  }
+
 
   async openDialogDeXuat(index) {
     let data = this.danhsachDx[index]
@@ -362,7 +374,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       nzWidth: '90%',
       nzFooter: null,
       nzComponentParams: {
-        data: data
+        data: data,
+        isEdit: true
       },
     });
   }
@@ -377,8 +390,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save() {
-    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      this.helperService.markFormGroupTouched(this.formData);
       console.log(this.formData.value);
       return;
     }

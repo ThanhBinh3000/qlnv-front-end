@@ -45,7 +45,8 @@
               <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
-                <nz-select formControlName="namKhoach" nzAllowClear>
+                <nz-select formControlName="namKhoach" nzAllowClear
+                  [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
                 <ng-template #namKeHoachError let-control>
