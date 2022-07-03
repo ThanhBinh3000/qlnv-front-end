@@ -86,7 +86,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     this.routerUrl = this.router.url;
     this.spinner.show();
     try {
-      if (this.typeVthh == 'tat-ca') {
+      if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();

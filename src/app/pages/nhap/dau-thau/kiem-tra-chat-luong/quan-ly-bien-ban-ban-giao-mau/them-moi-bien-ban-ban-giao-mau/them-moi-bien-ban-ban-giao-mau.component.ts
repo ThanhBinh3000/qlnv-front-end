@@ -103,6 +103,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
 
   async loadBienbanLayMau() {
     let param = {
+      "capDvi": this.userService.isCuc() ? '3' : null,
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,

@@ -74,7 +74,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.typeVthh == 'tat-ca') {
+      if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();
