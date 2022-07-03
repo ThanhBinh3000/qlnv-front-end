@@ -126,7 +126,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   async loadDsTong() {
     const body = {
-      maDviCha: this.detail.maDvi,
+      maDvi: this.detail.maDvi,
       trangThai: '01',
     };
 

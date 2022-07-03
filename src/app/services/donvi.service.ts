@@ -44,11 +44,16 @@ export class DonviService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  layTatCaDangTree(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca-tree?maDvi=${body.maDvi}`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   async layDonViTheoCapDo(
     body: any,
     capDv?: number | string,
   ): Promise<{ [capDv: string]: any[] }> {
-    const dsDonViCha = await this.getAll(body);
+    const dsDonViCha = await this.layTatCaDangTree(body);
     const data = dsDonViCha?.data || [];
     let dsTong: any[] = [];
     if (data.length) {
