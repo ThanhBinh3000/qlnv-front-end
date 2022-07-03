@@ -6,19 +6,19 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+          </button> -->
+          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '01' && !isView" (click)="hoanThanh()">
+          </button> -->
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
+            (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
-            <span>Hoàn thành phiếu</span>
+            <span>Hoàn thành</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="detail.trangThai == '04' && !isView" (click)="pheDuyet()">
@@ -222,7 +222,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
+              <tr>
                 <td></td>
                 <td>
                   {{chiTietHopDong.tenCloaiVthh}}
@@ -264,9 +264,9 @@
             </div>
           </div>
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="24" class="text-summary">Chứng từ kèm theo</div>
+            <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
             <div nz-col nzSpan="24">
-              <file-list (selectDataEvent)="selectFile($event)"></file-list>
+              <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
             </div>
           </div>
         </div>

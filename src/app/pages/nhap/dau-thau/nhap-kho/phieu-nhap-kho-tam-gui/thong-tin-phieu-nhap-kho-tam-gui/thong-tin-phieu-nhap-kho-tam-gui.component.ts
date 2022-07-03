@@ -52,7 +52,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
   detailHopDong: any = {};
-
+  listFileDinhKem: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -201,6 +201,14 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
+          this.listFileDinhKem = res.data.fileDinhKems;
+          this.chiTietHopDong.donGia = res.data.chiTiets[0].donGia;
+          this.chiTietHopDong.donViTinh = res.data.chiTiets[0].donViTinh;
+          this.chiTietHopDong.soLuongChungTu = res.data.chiTiets[0].soLuongChungTu;
+          this.chiTietHopDong.soLuongThucNhap = res.data.chiTiets[0].soLuongThucNhap;
+          this.chiTietHopDong.thanhTien = res.data.chiTiets[0].thanhTien;
+          this.chiTietHopDong.maSo = res.data.chiTiets[0].maSo;
+          this.chiTietHopDong.vthh = res.data.chiTiets[0].vthh;
           this.changeDiemKho(true);
         }
       }
@@ -392,7 +400,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: '01',
           };
           let res =
             await this.phieuNhapKhoTamGuiService.updateStatus(
@@ -490,7 +498,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
           }
         ],
         "co": this.detail.co,
-        "fileDinhKems": this.detail.fileDinhKems,
+        "fileDinhKems": this.listFileDinhKem,
         "id": this.id,
         "loaiVthh": this.typeVthh,
         "maDiemKho": this.detail.maDiemKho,
@@ -503,7 +511,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
         "no": this.detail.no,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soPhieu": this.detail.soPhieu,
-        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang ? dayjs(this.detail.thoiGianGiaoNhanHang).format("YYYY-MM-DD HH:mm:ss") : null,
+        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang,
         "tongSoLuong": this.detail.tongSoLuong,
         "tongSoTien": this.detail.tongSoTien,
       };

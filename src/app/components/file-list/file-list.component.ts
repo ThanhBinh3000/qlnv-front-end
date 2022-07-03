@@ -12,6 +12,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 export class FileListComponent implements OnInit {
   @Input() data: FileDinhKem[] = [];
   @Input() trangThai: string;
+  @Input() isViewDetail: boolean;
 
   fileAdd: FileDinhKem = new FileDinhKem();
 
