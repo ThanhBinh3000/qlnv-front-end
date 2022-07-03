@@ -1,7 +1,5 @@
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -14,10 +12,12 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import VNnum2words from 'vn-num2words';
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
@@ -47,6 +47,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
   listSoQuyetDinh: any[] = [];
+  chiTietHopDong: any = {};
   detailGiaoNhap: any = {};
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -116,6 +117,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
       this.detail.trangThai = "00";
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
+      this.detail.chiTiets = [];
       await Promise.all([
         this.loadDiemKho(),
         this.loadSoQuyetDinh(),
@@ -181,6 +183,11 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
         this.detail.maHangHoa = this.detailHopDong.loaiVthh;
         this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
         this.detail.maHangHoa = this.typeVthh;
+        this.chiTietHopDong.tenCloaiVthh = this.detailHopDong.tenCloaiVthh;
+        this.chiTietHopDong.vthh = this.detailHopDong.cloaiVthh;
+        this.chiTietHopDong.donViTinh = this.detailHopDong.donViTinh;
+        this.chiTietHopDong.soLuongChungTu = this.detailHopDong.soLuong;
+        this.chiTietHopDong.donGia = this.detailHopDong.donGiaVat;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -198,7 +205,6 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
         }
       }
     }
-    this.updateEditCache();
   }
 
   caculatorThanhTienTN() {
@@ -216,76 +222,11 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     }
   }
 
-  caculatorThanhTienQT() {
-    if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienQt).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
-  }
+
 
   convertTien(tien: number): string {
-    return convertTienTobangChu(tien);
-  }
-
-  deleteRow(data: any) {
-    this.detail.detail = this.detail?.detail.filter(x => x.stt != data.stt);
-    this.sortTableId();
-    this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
-  }
-
-  sortTableId() {
-    this.detail?.detail.forEach((lt, i) => {
-      lt.stt = i + 1;
-    });
-  }
-
-  addRow() {
-    if (!this.detail?.detail) {
-      this.detail.detail = [];
-    }
-    this.sortTableId();
-    let item = cloneDeep(this.create);
-    item.stt = this.detail?.detail.length + 1;
-    this.detail.detail = [
-      ...this.detail?.detail,
-      item,
-    ]
-    this.updateEditCache();
-    this.clearItemRow();
-  }
-
-  clearItemRow() {
-    this.create = {};
-    this.create.dvt = "Tấn";
-  }
-
-  cancelEdit(stt: number): void {
-    const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    this.editDataCache[stt] = {
-      data: { ...this.detail?.detail[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(stt: number): void {
-    const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    Object.assign(this.detail?.detail[index], this.editDataCache[stt].data);
-    this.editDataCache[stt].edit = false;
-  }
-
-  updateEditCache(): void {
-    if (this.detail?.detail && this.detail?.detail.length > 0) {
-      this.detail?.detail.forEach((item) => {
-        this.editDataCache[item.stt] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
+    if (tien) {
+      return convertTienTobangChu(tien);
     }
   }
 
@@ -536,21 +477,20 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     try {
       let body = {
         "chiTiets": [
-          // {
-          //   "donGia": 0,
-          //   "donViTinh": "string",
-          //   "id": 0,
-          //   "maSo": "string",
-          //   "phieuNkTgId": 0,
-          //   "soLuongChungTu": 0,
-          //   "soLuongThucNhap": 0,
-          //   "stt": 0,
-          //   "thanhTien": 0,
-          //   "vthh": "string"
-          // }
+          {
+            "donGia": this.chiTietHopDong.donGia,
+            "donViTinh": this.chiTietHopDong.donViTinh,
+            "maSo": null,
+            "phieuNkTgId": null,
+            "soLuongChungTu": this.chiTietHopDong.soLuongChungTu,
+            "soLuongThucNhap": this.chiTietHopDong.soLuongThucNhap,
+            "stt": null,
+            "thanhTien": this.chiTietHopDong.soLuongThucNhap * this.chiTietHopDong.donGia,
+            "vthh": this.chiTietHopDong.vthh
+          }
         ],
         "co": this.detail.co,
-        "fileDinhKems": [],
+        "fileDinhKems": this.detail.fileDinhKems,
         "id": this.id,
         "loaiVthh": this.typeVthh,
         "maDiemKho": this.detail.maDiemKho,
@@ -563,7 +503,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
         "no": this.detail.no,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soPhieu": this.detail.soPhieu,
-        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang ? dayjs(this.detail.thoiGianGiaoNhanHang).format("YYYY-MM-DD") : null,
+        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang ? dayjs(this.detail.thoiGianGiaoNhanHang).format("YYYY-MM-DD HH:mm:ss") : null,
         "tongSoLuong": this.detail.tongSoLuong,
         "tongSoTien": this.detail.tongSoTien,
       };
@@ -620,4 +560,13 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
 
   }
 
+  selectFile(event) {
+    this.detail.fileDinhKems = event;
+  }
+
+  calculatorThanhTien(): string {
+    if (this.chiTietHopDong.soLuongThucNhap && this.chiTietHopDong.donGia) {
+      return VNnum2words(+this.chiTietHopDong.soLuongThucNhap * +this.chiTietHopDong.donGia);
+    }
+  }
 }
