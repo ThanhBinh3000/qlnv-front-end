@@ -3,9 +3,26 @@
   overflow: unset;
 }
 
-.header-file {
-  display: flex;
-  gap: 10px;
+::ng-deep {
+  .header-file {
+    display: flex;
+    gap: 10px;
+  }
+
+  .header-file,
+  .body-file {
+    .ant-input-group-addon {
+      position: relative;
+
+      .input-file {
+        left: 0;
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        top: -2px;
+      }
+    }
+  }
 }
 
 .icon-plus,

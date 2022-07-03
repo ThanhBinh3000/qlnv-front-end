@@ -7,21 +7,27 @@
             <div nz-col nzSpan="2">
               <label class="search__label">Số quyết định</label>
               <nz-input-group>
-                <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
+                <input [(ngModel)]="searchFilter.soQdNhap" nz-input nzSize="small" placeholder="Nhập số"
                   appNumberOnly />
               </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Số biên bản</label>
-              <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieu" />
+              <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soBienBan" />
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Loại hàng hóa</label>
-              <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieu" />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTuCha"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Chủng loại hàng hóa</label>
-              <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieu" />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTu"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày</label>
