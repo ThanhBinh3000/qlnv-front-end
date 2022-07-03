@@ -86,7 +86,8 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     this.newObjectBienBanLayMau();
     this.bienBanLayMau.maDvi = this.userInfo.MA_DVI;
     this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
-    this.bienBanLayMau.maVatTuCha = this.typeVthh;
+    this.bienBanLayMau.maVatTuCha = this.isTatCa ? null : this.typeVthh;
+    this.bienBanLayMau.trangThai = this.globals.prop.DU_THAO;
     await Promise.all([
       this.loadSoQuyetDinh(),
       this.loaiVTHHGetAll(),
@@ -102,6 +103,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
 
   async loadBienbanLayMau() {
     let param = {
+      "capDvi": this.userService.isCuc() ? '3' : null,
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,
@@ -177,7 +179,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "maVthh": this.bienBanLayMau.maVatTuCha,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",
@@ -217,10 +219,10 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   }
 
   isAction(): boolean {
-    return (
-      this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
-      !this.isView
-    );
+    if (this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO && !this.isView) {
+      return true;
+    }
+    return false;
   }
 
   save(isGuiDuyet?: boolean) {
@@ -237,7 +239,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "soBienBan": this.bienBanLayMau.soBienBan,
       "soLuongMau": this.bienBanLayMau.soLuongMau,
       "tenDviBenNhan": this.bienBanLayMau.tenDviBenNhan,
-      "tniemPhongMauHang": this.bienBanLayMau.tniemPhongMauHang,
+      "ttNiemPhongMauHang": this.bienBanLayMau.ttNiemPhongMauHang,
     }
     if (this.id > 0) {
       this.quanLyBienBanBanGiaoService.sua(body).then((res) => {
@@ -495,6 +497,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
         });
         this.loadDaiDien();
       }
+      await this.loadSoQuyetDinh();
     }
     else {
       this.notification.error(MESSAGE.ERROR, res.msg);

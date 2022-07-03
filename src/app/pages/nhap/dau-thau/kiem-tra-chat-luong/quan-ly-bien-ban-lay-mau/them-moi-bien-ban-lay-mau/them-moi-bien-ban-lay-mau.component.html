@@ -53,7 +53,8 @@
                 </nz-form-label>
                 <nz-form-control class="w-p-100">
                   <nz-radio-group [(ngModel)]="bienBanLayMau.maVatTuCha">
-                    <label nz-radio *ngFor="let item of listHangHoa" [nzValue]="item.ma">{{item.giaTri}}</label>
+                    <label nz-radio *ngFor="let item of listHangHoa" [nzValue]="item.ma"
+                      [nzDisabled]="bienBanLayMau.trangThai == '01' || bienBanLayMau.trangThai == '02' || bienBanLayMau.trangThai == '04' || isView">{{item.giaTri}}</label>
                   </nz-radio-group>
                 </nz-form-control>
               </nz-form-item>
