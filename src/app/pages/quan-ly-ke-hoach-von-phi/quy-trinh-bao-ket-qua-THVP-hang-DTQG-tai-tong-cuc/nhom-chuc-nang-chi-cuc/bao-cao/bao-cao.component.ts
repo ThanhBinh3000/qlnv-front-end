@@ -212,6 +212,7 @@ export class BaoCaoComponent implements OnInit {
   lstVatTuFull = [];
 
   baoCao: ItemDanhSach = new ItemDanhSach();
+  luyKes: ItemData = new ItemData();
   currentday = new Date();
   maPhanBcao: string = '1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
   maLoaiBaocao: any;
@@ -428,6 +429,7 @@ export class BaoCaoComponent implements OnInit {
         })
       }
     }
+    this.getLuyKe();
     //lấy danh sách vật tư
     await this.danhMucService.dMVatTu().toPromise().then(res => {
       if (res.statusCode == 0) {
@@ -500,6 +502,23 @@ export class BaoCaoComponent implements OnInit {
   //   this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
   //   this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
   // }
+  getLuyKe(){
+    let request = {
+      dotBcao: this.baoCao?.dotBcao,
+      maPhanBcao: "1",
+      namBcao: this.baoCao?.namBcao,
+      thangBcao: null
+    }
+    this.quanLyVonPhiService.getLuyKe(request).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.luyKes = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
 
   getListUser() {
     let request = {
@@ -792,6 +811,7 @@ export class BaoCaoComponent implements OnInit {
         statusBtnExport: this.statusBtnExport,
         status: this.status,
         idBaoCao: this.baoCao.id,
+        luyKes: this.luyKes,
       }
       this.tabs = [];
       this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
@@ -1375,6 +1395,21 @@ export class BaoCaoComponent implements OnInit {
                 item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
                 item.nguoiBcao = this.userInfor.username;
               }
+            }
+            // voi loai bc 02 thi chi tong hop so luong
+            if(item.maLoai =='4'){
+              item?.lstCtietBcaos.forEach(element => {
+                element.khGiaMuaTd = null;
+                element.khTtien = null;
+                element.thGiaMuaTd = null;
+                element.thTtien = null;
+              });
+            }else if( item.maLoai =='5'){     // voi loai bc 03 thi chi tong hop so luong
+              item?.lstCtietBcaos.forEach(element => {
+                element.dgGiaBanTte = null;
+                element.dgGiaBanTthieu = null;
+                element.dgGiaKhoach = null;
+              });
             }
           })
           this.listFile = [];
