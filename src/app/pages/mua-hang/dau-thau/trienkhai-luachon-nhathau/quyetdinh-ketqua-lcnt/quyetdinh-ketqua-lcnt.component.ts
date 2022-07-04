@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
+import { saveAs } from 'file-saver';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-quyetdinh-ketqua-lcnt',
@@ -26,17 +26,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private danhMucService: DanhMucService
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
+
   }
-  searchValue = '';
-  visibleTab: boolean = false;
+
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -53,13 +50,9 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
+  listVthh: any[] = [];
   lastBreadcrumb: string;
   userInfo: UserLogin;
-  datePickerConfig = DATEPICKER_CONFIG;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -67,14 +60,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: this.yearNow - i,
           text: this.yearNow - i,
         });
-      }
+      };
+      this.getListVthh();
       await this.search();
       this.spinner.hide();
     }
@@ -85,14 +78,16 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
-  }
-
-  themMoi() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/ketqua-dauthau/them-moi']);
+  async getListVthh() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          element.count = 0;
+          this.listVthh.push(element);
+        });
+      }
+    }
   }
 
   async search() {
@@ -123,11 +118,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai
-    return this.danhSachDauThauService.search(body);
-  }
-
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -153,31 +143,17 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  edit(id) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/ketqua-dauthau/chinh-sua', id]);
-  }
-
   redirectToChiTiet(id: number, isView?: boolean) {
-    // if (this.router.url.includes(LEVEL.TONG_CUC)) {
-    //   this.router.navigate([
-    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-    //     id,
-    //   ]);
-    // } else if (this.router.url.includes(LEVEL.CUC)) {
-    //   this.router.navigate([
-    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-    //     id,
-    //   ]);
-    // }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
+
   async showList() {
     this.isDetail = false;
     await this.search()
   }
+
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;
@@ -201,7 +177,16 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.quyetDinhPheDuyetKetQuaLCNTService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             await this.search();
             this.spinner.hide();
           });
@@ -219,37 +204,41 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     return convertTrangThai(status);
   }
 
+  statusGoiThau(status: string) {
+    return convertTrangThaiGt(status);
+  }
+
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          // "denNgayTao": this.endValue
+          //   ? dayjs(this.endValue).format('YYYY-MM-DD')
+          //   : null,
+          // "loaiVthh": this.searchFilter.loaiVthh,
+          // "namKhoach": this.searchFilter.namKh,
+          // "paggingReq": null,
+          // "str": "",
+          // "trangThai": "",
+          // "tuNgayTao": this.startValue
+          //   ? dayjs(this.startValue).format('YYYY-MM-DD')
+          //   : null,
+        };
+        this.tongHopDeXuatKHLCNTService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
 }

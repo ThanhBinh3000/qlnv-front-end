@@ -17,6 +17,7 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
   ghiChu: string = null;
   tableExist: boolean = false;
   data: any = {};
+  dataEdit: any = {};
   isEdit: boolean;
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
@@ -39,8 +40,7 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
 
   async ngOnInit() {
     if (this.data) {
-      let res = await this.dauThauService.getDetail(this.data.idDxHdr);
-      this.listOfData = res.data.dsGtDtlList;
+      this.listOfData = this.data.dsGoiThau;
       this.listOfData.forEach(item => {
         this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
       });
@@ -203,5 +203,44 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  editRow(idGoiThau) {
+    // console.log(idGoiThau);
+    const dataRow = this.listOfData.filter(item => item.id === idGoiThau);
+    console.log(dataRow);
+    this.dataEdit.tenGthau = dataRow[0].goiThau;
+    this.dataEdit.tenDvi = dataRow[0].tenDvi;
+    this.dataEdit.maDvi = dataRow[0].maDvi;
+    this.dataEdit.soLuong = dataRow[0].soLuong;
+    this.dataEdit.donGia = dataRow[0].donGia;
+    this.dataEdit.tongTien = dataRow[0].thanhTien;
+    this.dataEdit.children = dataRow[0].children;
+    this.changeChiCuc(dataRow[0].maDvi);
+
+  }
+
+
+
+  // async changeChiCuc(event) {
+  //   const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+  //   let data = this.listChiCuc.filter(item => item.maDvi === event);
+  //   this.formData.get('tenDvi').setValue(data[0].tenDonVi);
+  //   this.listDiemKho = [];
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     for (let i = 0; i < res.data?.child.length; i++) {
+  //       const item = {
+  //         'value': res.data.child[i].maDiemkho,
+  //         'text': res.data.child[i].tenDiemkho,
+  //         'diaDiemNhap': res.data.child[i].diaChi,
+  //       };
+  //       this.listDiemKho.push(item);
+  //       this.filterData();
+  //     }
+  //   }
+  // }
+
+  onApplyEdit() {
+
   }
 }
