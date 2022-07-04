@@ -731,12 +731,14 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    var data: ItemData = {
-                        ...this.initItem,
-                        maNdung: item.id,
-                        level: item.level,
-                    };
-                    this.addLow(id, data);
+                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
+                        var data: ItemData = {
+                            ...this.initItem,
+                            maNdung: item.id,
+                            level: item.level,
+                        };
+                        this.addLow(id, data);
+                    }
                 })
                 this.updateEditCache();
             }

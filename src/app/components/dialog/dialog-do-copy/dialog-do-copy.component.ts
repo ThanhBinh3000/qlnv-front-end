@@ -3,7 +3,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { CAN_CU_GIA, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, LOAI_DE_NGHI, LOAI_VON, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON } from 'src/app/Utility/utils';
 
 @Component({
     selector: 'dialog-do-copy',

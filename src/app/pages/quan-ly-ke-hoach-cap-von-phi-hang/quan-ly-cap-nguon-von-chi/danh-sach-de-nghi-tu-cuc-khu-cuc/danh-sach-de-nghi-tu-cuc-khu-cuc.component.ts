@@ -10,7 +10,7 @@ import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_DE_NGHI, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -50,7 +50,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		page: 1,
 	}
 	//trang thai
-	statusBtnNew: boolean = true;
+	statusBtnNew = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -66,7 +66,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 		//lay danh sach danh muc
@@ -109,7 +109,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		if (this.searchFilter.trangThai){
 			trangThais = [this.searchFilter.trangThai];
 		}
-		let requestReport = {
+		var requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDvi: "",
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
