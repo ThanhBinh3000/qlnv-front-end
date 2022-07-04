@@ -685,12 +685,15 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maLvucNdChi == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    var data: ItemData = {
-                        ...this.initItem,
-                        maLvucNdChi: item.id,
-                        level: item.level,
-                    };
-                    this.addLow(id, data);
+                    if (this.lstCtietBcao.findIndex(e => e.maLvucNdChi == item.id) == -1){
+                        var data: ItemData = {
+                            ...this.initItem,
+                            maLvucNdChi: item.id,
+                            level: item.level,
+                        };
+                        this.addLow(id, data);
+                    }
+                    
                 })
                 this.updateEditCache();
             }

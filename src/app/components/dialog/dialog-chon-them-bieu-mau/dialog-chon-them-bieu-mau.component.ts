@@ -13,7 +13,7 @@ export class DialogChonThemBieuMauComponent implements OnInit {
     private _modalRef: NzModalRef,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
   }
 
   handleOk() {
