@@ -37,9 +37,9 @@ export function convertTrangThaiGt(status: string): string {
   } else if (status == '02') {
     return 'Hoàn thành cập nhật';
   } else if (status == '03') {
-    return 'Hủy thầu';
-  } else if (status == '04') {
     return 'Trúng thầu';
+  } else if (status == '04') {
+    return 'Hủy thầu';
   }
 }
 

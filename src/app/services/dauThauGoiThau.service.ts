@@ -14,16 +14,6 @@ export class dauThauGoiThauService extends BaseService {
     super(httpClient, 'dx-kh/ttin-dthau-gthau', '/qlnv-gateway/qlnv-hang');
   }
 
-  timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/tra-cuu`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  chiTiet(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/chi-tiet/${id}`
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
   chiTietByGoiThauId(id: number): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/chi-tiet/goi-thau/${id}`
     return this.httpClient.get<any>(url).toPromise();
@@ -31,16 +21,6 @@ export class dauThauGoiThauService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/phe-duyet`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  update(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/cap-nhat`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  xoa(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/xoa`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

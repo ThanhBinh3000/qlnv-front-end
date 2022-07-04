@@ -9,16 +9,20 @@
               <div class="trai">
               </div>
               <div class="canphai phai">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+                  <span>Quay về</span>
+                </a>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="approve()"
+                  *ngIf="(detail.trangThai == '00' && id > 0) && !isView">
+                  <i class="icon htvbdh_trinh"></i>
+                  <span>Ký</span>
+                </button>
                 <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
                   *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
                   <i class="icon  htvbdh_tcdt_save"></i>
                   <span>Lưu</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="approve()"
-                  *ngIf="(detail.trangThai == '00' && id > 0) && !isView">
-                  <i class="icon htvbdh_trinh"></i>
-                  <span>Đã ký</span>
-                </button>
+
                 <!-- <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
                   *ngIf="detail.trangThai == '01' && !isView">
                   <i class="icon  htvbdh_da-xu-ly"></i>
@@ -34,9 +38,7 @@
                   <i class="icon htvbdh_tcdt_tuchoi"></i>
                   <span>Từ chối</span>
                 </a> -->
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-                  <span>Quay về</span>
-                </a>
+
               </div>
             </div>
           </div>
@@ -123,14 +125,22 @@
                         formControlName="soNgayThien" />
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="4">
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label [nzNoColon]="true"> Thời hạn nhập kho trước ngày </nz-form-label>
+                      <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="yyyy-MM-dd"
+                        nzPlaceHolder="Thời hạn nhập kho trước ngày" formControlName="tgianNkho">
+                      </nz-date-picker>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="3">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                       <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh"
                         readonly="true" />
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="4">
+                  <div nz-col [nzSpan]="3">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                       <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh"
@@ -161,7 +171,7 @@
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị hợp đồng sau thuế </nz-form-label>
-                      <input nz-input [readonly]="true" formControlName="gtriHdSauVat" />
+                      <input nz-input [readonly]="true" type="string" appNumberOnly formControlName="gtriHdSauVat" />
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6" class="btn-tep">
@@ -303,36 +313,36 @@
               <nz-tab [nzTitle]="'Địa điểm nhập hàng'" class="ds-goi-thau__container"
                 (nzClick)="tabSelected = 'bang-gia'">
                 <nz-card class="flex-card p-lr16">
-                  <nz-table #editRowTable nzBordered [nzData]="detail?.bangGia" [nzFrontPagination]="false"
-                    [nzShowPagination]="false">
-                    <thead>
-                      <tr>
-                        <th [width]="35">STT</th>
-                        <th>Tên cục</th>
-                        <th width="175px">Tên Chi cục</th>
-                        <th width="175px">Số lượng nhập</th>
-                        <th width="175px">Đơn vị tính</th>
-                        <th width="175px" class="text-right"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let data of editRowTable.data; let i = index" class="editable-row">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ data.tenGthau }}</td>
-                        <td>{{ data.shgt }}</td>
-                        <td>{{ data.soLuong | number: '1.0-1' }}</td>
-                        <td>{{ data.donGia | number: '1.0-1' }}</td>
-                        <td class="text-right">
-                          <a (click)="openDialogBang(data)">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a>
-                            <i class="fa fa-trash-o do"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </nz-table>
+                  <ng-container *ngIf="userService.isTongCuc()">
+                  </ng-container>
+                  <ng-container *ngIf="userService.isCuc()">
+                    <nz-table #editRowTable nzBordered [nzData]="diaDiemNhapListCuc" [nzFrontPagination]="false"
+                      [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <th [width]="35">STT</th>
+                          <th>Chi cục DTNN</th>
+                          <th width="175px">Điểm kho</th>
+                          <th width="175px">Địa điểm kho</th>
+                          <th width="175px">Số lượng (kg)</th>
+                          <th width="175px">Đơn giá</th>
+                          <th width="175px">Giá sau thuế</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of editRowTable.data; let i = index" class="editable-row">
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ data.tenDvi }}</td>
+                          <td>{{ data.tenDiemKho }}</td>
+                          <td>{{ data.diaDiemNhap }}</td>
+                          <td>{{ data.soLuong | number: '1.0-3' }}</td>
+                          <td>{{ donGiaCore | number: '1.0-3' }}</td>
+                          <td>{{ calculateGiaSauThue(data.soLuong, donGiaCore) | number: '1.0-3' }}</td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </ng-container>
+
                 </nz-card>
               </nz-tab>
               <ng-container *ngIf="detail.trangThai == '02'">

@@ -25,6 +25,7 @@ export class BienBanGuiHang {
     trachNhiemBenGiao: string;
     trachNhiemBenNhan: string;
     trangThai: string;
+    tenTrangThai: string;
     chiTiets: Array<ChiTiet>;
     constructor(chiTiets: Array<ChiTiet> = []) {
         this.chiTiets = chiTiets;
@@ -38,4 +39,5 @@ export class ChiTiet {
     id: number;
     loaiBen: string;
     stt: string;
+    idVirtual: number;
 }

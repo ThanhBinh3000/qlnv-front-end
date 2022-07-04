@@ -16,9 +16,10 @@ export class QuanLyBienBanLayMauService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/tra-cuu?`
-    if (body.maDvi) {
-      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
-    }
+    if (body.maDvis)
+      url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
+    if (body.capDvis)
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
     if (body.maVatTuCha)
       url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
     if (body.soQuyetDinhNhap)

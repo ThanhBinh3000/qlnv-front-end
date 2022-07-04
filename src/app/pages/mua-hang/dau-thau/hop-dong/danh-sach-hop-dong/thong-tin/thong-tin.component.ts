@@ -87,6 +87,8 @@ export class ThongTinComponent implements OnInit {
   };
   titleStatus: string = '';
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
+  diaDiemNhapListCuc = [];
+  donGiaCore: number = 0;
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -115,6 +117,7 @@ export class ThongTinComponent implements OnInit {
         namKh: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
+        tgianNkho: [null],
         tenVthh: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
@@ -138,12 +141,18 @@ export class ThongTinComponent implements OnInit {
     );
     this.formDetailHopDong.controls['donGiaVat'].valueChanges.subscribe(value => {
       if (value) {
+        this.donGiaCore = value;
         const gtriHdSauVat = this.formDetailHopDong.controls.donGiaVat.value * this.formDetailHopDong.controls.soLuong.value;
         this.formDetailHopDong.controls['gtriHdSauVat'].setValue(gtriHdSauVat);
       } else {
+        this.donGiaCore = 0;
         this.formDetailHopDong.controls['gtriHdSauVat'].setValue(0);
       }
     });
+  }
+
+  calculateGiaSauThue(soLuong, donGia) {
+    return soLuong * donGia;
   }
 
   async ngOnInit() {
@@ -194,6 +203,7 @@ export class ThongTinComponent implements OnInit {
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
             tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
+            tgianNkho: this.detail.tgianNkho ?? null,
             soLuong: this.detail.soLuong ?? null,
             donGiaVat: this.detail.donGiaVat ?? null,
             gtriHdSauVat: this.detail.gtriHdSauVat ?? null,
@@ -212,11 +222,8 @@ export class ThongTinComponent implements OnInit {
               dviTinh: this.detail.dviTinh ?? null
             })
           }
-          const dvlq = this.detail.idNthau;
-          if (dvlq) {
-            this.dvLQuan = this.listDviLquan.find(item => item.id == dvlq.split('/')[0] && item.version == dvlq.split('/')[1])
-          }
-          await this.getListGoiThau(this.detail.canCu)
+          this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
+          await this.getListGoiThau(this.detail.id);
         }
       }
     }
@@ -277,58 +284,64 @@ export class ThongTinComponent implements OnInit {
   }
 
   async save(isOther: boolean) {
-    this.spinner.show();
-    try {
-      if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
-        this.errorGhiChu = true;
-      }
-      else {
-        let body = this.formDetailHopDong.value;
-        body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
-        body.fileDinhKems = this.fileDinhKem,
-          body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
-          body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
-          delete body.ngayHieuLuc;
-        delete body.maHdong;
-        delete body.tenCloaiVthh;
-        delete body.tenVthh;
+    let body = this.formDetailHopDong.value;
+    console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
 
-        body.idNthau = `${this.dvLQuan.id}/${this.dvLQuan.version}`
-        if (this.id > 0) {
-          let res = await this.thongTinHopDong.update(
-            body,
-          );
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
-              this.back();
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        } else {
-          let res = await this.thongTinHopDong.create(
-            body,
-          );
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+
+    // this.spinner.show();
+    // try {
+    //   if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
+    //     this.errorGhiChu = true;
+    //   }
+    //   else {
+    //     let body = this.formDetailHopDong.value;
+    //     body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
+    //     body.fileDinhKems = this.fileDinhKem,
+    //       body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
+    //       body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
+    //       delete body.ngayHieuLuc;
+    //     delete body.maHdong;
+    //     delete body.tenCloaiVthh;
+    //     delete body.tenVthh;
+
+    //     body.idNthau = `${this.dvLQuan.id}`;
+    //     body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
+    //     if (this.id > 0) {
+    //       body.id = this.id;
+    //       let res = await this.thongTinHopDong.update(
+    //         body,
+    //       );
+    //       if (res.msg == MESSAGE.SUCCESS) {
+    //         if (!isOther) {
+    //           this.notification.success(
+    //             MESSAGE.SUCCESS,
+    //             MESSAGE.UPDATE_SUCCESS,
+    //           );
+    //           this.back();
+    //         }
+    //       } else {
+    //         this.notification.error(MESSAGE.ERROR, res.msg);
+    //       }
+    //     } else {
+    //       let res = await this.thongTinHopDong.create(
+    //         body,
+    //       );
+    //       if (res.msg == MESSAGE.SUCCESS) {
+    //         if (!isOther) {
+    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    //           this.back();
+    //         }
+    //       } else {
+    //         this.notification.error(MESSAGE.ERROR, res.msg);
+    //       }
+    //     }
+    //   }
+    //   this.spinner.hide();
+    // } catch (e) {
+    //   console.log('error: ', e);
+    //   this.spinner.hide();
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    // }
   }
 
   async setTitle() {
@@ -388,7 +401,7 @@ export class ThongTinComponent implements OnInit {
         loaiVthh: this.loaiVthh
       },
     });
-    modalQD.afterClose.subscribe((data) => {
+    modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formDetailHopDong.patchValue({
           canCu: data.soQd ?? null,
@@ -402,9 +415,7 @@ export class ThongTinComponent implements OnInit {
           soLuong: null,
           donGiaVat: null,
         })
-        if (data.children1 && data.children1.length > 0) {
-          this.listGoiThau = data.children1;
-        }
+        await this.getListGoiThau(data.id);
       }
     });
     // }
@@ -415,6 +426,7 @@ export class ThongTinComponent implements OnInit {
       let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
+        console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
           tenVthh: data.tenVthh ?? null,
@@ -422,9 +434,14 @@ export class ThongTinComponent implements OnInit {
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
           soLuong: data.soLuong ?? null,
-          donGiaVat: data.children3[0].dgiaSauThue ?? null,
+          donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null,
         })
-        if (this.userService.isTongCuc) {
+        this.onChangeDvlq(data.idNhaThau);
+        this.diaDiemNhapListCuc = data.diaDiemNhapList;
+        this.diaDiemNhapListCuc.forEach(element => {
+          delete element.id
+        });
+        if (this.userService.isTongCuc()) {
           this.formDetailHopDong.patchValue({
             dviTinh: data.dviTinh ?? null
           })
@@ -476,32 +493,11 @@ export class ThongTinComponent implements OnInit {
     this.dvLQuan = this.listDviLquan.find(item => item.id == event);
   }
 
-  async getListGoiThau(canCu) {
-    const body = {
-      "denNgayQd": null,
-      "loaiVthh": this.loaiVthh,
-      "maDvi": null,
-      "namKhoach": null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": PAGE_SIZE_DEFAULT,
-        "orderBy": null,
-        "orderType": null,
-        "page": 0
-      },
-      "soQd": null,
-      "str": null,
-      "trangThai": null,
-      "tuNgayQd": null
-    };
-    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getAll(body);
+  async getListGoiThau(idCanCu) {
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(idCanCu);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      const goiThauSelected = data.find(item => item.canCu == canCu);
-      if (!!goiThauSelected) {
-        this.listGoiThau = goiThauSelected.children1;
-      }
+      this.listGoiThau = data.hhQdPduyetKqlcntDtlList;
     }
   }
 

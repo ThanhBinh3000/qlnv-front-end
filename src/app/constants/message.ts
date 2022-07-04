@@ -30,4 +30,5 @@ export const MESSAGE = {
   TU_CHOI_SUCCESS: 'Từ chối thành công.',
   DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
   DON_VI_TINH_LUONG_THUC: 'Tấn',
+  GUI_DUYET_SUCCESS: 'Gửi duyệt thành công'
 };

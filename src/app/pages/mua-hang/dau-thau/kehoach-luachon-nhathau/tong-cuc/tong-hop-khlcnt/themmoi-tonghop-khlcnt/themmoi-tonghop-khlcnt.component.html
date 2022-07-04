@@ -1,4 +1,4 @@
-<div *ngIf="!isDetailDxCuc" class="contentBor them-moi-nhap-xuat-hang__body">
+<div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="contentBor them-moi-nhap-xuat-hang__body">
   <div class="contentDetail">
     <div class="main-content">
       <nz-card *ngIf="formData.value.trangThai == '' || formData.value.trangThai == null "
@@ -276,7 +276,6 @@
                     <th>Số gói thầu</th>
                     <th>Số lượng (Tấn)</th>
                     <th>Tổng tiền đã bao gồm thuế (đồng)</th>
-                    <th>Giá trị đảm bảo dự thầu (%)</th>
                     <th [width]="30">Hành động</th>
                   </tr>
                 </thead>
@@ -291,7 +290,6 @@
                     <td>{{ data.soGthau }}</td>
                     <td>{{ data.soLuong | number: '1.0-1' }}</td>
                     <td>{{ data.tongTien | number: '1.0-1' }}</td>
-                    <td>{{ data.gtriDthau }}</td>
                     <td class="text-left">
                       <a (click)="displayDialogPhuLuc(data)">
                         <i class="fa fa-eye"></i>
@@ -329,4 +327,9 @@
       </form>
     </div>
   </div>
+</div>
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+  <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" [loaiVthh]="loaiVthh"
+    (showListEvent)="showTongHop()">
+  </app-themmoi-quyetdinh-khlcnt>
 </div>

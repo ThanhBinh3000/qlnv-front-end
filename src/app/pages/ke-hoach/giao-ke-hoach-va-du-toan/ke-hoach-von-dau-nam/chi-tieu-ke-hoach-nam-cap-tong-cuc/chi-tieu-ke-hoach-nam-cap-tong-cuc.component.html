@@ -373,17 +373,17 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu" *ngIf="!userService.isChiCuc()">
-          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
+          <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-do" (click)="deleteSelect()">
-            <i class="fa fa-trash-o do"></i>
-            <span>Xóa</span>
+          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
