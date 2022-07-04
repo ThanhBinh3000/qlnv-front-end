@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { DataService } from '../data.service';
