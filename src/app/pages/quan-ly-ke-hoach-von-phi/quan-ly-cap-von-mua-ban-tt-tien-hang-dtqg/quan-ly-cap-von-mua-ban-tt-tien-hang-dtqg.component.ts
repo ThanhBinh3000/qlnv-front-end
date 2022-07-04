@@ -1,22 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST } from './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
-interface DataItem {
-	name: string;
-	age: number;
-	street: string;
-	building: string;
-	number: number;
-	companyAddress: string;
-	companyName: string;
-	gender: string;
-}
+
 @Component({
 	selector: 'app-quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg',
 	templateUrl: './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.component.html',
@@ -24,37 +13,11 @@ interface DataItem {
 })
 export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	@ViewChild('nzTreeComponent', { static: false })
-	nzTreeComponent!: NzTreeComponent;
-	visible = false;
-	nodes: any = [];
-	nodeDetail: any;
-	listDonViDuoi = [];
-	cureentNodeParent: any = [];
-	datasNguoiDung: any = [];
-	nodeSelected: any = [];
-	listHTDV: any = [];
-	listKPB: any = [];
-	detailDonVi: FormGroup;
-	noParent = true;
-	searchValue = '';
-	QuanLyCapVonMuaBanTtTienHangDtqgList = QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST;
-	danhSach: any[] = [];
-	searchFilter = {
-		soDeXuat: '',
-	};
+	//thong tin chung
 	userInfo: any;
 	capDvi: string;
 	donVis: any[] = [];
-	////////
-	listOfData: DataItem[] = [];
-	sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
-	nameFilterFn = (list: string[], item: DataItem): boolean =>
-		list.some((name) => item.name.indexOf(name) !== -1);
-	filterName = [
-		{ text: 'Joe', value: 'Joe' },
-		{ text: 'John', value: 'John' },
-	];
-	/////////
+	danhSach: any[] = [];
 
 	constructor(
 		private router: Router,
@@ -80,7 +43,8 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
-		this.QuanLyCapVonMuaBanTtTienHangDtqgList.forEach(data => {
+
+		QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST.forEach(data => {
 			data.Role.forEach(item => {
 				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit) {
 					this.danhSach.push(data);
@@ -88,22 +52,6 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 				}
 			})
 		})
-		/////////
-		const data = [];
-		for (let i = 0; i < 100; i++) {
-			data.push({
-				name: 'John Brown',
-				age: i + 1,
-				street: 'Lake Park',
-				building: 'C',
-				number: 2035,
-				companyAddress: 'Lake Street 42',
-				companyName: 'SoftLake Co',
-				gender: 'M',
-			});
-		}
-		this.listOfData = data;
-		//////////////
 	}
 
 	//get user info

@@ -1053,17 +1053,19 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xóa báo cáo nút xóa Báo cáo quyết toán
-  xoaBaoCaoLapQuyetToan(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa/' + id
-      // 'http://192.168.1.111:8094/quyet-toan/xoa/' + id
+  xoaBaoCaoLapQuyetToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      // 'http://192.168.1.105:8094/quyet-toan/xoa/',
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa',
+      request
     );
   }
   //xóa báo cáo nút xóa Báo cáo quyết toán
-  xoaBaoCaoLapQuyetToan1(id: any): Observable<any> {
-    return this.httpClient.delete(
-      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa/' + id
-      'http://192.168.1.105:8094/quyet-toan/xoa/' + id
+  xoaBaoCaoLapQuyetToan1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa',
+      'http://192.168.1.105:8094/quyet-toan/xoa',
+      request
     );
   }
 

@@ -531,6 +531,16 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     });
 
     //get list file url
+    let checkFile = true;
+        for (const iterator of this.listFile) {
+            if (iterator.size > Utils.FILE_SIZE){
+                checkFile = false;
+            }
+        }
+        if (!checkFile){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+            return;
+        }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -582,8 +592,20 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     //get file cong van url
     let file: any = this.fileDetail;
     if (file) {
+      if (file.size > Utils.FILE_SIZE){
+          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+      } else {
+          request.soQd = await this.uploadFile(file);
+      }
+  }
+    if (file) {
       request1.soQd = await this.uploadFile(file);
     }
+    if (!request.soQd){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
     this.spinner.show();
     if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(

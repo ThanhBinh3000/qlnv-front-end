@@ -75,8 +75,16 @@ export class GiaoNhiemVuComponent implements OnInit {
 	maDviTao!: string;
 	thuyetMinh: string;
 	lyDoTuChoi: string;
-  dotBcao: number = 1;
+  dotBcao: number;
 	//danh muc
+  dotBcaos: any[] = [
+    {
+      id: 1
+    },
+    {
+      id: 2
+    }
+  ]
 	lstDieuChinhs: ItemData[] = [];
 	phuLucs: any[] = JSON.parse(JSON.stringify(PHU_LUC)) ;
 	donVis: any[] = [];
@@ -205,6 +213,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
+    // this.dotBcao = parseInt(dotBcaoDieuChinh, 10)
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
@@ -451,7 +460,17 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
 		})
-
+    //get list file url
+    let checkFile = true;
+    for (const iterator of this.listFile) {
+        if (iterator.size > Utils.FILE_SIZE){
+            checkFile = false;
+        }
+    }
+    if (!checkFile){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
+    }
     //get list file url
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -477,10 +496,21 @@ export class GiaoNhiemVuComponent implements OnInit {
     }
     //get file cong van url
 		let file: any = this.fileDetail;
+    if (file) {
+      if (file.size > Utils.FILE_SIZE){
+          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+      } else {
+          request.congVan = await this.uploadFile(file);
+      }
+    }
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
-
+    if (!request.congVan){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -614,6 +644,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
+          this.dotBcao = data.data.dotBcao
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

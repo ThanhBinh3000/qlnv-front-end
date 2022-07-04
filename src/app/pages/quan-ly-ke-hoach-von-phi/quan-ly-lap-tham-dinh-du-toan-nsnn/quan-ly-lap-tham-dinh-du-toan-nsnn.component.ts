@@ -7,16 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST } from './quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
-interface DataItem {
-	name: string;
-	age: number;
-	street: string;
-	building: string;
-	number: number;
-	companyAddress: string;
-	companyName: string;
-	gender: string;
-}
+
 @Component({
 	selector: 'app-quan-ly-lap-tham-dinh-du-toan-nsnn',
 	templateUrl: './quan-ly-lap-tham-dinh-du-toan-nsnn.component.html',
@@ -30,34 +21,9 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 	donVis: any[] = [];
 	capDvi: string;
 
-	nzTreeComponent!: NzTreeComponent;
-	visible = false;
-	nodes: any = [];
-	nodeDetail: any;
-	listDonViDuoi = [];
-	cureentNodeParent: any = [];
-	datasNguoiDung: any = [];
-	nodeSelected: any = [];
-	listHTDV: any = [];
-	listKPB: any = [];
-	detailDonVi: FormGroup;
-	noParent = true;
-	searchValue = '';
+	
 	QuanLyLapThamDinhDuToanNSNNList = QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST;
 	danhSach: any[] = [];
-	searchFilter = {
-		soDeXuat: '',
-	};
-	////////
-	listOfData: DataItem[] = [];
-	sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
-	nameFilterFn = (list: string[], item: DataItem): boolean =>
-		list.some((name) => item.name.indexOf(name) !== -1);
-	filterName = [
-		{ text: 'Joe', value: 'Joe' },
-		{ text: 'John', value: 'John' },
-	];
-	/////////
 
 	constructor(
 		private router: Router,
@@ -91,22 +57,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 				}
 			})
 		})
-		/////////
-		const data = [];
-		for (let i = 0; i < 100; i++) {
-			data.push({
-				name: 'John Brown',
-				age: i + 1,
-				street: 'Lake Park',
-				building: 'C',
-				number: 2035,
-				companyAddress: 'Lake Street 42',
-				companyName: 'SoftLake Co',
-				gender: 'M',
-			});
-		}
-		this.listOfData = data;
-		//////////////
+		
 	}
 
 	//get user info
