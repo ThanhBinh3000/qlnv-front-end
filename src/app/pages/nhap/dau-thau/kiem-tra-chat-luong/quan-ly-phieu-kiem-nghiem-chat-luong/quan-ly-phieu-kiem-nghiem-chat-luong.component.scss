@@ -16,3 +16,11 @@
     height: 28px !important;
   }
 }
+
+::ng-deep {
+  #table-quan-ly-phieu-kncl {
+    .ant-tabs-content-holder {
+      overflow-y: auto !important;
+    }
+  }
+}
