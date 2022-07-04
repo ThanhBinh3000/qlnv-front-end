@@ -498,7 +498,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		if (file) {
 			request.congVan = await this.uploadFile(file);
 		}
-    if (!request.soQd){
+    if (!request.congVan){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}

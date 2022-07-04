@@ -249,7 +249,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
           this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
       return;
       } else {
-          request.congVan = await this.uploadFile(file);
+          request.soQd = await this.uploadFile(file);
       }
     }
     if (file) {
