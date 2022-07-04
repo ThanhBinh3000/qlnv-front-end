@@ -400,6 +400,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
