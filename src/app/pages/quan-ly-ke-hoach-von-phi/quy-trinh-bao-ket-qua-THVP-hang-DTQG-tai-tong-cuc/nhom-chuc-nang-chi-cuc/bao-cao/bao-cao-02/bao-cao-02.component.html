@@ -147,11 +147,12 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let dvt of listDonvitinh">
+            {{item.maDviTinh}}
+            <!-- <div *ngFor="let dvt of listDonvitinh">
               <div *ngIf="dvt.id == item.maDviTinh">
                 {{dvt.tenDviTinh}}
               </div>
-            </div>
+            </div> -->
           </td>
           <td>{{item.soQd}}</td>
           <td>{{item.khSoLuong}}</td>
@@ -189,12 +190,13 @@
             </div>
           </td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+            {{item.maDviTinh}}
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
               [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
               [(ngModel)]="editCache[item.id].data.maDviTinh">
               <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
               </nz-option>
-            </nz-select>
+            </nz-select> -->
           </td>
           <td>
             <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soQd" />
@@ -281,11 +283,12 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let dvt of listDonvitinh">
+            {{item.maDviTinh}}
+            <!-- <div *ngFor="let dvt of listDonvitinh">
               <div *ngIf="dvt.id == item.maDviTinh">
                 {{dvt.tenDviTinh}}
               </div>
-            </div>
+            </div> -->
           </td>
           <td>{{item.soQd}}</td>
           <td>{{item.khSoLuong}}</td>
@@ -323,12 +326,13 @@
             </div>
           </td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+            {{item.maDviTinh}}
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
               [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
               [(ngModel)]="editCache[item.id].data.maDviTinh">
               <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
               </nz-option>
-            </nz-select>
+            </nz-select> -->
           </td>
           <td>
             <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soQd" />

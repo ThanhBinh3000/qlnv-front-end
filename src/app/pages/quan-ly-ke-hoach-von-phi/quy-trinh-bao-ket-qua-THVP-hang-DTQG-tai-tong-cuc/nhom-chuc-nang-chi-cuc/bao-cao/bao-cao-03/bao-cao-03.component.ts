@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -12,8 +10,8 @@ import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
-import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
-import { LINH_VUC } from './bao-cao-03.constant';
+import { LISTBIEUMAUDOT } from '../bao-cao.constant';
+import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 
 export class ItemDataMau03 {
     id = null;
@@ -76,30 +74,30 @@ export class BaoCao03Component implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
-    soLuongKhoachXb = 0;
-    soLuongTteXb = 0;
-    dgGiaKhoachXb = 0;
-    dgGiaBanTthieuXb = 0;
-    dgGiaBanTteXb = 0;
-    ttGiaHtoanXb = 0;
-    ttGiaBanTteXb = 0;
-    ttClechGiaTteVaGiaHtoanXb = 0;
-    soLuongKhoachXCTVT = 0;
-    soLuongTteXCTVT = 0;
-    dgGiaKhoachXCTVT = 0;
-    dgGiaBanTthieuXCTVT = 0;
-    dgGiaBanTteXCTVT = 0;
-    ttGiaHtoanXCTVT = 0;
-    ttGiaBanTteXCTVT = 0;
-    ttClechGiaTteVaGiaHtoanXCTVT = 0;
-    soLuongKhoachXk = 0;
-    soLuongTteXk = 0;
-    dgGiaKhoachXk = 0;
-    dgGiaBanTthieuXk = 0;
-    dgGiaBanTteXk = 0;
-    ttGiaHtoanXk = 0;
-    ttGiaBanTteXk = 0;
-    ttClechGiaTteVaGiaHtoanXk = 0;
+    soLuongKhoachXb = null;
+    soLuongTteXb = null;
+    dgGiaKhoachXb = null;
+    dgGiaBanTthieuXb = null;
+    dgGiaBanTteXb = null;
+    ttGiaHtoanXb = null;
+    ttGiaBanTteXb = null;
+    ttClechGiaTteVaGiaHtoanXb = null;
+    soLuongKhoachXCTVT = null;
+    soLuongTteXCTVT = null;
+    dgGiaKhoachXCTVT = null;
+    dgGiaBanTthieuXCTVT = null;
+    dgGiaBanTteXCTVT = null;
+    ttGiaHtoanXCTVT = null;
+    ttGiaBanTteXCTVT = null;
+    ttClechGiaTteVaGiaHtoanXCTVT = null;
+    soLuongKhoachXk = null;
+    soLuongTteXk = null;
+    dgGiaKhoachXk = null;
+    dgGiaBanTthieuXk = null;
+    dgGiaBanTteXk = null;
+    ttGiaHtoanXk = null;
+    ttGiaBanTteXk = null;
+    ttClechGiaTteVaGiaHtoanXk = null;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -335,7 +333,7 @@ export class BaoCao03Component implements OnInit {
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách nội dung',
-            nzContent: DialogThemKhoanMucComponent,
+            nzContent: DialogThemVatTuComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '65%',
@@ -353,6 +351,7 @@ export class BaoCao03Component implements OnInit {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
+                        maDviTinh: res.maDviTinh,
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
@@ -369,6 +368,7 @@ export class BaoCao03Component implements OnInit {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
+                        maDviTinh: item.maDviTinh,
                         level: item.level,
                     };
                     this.addLow(id, data, phuLuc);
@@ -489,10 +489,9 @@ export class BaoCao03Component implements OnInit {
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
         var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var stt: string = baoCao[index].stt;
-
         // khong tim thay thi out ra
         if (index == -1) return;
+        var stt: string = baoCao[index].stt;
         var nho: string = baoCao[index].stt;
         var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
         //xóa phần tử và con của nó
@@ -921,12 +920,12 @@ export class BaoCao03Component implements OnInit {
                 if (this.getHead(item.stt) == stt) {
                     baoCaoTemp[index].soLuongKhoach += item.soLuongKhoach;
                     baoCaoTemp[index].soLuongTte += item.soLuongTte;
-                    baoCaoTemp[index].dgGiaKhoach += item.dgGiaKhoach;
-                    baoCaoTemp[index].dgGiaBanTthieu += item.dgGiaBanTthieu;
-                    baoCaoTemp[index].dgGiaBanTte += item.dgGiaBanTte;
                     baoCaoTemp[index].ttGiaHtoan += item.ttGiaHtoan;
                     baoCaoTemp[index].ttGiaBanTte += item.ttGiaBanTte;
                     baoCaoTemp[index].ttClechGiaTteVaGiaHtoan += item.ttClechGiaTteVaGiaHtoan;
+                    baoCaoTemp[index].dgGiaKhoach = null;
+                    baoCaoTemp[index].dgGiaBanTthieu = null;
+                    baoCaoTemp[index].dgGiaBanTte = null;
                 }
             })
             stt = this.getHead(stt);
@@ -950,9 +949,9 @@ export class BaoCao03Component implements OnInit {
     async changeModel() {
         this.soLuongKhoachXb = 0;
         this.soLuongTteXb = 0;
-        this.dgGiaKhoachXb = 0;
-        this.dgGiaBanTthieuXb = 0;
-        this.dgGiaBanTteXb = 0;
+        // this.dgGiaKhoachXb = 0;
+        // this.dgGiaBanTthieuXb = 0;
+        // this.dgGiaBanTteXb = 0;
         this.ttGiaHtoanXb = 0;
         this.ttGiaBanTteXb = 0;
         this.ttClechGiaTteVaGiaHtoanXb = 0;
@@ -976,9 +975,9 @@ export class BaoCao03Component implements OnInit {
             if (element?.stt?.split('.').length == 2) {
                 this.soLuongKhoachXb += Number(element.soLuongKhoach);
                 this.soLuongTteXb += Number(element.soLuongTte);
-                this.dgGiaKhoachXb += Number(element.dgGiaKhoach);
-                this.dgGiaBanTthieuXb += Number(element.dgGiaBanTthieu);
-                this.dgGiaBanTteXb += Number(element.dgGiaBanTte);
+                // this.dgGiaKhoachXb += Number(element.dgGiaKhoach);
+                // this.dgGiaBanTthieuXb += Number(element.dgGiaBanTthieu);
+                // this.dgGiaBanTteXb += Number(element.dgGiaBanTte);
                 this.ttGiaHtoanXb += Number(element.ttGiaHtoan);
                 this.ttGiaBanTteXb += Number(element.ttGiaBanTte);
                 this.ttClechGiaTteVaGiaHtoanXb += Number(element.ttClechGiaTteVaGiaHtoan);
@@ -988,9 +987,9 @@ export class BaoCao03Component implements OnInit {
             if (element?.stt?.split('.').length == 2) {
                 this.soLuongKhoachXCTVT += Number(element.soLuongKhoach);
                 this.soLuongTteXCTVT += Number(element.soLuongTte);
-                this.dgGiaKhoachXCTVT += Number(element.dgGiaKhoach);
-                this.dgGiaBanTthieuXCTVT += Number(element.dgGiaBanTthieu);
-                this.dgGiaBanTteXCTVT += Number(element.dgGiaBanTte);
+                // this.dgGiaKhoachXCTVT += Number(element.dgGiaKhoach);
+                // this.dgGiaBanTthieuXCTVT += Number(element.dgGiaBanTthieu);
+                // this.dgGiaBanTteXCTVT += Number(element.dgGiaBanTte);
                 this.ttGiaHtoanXCTVT += Number(element.ttGiaHtoan);
                 this.ttGiaBanTteXCTVT += Number(element.ttGiaBanTte);
                 this.ttClechGiaTteVaGiaHtoanXCTVT += Number(element.ttClechGiaTteVaGiaHtoan);
@@ -1000,9 +999,9 @@ export class BaoCao03Component implements OnInit {
             if (element?.stt?.split('.').length == 2) {
                 this.soLuongKhoachXk += Number(element.soLuongKhoach);
                 this.soLuongTteXk += Number(element.soLuongTte);
-                this.dgGiaKhoachXk += Number(element.dgGiaKhoach);
-                this.dgGiaBanTthieuXk += Number(element.dgGiaBanTthieu);
-                this.dgGiaBanTteXk += Number(element.dgGiaBanTte);
+                // this.dgGiaKhoachXk += Number(element.dgGiaKhoach);
+                // this.dgGiaBanTthieuXk += Number(element.dgGiaBanTthieu);
+                // this.dgGiaBanTteXk += Number(element.dgGiaBanTte);
                 this.ttGiaHtoanXk += Number(element.ttGiaHtoan);
                 this.ttGiaBanTteXk += Number(element.ttGiaBanTte);
                 this.ttClechGiaTteVaGiaHtoanXk += Number(element.ttClechGiaTteVaGiaHtoan);

@@ -1,18 +1,18 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK, Utils } from "../../../../../../Utility/utils";
-import { LISTBIEUMAUDOT, NOI_DUNG } from '../bao-cao.constant';
-import { DatePipe } from '@angular/common';
+import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
+import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 
 export class ItemDataMau02 {
     bcaoCtietId = null;
@@ -321,7 +321,7 @@ export class BaoCao02Component implements OnInit {
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách nội dung',
-            nzContent: DialogThemKhoanMucComponent,
+            nzContent: DialogThemVatTuComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '65%',
@@ -339,6 +339,7 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
+                        maDviTinh: res.maDviTinh,
                         level: lstKmTemp.find(e => e.id == maKm)?.level,
                     };
                     if (baoCao.length == 0) {
@@ -354,6 +355,7 @@ export class BaoCao02Component implements OnInit {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
+                        maDviTinh: item.maDviTinh,
                         level: item.level,
                     };
                     this.addLow(id, data, phuLuc);
@@ -471,9 +473,10 @@ export class BaoCao02Component implements OnInit {
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
         var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var stt: string = baoCao[index].stt;
+        
         // khong tim thay thi out ra
         if (index == -1) return;
+        var stt: string = baoCao[index].stt;
         var nho: string = baoCao[index].stt;
         var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
         //xóa phần tử và con của nó
@@ -801,7 +804,7 @@ export class BaoCao02Component implements OnInit {
         
         let checkMoneyRange = true;
         let checkPersonReport = true;
-        debugger
+        
         // validate nguoi thuc hien bao cao
         if (!baoCaoChiTietTemp.nguoiBcao) {
             checkPersonReport = false;
@@ -931,7 +934,6 @@ export class BaoCao02Component implements OnInit {
             }
             baoCaoTemp.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    debugger
                     if(item.level == 2){
                         baoCaoTemp[index].khSoLuong += item.khSoLuong;
                         baoCaoTemp[index].thSoLuong += item.thSoLuong;    

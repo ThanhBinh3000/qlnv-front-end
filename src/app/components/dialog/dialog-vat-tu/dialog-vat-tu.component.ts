@@ -1,12 +1,13 @@
+import { E } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
-    selector: 'dialog-them-khoan-muc',
-    templateUrl: './dialog-them-khoan-muc.component.html',
-    styleUrls: ['./dialog-them-khoan-muc.component.scss'],
+    selector: 'dialog-vat-tu',
+    templateUrl: './dialog-vat-tu.component.html',
+    styleUrls: ['./dialog-vat-tu.component.scss'],
 })
-export class DialogThemKhoanMucComponent implements OnInit {
+export class DialogThemVatTuComponent implements OnInit {
     @Input() obj: any;
 
     maKhoanMuc: any;
@@ -39,6 +40,15 @@ export class DialogThemKhoanMucComponent implements OnInit {
 
     changeModel() {
         this.lstChild = this.lstKhoanMuc.filter(e => e.idCha == this.maKhoanMuc);
+        if(this.obj.tab == '1' || this.obj.tab == '2'){
+            this.lstChild = this.lstChild.filter(item => this.obj.baoCaos.findIndex(el => el.maNdung == item.id) == -1);
+        }else if(this.obj.tab == '3'){
+            this.lstChild = this.lstChild.filter(item => this.obj.baoCaos.findIndex(el => el.maDan == item.id) == -1);
+        }else if(this.obj.tab == '4' || this.obj.tab == '5'){
+            this.lstChild = this.lstChild.filter(item => this.obj.baoCaos.findIndex(el => el.maVtu == item.id) == -1);
+        }else {
+            this.lstChild = this.lstChild.filter(item => this.obj.baoCaos.findIndex(el => el.maNdungChi == item.id) == -1);
+        }
     }
 
     handleOk() {

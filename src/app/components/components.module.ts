@@ -116,6 +116,7 @@ import { DialogThemKhoanMucComponent } from './dialog/dialog-them-khoan-muc/dial
 import { DialogLuaChonThemDonViComponent } from './dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-bao-cao-copy.component';
 import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.component';
+import { DialogThemVatTuComponent } from './dialog/dialog-vat-tu/dialog-vat-tu.component';
 
 @NgModule({
   declarations: [
@@ -184,6 +185,7 @@ import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.co
     DialogDieuChinhCopyComponent,
     DialogCopyGiaoDuToanComponent,
     DialogCopyQuyetToanVonPhiHangDtqgComponent,
+    DialogThemVatTuComponent,
   ],
   imports: [
     CommonModule,
