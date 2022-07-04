@@ -1,6 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
+import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-them-hang-hong-hoc-giam-chat-luong',
@@ -8,21 +11,51 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./them-hang-hong-hoc-giam-chat-luong.component.scss'],
 })
 export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
+  @Input('dsTong') dsTong;
+  @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
   formData: FormGroup;
   dataTable: IHangHongHocGiamChatLuong[];
-  rowItem: IHangHongHocGiamChatLuong;
+  rowItem: IHangHongHocGiamChatLuong = {
+    id: null,
+    idLoaiHangHoa: null,
+    loaiHangHoa: null,
+    idHangHoa: null,
+    tenHangHoa: null,
+    idDiemKho: null,
+    tenDiemKho: null,
+    idNhaKho: null,
+    tenNhaKho: null,
+    idNganLo: null,
+    tenNganLo: null,
+    soLuongTon: null,
+    soLuongThanhLy: null,
+    donVi: null,
+    lyDo: null,
+  };
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   dataEdit: {
     [key: string]: { edit: boolean; data: IHangHongHocGiamChatLuong };
   } = {};
+  dsDonVi = [];
+  dsDonViDataSource = [];
+  dsDiemKho = [];
+  dsDiemKhoDataSource = [];
+  dsNhaKho = [];
+  dsNhaKhoDataSource = [];
+  dsNganLo = [];
+  dsNganLoDataSource = [];
   @Output('close') onClose = new EventEmitter<any>();
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly donviService: DonviService,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.initData();
   }
 
   initForm(): void {
@@ -32,6 +65,59 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       idDanhSach: [null],
       ngayTao: [new Date()],
     });
+  }
+
+  initData() {
+    this.loadDsTong();
+  }
+
+  loadDsTong() {
+    if (!isEmpty(this.dsTong)) {
+      this.dsDonVi = this.dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+      // this.dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+      // this.dsDiemKhoDataSource = this.dsDiemKho.map((item) => item.tenDvi);
+      // this.dsNhaKho = this.dsTong[DANH_MUC_LEVEL.NHA_KHO];
+      // this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
+      // this.dsNganLo = this.dsTong[DANH_MUC_LEVEL.NGAN_LO];
+      // this.dsNganLoDataSource = this.dsNganLo.map((item) => item.tenDvi);
+    }
+  }
+
+  onChangeDonVi(id) {
+    const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
+    if (chiCuc) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+      };
+      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
+    } else {
+      this.dsDiemKho = [];
+    }
+  }
+
+  onChangeDiemKho(id) {
+    const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
+    if (diemKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
+      };
+      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+    } else {
+      this.dsNhaKho = [];
+    }
+  }
+
+  onChangeNhaKho(id) {
+    const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
+    if (nhaKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
+      };
+      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
+    } else {
+      this.dsNganLo = [];
+    }
   }
 
   huy() {

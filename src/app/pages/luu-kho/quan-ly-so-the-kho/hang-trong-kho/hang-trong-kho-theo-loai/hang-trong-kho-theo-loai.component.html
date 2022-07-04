@@ -9,6 +9,7 @@
                 <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="idLoaiHH" id="loai-hang-hoa">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
                     </nz-option>
                   </nz-select>
@@ -19,6 +20,7 @@
                 <nz-form-label nzFor="chung-loai-hang-ho">Chủng loại HH</nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="idChungLoaiHH" id="chung-loai-hang-hoa">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsChungLoaiHangHoa">
                     </nz-option>
                   </nz-select>
@@ -39,7 +41,8 @@
                 <nz-form-label nzFor="cuc">Cục</nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="idCuc" id="cuc">
-                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsCuc">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -48,8 +51,9 @@
               <nz-form-item nz-col nzSpan="5" class="form-item">
                 <nz-form-label nzFor="chi-cuc">Chi cục</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idChiCuc" id="chi-cuc">
-                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsChiCuc">
+                  <nz-select formControlName="idChiCuc" id="chi-cuc" (ngModelChange)="onChangeChiCuc($event)">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsChiCuc">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -58,8 +62,9 @@
               <nz-form-item nz-col nzSpan="3" class="form-item">
                 <nz-form-label nzFor="nha-kho">Nhà kho</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idNhaKho" id="nha-kho">
-                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsNhaKho">
+                  <nz-select formControlName="idNhaKho" id="nha-kho" (ngModelChange)="onChangeNhaKho($event)">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNhaKho">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -68,8 +73,9 @@
               <nz-form-item nz-col nzSpan="3" class="form-item">
                 <nz-form-label nzFor="ngan-kho">Ngăn kho</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idNganKho" id="ngan-kho">
-                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsNganKho">
+                  <nz-select formControlName="idNganKho" id="ngan-kho" (ngModelChange)="onChangeNganKho($event)">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganKho">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -79,7 +85,8 @@
                 <nz-form-label nzFor="lo-kho">Lô kho</nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="idLoKho" id="lo-kho">
-                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoKho">
+                    <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                    <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganLo">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -125,37 +132,40 @@
               <tr>
                 <th class="text-center" width="350px">
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.donVi"
+                      [nzAutocomplete]="donViAuto" (input)="onChangeAutoComplete($event)" />
+                    <nz-autocomplete #donViAuto [nzDataSource]="dsChiCucDataSource">
+                    </nz-autocomplete>
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.chungLoaiHH" />
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tonDauKy" />
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.nhapTrongKy" />
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.xuatTrongKy" />
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tonCuoiKy" />
                   </nz-input-group>
                 </th>
                 <th>
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Tìm kiếm" />
+                    <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donViTinh" />
                   </nz-input-group>
                 </th>
                 <th></th>
