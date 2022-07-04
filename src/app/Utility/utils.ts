@@ -279,62 +279,62 @@ export class Utils {
     }
 
     //get role xoa
-    public getRoleDel(status: any, unit: any, role: any) {
+    public getRoleDel(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleDel.status.includes(status) && unit == true && this.btnRoleDel.role.includes(role));
     }
 
     //get role luu
-    public getRoleSave(status: any, unit: any, role: any) {
+    public getRoleSave(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleSave.status.includes(status) && unit == true && this.btnRoleSave.role.includes(role));
     }
 
     //get role trinh duyet
-    public getRoleApprove(status: any, unit: any, role: any) {
+    public getRoleApprove(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleApprove.status.includes(status) && unit == true && this.btnRoleApprove.role.includes(role));
     }
 
     //get role truong bo phan
-    public getRoleTBP(status: any, unit: any, role: any) {
+    public getRoleTBP(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleTBP.status.includes(status) && unit == true && this.btnRoleTBP.role.includes(role));
     }
 
     //get role button lanh dao
-    public getRoleLD(status: any, unit: any, role: any) {
+    public getRoleLD(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleLD.status.includes(status) && unit == true && this.btnRoleLD.role.includes(role));
     }
 
     //get role button gui don vi cap tren
-    public getRoleGuiDVCT(status: any, unit: any, role: any) {
+    public getRoleGuiDVCT(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleGuiDVCT.status.includes(status) && unit == true && this.btnRoleGuiDVCT.role.includes(role));
     }
 
     //get role button don vi cap tren
-    public getRoleDVCT(status: any, unit: any, role: any) {
+    public getRoleDVCT(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleDVCT.status.includes(status) && unit == true && this.btnRoleDVCT.role.includes(role));
     }
 
     //role lanh dao dieu chinh
-    public getRoleLDDC(status: any, unit: any, role: any) {
+    public getRoleLDDC(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleLDDC.status.includes(status) && unit == true && this.btnRoleLDDC.role.includes(role));
     }
 
     //role copy
-    public getRoleCopy(status: any, unit: any, role: any) {
+    public getRoleCopy(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleCOPY.status.includes(status) && unit == true && this.btnRoleCOPY.role.includes(role));
     }
 
     //role in
-    public getRolePrint(status: any, unit: any, role: any) {
+    public getRolePrint(status: any, unit: any, role: any): boolean {
         return !(this.btnRolePRINT.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
     }
 
     //role export
-    public getRoleExport(status: any, unit: any, role: any) {
+    public getRoleExport(status: any, unit: any, role: any): boolean {
         return !(this.btnRoleExport.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
     }
 
     //role OK/not Ok
-    public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
+    public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any): boolean {
         return !(this.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && this.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
     // lay quyen
@@ -482,9 +482,10 @@ export class Utils {
     }
 
     // lay ten trang thai theo ma trang thai
-    public getStatusAppendixName(id: any) {
-        let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
-        return statusName?.ten;
+    public getStatusAppendixName(id: any): string {
+        // let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
+        // return statusName?.ten;
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 }
 export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
@@ -624,68 +625,68 @@ export const LOAI_BAO_CAO = [
 ]
 // Loai bao cao
 // 3.2.4.3.1
-export const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N: string = "01";
+export const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N = "01";
 
 // 3.2.4.3.2
-export const QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU: string = "02";
+export const QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU = "02";
 
 // 3.2.4.3.3
-export const QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG: string = "03";
+export const QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG = "03";
 
 // 3.2.4.3.4
-export const QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM: string = "04";
+export const QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM = "04";
 
 // 3.2.4.3.5
-export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N: string = "05";
+export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N = "05";
 
 // 3.2.4.3.6
-export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM: string = "06";
+export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM = "06";
 
 // 3.2.4.3.7
-export const QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N: string = "07";
+export const QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N = "07";
 
 // 3.2.4.3.8
-export const QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N: string = "08";
+export const QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N = "08";
 
 // 3.2.4.3.9
-export const QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N: string = "09";
+export const QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N = "09";
 
 // 3.2.4.3.10
-export const QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N: string = "10";
+export const QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N = "10";
 
 // 3.2.4.3.11
-export const QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N: string = "11";
+export const QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N = "11";
 
 // 3.2.4.3.12
-export const QLNV_KHVONPHI_CHI_TX_GD3N: string = "12";
+export const QLNV_KHVONPHI_CHI_TX_GD3N = "12";
 
 // 3.2.4.3.13
-export const QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N: string = "13";
+export const QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N = "13";
 
 // 3.2.4.3.14
-export const QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N: string = "14";
+export const QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N = "14";
 
 // 3.2.4.3.15
-export const QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N: string = "15";
+export const QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N = "15";
 
 // Loai bao cao Tổng cục
-export const QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N: string = "16";
-export const QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM: string = "17";
-export const QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM: string = "18";
-export const QLNV_KHVONPHI_TC_KHOACH_BQUAN_THOC_GAO_HNAM: string = "19";
-export const QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM: string = "20";
-export const QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N: string = "21";
-export const QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1: string = "22";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N: string = "23";
-export const QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N: string = "24";
-export const QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N: string = "25";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N: string = "26";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N: string = "27";
-export const QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N: string = "28";
-export const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N: string = "29";
-export const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N: string = "30";
-export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N: string = "31";
-export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N: string = "32";
+export const QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N = "16";
+export const QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM = "17";
+export const QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM = "18";
+export const QLNV_KHVONPHI_TC_KHOACH_BQUAN_THOC_GAO_HNAM = "19";
+export const QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM = "20";
+export const QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N = "21";
+export const QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1 = "22";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N = "23";
+export const QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N = "24";
+export const QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N = "25";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N = "26";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N = "27";
+export const QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N = "28";
+export const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N = "29";
+export const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N = "30";
+export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N = "31";
+export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N = "32";
 
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
@@ -1008,7 +1009,7 @@ export const DON_VI_TIEN = [
     },
 ]
 
-export function divMoney(value, maDonViTien) {
+export function divMoney(value, maDonViTien): number {
     let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
         return null;
@@ -1021,7 +1022,7 @@ export function divMoney(value, maDonViTien) {
     }
 }
 
-export function mulMoney(value, maDonViTien) {
+export function mulMoney(value, maDonViTien): number {
 
     let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
@@ -1070,7 +1071,7 @@ export const TRANG_THAI_GIAO = [
         tenDm: "Đã nhận",
     },
 ]
-export const MONEY_LIMIT = 9000000000000000000;
+export const MONEY_LIMIT = 9000000000000000;
 
 export const KHOAN_MUC: any[] = [
 	{
@@ -1237,7 +1238,7 @@ export const KHOAN_MUC: any[] = [
 
 
 
-export const LA_MA: any[] = [
+export const LA_MA = [
 	{
 		kyTu: "M",
 		gTri: 1000,

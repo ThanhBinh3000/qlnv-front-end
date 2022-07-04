@@ -13,7 +13,7 @@ export class DialogCopyComponent implements OnInit {
     private _modalRef: NzModalRef,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
 
   }
 

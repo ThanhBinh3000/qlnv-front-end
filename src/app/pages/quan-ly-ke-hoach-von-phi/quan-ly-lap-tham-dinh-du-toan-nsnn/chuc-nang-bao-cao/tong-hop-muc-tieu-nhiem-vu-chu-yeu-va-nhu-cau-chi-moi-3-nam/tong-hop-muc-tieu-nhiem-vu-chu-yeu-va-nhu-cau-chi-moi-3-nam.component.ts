@@ -701,12 +701,14 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 }
                 id = this.lstCtietBcao.find(e => e.maLvuc == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    var data: ItemData = {
-                        ...this.initItem,
-                        maLvuc: item.id,
-                        level: item.level,
-                    };
-                    this.addLow(id, data);
+                    if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.id) == -1){
+                        var data: ItemData = {
+                            ...this.initItem,
+                            maLvuc: item.id,
+                            level: item.level,
+                        };
+                        this.addLow(id, data);
+                    }
                 })
                 this.updateEditCache();
             }

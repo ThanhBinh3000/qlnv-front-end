@@ -7,13 +7,13 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   styleUrls: ['./dialog-tu-choi.component.scss'],
 })
 export class DialogTuChoiComponent implements OnInit {
-  text: string = ""
+  text!: string;
 
   constructor(
     private _modalRef: NzModalRef,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
 
   }
 
