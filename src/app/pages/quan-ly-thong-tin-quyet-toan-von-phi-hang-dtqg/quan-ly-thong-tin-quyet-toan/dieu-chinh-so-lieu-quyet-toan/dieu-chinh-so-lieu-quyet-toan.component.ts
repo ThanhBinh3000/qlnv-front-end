@@ -524,7 +524,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
