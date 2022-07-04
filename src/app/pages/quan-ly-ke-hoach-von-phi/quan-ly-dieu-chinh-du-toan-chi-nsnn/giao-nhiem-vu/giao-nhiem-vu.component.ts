@@ -75,8 +75,16 @@ export class GiaoNhiemVuComponent implements OnInit {
 	maDviTao!: string;
 	thuyetMinh: string;
 	lyDoTuChoi: string;
-  dotBcao: number = 1;
+  dotBcao: number;
 	//danh muc
+  dotBcaos: any[] = [
+    {
+      id: 1
+    },
+    {
+      id: 2
+    }
+  ]
 	lstDieuChinhs: ItemData[] = [];
 	phuLucs: any[] = JSON.parse(JSON.stringify(PHU_LUC)) ;
 	donVis: any[] = [];
@@ -205,6 +213,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
+    // this.dotBcao = parseInt(dotBcaoDieuChinh, 10)
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
@@ -635,6 +644,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
+          this.dotBcao = data.data.dotBcao
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
