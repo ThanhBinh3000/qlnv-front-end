@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -50,6 +51,17 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     loaiVthh: '',
     trichYeu: ''
   };
+  filterTable: any = {
+    soDxuat: '',
+    ngayKy: '',
+    trichYeu: '',
+    soQd: '',
+    namKhoach: '',
+    tenVthh: '',
+    tenCloaiVthh: '',
+    trangThai: '',
+  };
+  dataTableAll: any[] = [];
   listVthh: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
@@ -145,6 +157,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           item.checked = false;
         });
       }
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
@@ -350,5 +363,36 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+  
+  clearFilterTable() {
+    this.filterTable = {
+      soDxuat: '',
+      ngayKy: '',
+      trichYeu: '',
+      soQd: '',
+      namKhoach: '',
+      tenVthh: '',
+      tenCloaiVthh: '',
+      trangThai: '',
+    }
   }
 }
