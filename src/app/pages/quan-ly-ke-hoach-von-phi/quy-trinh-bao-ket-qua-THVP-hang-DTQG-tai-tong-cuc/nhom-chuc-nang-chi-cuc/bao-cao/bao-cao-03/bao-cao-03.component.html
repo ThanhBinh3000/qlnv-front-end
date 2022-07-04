@@ -122,9 +122,9 @@
         <td></td>
         <td>{{soLuongKhoachXb}}</td>
         <td>{{soLuongTteXb}}</td>
-        <td>{{dgGiaKhoachXb}}</td>
-        <td>{{dgGiaBanTthieuXb}}</td>
-        <td>{{dgGiaBanTteXb}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>{{ttGiaHtoanXb}}</td>
         <td>{{ttGiaBanTteXb}}</td>
         <td>{{ttClechGiaTteVaGiaHtoanXb}}</td>
@@ -152,11 +152,12 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let dvt of listDonvitinh">
+            {{item.maDviTinh}}
+            <!-- <div *ngFor="let dvt of listDonvitinh">
               <div *ngIf="dvt.id == item.maDviTinh">
                 {{dvt.tenDviTinh}}
               </div>
-            </div>
+            </div> -->
           </td>
           <td>{{item.soLuongKhoach}}</td>
           <td>{{item.soLuongTte}}</td>
@@ -195,12 +196,13 @@
             </div>
           </td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+            {{item.maDviTinh}}
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
               [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
               [(ngModel)]="editCache[item.id].data.maDviTinh">
               <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
               </nz-option>
-            </nz-select>
+            </nz-select> -->
           </td>
           <td>
             <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongKhoach">
@@ -265,9 +267,9 @@
         <td></td>
         <td>{{soLuongKhoachXCTVT}}</td>
         <td>{{soLuongTteXCTVT}}</td>
-        <td>{{dgGiaKhoachXCTVT}}</td>
-        <td>{{dgGiaBanTthieuXCTVT}}</td>
-        <td>{{dgGiaBanTteXCTVT}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>{{ttGiaHtoanXCTVT}}</td>
         <td>{{ttGiaBanTteXCTVT}}</td>
         <td>{{ttClechGiaTteVaGiaHtoanXCTVT}}</td>
@@ -294,11 +296,12 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let dvt of listDonvitinh">
+            {{item.maDviTinh}}
+            <!-- <div *ngFor="let dvt of listDonvitinh">
               <div *ngIf="dvt.id == item.maDviTinh">
                 {{dvt.tenDviTinh}}
               </div>
-            </div>
+            </div> -->
           </td>
           <td>{{item.soLuongKhoach}}</td>
           <td>{{item.soLuongTte}}</td>
@@ -337,12 +340,13 @@
             </div>
           </td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+            {{item.maDviTinh}}
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
               [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
               [(ngModel)]="editCache[item.id].data.maDviTinh">
               <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
               </nz-option>
-            </nz-select>
+            </nz-select> -->
           </td>
           <td>
             <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongKhoach">
@@ -407,9 +411,9 @@
         <td></td>
         <td>{{soLuongKhoachXk}}</td>
         <td>{{soLuongTteXk}}</td>
-        <td>{{dgGiaKhoachXk}}</td>
-        <td>{{dgGiaBanTthieuXk}}</td>
-        <td>{{dgGiaBanTteXk}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>{{ttGiaHtoanXk}}</td>
         <td>{{ttGiaBanTteXk}}</td>
         <td>{{ttClechGiaTteVaGiaHtoanXk}}</td>
@@ -436,11 +440,12 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let dvt of listDonvitinh">
+            {{item.maDviTinh}}
+            <!-- <div *ngFor="let dvt of listDonvitinh">
               <div *ngIf="dvt.id == item.maDviTinh">
                 {{dvt.tenDviTinh}}
               </div>
-            </div>
+            </div> -->
           </td>
           <td>{{item.soLuongKhoach}}</td>
           <td>{{item.soLuongTte}}</td>
@@ -479,12 +484,13 @@
             </div>
           </td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+            {{item.maDviTinh}}
+            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
               [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
               [(ngModel)]="editCache[item.id].data.maDviTinh">
               <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
               </nz-option>
-            </nz-select>
+            </nz-select> -->
           </td>
           <td>
             <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongKhoach">
