@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DonviService } from 'src/app/services/donvi.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/services/user.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { isEmpty } from 'lodash';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 
 @Component({
   selector: 'app-hang-sap-het-han-bao-hanh',
@@ -8,6 +17,8 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./hang-sap-het-han-bao-hanh.component.scss'],
 })
 export class HangSapHetHanBaoHanhComponent implements OnInit {
+  userInfo: UserLogin;
+  detail: any = {};
   formData: FormGroup;
   filterDate = new Date();
   dsTrangThai: ITrangThai[] = [
@@ -16,6 +27,26 @@ export class HangSapHetHanBaoHanhComponent implements OnInit {
     { id: 2, giaTri: 'Chờ duyệt' },
     { id: 3, giaTri: 'Đã duyệt' },
   ];
+  dsTong: any;
+  dsDonVi = [];
+  dsDonViDataSource = [];
+  dsLoaiHangHoa = [];
+  dsLoaiHangHoaDataSource = [];
+  dsDiemKho = [];
+  dsDiemKhoDataSource = [];
+  dsNhaKho = [];
+  dsNhaKhoDataSource = [];
+  dsNganLo = [];
+  dsNganLoDataSource = [];
+  searchInTable: any = {
+    idDonVi: null,
+    idLoaiHangHoa: null,
+    tenHangHoa: null,
+    idDiemKho: null,
+    idNhaKho: null,
+    idNganLo: null,
+    ngayNhapKho: new Date(),
+  };
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -101,11 +132,26 @@ export class HangSapHetHanBaoHanhComponent implements OnInit {
     },
   ];
 
-  constructor(private readonly fb: FormBuilder) { }
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly donviService: DonviService,
+    private readonly spinner: NgxSpinnerService,
+    private readonly notification: NzNotificationService,
+    private readonly userService: UserService,
+    private readonly danhMucService: DanhMucService,
+  ) {}
 
-  ngOnInit(): void {
-    this.initForm();
-    this.dataTable = [...this.dataExample];
+  async ngOnInit(): Promise<void> {
+    try {
+      this.spinner.show();
+      this.initForm();
+      await this.initData();
+      this.dataTable = [...this.dataExample];
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   initForm(): void {
@@ -118,11 +164,114 @@ export class HangSapHetHanBaoHanhComponent implements OnInit {
     });
   }
 
-  onChangeFilterDate(event) { }
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
+  }
 
-  changePageIndex(event) { }
+  async loadDsTong() {
+    const body = {
+      maDvi: this.detail.maDvi,
+      trangThai: '01',
+    };
 
-  changePageSize(event) { }
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+      // this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+      // this.dsDiemKhoDataSource = this.dsDiemKho.map((item) => item.tenDvi);
+      // this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+      // this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
+      // this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
+      // this.dsNganLoDataSource = this.dsNganLo.map((item) => item.tenDvi);
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiHangHoa = res.data;
+      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+    }
+  }
+
+  onChangeAutoComplete(e) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this.dsDonViDataSource = this.dsDonVi
+        .filter((item) =>
+          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.tenDvi);
+    } else {
+      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+    }
+  }
+
+  onChangeAutoCompleteLoaiHH(e) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
+        .filter((item) =>
+          item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.giaTri);
+    } else {
+      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
+        (item) => item.giaTri,
+      );
+    }
+  }
+
+  clearFilter() {
+    this.formData.reset();
+  }
+
+  onChangeDonVi(id) {
+    const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
+    if (chiCuc) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+      };
+      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
+    } else {
+      this.dsDiemKho = [];
+    }
+  }
+
+  onChangeDiemKho(id) {
+    const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
+    if (diemKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
+      };
+      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+    } else {
+      this.dsNhaKho = [];
+    }
+  }
+
+  onChangeNhaKho(id) {
+    const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
+    if (nhaKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
+      };
+      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
+    } else {
+      this.dsNganLo = [];
+    }
+  }
+
+  onChangeFilterDate(event) {}
+
+  changePageIndex(event) {}
+
+  changePageSize(event) {}
 }
 
 interface ITrangThai {

@@ -16,7 +16,9 @@
             <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
             <nz-form-control>
               <nz-input-group id="ten-don-vi">
-                <input type="text" nz-input formControlName="tenDonVi" />
+                <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto"
+                  (input)="onChangeAutoComplete($event)" />
+                <nz-autocomplete #donViAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -34,7 +36,9 @@
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-input-group id="loai-hang-hoa">
-                <input type="text" nz-input formControlName="loaiHangHoa" />
+                <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto"
+                  (input)="onChangeLoaiHHAutoComplete($event)" />
+                <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource"></nz-autocomplete>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -50,7 +54,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -101,19 +105,21 @@
             <th></th>
             <th class="text-center" width="350px">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"
+                  [nzAutocomplete]="donViSearchAuto" (input)="onChangeAutoComplete($event)" />
+                <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker [(ngModel)]="filterDate" (ngModelChange)="onChangeFilterDate($event)"></nz-date-picker>
+              <nz-date-picker [(ngModel)]="searchInTable.ngayTao"></nz-date-picker>
             </th>
             <th>
-              <nz-select>
+              <nz-select [(ngModel)]="searchInTable.trangThai">
                 <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
                 </nz-option>
               </nz-select>
@@ -170,5 +176,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-hang-hong-hoc-giam-chat-luong (close)="onClose()"></app-them-hang-hong-hoc-giam-chat-luong>
+  <app-them-hang-hong-hoc-giam-chat-luong (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa">
+  </app-them-hang-hong-hoc-giam-chat-luong>
 </ng-template>

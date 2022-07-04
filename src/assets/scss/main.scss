@@ -1579,6 +1579,10 @@ input.form-control,
   align-items: center;
 }
 
+.filter-in-table .ant-select-selector {
+  height: ($input-h + 4) $i;
+}
+
 .ant-input-group-addon .ant-btn,
 .ant-input {
   min-width: $input-h $i;

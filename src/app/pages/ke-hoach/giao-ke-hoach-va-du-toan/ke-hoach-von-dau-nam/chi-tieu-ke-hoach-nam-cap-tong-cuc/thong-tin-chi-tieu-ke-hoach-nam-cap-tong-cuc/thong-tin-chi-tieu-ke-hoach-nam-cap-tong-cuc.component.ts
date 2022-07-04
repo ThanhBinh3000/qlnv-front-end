@@ -363,9 +363,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       ],
     });
 
-    this.formData.get('soQD').setValidators(this.setRequired());
-    this.formData.get('ngayKy').setValidators(this.setRequired());
-    this.formData.get('ngayHieuLuc').setValidators(this.setRequired());
+    // this.formData.get('soQD').setValidators(this.setRequired());
+    // this.formData.get('ngayKy').setValidators(this.setRequired());
+    // this.formData.get('ngayHieuLuc').setValidators(this.setRequired());
   }
   setRequired() {
     if (this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.LANH_DAO_DUYET) {
