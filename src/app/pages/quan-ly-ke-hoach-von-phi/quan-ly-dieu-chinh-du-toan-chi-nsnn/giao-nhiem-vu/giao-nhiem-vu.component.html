@@ -83,15 +83,29 @@
 						<tr>
 							<td>{{maBaoCao}}</td>
 							<td>
-                <!-- {{namHienHanh}} -->
-                  <nz-input-number [nzSize]="'small'"
-                    [class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
-                    [(ngModel)]="namHienHanh"
-                    (ngModelChange)="changeNam()"
-                    >
-                  </nz-input-number>
-              </td>
-							<td>{{dotBcao}}</td>
+								<!-- {{namHienHanh}} -->
+								<nz-input-number [nzSize]="'small'"
+									[class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
+									[(ngModel)]="namHienHanh" (ngModelChange)="changeNam()">
+								</nz-input-number>
+							</td>
+							<td>
+								<!-- {{dotBcao}} -->
+								<ng-container *ngIf="trangThaiBaoCao == '1'; else chonDot">
+									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+										[(ngModel)]="dotBcao">
+										<nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id" [nzLabel]="item.id">
+										</nz-option>
+									</nz-select>
+								</ng-container>
+								<ng-template #chonDot>
+									<div *ngFor="let item of dotBcaos">
+											<div *ngIf="item.id == dotBcao">
+												{{item.id}}
+											</div>
+									</div>
+								</ng-template>
+							</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>
 							<td>
@@ -126,7 +140,7 @@
 			<div class="tab__container" id="tablePrint">
 				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex" nzType="editable-card"
 					(nzClose)="closeTab($event)" nzHideAdd>
-					<nz-tab [nzTitle]="'DANH SÁCH BIỂU MẪU'" >
+					<nz-tab [nzTitle]="'DANH SÁCH BIỂU MẪU'">
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col class="gutter-row canphai phai" [nzSpan]="24"
 								style="display:flex; justify-content: end;">
@@ -140,7 +154,7 @@
 								</button>
 							</div>
 						</div>
-						<nz-table nzBordered class="table__body" >
+						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
 									<th nzWidth="5%">STT</th>
@@ -333,7 +347,7 @@
 							<app-phu-luc1 [data]="data" (dataChange)="getNewData($event)">
 							</app-phu-luc1>
 						</ng-container>
-						<ng-container *ngIf="tab.id == '2'" >
+						<ng-container *ngIf="tab.id == '2'">
 							<app-phu-luc2 [data]="data" (dataChange)="getNewData($event)">
 							</app-phu-luc2>
 						</ng-container>
