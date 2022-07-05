@@ -764,4 +764,16 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   print() {
 
   }
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
+    }
+  }
 }
