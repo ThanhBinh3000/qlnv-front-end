@@ -18,6 +18,11 @@ export abstract class BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getTreeAll(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca-tree`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
   create(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();

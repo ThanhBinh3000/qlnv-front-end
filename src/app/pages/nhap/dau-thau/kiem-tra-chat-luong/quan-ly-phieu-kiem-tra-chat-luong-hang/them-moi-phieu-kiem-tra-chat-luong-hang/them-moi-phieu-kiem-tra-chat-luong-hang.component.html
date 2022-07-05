@@ -82,7 +82,7 @@
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
@@ -94,7 +94,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
@@ -106,7 +106,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
@@ -118,10 +118,10 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngăn lô
+                  Lô kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNganLo"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
@@ -161,6 +161,14 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng nhập kho
+                </nz-form-label>
+                <input nz-input [(ngModel)]="typeVthh" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chủng loại hàng hóa
                 </nz-form-label>
                 <input nz-input [(ngModel)]="typeVthh" disabled />
               </nz-form-item>

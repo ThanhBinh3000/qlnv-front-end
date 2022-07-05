@@ -193,7 +193,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       maDviCha: this.detail.maDonVi,
       trangThai: '01',
     }
-    const res = await this.donViService.getAll(body);
+    const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listDiemKho = res.data;
