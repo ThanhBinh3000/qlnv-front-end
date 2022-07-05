@@ -300,7 +300,8 @@ export class PhuLuc3Component implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
-    if ((!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
+    if (
+      (!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
       (!this.editCache[id].data.dkienThienLuong && this.editCache[id].data.dkienThienLuong !== 0) ||
       (!this.editCache[id].data.dtoanDchinh && this.editCache[id].data.dtoanDchinh !== 0) ||
       (!this.editCache[id].data.dtoanLke && this.editCache[id].data.dtoanLke !== 0) ||
@@ -315,6 +316,21 @@ export class PhuLuc3Component implements OnInit {
 
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if(
+      this.editCache[id].data.dkienThienDtoan < 0 ||
+      this.editCache[id].data.dkienThienLuong < 0 ||
+      this.editCache[id].data.dtoanDchinh < 0 ||
+      this.editCache[id].data.dtoanLke < 0 ||
+      this.editCache[id].data.dtoanThieuNtruoc < 0 ||
+      this.editCache[id].data.khoachLuong < 0 ||
+      this.editCache[id].data.khoachQdGiaoNvu < 0 ||
+      this.editCache[id].data.tdiemBcaoDtoan < 0 ||
+      this.editCache[id].data.tdiemBcaoLuong < 0 ||
+      this.editCache[id].data.tongNcauDtoanN < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
     }
     this.editCache[id].data.checked = this.lstDchinh.find(

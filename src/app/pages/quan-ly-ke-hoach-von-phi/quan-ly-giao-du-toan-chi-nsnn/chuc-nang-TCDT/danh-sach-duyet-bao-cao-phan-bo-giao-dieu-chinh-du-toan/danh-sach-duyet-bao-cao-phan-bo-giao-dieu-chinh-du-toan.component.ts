@@ -216,7 +216,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maPa = null
-    // this.searchFilter.trangThai = null
+    this.trangThai = null
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {

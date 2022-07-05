@@ -553,8 +553,8 @@ export class PhuLuc7Component implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (
-      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.maDviTinh) ||
+      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.slHangTte && this.editCache[id].data.slHangTte !== 0) ||
       (!this.editCache[id].data.kphiBqDmuc && this.editCache[id].data.kphiBqDmuc !== 0) ||
       (!this.editCache[id].data.kphiBqTtien && this.editCache[id].data.kphiBqTtien !== 0) ||
@@ -570,6 +570,24 @@ export class PhuLuc7Component implements OnInit {
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
+    }
+    if(
+      this.editCache[id].data.loaiMatHang < 0 ||
+      this.editCache[id].data.slHangTte < 0 ||
+      this.editCache[id].data.kphiBqDmuc < 0 ||
+      this.editCache[id].data.kphiBqTtien < 0 ||
+      this.editCache[id].data.cphiBqTcong < 0 ||
+      this.editCache[id].data.cphiBqNtruoc < 0 ||
+      this.editCache[id].data.cphiBqNnay < 0 ||
+      this.editCache[id].data.chenhLech < 0 ||
+      this.editCache[id].data.soQtoan < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTk < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTchi < 0 ||
+      this.editCache[id].data.dtoan2021ThanhQtoan2020 < 0 ||
+      this.editCache[id].data.soChuaQtoan < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
     }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua

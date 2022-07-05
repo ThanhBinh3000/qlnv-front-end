@@ -366,7 +366,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
+
           this.lstCtietBcao = data.data.lstCtiet;
           this.maDviTien = data.data.maDviTien;
           this.sortByIndex();
@@ -1160,7 +1160,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   }
 
   async doCopy(response: any) {
-    console.log(response);
+
 
     var maBcaoNew: string;
     await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(
