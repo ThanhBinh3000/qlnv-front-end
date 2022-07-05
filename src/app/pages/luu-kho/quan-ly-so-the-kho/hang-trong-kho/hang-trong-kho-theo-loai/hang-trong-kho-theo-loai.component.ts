@@ -661,7 +661,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
 
   async loadDsTong() {
     const body = {
-      maDvi: this.detail.maDvi,
+      maDviCha: this.detail.maDvi,
       trangThai: '01',
     };
 

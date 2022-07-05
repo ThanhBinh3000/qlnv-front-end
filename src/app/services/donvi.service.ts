@@ -45,7 +45,7 @@ export class DonviService extends BaseService {
   }
 
   layTatCaDangTree(body): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca-tree?maDvi=${body.maDvi}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca-tree?maDviCha=${body.maDviCha}`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

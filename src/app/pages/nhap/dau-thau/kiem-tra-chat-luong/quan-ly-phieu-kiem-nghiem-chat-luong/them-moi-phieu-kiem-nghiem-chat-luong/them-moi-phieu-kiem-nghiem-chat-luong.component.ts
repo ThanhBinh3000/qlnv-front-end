@@ -62,6 +62,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   dsKetQuaKiemNghiemHangClone: Array<KetQuaKiemNghiemChatLuongHang> = [];
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
+  isValid = false;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -98,6 +99,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       } else {
         this.phieuKiemNghiemChatLuongHang.trangThai = this.globals.prop.DU_THAO;
       }
+      this.isValid =
+        !!this.phieuKiemNghiemChatLuongHang.bbBanGiaoMauId &&
+        !!this.phieuKiemNghiemChatLuongHang.qdgnvnxId;
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -173,10 +177,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
         res = await this.phieuKiemNghiemChatLuongHangService.sua(body);
       } else {
         // Thêm
-        if (isGuiDuyet) {
-          body.trangThai = this.globals.prop.LANH_DAO_DUYET;
-        }
         res = await this.phieuKiemNghiemChatLuongHangService.them(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          const body = {
+            id: res.data.id,
+            trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+          };
+          await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
+        }
       }
 
       if (res.msg == MESSAGE.SUCCESS) {
@@ -413,6 +421,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           this.phieuKiemNghiemChatLuongHang.bbBanGiaoMauId,
         );
       if (bbBanGiaoMauRes.msg === MESSAGE.SUCCESS) {
+        this.isValid =
+          !!this.phieuKiemNghiemChatLuongHang.bbBanGiaoMauId &&
+          !!this.phieuKiemNghiemChatLuongHang.qdgnvnxId;
         const bbBanGiaoMau = bbBanGiaoMauRes.data;
         const bbLayMauRes = await this.quanLyBienBanLayMauService.loadChiTiet(
           bbBanGiaoMau.bbLayMauId,
@@ -454,7 +465,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
   async loadDiemKho() {
     const body = {
-      maDvi: this.phieuKiemNghiemChatLuongHang.maDonVi,
+      maDviCha: this.phieuKiemNghiemChatLuongHang.maDonVi,
       trangThai: '01',
     };
 
@@ -823,7 +834,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   }
 
   thongTinTrangThaiText(trangThai: string): string {
-    console.log(this.globals);
     switch (trangThai) {
       case this.globals.prop.DU_THAO:
         return 'Dự thảo';

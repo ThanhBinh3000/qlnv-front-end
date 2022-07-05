@@ -158,7 +158,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.dataTable = data.content;
+      this.dataTable = [...data.content];
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
