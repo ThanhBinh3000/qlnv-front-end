@@ -47,3 +47,20 @@
     color: #fff;
   }
 }
+
+::ng-deep {
+  .data-table {
+    .ant-table {
+      overflow-x: auto;
+    }
+  }
+}
+
+.filter-in-table {
+  margin-bottom: 8px;
+  height: 28px;
+
+  nz-select-top-control {
+    height: 28px !important;
+  }
+}

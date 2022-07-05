@@ -116,10 +116,10 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker [(ngModel)]="searchInTable.ngayTao"></nz-date-picker>
+              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"></nz-date-picker>
             </th>
             <th>
-              <nz-select [(ngModel)]="searchInTable.trangThai">
+              <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThai">
                 <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
                 </nz-option>
               </nz-select>
@@ -139,7 +139,7 @@
             <td>{{ data.tenDonVi }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trangThai }}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; white-space: nowrap;">
               <a (click)="viewDetail(data.id, false)">
                 <i class="fa fa-eye"></i>
               </a>
