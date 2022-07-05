@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -50,8 +50,8 @@ export class TongHopComponent implements OnInit {
 		page: 1,
 	}
 
-	statusBtnValidate: boolean = true;
-	statusTaoMoi: boolean = true;
+	statusBtnValidate = true;
+	statusTaoMoi = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -66,7 +66,7 @@ export class TongHopComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.maDviTao = this.userInfo?.dvql;
 		//lay danh sach danh muc
@@ -114,13 +114,13 @@ export class TongHopComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
-		let trangThais = [];
+		let trangThais: string[] = [];
 		if (this.trangThai){
 			trangThais = [this.trangThai];
 		} else [
 			trangThais = [Utils.TT_BC_9, Utils.TT_BC_7]
 		]
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "1",
 			maDvi: this.maDviTao,
 			namBcao: this.namHienTai,

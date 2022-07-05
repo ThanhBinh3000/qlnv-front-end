@@ -35,8 +35,8 @@ export class ItemGui {
 })
 export class ThanhToanChoKhachHangComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
-    loai: any;
+    id: string;
+    loai: string;
     userInfo: any;
     //thong tin chung bao cao
     maThanhToan: string;
@@ -51,7 +51,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     ttGui: ItemGui = new ItemGui();
     ttGuiCache: ItemGui = new ItemGui();
     thuyetMinh: string;
-    trangThaiBanGhi: string = "1";
+    trangThaiBanGhi = "1";
     newDate = new Date();
     maDviTien: string;
     //danh muc
@@ -59,8 +59,8 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
-    status: boolean = false;
-    statusEdit: boolean = true;
+    status = false;
+    statusEdit = true;
     statusBtnDel: boolean;
     statusBtnSave: boolean;
     statusBtnApprove: boolean;
@@ -69,14 +69,14 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     statusBtnCopy: boolean;
     allChecked = false;
     //khac
-    listId: string = '';
+    listId = '';
     lstFiles: any[] = []; //show file ra man hinh
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     //beforeUpload: any;
-    listIdFilesDelete: any = [];                        // id file luc call chi tiet
+    listIdFilesDelete: string[] = [];                        // id file luc call chi tiet
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -114,7 +114,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
 
         //lay danh sach danh muc
@@ -187,21 +187,17 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkParent = false;
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
-        }
-        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-            checkParent = true;
         }
         const utils = new Utils();
         this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, userRole);
@@ -218,9 +214,9 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maThanhToan);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -243,10 +239,9 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -379,12 +374,12 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile: any = [];
+        const listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
-        let request = {
+        const request = {
             id: this.id,
             maLoai: "4",
             fileDinhKemGuis: listFile,
@@ -496,7 +491,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     async showDialogCopy() {
         let danhSach = [];
 
-        let requestReport = {
+        const requestReport = {
 			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: "",
 			maDvi: this.userInfo?.dvql,
@@ -525,7 +520,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 		);
 
 		this.spinner.hide();
-        let obj = {
+        const obj = {
             maCvUv: this.maCvUv,
             danhSach: danhSach,
             khachHang: this.khachHang,
@@ -549,7 +544,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     }
 
     async doCopy(response: any) {
-        var maCvUvNew: string;
+        let maCvUvNew: string;
         await this.quanLyVonPhiService.maThanhToan().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -578,7 +573,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             return;
         }
         // gui du lieu trinh duyet len server
-        let request = {
+        const request = {
             id: null,
             maLoai: "4",
             fileDinhKemGuis: [],

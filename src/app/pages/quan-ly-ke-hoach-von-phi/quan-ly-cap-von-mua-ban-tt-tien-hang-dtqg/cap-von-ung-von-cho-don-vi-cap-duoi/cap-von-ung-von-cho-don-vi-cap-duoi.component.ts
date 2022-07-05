@@ -21,7 +21,7 @@ import { DataService } from '../data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 export class ItemData {
-    id: any;
+    id: string;
     stt: string;
     dviNhan: string;
     ngayLap: string;
@@ -47,8 +47,8 @@ export class ItemData {
 })
 export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
-    loai: any;
+    id: string;
+    loai: string;
     userInfo: any;
     //thong tin chung bao cao
     maCvUvDuoi: string;
@@ -72,18 +72,18 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     //trang thai cac nut
-    status: boolean = false;
-    statusBtnDel: boolean;
-    statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
-    statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-    statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
-    statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnCopy: boolean = true;                      // trang thai copy
+    status = false;
+    statusBtnDel;
+    statusBtnSave = true;                      // trang thai an/hien nut luu
+    statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
+    statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
+    statusBtnLD = true;                        // trang thai an/hien nut lanh dao
+    statusBtnCopy = true;                      // trang thai copy
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
-    listIdFilesDelete: any = [];
+    listIdFilesDelete: string[] = [];
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -127,7 +127,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -217,21 +217,17 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkParent = false;
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
-        }
-        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-            checkParent = true;
         }
         const utils = new Utils();
         this.statusBtnDel = utils.getRoleDel(this.trangThai, checkChirld, userRole);
@@ -248,9 +244,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maCvUvDuoi);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -273,10 +269,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -418,12 +413,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile: any = [];
+        const listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
 
-        var lstCtietBcaoTemp: ItemData[] = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
             if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
                 checkMoneyRange = false;
@@ -448,7 +443,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             }
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -584,29 +579,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     async capToanBo() {
-        // var maCvUvDuoi: string;
-        // await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             let capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-        //             var str: string;
-        //             if (capDvi == Utils.TONG_CUC) {
-        //                 str = "CKV";
-        //             } else {
-        //                 str = "CC";
-        //             }
-        //             maCvUvDuoi = res.data;
-        //             let mm = maCvUvDuoi.split('.');
-        //             maCvUvDuoi = mm[0] + str + '.' + mm[1];
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     },
-        // );
-        let request: any[] = [];
+        const request: any[] = [];
         this.lstCtietBcao.forEach(item => {
             request.push({
                 id: null,
@@ -633,8 +606,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         })
         this.quanLyVonPhiService.capTatCa(request).toPromise().then(
             async (data) => {
-                if (data.statusCode == 0) {
-                } else {
+                if (data.statusCode != 0) {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
@@ -645,7 +617,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     async showDialogCopy() {
-        let requestReport = {
+        const requestReport = {
             loaiTimKiem: "0",
             maCapUngVonTuCapTren: "",
             maDvi: this.userInfo?.dvql,
@@ -672,7 +644,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
-        let obj = {
+        const obj = {
             maCvUv: this.maCvUvTren,
             danhSach: danhSach,
         }
@@ -695,7 +667,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     async doCopy(response: any) {
-        var maCvUvNew: string;
+        let maCvUvNew: string;
         await this.quanLyVonPhiService.maCapVonUng().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -727,7 +699,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             return;
         }
 
-        var lstCtietBcaoTemp: ItemData[] = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
             if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
                 checkMoneyRange = false;
@@ -748,7 +720,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         }
 
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: null,
             fileDinhKemGuis: [],
             listIdDeleteFileGuis: [],

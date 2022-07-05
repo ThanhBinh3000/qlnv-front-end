@@ -20,7 +20,7 @@ import * as uuid from 'uuid';
 import { DataService } from '../data.service';
 
 export class ItemData {
-    id: any;
+    id: string;
     stt: string;
     maHang: string;
     maDviTinh: string;
@@ -44,9 +44,9 @@ export class ItemCongVan {
 })
 export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
+    id: string;
     userInfo: any;
-    loai: any;
+    loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -59,8 +59,8 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     trangThai: string;
     maDviTao: string;
     thuyetMinh: string;
-    tongTien: number = 0;
-    kphiDaCap: number = 0;
+    tongTien = 0;
+    kphiDaCap = 0;
     lyDoTuChoi: string;
     maDviTien: string;
     newDate = new Date();
@@ -88,21 +88,20 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     ]
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
-    dviTinhs: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     //trang thai cac nut
-    status: boolean = false;
-    statusBtnDel: boolean;
-    statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
-    statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-    statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnCopy: boolean = true;                      // trang thai copy
+    status = false;
+    statusBtnDel;
+    statusBtnSave = true;                      // trang thai an/hien nut luu
+    statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
+    statusBtnLD = true;                        // trang thai an/hien nut lanh dao
+    statusBtnCopy = true;                      // trang thai copy
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
-    listIdFilesDelete: any = [];
+    listIdFilesDelete: string[] = [];
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -156,7 +155,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -247,21 +246,17 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkParent = false;
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
-        }
-        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-            checkParent = true;
         }
         const utils = new Utils();
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
@@ -280,9 +275,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maDeNghi);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -305,10 +300,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -337,7 +331,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -461,7 +455,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
         }
 
-        let lstCtietBcaoTemp: ItemData[] = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
@@ -480,7 +474,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
 
-        let listFile = [];
+        const listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
@@ -492,7 +486,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             }
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -510,7 +504,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             trangThai: this.trangThai,
             thuyetMinh: this.thuyetMinh,
         }));
-        let file: any = this.fileDetail;
+        const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -562,7 +556,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // them dong moi
     addLine(id: number): void {
-        let item: ItemData = {
+        const item: ItemData = {
             id: uuid.v4() + 'FE',
             stt: '',
             maHang: "",
@@ -581,7 +575,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     // xoa dong
-    deleteById(id: any): void {
+    deleteById(id: string): void {
         this.tongTien -= this.lstCtietBcao.find(e => e.id == id).thanhTien;
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
     }
@@ -647,6 +641,12 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+        const ind = this.lstCtietBcao.findIndex(e => e.maHang == this.editCache[id].data.maHang);
+        if (ind != -1 && ind != index) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGE.ERROR_ADD_VTU);
+            return;
+        }
         if (!this.editCache[id].data.maHang ||
             (!this.editCache[id].data.soLuong && this.editCache[id].data.soLuong !== 0) ||
             (!this.editCache[id].data.donGiaMua && this.editCache[id].data.donGiaMua !== 0)) {
@@ -659,7 +659,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
-        const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+
         this.tongTien -= this.lstCtietBcao[index].thanhTien;
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
@@ -704,7 +704,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     showDialogCopy() {
-        let obj = {
+        const obj = {
             qdChiTieu: this.qdChiTieu,
         }
         const modalTuChoi = this.modal.create({
@@ -726,7 +726,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     async doCopy(response: any) {
-        var maDeNghiNew: string;
+        let maDeNghiNew: string;
         await this.quanLyVonPhiService.maDeNghi().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -760,7 +760,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
         }
 
-        let lstCtietBcaoTemp: ItemData[] = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
@@ -769,7 +769,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             })
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],

@@ -10,7 +10,7 @@ import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -22,7 +22,7 @@ import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_GUI_DVCT, T
 export class TongHopComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -74,8 +74,8 @@ export class TongHopComponent implements OnInit {
 		page: 1,
 	}
 	//trang thai
-	statusBtnNew: boolean = true;
-	statusTaoMoi: boolean = true;
+	statusBtnNew = true;
+	statusTaoMoi = true;
 	status: boolean;
 	disable: boolean;
 
@@ -95,11 +95,11 @@ export class TongHopComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
@@ -157,7 +157,7 @@ export class TongHopComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		this.statusBtnNew = true;
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDnghi: this.searchFilter.maDeNghi,
 			maDvi: this.searchFilter.maDviTao,
@@ -228,7 +228,7 @@ export class TongHopComponent implements OnInit {
 			return;
 		}
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
-			let obj = {
+			const obj = {
 				qdChiTieu: this.searchFilter.qdChiTieu,
 			}
 			this.dataSource.changeData(obj);
@@ -307,7 +307,7 @@ export class TongHopComponent implements OnInit {
 	}
 
 	checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
 			&& ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
@@ -317,7 +317,7 @@ export class TongHopComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: any){
+	changeListIdDelete(id: string){
 		if (this.listIdDelete.findIndex(e => e == id) == -1){
 			this.listIdDelete.push(id); 
 		} else {

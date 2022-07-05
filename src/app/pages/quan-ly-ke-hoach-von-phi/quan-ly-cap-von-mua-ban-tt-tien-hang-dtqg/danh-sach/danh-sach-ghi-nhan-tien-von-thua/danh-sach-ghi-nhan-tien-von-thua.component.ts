@@ -5,9 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -20,7 +19,7 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -65,11 +64,11 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
@@ -129,7 +128,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		// if (this.searchFilter.trangThai) {
 		// 	trangThais = [this.searchFilter.trangThai];
 		// }
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "1",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maNopTienThua: this.searchFilter.maTienThua,
@@ -205,24 +204,24 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	xoaBaoCao(id: any) {
-		// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0){
-		// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-		// 			this.onSubmit();
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, data?.msg);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// )
-	}
+	// xoaBaoCao(id: any) {
+	// 	// this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
+	// 	// 	data => {
+	// 	// 		if (data.statusCode == 0){
+	// 	// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+	// 	// 			this.onSubmit();
+	// 	// 		} else {
+	// 	// 			this.notification.error(MESSAGE.ERROR, data?.msg);
+	// 	// 		}
+	// 	// 	},
+	// 	// 	err => {
+	// 	// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+	// 	// 	}
+	// 	// )
+	// }
 
 	checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThaiDviCha == Utils.TT_BC_1 || item.trangThaiDviCha == Utils.TT_BC_3 || item.trangThaiDviCha == Utils.TT_BC_5) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;

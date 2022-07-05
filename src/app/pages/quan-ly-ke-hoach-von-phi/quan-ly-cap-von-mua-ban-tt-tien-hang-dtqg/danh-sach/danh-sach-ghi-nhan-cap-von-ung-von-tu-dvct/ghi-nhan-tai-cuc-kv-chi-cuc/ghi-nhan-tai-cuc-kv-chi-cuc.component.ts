@@ -20,7 +20,7 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../../quan-ly-cap-von-mua-ban-tt-tie
 export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -67,7 +67,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.maDvi = this.userInfo?.dvql;
@@ -106,7 +106,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	}
 
 	async getDanhSachCapVon() {
-		let request = {
+		const request = {
 			maCapUngVonChoCapDuoi: "",
 			ngayTaoTu: "",
 			ngayTaoDen: "",
@@ -152,7 +152,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		this.statusNew = true;
-		let requestReport = {
+		const requestReport = {
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maDvi: this.userInfo?.dvql,
 			maLoai: "1",
@@ -221,32 +221,32 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	xoaBaoCao(id: any) {
-		this.quanLyVonPhiService.xoaVonMuaBan(id).toPromise().then(
-			data => {
-				if (data.statusCode == 0){
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-					this.onSubmit();
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		)
-	}
+	// xoaBaoCao(id: any) {
+	// 	this.quanLyVonPhiService.xoaVonMuaBan(id).toPromise().then(
+	// 		data => {
+	// 			if (data.statusCode == 0){
+	// 				this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+	// 				this.onSubmit();
+	// 			} else {
+	// 				this.notification.error(MESSAGE.ERROR, data?.msg);
+	// 			}
+	// 		},
+	// 		err => {
+	// 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+	// 		}
+	// 	)
+	// }
 
-	checkDeleteReport(item: any): boolean {
-		var check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) 
-			 && ROLE_CAN_BO.includes(this.userRole)) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
-	}
+	// checkDeleteReport(item: any): boolean {
+	// 	var check: boolean;
+	// 	if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) 
+	// 		 && ROLE_CAN_BO.includes(this.userRole)) {
+	// 		check = true;
+	// 	} else {
+	// 		check = false;
+	// 	}
+	// 	return check;
+	// }
 
 	close() {
 		this.router.navigate([
