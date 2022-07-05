@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -53,7 +54,18 @@ export class ThongtinDauthauComponent implements OnInit {
     maDvi: '',
     trichYeu: ''
   };
-
+  filterTable: any = {
+    goiThau: '',
+    tenDvi: '',
+    soQdPdKhlcnt: '',
+    ngayQd: '',
+    trichYeu: '',
+    tenVthh: '',
+    tenCloaiVthh: '',
+    thanhGiaGoiThau: '',
+    statusConvert: '',
+  };
+  dataTableAll: any[] = [];
   listVthh: any[] = [];
 
   dataTable: any[] = [];
@@ -125,7 +137,12 @@ export class ThongtinDauthauComponent implements OnInit {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+          item.statusConvert = this.statusGoiThau(item.trangThai);
+        });
       }
+      this.dataTableAll = cloneDeep(this.dataTable)
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -269,6 +286,38 @@ export class ThongtinDauthauComponent implements OnInit {
 
   dateChange() {
     this.helperService.formatDate()
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      goiThau: '',
+      tenDvi: '',
+      soQdPdKhlcnt: '',
+      ngayQd: '',
+      trichYeu: '',
+      tenVthh: '',
+      tenCloaiVthh: '',
+      thanhGiaGoiThau: '',
+      statusConvert: '',
+    }
   }
 
 }

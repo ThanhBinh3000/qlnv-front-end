@@ -137,8 +137,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                          (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.statusConvert"
+                          (input)="filterInTable('statusConvert',filterTable.statusConvert)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -169,7 +169,7 @@
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.tenVthh }}</td>
                     <td *ngIf="isCuc">{{ data.tenCloaiVthh }}</td>
-                    <td>{{ convertTrangThai(data.trangThai) }}</td>
+                    <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>

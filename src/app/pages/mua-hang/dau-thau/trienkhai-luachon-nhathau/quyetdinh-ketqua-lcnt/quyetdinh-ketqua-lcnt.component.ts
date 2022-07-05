@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -44,7 +45,20 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     loaiVthh: '',
     soQd: ''
   };
-
+  filterTable: any = {
+    soQd: '',
+    ngayQd: '',
+    trichYeu: '',
+    tenGthau: '',
+    statusGT: '',
+    tenNhaThau: '',
+    lyDoHuy: '',
+    donGiaTrcVat: '',
+    tenHdong: '',
+    tgianThienHd: '',
+    statusConvert: '',
+  };
+  dataTableAll: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -111,6 +125,13 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       let data = res.data;
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.statusConvert = this.convertTrangThai(item.trangThai);
+          item.statusGT = this.statusGoiThau(item.statusGthau);
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -241,4 +262,37 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      ngayQd: '',
+      trichYeu: '',
+      tenGthau: '',
+      statusGT: '',
+      tenNhaThau: '',
+      lyDoHuy: '',
+      donGiaTrcVat: '',
+      tenHdong: '',
+      tgianThienHd: '',
+      statusConvert: '',
+    }
+  }
 }
