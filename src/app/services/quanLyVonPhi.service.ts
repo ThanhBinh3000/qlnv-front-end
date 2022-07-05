@@ -1246,11 +1246,6 @@ updateBaoCaoThucHienDTC(request: any): Observable<any> {
   );
 }
 
-//sinh đợt báo cáo 3.2.9
-sinhDotBaoCao(): Observable<any> {
-  return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-dot')
-}
-
 //search list bao cao
 timBaoCao(request: any): Observable<any> {
   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
@@ -1283,17 +1278,22 @@ approveBieuMau(request: any): Observable<any> {
   return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
 }
 
-// call api chức năng duyet bieu mau
+// exprot excel
 exportBaoCao(bcaoCtietId: string, bcaoId: string): Observable<any> {
   return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId, { responseType: 'blob' });
 }
  
-//call api chức năng duyet bieu mau
+//get user theo dvql
 getListUserByManage(request: any): Observable<any> {
   return this.httpClient.post(this.urlDefault + '/qlnv-system/user/findList',request);
 }
 
 getListUser(): Observable<any> {
   return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/chung/can-bo');
+}
+
+//lay thong tin luy ke
+getLuyKe(request: any): Observable<any> {
+  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/luy-ke',request);
 }
 }

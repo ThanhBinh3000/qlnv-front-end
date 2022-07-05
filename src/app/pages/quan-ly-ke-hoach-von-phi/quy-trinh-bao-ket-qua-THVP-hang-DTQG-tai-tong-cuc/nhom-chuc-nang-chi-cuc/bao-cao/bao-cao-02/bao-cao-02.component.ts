@@ -94,7 +94,6 @@ export class BaoCao02Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        private datePipe: DatePipe,
     ) {
     }
 
@@ -688,7 +687,7 @@ export class BaoCao02Component implements OnInit {
             var lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
             while (lstTemp.length != 0 || level == 0) {
                 lstTemp.forEach(item => {
-                    let idCha = this.getIdCha(item.maNdung);
+                    let idCha = this.getIdCha(item.maVtu);
                     var index: number = baoCao.findIndex(e => e.maVtu == idCha);
                     if (index != -1) {
                         this.addLow(baoCao[index].id, item, phuLuc);
