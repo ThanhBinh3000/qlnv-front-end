@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { DataService } from '../../data.service';
@@ -21,7 +21,7 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachNopTienThuaComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -49,8 +49,8 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	//trang thai
 	status: boolean;
 	disable: boolean;
-	statusNew: boolean = true;
-	statusTaoMoi: boolean = true;
+	statusNew = true;
+	statusTaoMoi = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -69,11 +69,11 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
@@ -117,7 +117,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	}
 
 	async getDanhSachCapVon() {
-		let requestReport = {
+		const requestReport = {
 			maCapUngVonTuCapTren: "",
 			maDvi: this.userInfo?.dvql,
 			maLoai: "1",
@@ -149,11 +149,11 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		this.statusNew = true;
-		// let trangThais = [];
+		// const trangThais = [];
 		// if (this.searchFilter.trangThai) {
 		// 	trangThais = [this.searchFilter.trangThai];
 		// }
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maNopTienThua: this.searchFilter.maTienThua,
@@ -234,7 +234,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		let obj = {
+		const obj = {
 			maCvUv: this.searchFilter.maCvUv
 		}
 		this.dataSource.changeData(obj);
@@ -276,7 +276,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 	}
 
 	checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
@@ -286,7 +286,7 @@ export class DanhSachNopTienThuaComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: any){
+	changeListIdDelete(id: string){
 		if (this.listIdDelete.findIndex(e => e == id) == -1){
 			this.listIdDelete.push(id); 
 		} else {

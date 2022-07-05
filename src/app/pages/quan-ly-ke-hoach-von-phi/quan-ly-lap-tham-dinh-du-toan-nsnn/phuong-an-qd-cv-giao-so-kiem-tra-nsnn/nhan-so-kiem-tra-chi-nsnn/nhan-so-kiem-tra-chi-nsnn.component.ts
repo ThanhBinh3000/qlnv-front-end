@@ -57,7 +57,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     async ngOnInit() {
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.maDviNhan = this.userInfo?.dvql;
 
@@ -107,7 +107,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
                 return;
             }
         }
-        let requestReport = {
+        const requestReport = {
             maDviNhan: this.searchFilter.maDviNhan,
             maDviGui: this.searchFilter.maDviTao,
             maPa: this.searchFilter.maPa,
@@ -176,7 +176,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         ])
     }
 
-    getStatusName(trangThai: any){
+    getStatusName(trangThai: string){
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 

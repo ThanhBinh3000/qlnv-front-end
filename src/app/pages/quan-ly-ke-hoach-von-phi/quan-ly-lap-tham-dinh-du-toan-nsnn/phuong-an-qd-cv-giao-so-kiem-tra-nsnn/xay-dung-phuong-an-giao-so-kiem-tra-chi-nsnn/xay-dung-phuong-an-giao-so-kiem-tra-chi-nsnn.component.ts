@@ -21,16 +21,16 @@ import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-t
 
 
 export class ItemData {
-    id!: any;
-    stt: any;
+    id!: string;
+    stt: string;
     level: number;
     maNhom: number;
-    tongSo: any;
+    tongSo: number;
     listCtietDvi: ItemDvi[] = [];
     checked!: boolean;
 }
 export class ItemDvi {
-    id: any;
+    id: string;
     maKhuVuc: string;
     soTranChi: number;
     maBcao: string;
@@ -43,7 +43,7 @@ export class ItemDvi {
 })
 export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
+    id: string;
     userInfo: any;
     //thong tin chung bao cao
     maBaoCao: string;
@@ -53,7 +53,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     maPaBtc: string;
     namPa: number;
     soQdCv: ItemCongVan;
-    trangThaiBanGhi: string = '1';
+    trangThaiBanGhi = '1';
     newDate = new Date();
     maDviTien: string;
     thuyetMinh: string;
@@ -67,7 +67,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     lstDvi: any[] = [];                                         //danh sach don vi da duoc chon
     lstTtCtiet: any[] = [];
     //trang thai cac nut
-    status: boolean = false;
+    status = false;
     statusBtnDel: boolean;
     statusBtnSave: boolean;
     statusBtnApprove: boolean;
@@ -76,15 +76,15 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     statusBtnCopy: boolean;
     statusBtnPrint: boolean;
     statusBtnGiao: boolean;
-    statusGiaoToanBo: boolean = true;
+    statusGiaoToanBo = true;
     statusBtnBtc: boolean;
     allChecked = false;
     //khac
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
-    maGiao: any;
+    maGiao: string;
     namGiao: number;
-    checkGiao: boolean = true;
-    listId: string = '';
+    checkGiao = true;
+    listId = '';
     lstFiles: any[] = []; //show file ra man hinh
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -128,7 +128,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBaoCao');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         this.maDonViTao = this.userInfo?.dvql;
 
@@ -210,7 +210,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
@@ -218,7 +218,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.status = true;
         }
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
         if (dVi && dVi.maDvi == this.userInfo?.dvql) {
             checkChirld = true;
         }
@@ -236,8 +236,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-        let capDvi: string = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-        if (capDvi == Utils.TONG_CUC){
+        const capDvi: string = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+        if (capDvi == Utils.TONG_CUC) {
             this.statusBtnBtc = false;
         } else {
             this.statusBtnBtc = true;
@@ -250,9 +250,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDonViTao + '/' + this.maPa);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -275,10 +275,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -308,7 +307,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -332,10 +331,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                         })
                     })
                     this.lstFiles = data.data.lstFiles;
-					this.listFile = [];
+                    this.listFile = [];
                     this.lstTtCtiet = data.data.listTtCtiet;
                     this.lstTtCtiet.forEach(item => {
-                        if (item.trangThai == "0"){
+                        if (item.trangThai == "0") {
                             this.statusGiaoToanBo = false;
                         }
                     })
@@ -428,7 +427,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             return;
         }
 
-        let lstCtietBcaoTemp: ItemData[] = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
@@ -436,7 +435,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 checkMoneyRange = false;
                 return;
             }
-            let data: ItemDvi[] = [];
+            const data: ItemDvi[] = [];
             item.listCtietDvi.forEach(e => {
                 data.push({
                     ...e,
@@ -468,20 +467,20 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile: any = [];
+        const listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
-        let request = {
+        const request = {
             id: this.id,
             fileDinhKems: this.lstFiles,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -517,11 +516,11 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.spinner.hide();
     }
 
-    giaoSoTranChi(maBcao: any) {
-        let lstGiao: any[] = [];
+    giaoSoTranChi(maBcao: string) {
+        const lstGiao: any[] = [];
 
         if (maBcao) {
-            let lstCtiet: any[] = [];
+            const lstCtiet: any[] = [];
             this.lstCtietBcao.forEach(item => {
                 lstCtiet.push({
                     stt: item.stt,
@@ -545,7 +544,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         } else {
             this.lstTtCtiet.forEach(item => {
                 if (item.trangThai == "0") {
-                    let lstCtiet: any[] = [];
+                    const lstCtiet: any[] = [];
                     this.lstCtietBcao.forEach(data => {
                         lstCtiet.push({
                             stt: data.stt,
@@ -575,7 +574,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 if (data.statusCode == 0) {
                     if (maBcao) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_SUCCESS);
-                        let index: number = this.lstTtCtiet.findIndex(e => e.maBcao == maBcao);
+                        const index: number = this.lstTtCtiet.findIndex(e => e.maBcao == maBcao);
                         this.lstTtCtiet[index].trangThai = "1";
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_TOAN_BO);
@@ -610,24 +609,24 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
+        let xau = "";
+        const chiSo: string[] = str.split('.');
+        const n: number = chiSo.length - 1;
+        let k: number = parseInt(chiSo[n], 10);
         if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
+            for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
                     k -= this.soLaMa[i].gTri;
                 }
             }
-        };
+        }
         if (n == 1) {
             xau = chiSo[n];
-        };
+        }
         if (n == 2) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
+        }
         if (n == 3) {
             xau = String.fromCharCode(k + 96);
         }
@@ -646,9 +645,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
     //tìm vị trí cần để thêm mới
     findVt(str: string): number {
-        var start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-        var index: number = start;
-        for (var i = start + 1; i < this.lstCtietBcao.length; i++) {
+        const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
+        let index: number = start;
+        for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
             if (this.lstCtietBcao[i].stt.startsWith(str)) {
                 index = i;
             }
@@ -659,38 +658,38 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     replaceIndex(lstIndex: number[], heSo: number) {
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
-            var str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-            var nho = this.lstCtietBcao[item].stt;
+            const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+            const nho = this.lstCtietBcao[item].stt;
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.stt.replace(nho, str);
             })
         })
     }
     //thêm ngang cấp
-    addSame(id: any, khoanMuc: any) {
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
+    addSame(id: string, khoanMuc: any) {
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
+        const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
         // tim cac vi tri can thay doi lai stt
-        let lstIndex: number[] = [];
-        for (var i = this.lstCtietBcao.length - 1; i > ind; i--) {
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
             if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
         }
         this.replaceIndex(lstIndex, 1);
         // them moi phan tu
-        let data: ItemDvi[] = [];
-        let data1: ItemDvi[] = [];
+        const data: ItemDvi[] = [];
+        const data1: ItemDvi[] = [];
         this.lstDvi.forEach(item => {
-            let mm: ItemDvi = {
+            const mm: ItemDvi = {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
                 maBcao: item.maBcao,
             }
-            let mm1: ItemDvi = {
+            const mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
@@ -699,7 +698,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             data.push(mm);
             data1.push(mm1);
         })
-        let item: ItemData = {
+        const item: ItemData = {
             id: uuid.v4() + 'FE',
             stt: head + "." + (tail + 1).toString(),
             maNhom: khoanMuc.id,
@@ -708,7 +707,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listCtietDvi: data,
             checked: false,
         };
-        let item1: ItemData = {
+        const item1: ItemData = {
             id: item.id,
             stt: item.stt,
             maNhom: khoanMuc.id,
@@ -727,7 +726,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
-            let data: ItemDvi[] = [];
+            const data: ItemDvi[] = [];
             item.listCtietDvi.forEach(e => {
                 data.push({
                     id: e.id,
@@ -751,15 +750,15 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         })
     }
     //thêm cấp thấp hơn
-    addLow(id: any, khoanMuc: any) {
-        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var stt: string;
+    addLow(id: string, khoanMuc: any) {
+        const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+        let index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        let stt: string;
         if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
             stt = data.stt + '.1';
         } else {
             index = this.findVt(data.stt);
-            for (var i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+            for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
                 if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
                     stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
                     break;
@@ -771,16 +770,16 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.updateEditCache();
         }
 
-        let obj: ItemDvi[] = [];
-        let obj1: ItemDvi[] = [];
+        const obj: ItemDvi[] = [];
+        const obj1: ItemDvi[] = [];
         this.lstDvi.forEach(item => {
-            let mm: ItemDvi = {
+            const mm: ItemDvi = {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
                 maBcao: item.maBcao,
             }
-            let mm1: ItemDvi = {
+            const mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
@@ -789,7 +788,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             obj.push(mm);
             obj1.push(mm1);
         })
-        let item: ItemData = {
+        const item: ItemData = {
             id: uuid.v4() + 'FE',
             stt: stt,
             maNhom: khoanMuc.id,
@@ -798,7 +797,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listCtietDvi: obj,
             checked: false,
         };
-        let item1: ItemData = {
+        const item1: ItemData = {
             id: item.id,
             stt: item.stt,
             maNhom: khoanMuc.id,
@@ -814,16 +813,16 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         };
     }
     //xóa dòng
-    deleteLine(id: any) {
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var nho: string = this.lstCtietBcao[index].stt;
-        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        var stt: string = this.lstCtietBcao[index].stt;
+    deleteLine(id: string) {
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const nho: string = this.lstCtietBcao[index].stt;
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
-        let lstIndex: number[] = [];
-        for (var i = this.lstCtietBcao.length - 1; i >= index; i--) {
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
             if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -842,7 +841,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     cancelEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
-        let data: ItemDvi[] = [];
+        const data: ItemDvi[] = [];
         this.lstCtietBcao[index].listCtietDvi.forEach(item => {
             data.push({
                 id: item.id,
@@ -865,24 +864,24 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         let checkNull = true;
         let checkNegative = true;
         this.editCache[id].data.listCtietDvi.forEach(item => {
-            if (!item.soTranChi && item.soTranChi !== 0 ){
+            if (!item.soTranChi && item.soTranChi !== 0) {
                 checkNull = false;
             }
-            if (item.soTranChi < 0){
+            if (item.soTranChi < 0) {
                 checkNegative = false;
             }
         })
-        if (!checkNull){
+        if (!checkNull) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (!checkNegative){
+        if (!checkNegative) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        let data: ItemDvi[] = [];
+        const data: ItemDvi[] = [];
         this.editCache[id].data.listCtietDvi.forEach(item => {
             data.push({
                 id: item.id,
@@ -901,8 +900,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
 
-    updateChecked(id: any) {
-        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+    updateChecked(id: string) {
+        const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
         //đặt các phần tử con có cùng trạng thái với nó
         this.lstCtietBcao.forEach(item => {
             if (item.stt.startsWith(data.stt)) {
@@ -910,11 +909,11 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        var index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
+        let index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0');
         } else {
-            var nho: boolean = this.lstCtietBcao[index].checked;
+            let nho: boolean = this.lstCtietBcao[index].checked;
             while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
                 this.lstCtietBcao[index].checked = !nho;
                 index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
@@ -928,7 +927,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
     //kiểm tra các phần tử con có cùng được đánh dấu hay ko
     checkAllChild(str: string): boolean {
-        var nho: boolean = true;
+        let nho = true;
         this.lstCtietBcao.forEach(item => {
             if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
                 nho = item.checked;
@@ -945,7 +944,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     deleteAllChecked() {
-        var lstId: any[] = [];
+        const lstId: any[] = [];
         this.lstCtietBcao.forEach(item => {
             if (item.checked) {
                 lstId.push(item.id);
@@ -960,16 +959,16 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(khoanMuc: any) {
         // them moi phan tu
-        let data: ItemDvi[] = [];
-        let data1: ItemDvi[] = [];
+        const data: ItemDvi[] = [];
+        const data1: ItemDvi[] = [];
         this.lstDvi.forEach(item => {
-            let mm: ItemDvi = {
+            const mm: ItemDvi = {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
                 maBcao: item.maBcao,
             }
-            let mm1: ItemDvi = {
+            const mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
@@ -978,7 +977,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             data.push(mm);
             data1.push(mm1);
         })
-        let item: ItemData = {
+        const item: ItemData = {
             id: uuid.v4() + 'FE',
             stt: '0.1',
             maNhom: khoanMuc.id,
@@ -987,7 +986,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listCtietDvi: data,
             checked: false,
         };
-        let item1: ItemData = {
+        const item1: ItemData = {
             id: item.id,
             stt: item.stt,
             maNhom: khoanMuc.id,
@@ -1020,9 +1019,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             }
             return 0;
         });
-        var lstTemp: any[] = [];
+        const lstTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+            const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
             if (index == -1) {
                 lstTemp.splice(0, 0, item);
             } else {
@@ -1039,9 +1038,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         })
     }
 
-    addLine(id: any) {
-        var maNhom: any = this.lstCtietBcao.find(e => e.id == id)?.maNhom;
-        let obj = {
+    addLine(id: string) {
+        const maNhom: number = this.lstCtietBcao.find(e => e.id == id)?.maNhom;
+        const obj = {
             maKhoanMuc: maNhom,
             lstKhoanMuc: this.noiDungs,
         }
@@ -1059,9 +1058,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCtietBcao.findIndex(e => e.maNhom == res.maKhoanMuc);
+                const index: number = this.lstCtietBcao.findIndex(e => e.maNhom == res.maKhoanMuc);
                 if (index == -1) {
-                    let data: any = this.noiDungs.find(e => e.id == res.maKhoanMuc);
+                    const data: any = this.noiDungs.find(e => e.id == res.maKhoanMuc);
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
                     } else {
@@ -1070,7 +1069,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNhom == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    this.addLow(id, item);
+                    if (this.lstCtietBcao.findIndex(e => e.maNhom == item.id) == -1) {
+                        this.addLow(id, item);
+                    }
+
                 })
                 this.updateEditCache();
             }
@@ -1078,7 +1080,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
         if (index == -1) {
             return false;
         }
@@ -1088,9 +1090,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     sum(stt: string) {
         stt = this.getHead(stt);
         while (stt != '0') {
-            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            let data = this.lstCtietBcao[index];
-            var mm: any[] = [];
+            const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            const data = this.lstCtietBcao[index];
+            const mm: any[] = [];
             data.listCtietDvi.forEach(item => {
                 mm.push({
                     ...item,
@@ -1100,7 +1102,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.lstCtietBcao[index] = {
                 id: data.id,
                 stt: data.stt,
-                level: data.stt,
+                level: data.level,
                 maNhom: data.maNhom,
                 tongSo: 0,
                 listCtietDvi: mm,
@@ -1109,7 +1111,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
                     item.listCtietDvi.forEach(e => {
-                        let ind = this.lstCtietBcao[index].listCtietDvi.findIndex(i => i.maBcao == e.maBcao);
+                        const ind = this.lstCtietBcao[index].listCtietDvi.findIndex(i => i.maBcao == e.maBcao);
                         this.lstCtietBcao[index].listCtietDvi[ind].soTranChi += e.soTranChi;
                     })
                 }
@@ -1121,7 +1123,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         }
     }
 
-    changeModel(id: any){
+    changeModel(id: string) {
         this.editCache[id].data.tongSo = 0;
         this.editCache[id].data.listCtietDvi.forEach(item => {
             this.editCache[id].data.tongSo += item.soTranChi;
@@ -1132,8 +1134,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
     }
 
-    doPrint(){
-        let WindowPrt = window.open(
+    doPrint() {
+        const WindowPrt = window.open(
             '',
             '',
             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
@@ -1150,26 +1152,26 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         WindowPrt.close();
     }
 
-    async doCopy(){
-        var maPaNew: string;
-		await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-					maPaNew = data.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-					return;
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				return;
-			}
-		);
-		let lstCtietBcaoTemp: ItemData[] = [];
+    async doCopy() {
+        let maPaNew: string;
+        await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    maPaNew = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    return;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                return;
+            }
+        );
+        const lstCtietBcaoTemp: ItemData[] = [];
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            let data: ItemDvi[] = [];
+            const data: ItemDvi[] = [];
             item.listCtietDvi.forEach(e => {
                 data.push({
                     ...e,
@@ -1185,9 +1187,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         })
 
-        var lstTtCtietTemp: any[] = [];
-        if (lstCtietBcaoTemp.length > 0){
-            let item = lstCtietBcaoTemp[0];
+        const lstTtCtietTemp: any[] = [];
+        if (lstCtietBcaoTemp.length > 0) {
+            const item = lstCtietBcaoTemp[0];
             item.listCtietDvi.forEach(e => {
                 lstTtCtietTemp.push({
                     id: null,
@@ -1197,8 +1199,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         }
 
-		let request = {
-			id: null,
+        const request = {
+            id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],
             listCtiet: lstCtietBcaoTemp,
@@ -1212,30 +1214,30 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             trangThai: "1",
             thuyetMinh: "",
             maGiao: "",
-		};
+        };
 
-		this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
-			async data => {
-				if (data.statusCode == 0) {
-					const modalCopy = this.modal.create({
-						nzTitle: MESSAGE.ALERT,
-						nzContent: DialogCopyComponent,
-						nzMaskClosable: false,
-						nzClosable: false,
-						nzWidth: '900px',
-						nzFooter: null,
-						nzComponentParams: {
-						  maBcao: maPaNew
-						},
-					  });
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
+        this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    const modalCopy = this.modal.create({
+                        nzTitle: MESSAGE.ALERT,
+                        nzContent: DialogCopyComponent,
+                        nzMaskClosable: false,
+                        nzClosable: false,
+                        nzWidth: '900px',
+                        nzFooter: null,
+                        nzComponentParams: {
+                            maBcao: maPaNew
+                        },
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
 

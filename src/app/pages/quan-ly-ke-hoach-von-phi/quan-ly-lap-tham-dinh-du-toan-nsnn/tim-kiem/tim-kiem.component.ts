@@ -73,7 +73,7 @@ export class TimKiemComponent implements OnInit {
 		page: 1,
 	}
 
-	statusTaoMoi: boolean = true;
+	statusTaoMoi = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -89,11 +89,11 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() -1);
 		this.searchFilter.tuNgay = newDate;
 
@@ -148,7 +148,7 @@ export class TimKiemComponent implements OnInit {
 		if (this.searchFilter.trangThai){
 			trangThais = [this.searchFilter.trangThai];
 		}
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "0",
 			maBcao: this.searchFilter.maBaoCao,
 			maDvi: this.searchFilter.donViTao,
@@ -231,7 +231,8 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	xoaBaoCao(id: any){
-		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
+		const request: string[] = [id];
+		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -247,7 +248,7 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	checkDeleteReport(item: any): boolean{
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 		this.userInfo?.username == item.nguoiTao){
 			check = true;

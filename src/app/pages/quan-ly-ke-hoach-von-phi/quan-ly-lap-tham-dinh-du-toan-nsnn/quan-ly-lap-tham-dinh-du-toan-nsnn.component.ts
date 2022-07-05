@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
@@ -33,7 +31,7 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(

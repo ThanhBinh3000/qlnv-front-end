@@ -27,7 +27,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	) { }
 
 	async ngOnInit(): Promise<void> {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(

@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
-    id: any;
+    id: string;
     stt: string;
     level: number;
     maNoiDung: string;
@@ -33,7 +33,7 @@ export class ItemCongVan {
 })
 export class SoKiemTraChiNsnnComponent implements OnInit {
     //thong tin dang nhap
-    id!: any;
+    id!: string;
     userInfo: any;
     //thong tin chung bao cao
     ngayNhap: string;
@@ -45,7 +45,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     maGiao: string;
     trangThai: string;
     namGiao: number;
-    maDviTien: any;
+    maDviTien: string;
     newDate = new Date();
     //danh muc
     donViTiens: any[] = DON_VI_TIEN;
@@ -77,7 +77,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
 
     async ngOnInit() {
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
 
         //lay danh sach danh muc
@@ -161,7 +161,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -204,24 +204,24 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
+        let xau = "";
+        const chiSo: string[] = str.split('.');
+        const n: number = chiSo.length - 1;
+        let k: number = parseInt(chiSo[n], 10);
         if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
+            for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
                     k -= this.soLaMa[i].gTri;
                 }
             }
-        };
+        }
         if (n == 1) {
             xau = chiSo[n];
-        };
+        }
         if (n == 2) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
+        }
         if (n == 3) {
             xau = String.fromCharCode(k + 96);
         }
@@ -257,9 +257,9 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             }
             return 0;
         });
-        var lstTemp: any[] = [];
+        const lstTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+            const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
             if (index == -1) {
                 lstTemp.splice(0, 0, item);
             } else {
@@ -287,8 +287,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     }
 
     async taoMoiPhuongAn() {
-        let listCtietDvi: any[] = [];
-        let listTtCtiet: any[] = [];
+        const listCtietDvi: any[] = [];
+        const listTtCtiet: any[] = [];
         await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -317,7 +317,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                 trangThai: "0",
             })
         })
-        let lstCtietBcaoTemp: any[] = [];
+        const lstCtietBcaoTemp: any[] = [];
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
@@ -336,7 +336,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         });
 
         // gui du lieu trinh duyet len server
-        let request = {
+        const request = {
             id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],
@@ -371,7 +371,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     }
 
     sua() {
-        let request = {
+        const request = {
             id: this.id,
             maBcao: this.maBaoCao,
         }
