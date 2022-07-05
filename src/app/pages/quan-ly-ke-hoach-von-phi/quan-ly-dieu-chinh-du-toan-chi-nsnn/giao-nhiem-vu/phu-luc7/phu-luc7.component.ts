@@ -175,18 +175,62 @@ export class PhuLuc7Component implements OnInit {
       }
     );
 
-    await this.danhMucService.dMDviTinh().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donViTinhs = data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
+    // await this.danhMucService.dMDviTinh().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.donViTinhs = data?.data;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
+    this.donViTinhs = [
+      {
+        dviDo: "DTN",
+        id: 1,
+        maDviTinh: "DTN",
+        tenDviTinh: "Đồng/tấn.năm",
+        trangThai: "01",
       },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
+      {
+        dviDo: "DT",
+        id: 2,
+        maDviTinh: "DT",
+        tenDviTinh: "Đồng/tấn",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DCN",
+        id: 3,
+        maDviTinh: "DCN",
+        tenDviTinh: "Đồng/chiếc.năm",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DC",
+        id: 4,
+        maDviTinh: "DC",
+        tenDviTinh: "Đồng/chiếc",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DB",
+        id: 5,
+        maDviTinh: "DB",
+        tenDviTinh: "Đồng/bộ",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DBN",
+        id: 6,
+        maDviTinh: "DBN",
+        tenDviTinh: "Đồng/bộ.năm",
+        trangThai: "01",
+      },
+    ]
     this.getStatusButton();
     this.spinner.hide();
   }
