@@ -32,9 +32,9 @@ export class ItemCongVan {
 })
 export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
+    id: string;
     userInfo: any;
-    loai: any;
+    loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -47,8 +47,8 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     trangThai: string;
     maDviTao: string;
     thuyetMinh: string;
-    tongTien: number = 0;
-    kphiDaCap: number = 0;
+    tongTien = 0;
+    kphiDaCap = 0;
     lyDoTuChoi: string;
     newDate = new Date();
     //danh muc
@@ -79,12 +79,12 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
     //trang thai cac nut
-    status: boolean = false;
-    statusBtnDel: boolean;
-    statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
-    statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-    statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnCopy: boolean = true;                      // trang thai copy
+    status = false;
+    statusBtnDel;
+    statusBtnSave = true;                      // trang thai an/hien nut luu
+    statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
+    statusBtnLD = true;                        // trang thai an/hien nut lanh dao
+    statusBtnCopy = true;                      // trang thai copy
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -138,7 +138,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -193,7 +193,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-            let request = {
+            const request = {
                 soQD: this.qdChiTieu,
             }
             this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
@@ -275,21 +275,17 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkParent = false;
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
-        }
-        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-            checkParent = true;
         }
         const utils = new Utils();
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
@@ -308,9 +304,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maDeNghi);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -333,10 +329,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -365,7 +360,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -479,19 +474,19 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile = [];
+        const listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
 
-        let lstCtietBcaoTemp = [];
+        const lstCtietBcaoTemp = [];
         this.lstCtietBcao.forEach(item => {
 
             lstCtietBcaoTemp.push(item);
 
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -510,7 +505,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             thuyetMinh: this.thuyetMinh,
         }));
         //get file cong van url
-        let file: any = this.fileDetail;
+        const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE){
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -589,7 +584,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     }
 
     showDialogCopy() {
-        let obj = {
+        const obj = {
             qdChiTieu: this.qdChiTieu,
         }
         const modalTuChoi = this.modal.create({
@@ -611,7 +606,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     }
 
     async doCopy(response: any) {
-        var maDeNghiNew: string;
+        let maDeNghiNew: string;
         await this.quanLyVonPhiService.maDeNghi().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -629,7 +624,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             return;
         }
 
-        let lstCtietBcaoTemp: any[] = [];
+        const lstCtietBcaoTemp: any[] = [];
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
@@ -637,7 +632,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             })
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],

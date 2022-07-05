@@ -109,7 +109,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		if (this.searchFilter.trangThai){
 			trangThais = [this.searchFilter.trangThai];
 		}
-		var requestReport = {
+		const requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maDvi: "",
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
@@ -152,7 +152,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		let obj = {
+		const obj = {
 			qdChiTieu: this.searchFilter.qdChiTieu,
 			maDvi: this.searchFilter.maDviTao,
 		}
@@ -213,7 +213,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	}
 
     checkDeleteReport(item: any): boolean{
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 		this.userInfo?.username == item.nguoiTao){
 			check = true;

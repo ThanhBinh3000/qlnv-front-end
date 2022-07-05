@@ -20,21 +20,21 @@ import * as uuid from 'uuid';
 import { DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
-    id: any;
+    id: string;
     stt: number;
     maCucKv: string;
     kphiDaCapThoc: number;
     ycauCapThemThoc: number;
     tongTienThoc: number;
-    idThoc: any;
+    idThoc: string;
     kphiDaCapGao: number;
     ycauCapThemGao: number;
     tongTienGao: number;
-    idGao: any;
+    idGao: string;
     kphiDaCapMuoi: number;
     ycauCapThemMuoi: number;
     tongTienMuoi: number;
-    idMuoi: any;
+    idMuoi: string;
 }
 export class ItemCongVan {
     fileName: string;
@@ -50,9 +50,9 @@ export class ItemCongVan {
 })
 export class TongHopTuCucKhuVucComponent implements OnInit {
     //thong tin dang nhap
-    id: any;
+    id: string;
     userInfo: any;
-    loai: any;
+    loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
@@ -64,7 +64,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     ngayPheDuyet: string;
     trangThai: string;
     maDviTao: string;
-    maDviTien: string = "1";
+    maDviTien = "1";
     thuyetMinh: string;
     lyDoTuChoi: string;
     newDate = new Date();
@@ -136,18 +136,18 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     lstFiles: any[] = []; //show file ra man hinh
     nguonBcaos: any[] = NGUON_BAO_CAO;
     //trang thai cac nut
-    status: boolean = false;
-    statusBtnDel: boolean;
-    statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
-    statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-    statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
-    statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-    statusBtnCopy: boolean = true;                      // trang thai copy
+    status = false;
+    statusBtnDel;
+    statusBtnSave = true;                      // trang thai an/hien nut luu
+    statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
+    statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
+    statusBtnLD = true;                        // trang thai an/hien nut lanh dao
+    statusBtnCopy = true;                      // trang thai copy
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
-    listIdFilesDelete: any = [];
+    listIdFilesDelete: string[] = [];
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -196,7 +196,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -271,21 +271,17 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        let userRole = this.userInfo?.roles[0]?.code;
+        const userRole = this.userInfo?.roles[0]?.code;
         if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
             && (ROLE_CAN_BO.includes(userRole))) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkParent = false;
         let checkChirld = false;
-        let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
             checkChirld = true;
-        }
-        if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-            checkParent = true;
         }
         const utils = new Utils();
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
@@ -301,9 +297,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maDeNghi);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -326,10 +322,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -358,7 +353,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -465,12 +460,12 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile = [];
+        const listFile = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: this.id,
             fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
@@ -485,7 +480,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             thuyetMinh: this.thuyetMinh,
         }));
         //get file cong van url
-        let file: any = this.fileDetail;
+        const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -540,7 +535,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     tongHop() {
-        let request = {
+        const request = {
             maDviCha: this.maDviTao,
             soQdChiTieu: this.qdChiTieu,
         }
@@ -585,7 +580,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             return 0;
         })
         this.lstCtietBcao[0].stt = 1;
-        for (var i = 1; i < this.lstCtietBcao.length; i++) {
+        for (let i = 1; i < this.lstCtietBcao.length; i++) {
             if (this.lstCtietBcao[i].maCucKv != this.lstCtietBcao[i - 1].maCucKv) {
                 this.lstCtietBcao[i].stt = this.lstCtietBcao[i - 1].stt + 1;
             } else {
@@ -594,8 +589,8 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         }
     }
 
-    checkEqual(id: any){
-        var index: number = this.lstCtietBcao.findIndex(e => e.id == id);
+    checkEqual(id: string){
+        const index: number = this.lstCtietBcao.findIndex(e => e.id == id);
         if (index == 0){
             return true;
         } else {
@@ -661,7 +656,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     showDialogCopy() {
-        let obj = {
+        const obj = {
             qdChiTieu: this.qdChiTieu,
         }
         const modalTuChoi = this.modal.create({
@@ -683,7 +678,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     async doCopy(response: any) {
-        var maDeNghiNew: string;
+        let maDeNghiNew: string;
         await this.quanLyVonPhiService.maDeNghi().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -697,7 +692,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             },
         );
 
-        let lstCtietBcaoTemp: any[] = [];
+        const lstCtietBcaoTemp: any[] = [];
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
@@ -705,7 +700,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             })
         })
         // gui du lieu trinh duyet len server
-        let request = JSON.parse(JSON.stringify({
+        const request = JSON.parse(JSON.stringify({
             id: null,
             fileDinhKems: [],
             listIdDeleteFiles: [],

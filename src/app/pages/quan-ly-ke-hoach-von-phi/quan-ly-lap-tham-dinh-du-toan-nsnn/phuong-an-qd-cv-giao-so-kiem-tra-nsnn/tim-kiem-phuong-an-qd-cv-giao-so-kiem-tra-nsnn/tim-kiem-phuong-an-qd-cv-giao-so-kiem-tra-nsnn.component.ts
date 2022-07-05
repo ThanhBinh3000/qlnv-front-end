@@ -26,7 +26,7 @@ export class ItemCongVan {
 export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //thong tin dang nhap
     userInfo: any;
-    loai: any;
+    loai: string;
     //thong tin tim kiem
     searchFilter = {
         loaiTimKiem: "",
@@ -78,8 +78,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         page: 1,
     }//
     status: boolean;
-    statusBtnBcao: boolean = true;
-    statusTaoMoi: boolean = true;
+    statusBtnBcao = true;
+    statusTaoMoi = true;
 
     fileDetail: NzUploadFile;
 
@@ -106,7 +106,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             this.status = false;
             this.searchFilter.loaiTimKiem = "0";
         }
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.donViTao = this.userInfo?.dvql;
 
@@ -164,7 +164,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -183,7 +183,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         if (this.searchFilter.trangThai){
             lstTrangThai = [this.searchFilter.trangThai];
         }
-        let requestReport = {
+        const requestReport = {
             loaiTimKiem: this.searchFilter.loaiTimKiem,
             maDviTao: this.searchFilter.donViTao,
             maPa: this.searchFilter.maPa,
@@ -251,7 +251,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         }
         if (this.loai == "0") {
             let checkBcao = false;
-            let requestReport = {
+            const requestReport = {
                 loaiTimKiem: "0",
                 maBcao: this.searchFilter.maBaoCao,
                 maDvi: this.searchFilter.donViTao,
@@ -309,7 +309,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     async checkMaBcao() {
-        let requestReport = {
+        const requestReport = {
             loaiTimKiem: "0",
             maBcao: this.searchFilter.maBaoCao,
             maDvi: this.searchFilter.donViTao,
@@ -345,7 +345,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     checkDeleteReport(item: any): boolean {
-        var check: boolean = false;
+        let check = false;
         if (this.userInfo?.username == item.nguoiTao) {
             if (this.status) {
                 check = true;
@@ -358,7 +358,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         return check;
     }
 
-    xoaPA(id: any) {
+    xoaPA(id: string) {
         const request: string[] = [id];
         this.quanLyVonPhiService.xoaPhuongAn(request).toPromise().then(
             data => {
