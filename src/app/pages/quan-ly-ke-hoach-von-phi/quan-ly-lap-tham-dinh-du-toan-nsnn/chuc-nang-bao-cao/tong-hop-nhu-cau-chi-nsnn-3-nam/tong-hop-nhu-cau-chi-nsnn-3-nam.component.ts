@@ -14,14 +14,14 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-nsnn-3-nam.constant';
 
 export class ItemData {
-    id!: any;
+    id!: string;
     stt!: string;
     level: number;
-    maNdung!: string;
+    maNdung!: number;
     namHienHanhDtoan!: number;
     namHienHanhUocThien!: number;
     tranChiN!: number;
@@ -52,18 +52,18 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     //thong tin chung
-    id: any;
+    id: string;
     trangThaiPhuLuc: string;
     namHienHanh: number;
-    maBieuMau: string = "13";
+    maBieuMau = "13";
     thuyetMinh: string;
-    maDviTien: any;
-    listIdDelete: string = "";
+    maDviTien: string;
+    listIdDelete = "";
     initItem: ItemData = {
         id: null,
         stt: "0",
         level: 0,
-        maNdung: "",
+        maNdung: 0,
         namHienHanhDtoan: 0,
         namHienHanhUocThien: 0,
         tranChiN: 0,
@@ -79,7 +79,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         checked: false,
     }
     //trang thai cac nut
-    status: boolean = false;
+    status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
 
@@ -164,17 +164,25 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     // luu
     async save(trangThai: string) {
-        var data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == "100");
-        var data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == "200");
-        var data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == "300");
+        const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 100);
+        const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 200);
+        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 300);
+        if ((data2 ||data3) && !data1){
+            this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường TỔNG NHU CẦU CHI");
+            return;
+        }
+        if (data2 && !data3){
+            this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường NHU CẦU CÒN LẠI");
+            return;
+        }
         if (data1 && data2 && data3) {
             if (data1.namHienHanhDtoan - data2.namHienHanhDtoan != data3.namHienHanhDtoan ||
                 data1.namHienHanhUocThien - data2.namHienHanhUocThien != data3.namHienHanhUocThien ||
-                data1.tranChiN - data2.tranChiN != data3.tranChiN ||
+                // data1.tranChiN - data2.tranChiN != data3.tranChiN ||
                 data1.ncauChiN - data2.ncauChiN != data3.ncauChiN ||
-                data1.tranChiN1 - data2.tranChiN1 != data3.tranChiN1 ||
+                // data1.tranChiN1 - data2.tranChiN1 != data3.tranChiN1 ||
                 data1.ncauChiN1 - data2.ncauChiN1 != data3.ncauChiN1 ||
-                data1.tranChiN2 - data2.tranChiN2 != data3.tranChiN2 ||
+                // data1.tranChiN2 - data2.tranChiN2 != data3.tranChiN2 ||
                 data1.ncauChiN2 - data2.ncauChiN2 != data3.ncauChiN2) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
                     this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
@@ -198,20 +206,20 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             return;
         }
         //tinh lai don vi tien va kiem tra gioi han cua chung
-        let lstCtietBcaoTemp: any = [];
+        const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            let namHienHanhDtoan = mulMoney(item.namHienHanhDtoan, this.maDviTien);
-            let namHienHanhUocThien = mulMoney(item.namHienHanhUocThien, this.maDviTien);
-            let tranChiN = mulMoney(item.tranChiN, this.maDviTien);
-            let ncauChiN = mulMoney(item.ncauChiN, this.maDviTien);
-            let clechTranChiVsNcauChiN = mulMoney(item.clechTranChiVsNcauChiN, this.maDviTien);
-            let tranChiN1 = mulMoney(item.tranChiN1, this.maDviTien);
-            let ncauChiN1 = mulMoney(item.ncauChiN1, this.maDviTien);
-            let clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.maDviTien);
-            let tranChiN2 = mulMoney(item.tranChiN2, this.maDviTien);
-            let ncauChiN2 = mulMoney(item.ncauChiN2, this.maDviTien);
-            let clechTranChiVsNcauChiN2 = mulMoney(item.clechTranChiVsNcauChiN2, this.maDviTien);
+            const namHienHanhDtoan = mulMoney(item.namHienHanhDtoan, this.maDviTien);
+            const namHienHanhUocThien = mulMoney(item.namHienHanhUocThien, this.maDviTien);
+            const tranChiN = mulMoney(item.tranChiN, this.maDviTien);
+            const ncauChiN = mulMoney(item.ncauChiN, this.maDviTien);
+            const clechTranChiVsNcauChiN = mulMoney(item.clechTranChiVsNcauChiN, this.maDviTien);
+            const tranChiN1 = mulMoney(item.tranChiN1, this.maDviTien);
+            const ncauChiN1 = mulMoney(item.ncauChiN1, this.maDviTien);
+            const clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.maDviTien);
+            const tranChiN2 = mulMoney(item.tranChiN2, this.maDviTien);
+            const ncauChiN2 = mulMoney(item.ncauChiN2, this.maDviTien);
+            const clechTranChiVsNcauChiN2 = mulMoney(item.clechTranChiVsNcauChiN2, this.maDviTien);
             if (namHienHanhDtoan > MONEY_LIMIT || namHienHanhUocThien > MONEY_LIMIT ||
                 tranChiN > MONEY_LIMIT || ncauChiN > MONEY_LIMIT || clechTranChiVsNcauChiN > MONEY_LIMIT ||
                 tranChiN1 > MONEY_LIMIT || ncauChiN1 > MONEY_LIMIT || clechTranChiVsNcauChiN1 > MONEY_LIMIT ||
@@ -246,7 +254,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             }
         })
 
-        let request = {
+        const request = {
             id: this.id,
             lstCtietLapThamDinhs: lstCtietBcaoTemp,
             maBieuMau: this.maBieuMau,
@@ -260,7 +268,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    let obj = {
+                    const obj = {
                         trangThai: '-1',
                         lyDoTuChoi: null,
                     };
@@ -290,7 +298,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = mcn;
                     this.getStatusButton();
-                    let obj = {
+                    const obj = {
                         trangThai: mcn,
                         lyDoTuChoi: lyDoTuChoi,
                     }
@@ -333,24 +341,24 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
-        var xau: string = "";
-        let chiSo: any = str.split('.');
-        var n: number = chiSo.length - 1;
-        var k: number = parseInt(chiSo[n], 10);
+        let xau = "";
+        const chiSo: string[] = str.split('.');
+        const n: number = chiSo.length - 1;
+        let k: number = parseInt(chiSo[n], 10);
         if (n == 0) {
-            for (var i = 0; i < this.soLaMa.length; i++) {
+            for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
                     k -= this.soLaMa[i].gTri;
                 }
             }
-        };
+        }
         if (n == 1) {
             xau = chiSo[n];
-        };
+        }
         if (n == 2) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        };
+        }
         if (n == 3) {
             xau = String.fromCharCode(k + 96);
         }
@@ -369,9 +377,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
     //tìm vị trí cần để thêm mới
     findVt(str: string): number {
-        var start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-        var index: number = start;
-        for (var i = start + 1; i < this.lstCtietBcao.length; i++) {
+        const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
+        let index: number = start;
+        for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
             if (this.lstCtietBcao[i].stt.startsWith(str)) {
                 index = i;
             }
@@ -382,22 +390,22 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     replaceIndex(lstIndex: number[], heSo: number) {
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
-            var str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-            var nho = this.lstCtietBcao[item].stt;
+            const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+            const nho = this.lstCtietBcao[item].stt;
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.stt.replace(nho, str);
             })
         })
     }
     //thêm ngang cấp
-    addSame(id: any, initItem: ItemData) {
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
+    addSame(id: string, initItem: ItemData) {
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
+        const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
         // tim cac vi tri can thay doi lai stt
-        let lstIndex: number[] = [];
-        for (var i = this.lstCtietBcao.length - 1; i > ind; i--) {
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
             if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -405,7 +413,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         this.replaceIndex(lstIndex, 1);
         // them moi phan tu
         if (initItem.id) {
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 stt: head + "." + (tail + 1).toString(),
             }
@@ -415,7 +423,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
@@ -438,15 +446,15 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         });
     }
     //thêm cấp thấp hơn
-    addLow(id: any, initItem: ItemData) {
-        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var stt: string;
+    addLow(id: string, initItem: ItemData) {
+        const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+        let index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        let stt: string;
         if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
             stt = data.stt + '.1';
         } else {
             index = this.findVt(data.stt);
-            for (var i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+            for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
                 if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
                     stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
                     break;
@@ -456,7 +464,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
         // them moi phan tu
         if (initItem.id) {
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 stt: stt,
             }
@@ -470,7 +478,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 this.sum(stt);
                 this.updateEditCache();
             }
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
@@ -484,16 +492,16 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         }
     }
     //xóa dòng
-    deleteLine(id: any) {
-        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-        var nho: string = this.lstCtietBcao[index].stt;
-        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        var stt: string = this.lstCtietBcao[index].stt;
+    deleteLine(id: string) {
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const nho: string = this.lstCtietBcao[index].stt;
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
-        let lstIndex: number[] = [];
-        for (var i = this.lstCtietBcao.length - 1; i >= index; i--) {
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
             if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -548,8 +556,8 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
 
 
-    updateChecked(id: any) {
-        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+    updateChecked(id: string) {
+        const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
         //đặt các phần tử con có cùng trạng thái với nó
         this.lstCtietBcao.forEach(item => {
             if (item.stt.startsWith(data.stt)) {
@@ -557,11 +565,11 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        var index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
+        let index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0');
         } else {
-            var nho: boolean = this.lstCtietBcao[index].checked;
+            let nho: boolean = this.lstCtietBcao[index].checked;
             while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
                 this.lstCtietBcao[index].checked = !nho;
                 index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
@@ -575,7 +583,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
     //kiểm tra các phần tử con có cùng được đánh dấu hay ko
     checkAllChild(str: string): boolean {
-        var nho: boolean = true;
+        let nho = true;
         this.lstCtietBcao.forEach(item => {
             if ((this.getHead(item.stt) == str) && (!item.checked)) {
                 nho = item.checked;
@@ -592,7 +600,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
 
     deleteAllChecked() {
-        var lstId: any[] = [];
+        const lstId: string[] = [];
         this.lstCtietBcao.forEach(item => {
             if (item.checked) {
                 lstId.push(item.id);
@@ -607,7 +615,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: ItemData) {
         if (initItem?.id) {
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 stt: "0.1",
             }
@@ -617,7 +625,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            let item: ItemData = {
+            const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
@@ -648,9 +656,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             }
             return 0;
         });
-        var lstTemp: any[] = [];
+        const lstTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+            const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
             if (index == -1) {
                 lstTemp.splice(0, 0, item);
             } else {
@@ -667,23 +675,23 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         })
     }
 
-    getIdCha(maKM: any) {
+    getIdCha(maKM: number) {
         return this.noiDungs.find(e => e.id == maKM)?.idCha;
     }
 
     sortWithoutIndex() {
         this.setDetail();
-        var level = 0;
-        var lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
+        let level = 0;
+        let lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
         this.lstCtietBcao = [];
-        var data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
+        const data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
         this.addFirst(data);
         lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
-        var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
+        let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
-                let idCha = this.getIdCha(item.maNdung);
-                var index: number = this.lstCtietBcao.findIndex(e => e.maNdung === idCha);
+                const idCha = this.getIdCha(item.maNdung);
+                let index: number = this.lstCtietBcao.findIndex(e => e.maNdung === idCha);
                 if (index != -1) {
                     this.addLow(this.lstCtietBcao[index].id, item);
                 } else {
@@ -696,9 +704,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         }
     }
 
-    addLine(id: any) {
-        var maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
-        let obj = {
+    addLine(id: string) {
+        const maNdung: number = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+        const obj = {
             maKhoanMuc: maNdung,
             lstKhoanMuc: this.noiDungs,
         }
@@ -716,9 +724,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.maKhoanMuc);
+                const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.maKhoanMuc);
                 if (index == -1) {
-                    let data: any = {
+                    const data: ItemData = {
                         ...this.initItem,
                         maNdung: res.maKhoanMuc,
                         level: this.noiDungs.find(e => e.id == maNdung)?.level,
@@ -732,7 +740,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
                     if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
-                        var data: ItemData = {
+                        const data: ItemData = {
                             ...this.initItem,
                             maNdung: item.id,
                             level: item.level,
@@ -747,7 +755,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
         if (index == -1) {
             return false;
         }
@@ -757,8 +765,8 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     sum(stt: string) {
         stt = this.getHead(stt);
         while (stt != '0') {
-            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            let data = this.lstCtietBcao[index];
+            const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            const data = this.lstCtietBcao[index];
             this.lstCtietBcao[index] = {
                 ...this.initItem,
                 id: data.id,
@@ -804,7 +812,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
 
     doPrint() {
-        let WindowPrt = window.open(
+        const WindowPrt = window.open(
             '',
             '',
             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',

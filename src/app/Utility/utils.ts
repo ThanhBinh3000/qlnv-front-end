@@ -482,7 +482,7 @@ export class Utils {
     }
 
     // lay ten trang thai theo ma trang thai
-    public getStatusAppendixName(id: any): string {
+    public getStatusAppendixName(id): string {
         // let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
         // return statusName?.ten;
         return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
@@ -1010,7 +1010,7 @@ export const DON_VI_TIEN = [
 ]
 
 export function divMoney(value, maDonViTien): number {
-    let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
+    const donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
         return null;
     }
@@ -1024,7 +1024,7 @@ export function divMoney(value, maDonViTien): number {
 
 export function mulMoney(value, maDonViTien): number {
 
-    let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
+    const donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
         return null;
     }
@@ -1073,7 +1073,7 @@ export const TRANG_THAI_GIAO = [
 ]
 export const MONEY_LIMIT = 9000000000000000;
 
-export const KHOAN_MUC: any[] = [
+export const KHOAN_MUC = [
 	{
 		id: 10000,
 		tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
