@@ -231,7 +231,8 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	xoaBaoCao(id: any){
-		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
+		const request: string[] = [id];
+		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);

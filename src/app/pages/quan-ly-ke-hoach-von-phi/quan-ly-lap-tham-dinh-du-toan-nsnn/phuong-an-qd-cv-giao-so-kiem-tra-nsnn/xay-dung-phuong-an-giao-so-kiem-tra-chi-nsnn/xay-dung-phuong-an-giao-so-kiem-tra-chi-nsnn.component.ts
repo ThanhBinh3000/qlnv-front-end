@@ -1070,7 +1070,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNhom == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    this.addLow(id, item);
+                    if (this.lstCtietBcao.findIndex(e => e.maNhom == item.id) == -1){
+                        this.addLow(id, item);
+                    }
+                    
                 })
                 this.updateEditCache();
             }

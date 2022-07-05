@@ -359,7 +359,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     xoaPA(id: any) {
-        this.quanLyVonPhiService.xoaPhuongAn(id).toPromise().then(
+        const request: string[] = [id];
+        this.quanLyVonPhiService.xoaPhuongAn(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
