@@ -669,18 +669,38 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     if (!isEmpty(dsTong)) {
       this.dsTong = dsTong;
       this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
-      this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsChiCucDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
-        (item) => item.tenDvi,
-      );
+      // this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      // this.dsChiCucDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
+      //   (item) => item.tenDvi,
+      // );
       // this.dsNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
       // this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
       // this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
     }
   }
 
+  onChangeCuc(id) {
+    const cuc = this.dsCuc.find((item) => item.id === Number(id));
+    this.formData.get('idChiCuc').setValue(null);
+    this.formData.get('idNhaKho').setValue(null);
+    this.formData.get('idNganKho').setValue(null);
+    this.formData.get('idLoKho').setValue(null);
+
+    if (cuc) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, cuc),
+      };
+      this.dsChiCuc = result[DANH_MUC_LEVEL.CHI_CUC];
+    } else {
+      this.dsChiCuc = [];
+    }
+  }
+
   onChangeChiCuc(id) {
     const chiCuc = this.dsChiCuc.find((item) => item.id === Number(id));
+    this.formData.get('idNhaKho').setValue(null);
+    this.formData.get('idNganKho').setValue(null);
+    this.formData.get('idLoKho').setValue(null);
     if (chiCuc) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
@@ -693,6 +713,8 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
 
   onChangeNhaKho(id) {
     const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
+    this.formData.get('idNganKho').setValue(null);
+    this.formData.get('idLoKho').setValue(null);
     if (nhaKho) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
@@ -705,6 +727,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
 
   onChangeNganKho(id) {
     const nganKho = this.dsNganKho.find((item) => item.id === Number(id));
+    this.formData.get('idLoKho').setValue(null);
     if (nganKho) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, nganKho),
