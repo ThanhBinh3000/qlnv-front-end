@@ -195,8 +195,15 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     }
     const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+          }
+        });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

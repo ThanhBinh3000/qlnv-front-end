@@ -59,6 +59,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     ketLuan: '',
     soQuyetDinhNhap: '',
     soBienBan: '',
+    tenDiemKho: '',
+    tenNganLo: '',
+    tenNhaKho: '',
   };
 
   constructor(
@@ -356,6 +359,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       ketLuan: '',
       soQuyetDinhNhap: '',
       soBienBan: '',
+      tenDiemKho: '',
+      tenNganLo: '',
+      tenNhaKho: '',
     }
   }
 
