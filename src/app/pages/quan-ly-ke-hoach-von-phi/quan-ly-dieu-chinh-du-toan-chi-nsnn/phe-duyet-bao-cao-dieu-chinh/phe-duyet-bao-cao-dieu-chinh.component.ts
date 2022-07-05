@@ -193,7 +193,6 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     }
     let lstTrangThai = [];
     if (!this.searchFilter.trangThai) {
-      debugger
       if (ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
         lstTrangThai.push(Utils.TT_BC_7);
         lstTrangThai.push(Utils.TT_BC_8);
