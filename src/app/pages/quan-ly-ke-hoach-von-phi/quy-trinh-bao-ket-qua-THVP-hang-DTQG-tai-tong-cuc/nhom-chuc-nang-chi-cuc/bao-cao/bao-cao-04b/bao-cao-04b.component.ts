@@ -889,7 +889,7 @@ export class BaoCao04bComponent implements OnInit {
                 }
             })
         }
-        this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
+        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
         let tonglstChitietVtuLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
@@ -898,7 +898,7 @@ export class BaoCao04bComponent implements OnInit {
                 }
             })
         }
-        this.editCache[id].data.luyKeTcong = this.editCache[id].data.luyKeThoc + this.editCache[id].data.luyKeGao + tonglstChitietVtuLuyke;
+        this.editCache[id].data.luyKeTcong = tonglstChitietVtuLuyke;
     }
 
     addAllCol() {
@@ -983,14 +983,14 @@ export class BaoCao04bComponent implements OnInit {
         let tonglstChitietVtuLuyke = 0;
         this.lstCTietBaoCaoTemp.forEach(e => {
             e.listCtiet.forEach(el => {
-                if (e.loaiMatHang == '0') {
+                if (el.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += el.sl;
                 } else {
                     tonglstChitietVtuLuyke += el.sl;
                 }
             });
-            e.trongDotTcong = e.trongDotThoc + e.trongDotGao + tonglstChitietVtuTrongDot;
-            e.luyKeTcong = e.luyKeThoc + e.luyKeGao + tonglstChitietVtuLuyke;
+            e.trongDotTcong = tonglstChitietVtuTrongDot;
+            e.luyKeTcong = tonglstChitietVtuLuyke;
         })
     }
 

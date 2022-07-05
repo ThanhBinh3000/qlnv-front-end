@@ -252,8 +252,9 @@ export class BaoCaoComponent implements OnInit {
 
   maDans: any = [];
   maDanFull: any = [];
-  ddiemXdungs: any = DIADIEM;
-
+  ddiemXdungs = DIADIEM;
+  luyKes: ItemData[] = [];
+  luyKeDetail = [];
   statusBtnDel: boolean = true;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
   statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
@@ -388,6 +389,7 @@ export class BaoCaoComponent implements OnInit {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.getListUser();
+
     if (this.idDialog) {
       this.id = this.idDialog;
       this.statusBtnClose = true;
@@ -458,7 +460,7 @@ export class BaoCaoComponent implements OnInit {
         });
       })
     }
-
+    this.getLuyKe();
     //get danh muc noi dung
     await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
       (data) => {
@@ -528,6 +530,24 @@ export class BaoCaoComponent implements OnInit {
     );
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  getLuyKe() {
+    let request = {
+      dotBcao: null,
+      maPhanBcao: "0",
+      namBcao: this.baoCao?.namBcao,
+      thangBcao: this.baoCao?.thangBcao,
+    }
+    this.quanLyVonPhiService.getLuyKe(request).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.luyKes = res.data.lstBcaos;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 
   getListUser() {
@@ -954,23 +974,26 @@ export class BaoCaoComponent implements OnInit {
     this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
     this.trangThaiChiTiet = trangThaiChiTiet;
     this.resetList();
-    switch (maPhuLuc) {
-      //phu luc 1
-      case PHULUCLIST[0].maPhuLuc:
-        this.updateEditCache('1111');
-        break;
+    this.luyKeDetail = this.luyKes.find(item => item.maLoai == maPhuLuc)?.lstCtietBcaos;
+    // switch (maPhuLuc) {
+    //   //phu luc 1
+    //   case PHULUCLIST[0].maPhuLuc:
 
-      //phu luc 2
-      case PHULUCLIST[1].maPhuLuc:
-        this.updateEditCache('1111');
-        break;
-      //phu luc 3
-      case PHULUCLIST[2].maPhuLuc:
-        this.updateEditCache('1111');
-        break;
-      default:
-        break;
-    }
+    //     this.updateEditCache('1111');
+    //     break;
+
+    //   //phu luc 2
+    //   case PHULUCLIST[1].maPhuLuc:
+    //     this.updateEditCache('1111');
+    //     break;
+    //   //phu luc 3
+    //   case PHULUCLIST[2].maPhuLuc:
+    //     this.updateEditCache('1111');
+    //     break;
+    //   default:
+    //     break;
+    // }
+    this.updateEditCache('1111');
     if (this.danhSachChiTietPhuLucTemp.length > 0) {
       if (!this.danhSachChiTietPhuLucTemp[0].stt) {
         await this.sortWithoutIndex();
@@ -1136,6 +1159,15 @@ export class BaoCaoComponent implements OnInit {
     this.editCache[id].data.luyKeGiaiNganTcong = Number(this.editCache[id].data.luyKeGiaiNganDtoan) + Number(this.editCache[id].data.luyKeGiaiNganNguonKhac) + Number(this.editCache[id].data.luyKeGiaiNganNguonQuy)
       + Number(this.editCache[id].data.luyKeGiaiNganNstt) + Number(this.editCache[id].data.luyKeGiaiNganCk);
 
+    // cong luy ke
+    this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganTcong + this.editCache[id].data.giaiNganThangBcaoTcong;
+    this.editCache[id].data.luyKeGiaiNganDtoan = this.editCache[id].data.luyKeGiaiNganDtoan + this.editCache[id].data.giaiNganThangBcaoDtoan;
+    this.editCache[id].data.luyKeGiaiNganNguonKhac = this.editCache[id].data.luyKeGiaiNganNguonKhac + this.editCache[id].data.giaiNganThangBcaoNguonKhac;
+    this.editCache[id].data.luyKeGiaiNganNguonQuy = this.editCache[id].data.luyKeGiaiNganNguonQuy + this.editCache[id].data.giaiNganThangBcaoNguonQuy;
+    this.editCache[id].data.luyKeGiaiNganNstt = this.editCache[id].data.luyKeGiaiNganNstt + this.editCache[id].data.giaiNganThangBcaoNstt;
+    this.editCache[id].data.luyKeGiaiNganCk = this.editCache[id].data.luyKeGiaiNganCk + this.editCache[id].data.giaiNganThangBcaoCk;
+
+
     this.editCache[id].data.giaiNganThangBcaoTcongTle = (Number(this.editCache[id].data.giaiNganThangBcaoTcong) == 0 && Number(this.editCache[id].data.kphiSdungTcong) == 0) ? '' : Number(this.editCache[id].data.giaiNganThangBcaoTcong) / Number(this.editCache[id].data.kphiSdungTcong);
     this.editCache[id].data.giaiNganThangBcaoDtoanTle = (Number(this.editCache[id].data.giaiNganThangBcaoDtoan) == 0 && Number(this.editCache[id].data.kphiSdungTcong) == 0) ? '' : Number(this.editCache[id].data.giaiNganThangBcaoDtoan) / Number(this.editCache[id].data.kphiSdungTcong);
     this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = (Number(this.editCache[id].data.giaiNganThangBcaoNguonKhac) == 0 && Number(this.editCache[id].data.kphiSdungTcong) == 0) ? '' : Number(this.editCache[id].data.giaiNganThangBcaoNguonKhac) / Number(this.editCache[id].data.kphiSdungTcong);
@@ -1154,6 +1186,12 @@ export class BaoCaoComponent implements OnInit {
     this.editCache[id].data.dtoanSdungNamTcong = Number(this.editCache[id].data.dtoanSdungNamNguonNsnn) + Number(this.editCache[id].data.dtoanSdungNamNguonSn);
     this.editCache[id].data.giaiNganThangTcong = Number(this.editCache[id].data.giaiNganThangNguonNsnn) + Number(this.editCache[id].data.giaiNganThangNguonSn) + Number(this.editCache[id].data.giaiNganThangNguonQuy);
     this.editCache[id].data.luyKeGiaiNganTcong = Number(this.editCache[id].data.luyKeGiaiNganNguonNsnn) + Number(this.editCache[id].data.luyKeGiaiNganNguonSn) + Number(this.editCache[id].data.luyKeGiaiNganNguonQuy);
+
+    // cong luy ke
+    this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganTcong + this.editCache[id].data.giaiNganThangTcong;
+    this.editCache[id].data.luyKeGiaiNganNguonNsnn = this.editCache[id].data.luyKeGiaiNganNguonNsnn + this.editCache[id].data.giaiNganThangNguonNsnn;
+    this.editCache[id].data.luyKeGiaiNganNguonSn = this.editCache[id].data.luyKeGiaiNganNguonSn + this.editCache[id].data.giaiNganThangNguonSn;
+    this.editCache[id].data.luyKeGiaiNganNguonQuy = this.editCache[id].data.luyKeGiaiNganNguonQuy + this.editCache[id].data.giaiNganThangNguonQuy;
   }
 
   changeModelPL3(id) {
@@ -1166,6 +1204,13 @@ export class BaoCaoComponent implements OnInit {
       + Number(this.editCache[id].data.giaiNganScl);
     this.editCache[id].data.luyKeGiaiNganDauNamTso = Number(this.editCache[id].data.luyKeGiaiNganDauNamNsnn) + Number(this.editCache[id].data.luyKeGiaiNganDauNamDt) + Number(this.editCache[id].data.luyKeGiaiNganDauNamThue)
       + Number(this.editCache[id].data.luyKeGiaiNganDauNamScl);
+
+    // cong luy ke
+    this.editCache[id].data.luyKeGiaiNganDauNamTso = this.editCache[id].data.luyKeGiaiNganDauNamTso + this.editCache[id].data.giaiNganTso;
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnn = this.editCache[id].data.luyKeGiaiNganDauNamNsnn + this.editCache[id].data.giaiNganNsnn;
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt = this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt + this.editCache[id].data.giaiNganNsnnVonDt;
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue = this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue + this.editCache[id].data.giaiNganNsnnVonThue;
+    this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl = this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl + this.editCache[id].data.giaiNganNsnnVonScl;
 
     this.editCache[id].data.giaiNganTsoTle = (Number(this.editCache[id].data.giaiNganTso) == 0 && Number(this.editCache[id].data.khoachNamVonTso) == 0) ? '' : Number(this.editCache[id].data.giaiNganTso) / Number(this.editCache[id].data.khoachNamVonTso);
     this.editCache[id].data.giaiNganNsnnTle = (Number(this.editCache[id].data.giaiNganNsnn) == 0 && Number(this.editCache[id].data.khoachNamVonNsnn) == 0) ? '' : Number(this.editCache[id].data.giaiNganNsnn) / Number(this.editCache[id].data.khoachNamVonNsnn);
@@ -2262,6 +2307,38 @@ export class BaoCaoComponent implements OnInit {
       }
     }
     this.replaceIndex(lstIndex, 1, phuLuc);
+    // them du lieu luy ke
+    if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
+        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
+        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+      }
+    } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
+        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+      }
+    } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
+        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+      }
+    }
     // them moi phan tu
     if (initItem?.id) {
       let item = {
@@ -2317,7 +2394,38 @@ export class BaoCaoComponent implements OnInit {
         }
       }
     }
-
+    // them du lieu luy ke
+    if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
+        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
+        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+      }
+    } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
+        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+      }
+    } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
+        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+      }
+    }
     // them moi phan tu
     if (initItem?.id) {
       let item = {
@@ -2349,9 +2457,9 @@ export class BaoCaoComponent implements OnInit {
   deleteLine(id: any, phuLuc: string) {
     let phuLucTemp = this.getPhuLuc(phuLuc);
     var index: number = phuLucTemp.findIndex(e => e.id == id); // vi tri hien tai
-    var stt: string = phuLucTemp[index].stt;
     // khong tim thay thi out ra
     if (index == -1) return;
+    var stt: string = phuLucTemp[index].stt;
     var nho: string = phuLucTemp[index].stt;
     var head: string = this.getHead(phuLucTemp[index].stt); // lay phan dau cua so tt
     //xóa phần tử và con của nó
@@ -2497,6 +2605,39 @@ export class BaoCaoComponent implements OnInit {
   async addFirst(initItem: any, phuLuc: string) {
     let phuLucTemp = [];
     let item;
+
+    if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
+        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
+        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+      }
+    } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
+        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
+        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
+        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+      }
+    } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+      let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
+      initItem = {
+        ...initItem,
+        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
+        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+      }
+    }
+
     if (initItem?.id) {
       item = {
         ...initItem,
@@ -2681,6 +2822,8 @@ export class BaoCaoComponent implements OnInit {
             await this.addFirst(data, phuLuc);
           } else {
             await this.addSame(id, data, phuLuc);
+            //tinh lai luy ke cho lop cha
+            this.sum(phuLucTemp.find(e => e.id == id).stt, phuLuc);
           }
         }
         phuLucTemp = this.getPhuLuc(phuLuc);
@@ -2700,6 +2843,8 @@ export class BaoCaoComponent implements OnInit {
           };
           this.addLow(id, data, phuLuc);
         })
+        //tinh lai luy ke cho lop cha
+        this.sum(phuLucTemp.find(e => e.id == id).stt, phuLuc);
         this.updateEditCache(phuLuc);
       }
     });

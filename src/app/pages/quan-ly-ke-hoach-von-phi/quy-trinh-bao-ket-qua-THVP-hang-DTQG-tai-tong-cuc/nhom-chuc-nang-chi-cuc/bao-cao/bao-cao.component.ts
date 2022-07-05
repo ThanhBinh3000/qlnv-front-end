@@ -212,7 +212,7 @@ export class BaoCaoComponent implements OnInit {
   lstVatTuFull = [];
 
   baoCao: ItemDanhSach = new ItemDanhSach();
-  luyKes: ItemData = new ItemData();
+  luyKes: ItemData[] = [];
   currentday = new Date();
   maPhanBcao: string = '1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
   maLoaiBaocao: any;
@@ -511,7 +511,7 @@ export class BaoCaoComponent implements OnInit {
     }
     this.quanLyVonPhiService.getLuyKe(request).toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.luyKes = res.data;
+        this.luyKes = res.data.lstBcaos;
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
