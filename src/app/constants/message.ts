@@ -33,7 +33,7 @@ export const MESSAGE = {
 
   ERROR_CALL_SERVICE: 'Có lỗi trong quá trình vấn tin',
   SEARCH_VALIDATE: 'Bạn chưa chọn loại báo cáo',
-  ERROR_ADD_VTU: 'Không được chọn trùng loại vật tư',
+  ERROR_ADD_VTU: 'Không được chọn trùng loại mặt hàng',
   ERROR_ADD_UNIT: 'Không được chọn trùng Cục DTNN KV',
   NULL_ERROR: 'Không được để trống',
   GIAO_SO_TRAN_CHI_SUCCESS:'Giao số trần chi thành công!',

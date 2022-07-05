@@ -21,7 +21,7 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -49,8 +49,8 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	//trang thai
 	status: boolean;
 	disable: boolean;
-	statusNew: boolean = true;
-	statusTaoMoi: boolean = true;
+	statusNew = true;
+	statusTaoMoi = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -68,11 +68,11 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
@@ -115,7 +115,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	}
 
 	async getDanhSachCapVon() {
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: "",
 			maDvi: this.userInfo?.dvql,
@@ -152,7 +152,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		// if (this.searchFilter.trangThai) {
 		// 	trangThais = [this.searchFilter.trangThai];
 		// }
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: "0",
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
 			maThanhToan: this.searchFilter.maThanhToan,
@@ -231,7 +231,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		let obj = {
+		const obj = {
 			maCvUv: this.searchFilter.maCvUv,
 			khachHang: this.searchFilter.khachHang,
 		}
@@ -275,7 +275,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 	}
 
 	checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
@@ -285,7 +285,7 @@ export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: any){
+	changeListIdDelete(id: string){
 		if (this.listIdDelete.findIndex(e => e == id) == -1){
 			this.listIdDelete.push(id); 
 		} else {

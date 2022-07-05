@@ -20,7 +20,7 @@ import { DataService } from '../data.service';
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: any;
+	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -35,7 +35,7 @@ export class TimKiemComponent implements OnInit {
 		loaiTimKiem: "0",
 	};
 	capDvi: string;
-	listIdDelete: any[] = [];
+	listIdDelete: string[] = [];
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -67,8 +67,8 @@ export class TimKiemComponent implements OnInit {
 		page: 1,
 	}
 	//trangThai
-	statusBtnNew: boolean = true;
-	statusTaoMoi: boolean = true;
+	statusBtnNew = true;
+	statusTaoMoi = true;
 	status: boolean;
 	disable: boolean;
 
@@ -89,11 +89,11 @@ export class TimKiemComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.denNgay = new Date();
-		let newDate = new Date();
+		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
@@ -160,7 +160,7 @@ export class TimKiemComponent implements OnInit {
 		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			// maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
@@ -243,7 +243,7 @@ export class TimKiemComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		let obj = {
+		const obj = {
 			qdChiTieu: this.searchFilter.qdChiTieu,
 			canCuGia: this.searchFilter.canCuGia,
 			loaiDn: this.searchFilter.loaiDn,
@@ -301,7 +301,7 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
 			&& ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;
@@ -311,7 +311,7 @@ export class TimKiemComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: any) {
+	changeListIdDelete(id: string) {
 		if (this.listIdDelete.findIndex(e => e == id) == -1) {
 			this.listIdDelete.push(id);
 		} else {

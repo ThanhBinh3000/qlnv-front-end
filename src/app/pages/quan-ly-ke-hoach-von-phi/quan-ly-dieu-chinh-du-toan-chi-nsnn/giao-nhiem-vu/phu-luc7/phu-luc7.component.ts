@@ -175,18 +175,62 @@ export class PhuLuc7Component implements OnInit {
       }
     );
 
-    await this.danhMucService.dMDviTinh().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donViTinhs = data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
+    // await this.danhMucService.dMDviTinh().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.donViTinhs = data?.data;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
+    this.donViTinhs = [
+      {
+        dviDo: "DTN",
+        id: 1,
+        maDviTinh: "DTN",
+        tenDviTinh: "Đồng/tấn.năm",
+        trangThai: "01",
       },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
+      {
+        dviDo: "DT",
+        id: 2,
+        maDviTinh: "DT",
+        tenDviTinh: "Đồng/tấn",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DCN",
+        id: 3,
+        maDviTinh: "DCN",
+        tenDviTinh: "Đồng/chiếc.năm",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DC",
+        id: 4,
+        maDviTinh: "DC",
+        tenDviTinh: "Đồng/chiếc",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DB",
+        id: 5,
+        maDviTinh: "DB",
+        tenDviTinh: "Đồng/bộ",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DBN",
+        id: 6,
+        maDviTinh: "DBN",
+        tenDviTinh: "Đồng/bộ.năm",
+        trangThai: "01",
+      },
+    ]
     this.getStatusButton();
     this.spinner.hide();
   }
@@ -553,8 +597,8 @@ export class PhuLuc7Component implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (
-      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.maDviTinh) ||
+      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.slHangTte && this.editCache[id].data.slHangTte !== 0) ||
       (!this.editCache[id].data.kphiBqDmuc && this.editCache[id].data.kphiBqDmuc !== 0) ||
       (!this.editCache[id].data.kphiBqTtien && this.editCache[id].data.kphiBqTtien !== 0) ||
@@ -570,6 +614,24 @@ export class PhuLuc7Component implements OnInit {
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
+    }
+    if(
+      this.editCache[id].data.loaiMatHang < 0 ||
+      this.editCache[id].data.slHangTte < 0 ||
+      this.editCache[id].data.kphiBqDmuc < 0 ||
+      this.editCache[id].data.kphiBqTtien < 0 ||
+      this.editCache[id].data.cphiBqTcong < 0 ||
+      this.editCache[id].data.cphiBqNtruoc < 0 ||
+      this.editCache[id].data.cphiBqNnay < 0 ||
+      this.editCache[id].data.chenhLech < 0 ||
+      this.editCache[id].data.soQtoan < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTk < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTchi < 0 ||
+      this.editCache[id].data.dtoan2021ThanhQtoan2020 < 0 ||
+      this.editCache[id].data.soChuaQtoan < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
     }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
@@ -764,12 +826,14 @@ export class PhuLuc7Component implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
+          if (this.lstCtietBcao.findIndex(e => e.loaiMatHang == item.id) == -1){
           var data: ItemData = {
             ...this.initItem,
             loaiMatHang: item.id,
             level: item.level,
           };
           this.addLow(id, data);
+        }
         })
         this.updateEditCache();
       }

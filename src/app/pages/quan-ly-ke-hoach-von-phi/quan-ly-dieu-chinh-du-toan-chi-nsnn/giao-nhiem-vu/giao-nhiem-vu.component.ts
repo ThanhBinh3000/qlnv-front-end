@@ -20,6 +20,7 @@ import { MESSAGEVALIDATE } from '../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { TRANG_THAI_PHU_LUC, Utils } from "../../../../Utility/utils";
 import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+import { A } from '@angular/cdk/keycodes';
 
 
 // export class ItemData {
@@ -254,7 +255,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						checked: false,
 					})
 				})
-
+        this.dotBcao = 1
 				this.trangThaiBaoCao = "1";
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
@@ -280,6 +281,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 		}
     this.changeNam();
+    this.changeDot();
 		//lay danh sach danh muc don vi
 		await this.danhMucService.dMDonVi().toPromise().then(
 			(data) => {
@@ -301,6 +303,11 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.phuLucs.forEach(item => {
       item.tenDm = PHU_LUC.find(el => el.id == item.id)?.tenDm + this.namHienHanh;
     })
+    this.changeDot()
+  }
+  changeDot(){
+    let item1 = this.phuLucs.find(item => item.id == "1")
+    item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao +"/năm " + this.namHienHanh
   }
 
 	//nhóm các nút chức năng --báo cáo-----
@@ -512,6 +519,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
 		}
+    if(!request.dotBcao){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    }
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -853,7 +863,8 @@ export class GiaoNhiemVuComponent implements OnInit {
 		let obj = {
 			namBcao: this.namHienHanh,
       dotBcao: this.dotBcao,
-      loaiCopy: ''
+      loaiCopy: '',
+      checkDvtt: this.lstDviTrucThuoc.length > 0 ? true : false,
 		}
 		const modalTuChoi = this.modal.create({
 			nzTitle: 'Copy Báo Cáo',
@@ -892,7 +903,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		let lstDieuChinhTemps: any[] = [];
 		this.lstDieuChinhs.forEach(data => {
 			let lstCtietTemp: any[] = [];
-			data.lstCtietDchinh.forEach(item => {
+			data.lstCtietDchinh?.forEach(item => {
 				lstCtietTemp.push({
 					...item,
 					id: null,

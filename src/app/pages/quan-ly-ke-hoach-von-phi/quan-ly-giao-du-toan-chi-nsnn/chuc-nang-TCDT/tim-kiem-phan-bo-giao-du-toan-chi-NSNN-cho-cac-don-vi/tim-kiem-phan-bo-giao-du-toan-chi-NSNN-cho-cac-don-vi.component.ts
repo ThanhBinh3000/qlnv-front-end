@@ -294,5 +294,11 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     );
     this.spinner.hide();
   }
-
+  xoaDieuKien(){
+    this.searchFilter.namPa = null;
+    this.searchFilter.ngayTaoDen = null;
+    this.searchFilter.ngayTaoTu = null;
+    this.searchFilter.maPa = null;
+    // this.searchFilter.maLoaiDan = null;
+  }
 }

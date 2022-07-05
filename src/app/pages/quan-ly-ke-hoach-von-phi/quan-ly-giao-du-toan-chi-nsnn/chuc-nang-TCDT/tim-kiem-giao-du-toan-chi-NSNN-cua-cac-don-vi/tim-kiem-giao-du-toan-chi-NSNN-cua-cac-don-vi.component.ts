@@ -219,4 +219,13 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   getUnitName(maDvi: string) {
     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
   }
+  xoaDieuKien(){
+    this.searchFilter.namGiao = null;
+    this.searchFilter.ngayTaoDen = null;
+    this.searchFilter.ngayTaoTu = null;
+    this.searchFilter.maPa = null;
+    this.searchFilter.maDviNhan = null;
+    this.trangThai = null
+    this.searchFilter.loaiDuAn = null;
+  }
 }

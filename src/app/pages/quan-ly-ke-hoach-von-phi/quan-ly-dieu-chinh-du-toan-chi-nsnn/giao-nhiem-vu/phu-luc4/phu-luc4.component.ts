@@ -558,6 +558,24 @@ export class PhuLuc4Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
+    if(
+      this.editCache[id].data.slBquanKh <0 ||
+      this.editCache[id].data.slBquanTte <0 ||
+      this.editCache[id].data.slBquanUocThien <0 ||
+      this.editCache[id].data.slBquanTcong <0 ||
+      this.editCache[id].data.dinhMuc <0 ||
+      this.editCache[id].data.thanhTien <0 ||
+      this.editCache[id].data.dtoanThieuNTruoc <0 ||
+      this.editCache[id].data.tongNcauKphi <0 ||
+      this.editCache[id].data.kphiTcong <0 ||
+      this.editCache[id].data.kphiQtoanNtruoc <0 ||
+      this.editCache[id].data.kphiDtoanGiaoTnam <0 ||
+      this.editCache[id].data.kphiPvcTcDchuyen <0 ||
+      this.editCache[id].data.dtoanDchinh <0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
+    }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
@@ -700,7 +718,6 @@ export class PhuLuc4Component implements OnInit {
     this.addFirst(data);
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
     var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
-    console.log(lstTemp);
 
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
@@ -753,12 +770,14 @@ export class PhuLuc4Component implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
+          if (this.lstCtietBcao.findIndex(e => e.loaiMatHang == item.id) == -1){
           var data: ItemData = {
             ...this.initItem,
             loaiMatHang: item.id,
             level: item.level,
           };
           this.addLow(id, data);
+        }
         })
         this.updateEditCache();
       }

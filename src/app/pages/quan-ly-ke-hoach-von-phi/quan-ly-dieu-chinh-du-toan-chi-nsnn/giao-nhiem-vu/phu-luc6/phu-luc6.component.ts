@@ -578,6 +578,23 @@ export class PhuLuc6Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
+    if(
+      this.editCache[id].data.kphiDmuc <0 ||
+      this.editCache[id].data.kphiTtien <0 ||
+      this.editCache[id].data.cphiTcong <0 ||
+      this.editCache[id].data.cphiNtruoc <0 ||
+      this.editCache[id].data.cphiNnay <0 ||
+      this.editCache[id].data.chenhLech <0 ||
+      this.editCache[id].data.kphiQtoan <0 ||
+      this.editCache[id].data.kphiChuaQtoanCong <0 ||
+      this.editCache[id].data.kphiChuaQtoanKpTchi <0 ||
+      this.editCache[id].data.kphiChuaQtoanKpTkiem <0 ||
+      this.editCache[id].data.soChuaQtoan <0 ||
+      this.editCache[id].data.dtoan2021ThanhQtoan2020 <0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
+    }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
@@ -771,12 +788,14 @@ export class PhuLuc6Component implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
+          if (this.lstCtietBcao.findIndex(e => e.loaiMatHang == item.id) == -1){
           var data: ItemData = {
             ...this.initItem,
             loaiMatHang: item.id,
             level: item.level,
           };
           this.addLow(id, data);
+        }
         })
         this.updateEditCache();
       }

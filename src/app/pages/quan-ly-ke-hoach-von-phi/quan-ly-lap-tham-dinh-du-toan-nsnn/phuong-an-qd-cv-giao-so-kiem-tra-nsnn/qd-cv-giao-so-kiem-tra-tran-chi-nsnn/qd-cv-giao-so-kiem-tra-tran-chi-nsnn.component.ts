@@ -1,18 +1,18 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as fileSaver from 'file-saver';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
-import * as fileSaver from 'file-saver';
-import { DomSanitizer } from '@angular/platform-browser';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 
 export class ItemCongVan {
@@ -28,7 +28,7 @@ export class ItemCongVan {
 })
 export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
-    id!: any;
+    id!: string;
     userInfo: any;
     //thong tin chung bao cao
     ngayTao: string;
@@ -48,8 +48,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     //beforeUpload: any;
-    listIdFilesDelete: any = [];                        // id file luc call chi tiet
-    status: boolean = false;
+    listIdFilesDelete: string[] = [];                        // id file luc call chi tiet
+    status = false;
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
         this.fileDetail = file;
@@ -96,7 +96,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     async ngOnInit() {
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        let userName = this.userService.getUserName();
+        const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         this.maDviTao = this.userInfo?.dvql;
 
@@ -157,9 +157,9 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         const upfile: FormData = new FormData();
         upfile.append('file', file);
         upfile.append('folder', this.maDviTao + '/' + this.maPa);
-        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+        const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
-                let objfile = {
+                const objfile = {
                     fileName: data.filename,
                     fileSize: data.size,
                     fileUrl: data.url,
@@ -182,10 +182,9 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     //download file về máy tính
     async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -214,7 +213,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
                 },
             );
         } else {
-            let file: any = this.fileDetail;
+            const file: any = this.fileDetail;
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
@@ -242,12 +241,12 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        let listFile: any = [];
+        const listFile: any = [];
         for (const iterator of this.listFile) {
             listFile.push(await this.uploadFile(iterator));
         }
 
-        let request = JSON.parse(JSON.stringify(
+        const request = JSON.parse(JSON.stringify(
             {
                 id: this.id,
                 fileDinhKems: this.lstFiles,
@@ -260,7 +259,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         ))
 
         //get file cong van url
-        let file: any = this.fileDetail;
+        const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE){
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);

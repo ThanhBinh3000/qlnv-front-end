@@ -60,7 +60,7 @@ export class PheDuyetComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
 		this.maDviTao = this.userInfo?.dvql;
@@ -146,7 +146,7 @@ export class PheDuyetComponent implements OnInit {
 		if (!this.searchFilter.trangThai){
 			if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN){
 				lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
-			} else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+			} else if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
 				lstTrangThai = [Utils.TT_BC_2];
 			} else {
 				lstTrangThai = [Utils.TT_BC_4];
@@ -154,7 +154,7 @@ export class PheDuyetComponent implements OnInit {
 		} else {
 			lstTrangThai = [this.searchFilter.trangThai];
 		}
-		let requestReport = {
+		const requestReport = {
 			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maBcao: this.searchFilter.maBaoCao,
 			maDvi: this.searchFilter.donViTao,

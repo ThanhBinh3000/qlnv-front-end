@@ -34,18 +34,18 @@ export const TRANG_THAI_TIM_KIEM = [
     id: "5",
     tenDm: 'Lãnh đạo từ chối'
   },
-  {
-    id: "6",
-    tenDm: 'Lãnh đạo duyệt'
-  },
+  // {
+  //   id: "6",
+  //   tenDm: 'Lãnh đạo duyệt'
+  // },
   // {
   //     id: "7",
   //     tenDm: 'Gửi ĐV cấp trên'
   // },
-  // {
-  //     id: "7",
-  //     tenDm: 'Lãnh đạo duyệt'
-  // },
+  {
+      id: "7",
+      tenDm: 'Lãnh đạo duyệt'
+  },
   {
     id: "8",
     tenDm: 'ĐV cấp trên Từ chối'
@@ -284,5 +284,13 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 
   getStatusName(trangThai: string) {
     return this.trangThais.find(e => e.id == trangThai).tenDm;
+  }
+
+  xoaDieuKien() {
+    this.searchFilter.tuNgay = null
+    this.searchFilter.nam = null
+    this.searchFilter.denNgay = null
+    this.searchFilter.maBcao = null
+    this.searchFilter.dotBcao = null
   }
 }
