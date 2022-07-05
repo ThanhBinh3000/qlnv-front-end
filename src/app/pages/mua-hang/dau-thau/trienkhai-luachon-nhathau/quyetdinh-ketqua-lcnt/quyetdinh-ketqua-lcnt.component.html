@@ -110,6 +110,111 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr class="search-table">
+                    <th></th>
+                    <th></th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                          (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
+                          (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                          (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenGthau"
+                          (input)="filterInTable('tenGthau',filterTable.tenGthau)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.statusGT"
+                          (input)="filterInTable('statusGT',filterTable.statusGT)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaThau"
+                          (input)="filterInTable('tenNhaThau',filterTable.tenNhaThau)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lyDoHuy"
+                          (input)="filterInTable('lyDoHuy',filterTable.lyDoHuy)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donGiaTrcVat"
+                          (input)="filterInTable('donGiaTrcVat',filterTable.donGiaTrcVat)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHdong"
+                          (input)="filterInTable('tenHdong',filterTable.tenHdong)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThienHd"
+                          (input)="filterInTable('tgianThienHd',filterTable.tgianThienHd)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.statusConvert"
+                          (input)="filterInTable('statusConvert',filterTable.statusConvert)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th></th>
+                  </tr>
+
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox nz-checkbox></label>
@@ -119,13 +224,13 @@
                     <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
                     <td>{{ data.tenGthau }}</td>
-                    <td>{{ statusGoiThau(data.statusGthau) }}</td>
+                    <td>{{ data.statusGT }}</td>
                     <td>{{ data.tenNhaThau }}</td>
                     <td>{{ data.lyDoHuy }}</td>
                     <td>{{ (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) * data.soLuong }}</td>
                     <td>{{ data.tenHdong }}</td>
                     <td>{{ data.tgianThienHd }}</td>
-                    <td>{{ convertTrangThai(data.trangThai) }}</td>
+                    <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>

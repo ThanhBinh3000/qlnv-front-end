@@ -1,4 +1,5 @@
 import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -16,6 +17,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { ItemDetail } from 'src/app/models/ItemDetail';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
@@ -35,6 +37,15 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     tuNgayQd: null,
     denNgayQd: null
   };
+  filterTable: any = {
+    soQd: '',
+    ngayQd: '',
+    trichYeu: '',
+    namKhoach: '',
+    tenVthh: '',
+    tenCloaiVthh: '',
+  };
+  dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
   listVthh: any;
@@ -259,11 +270,15 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+
       }
+      this.dataTableAll = cloneDeep(this.dataTable)
       this.totalRecord = data.totalElements;
     } else {
+      this.dataTable = [];
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
@@ -375,6 +390,35 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      ngayQd: '',
+      trichYeu: '',
+      namKhoach: '',
+      tenVthh: '',
+      tenCloaiVthh: '',
     }
   }
 }

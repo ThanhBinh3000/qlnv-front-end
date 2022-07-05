@@ -59,7 +59,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     namKhoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
-    trangThai: '',
+    statusConvert: '',
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -155,6 +155,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
+          item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -382,7 +383,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-  
+
   clearFilterTable() {
     this.filterTable = {
       soDxuat: '',
@@ -392,7 +393,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       namKhoach: '',
       tenVthh: '',
       tenCloaiVthh: '',
-      trangThai: '',
+      statusConvert: '',
     }
   }
 }
