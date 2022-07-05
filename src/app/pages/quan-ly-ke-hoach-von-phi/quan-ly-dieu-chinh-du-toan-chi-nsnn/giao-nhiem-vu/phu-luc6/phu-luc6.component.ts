@@ -771,12 +771,14 @@ export class PhuLuc6Component implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
+          if (this.lstCtietBcao.findIndex(e => e.loaiMatHang == item.id) == -1){
           var data: ItemData = {
             ...this.initItem,
             loaiMatHang: item.id,
             level: item.level,
           };
           this.addLow(id, data);
+        }
         })
         this.updateEditCache();
       }
