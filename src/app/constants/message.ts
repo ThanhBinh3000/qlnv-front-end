@@ -3,6 +3,7 @@ export const MESSAGE = {
   SYSTEM_ERROR: 'Lỗi hệ thống',
   ERROR: 'Lỗi!!!',
   WARNING: 'Chú ý!!',
+  NOTIFICATION: 'Thông báo',
   SUCCESS: 'Thành công',
   ADD_SUCCESS: 'Thêm mới thành công',
   UPDATE_SUCCESS: 'Cập nhật thành công',

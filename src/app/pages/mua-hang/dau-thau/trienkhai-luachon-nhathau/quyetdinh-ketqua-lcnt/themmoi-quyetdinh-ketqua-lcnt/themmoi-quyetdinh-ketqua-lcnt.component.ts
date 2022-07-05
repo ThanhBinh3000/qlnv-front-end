@@ -73,6 +73,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   listVthh: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
+  dataTableGoiThau: any[] = [];
 
   listQdPdKhlcnt: any[] = [];
   maQd: string = '';
@@ -412,6 +413,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     }
     let res = await this.ttinDauThauService.getAll(body);
     this.listGoiThau = res.data;
+    this.dataTableGoiThau = res.data;
   }
 
   async onChangeGoiThau(event) {

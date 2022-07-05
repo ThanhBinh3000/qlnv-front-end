@@ -70,16 +70,14 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   userInfo: UserLogin;
   selectedId: number = 0;
-  isTongCuc: boolean = false;
-  isCuc: boolean = false;
+
+  isVatTu: boolean = false;
 
   allChecked = false;
   indeterminate = false;
 
   async ngOnInit() {
     try {
-      this.isTongCuc = this.userService.isTongCuc();
-      this.isCuc = this.userService.isCuc();
       this.userInfo = this.userService.getUserLogin();
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
@@ -198,6 +196,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   themMoi() {
     this.isDetail = true;
+    if (this.userService.isTongCuc()) {
+      this.isVatTu = true;
+    } else {
+      this.isVatTu = false;
+    }
     this.selectedId = null;
     this.loaiVthh = this.loaiVthhCache;
   }
@@ -211,6 +214,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.selectedId = data.id;
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
+    if (data.loaiVthh.startsWith('02')) {
+      this.isVatTu = true;
+    } else {
+      this.isVatTu = false;
+    }
   }
 
   clearFilter() {
@@ -357,13 +365,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
-  }
-
-  checkCanUpdate() {
-    if (this.loaiVthh == 'tat-ca' || this.loaiVthh == '02' || this.isCuc) {
-      return true;
-    }
-    return false;
   }
 
   filterInTable(key: string, value: string) {

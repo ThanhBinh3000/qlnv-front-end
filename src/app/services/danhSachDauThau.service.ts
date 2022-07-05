@@ -18,10 +18,6 @@ export class DanhSachDauThauService extends BaseService {
     super(httpClient, 'dx-kh/lcnt', '/qlnv-gateway/qlnv-hang');
   }
 
-  timKiem(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/tra-cuu`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
   getChiTietDeXuatKeHoachLuaChonNhaThau(
     id: number,
   ): Promise<ResponseData<ThongTinDeXuatKeHoachLuaChonNhaThau>> {

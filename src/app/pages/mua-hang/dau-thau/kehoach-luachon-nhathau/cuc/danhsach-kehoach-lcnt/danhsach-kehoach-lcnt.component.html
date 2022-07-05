@@ -49,13 +49,13 @@
                     </th>
                     <th width="60px" class="text-center">STT</th>
                     <th width="">Số tờ trình</th>
-                    <th *ngIf="isTongCuc" width="">Đơn vị</th>
+                    <th *ngIf="userService.isTongCuc()" width="">Đơn vị</th>
                     <th width="">Ngày đề xuất</th>
                     <th width="">Trích yếu</th>
                     <th width="">Số QĐ giao chỉ tiêu</th>
                     <th width="">Năm kế hoạch</th>
                     <th width="">Hàng hóa</th>
-                    <th *ngIf="isCuc" width="">Chủng loại hàng hóa</th>
+                    <th *ngIf="userService.isCuc()" width="">Chủng loại hàng hóa</th>
                     <th width="">Trạng thái của đề xuất</th>
                     <th width="90px">Hành động</th>
                   </tr>
@@ -73,7 +73,7 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th *ngIf="isTongCuc">
+                    <th *ngIf="userService.isTongCuc()">
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" />
                       </nz-input-group>
@@ -126,7 +126,7 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th *ngIf="isCuc">
+                    <th *ngIf="userService.isCuc()">
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                           (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
@@ -162,13 +162,13 @@
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{ data.soDxuat }}</td>
-                    <td *ngIf="isTongCuc" width="">{{data.tenDvi}}</td>
+                    <td *ngIf="userService.isTongCuc()" width="">{{data.tenDvi}}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
                     <td>{{ data.soQd }}</td>
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.tenVthh }}</td>
-                    <td *ngIf="isCuc">{{ data.tenCloaiVthh }}</td>
+                    <td *ngIf="userService.isCuc()">{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
                       <a (click)="detail(data)">
@@ -224,11 +224,11 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <ng-container *ngIf="userService.isCuc()">
+  <ng-container *ngIf="!isVatTu">
     <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
     </app-themmoi-kehoach-lcnt>
   </ng-container>
-  <ng-container *ngIf="userService.isTongCuc()">
+  <ng-container *ngIf="isVatTu">
     <app-themmoi-kehoach-lcnt-tong-cuc [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
     </app-themmoi-kehoach-lcnt-tong-cuc>
   </ng-container>

@@ -166,8 +166,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   constructor(
     private modal: NzModalService,
-    private routerActive: ActivatedRoute,
-    private router: Router,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
     private spinner: NgxSpinnerService,
@@ -180,7 +178,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private cdr: ChangeDetectorRef,
     private dmTieuChuanService: DanhMucTieuChuanService
 
   ) {
