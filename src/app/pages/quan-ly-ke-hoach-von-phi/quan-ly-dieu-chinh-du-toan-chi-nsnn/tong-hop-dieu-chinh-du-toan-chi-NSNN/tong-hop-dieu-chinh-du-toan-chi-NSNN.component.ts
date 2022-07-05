@@ -153,8 +153,6 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
 	tongHop() {
-    console.log(this.dotBcao);
-
 		if (!this.namHienTai) {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
@@ -201,4 +199,9 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	getUnitName(maDvi: string){
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
+
+  xoaDieuKien(){
+    this.namHienTai = null
+    this.dotBcao = null
+  }
 }

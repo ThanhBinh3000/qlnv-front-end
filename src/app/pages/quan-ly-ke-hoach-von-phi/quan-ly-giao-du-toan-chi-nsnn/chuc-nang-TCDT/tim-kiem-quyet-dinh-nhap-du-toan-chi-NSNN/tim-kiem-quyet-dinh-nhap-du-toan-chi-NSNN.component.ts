@@ -152,5 +152,11 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     );
     this.spinner.hide();
   }
+  xoaDieuKien(){
+    this.searchFilter.namPa = null
+    this.searchFilter.ngayTaoDen = null
+    this.searchFilter.ngayTaoTu = null
+    this.searchFilter.maPa = null
+  }
 
 }

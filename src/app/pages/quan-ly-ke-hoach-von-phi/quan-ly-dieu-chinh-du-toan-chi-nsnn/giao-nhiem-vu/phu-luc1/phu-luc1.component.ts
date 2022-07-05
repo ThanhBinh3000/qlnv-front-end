@@ -22,7 +22,7 @@ export class ItemData {
   stt: string;
   level: number;
   maNdung: number;
-  maLoaiKhoan: number;
+  maLoaiKhoan: string;
   tongNcauDtoanKphi: number;
   dtoanKphiNtruoc: number;
   dtoanKphiDaGiao: number;
@@ -65,7 +65,7 @@ export class PhuLuc1Component implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    maLoaiKhoan: 0,
+    maLoaiKhoan: "",
     tongNcauDtoanKphi: 0,
     dtoanKphiNtruoc: 0,
     dtoanKphiDaGiao: 0,
@@ -80,7 +80,7 @@ export class PhuLuc1Component implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    maLoaiKhoan: 0,
+    maLoaiKhoan: "",
     tongNcauDtoanKphi: 0,
     dtoanKphiNtruoc: 0,
     dtoanKphiDaGiao: 0,
@@ -220,8 +220,6 @@ export class PhuLuc1Component implements OnInit {
     if (a.length > 0) {
         this.addListNoiDungChi(a);
     }
-    console.log(this.noiDungFull);
-
   }
 
   getStatusButton() {
@@ -584,6 +582,17 @@ export class PhuLuc1Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
+    if (this.editCache[id].data.tongNcauDtoanKphi < 0 ||
+      this.editCache[id].data.dtoanKphiNtruoc < 0 ||
+      this.editCache[id].data.dtoanKphiDaGiao < 0 ||
+      this.editCache[id].data.dtoanKphiCong < 0 ||
+      this.editCache[id].data.kphiUocThien < 0 ||
+      this.editCache[id].data.kphiDchinhTang < 0 ||
+      this.editCache[id].data.kphiDchinhGiam < 0
+      ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+      return;
+  }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data

@@ -92,8 +92,9 @@
 							<td>
 								<!-- {{dotBcao}} -->
 								<ng-container *ngIf="trangThaiBaoCao == '1'; else chonDot">
-									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-										[(ngModel)]="dotBcao">
+									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đợt báo cáo"
+                  [class]="dotBcao ? '' : 'input-error-validate'"
+										[(ngModel)]="dotBcao" (ngModelChange)="changeDot()">
 										<nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id" [nzLabel]="item.id">
 										</nz-option>
 									</nz-select>

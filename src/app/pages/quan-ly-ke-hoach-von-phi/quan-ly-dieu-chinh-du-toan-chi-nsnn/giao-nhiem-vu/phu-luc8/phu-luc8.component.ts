@@ -300,6 +300,19 @@ export class PhuLuc8Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
+    if(
+      this.editCache[id].data.dxuatDchinhGiam < 0 ||
+      this.editCache[id].data.dxuatDchinhTang < 0 ||
+      this.editCache[id].data.dxuatDchinhTong < 0 ||
+      this.editCache[id].data.gtriCtrinh < 0 ||
+      this.editCache[id].data.dxuatDchinhGiam < 0 ||
+      this.editCache[id].data.dxuatDchinhTang < 0 ||
+      this.editCache[id].data.dxuatDchinhTong < 0 ||
+      this.editCache[id].data.kh2021SauDchinh < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
+    }
     // this.changeModel(id);
     this.editCache[id].data.checked = this.lstDchinh.find(
       (item) => item.id === id,

@@ -356,6 +356,9 @@ export class PhuLuc2Component implements OnInit {
     if (n == 2) {
       xau = "-";
     }
+    if (n == 3) {
+      xau = "+";
+    }
     return xau;
   }
   // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
@@ -521,7 +524,8 @@ export class PhuLuc2Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if ((!this.editCache[id].data.thienSluongKhoachDgiao && this.editCache[id].data.thienSluongKhoachDgiao !== 0) ||
+    if (
+      (!this.editCache[id].data.thienSluongKhoachDgiao && this.editCache[id].data.thienSluongKhoachDgiao !== 0) ||
       (!this.editCache[id].data.thienSluongTteThien && this.editCache[id].data.thienSluongTteThien !== 0) ||
       (!this.editCache[id].data.thienSluongUocThien && this.editCache[id].data.thienSluongUocThien !== 0) ||
       (!this.editCache[id].data.thienCong && this.editCache[id].data.thienCong !== 0) ||
@@ -532,6 +536,19 @@ export class PhuLuc2Component implements OnInit {
       (!this.editCache[id].data.maDviTinh)
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if(
+      this.editCache[id].data.thienSluongKhoachDgiao < 0 ||
+      this.editCache[id].data.thienSluongTteThien < 0 ||
+      this.editCache[id].data.thienSluongUocThien < 0 ||
+      this.editCache[id].data.thienCong < 0 ||
+      this.editCache[id].data.thienDinhMuc < 0 ||
+      this.editCache[id].data.thienThanhTien < 0 ||
+      this.editCache[id].data.kphiThieuNtruoc < 0 ||
+      this.editCache[id].data.ncauKphi < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
     }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao

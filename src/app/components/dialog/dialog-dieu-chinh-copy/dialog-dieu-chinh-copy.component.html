@@ -15,10 +15,12 @@
           </div>
       </ng-container>
       <div nz-col nzSpan="8">
+        <ng-container *ngIf="obj.checkDvtt == true">
           <nz-radio-group [(ngModel)]="response.loaiCopy">
               <label nz-radio nzValue="C">Copy danh sách báo cáo từ các đơn vị trực thuộc</label>
               <label nz-radio nzValue="D">Xóa danh sách báo cáo từ các đơn vị trực thuộc</label>
           </nz-radio-group>
+        </ng-container>
       </div>
   </div>
 </div>
