@@ -42,7 +42,7 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Tiếp nhận</span>
 				</a>
-				<a class="btn btn-main"  (click)="showDialogCopy()">
+				<a class="btn btn-main" (click)="showDialogCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
@@ -84,27 +84,33 @@
 							<td>{{maBaoCao}}</td>
 							<td>
 								<!-- {{namHienHanh}} -->
-								<nz-input-number [nzSize]="'small'"
-									[class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
-									[(ngModel)]="namHienHanh" (ngModelChange)="changeNam()">
-								</nz-input-number>
+								<ng-container *ngIf="dotBcao ; else nam">
+									{{namHienHanh}}
+								</ng-container>
+								<ng-template #nam>
+									<nz-input-number [nzSize]="'small'"
+										[class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
+										[(ngModel)]="namHienHanh" (ngModelChange)="changeNam()">
+									</nz-input-number>
+								</ng-template>
 							</td>
 							<td>
 								<!-- {{dotBcao}} -->
-								<ng-container *ngIf="trangThaiBaoCao == '1'; else chonDot">
-									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đợt báo cáo"
-                  [class]="dotBcao ? '' : 'input-error-validate'"
-										[(ngModel)]="dotBcao" (ngModelChange)="changeDot()">
-										<nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id" [nzLabel]="item.id">
-										</nz-option>
-									</nz-select>
+								<ng-container *ngIf="dotBcao ; else chonDot">
+									<div *ngFor="let item of dotBcaos">
+										<div *ngIf="item.id == dotBcao">
+											{{item.id}}
+										</div>
+									</div>
 								</ng-container>
 								<ng-template #chonDot>
-									<div *ngFor="let item of dotBcaos">
-											<div *ngIf="item.id == dotBcao">
-												{{item.id}}
-											</div>
-									</div>
+									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đợt báo cáo"
+										[class]="dotBcao ? '' : 'input-error-validate'" [(ngModel)]="dotBcao"
+										(ngModelChange)="changeDot()">
+										<nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id"
+											[nzLabel]="item.id">
+										</nz-option>
+									</nz-select>
 								</ng-template>
 							</td>
 							<td>{{ngayNhap}}</td>
