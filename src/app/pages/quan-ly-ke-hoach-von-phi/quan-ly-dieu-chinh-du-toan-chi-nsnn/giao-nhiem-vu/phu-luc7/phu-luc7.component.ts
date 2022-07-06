@@ -231,8 +231,22 @@ export class PhuLuc7Component implements OnInit {
         trangThai: "01",
       },
     ]
+    this.changeNam()
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  changeNam(){
+    let a = LINH_VUC.find(el => el.id == 1)
+    a.tenDm = "Tổng cộng năm " + this.namBcao
+    let b = LINH_VUC.find(el => el.id == 2)
+    b.tenDm = "Thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b1 = LINH_VUC.find(el => el.id == 21)
+    b1.tenDm = "VTCT thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b2 = LINH_VUC.find(el => el.id == 22)
+    b2.tenDm = "Nhập thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b3 = LINH_VUC.find(el => el.id == 23)
+    b3.tenDm = "Xuất thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
   }
 
   getStatusButton() {
@@ -418,17 +432,23 @@ export class PhuLuc7Component implements OnInit {
     //     }
     //   }
     // };
-    if (n == 0) {
-      xau = chiSo[n];
-    };
+    // if (n == 0) {
+    //   xau = chiSo[n];
+    // };
     // if (n == 2) {
     //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     // };
-    // if (n == 3) {
-    //   xau = String.fromCharCode(k + 96);
-    // }
-    if (n == 1) {
+    if (n == 0) {
+      xau = String.fromCharCode(k + 96).toUpperCase();
+    }
+     if (n == 1) {
+      xau = chiSo[n];
+    };
+    if (n == 2) {
       xau = "-";
+    }
+    if (n == 3) {
+      xau = "+";
     }
     return xau;
   }
