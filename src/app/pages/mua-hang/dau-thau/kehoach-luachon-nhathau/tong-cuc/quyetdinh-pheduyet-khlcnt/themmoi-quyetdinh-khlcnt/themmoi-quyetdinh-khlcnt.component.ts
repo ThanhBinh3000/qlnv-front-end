@@ -14,6 +14,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -191,6 +192,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
+  deleteSelect() {
+  }
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -350,7 +354,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async danhSachTongHopGetAll() {
-    // this.listDanhSachTongHop = [];
+    this.danhsachDx = []
     let body = {
       trangThai: "00",
       loaiVthh: this.formData.get('loaiVthh').value,
@@ -370,10 +374,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (body.loaiVthh.startsWith("02")) {
         res.data.content.forEach(item => {
-          this.listToTrinh.push({
-            id: item.id,
-            tenTr: item.soDxuat
-          })
+          if (!this.maTongHopExis(this.listToTrinh, item.id)) {
+            this.listToTrinh.push({
+              id: item.id,
+              tenTr: item.soDxuat
+            });
+          }
         });
       } else {
         res.data.forEach(item => {
@@ -458,6 +464,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async onChangeIdTrHdr(data) {
+    this.spinner.show();
+    this.danhsachDx = [];
     const res = await this.dxuatKhLcntVatTuService.getDetail(data)
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
@@ -466,14 +474,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   async save() {
-    // if (this.formData.invalid) {
-    //   this.helperService.markFormGroupTouched(this.formData);
-    //   console.log(this.formData.value);
-    //   return;
-    // }
+    if (this.formData.invalid) {
+      this.helperService.markFormGroupTouched(this.formData);
+      console.log(this.formData.value);
+      return;
+    }
     let body = this.formData.value;
     body.soQd = body.soQd + "/" + this.maQd;
     body.dsDeXuat = this.danhsachDx;
@@ -690,14 +699,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         trichYeu: data.trichYeu
       })
       this.danhsachDx = data.hhQdKhlcntDtlList
-      console.log(this.danhsachDx);
       this.listDanhSachTongHop = [
         ...this.listDanhSachTongHop,
         {
           id: data.idThHdr
         }
       ]
-
     };
     this.setTitle();
   }
@@ -788,5 +795,32 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else if (trangThai === this.globals.prop.BAN_HANH) {
       return 'da-ban-hanh';
     }
+  }
+
+  openDialogGoiThau(data?: any, index?) {
+    const modal = this.modal.create({
+      nzTitle: 'Thông tin gói thầu',
+      nzContent: DialogThemMoiGoiThauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: data,
+        loaiVthh: data.loaiVthh
+      },
+    });
+    modal.afterClose.subscribe((res) => {
+      if (res) {
+        console.log(res);
+        if (index >= 0) {
+          this.danhsachDx[index] = res;
+        } else {
+          this.danhsachDx.push(res);
+        }
+        // this.bindingDataNguonVon()
+        // this.calendarDinhMuc();
+      }
+    });
   }
 }

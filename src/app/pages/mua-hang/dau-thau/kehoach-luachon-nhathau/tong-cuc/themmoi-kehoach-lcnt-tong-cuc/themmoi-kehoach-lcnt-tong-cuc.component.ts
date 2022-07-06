@@ -197,24 +197,16 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         ghiChu: [null, [Validators.required]],
         namKhoach: [, [Validators.required]],
         loaiVthh: [, [Validators.required]],
-        // tenVthh: [, [Validators.required]],
         ngayKy: [null, [Validators.required]],
         trangThai: [''],
         maDvi: [],
-        // cloaiVthh: [, [Validators.required]],
-        // tenCloaiVthh: [, [Validators.required]],
         tenDuAn: [null, [Validators.required]],
         tenDvi: [null],
-        tongMucDt: [null, [Validators.required]],
+        tongMucDt: [null],
         nguonVon: [null, [Validators.required]],
+        dienGiai: [null],
         tchuanCluong: [null],
-        // tgianBdauTchuc: [null, [Validators.required]],
-        // tgianMthau: [null, [Validators.required]],
-        // tgianDthau: [null, [Validators.required]],
-        // gtriDthau: [null, [Validators.required]],
-        // gtriHdong: [null, [Validators.required]],
         tgianThienHd: [null, [Validators.required]],
-        // tgianNhang: [null, [Validators.required]],
       }
     );
     this.formData.controls['nguonVon'].valueChanges.subscribe(value => {
@@ -286,7 +278,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     this.setTitle();
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       console.log("Invalid");
@@ -294,7 +286,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       return;
     }
     if (this.dataGoiThau.length == 0) {
-      this.notification.error(MESSAGE.ERROR, 'Danh sách kế hoạch không được để trống');
+      this.notification.error(MESSAGE.ERROR, this.userService.isTongCuc ? 'Danh sách gói thầu không được để trống' : 'Danh sách kế hoạch không được để trống');
       return;
     }
     let body = this.formData.value;
@@ -308,12 +300,18 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       res = await this.dxuatKhLcntVatTuService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isGuiDuyet) {
+        await this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
+        this.guiDuyet();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.quayLai();
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.quayLai();
+        }
       }
-      this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -397,22 +395,23 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case '00':
-            case '03':
-            case '00': {
+            case '03': {
               body.trangThai = '01';
               break;
             }
             case '01': {
-              body.trangThai = '09';
-              break;
-            }
-            case '09': {
               body.trangThai = '02';
+              break;
             }
           }
           // this.save()
-          let res = await this.dauThauService.updateStatus(body);
-          this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id)
+          let res = await this.dxuatKhLcntVatTuService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, body.trangThai == '01' ? MESSAGE.GUI_DUYET_SUCCESS : MESSAGE.PHE_DUYET_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -510,7 +509,6 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     }
   }
 
-
   export() {
     const workbook = XLSX.utils.book_new();
     if (this.tabSelected == 'dsGoiThau') {
@@ -598,7 +596,6 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       array.push(node);
     }
   }
-
 
   taiLieuDinhKem(type?: string) {
     const modal = this.modal.create({
@@ -741,8 +738,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         data: data,
-        listVatTu: this.listVatTu,
-        vatTuChaId: this.formData.get('loaiVthh').value
+        loaiVthh: this.formData.get('loaiVthh').value
       },
     });
     modal.afterClose.subscribe((res) => {
@@ -778,8 +774,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     this.formData.get('tongMucDt').setValue(tongMucDt);
   }
 
-  xoaItem(data: any) {
-
+  deleteRow(data: any) {
+    this.dataGoiThau = this.dataGoiThau.filter(x => x.id != data.id);
   }
 
   deleteSelect() {

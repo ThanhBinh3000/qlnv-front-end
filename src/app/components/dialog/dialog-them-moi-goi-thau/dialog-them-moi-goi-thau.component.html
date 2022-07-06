@@ -17,9 +17,9 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-        <nz-select formControlName="cloaiVthh" (ngModelChange)="changeChungLoai($event)"
-          [ngModelOptions]="{standalone: true}" [mzDisabled]="dataTable.length > 0">
-          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.tenVatTu"></nz-option>
+        <nz-select formControlName="cloaiVthh" [ngModelOptions]="{standalone: true}"
+          [nzDisabled]="dataTable.length > 0">
+          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
@@ -109,7 +109,7 @@
           <td></td>
           <td>
             <nz-select [(ngModel)]="thongtinDauThau.maDvi">
-              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
+              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
           </td>
           <td>
@@ -139,10 +139,10 @@
           <td>189</td>
           <td>189</td>
           <td>
-            <a>
+            <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a>
+            <a (click)="deleteRow(i)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

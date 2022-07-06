@@ -14,15 +14,16 @@
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button
-          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03' || formData.value.trangThai == '09')"
-          type="button" class="btn btn-sub" (click)="guiDuyet()">
+        <button *ngIf="(formData.value.trangThai == '01')" type="button" class="btn btn-sub" (click)="guiDuyet()">
           <i class="icon {{iconButtonDuyet}}"></i>
           <span>{{titleButtonDuyet}}</span>
         </button>
-        <button
-          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == '12')"
-          type="
+        <button *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03')" type="button"
+          class="btn btn-sub" (click)="save(true)">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03')" type="
           button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -167,7 +168,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Diễn giải chi tiết tổng mức đầu tư </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
-                    <textarea formControlName="tchuanCluong" nz-input></textarea>
+                    <textarea formControlName="dienGiai" nz-input></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -175,7 +176,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                    <nz-select formControlName="loaiVthh">
+                    <nz-select formControlName="loaiVthh" [nzDisabled]="dataGoiThau.length > 0">
                       <nz-option *ngFor="let p of listVatTuUniq" [nzValue]="p.maVatTuCha" [nzLabel]="p.tenVatTuCha">
                       </nz-option>
                     </nz-select>
@@ -203,7 +204,7 @@
         </div>
         <div class="tab-padding-10">
           <nz-tabset nzType="card" class="tab__container tab-level-3" [nzTabBarExtraContent]="tableCard1">
-            <nz-tab [nzTitle]="'Chi tiết'" class="tt-chung__container">
+            <nz-tab [nzTitle]="'Danh sách gói thầu'" class="tt-chung__container">
               <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataGoiThau"
                 [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                 <thead>
@@ -245,7 +246,7 @@
                       <a (click)="openDialogGoiThau(data,i)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data)">
+                      <a (click)="deleteRow(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -288,7 +289,6 @@
         </div>
         <div class="tab-padding-10">
           <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
-
             <div nz-row [nzGutter]="[18, 12]">
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
