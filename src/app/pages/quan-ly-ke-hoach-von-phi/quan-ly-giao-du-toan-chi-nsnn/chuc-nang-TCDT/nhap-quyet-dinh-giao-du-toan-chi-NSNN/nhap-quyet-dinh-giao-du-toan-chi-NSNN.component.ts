@@ -519,9 +519,9 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return
     }
-    if (file) {
-      request.soQd = await this.uploadFile(file);
-    }
+    // if (file) {
+    //   request.soQd = await this.uploadFile(file);
+    // }
     if (!request.soQd) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return;

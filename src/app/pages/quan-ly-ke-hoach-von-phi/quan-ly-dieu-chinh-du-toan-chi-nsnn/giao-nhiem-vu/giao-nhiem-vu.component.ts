@@ -255,7 +255,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						checked: false,
 					})
 				})
-        this.dotBcao = 1
+        // this.dotBcao = 1
 				this.trangThaiBaoCao = "1";
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
@@ -592,6 +592,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 			await this.quanLyVonPhiService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
+					this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetTBP = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet,Utils.FORMAT_DATE_STR);
+					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq,Utils.FORMAT_DATE_STR);
 					this.getStatusButton();
           // this.getStatusButtonOk();
 					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
