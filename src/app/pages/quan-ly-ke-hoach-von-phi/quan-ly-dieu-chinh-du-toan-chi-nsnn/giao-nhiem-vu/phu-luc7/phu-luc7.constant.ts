@@ -2511,7 +2511,7 @@ export const LINH_VUC = [
   // ======================
   {
     id: 14000,
-    tenDm: "Thóc bảo quản đóng bao trong điều kiện áp suất thấp",
+    tenDm: "Thiết bị khoan cắt",
     idCha: 0,
     level: 0,
   },
