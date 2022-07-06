@@ -208,9 +208,9 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isCuc()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
+          <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -221,9 +221,9 @@
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo QĐ điều chỉnh</span>
           </button>
-          <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
-            <i class="fa fa-trash-o do"></i>
-            <span>Xóa</span>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isCuc()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
           </button>
         </div>
       </div>

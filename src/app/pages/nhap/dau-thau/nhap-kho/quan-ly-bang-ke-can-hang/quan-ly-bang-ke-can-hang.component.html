@@ -52,7 +52,7 @@
                     <th width="200px">Nhà kho</th>
                     <th width="200px">Ngăn/Lô</th>
                     <th width="200px">Số hợp đồng</th>
-                    <th width="200px">Số phiếu nhập</th>
+                    <!-- <th width="200px">Số phiếu nhập</th> -->
                     <th width="150px">Trạng thái</th>
                     <th width="90px" class="text-right"></th>
                   </tr>
@@ -124,7 +124,7 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th>
+                    <!-- <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieuNhapKho"
                           (input)="filterInTable('soPhieuNhapKho',filterTable.soPhieuNhapKho)" />
@@ -132,7 +132,7 @@
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
                       </ng-template>
-                    </th>
+                    </th> -->
                     <th></th>
                     <th></th>
                   </tr>
@@ -149,7 +149,7 @@
                     <td>{{ data.tenNhaKho }}</td>
                     <td>{{ data.tenNganLo }}</td>
                     <td>{{ data.soHd }}</td>
-                    <td>{{ data.soPhieuNhapKho }}</td>
+                    <!-- <td>{{ data.soPhieuNhapKho }}</td> -->
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-right">
                       <a (click)="redirectToChiTiet(true, data.id)">
@@ -193,10 +193,10 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="print()">
+            <!-- <button type="button" class="btn btn-sub" (click)="print()">
               <i class="icon htvbdh_tcdt_print"></i>
               <span>In</span>
-            </button>
+            </button> -->
             <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
               (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>

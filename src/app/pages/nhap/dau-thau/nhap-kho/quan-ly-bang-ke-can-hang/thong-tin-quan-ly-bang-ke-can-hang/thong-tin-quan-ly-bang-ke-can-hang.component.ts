@@ -168,10 +168,17 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       maDviCha: this.detail.maDvi,
       trangThai: '01',
     }
-    const res = await this.donViService.getAll(body);
+    const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+          }
+        });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -756,5 +763,17 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
 
   print() {
 
+  }
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
+    }
   }
 }

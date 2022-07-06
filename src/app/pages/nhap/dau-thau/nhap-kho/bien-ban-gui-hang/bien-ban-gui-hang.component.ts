@@ -1,16 +1,14 @@
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({
@@ -24,10 +22,9 @@ export class BienBanGuiHangComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
-    soPhieu: '',
-    ngayTongHop: '',
-    ketLuan: '',
+    soBienBan: '',
     soQuyetDinh: '',
+    ngayGuiHang: '',
   };
 
   optionsDonVi: any[] = [];
@@ -54,18 +51,19 @@ export class BienBanGuiHangComponent implements OnInit {
 
   filterTable: any = {
     soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
-    soBienBan: '',
+    soQuyetDinh: '',
+    ngayNhapKho: '',
+    diemKho: '',
+    nhaKho: '',
+    nganLo: '',
+    trangThai: '',
   };
+
 
   constructor(
     private spinner: NgxSpinnerService,
-    private donViService: DonviService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private bienBanGuiHangService: BienBanGuiHangService,
     private notification: NzNotificationService,
-    private router: Router,
     private modal: NzModalService,
     public userService: UserService,
   ) { }
@@ -73,9 +71,6 @@ export class BienBanGuiHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.typeVthh == 'tat-ca') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -122,32 +117,13 @@ export class BienBanGuiHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
-      "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
+      soBienBan: this.searchFilter.soBienBan,
+      soQuyetDinh: this.searchFilter.soQuyetDinh,
+      ngayGuiHang: this.searchFilter.ngayGuiHang,
+      pageSize: this.pageSize,
+      pageNumber: this.page
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.bienBanGuiHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -191,10 +167,9 @@ export class BienBanGuiHangComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soPhieu: '',
-      ngayTongHop: '',
-      ketLuan: '',
+      soBienBan: '',
       soQuyetDinh: '',
+      ngayGuiHang: '',
     };
     this.search();
   }
@@ -215,7 +190,7 @@ export class BienBanGuiHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
+          this.bienBanGuiHangService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -252,30 +227,31 @@ export class BienBanGuiHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+          "loaiVthh": this.typeVthh,
+          "maDvi": this.userInfo.MA_DVI,
+          "ngayGuiHangDen": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
+            ? dayjs(this.searchFilter.ngayGuiHang[1]).format('YYYY-MM-DD')
             : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+          "ngayGuiHangTu": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
+            ? dayjs(this.searchFilter.ngayGuiHang[0]).format('YYYY-MM-DD')
             : null,
-          "ngayLapPhieu": null,
           "orderBy": null,
           "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQd": this.searchFilter.soQuyetDinh,
+          "paggingReq": {
+            "limit": 20,
+            "orderBy": null,
+            "orderType": null,
+            "page": 0
+          },
+          "soBienBan": this.searchFilter.soBienBan,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
           "str": null,
-          "tenNguoiGiao": null,
           "trangThai": null
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
+        this.bienBanGuiHangService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'danh-sach-bien-ban-gui-hang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -309,7 +285,7 @@ export class BienBanGuiHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.bienBanGuiHangService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -350,11 +326,13 @@ export class BienBanGuiHangComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
       soBienBan: '',
+      soQuyetDinh: '',
+      namNhap: '',
+      ngayGui: '',
+      benNhan: '',
+      benGiao: '',
+      trangThai: '',
     }
   }
 

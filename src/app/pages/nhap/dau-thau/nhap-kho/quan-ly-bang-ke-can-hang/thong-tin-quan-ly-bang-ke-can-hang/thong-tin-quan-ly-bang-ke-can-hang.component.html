@@ -46,7 +46,10 @@
     <div class="contentDetail">
       <div class="main-content">
         <div class="title-chi-tieu">
-          <!-- <span [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span> -->
+          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo
+          </span>
+          <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
           <span class="title-form">Bảng kê cân hàng</span>
         </div>
         <nz-card nzTitle="" class="flex-card p-lr16">
@@ -138,7 +141,7 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
@@ -150,10 +153,10 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngăn lô
+                  Lô kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNganLo"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
@@ -195,7 +198,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Địa chỉ người giao (người nhận)
+                  Địa chỉ người giao (Người nhận)
                 </nz-form-label>
                 <input nz-input placeholder="Nhập" [(ngModel)]="detail.diaChiNguoiGiao"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
@@ -222,7 +225,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng</nz-form-label>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                   <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenVatTuCha"
                     readonly="true" />
@@ -247,7 +250,7 @@
               <tr>
                 <th width="60px" class="text-center">STT<br />(A)</th>
                 <th class="text-center">SỐ BAO BÌ<br />(1)</th>
-                <th class="text-center">Trọng lượng cả BÌ<br />(2)</th>
+                <th class="text-center">TRỌNG LƯỢNG CẢ BÌ<br />(2)</th>
                 <th width="140px" class="text-center"
                   *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
                   HÀNH ĐỘNG</th>

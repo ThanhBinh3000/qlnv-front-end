@@ -20,8 +20,8 @@ export class QuanLyBangKeCanHangService extends BaseService {
       url_ += 'denNgayNhap=' + encodeURIComponent('' + body.denNgay) + '&';
     if (body.maDonVi)
       url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.maHang)
-      url_ += 'maHang=' + encodeURIComponent('' + body.maHang) + '&';
+    if (body.maVatTuCha)
+      url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
     if (body.soQdNhap)
       url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
     if (body.soBangKe)

@@ -46,6 +46,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -71,6 +72,9 @@ export class BienBanChuanBiKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -118,7 +122,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
   async search() {
     let body = {
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
         ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')

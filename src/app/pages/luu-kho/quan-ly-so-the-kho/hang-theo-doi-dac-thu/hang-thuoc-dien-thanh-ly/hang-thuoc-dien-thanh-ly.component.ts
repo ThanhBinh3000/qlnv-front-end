@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { isEmpty } from 'lodash';
+import { DonviService } from 'src/app/services/donvi.service';
+import { DANH_MUC_LEVEL } from '../../../luu-kho.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-hang-thuoc-dien-thanh-ly',
@@ -8,17 +17,30 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./hang-thuoc-dien-thanh-ly.component.scss'],
 })
 export class HangThuocDienThanhLyComponent implements OnInit {
+  userInfo: UserLogin;
+  detail: any = {};
   formData: FormGroup;
   allChecked = false;
   indeterminate = false;
-  filterDate = new Date();
   dsTrangThai: ITrangThai[] = [
     // fake
     { id: 1, giaTri: 'Đang xử lý' },
     { id: 2, giaTri: 'Chờ duyệt' },
     { id: 3, giaTri: 'Đã duyệt' },
   ];
+  dsTong;
+  dsDonVi = [];
+  dsDonViDataSource = [];
+  dsHangHoa = [];
+  dsLoaiHangHoa = [];
+  dsLoaiHangHoaDataSource = [];
 
+  searchInTable: any = {
+    maDanhSach: null,
+    donVi: null,
+    ngayTao: new Date(),
+    trangThai: null,
+  };
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -61,11 +83,26 @@ export class HangThuocDienThanhLyComponent implements OnInit {
   ];
   isAddNew = false;
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly userService: UserService,
+    private readonly donviService: DonviService,
+    private readonly danhMucService: DanhMucService,
+    private readonly spinner: NgxSpinnerService,
+    private readonly notification: NzNotificationService,
+  ) {}
 
-  ngOnInit(): void {
-    this.initForm();
-    this.dataTable = [...this.dataExample];
+  async ngOnInit(): Promise<void> {
+    try {
+      this.spinner.show();
+      this.initForm();
+      await this.initData();
+      this.dataTable = [...this.dataExample];
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   initForm(): void {
@@ -76,6 +113,65 @@ export class HangThuocDienThanhLyComponent implements OnInit {
       loaiHangHoa: [null],
       ngayTao: [null],
     });
+  }
+
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
+  }
+
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.dsDonViDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
+        (item) => item.tenDvi,
+      );
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiHangHoa = res.data;
+      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+    }
+  }
+
+  onChangeAutoComplete(e) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this.dsDonViDataSource = this.dsDonVi
+        .filter((item) =>
+          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.tenDvi);
+    } else {
+      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+    }
+  }
+
+  onChangeLoaiHHAutoComplete(e) {
+    const value = (e.target as HTMLInputElement).value;
+    if (value) {
+      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
+        .filter((item) =>
+          item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
+        )
+        .map((item) => item.giaTri);
+    } else {
+      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
+        (item) => item.giaTri,
+      );
+    }
   }
 
   exportData() {}
@@ -108,6 +204,10 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     this.indeterminate =
       this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
+  }
+
+  clearFilter() {
+    this.formData.reset();
   }
 
   onChangeFilterDate(event) {}

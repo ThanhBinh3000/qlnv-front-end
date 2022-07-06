@@ -59,6 +59,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     ketLuan: '',
     soQuyetDinhNhap: '',
     soBienBan: '',
+    tenDiemKho: '',
+    tenNganLo: '',
+    tenNhaKho: '',
   };
 
   constructor(
@@ -74,7 +77,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.typeVthh == 'tat-ca') {
+      if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();
@@ -125,7 +128,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     let body = {
       "ketLuan": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.isTatCa ? null : this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
@@ -356,6 +359,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       ketLuan: '',
       soQuyetDinhNhap: '',
       soBienBan: '',
+      tenDiemKho: '',
+      tenNganLo: '',
+      tenNhaKho: '',
     }
   }
 

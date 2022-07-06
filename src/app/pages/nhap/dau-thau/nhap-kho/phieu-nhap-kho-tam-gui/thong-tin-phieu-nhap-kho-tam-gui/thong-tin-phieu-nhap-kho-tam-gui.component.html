@@ -6,19 +6,19 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+          </button> -->
+          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '01' && !isView" (click)="hoanThanh()">
+          </button> -->
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
+            (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
-            <span>Hoàn thành phiếu</span>
+            <span>Hoàn thành</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="detail.trangThai == '04' && !isView" (click)="pheDuyet()">
@@ -46,8 +46,11 @@
     <div class="contentDetail">
       <div class="main-content">
         <div class="title-chi-tieu">
-          <!-- <span [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span> -->
-          <span class="title-form">Phiếu nhập kho tạm gửi</span>
+          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo
+          </span>
+          <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+          <span>Phiếu nhập kho tạm gửi</span>
         </div>
         <nz-card nzTitle="" class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
@@ -134,9 +137,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Thời gian giao nhận hàng
                 </nz-form-label>
-                <nz-time-picker [(ngModel)]="detail.thoiGianGiaoNhanHang"
+                <nz-date-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="detail.thoiGianGiaoNhanHang"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                </nz-time-picker>
+                </nz-date-picker>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -188,7 +191,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngăn lô
+                  Lô kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNganLo"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
@@ -210,7 +213,7 @@
                 <th rowSpan="2" class="text-center">Mã số<br />(C)</th>
                 <th rowSpan="2" class="text-center">Đơn vị tính</th>
                 <th colSpan="2" class="text-center">Số lượng</th>
-                <th rowspan="2" class="text-center">Đơn giá</th>
+                <th rowspan="2" class="text-center">Đơn giá <br />(3)</th>
                 <th rowSpan="2" class="text-center">Thành tiền<br />(4) = (2) x (3)</th>
               </tr>
               <tr>
@@ -219,87 +222,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
+              <tr>
                 <td></td>
                 <td>
-                  <input type="text" nz-input [(ngModel)]="create.noiDung" />
+                  {{chiTietHopDong.tenCloaiVthh}}
                 </td>
                 <td>
-                  <input type="text" nz-input [(ngModel)]="create.noiDung" />
+                  {{chiTietHopDong.vthh}}
                 </td>
                 <td>
-                  <input type="text" nz-input [(ngModel)]="create.noiDung" />
+                  {{chiTietHopDong.donViTinh}}
                 </td>
                 <td>
-                  <input type="text" nz-input [(ngModel)]="create.noiDung" />
+                  {{chiTietHopDong.soLuongChungTu}}
                 </td>
-                <td><input type="text" nz-input [(ngModel)]="create.noiDung" /></td>
                 <td>
-                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongQt"
-                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietHopDong.soLuongThucNhap"
+                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  </nz-input-number>
                 </td>
-                <td></td>
-              </tr>
-              <tr *ngFor="let data of basicTable.data; let i = index">
-                <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
-                  <td class="text-center">{{i+1}}</td>
-                  <td>{{data.noiDung}}</td>
-                  <td>{{data.dvt}}</td>
-                  <td>{{data.soLuongTn ?? 0 | number: '1.0-1'}}</td>
-                  <td>{{data.donGiaTn ?? 0 | number: '1.0-1'}}</td>
-                  <td class="bg-gray">{{data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                  <td>{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-                  <td class="bg-gray">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
-                  <td>{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                </ng-container>
-                <ng-template #editTemplate>
-                  <td></td>
-                  <td>
-                    <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.noiDung" />
-                  </td>
-                  <td>
-                    <nz-select class="w-200" [(ngModel)]="editDataCache[data.stt]?.data.dvt">
-                      <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh"
-                        [nzLabel]="item.tenDviTinh">
-                      </nz-option>
-                    </nz-select>
-                  </td>
-                  <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
-                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongTn" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
-                      [(ngModel)]="editDataCache[data.stt]?.data.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
-                    </nz-input-number>
-                  </td>
-                  <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                  <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongQt" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                  </td>
-                  <td class="bg-gray">
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
-                      [(ngModel)]="editDataCache[data.stt]?.data.thanhTienQt"
-                      [nzMin]="editDataCache[data.stt]?.data.soLuongQt ?? 0" [nzMax]="globals.prop.MAX_INPUT">
-                    </nz-input-number>
-                  </td>
-                  <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">
-                    <a (click)="saveEdit(data.stt)" class="save"
-                      [class.disabled]="!editDataCache[data.stt]?.data.noiDung || !editDataCache[data.stt]?.data.dvt || editDataCache[data.stt]?.data.noiDung == '' || editDataCache[data.stt]?.data.dvt == ''">
-                      <i class="fa fa-save"></i>
-                    </a>
-                    <a (click)="cancelEdit(data.stt)">
-                      <i class="fa fa-times do"></i>
-                    </a>
-                  </td>
-                </ng-template>
+                <td>
+                  {{chiTietHopDong.donGia}}
+                </td>
+                <td>{{calculatorThanhTien()}}</td>
               </tr>
             </tbody>
           </nz-table>
@@ -307,20 +253,20 @@
             <div nz-col nzSpan="4" class="text-summary">
               Tổng số lượng (viết bằng chữ)
             </div>
-            <div nz-col nzSpan="20" class="bg-gray text-money">
-              một tỷ
+            <div nz-col nzSpan="20" class="bg-gray text-money text-specical-money">
+              {{convertTien(chiTietHopDong.soLuongThucNhap)}}
             </div>
             <div nz-col nzSpan="4" class="text-summary mt-16">
               Tổng số tiền (viết bằng chữ)
             </div>
             <div nz-col nzSpan="20" class="bg-gray text-money text-specical-money mt-16">
-              một tỷ
+              {{convertTien(chiTietHopDong.soLuongThucNhap * chiTietHopDong.donGia)}}
             </div>
           </div>
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="24" class="text-summary">Chứng từ kèm theo</div>
+            <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
             <div nz-col nzSpan="24">
-              <file-list></file-list>
+              <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
             </div>
           </div>
         </div>

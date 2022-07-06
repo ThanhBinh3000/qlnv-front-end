@@ -41,8 +41,11 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
 
-  listThuKho: any[] = [];
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganKho: any[] = [];
   listNganLo: any[] = [];
+  listThuKho: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
@@ -74,8 +77,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
+        this.loadDiemKho(),
         this.loadThuKho(),
-        this.loadNganLo(),
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
         this.loadDonViTinh(),
@@ -295,25 +298,54 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  async loadNganLo() {
+  async loadDiemKho() {
     let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    }
+    this.listDiemKho = [];
+    const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+          }
+        });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDiemKho(fromChiTiet: boolean) {
+    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+    this.detail.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      this.listNhaKho = diemKho[0].children;
+      if (fromChiTiet) {
+        this.changeNhaKho(fromChiTiet);
+      }
+    }
+  }
+
+  changeNhaKho(fromChiTiet: boolean) {
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKho = nhaKho[0].children;
+      if (fromChiTiet) {
+        this.changeNganKho();
+      }
+    }
+  }
+
+  changeNganKho() {
+    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLo = nganKho[0].children;
     }
   }
 
