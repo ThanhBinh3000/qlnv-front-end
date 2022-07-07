@@ -130,6 +130,7 @@ export class PhuLuc4Component implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = this.data?.maDviTien;

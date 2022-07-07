@@ -327,7 +327,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		if (dVi && dVi.maDvi == this.userInfo.dvql) {
 			checkChirld = true;
 		}
-		if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+		if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
 			checkParent = true;
 		}
 		let roleNguoiTao = this.userInfo?.roles[0]?.code;
@@ -943,6 +943,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			maDvi: this.maDviTao,
 			namBcao: response?.namBcao,
 			namHienHanh: response?.namBcao,
+			dotBcao: response?.dotBcao,
 			congVan: null,
 			tongHopTuIds: tongHopTuIds ,
 		};

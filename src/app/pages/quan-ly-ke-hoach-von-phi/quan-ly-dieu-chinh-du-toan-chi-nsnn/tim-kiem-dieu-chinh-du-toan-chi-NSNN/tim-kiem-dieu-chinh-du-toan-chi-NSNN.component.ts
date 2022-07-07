@@ -112,6 +112,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.denNgay = new Date().toISOString().slice(0, 16);
@@ -150,6 +151,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       }
     }
     this.onSubmit();
+    this.spinner.hide();
   }
 
   //get user info
