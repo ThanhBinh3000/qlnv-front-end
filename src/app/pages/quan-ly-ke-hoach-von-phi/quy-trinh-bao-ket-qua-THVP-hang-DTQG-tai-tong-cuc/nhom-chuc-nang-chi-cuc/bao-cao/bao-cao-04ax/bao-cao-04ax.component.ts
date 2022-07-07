@@ -111,6 +111,7 @@ export class BaoCao04axComponent implements OnInit {
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '6')?.lstCtietBcaos;
+        this.spinner.show();
         // 04ax
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             await el.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
@@ -580,7 +581,7 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     // luu thay doi
-    saveEdit(id: string, phuLuc: string): void {
+    async saveEdit(id: string, phuLuc: string): Promise<void> {
         if (!this.editCache[id].data.maNdungChi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
             return;
@@ -591,7 +592,17 @@ export class BaoCao04axComponent implements OnInit {
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(baoCao[index].stt, phuLuc);
-
+        let soLuongThucHienGop = baoCao.find(item => item.stt == '0.1.2');
+        let soLuongThucHienNamTruoc = baoCao.find(item => item.stt == '0.1.3');
+        let soLuongThucHienNamNay = baoCao.find(item => item.stt == '0.1.4');
+        if (soLuongThucHienGop) {
+            await soLuongThucHienGop?.listCtiet?.forEach(item => {
+                item.sl = soLuongThucHienNamTruoc?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl
+                    + soLuongThucHienNamNay?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
+            })
+            soLuongThucHienGop.trongDotTcong = soLuongThucHienNamTruoc.trongDotTcong + soLuongThucHienNamNay.trongDotTcong;
+            soLuongThucHienGop.luyKeTcong = soLuongThucHienNamTruoc.luyKeTcong + soLuongThucHienNamNay.luyKeTcong;
+        }
     }
 
     updateChecked(id: any, phuLuc: string) {
