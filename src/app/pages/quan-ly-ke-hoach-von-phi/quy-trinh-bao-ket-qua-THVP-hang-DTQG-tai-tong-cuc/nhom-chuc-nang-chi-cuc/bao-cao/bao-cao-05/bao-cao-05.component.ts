@@ -107,6 +107,7 @@ export class BaoCao05Component implements OnInit {
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '9')?.lstCtietBcaos;
+        this.spinner.show();
         // 05/BCPBQ
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             await el.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
@@ -630,7 +631,7 @@ export class BaoCao05Component implements OnInit {
     }
 
     // luu thay doi
-    saveEdit(id: string, phuLuc: string): void {
+    async saveEdit(id: string, phuLuc: string): Promise<void> {
         if (!this.editCache[id].data.maNdungChi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
             return;
@@ -641,6 +642,17 @@ export class BaoCao05Component implements OnInit {
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(baoCao[index].stt, phuLuc);
+        let soLuongThucHienGop = baoCao.find(item => item.stt == '0.1.2');
+        let soLuongThucHienNamTruoc = baoCao.find(item => item.stt == '0.1.3');
+        let soLuongThucHienNamNay = baoCao.find(item => item.stt == '0.1.4');
+        if (soLuongThucHienGop) {
+            await soLuongThucHienGop?.listCtiet?.forEach(item => {
+                item.sl = soLuongThucHienNamTruoc?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl
+                    + soLuongThucHienNamNay?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
+            })
+            soLuongThucHienGop.trongDotTcong = soLuongThucHienNamTruoc.trongDotTcong + soLuongThucHienNamNay.trongDotTcong;
+            soLuongThucHienGop.luyKeTcong = soLuongThucHienNamTruoc.luyKeTcong + soLuongThucHienNamNay.luyKeTcong;
+        }
     }
 
     updateChecked(id: any, phuLuc: string) {
@@ -871,7 +883,8 @@ export class BaoCao05Component implements OnInit {
                     tonglstChitietVtuTrongDot += e.sl;
                     //set luy ke tuong ung = luy ke default + chi tiet theo dot
                     let sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
-                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;                }
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;
+                }
             })
         }
         if (this.editCache[id].data.listCtiet.length != 0) {

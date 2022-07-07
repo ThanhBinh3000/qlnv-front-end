@@ -390,7 +390,7 @@ export class BaoCaoComponent implements OnInit {
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.getListUser();
-
+    this.spinner.show();
     if (this.idDialog) {
       this.id = this.idDialog;
       this.statusBtnClose = true;
@@ -401,7 +401,6 @@ export class BaoCaoComponent implements OnInit {
     } else if (lbc == 'tong-hop') {
       await this.callSynthetic();
       this.maDonViTao = this.userInfo?.dvql;
-      this.spinner.show();
       this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
@@ -423,7 +422,6 @@ export class BaoCaoComponent implements OnInit {
 
     } else {
       this.maDonViTao = this.userInfo?.dvql;
-      this.spinner.show();
       this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (data) => {
           if (data.statusCode == 0) {

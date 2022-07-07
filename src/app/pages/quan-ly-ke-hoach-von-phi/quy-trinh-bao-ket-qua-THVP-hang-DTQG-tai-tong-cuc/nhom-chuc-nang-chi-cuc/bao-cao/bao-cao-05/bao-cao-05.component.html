@@ -100,7 +100,7 @@
                             <td>
                                 <ng-container *ngIf="item.stt != '0.1'">
                                     {{e.sl}}
-                                </ng-container>                    
+                                </ng-container>
                             </td>
                         </ng-container>
                     </ng-container>
@@ -126,7 +126,9 @@
                     </td>
                     <td [hidden]="status">
                         <ng-container *ngIf="!getLowStatus(item.stt,'5-B')">
-                            <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                            <ng-container *ngIf="item.stt != '0.1.2'">
+                                <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+                            </ng-container>
                         </ng-container>
                     </td>
                     <td [hidden]="status">
@@ -135,7 +137,7 @@
                     <td [hidden]="status">
                         <ng-container *ngIf="item.level > 2">
                             <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                            (ngModelChange)="updateChecked(item.id,'5-B')"></label>
+                                (ngModelChange)="updateChecked(item.id,'5-B')"></label>
                         </ng-container>
                     </td>
                 </ng-container>
@@ -154,8 +156,8 @@
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                         <ng-container *ngIf="kv.loaiMatHang == 0">
                             <td>
-                                <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
-                                    (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                                <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl"
+                                    type="number" (ngModelChange)="tinhTong(item.id)"></nz-input-number>
                             </td>
                         </ng-container>
                     </ng-container>
@@ -189,7 +191,7 @@
                     <td [hidden]="status">
                         <ng-container *ngIf="item.level > 2">
                             <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                            (ngModelChange)="updateChecked(item.id,'5-B')"></label>
+                                (ngModelChange)="updateChecked(item.id,'5-B')"></label>
                         </ng-container>
                     </td>
                 </ng-template>
