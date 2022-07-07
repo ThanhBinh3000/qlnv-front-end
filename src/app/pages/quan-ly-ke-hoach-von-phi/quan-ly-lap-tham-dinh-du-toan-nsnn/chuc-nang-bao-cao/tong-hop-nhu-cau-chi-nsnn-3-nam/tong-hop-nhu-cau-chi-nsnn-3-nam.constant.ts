@@ -72,10 +72,34 @@ export const NOI_DUNG = [
         idCha: 200,
     },
     {
+        id: 211,
+        tenDm: "Chi thường xuyên cơ sở",
+        level: 2,
+        idCha: 210,
+    },
+    {
+        id: 212,
+        tenDm: "Chi thường xuyên mới",
+        level: 2,
+        idCha: 210,
+    },
+    {
         id: 220,
         tenDm: "Chi quản lý hành chính",
         level: 1,
         idCha: 200,
+    },
+    {
+        id: 221,
+        tenDm: "Chi thường xuyên cơ sở",
+        level: 2,
+        idCha: 220,
+    },
+    {
+        id: 222,
+        tenDm: "Chi thường xuyên mới",
+        level: 2,
+        idCha: 220,
     },
     {
         id: 300,

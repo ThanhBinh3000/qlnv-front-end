@@ -11,13 +11,13 @@ import { OldResponseData } from '../interfaces/response';
 })
 export class DanhMucHDVService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'danhMucHDV','');
+    super(httpClient, 'danhMucHDV', '');
   }
 
   urlDefault = environment.SERVICE_API;
 
   //get list danh muc loai bao cao
-  dMLoaiBaoCao(): Observable<any>{
+  dMLoaiBaoCao(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/7",
       {
@@ -32,10 +32,18 @@ export class DanhMucHDVService extends BaseService {
   }
 
   //get list don vi tao
-  dMDonVi(): Observable<any>{
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
-      // this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
+  dMDonVi(): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/hoat-dong'
+      this.urlDefault + "/qlnv-category/dmuc-donvi/tat-ca",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
     );
   }
 
@@ -402,82 +410,82 @@ export class DanhMucHDVService extends BaseService {
   }
   mDCQQD(): Observable<any> {
     return this.httpClient.post(
-        this.urlDefault + "/qlnv-category/dmuc-khoachvon/143",
-        {
-            "paggingReq": {
-                "limit": 1000,
-                "page": 1
-            },
-            "str": "",
-            "trangThai": "",
-        }
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/143",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+      }
     );
-}
+  }
 
-mDCongTrinh(): Observable<any> {
+  mDCongTrinh(): Observable<any> {
     return this.httpClient.post(
-        this.urlDefault + "/qlnv-category/dmuc-khoachvon/131",
-        {
-            "paggingReq": {
-                "limit": 1000,
-                "page": 1
-            },
-            "str": "",
-            "trangThai": "",
-        }
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/131",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+      }
     );
-}
+  }
 
-mDChiTiet(): Observable<any> {
-  return this.httpClient.post(
+  mDChiTiet(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/255",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
-dMMaNdungChi(): Observable<any> {
-  return this.httpClient.post(
+    );
+  }
+  dMMaNdungChi(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/249",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
-
-    // lay danh sach cuc khu vuc
-    dMCucKhuVuc():Observable<any>{
-      return this.httpClient.post(
-          this.urlDefault  + "/qlnv-category/dmuc-donvi/ds-donvi-child",
-          {
-                  capDvi: "2",
-                  kieuDvi: null,
-                  loaiDvi: null,
-                  maDvi: "0",
-                  maPhuong: null,
-                  maQuan: null,
-                  maTinh: null,
-                  paggingReq: {
-                    "limit": 20,
-                    "page": 1
-                  },
-                  str: "string",
-                  tenDvi: "string",
-                  trangThai: "01"
-          }
-          );
+    );
   }
-//chung loai
+
+  // lay danh sach cuc khu vuc
+  dMCucKhuVuc(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-donvi/ds-donvi-child",
+      {
+        capDvi: "2",
+        kieuDvi: null,
+        loaiDvi: null,
+        maDvi: "0",
+        maPhuong: null,
+        maQuan: null,
+        maTinh: null,
+        paggingReq: {
+          "limit": 20,
+          "page": 1
+        },
+        str: "string",
+        tenDvi: "string",
+        trangThai: "01"
+      }
+    );
+  }
+  //chung loai
   dMChungLoai(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/462",
@@ -537,98 +545,98 @@ dMMaNdungChi(): Observable<any> {
   }
 
   // danh muc loai quyet dinh giao
-dMLoaiQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
+  dMLoaiQDGiaoDT(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/421",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
-// danh muc nhom qd giao du toan
-dMNhomQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
+    );
+  }
+  // danh muc nhom qd giao du toan
+  dMNhomQDGiaoDT(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/425",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
-// danh muc mat hang giao du toan
-dMMatHangQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
+    );
+  }
+  // danh muc mat hang giao du toan
+  dMMatHangQDGiaoDT(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/429",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
-// danh muc don vi tinh giao du toan
-dMDviHangQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
+    );
+  }
+  // danh muc don vi tinh giao du toan
+  dMDviHangQDGiaoDT(): Observable<any> {
+    return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/433",
       {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
       }
-  );
-}
+    );
+  }
 
-//danh muc Khoan muc
-dMKhoanMuc(): Observable<any> {
-  return this.httpClient.post(
-    this.urlDefault + "/qlnv-category/dmuc-khoachvon/503",
-    {
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": "",
-      "trangThai": ""
-    }
-  );
-}
+  //danh muc Khoan muc
+  dMKhoanMuc(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/503",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
+    );
+  }
 
-//danh muc ke hoach von
-dMLoaiBaoCaoThucHienDuToanChi(): Observable<any> {
-  return this.httpClient.post(
-    this.urlDefault + "/qlnv-category/dmuc-khoachvon/525",
-    {
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": "",
-      "trangThai": "",
-    }
-  );
-}
+  //danh muc ke hoach von
+  dMLoaiBaoCaoThucHienDuToanChi(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/525",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+      }
+    );
+  }
 
 
-dMucBcaoDuyet(): Observable<any> {
-  // return this.httpClient.get('http://192.168.1.125:8094/lap-tham-dinh-du-toan/danh-sach-bao-cao-duyet/'
-  return this.httpClient.get(this.urlDefault+'/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-bao-cao-duyet/'
-  );
-}
+  dMucBcaoDuyet(): Observable<any> {
+    // return this.httpClient.get('http://192.168.1.125:8094/lap-tham-dinh-du-toan/danh-sach-bao-cao-duyet/'
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-bao-cao-duyet/'
+    );
+  }
 
 
 
@@ -708,25 +716,25 @@ dMucBcaoDuyet(): Observable<any> {
   dmQuyetDinhBTC(): Observable<any> {
     return this.httpClient.get(
       // this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',
-      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach',)
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach')
   }
 
   //lấy danh sach các đơn vị thuộc quyền quản lý bởi tổng cục hoặc khu vực ( Tổng cục lấy các khu vực do tổng cục đó quản lý)
-  dmDonViThuocQuanLy(request:any):Observable<any>{
-    return this.httpClient.post(this.urlDefault+'/qlnv-category/dmuc-donvi/ds-donvi-child',request);
+  dmDonViThuocQuanLy(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-donvi/ds-donvi-child', request);
   }
 
   // lấy danh sách danh mục vốn phí
   dmGoc(): Observable<any> {
     return this._httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/danh-muc-goc',
-    {
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": "",
-      "trangThai": "",
-    })
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+      })
   }
   // Thêm danh mục vốn phí
   addDm(request: any): Observable<any> {

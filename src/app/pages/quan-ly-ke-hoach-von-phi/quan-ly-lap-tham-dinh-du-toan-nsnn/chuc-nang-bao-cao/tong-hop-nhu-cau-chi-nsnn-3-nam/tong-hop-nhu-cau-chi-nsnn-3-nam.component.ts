@@ -345,7 +345,10 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         const chiSo: string[] = str.split('.');
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
-        if (n == 0) {
+        if (n == 0){
+            xau = String.fromCharCode(k + 64);
+        }
+        if (n == 1) {
             for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
@@ -353,16 +356,16 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 }
             }
         }
-        if (n == 1) {
+        if (n == 2) {
             xau = chiSo[n];
         }
-        if (n == 2) {
+        if (n == 3) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
-        if (n == 3) {
+        if (n == 4) {
             xau = String.fromCharCode(k + 96);
         }
-        if (n == 4) {
+        if (n == 5) {
             xau = "-";
         }
         return xau;

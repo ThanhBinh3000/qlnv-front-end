@@ -19,6 +19,7 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	userRole: string;
 	//thong tin tim kiem
 	searchFilter = {
 		nam: null,
@@ -26,9 +27,10 @@ export class TimKiemComponent implements OnInit {
 		denNgay:null,
 		maBaoCao: "",
 		donViTao: "",
-		trangThai: "",
+		trangThai: Utils.TT_BC_1,
 	};
 	newDate = new Date();
+	listIdDelete: string[] = [];
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -110,7 +112,8 @@ export class TimKiemComponent implements OnInit {
 		await this.userService.getUserInfo(username).toPromise().then(
 			(data) => {
 				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
+					this.userInfo = data?.data;
+					this.userRole = this.userInfo?.roles[0]?.code;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -166,9 +169,26 @@ export class TimKiemComponent implements OnInit {
 		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.danhSachBaoCao = data.data.content;
+					this.danhSachBaoCao = [];
+					data.data.content.forEach(item => {
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+							this.danhSachBaoCao.push({
+								...item,
+								checked: false,
+							})
+						} else {
+							this.danhSachBaoCao.push({
+								...item, 
+								checked: true,
+							})
+						}
+					})
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -230,11 +250,17 @@ export class TimKiemComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 
-	xoaBaoCao(id: any){
-		const request: string[] = [id];
+	xoaBaoCao(id: string){
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
 		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
+					this.listIdDelete = [];
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.onSubmit();
 				} else {
@@ -256,6 +282,34 @@ export class TimKiemComponent implements OnInit {
 			check = false;
 		}
 		return check;
+	}
+
+	changeListIdDelete(id: string){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id); 
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachBaoCao.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachBaoCao.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
 	}
 
 	close() {
