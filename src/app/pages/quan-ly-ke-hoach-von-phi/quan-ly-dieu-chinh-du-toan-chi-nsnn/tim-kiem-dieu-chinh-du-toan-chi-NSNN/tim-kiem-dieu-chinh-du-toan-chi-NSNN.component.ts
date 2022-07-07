@@ -85,6 +85,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   //danh muc
   danhSachDieuChinh: any[] = [];
   trangThais: any[] = TRANG_THAI_TIM_KIEM;
+  listIdDelete: any[] = [];
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -126,16 +127,15 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
-
+    this.status = true;
+    
     if (this.userRole == roleUserCB[0]) {
-      this.status = false;
       this.trangThai = Utils.TT_BC_1;
       this.searchFilter.loaiTimKiem = '0';
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
       this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
     }
     else {
-      this.status = true;
       this.searchFilter.loaiTimKiem = '0';
       this.searchFilter.donViTao = this.maDviTao;
       if (this.userRole == roleUserTPB[0]) {
@@ -212,7 +212,11 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
         if (data.statusCode == 0) {
           this.danhSachDieuChinh = data.data.content;
           this.danhSachDieuChinh.forEach(e => {
-            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+            e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
@@ -293,4 +297,67 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.searchFilter.maBcao = null
     this.searchFilter.dotBcao = null
   }
+
+  xoaBaoCao(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaDuToanDieuChinh(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.listIdDelete = [];
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id);
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachDieuChinh.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachDieuChinh.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
+	}
+
+  checkDeleteReport(item: any): boolean {
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			ROLE_CAN_BO.includes(this.userRole)) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
 }
