@@ -59,6 +59,7 @@ export class BaoCao05Component implements OnInit {
     listDonvitinh: any[] = [];
     listVattu: any[] = [];
     lstVatTuFull = [];
+    luyKes = [];
     //nhóm biến biểu mẫu 05
     lstCtietBcao5I1: ItemDataMau0405[] = [];
     lstCtietBcao5I2: ItemDataMau0405[] = [];
@@ -105,6 +106,7 @@ export class BaoCao05Component implements OnInit {
         this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '9')?.lstCtietBcaos;
         // 05/BCPBQ
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             await el.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
@@ -175,7 +177,7 @@ export class BaoCao05Component implements OnInit {
             if (!this.lstCtietBcao5B[0].stt) {
                 let lstTemp = [];
                 await this.noiDungChiFull.forEach(element => {
-                     lstTemp.push(this.lstCtietBcao5B.find(item => item.maNdungChi == element.id));
+                    lstTemp.push(this.lstCtietBcao5B.find(item => item.maNdungChi == element.id));
                 });
                 this.lstCtietBcao5B = lstTemp;
                 await this.sortWithoutIndex();
@@ -341,8 +343,8 @@ export class BaoCao05Component implements OnInit {
         let obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
-            baoCaos : baoCao,
-            tab : '9',
+            baoCaos: baoCao,
+            tab: '9',
         }
 
         const modalIn = this.modal.create({
@@ -371,6 +373,8 @@ export class BaoCao05Component implements OnInit {
                         await this.addFirst(data, phuLuc);
                     } else {
                         await this.addSame(id, data, phuLuc);
+                        //tinh lai luy ke cho lop cha
+                        this.sum(baoCao.find(e => e.id == id).stt, phuLuc);
                     }
                 }
                 baoCao = this.getBieuMau(phuLuc);
@@ -385,74 +389,10 @@ export class BaoCao05Component implements OnInit {
                     };
                     this.addLow(id, data, phuLuc);
                 })
+                this.sum(baoCao.find(e => e.id == id).stt + '.1', phuLuc);
                 this.updateEditCache(phuLuc);
             }
         });
-    }
-
-    //thêm ngang cấp
-    addSame(id: any, initItem, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
-        // tim cac vi tri can thay doi lai stt
-        let lstIndex: number[] = [];
-        for (var i = baoCao.length - 1; i > ind; i--) {
-            if (this.getHead(baoCao[i].stt) == head) {
-                lstIndex.push(i);
-            }
-        }
-        this.replaceIndex(lstIndex, 1, phuLuc);
-        var listVtu: vatTu[] = [];
-
-        this.listColTemp.forEach((e) => {
-            let objTrongD = {
-                id: e.id,
-                maVtu: e.maVtu,
-                loaiMatHang: '0',
-                sl: 0,
-            };
-            let objLke = {
-                id: e.id,
-                maVtu: e.maVtu,
-                loaiMatHang: '1',
-                sl: 0,
-            };
-            listVtu.push(objTrongD);
-            listVtu.push(objLke);
-        });
-
-
-        // them moi phan tu
-        if (initItem?.id) {
-            let item = {
-                ...initItem,
-                stt: head + "." + (tail + 1).toString(),
-                maLoai: '9',
-                listCtiet: listVtu,
-            }
-            baoCao.splice(ind + 1, 0, item);
-            this.editCache[item.id] = {
-                edit: false,
-                data: { ...item }
-            };
-        } else {
-            let item = {
-                ...initItem,
-                id: uuid.v4() + "FE",
-                stt: head + "." + (tail + 1).toString(),
-                maLoai: '9',
-                listCtiet: listVtu,
-                maNdungChiCha: Number(baoCao[index].maNdungChiCha),
-            }
-            baoCao.splice(ind + 1, 0, item);
-            this.editCache[item.id] = {
-                edit: true,
-                data: { ...item }
-            };
-        }
     }
 
     // gan editCache.data == lstCtietBcao
@@ -464,6 +404,50 @@ export class BaoCao05Component implements OnInit {
                 data: { ...item }
             };
         });
+    }
+
+    //thêm phần tử đầu tiên khi bảng rỗng
+    addFirst(initItem: any, phuLuc: string) {
+        var listVtu: vatTu[] = [];
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
+        this.listColTemp.forEach((e) => {
+            let objTrongD = {
+                id: e.id,
+                maVtu: e.maVtu,
+                loaiMatHang: '0',
+                sl: 0,
+            };
+            let objLke = {
+                id: e.id,
+                maVtu: e.maVtu,
+                loaiMatHang: '1',
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0,
+            };
+            listVtu.push(objTrongD);
+            listVtu.push(objLke);
+        });
+        let baoCao = [];
+        let item;
+        if (initItem?.id) {
+            item = {
+                ...initItem,
+                stt: "0.1",
+                listCtiet: listVtu,
+            }
+        } else {
+            item = {
+                ...initItem,
+                id: uuid.v4() + 'FE',
+                stt: "0.1",
+                listCtiet: listVtu,
+            }
+        }
+        baoCao.push(item);
+        this.editCache[item.id] = {
+            edit: true,
+            data: { ...item }
+        };
+        this.setBieuMau(baoCao, phuLuc);
     }
 
     //thêm cấp thấp hơn
@@ -485,6 +469,7 @@ export class BaoCao05Component implements OnInit {
         }
 
         var listVtu: vatTu[] = [];
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
             let objTrongD = {
                 id: e.id,
@@ -496,7 +481,7 @@ export class BaoCao05Component implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -526,6 +511,71 @@ export class BaoCao05Component implements OnInit {
                 maNdungChiCha: Number(baoCao[index].maNdungChi),
             }
             baoCao.splice(index + 1, 0, item);
+            this.editCache[item.id] = {
+                edit: true,
+                data: { ...item }
+            };
+        }
+    }
+
+    //thêm ngang cấp
+    addSame(id: any, initItem, phuLuc: string) {
+        let baoCao = this.getBieuMau(phuLuc);
+        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
+        var tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
+        var ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
+        // tim cac vi tri can thay doi lai stt
+        let lstIndex: number[] = [];
+        for (var i = baoCao.length - 1; i > ind; i--) {
+            if (this.getHead(baoCao[i].stt) == head) {
+                lstIndex.push(i);
+            }
+        }
+        this.replaceIndex(lstIndex, 1, phuLuc);
+        var listVtu: vatTu[] = [];
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
+        this.listColTemp.forEach((e) => {
+            let objTrongD = {
+                id: e.id,
+                maVtu: e.maVtu,
+                loaiMatHang: '0',
+                sl: 0,
+            };
+            let objLke = {
+                id: e.id,
+                maVtu: e.maVtu,
+                loaiMatHang: '1',
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0
+            };
+            listVtu.push(objTrongD);
+            listVtu.push(objLke);
+        });
+
+
+        // them moi phan tu
+        if (initItem?.id) {
+            let item = {
+                ...initItem,
+                stt: head + "." + (tail + 1).toString(),
+                maLoai: '9',
+                listCtiet: listVtu,
+            }
+            baoCao.splice(ind + 1, 0, item);
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        } else {
+            let item = {
+                ...initItem,
+                id: uuid.v4() + "FE",
+                stt: head + "." + (tail + 1).toString(),
+                maLoai: '9',
+                listCtiet: listVtu,
+                maNdungChiCha: Number(baoCao[index].maNdungChiCha),
+            }
+            baoCao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -664,48 +714,7 @@ export class BaoCao05Component implements OnInit {
         });
     }
 
-    //thêm phần tử đầu tiên khi bảng rỗng
-    addFirst(initItem: any, phuLuc: string) {
-        var listVtu: vatTu[] = [];
-        this.listColTemp.forEach((e) => {
-            let objTrongD = {
-                id: e.id,
-                maVtu: e.maVtu,
-                loaiMatHang: '0',
-                sl: 0,
-            };
-            let objLke = {
-                id: e.id,
-                maVtu: e.maVtu,
-                loaiMatHang: '1',
-                sl: 0,
-            };
-            listVtu.push(objTrongD);
-            listVtu.push(objLke);
-        });
-        let baoCao = [];
-        let item;
-        if (initItem?.id) {
-            item = {
-                ...initItem,
-                stt: "0.1",
-                listCtiet: listVtu,
-            }
-        } else {
-            item = {
-                ...initItem,
-                id: uuid.v4() + 'FE',
-                stt: "0.1",
-                listCtiet: listVtu,
-            }
-        }
-        baoCao.push(item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-        this.setBieuMau(baoCao, phuLuc);
-    }
+
 
     async sortByIndex() {
         let idPhuLuc = LISTBIEUMAUDOT[5].lstId;
@@ -851,16 +860,20 @@ export class BaoCao05Component implements OnInit {
     }
 
     tinhTong(id: any) {
+        //luy ke default
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
+
         let tonglstChitietVtuTrongDot = 0;
+        let tonglstChitietVtuLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += e.sl;
-                }
+                    //set luy ke tuong ung = luy ke default + chi tiet theo dot
+                    let sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;                }
             })
         }
-        this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
-        let tonglstChitietVtuLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == '1') {
@@ -868,7 +881,8 @@ export class BaoCao05Component implements OnInit {
                 }
             })
         }
-        this.editCache[id].data.luyKeTcong = this.editCache[id].data.luyKeThoc + this.editCache[id].data.luyKeGao + tonglstChitietVtuLuyke;
+        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
+        this.editCache[id].data.luyKeTcong = tonglstChitietVtuLuyke;
     }
 
     addAllCol() {
@@ -887,7 +901,6 @@ export class BaoCao05Component implements OnInit {
         modalIn.afterClose.subscribe((res) => {
             if (res) {
                 res.forEach(async item => {
-
                     await this.addCol(item);
                 })
                 // this.lstCtietBcao.forEach(item => {
@@ -906,21 +919,22 @@ export class BaoCao05Component implements OnInit {
         let idPhuLuc = LISTBIEUMAUDOT[5].lstId;
         idPhuLuc.forEach(phuLuc => {
             let baoCao = this.getBieuMau(phuLuc);
-            let objTrongD = {
-                id: uuid.v4() + 'FE',
-                maVtu: vatTu.id,
-                colName: vatTu.ten,
-                loaiMatHang: '0',
-                sl: 0,
-            }
-            let objLke = {
-                id: uuid.v4() + 'FE',
-                maVtu: vatTu.id,
-                colName: vatTu.ten,
-                loaiMatHang: '1',
-                sl: 0,
-            }
-            baoCao.forEach(data => {
+            baoCao.forEach(async data => {
+                let itemLine = this.luyKes?.find(item => item.maNdungChi == data.maNdungChi)?.listCtiet;
+                let objTrongD = {
+                    id: uuid.v4() + 'FE',
+                    maVtu: vatTu.id,
+                    colName: vatTu.ten,
+                    loaiMatHang: '0',
+                    sl: 0,
+                }
+                let objLke = {
+                    id: uuid.v4() + 'FE',
+                    maVtu: vatTu.id,
+                    colName: vatTu.ten,
+                    loaiMatHang: '1',
+                    sl: itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl : 0,
+                }
                 data.listCtiet.push(objTrongD);
                 data.listCtiet.push(objLke);
             })
@@ -952,14 +966,14 @@ export class BaoCao05Component implements OnInit {
         let tonglstChitietVtuLuyke = 0;
         this.lstCTietBaoCaoTemp.forEach(e => {
             e.listCtiet.forEach(el => {
-                if (e.loaiMatHang == '0') {
+                if (el.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += el.sl;
                 } else {
                     tonglstChitietVtuLuyke += el.sl;
                 }
             });
-            e.trongDotTcong = e.trongDotThoc + e.trongDotGao + tonglstChitietVtuTrongDot;
-            e.luyKeTcong = e.luyKeThoc + e.luyKeGao + tonglstChitietVtuLuyke;
+            e.trongDotTcong = tonglstChitietVtuTrongDot;
+            e.luyKeTcong = tonglstChitietVtuLuyke;
         })
     }
 
