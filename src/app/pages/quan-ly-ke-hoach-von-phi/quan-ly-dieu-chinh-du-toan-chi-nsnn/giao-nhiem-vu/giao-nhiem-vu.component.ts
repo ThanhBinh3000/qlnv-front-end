@@ -321,6 +321,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 		} else {
 			this.status = true;
 		}
+		let roleNguoiTao = this.userInfo?.roles[0]?.code;
+		if( ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) ||  ROLE_LANH_DAO.includes(roleNguoiTao)){
+			this.status = true;
+		}
 		let checkParent = false;
 		let checkChirld = false;
 		let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
@@ -330,7 +334,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 		if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
 			checkParent = true;
 		}
-		let roleNguoiTao = this.userInfo?.roles[0]?.code;
 		const utils = new Utils();
 		this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
@@ -503,7 +506,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			tongHopTuIds: tongHopTuIds,
 		}));
     if (request.congVan.fileName == null){
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
       return;
     }
     //get file cong van url

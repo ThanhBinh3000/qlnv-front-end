@@ -976,12 +976,14 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.maLoaiHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
+          if (this.lstCtietBcao.findIndex(e => e.maLoaiHang == item.id) == -1){
           var data: ItemData = {
             ...this.initItem,
             maLoaiHang: item.id,
             level: item.level,
           };
           this.addLow(id, data);
+        }
         })
         this.updateEditCache();
       }
