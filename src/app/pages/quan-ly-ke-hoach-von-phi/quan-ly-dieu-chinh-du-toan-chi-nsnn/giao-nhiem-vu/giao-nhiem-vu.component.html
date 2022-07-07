@@ -84,7 +84,7 @@
 							<td>{{maBaoCao}}</td>
 							<td>
 								<!-- {{namHienHanh}} -->
-								<ng-container *ngIf="dotBcao ; else nam">
+								<ng-container *ngIf="dotBcao && id ; else nam">
 									{{namHienHanh}}
 								</ng-container>
 								<ng-template #nam>
@@ -96,7 +96,7 @@
 							</td>
 							<td>
 								<!-- {{dotBcao}} -->
-								<ng-container *ngIf="dotBcao ; else chonDot">
+								<ng-container *ngIf="dotBcao && id ; else chonDot">
 									<div *ngFor="let item of dotBcaos">
 										<div *ngIf="item.id == dotBcao">
 											{{item.id}}
