@@ -262,6 +262,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
+      soQd: this.searchFilter.soQd,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
