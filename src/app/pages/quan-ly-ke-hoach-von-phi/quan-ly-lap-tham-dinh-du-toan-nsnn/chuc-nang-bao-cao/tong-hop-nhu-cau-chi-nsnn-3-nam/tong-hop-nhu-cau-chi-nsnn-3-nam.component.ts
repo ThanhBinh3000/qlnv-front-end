@@ -632,6 +632,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
+                level: 0,
             }
             this.lstCtietBcao.push(item);
 

@@ -159,10 +159,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 200);
         const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 300);
         if (data1 && data2 && data3) {
-            if (data1.thNamHienHanhN1 - data2.thNamHienHanhN1 != data3.thNamHienHanhN1 ||
-                data1.ncauNamDtoanN - data2.ncauNamDtoanN != data3.ncauNamDtoanN ||
-                data1.ncauNamN1 - data2.ncauNamN1 != data3.ncauNamN1 ||
-                data1.ncauNamN2 - data2.ncauNamN2 != data3.ncauNamN2) {
+            if (((data1.thNamHienHanhN1 || data1.thNamHienHanhN1 === 0)  && data1.thNamHienHanhN1 - data2.thNamHienHanhN1 != data3.thNamHienHanhN1) ||
+                ((data1.ncauNamDtoanN || data1.ncauNamDtoanN === 0)  && data1.ncauNamDtoanN - data2.ncauNamDtoanN != data3.ncauNamDtoanN) ||
+                ((data1.ncauNamN1 || data1.ncauNamN1 === 0)  && data1.ncauNamN1 - data2.ncauNamN1 != data3.ncauNamN1) ||
+                ((data1.ncauNamN2 || data1.ncauNamN2 === 0)  && data1.ncauNamN2 - data2.ncauNamN2 != data3.ncauNamN2)) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
                     this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
                 return;
@@ -391,6 +391,12 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
             }
+            if (item.maNdung == 100){
+                item.thNamHienHanhN1 = null;
+                item.ncauNamDtoanN = null;
+                item.ncauNamN1 = null;
+                item.ncauNamN2 = null;
+            }
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
                 edit: true,
@@ -581,6 +587,13 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
+                level: 0,
+            }
+            if (item.maNdung == 100){
+                item.thNamHienHanhN1 = null;
+                item.ncauNamDtoanN = null;
+                item.ncauNamN1 = null;
+                item.ncauNamN2 = null;
             }
             this.lstCtietBcao.push(item);
 
