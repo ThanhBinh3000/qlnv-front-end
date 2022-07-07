@@ -84,6 +84,40 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         clechTranChiVsNcauChiN2: 0,
         checked: false,
     };
+    chiTx: ItemData = {
+        id: null,
+        stt: "0",
+        level: 0,
+        maNdung: 0,
+        thNamHienHanhN1: 0,
+        tranChiN: 0,
+        ncauChiN: 0,
+        clechTranChiVsNcauChiN: 0,
+        tranChiN1: 0,
+        ncauChiN1: 0,
+        clechTranChiVsNcauChiN1: 0,
+        tranChiN2: 0,
+        ncauChiN2: 0,
+        clechTranChiVsNcauChiN2: 0,
+        checked: false,
+    };
+    chiMoi: ItemData = {
+        id: null,
+        stt: "0",
+        level: 0,
+        maNdung: 0,
+        thNamHienHanhN1: 0,
+        tranChiN: 0,
+        ncauChiN: 0,
+        clechTranChiVsNcauChiN: 0,
+        tranChiN1: 0,
+        ncauChiN1: 0,
+        clechTranChiVsNcauChiN1: 0,
+        tranChiN2: 0,
+        ncauChiN2: 0,
+        clechTranChiVsNcauChiN2: 0,
+        checked: false,
+    };
     id: string;
     namHienHanh: number;
     maBieuMau = "16";
@@ -173,6 +207,10 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
+    }
+
+    getLoai(ma: number) {
+        return NOI_DUNG.find(e => e.id == ma)?.loai;
     }
 
     // luu
@@ -716,7 +754,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1){
+                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
                         const data: ItemData = {
                             ...this.initItem,
                             maNdung: item.id,
@@ -771,30 +809,64 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     getTotal() {
-        this.total.thNamHienHanhN1 = 0;
-        this.total.tranChiN = 0;
-        this.total.ncauChiN = 0;
-        this.total.clechTranChiVsNcauChiN = 0;
-        this.total.tranChiN1 = 0;
-        this.total.ncauChiN1 = 0;
-        this.total.clechTranChiVsNcauChiN1 = 0;
-        this.total.tranChiN2 = 0;
-        this.total.ncauChiN2 = 0;
-        this.total.clechTranChiVsNcauChiN2 = 0;
+        this.chiTx.thNamHienHanhN1 = 0;
+        this.chiTx.tranChiN = 0;
+        this.chiTx.ncauChiN = 0;
+        this.chiTx.clechTranChiVsNcauChiN = 0;
+        this.chiTx.tranChiN1 = 0;
+        this.chiTx.ncauChiN1 = 0;
+        this.chiTx.clechTranChiVsNcauChiN1 = 0;
+        this.chiTx.tranChiN2 = 0;
+        this.chiTx.ncauChiN2 = 0;
+        this.chiTx.clechTranChiVsNcauChiN2 = 0;
+
+        this.chiMoi.thNamHienHanhN1 = 0;
+        this.chiMoi.tranChiN = 0;
+        this.chiMoi.ncauChiN = 0;
+        this.chiMoi.clechTranChiVsNcauChiN = 0;
+        this.chiMoi.tranChiN1 = 0;
+        this.chiMoi.ncauChiN1 = 0;
+        this.chiMoi.clechTranChiVsNcauChiN1 = 0;
+        this.chiMoi.tranChiN2 = 0;
+        this.chiMoi.ncauChiN2 = 0;
+        this.chiMoi.clechTranChiVsNcauChiN2 = 0;
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 0) {
-                this.total.thNamHienHanhN1 += item.thNamHienHanhN1;
-                this.total.tranChiN += item.tranChiN;
-                this.total.ncauChiN += item.ncauChiN;
-                this.total.clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
-                this.total.tranChiN1 += item.tranChiN1;
-                this.total.ncauChiN1 += item.ncauChiN1;
-                this.total.clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
-                this.total.tranChiN2 += item.tranChiN2;
-                this.total.ncauChiN2 += item.ncauChiN2;
-                this.total.clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+            if (this.getLoai(item.maNdung) == 1) {
+                this.chiTx.thNamHienHanhN1 += item.thNamHienHanhN1;
+                this.chiTx.tranChiN += item.tranChiN;
+                this.chiTx.ncauChiN += item.ncauChiN;
+                this.chiTx.clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
+                this.chiTx.tranChiN1 += item.tranChiN1;
+                this.chiTx.ncauChiN1 += item.ncauChiN1;
+                this.chiTx.clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
+                this.chiTx.tranChiN2 += item.tranChiN2;
+                this.chiTx.ncauChiN2 += item.ncauChiN2;
+                this.chiTx.clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+            }
+
+            if (this.getLoai(item.maNdung) == 2) {
+                this.chiMoi.thNamHienHanhN1 += item.thNamHienHanhN1;
+                this.chiMoi.tranChiN += item.tranChiN;
+                this.chiMoi.ncauChiN += item.ncauChiN;
+                this.chiMoi.clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
+                this.chiMoi.tranChiN1 += item.tranChiN1;
+                this.chiMoi.ncauChiN1 += item.ncauChiN1;
+                this.chiMoi.clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
+                this.chiMoi.tranChiN2 += item.tranChiN2;
+                this.chiMoi.ncauChiN2 += item.ncauChiN2;
+                this.chiMoi.clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
             }
         })
+        this.total.thNamHienHanhN1 = this.chiTx.thNamHienHanhN1 + this.chiMoi.thNamHienHanhN1;
+        this.total.tranChiN = this.chiTx.tranChiN + this.chiMoi.tranChiN;
+        this.total.ncauChiN = this.chiTx.ncauChiN + this.chiMoi.ncauChiN;
+        this.total.clechTranChiVsNcauChiN = this.chiTx.clechTranChiVsNcauChiN + this.chiMoi.clechTranChiVsNcauChiN;
+        this.total.tranChiN1 = this.chiTx.tranChiN1 + this.chiMoi.tranChiN1;
+        this.total.ncauChiN1 = this.chiTx.ncauChiN1 + this.chiMoi.ncauChiN1;
+        this.total.clechTranChiVsNcauChiN1 = this.chiTx.clechTranChiVsNcauChiN1 + this.chiMoi.clechTranChiVsNcauChiN1;
+        this.total.tranChiN2 = this.chiTx.tranChiN2 + this.chiMoi.tranChiN2;
+        this.total.ncauChiN2 = this.chiTx.ncauChiN2 + this.chiMoi.ncauChiN2;
+        this.total.clechTranChiVsNcauChiN2 = this.chiTx.clechTranChiVsNcauChiN2 + this.chiMoi.clechTranChiVsNcauChiN2;
     }
 
 
