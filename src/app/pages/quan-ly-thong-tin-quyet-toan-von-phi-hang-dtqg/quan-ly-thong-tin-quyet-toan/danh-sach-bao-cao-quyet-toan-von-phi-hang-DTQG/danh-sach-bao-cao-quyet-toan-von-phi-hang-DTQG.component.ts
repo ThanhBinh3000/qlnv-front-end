@@ -114,15 +114,14 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
+    this.status = true;
 
     if (this.userRole == roleUserCB[0]) {
-			this.status = true;
 			this.trangThai = Utils.TT_BC_1;
 			this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
 			this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
 		}
     else {
-			this.status = true;
 			if (this.userRole == roleUserTPB[0]) {
 				this.trangThai = Utils.TT_BC_2;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));

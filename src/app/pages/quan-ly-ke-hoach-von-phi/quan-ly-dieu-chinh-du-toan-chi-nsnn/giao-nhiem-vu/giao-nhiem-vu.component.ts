@@ -222,7 +222,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			if (dotBcaoDieuChinh && nam) {
-        this.loai = "1";
+        		this.loai = "1";
 				this.namHienHanh = parseInt(nam, 10);
 				await this.tongHop();
 				this.trangThaiBaoCao = "1";
@@ -455,6 +455,10 @@ export class GiaoNhiemVuComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
+	if(!this.dotBcao){
+		this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_EMPTY_DOTBC)
+		return
+	}
 
 		// replace nhung ban ghi dc them moi id thanh null
 		this.lstDieuChinhs.forEach(item => {
