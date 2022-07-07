@@ -90,19 +90,31 @@
               </div>
             </div>
           </td>
-          <td>{{item.trongDotTcong}}</td>
+          <td>
+            <ng-container *ngIf="item.stt != '0.1'">
+              {{item.trongDotTcong}}
+            </ng-container>
+          </td>
           <ng-container *ngFor="let e of item.listCtiet">
             <ng-container *ngIf="e.loaiMatHang == 0">
               <td>
-                {{e.sl}}
+                <ng-container *ngIf="item.stt != '0.1'">
+                  {{e.sl}}
+                </ng-container>
               </td>
             </ng-container>
           </ng-container>
-          <td>{{item.luyKeTcong}}</td>
+          <td>
+            <ng-container *ngIf="item.stt != '0.1'">
+              {{item.luyKeTcong}}
+            </ng-container>
+          </td>
           <ng-container *ngFor="let e of item.listCtiet">
             <ng-container *ngIf="e.loaiMatHang == 1">
               <td>
-                {{e.sl}}
+                <ng-container *ngIf="item.stt != '0.1'">
+                  {{e.sl}}
+                </ng-container>
               </td>
             </ng-container>
           </ng-container>
@@ -114,7 +126,9 @@
           </td>
           <td [hidden]="status">
             <ng-container *ngIf="!getLowStatus(item.stt,'4an-B')">
-              <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+              <ng-container *ngIf="item.stt != '0.1.2'">
+                <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
+              </ng-container>
             </ng-container>
           </td>
           <td [hidden]="status">
@@ -139,10 +153,8 @@
             </div>
           </td>
           <td>
-            <nz-input-number [nzMin]="0" type="number" class="search__input" nzSize="small"
-              [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
+            {{editCache[item.id].data.trongDotTcong}}
           </td>
-
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -152,14 +164,12 @@
             </ng-container>
           </ng-container>
           <td>
-            <nz-input-number [nzMin]="0" type="number" class="search__input" nzSize="small"
-              [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled></nz-input-number>
+            {{editCache[item.id].data.luyKeTcong}}
           </td>
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 1">
               <td>
-                <nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl" type="number"
-                  (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+                {{kv.sl}}
               </td>
             </ng-container>
           </ng-container>

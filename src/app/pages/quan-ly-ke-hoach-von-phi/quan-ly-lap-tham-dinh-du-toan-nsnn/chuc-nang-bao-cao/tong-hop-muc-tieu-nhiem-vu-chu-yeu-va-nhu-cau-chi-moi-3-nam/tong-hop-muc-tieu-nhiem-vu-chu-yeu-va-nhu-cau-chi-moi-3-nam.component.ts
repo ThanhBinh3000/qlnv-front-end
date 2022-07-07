@@ -74,6 +74,26 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         ncauChiChiaRaChiMoi2: 0,
         checked: false,
     };
+    total: ItemData = {
+        id: null,
+        stt: "0",
+        maLvuc: 0,
+        level: 0,
+        mtieuNvu: "",
+        csPhapLyThien: "",
+        hdongChuYeu: "",
+        nguonKphi: "",
+        ncauChiTongSo: 0,
+        ncauChiTrongDoChiCs: 0,
+        ncauChiTrongDoChiMoi: 0,
+        ncauChiChiaRaDtuPtrien: 0,
+        ncauChiChiaRaChiCs1: 0,
+        ncauChiChiaRaChiMoi1: 0,
+        ncauChiChiaRaChiTx: 0,
+        ncauChiChiaRaChiCs2: 0,
+        ncauChiChiaRaChiMoi2: 0,
+        checked: false,
+    };
     id: string;
     namHienHanh: number;
     maBieuMau: string;
@@ -137,7 +157,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 this.sortByIndex();
             }
         }
-
+        this.getTotal();
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(
@@ -590,6 +610,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 ...initItem,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
+                level: 0,
             }
             this.lstCtietBcao.push(item);
 
@@ -700,7 +721,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 }
                 id = this.lstCtietBcao.find(e => e.maLvuc == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.id) == -1){
+                    if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.id) == -1) {
                         const data: ItemData = {
                             ...this.initItem,
                             maLvuc: item.id,
@@ -760,6 +781,32 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
             })
             stt = this.getHead(stt);
         }
+        this.getTotal();
+    }
+
+    getTotal() {
+        this.total.ncauChiTongSo = 0;
+        this.total.ncauChiTrongDoChiCs = 0;
+        this.total.ncauChiTrongDoChiMoi = 0;
+        this.total.ncauChiChiaRaDtuPtrien = 0;
+        this.total.ncauChiChiaRaChiCs1 = 0;
+        this.total.ncauChiChiaRaChiMoi1 = 0;
+        this.total.ncauChiChiaRaChiTx = 0;
+        this.total.ncauChiChiaRaChiCs2 = 0;
+        this.total.ncauChiChiaRaChiMoi2 = 0;
+        this.lstCtietBcao.forEach(item => {
+            if (item.level == 0) {
+                this.total.ncauChiTongSo += item.ncauChiTongSo;
+                this.total.ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
+                this.total.ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
+                this.total.ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
+                this.total.ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
+                this.total.ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
+                this.total.ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
+                this.total.ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
+                this.total.ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+            }
+        })
     }
 
     doPrint() {
