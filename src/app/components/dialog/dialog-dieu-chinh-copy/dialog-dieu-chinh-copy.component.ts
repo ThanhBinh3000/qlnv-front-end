@@ -14,6 +14,16 @@ export class DialogDieuChinhCopyComponent implements OnInit {
     @Input() obj: any;
 
     response: any;
+    dotBcao: number;
+    id: any;
+    dotBcaos: any[] = [
+        {
+          id: 1
+        },
+        {
+          id: 2
+        }
+      ]
 
     constructor(
         private _modalRef: NzModalRef,

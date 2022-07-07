@@ -1072,17 +1072,19 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaDuToanDieuChinh(id: any): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
+  xoaDuToanDieuChinh(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/',
+       request
       // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
     );
   }
   //xóa báo cáo nút xóa Báo cáo
-  xoaDuToanDieuChinh1(id: any): Observable<any> {
-    return this.httpClient.get(
+  xoaDuToanDieuChinh1(request: any): Observable<any> {
+    return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
-      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/xoa/' + id
+      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/xoa/',
+      request
     );
   }
 
