@@ -90,19 +90,31 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{item.trongDotTcong}}</td>
+                    <td>
+                        <ng-container *ngIf="item.stt != '0.1'">
+                            {{item.trongDotTcong}}
+                        </ng-container>
+                    </td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 0">
                             <td>
-                                {{e.sl}}
+                                <ng-container *ngIf="item.stt != '0.1'">
+                                    {{e.sl}}
+                                </ng-container>                    
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{item.luyKeTcong}}</td>
+                    <td>
+                        <ng-container *ngIf="item.stt != '0.1'">
+                            {{item.luyKeTcong}}
+                        </ng-container>
+                    </td>
                     <ng-container *ngFor="let e of item.listCtiet">
                         <ng-container *ngIf="e.loaiMatHang == 1">
                             <td>
-                                {{e.sl}}
+                                <ng-container *ngIf="item.stt != '0.1'">
+                                    {{e.sl}}
+                                </ng-container>
                             </td>
                         </ng-container>
                     </ng-container>

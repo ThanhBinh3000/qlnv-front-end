@@ -90,19 +90,31 @@
               </div>
             </div>
           </td>
-          <td>{{item.trongDotTcong}}</td>
+          <td>
+            <ng-container *ngIf="item.stt != '0.1'">
+              {{item.trongDotTcong}}
+            </ng-container>
+          </td>
           <ng-container *ngFor="let e of item.listCtiet">
             <ng-container *ngIf="e.loaiMatHang == 0">
               <td>
-                {{e.sl}}
+                <ng-container *ngIf="item.stt != '0.1'">
+                  {{e.sl}}
+                </ng-container>
               </td>
             </ng-container>
           </ng-container>
-          <td>{{item.luyKeTcong}}</td>
+          <td>
+            <ng-container *ngIf="item.stt != '0.1'">
+              {{item.luyKeTcong}}
+            </ng-container>
+          </td>
           <ng-container *ngFor="let e of item.listCtiet">
             <ng-container *ngIf="e.loaiMatHang == 1">
               <td>
-                {{e.sl}}
+                <ng-container *ngIf="item.stt != '0.1'">
+                  {{e.sl}}
+                </ng-container>
               </td>
             </ng-container>
           </ng-container>
@@ -123,7 +135,7 @@
           <td [hidden]="status">
             <ng-container *ngIf="item.level > 2">
               <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-              (ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
+                (ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
             </ng-container>
           </td>
         </ng-container>
@@ -139,7 +151,7 @@
           <td>
             <nz-input-number [nzMin]="0" type="number" class="search__input" nzSize="small"
               [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled></nz-input-number>
-          </td>          
+          </td>
           <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
             <ng-container *ngIf="kv.loaiMatHang == 0">
               <td>
@@ -179,7 +191,7 @@
           <td [hidden]="status">
             <ng-container *ngIf="item.level > 2">
               <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-              (ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
+                (ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
             </ng-container>
           </td>
         </ng-template>
