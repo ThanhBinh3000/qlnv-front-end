@@ -1113,7 +1113,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 	}
 
 	async doCopy(response: any) {
-    console.log(response);
+
 
 		var maBcaoNew: string;
 		await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcao1).toPromise().then(

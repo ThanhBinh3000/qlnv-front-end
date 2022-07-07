@@ -36,6 +36,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   };
   //danh muc
   danhSachQuyetDinh: any = [];
+  listIdDelete: any = [];
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -57,11 +58,32 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    let userName = this.userService.getUserName();
+    await this.getUserInfo(userName); 
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
+    this.status = true;
+    this.userRole = this.userInfo?.roles[0].code;
     this.onSubmit()
+  }
+
+  //get user info
+  async getUserInfo(username: string) {
+    await this.userService.getUserInfo(username).toPromise().then(
+      (data) => {
+        if (data?.statusCode == 0) {
+          this.userInfo = data?.data
+          return data?.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
   }
 
   redirectThongTinTimKiem() {
@@ -152,5 +174,73 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     );
     this.spinner.hide();
   }
+  xoaDieuKien(){
+    this.searchFilter.namPa = null
+    this.searchFilter.ngayTaoDen = null
+    this.searchFilter.ngayTaoTu = null
+    this.searchFilter.maPa = null
+  }
 
+  xoaBaoCao(id: string) {
+		let request = [];
+		if (!id){
+			request = this.listIdDelete;
+		} else {
+			request = [id];
+		}
+		this.quanLyVonPhiService.xoaBanGhiGiaoBTC(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.listIdDelete = [];
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+
+	changeListIdDelete(id: any){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id);
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	checkAll(){
+		let check = true;
+		this.danhSachQuyetDinh.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	updateAllCheck(){
+		this.danhSachQuyetDinh.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+			&& ROLE_CAN_BO.includes(this.userRole)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
+	}
+
+  checkDeleteReport(item: any): boolean {
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			ROLE_CAN_BO.includes(this.userRole)) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
 }

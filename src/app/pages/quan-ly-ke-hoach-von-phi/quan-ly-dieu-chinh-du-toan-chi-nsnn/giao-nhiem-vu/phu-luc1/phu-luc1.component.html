@@ -108,11 +108,12 @@
           </div>
         </td>
         <td>
-          <div *ngFor="let item of loaiKhoans">
+          <!-- <div *ngFor="let item of loaiKhoans">
             <div *ngIf="item.id == data.maLoaiKhoan">
               {{item.giaTri}}
             </div>
-          </div>
+          </div> -->
+          {{data.maLoaiKhoan}}
         </td>
         <td>{{data.tongNcauDtoanKphi}}</td>
         <td>{{data.dtoanKphiNtruoc}}</td>
@@ -150,12 +151,13 @@
           </div>
         </td>
         <td>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại khoản mục"
+          <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại khoản mục"
             [(ngModel)]="editCache[data.id].data.maLoaiKhoan"
             [class]="editCache[data.id].data.maLoaiKhoan ?'' : 'input-error-validate'">
             <nz-option *ngFor="let item of loaiKhoans" [nzValue]="item.id" [nzLabel]="item.giaTri">
             </nz-option>
-          </nz-select>
+          </nz-select> -->
+          <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.maLoaiKhoan" />
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tongNcauDtoanKphi"

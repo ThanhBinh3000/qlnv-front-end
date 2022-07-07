@@ -173,4 +173,9 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
       '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
     ])
   }
+  xoaDieuKien(){
+    this.searchFilter.namBcao = null ;
+    this.searchFilter.maLoaiDuAn = null;
+    this.trangThai = null
+  }
 }

@@ -9,12 +9,17 @@
         <button nz-button class="search__button--search" routerLink="../">
           <i nz-icon nzType="stop"></i>
           Đóng
+
         </button>
         <button nz-button type="submit" class="search__button--search"
           (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()" >
+					<i nz-icon nzType="close"></i>
+					Xóa điều kiện
+				</button>
       </div>
     </div>
   </div>
@@ -71,8 +76,24 @@
               <th nzWidth="150px">Mã báo cáo</th>
               <th nzWidth="200px">Ngày tạo</th>
               <th nzWidth="150px">Năm báo cáo</th>
+              <th nzWidth="150px">Ngày trình duyệt</th>
+							<th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
+							<th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
+							<th nzWidth="150px">Ngày cấp trên trả kết quả</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
               <th nzWidth="200px" colspan="2" [hidden]="status">Hành động</th>
+              <th [hidden]="!status">
+								<ng-container *ngIf="checkAll(); else xoa">
+									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
+										<span>Tất cả</span>
+									</button>
+								</ng-container>
+								<ng-template #xoa>
+									<button type="button" class="btn btn-main" (click)="xoaBaoCao('')">
+										<span>Xóa</span>
+									</button>
+								</ng-template>
+							</th>
             </tr>
           </thead>
           <tbody>
@@ -90,6 +111,18 @@
                       Xóa
                   </a>
               </td> -->
+              <td>
+								{{item.ngayTrinh}}
+							</td>
+							<td>
+								{{item.ngayDuyet}}
+							</td>
+							<td>
+								{{item.ngayPheDuyet}}
+							</td>
+							<td>
+								{{item.ngayTraKq}}
+							</td>
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
@@ -103,8 +136,13 @@
                   *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
                   <span>Xóa</span>
                 </button>
-
               </td>
+              <td [hidden]="!status">
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+									(ngModelChange)="changeListIdDelete(item.id)"></label>
+								</ng-container>
+							</td>
             </tr>
           </tbody>
         </nz-table>

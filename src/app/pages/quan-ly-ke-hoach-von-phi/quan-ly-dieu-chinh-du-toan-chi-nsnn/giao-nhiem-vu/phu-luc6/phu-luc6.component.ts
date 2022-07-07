@@ -191,8 +191,22 @@ export class PhuLuc6Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.changeNam();
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  changeNam(){
+    let a = LINH_VUC.find(el => el.id == 1)
+    a.tenDm = "Tổng cộng năm " + this.namBcao
+    let b = LINH_VUC.find(el => el.id == 2)
+    b.tenDm = "Thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b1 = LINH_VUC.find(el => el.id == 21)
+    b1.tenDm = "VTCT thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b2 = LINH_VUC.find(el => el.id == 22)
+    b2.tenDm = "Nhập thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b3 = LINH_VUC.find(el => el.id == 23)
+    b3.tenDm = "Xuất thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
   }
 
   getStatusButton() {
@@ -577,6 +591,23 @@ export class PhuLuc6Component implements OnInit {
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
+    }
+    if(
+      this.editCache[id].data.kphiDmuc <0 ||
+      this.editCache[id].data.kphiTtien <0 ||
+      this.editCache[id].data.cphiTcong <0 ||
+      this.editCache[id].data.cphiNtruoc <0 ||
+      this.editCache[id].data.cphiNnay <0 ||
+      this.editCache[id].data.chenhLech <0 ||
+      this.editCache[id].data.kphiQtoan <0 ||
+      this.editCache[id].data.kphiChuaQtoanCong <0 ||
+      this.editCache[id].data.kphiChuaQtoanKpTchi <0 ||
+      this.editCache[id].data.kphiChuaQtoanKpTkiem <0 ||
+      this.editCache[id].data.soChuaQtoan <0 ||
+      this.editCache[id].data.dtoan2021ThanhQtoan2020 <0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
     }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua

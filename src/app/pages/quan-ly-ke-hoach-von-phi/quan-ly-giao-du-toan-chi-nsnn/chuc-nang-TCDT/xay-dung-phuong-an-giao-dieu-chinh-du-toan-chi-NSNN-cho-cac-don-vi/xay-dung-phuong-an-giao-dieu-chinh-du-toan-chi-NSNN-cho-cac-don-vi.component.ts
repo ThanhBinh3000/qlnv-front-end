@@ -265,7 +265,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     if (dVi && dVi.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
-    if(dVi && dVi.capDvi == "1"){
+    if (dVi && dVi.capDvi == "1") {
       this.statusBtnGuiDVCT = true
     }
     if (dVi && dVi.capDvi == "2" && this.trangThaiBanGhi == "7" || this.trangThaiBanGhi == "9") {
@@ -532,15 +532,15 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
     //get list file url
     let checkFile = true;
-        for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
-                checkFile = false;
-            }
-        }
-        if (!checkFile){
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
-        }
+    for (const iterator of this.listFile) {
+      if (iterator.size > Utils.FILE_SIZE) {
+        checkFile = false;
+      }
+    }
+    if (!checkFile) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+    }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -592,20 +592,20 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     //get file cong van url
     let file: any = this.fileDetail;
     if (file) {
-      if (file.size > Utils.FILE_SIZE){
-          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-      return;
+      if (file.size > Utils.FILE_SIZE) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
       } else {
-          request.soQd = await this.uploadFile(file);
+        request.soQd = await this.uploadFile(file);
       }
-  }
+    }
     if (file) {
       request1.soQd = await this.uploadFile(file);
     }
-    if (!request.soQd){
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
+    if (!request.soQd) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
     this.spinner.show();
     if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
@@ -675,7 +675,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         ngayTao: this.ngayTao,
       })
     } else {
-      console.log(this.lstCtietBcao[0]);
       if (this.lstCtietBcao.length > 0) {
         this.lstCtietBcao[0].lstCtietDvis.forEach(item => {
           if (item.trangThai == null) {
@@ -1256,7 +1255,9 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         }
         id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
-          this.addLow(id, item);
+          if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
+            this.addLow(id, item);
+          }
         })
         this.updateEditCache();
       }
@@ -1361,7 +1362,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.trangThaiBanGhi = '1';
           this.maDonViTao = this.userInfo?.dvql;
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-          console.log(this.lstDvi)
+
           this.ngayTao = this.newDate;
           this.spinner.show();
           this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
@@ -1395,39 +1396,40 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.spinner.hide();
   }
 
-  showDialogCopy(){
-		let obj = {
-			namBcao: this.namDtoan,
-      loaiCopy: ''
-		}
-		const modalTuChoi = this.modal.create({
-			nzTitle: 'Copy Báo Cáo',
-			nzContent: DialogCopyGiaoDuToanComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '900px',
-			nzFooter: null,
-			nzComponentParams: {
-			  namBcao: obj.namBcao
-			},
-		  });
-		  modalTuChoi.afterClose.toPromise().then(async (res) => {
-			if (res){
-				this.doCopy(res);
-			}
-		  });
-	}
+  showDialogCopy() {
+    let obj = {
+      namBcao: this.namDtoan,
+      loaiCopy: '',
+      checkDvtt: this.lstDviTrucThuoc.length > 0 ? true : false,
+    }
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Copy Báo Cáo',
+      nzContent: DialogCopyGiaoDuToanComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        namBcao: obj.namBcao
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (res) => {
+      if (res) {
+        this.doCopy(res);
+      }
+    });
+  }
 
-	async doCopy(response: any) {
-    console.log(response);
+  async doCopy(response: any) {
 
-		var maBcaoNew: string;
-		await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+
+    var maBcaoNew: string;
+    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
-         maBcaoNew = res.data;
-        //   let sub = "BTC";
-        //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
+          maBcaoNew = res.data;
+          //   let sub = "BTC";
+          //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -1464,7 +1466,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       })
     })
 
-		let request = {
+    let request = {
       id: null,
       fileDinhKems: [],
       listIdDeleteFiles: [],
@@ -1482,31 +1484,31 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       maGiao: this.maGiao,
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
-		};
+    };
 
-		this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
-			async data => {
-				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					const modalCopy = this.modal.create({
-						nzTitle: MESSAGE.ALERT,
-						nzContent: DialogCopyComponent,
-						nzMaskClosable: false,
-						nzClosable: false,
-						nzWidth: '900px',
-						nzFooter: null,
-						nzComponentParams: {
-						  maBcao: maBcaoNew
-						},
-					  });
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
+    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          const modalCopy = this.modal.create({
+            nzTitle: MESSAGE.ALERT,
+            nzContent: DialogCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              maBcao: maBcaoNew
+            },
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
   }
 
   // action print
@@ -1531,36 +1533,36 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   sum(stt: string) {
     stt = this.getHead(stt);
     while (stt != '0') {
-        var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-        let data = this.lstCtietBcao[index];
-        var mm: any[] = [];
-        data.lstCtietDvis.forEach(item => {
-            mm.push({
-                ...item,
-                soTranChi: 0,
-            })
+      var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+      let data = this.lstCtietBcao[index];
+      var mm: any[] = [];
+      data.lstCtietDvis.forEach(item => {
+        mm.push({
+          ...item,
+          soTranChi: 0,
         })
-        this.lstCtietBcao[index] = {
-            id: data.id,
-            stt: data.stt,
-            level: data.stt,
-            maNdung: data.maNdung,
-            tongCong: 0,
-            lstCtietDvis: mm,
-            checked: false,
+      })
+      this.lstCtietBcao[index] = {
+        id: data.id,
+        stt: data.stt,
+        level: data.stt,
+        maNdung: data.maNdung,
+        tongCong: 0,
+        lstCtietDvis: mm,
+        checked: false,
+      }
+      this.lstCtietBcao.forEach(item => {
+        if (this.getHead(item.stt) == stt) {
+          item.lstCtietDvis.forEach(e => {
+            let ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
+            this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
+          })
         }
-        this.lstCtietBcao.forEach(item => {
-            if (this.getHead(item.stt) == stt) {
-                item.lstCtietDvis.forEach(e => {
-                    let ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-                    this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
-                })
-            }
-        })
-        this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-            this.lstCtietBcao[index].tongCong += item.soTranChi;
-        })
-        stt = this.getHead(stt);
+      })
+      this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+        this.lstCtietBcao[index].tongCong += item.soTranChi;
+      })
+      stt = this.getHead(stt);
     }
   }
 

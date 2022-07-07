@@ -469,15 +469,15 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     });
     //get list file url
-		let checkFile = true;
+    let checkFile = true;
     for (const iterator of this.listFile) {
-        if (iterator.size > Utils.FILE_SIZE){
-            checkFile = false;
-        }
+      if (iterator.size > Utils.FILE_SIZE) {
+        checkFile = false;
+      }
     }
-    if (!checkFile){
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-        return;
+    if (!checkFile) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
     }
     //get list file url
     let listFile: any = [];
@@ -507,25 +507,25 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     //get file cong van url
     let file: any = this.fileDetail;
     //get file cong van url
-		if (file) {
-      if (file.size > Utils.FILE_SIZE){
-          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-      return;
-      } else {
-          request.soQd = await this.uploadFile(file);
-      }
-  }
-  if (this.soQd.fileName == null) {
-  this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-  return
-  }
     if (file) {
-      request.soQd = await this.uploadFile(file);
+      if (file.size > Utils.FILE_SIZE) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
+      } else {
+        request.soQd = await this.uploadFile(file);
+      }
     }
-    if (!request.soQd){
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
+    if (this.soQd.fileName == null) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return
+    }
+    // if (file) {
+    //   request.soQd = await this.uploadFile(file);
+    // }
+    if (!request.soQd) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
     this.spinner.show();
     if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
@@ -949,12 +949,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
-          var data: ItemData = {
-            ...this.initItem,
-            maNdung: item.id,
-            level: item.level,
-          };
-          this.addLow(id, data);
+          if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
+            var data: ItemData = {
+              ...this.initItem,
+              maNdung: item.id,
+              level: item.level,
+            };
+            this.addLow(id, data);
+          }
         })
         this.updateEditCache();
       }
@@ -1203,8 +1205,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   }
 
   async doCopy(response: any) {
-    console.log(response);
-
     var maBcaoNew: string;
     await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {

@@ -14,6 +14,10 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()" >
+					<i nz-icon nzType="close"></i>
+					Xóa điều kiện
+				</button>
       </div>
     </div>
   </div>
@@ -40,7 +44,7 @@
             </nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">mã phương án</label>
+            <label class="search__label">Mã phương án</label>
             <input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
           </div>
         </div>
@@ -60,6 +64,18 @@
               <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
               <th width="150px">Hành động </th>
+              <th nzWidth="60px" [hidden]="!status">
+								<ng-container *ngIf="checkAll(); else xoa">
+									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
+										<span>Tất cả</span>
+									</button>
+								</ng-container>
+								<ng-template #xoa>
+									<button type="button" class="btn btn-main" (click)="xoaBaoCao('')">
+										<span>Xóa</span>
+									</button>
+								</ng-template>
+							</th>
             </tr>
           </thead>
           <tbody>
@@ -86,8 +102,13 @@
                   *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
                   <span>Xóa</span>
                 </button>
-
               </td>
+              <td [hidden]="!status">
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+									(ngModelChange)="changeListIdDelete(item.id)"></label>
+								</ng-container>
+							</td>
             </tr>
           </tbody>
         </nz-table>

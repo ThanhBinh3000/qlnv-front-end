@@ -175,20 +175,78 @@ export class PhuLuc7Component implements OnInit {
       }
     );
 
-    await this.danhMucService.dMDviTinh().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donViTinhs = data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
+    // await this.danhMucService.dMDviTinh().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.donViTinhs = data?.data;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
+    this.donViTinhs = [
+      {
+        dviDo: "DTN",
+        id: 1,
+        maDviTinh: "DTN",
+        tenDviTinh: "Đồng/tấn.năm",
+        trangThai: "01",
       },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
+      {
+        dviDo: "DT",
+        id: 2,
+        maDviTinh: "DT",
+        tenDviTinh: "Đồng/tấn",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DCN",
+        id: 3,
+        maDviTinh: "DCN",
+        tenDviTinh: "Đồng/chiếc.năm",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DC",
+        id: 4,
+        maDviTinh: "DC",
+        tenDviTinh: "Đồng/chiếc",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DB",
+        id: 5,
+        maDviTinh: "DB",
+        tenDviTinh: "Đồng/bộ",
+        trangThai: "01",
+      },
+      {
+        dviDo: "DBN",
+        id: 6,
+        maDviTinh: "DBN",
+        tenDviTinh: "Đồng/bộ.năm",
+        trangThai: "01",
+      },
+    ]
+    this.changeNam()
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  changeNam(){
+    let a = LINH_VUC.find(el => el.id == 1)
+    a.tenDm = "Tổng cộng năm " + this.namBcao
+    let b = LINH_VUC.find(el => el.id == 2)
+    b.tenDm = "Thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b1 = LINH_VUC.find(el => el.id == 21)
+    b1.tenDm = "VTCT thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b2 = LINH_VUC.find(el => el.id == 22)
+    b2.tenDm = "Nhập thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
+    let b3 = LINH_VUC.find(el => el.id == 23)
+    b3.tenDm = "Xuất thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
   }
 
   getStatusButton() {
@@ -374,17 +432,23 @@ export class PhuLuc7Component implements OnInit {
     //     }
     //   }
     // };
-    if (n == 0) {
-      xau = chiSo[n];
-    };
+    // if (n == 0) {
+    //   xau = chiSo[n];
+    // };
     // if (n == 2) {
     //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     // };
-    // if (n == 3) {
-    //   xau = String.fromCharCode(k + 96);
-    // }
-    if (n == 1) {
+    if (n == 0) {
+      xau = String.fromCharCode(k + 96).toUpperCase();
+    }
+     if (n == 1) {
+      xau = chiSo[n];
+    };
+    if (n == 2) {
       xau = "-";
+    }
+    if (n == 3) {
+      xau = "+";
     }
     return xau;
   }
@@ -553,8 +617,8 @@ export class PhuLuc7Component implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (
-      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.maDviTinh) ||
+      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.slHangTte && this.editCache[id].data.slHangTte !== 0) ||
       (!this.editCache[id].data.kphiBqDmuc && this.editCache[id].data.kphiBqDmuc !== 0) ||
       (!this.editCache[id].data.kphiBqTtien && this.editCache[id].data.kphiBqTtien !== 0) ||
@@ -570,6 +634,24 @@ export class PhuLuc7Component implements OnInit {
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
+    }
+    if(
+      this.editCache[id].data.loaiMatHang < 0 ||
+      this.editCache[id].data.slHangTte < 0 ||
+      this.editCache[id].data.kphiBqDmuc < 0 ||
+      this.editCache[id].data.kphiBqTtien < 0 ||
+      this.editCache[id].data.cphiBqTcong < 0 ||
+      this.editCache[id].data.cphiBqNtruoc < 0 ||
+      this.editCache[id].data.cphiBqNnay < 0 ||
+      this.editCache[id].data.chenhLech < 0 ||
+      this.editCache[id].data.soQtoan < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTk < 0 ||
+      this.editCache[id].data.soQtoanChuyenNsauKpTchi < 0 ||
+      this.editCache[id].data.dtoan2021ThanhQtoan2020 < 0 ||
+      this.editCache[id].data.soChuaQtoan < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return
     }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
