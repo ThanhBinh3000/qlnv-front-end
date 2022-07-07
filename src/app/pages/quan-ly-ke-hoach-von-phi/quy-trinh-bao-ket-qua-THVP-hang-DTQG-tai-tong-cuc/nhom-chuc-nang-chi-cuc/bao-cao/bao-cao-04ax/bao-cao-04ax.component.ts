@@ -57,6 +57,7 @@ export class BaoCao04axComponent implements OnInit {
     listColTemp: any[] = [];
     listVattu: any[] = [];
     lstVatTuFull = [];
+    luyKes = [];
     //nhóm biến biểu mẫu 04ax
     lstCtietBcao4axI1: ItemDataMau0405[] = [];
     lstCtietBcao4axI2: ItemDataMau0405[] = [];
@@ -109,6 +110,7 @@ export class BaoCao04axComponent implements OnInit {
         this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '6')?.lstCtietBcaos;
         // 04ax
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             await el.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
@@ -362,6 +364,8 @@ export class BaoCao04axComponent implements OnInit {
                         await this.addFirst(data, phuLuc);
                     } else {
                         await this.addSame(id, data, phuLuc);
+                        //tinh lai luy ke cho lop cha
+                        this.sum(baoCao.find(e => e.id == id).stt, phuLuc);
                     }
                 }
                 baoCao = this.getBieuMau(phuLuc);
@@ -376,6 +380,7 @@ export class BaoCao04axComponent implements OnInit {
                     };
                     this.addLow(id, data, phuLuc);
                 })
+                this.sum(baoCao.find(e => e.id == id).stt + '.1', phuLuc);
                 this.updateEditCache(phuLuc);
             }
         });
@@ -397,7 +402,7 @@ export class BaoCao04axComponent implements OnInit {
         }
         this.replaceIndex(lstIndex, 1, phuLuc);
         var listVtu: vatTu[] = [];
-
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
             let objTrongD = {
                 id: e.id,
@@ -409,7 +414,7 @@ export class BaoCao04axComponent implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0,
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -478,6 +483,7 @@ export class BaoCao04axComponent implements OnInit {
             this.sum(stt, phuLuc);
         }
         var listVtu: vatTu[] = [];
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
             let objTrongD = {
                 id: e.id,
@@ -489,7 +495,7 @@ export class BaoCao04axComponent implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0,
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -662,6 +668,7 @@ export class BaoCao04axComponent implements OnInit {
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: any, phuLuc: string) {
         var listVtu: vatTu[] = [];
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
             let objTrongD = {
                 id: e.id,
@@ -673,7 +680,7 @@ export class BaoCao04axComponent implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0,
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -861,16 +868,22 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     tinhTong(id: any) {
+        //luy ke default
+        let itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
+
         let tonglstChitietVtuTrongDot = 0;
+        let tonglstChitietVtuLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += e.sl;
+                    //set luy ke tuong ung = luy ke default + chi tiet theo dot
+                    let sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;
                 }
             })
         }
-        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
-        let tonglstChitietVtuLuyke = 0;
+        
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == '1') {
@@ -878,6 +891,7 @@ export class BaoCao04axComponent implements OnInit {
                 }
             })
         }
+        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
         this.editCache[id].data.luyKeTcong = tonglstChitietVtuLuyke;
     }
 
@@ -913,10 +927,12 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     addCol(vatTu: any) {
+        debugger
         let idPhuLuc = LISTBIEUMAUDOT[2].lstId;
         idPhuLuc.forEach(phuLuc => {
             let baoCao = this.getBieuMau(phuLuc);
             baoCao.forEach(data => {
+                let itemLine = this.luyKes?.find(item => item.maNdungChi == data.maNdungChi)?.listCtiet;
                 let objTrongD = {
                     id: uuid.v4() + 'FE',
                     maVtu: vatTu.id,
@@ -929,7 +945,7 @@ export class BaoCao04axComponent implements OnInit {
                     maVtu: vatTu.id,
                     colName: vatTu.ten,
                     loaiMatHang: '1',
-                    sl: 0,
+                    sl: itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl : 0,
                 }
                 data.listCtiet.push(objTrongD);
                 data.listCtiet.push(objLke);

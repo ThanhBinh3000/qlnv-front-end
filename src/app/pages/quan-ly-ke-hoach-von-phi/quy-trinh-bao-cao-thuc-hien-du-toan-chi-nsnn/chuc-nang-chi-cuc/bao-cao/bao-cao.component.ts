@@ -11,6 +11,7 @@ import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialo
 import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -2386,31 +2387,31 @@ export class BaoCaoComponent implements OnInit {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
-        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
-        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
-        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
+        luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+        luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
+        luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
       }
     } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
-        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
+        luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
       }
     } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
       initItem = {
         ...initItem,
-        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
-        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
-        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
-        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
-        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+        luyKeGiaiNganDauNamTso: itemLine?.luyKeGiaiNganDauNamTso ? itemLine?.luyKeGiaiNganDauNamTso : 0,
+        luyKeGiaiNganDauNamNsnn: itemLine?.luyKeGiaiNganDauNamNsnn ? itemLine?.luyKeGiaiNganDauNamNsnn : 0,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine?.luyKeGiaiNganDauNamNsnnVonDt ? itemLine?.luyKeGiaiNganDauNamNsnnVonDt : 0,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
       }
     }
     // them moi phan tu
@@ -2473,31 +2474,31 @@ export class BaoCaoComponent implements OnInit {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
-        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
-        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
-        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
+        luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+        luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
+        luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
       }
     } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
-        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
+        luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
       }
     } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
       initItem = {
         ...initItem,
-        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
-        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
-        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
-        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
-        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+        luyKeGiaiNganDauNamTso: itemLine?.luyKeGiaiNganDauNamTso ? itemLine?.luyKeGiaiNganDauNamTso : 0,
+        luyKeGiaiNganDauNamNsnn: itemLine?.luyKeGiaiNganDauNamNsnn ? itemLine?.luyKeGiaiNganDauNamNsnn : 0,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine?.luyKeGiaiNganDauNamNsnnVonDt ? itemLine?.luyKeGiaiNganDauNamNsnnVonDt : 0,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
       }
     }
     // them moi phan tu
@@ -2684,31 +2685,31 @@ export class BaoCaoComponent implements OnInit {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganDtoan: itemLine.luyKeGiaiNganDtoan,
-        luyKeGiaiNganNguonKhac: itemLine.luyKeGiaiNganNguonKhac,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
-        luyKeGiaiNganNstt: itemLine.luyKeGiaiNganNstt,
-        luyKeGiaiNganCk: itemLine.luyKeGiaiNganCk,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan? itemLine?.luyKeGiaiNganDtoan : 0,
+        luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac? itemLine?.luyKeGiaiNganNguonKhac : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy? itemLine?.luyKeGiaiNganNguonQuy : 0,
+        luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt? itemLine?.luyKeGiaiNganNstt : 0,
+        luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk? itemLine?.luyKeGiaiNganCk : 0,
       }
     } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
       initItem = {
         ...initItem,
-        luyKeGiaiNganTcong: itemLine.luyKeGiaiNganTcong,
-        luyKeGiaiNganNguonNsnn: itemLine.luyKeGiaiNganNguonNsnn,
-        luyKeGiaiNganNguonSn: itemLine.luyKeGiaiNganNguonSn,
-        luyKeGiaiNganNguonQuy: itemLine.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
+        luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
+        luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
       }
     } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
       let itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
       initItem = {
         ...initItem,
-        luyKeGiaiNganDauNamTso: itemLine.luyKeGiaiNganDauNamTso,
-        luyKeGiaiNganDauNamNsnn: itemLine.luyKeGiaiNganDauNamNsnn,
-        luyKeGiaiNganDauNamNsnnVonDt: itemLine.luyKeGiaiNganDauNamNsnnVonDt,
-        luyKeGiaiNganDauNamNsnnVonThue: itemLine.luyKeGiaiNganDauNamNsnnVonThue,
-        luyKeGiaiNganDauNamNsnnVonScl: itemLine.luyKeGiaiNganDauNamNsnnVonScl,
+        luyKeGiaiNganDauNamTso: itemLine?.luyKeGiaiNganDauNamTso ? itemLine?.luyKeGiaiNganDauNamTso : 0,
+        luyKeGiaiNganDauNamNsnn: itemLine?.luyKeGiaiNganDauNamNsnn ? itemLine?.luyKeGiaiNganDauNamNsnn : 0,
+        luyKeGiaiNganDauNamNsnnVonDt: itemLine?.luyKeGiaiNganDauNamNsnnVonDt ? itemLine?.luyKeGiaiNganDauNamNsnnVonDt : 0,
+        luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
+        luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
       }
     }
 
@@ -2866,7 +2867,7 @@ export class BaoCaoComponent implements OnInit {
     }
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách nội dung',
-      nzContent: DialogThemKhoanMucComponent,
+      nzContent: DialogThemVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '65%',

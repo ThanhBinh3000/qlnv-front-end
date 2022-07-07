@@ -421,7 +421,7 @@ export class BaoCao05Component implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl | 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0,
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -481,7 +481,7 @@ export class BaoCao05Component implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl | 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -546,7 +546,7 @@ export class BaoCao05Component implements OnInit {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
-                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl | 0,
+                sl: itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0
             };
             listVtu.push(objTrongD);
             listVtu.push(objLke);
@@ -869,12 +869,14 @@ export class BaoCao05Component implements OnInit {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += e.sl;
-                    let luyKeDong = this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1);
-                    // luyKeDong = {
-                    //     ...luyKeDong
-                    // }
-                    // e.sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl | 0 + ;
-                }else if(e.loaiMatHang == '1'){
+                    //set luy ke tuong ung = luy ke default + chi tiet theo dot
+                    let sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;                }
+            })
+        }
+        if (this.editCache[id].data.listCtiet.length != 0) {
+            this.editCache[id].data.listCtiet.forEach(e => {
+                if (e.loaiMatHang == '1') {
                     tonglstChitietVtuLuyke += e.sl;
                 }
             })
@@ -931,7 +933,7 @@ export class BaoCao05Component implements OnInit {
                     maVtu: vatTu.id,
                     colName: vatTu.ten,
                     loaiMatHang: '1',
-                    sl: itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl | 0,
+                    sl: itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl : 0,
                 }
                 data.listCtiet.push(objTrongD);
                 data.listCtiet.push(objLke);
