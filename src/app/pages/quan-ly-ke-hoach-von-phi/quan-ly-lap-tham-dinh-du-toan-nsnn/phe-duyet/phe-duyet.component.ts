@@ -60,14 +60,15 @@ export class PheDuyetComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-
 		this.maDviTao = this.userInfo?.dvql;
 		this.searchFilter.denNgay = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.tuNgay = this.newDate;
+
+		const userName = this.userService.getUserName();
+		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
+		this.spinner.show();
 		await this.danhMuc.dMDonVi().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
@@ -80,6 +81,7 @@ export class PheDuyetComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+		this.spinner.hide();
 		if (ROLE_CAN_BO.includes(this.userRole)) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;

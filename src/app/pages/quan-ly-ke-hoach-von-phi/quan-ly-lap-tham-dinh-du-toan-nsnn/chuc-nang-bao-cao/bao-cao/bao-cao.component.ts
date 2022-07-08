@@ -182,8 +182,9 @@ export class BaoCaoComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
-		const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
+		const nam: string = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		const userName = this.userService.getUserName();
+		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
 		if (this.id) {
 			await this.getDetailReport();
@@ -225,7 +226,6 @@ export class BaoCaoComponent implements OnInit {
 				this.trangThaiBaoCao = "1";
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
-				this.spinner.show();
 				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 					(data) => {
 						if (data.statusCode == 0) {
@@ -248,7 +248,7 @@ export class BaoCaoComponent implements OnInit {
 
 
 		}
-
+		
 		//lay danh sach danh muc don vi
 		await this.danhMucService.dMDonVi().toPromise().then(
 			(data) => {
@@ -589,7 +589,6 @@ export class BaoCaoComponent implements OnInit {
 
 	// call chi tiet bao cao
 	async getDetailReport() {
-		this.spinner.show();
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
@@ -624,7 +623,6 @@ export class BaoCaoComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		);
-		this.spinner.hide();
 	}
 
 	// call chi tiet bao cao
@@ -891,7 +889,7 @@ export class BaoCaoComponent implements OnInit {
 			congVan: null,
 			tongHopTuIds: [],
 		};
-
+		this.spinner.show();
 		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
@@ -914,6 +912,6 @@ export class BaoCaoComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			},
 		);
-
+		this.spinner.hide();
 	}
 }

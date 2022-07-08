@@ -91,13 +91,13 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-		
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() -1);
 		this.searchFilter.tuNgay = newDate;
+
+		const userName = this.userService.getUserName();
+		await this.getUserInfo(userName); //get user info
 
 		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
 			this.statusTaoMoi = false;
@@ -257,6 +257,7 @@ export class TimKiemComponent implements OnInit {
 		} else {
 			request = [id];
 		}
+		this.spinner.show();
 		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
@@ -271,6 +272,7 @@ export class TimKiemComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		)
+		this.spinner.hide();
 	}
 
 	checkDeleteReport(item: any): boolean{

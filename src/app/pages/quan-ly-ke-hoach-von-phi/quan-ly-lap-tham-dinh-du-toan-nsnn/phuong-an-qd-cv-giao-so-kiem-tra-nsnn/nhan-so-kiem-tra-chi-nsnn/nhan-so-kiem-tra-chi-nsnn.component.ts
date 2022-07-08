@@ -57,13 +57,15 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     async ngOnInit() {
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
-        this.searchFilter.maDviNhan = this.userInfo?.dvql;
 
         this.searchFilter.denNgay = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.tuNgay = this.newDate;
+
+        this.spinner.show();
+        const userName = this.userService.getUserName();
+        await this.getUserInfo(userName); //get user info
+        this.searchFilter.maDviNhan = this.userInfo?.dvql;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
@@ -78,6 +80,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.spinner.hide();
 
         this.onSubmit();
     }

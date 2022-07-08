@@ -96,6 +96,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     async ngOnInit() {
         this.id = this.routerActive.snapshot.paramMap.get('id');
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         this.maDviTao = this.userInfo?.dvql;
@@ -114,6 +115,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        this.spinner.hide();
 
         this.getPhuongAn();
 
@@ -137,6 +139,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     }
 
     async getPhuongAn() {
+        this.spinner.show()
         await this.quanLyVonPhiService.timKiemMaPaDuyet().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -149,6 +152,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        this.spinner.hide();
     }
 
     //upload file

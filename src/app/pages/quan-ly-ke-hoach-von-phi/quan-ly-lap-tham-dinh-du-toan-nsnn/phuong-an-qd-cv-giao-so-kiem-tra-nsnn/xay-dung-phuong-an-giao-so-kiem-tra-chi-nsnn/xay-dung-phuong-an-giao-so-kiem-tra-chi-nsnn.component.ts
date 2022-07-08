@@ -128,6 +128,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBaoCao');
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         this.maDonViTao = this.userInfo?.dvql;
@@ -151,7 +152,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.spinner.show();
+            
             this.quanLyVonPhiService.maPhuongAn().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -315,7 +316,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietPhuongAn(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -358,7 +358,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role
@@ -568,7 +567,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 }
             })
         }
-
+        this.spinner.show();
         this.quanLyVonPhiService.giaoSoTranChi(lstGiao).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
@@ -592,6 +591,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         )
+        this.spinner.hide();
     }
 
 
