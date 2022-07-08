@@ -41,6 +41,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         maPaBtc: "",
     };
     newDate = new Date();
+    capDvi: string;
     listIdDelete: string[] = [];
     //danh muc
     danhSachBaoCao: any = [];
@@ -82,6 +83,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     status: boolean;
     statusBtnBcao = true;
     statusTaoMoi = true;
+    statusBtc = true;
 
     fileDetail: NzUploadFile;
 
@@ -108,6 +110,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             this.status = false;
             this.searchFilter.loaiTimKiem = "0";
         }
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.donViTao = this.userInfo?.dvql;
@@ -116,10 +119,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.newDate.setMonth(this.newDate.getMonth() - 1);
         this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDonVi().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
+                    this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
                     this.donViTaos = this.donVis.filter(e => e?.maDviCHa === this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -129,10 +133,14 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.spinner.hide();
 
         if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
 			this.statusTaoMoi = false;
 		}
+        if (!this.status && this.capDvi == Utils.TONG_CUC){
+            this.statusBtc = false;
+        }
         
         this.onSubmit();
     }
@@ -384,6 +392,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
 		} else {
 			request = [id];
 		}
+        this.spinner.show();
         this.quanLyVonPhiService.xoaPhuongAn(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
@@ -397,6 +406,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         )
+        this.spinner.hide();
     }
 
 	changeListIdDelete(id: string){

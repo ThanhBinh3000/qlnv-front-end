@@ -97,8 +97,8 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
-		title: 'Danh sách số kiểm tra trần chi giao từ Bộ tài chính',
-		description: 'Danh sách số kiểm tra trần chi giao từ Bộ tài chính',
+		title: 'Danh sách số kiểm tra trần chi nhận từ Bộ tài chính',
+		description: 'Danh sách số kiểm tra trần chi nhận từ Bộ tài chính',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/0`,
 		Role: [
 			NHAN_VIEN_TC,

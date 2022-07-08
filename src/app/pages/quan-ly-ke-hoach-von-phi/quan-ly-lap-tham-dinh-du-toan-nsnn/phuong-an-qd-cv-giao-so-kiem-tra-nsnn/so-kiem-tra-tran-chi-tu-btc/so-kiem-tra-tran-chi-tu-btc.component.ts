@@ -124,7 +124,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBcao');
-
+        this.spinner.show();
         //lay thong tin user
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -149,7 +149,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.spinner.show();
+
             this.quanLyVonPhiService.maPhuongAn().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -315,7 +315,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietPhuongAn(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -349,7 +348,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

@@ -47,6 +47,12 @@ export class DanhMucHDVService extends BaseService {
     );
   }
 
+  chiTietDonVi(id: string): Observable<any>{
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-donvi/chi-tiet/" + id
+    );
+  }
+
   //danh muc noi dung
   dMNoiDung(): Observable<any> {
     return this.httpClient.post(

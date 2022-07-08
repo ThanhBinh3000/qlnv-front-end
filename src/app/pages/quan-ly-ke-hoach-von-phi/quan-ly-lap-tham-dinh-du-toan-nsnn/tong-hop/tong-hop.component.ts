@@ -67,6 +67,7 @@ export class TongHopComponent implements OnInit {
 
 	async ngOnInit() {
 		const userName = this.userService.getUserName();
+		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
 		this.maDviTao = this.userInfo?.dvql;
 		//lay danh sach danh muc
@@ -82,6 +83,7 @@ export class TongHopComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+		this.spinner.hide();
 
 		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
 			this.statusTaoMoi = false;

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
@@ -22,11 +23,13 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private userService: UserService,
+		private spinner: NgxSpinnerService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
 	) { }
 
 	async ngOnInit(): Promise<void> {
+		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
@@ -52,6 +55,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 				}
 			})
 		})
+		this.spinner.hide();
 	}
 
 	//get user info

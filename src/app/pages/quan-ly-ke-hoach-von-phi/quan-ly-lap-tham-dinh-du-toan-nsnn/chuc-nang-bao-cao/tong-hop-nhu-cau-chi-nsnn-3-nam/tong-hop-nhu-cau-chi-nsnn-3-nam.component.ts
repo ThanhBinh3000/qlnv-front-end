@@ -103,6 +103,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
 
     async ngOnInit() {
+        this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
         this.maDviTien = this.data?.maDviTien;
@@ -137,19 +138,19 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         }
         this.updateEditCache();
 
-        //lay danh sach danh muc don vi
-        await this.danhMucService.dMDonVi().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        // //lay danh sach danh muc don vi
+        // await this.danhMucService.dMDonVi().toPromise().then(
+        //     (data) => {
+        //         if (data.statusCode == 0) {
+        //             this.donVis = data.data;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     }
+        // );
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -264,6 +265,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             thuyetMinh: this.thuyetMinh,
             trangThai: trangThai,
         };
+        this.spinner.show();
         this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
