@@ -108,6 +108,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.maDviTao = this.userInfo?.dvql;
@@ -150,6 +151,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
       }
     );
     this.onSubmit();
+    this.spinner.hide();
   }
 
   //get user info

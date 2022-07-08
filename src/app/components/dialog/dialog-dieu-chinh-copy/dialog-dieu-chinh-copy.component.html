@@ -9,9 +9,22 @@
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Đợt báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [(ngModel)]="response.dotBcao"
-                [class]="response.dotBcao ? '' : 'input-error-validate' ">
-            </nz-input-number>
+            <ng-container *ngIf="dotBcao && id ; else chonDot">
+              <div *ngFor="let item of dotBcaos">
+                <div *ngIf="item.id == dotBcao">
+                  {{item.id}}
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #chonDot>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đợt báo cáo"
+                [class]="dotBcao ? '' : 'input-error-validate'" [(ngModel)]="response.dotBcao"
+                >
+                 <nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id"
+                  [nzLabel]="item.id">
+                </nz-option>
+              </nz-select>
+            </ng-template>
           </div>
       </ng-container>
       <div nz-col nzSpan="8">
