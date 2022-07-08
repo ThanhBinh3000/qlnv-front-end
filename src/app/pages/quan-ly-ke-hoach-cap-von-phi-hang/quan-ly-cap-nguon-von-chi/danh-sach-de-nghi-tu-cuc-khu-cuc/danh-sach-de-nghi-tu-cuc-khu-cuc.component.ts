@@ -67,6 +67,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 	async ngOnInit() {
 		const userName = this.userService.getUserName();
+		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 		//lay danh sach danh muc
@@ -82,6 +83,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+		this.spinner.hide();
 		this.onSubmit();
 	}
 

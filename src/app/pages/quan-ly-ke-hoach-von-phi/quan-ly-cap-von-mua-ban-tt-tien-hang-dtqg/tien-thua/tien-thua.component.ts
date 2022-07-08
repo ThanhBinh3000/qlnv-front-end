@@ -150,6 +150,7 @@ export class TienThuaComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
 
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
 
@@ -181,7 +182,7 @@ export class TienThuaComponent implements OnInit {
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.ngayLap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.ngayLapTemp = this.datePipe.transform(this.newDate, "yyyy-MM-dd");
-            this.spinner.show();
+            
             this.quanLyVonPhiService.maNopTienVon().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -350,7 +351,6 @@ export class TienThuaComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -404,7 +404,6 @@ export class TienThuaComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

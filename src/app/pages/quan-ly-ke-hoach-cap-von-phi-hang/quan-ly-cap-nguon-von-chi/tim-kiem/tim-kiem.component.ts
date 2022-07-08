@@ -88,7 +88,7 @@ export class TimKiemComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-
+		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
@@ -130,7 +130,7 @@ export class TimKiemComponent implements OnInit {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
 			this.disable = false;
 		}
-
+		this.spinner.hide();
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 		this.onSubmit();
 	}
@@ -284,6 +284,7 @@ export class TimKiemComponent implements OnInit {
 		} else {
 			request = [id];
 		}
+		this.spinner.show();
 		this.quanLyVonPhiService.xoaDeNghi(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
@@ -298,6 +299,7 @@ export class TimKiemComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		)
+		this.spinner.hide();
 	}
 
 	checkDeleteReport(item: any): boolean {

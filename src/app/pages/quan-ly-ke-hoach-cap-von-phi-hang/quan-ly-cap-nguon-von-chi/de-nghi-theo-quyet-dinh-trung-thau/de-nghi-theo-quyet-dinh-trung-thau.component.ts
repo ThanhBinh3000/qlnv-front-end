@@ -138,6 +138,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
@@ -180,7 +181,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 this.close();
             }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.spinner.show();
+            
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -222,21 +223,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 },
             );
         }
-
-        // await this.danhMuc.dMDviTinh().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             this.dviTinhs = res.data?.content;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //     },
-        // );
-
-        
         this.getStatusButton();
         this.spinner.hide();
 
@@ -368,7 +354,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietDeNghi(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -398,7 +383,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

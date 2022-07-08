@@ -188,6 +188,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
@@ -237,7 +238,6 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 })
             })
             this.updateEditCache();
-            this.spinner.show();
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -369,7 +369,6 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietDeNghiThop(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -416,7 +415,6 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

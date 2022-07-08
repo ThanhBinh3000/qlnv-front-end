@@ -95,6 +95,7 @@ export class TongHopComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
+		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
@@ -133,6 +134,7 @@ export class TongHopComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+		this.spinner.hide();
 		this.onSubmit();
 	}
 
@@ -290,6 +292,7 @@ export class TongHopComponent implements OnInit {
 		} else {
 			request = [id];
 		}
+		this.spinner.show();
 		this.quanLyVonPhiService.xoaDeNghiThop(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
@@ -304,6 +307,7 @@ export class TongHopComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		)
+		this.spinner.hide();
 	}
 
 	checkDeleteReport(item: any): boolean {
