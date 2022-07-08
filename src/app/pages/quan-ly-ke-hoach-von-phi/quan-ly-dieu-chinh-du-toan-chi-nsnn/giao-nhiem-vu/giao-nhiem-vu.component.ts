@@ -214,7 +214,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
-    // this.dotBcao = parseInt(dotBcaoDieuChinh, 10)
+    this.dotBcao = parseInt(dotBcaoDieuChinh, 10)
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
@@ -319,7 +319,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.trangThaiBaoCao == Utils.TT_BC_10) {
 			this.status = false;
 		} else {
-			this.status = true;
+			this.status = true; 
 		}
 		let roleNguoiTao = this.userInfo?.roles[0]?.code;
 		if( ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) ||  ROLE_LANH_DAO.includes(roleNguoiTao)){
