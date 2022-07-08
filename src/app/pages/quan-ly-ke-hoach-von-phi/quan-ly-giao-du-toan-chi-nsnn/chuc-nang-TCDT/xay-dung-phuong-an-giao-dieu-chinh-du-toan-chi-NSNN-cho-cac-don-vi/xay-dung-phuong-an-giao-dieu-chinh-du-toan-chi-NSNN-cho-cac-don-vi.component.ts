@@ -602,10 +602,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     if (file) {
       request1.soQd = await this.uploadFile(file);
     }
-    if (!request.soQd) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-      return;
-    }
+    // if (!request.soQd) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+    //   return;
+    // }
     this.spinner.show();
     if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(

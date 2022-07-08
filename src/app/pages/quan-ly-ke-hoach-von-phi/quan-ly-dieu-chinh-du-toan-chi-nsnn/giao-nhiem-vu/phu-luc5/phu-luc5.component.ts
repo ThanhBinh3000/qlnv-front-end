@@ -144,10 +144,10 @@ export class PhuLuc5Component implements OnInit {
   };
   // them file vao danh sach
   handleUpload(): void {
-    this.lstFiles = [];
+    // this.lstFiles = [];
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles = [];
+      // this.lstFiles = [];
       this.lstFiles.push({ id: id, fileName: file?.name });
       this.listFile.push(file);
     });
@@ -683,7 +683,7 @@ export class PhuLuc5Component implements OnInit {
       maLoai: this.data?.maLoai,
       fileData: this.lstFiles,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
