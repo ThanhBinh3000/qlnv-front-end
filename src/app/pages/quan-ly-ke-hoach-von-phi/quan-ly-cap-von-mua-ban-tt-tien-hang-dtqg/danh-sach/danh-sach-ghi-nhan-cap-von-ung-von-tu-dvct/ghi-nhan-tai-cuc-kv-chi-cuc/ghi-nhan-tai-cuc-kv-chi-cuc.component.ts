@@ -66,7 +66,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-
+		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
@@ -102,6 +102,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		);
 
 		await this.getDanhSachCapVon();
+		this.spinner.hide();
 		this.onSubmit();
 	}
 

@@ -127,6 +127,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
@@ -155,7 +156,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             if (!this.maCvUvTren) {
                 this.close();
             }
-            this.spinner.show();
+            
             this.quanLyVonPhiService.maCapVonUng().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -290,7 +291,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietCapVon(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -324,7 +324,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

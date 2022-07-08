@@ -362,14 +362,14 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             xau = chiSo[n];
         }
         if (n == 3) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        }
-        if (n == 4) {
             xau = String.fromCharCode(k + 96);
         }
-        if (n == 5) {
-            xau = "-";
+        if (n == 4) {
+            xau = "";
         }
+        // if (n == 5) {
+        //     xau = "-";
+        // }
         return xau;
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha

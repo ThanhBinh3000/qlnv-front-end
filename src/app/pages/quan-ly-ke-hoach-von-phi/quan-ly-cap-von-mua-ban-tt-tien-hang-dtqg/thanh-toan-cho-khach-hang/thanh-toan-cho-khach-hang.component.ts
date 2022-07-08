@@ -114,6 +114,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
+        this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
 
@@ -143,7 +144,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                 this.close();
             }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.spinner.show();
+            
             this.quanLyVonPhiService.maThanhToan().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -260,7 +261,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        this.spinner.show();
         await this.quanLyVonPhiService.ctietVonMuaBan(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
@@ -291,7 +291,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-        this.spinner.hide();
     }
 
     // chuc nang check role

@@ -77,7 +77,14 @@
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th [hidden]="statusBtc">Mã phương án từ bộ tài chính</th>
+							<th [hidden]="status">
+								<ng-container *ngIf="statusBtc; else btc">
+									Mã phương án từ bộ tài chính
+								</ng-container>
+								<ng-template #btc>
+									Mã phương án giao từ cấp trên
+								</ng-template>
+							</th>
 							<th>Mã phương án</th>
 							<th [hidden]="!status">Mã báo cáo</th>
 							<th>Ngày tạo</th>
@@ -104,7 +111,7 @@
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-							<td [hidden]="statusBtc">
+							<td [hidden]="status">
 								{{ item.maPaBtc}}
 							</td>
 							<td [hidden]="status">

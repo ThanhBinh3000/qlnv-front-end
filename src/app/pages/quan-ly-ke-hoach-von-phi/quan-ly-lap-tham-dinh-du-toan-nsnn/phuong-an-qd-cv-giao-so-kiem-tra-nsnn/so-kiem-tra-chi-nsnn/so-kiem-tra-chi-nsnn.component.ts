@@ -291,10 +291,11 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     async taoMoiPhuongAn() {
         const listCtietDvi: any[] = [];
         const listTtCtiet: any[] = [];
+        let maPaNew: string;
         await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.maPa = res.data;
+                    maPaNew = res.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                     return;
@@ -346,8 +347,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             listTtCtiet: listTtCtiet,
             maDvi: this.maDviNhan,
             maDviTien: this.maDviTien,
-            maPa: this.maPa,
-            maPaBtc: "",
+            maPa: maPaNew,
+            maPaBtc: this.maPa,
             namPa: this.newDate.getFullYear(),
             maBcao: this.maBaoCao,
             trangThai: "1",

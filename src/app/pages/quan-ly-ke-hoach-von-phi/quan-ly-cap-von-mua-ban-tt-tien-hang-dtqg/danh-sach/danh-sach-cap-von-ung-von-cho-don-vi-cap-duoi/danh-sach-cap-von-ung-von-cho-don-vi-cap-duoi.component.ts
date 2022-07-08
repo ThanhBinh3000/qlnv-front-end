@@ -67,7 +67,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
-
+		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
@@ -105,6 +105,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		}
 
 		await this.getDanhSachMaVon();
+		this.spinner.hide();
 		this.onSubmit();
 	}
 
@@ -263,6 +264,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		} else {
 			request = [id];
 		}
+		this.spinner.show();
 		this.quanLyVonPhiService.xoaCapVon(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0){
@@ -277,6 +279,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		)
+		this.spinner.hide();
 	}
 
 	checkDeleteReport(item: any): boolean {
