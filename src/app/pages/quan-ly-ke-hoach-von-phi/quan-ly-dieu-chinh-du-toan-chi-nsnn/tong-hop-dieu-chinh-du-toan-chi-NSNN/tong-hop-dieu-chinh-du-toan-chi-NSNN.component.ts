@@ -170,8 +170,8 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 
 	dong() {
-		// this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
-		this.location.back();
+		this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn'])
+		// this.location.back();
 	}
 
 
