@@ -65,6 +65,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	//thong tin chung bao cao
 	maBaoCao!: string;
 	namHienHanh: number = new Date().getFullYear();
+	namBcao : string;
 	ngayNhap!: string;
 	nguoiNhap!: string;
 	congVan: ItemCongVan = new ItemCongVan();
@@ -76,6 +77,8 @@ export class GiaoNhiemVuComponent implements OnInit {
 	maDviTao!: string;
 	thuyetMinh: string;
 	lyDoTuChoi: string;
+	loaiTongHop!: string;
+	maDviUser!: string;
   dotBcao: number;
 	//danh muc
   dotBcaos: any[] = [
@@ -365,6 +368,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			(data) => {
 				if (data?.statusCode == 0) {
 					this.userInfo = data?.data
+					this.maDviUser = data?.data.dvql;
 					return data?.data;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -648,9 +652,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;
 					this.lstDviTrucThuoc = data.data.lstDchinhDviTrucThuocs;
-          this.lstFiles = data.data.lstFiles;
+          			this.lstFiles = data.data.lstFiles;
 					this.listFile = [];
 					// set thong tin chung bao cao
+					this.namBcao = data.data.namBcao;
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.nguoiNhap = data.data.nguoiTao;
 					this.maBaoCao = data.data.maBcao;
@@ -666,7 +671,8 @@ export class GiaoNhiemVuComponent implements OnInit {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
-          this.dotBcao = data.data.dotBcao
+          			this.dotBcao = data.data.dotBcao;
+					this.loai = "0";
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -828,6 +834,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
 				status: this.status,
+				namBcao: this.namBcao,
 			}
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
@@ -848,6 +855,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
 				status: this.status,
+				namBcao: this.namBcao,
 			}
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id == this.lstDieuChinhs[index].maLoai));
@@ -859,15 +867,24 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	close() {
-		if (this.loai == "0") {
-			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN']);
-		} else {
-			if (this.loai == "1"){
-				this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
-			} else {
-				this.location.back();
-			}
+		debugger
+		if (this.loai == "0" && this.maDviTao != this.maDviUser) {
+			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
+			return;
 		}
+		if(this.loai == "0" && this.maDviTao == this.maDviUser){
+			this.location.back();
+			return;
+		}
+		if(this.loai == "1"){
+			this.location.back();
+			return;
+		}else{
+			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN']);
+		}
+			//  else {
+			// 	this.location.back();
+			// }
 	}
 
   showDialogCopy(){
