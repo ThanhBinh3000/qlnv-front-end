@@ -698,6 +698,10 @@ export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
         id: '527',
         tenDm: 'Báo cáo giải ngân cả năm'
     },
+    {
+        id: '528',
+        tenDm: 'Báo cáo chỉnh lý năm'
+    },
 ]
 
 // loai bao cao ket qua thuc hien hang du tru quoc gia
