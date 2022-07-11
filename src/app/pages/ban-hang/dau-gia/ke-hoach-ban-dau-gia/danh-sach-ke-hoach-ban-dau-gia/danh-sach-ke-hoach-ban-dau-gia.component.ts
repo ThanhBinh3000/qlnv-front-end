@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
@@ -9,16 +8,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
 import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({
-  selector: 'app-phieu-nhap-kho-tam-gui',
-  templateUrl: './phieu-nhap-kho-tam-gui.component.html',
-  styleUrls: ['./phieu-nhap-kho-tam-gui.component.scss']
+  selector: 'app-danh-sach-ke-hoach-ban-dau-gia',
+  templateUrl: './danh-sach-ke-hoach-ban-dau-gia.component.html',
+  styleUrls: ['./danh-sach-ke-hoach-ban-dau-gia.component.scss']
 })
-export class PhieuNhapKhoTamGuiComponent implements OnInit {
+export class DanhSachKeHoachBanDauGiaComponent implements OnInit {
   @Input() typeVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -70,6 +68,8 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log("uqwggdajhgd");
+
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

@@ -20,11 +20,11 @@ import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 
 @Component({
-  selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
-  templateUrl: './thong-tin-phieu-nhap-kho-tam-gui.component.html',
-  styleUrls: ['./thong-tin-phieu-nhap-kho-tam-gui.component.scss']
+  selector: 'app-thong-tin-ke-hoach-ban-dau-gia',
+  templateUrl: './thong-tin-ke-hoach-ban-dau-gia.component.html',
+  styleUrls: ['./thong-tin-ke-hoach-ban-dau-gia.component.scss']
 })
-export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
+export class ThongTinKeHoachBanDauGiaComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
@@ -126,10 +126,10 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
       this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
       this.detail.chiTiets = [];
       await Promise.all([
-        this.loadDiemKho(),
-        this.loadSoQuyetDinh(),
+        // this.loadDiemKho(),
+        // this.loadSoQuyetDinh(),
       ]);
-      await this.loadChiTiet(this.id);
+      // await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
