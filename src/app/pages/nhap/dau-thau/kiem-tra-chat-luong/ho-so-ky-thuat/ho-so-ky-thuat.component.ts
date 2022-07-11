@@ -58,11 +58,12 @@ export class HoSoKyThuatComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
     soBienBan: '',
+    soQuyetDinhNhap: '',
+    ngayKiemTra: '',
+    tenVatTuCha: '',
+    tenVatTu: '',
+    ketLuan: '',
   };
 
   constructor(
@@ -372,11 +373,12 @@ export class HoSoKyThuatComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
       soBienBan: '',
+      soQuyetDinhNhap: '',
+      ngayKiemTra: '',
+      tenVatTuCha: '',
+      tenVatTu: '',
+      ketLuan: '',
     }
   }
 

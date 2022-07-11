@@ -13,6 +13,7 @@ export class FileListComponent implements OnInit {
   @Input() data: FileDinhKem[] = [];
   @Input() trangThai: string;
   @Input() isViewDetail: boolean;
+  @Input() disabled: boolean = false;
 
   fileAdd: FileDinhKem = new FileDinhKem();
 
@@ -88,7 +89,9 @@ export class FileListComponent implements OnInit {
   }
 
   deleteFile(item: FileDinhKem) {
-    this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
+    if (!this.disabled) {
+      this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
+    }
   }
 
   updateFile(item: FileDinhKem) {

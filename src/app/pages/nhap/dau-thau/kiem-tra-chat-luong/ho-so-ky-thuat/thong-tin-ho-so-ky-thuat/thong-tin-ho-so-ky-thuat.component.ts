@@ -264,7 +264,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
         this.detail.hopDongId = this.detailHopDong.id;
-        this.detail.soHd = this.detailHopDong.soHd;
+        this.detail.soHopDong = this.detailHopDong.soHd;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
         this.detail.loaiVthh = this.detailHopDong.loaiVthh;
       }
@@ -282,6 +282,19 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           this.detail = res.data;
           if (this.detail.children) {
             this.detail.detail = this.detail.children;
+          }
+          if (this.detail.bienBanGiaoMauId) {
+            this.detail.bienBanGiaoMauId = +this.detail.bienBanGiaoMauId;
+          }
+          if (this.detail.chiTiets && this.detail.chiTiets.length > 0) {
+            this.listDaiDien = this.detail.chiTiets;
+            this.loadDaiDien();
+          }
+          if (this.detail.fdkCanCus) {
+            this.listCanCu = this.detail.fdkCanCus;
+          }
+          if (this.detail.fileDinhKems) {
+            this.listFileDinhKem = this.detail.fileDinhKems;
           }
         }
       }
