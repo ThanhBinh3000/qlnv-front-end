@@ -37,7 +37,7 @@
             <label class="search__label">Tháng báo cáo</label>
             <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
               [(ngModel)]="searchFilter.thangBcao"
-              [class]="((searchFilter.thangBcao && searchFilter.maLoaiBcao == '526') || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
+              [class]="((searchFilter.thangBcao && (searchFilter.maLoaiBcao == '526' || searchFilter.maLoaiBcao == '528')) || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
             </nz-input-number>
           </div>
           <div nz-col nzSpan="6">
