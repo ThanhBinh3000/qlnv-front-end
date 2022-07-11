@@ -23,6 +23,8 @@ export class BanHangComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit(): void {
+        console.log("bán hàng");
+
         if (this.router.url) {
             this.routerUrl = this.router.url;
         }
@@ -80,6 +82,8 @@ export class BanHangComponent implements OnInit, AfterViewInit {
     }
 
     redirect(url: string) {
+        console.log("1111: ", this.defaultUrl + url);
+
         this.router.navigate([this.defaultUrl + url]);
     }
 }

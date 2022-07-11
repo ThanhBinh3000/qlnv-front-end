@@ -199,7 +199,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Theo hợp đồng
+                  Ngày tháng nhập
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
@@ -226,11 +226,12 @@
             <thead>
               <tr>
                 <th width="60px" class="text-center">STT</th>
-                <th class="text-center">Số lượng</th>
-                <th class="text-center">Số serial/mã sản phẩm</th>
+                <th class="text-center">SỐ LƯỢNG</th>
+                <th class="text-center">SỐ SERIAL/MÃ SẢN PHẨM</th>
                 <th width="140px" class="text-center"
                   *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
-                  HÀNH ĐỘNG</th>
+                  HÀNH ĐỘNG
+                </th>
               </tr>
             </thead>
             <tbody>
