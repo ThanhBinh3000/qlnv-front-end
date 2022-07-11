@@ -41,3 +41,12 @@
     margin: 0;
   }
 }
+
+.filter-in-table {
+  margin-bottom: 8px;
+  height: 28px;
+
+  nz-select-top-control {
+    height: 28px !important;
+  }
+}

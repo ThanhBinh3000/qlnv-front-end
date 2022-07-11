@@ -76,7 +76,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      await this.search();
+      // await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

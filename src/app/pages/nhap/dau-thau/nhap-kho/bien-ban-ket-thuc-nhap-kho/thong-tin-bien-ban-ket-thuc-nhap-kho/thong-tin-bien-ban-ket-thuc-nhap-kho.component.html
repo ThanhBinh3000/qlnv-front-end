@@ -42,11 +42,11 @@
       <div class="main-content">
         <div class="title-chi-tieu">
           <!-- <span [ngClass]="thongTinTrangThai(bienBanLayMau.trangThai)">{{bienBanLayMau.tenTrangThai ? bienBanLayMau.tenTrangThai : 'SOẠN THẢO'}}</span> -->
-          <span class="title-form">Biên bản nhập đầy kho</span>
+          <span class="title-form">Biên bản kết thúc nhập kho</span>
         </div>
         <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định nhập
@@ -54,7 +54,15 @@
                 <input nz-input [(ngModel)]="bienBanNhapDayKho.soQd" />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="5">
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số biên bản chuẩn bị kho
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanNhapDayKho.soQd" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
@@ -62,7 +70,7 @@
                 <input nz-input [(ngModel)]="bienBanNhapDayKho.tenDonVi" disabled />
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
@@ -82,7 +90,7 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngày nhập đầy kho
+                  Ngày kết thúc kho
                 </nz-form-label>
                 <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày nhập đầy kho"
                   [(ngModel)]="bienBanNhapDayKho.ngayNhapDayKho" [disabled]="!isAction()">
@@ -225,7 +233,7 @@
                     <th rowSpan="2" class="text-center">STT <br> (A)</th>
                     <th colspan="3" class="text-center">KẾT QUẢ NHẬP KHO</th>
                     <th rowspan="2" class="text-center">GHI CHÚ <br> (A)</th>
-                    <th rowspan="2" class="text-center" *ngif="!viewChiTiet">HÀNH ĐỘNG</th>
+                    <!-- <th rowspan="2" class="text-center" *ngif="!viewChiTiet">HÀNH ĐỘNG</th> -->
                   </tr>
                   <tr>
                     <th class="text-center"> SỐ LƯỢNG <br>
@@ -255,7 +263,7 @@
                     <td>
                       <input nz-input [(ngModel)]="bienBanNhapDayKhoDetailCreate.ghiChu" />
                     </td>
-                    <td class="text-center" *ngIf="!viewChiTiet">
+                    <!-- <td class="text-center" *ngIf="!viewChiTiet">
                       <a class="save" (click)="themmoi()"
                         [ngClass]="{'isDisabled': bienBanNhapDayKhoDetailCreate.thanhTien === 0 || !bienBanNhapDayKhoDetailCreate.thanhTien}">
                         <i class="icon htvbdh_dau-cong"></i>
@@ -264,7 +272,7 @@
                         [ngClass]="{'isDisabled': bienBanNhapDayKhoDetailCreate.thanhTien === 0 || !bienBanNhapDayKhoDetailCreate.thanhTien}">
                         <i class="fa fa-trash-o do"></i>
                       </a>
-                    </td>
+                    </td> -->
                   </tr>
                   <tr *ngFor="let dataBBNhapDayKho of bbNhapDayKhoDetail.data, let i = index">
                     <ng-container *ngIf="!dsBienBanNhapDayKhoDetailClone[i].isEdit; else editTemplate">
@@ -273,14 +281,14 @@
                       <td>{{dataBBNhapDayKho.donGia | number: '1.0-1'}}</td>
                       <td>{{dataBBNhapDayKho.thanhTien | number: '1.0-1'}}</td>
                       <td>{{dataBBNhapDayKho.ghiChu}}</td>
-                      <td class="text-center" *ngIf="!viewChiTiet">
+                      <!-- <td class="text-center" *ngIf="!viewChiTiet">
                         <a (click)="startEdit(i)">
                           <i class="fa fa-pencil"></i>
                         </a>
                         <a (click)="deleteData(dataBBNhapDayKho.stt)">
                           <i class="fa fa-trash-o do"></i>
                         </a>
-                      </td>
+                      </td> -->
                     </ng-container>
                     <ng-template #editTemplate>
                       <td>{{dataBBNhapDayKho.stt }}</td>
@@ -298,14 +306,14 @@
                       <td>
                         <input nz-input [(ngModel)]="dsBienBanNhapDayKhoDetailClone[i].ghiChu" />
                       </td>
-                      <td class="text-center" *ngIf="!viewChiTiet">
+                      <!-- <td class="text-center" *ngIf="!viewChiTiet">
                         <a (click)="saveEditBBDayKho(i)">
                           <i class="fa fa-save"></i>
                         </a>
                         <a (click)="cancelEditBBDayKho(i)">
                           <i class="fa fa-times do"></i>
                         </a>
-                      </td>
+                      </td> -->
                     </ng-template>
                   </tr>
                 </tbody>
@@ -313,14 +321,9 @@
             </div>
           </div>
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="24" class="text-summary">Tài liệu đính kèm</div>
+            <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
             <div nz-col nzSpan="24">
-              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-                [trangThai]="isView ? 'view-detail' : bienBanNhapDayKho.trangThai"
-                (removeDataEvent)="deleteTaiLieuDinhKemTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
-                typeFile="tai-lieu-dinh-kem">
-              </multiple-tag>
+              <file-list></file-list>
             </div>
           </div>
         </nz-card>
