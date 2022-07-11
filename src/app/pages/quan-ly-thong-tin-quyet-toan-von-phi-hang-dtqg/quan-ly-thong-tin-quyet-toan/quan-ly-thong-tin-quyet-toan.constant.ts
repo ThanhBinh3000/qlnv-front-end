@@ -60,10 +60,7 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     description: 'Danh sách điều chỉnh số liệu sau quyết toán',
     url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG`,
     unRole: [
-      {
-				"unit": TONG_CUC,
-				"role": 'TC_KH_VP_LD',
-			},
+      
     ],
 		isDisabled: false,
   },

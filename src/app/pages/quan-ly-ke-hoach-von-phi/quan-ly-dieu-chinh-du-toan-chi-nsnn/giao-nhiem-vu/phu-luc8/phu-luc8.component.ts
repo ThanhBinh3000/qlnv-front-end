@@ -67,7 +67,7 @@ export class PhuLuc8Component implements OnInit {
     checked: false,
   };
 
-  namBcao: number = 2022;
+  namBcao: number;
   thuyetMinh: string;
   maDviTien: any;
   listIdDelete: string = "";
@@ -103,6 +103,7 @@ export class PhuLuc8Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
+    this.namBcao = this.data?.namBcao;
     // this.lstDchinh = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;

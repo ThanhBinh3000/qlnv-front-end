@@ -682,6 +682,7 @@ export class PhuLuc5Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
       fileData: this.lstFiles,
+      listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
     this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
       async data => {
