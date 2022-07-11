@@ -231,9 +231,11 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   clearFilter() {
-    this.startValue = null;
-    this.endValue = null;
-    this.selectHang = { ten: "" };
+    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.soQd = null;
+    this.searchFilter.trichYeu = null;
+    this.searchFilter.ngayQd = null;
+
   }
 
   async selectTabData(tab: string) {
