@@ -69,11 +69,11 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số biên bản bàn giao hàng
+                  Số biên bản bàn giao mẫu
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.bienBanGiaoMauId" (ngModelChange)="changeBanGiaoMau()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listBanGiaoMau" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listBanGiaoMau" [nzValue]="item.id" [nzLabel]="item.soBienBan">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -116,7 +116,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số hợp đồng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.soHd" disabled />
+                <input nz-input [(ngModel)]="detail.soHopDong" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -171,7 +171,7 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện cục dữ trữ nhà nước
                 </nz-form-label>
-                <div class="line d-flex" *ngFor="let item of listDaiDienCuc;let i = index">
+                <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienCuc;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                   <div class="btn-plus"
@@ -192,7 +192,7 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện chi cục dữ trữ nhà nước
                 </nz-form-label>
-                <div class="line d-flex" *ngFor="let item of listDaiDienChiCuc;let i = index">
+                <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienChiCuc;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                   <div class="btn-plus"
@@ -213,7 +213,7 @@
                 <nz-form-label [nzNoColon]="true" class="d-flex">
                   Đại diện đơn vị cung cấp
                 </nz-form-label>
-                <div class="line d-flex" *ngFor="let item of listDaiDienDonVi;let i = index">
+                <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienDonVi;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                   <div class="btn-plus"
@@ -274,8 +274,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Thời gian nhập
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thoiGianNhap"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <nz-date-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="detail.thoiGianNhap"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                </nz-date-picker>
               </nz-form-item>
             </div>
           </div>
@@ -286,7 +287,9 @@
                   Căn cứ
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="listCanCu"></file-list>
+                  <file-list [data]="listCanCu"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  </file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -296,7 +299,9 @@
                   File đính kèm khác
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="listFileDinhKem"></file-list>
+                  <file-list [data]="listFileDinhKem"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  </file-list>
                 </div>
               </nz-form-item>
             </div>

@@ -9,7 +9,7 @@
       <app-lap-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-lap-bien-ban-nghiem-thu-bao-quan>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Hồ sơ kỹ thuật'" *ngIf="userService.isCuc() && typeVthh == '02'">
+  <nz-tab [nzTitle]="'Hồ sơ kỹ thuật'" *ngIf="typeVthh == '02'">
     <ng-template nz-tab>
       <app-ho-so-ky-thuat [typeVthh]="typeVthh"></app-ho-so-ky-thuat>
     </ng-template>

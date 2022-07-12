@@ -2,7 +2,27 @@
     <div class="contentDetail">
         <div class="main-content tab-menu-new">
             <nz-tabset nzType="card" class="tab-level-0">
-                <nz-tab [nzTitle]="'QĐ giao nhiệm vụ nhập hàng'">
+                <nz-tab [nzTitle]="'Kế hoạch lựa chọn nhà thầu'">
+                    <ng-template nz-tab>
+                        <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Tổ chức triển khai KH lựa chọn nhà thầu'">
+                    <ng-template nz-tab>
+                        <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Điều chỉnh KH lựa chọn nhà thầu'">
+                    <ng-template nz-tab>
+                        <app-dieu-chinh></app-dieu-chinh>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Hợp đồng'">
+                    <ng-template nz-tab>
+                        <app-hop-dong></app-hop-dong>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Quyết định giao nhiệm vụ nhập hàng'">
                     <ng-template nz-tab>
                         <app-giao-nhap-hang></app-giao-nhap-hang>
                     </ng-template>

@@ -2,7 +2,7 @@
   <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_thoc">
     <ng-template #title_thoc>
       {{tab.giaTri}}
-      <!-- (<span class="number-title-tab">{{tab.count}}</span>) -->
+      (<span class="number-title-tab">{{tab.count}}</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-theo-phuong-thuc-dau-thau typeVthh="{{tab.ma}}"></app-theo-phuong-thuc-dau-thau>
