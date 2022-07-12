@@ -113,7 +113,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.denNgay = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
@@ -125,9 +125,9 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     // this.trangThai = '1'
 
     //  check va lay gia tri role trong list role
-    let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
-    let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
-    let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
     this.status = true;
     
     if (this.userRole == roleUserCB[0]) {
@@ -194,7 +194,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       }
     }
 
-    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
     searchFilterTemp.tuNgay = this.datePipe.transform(searchFilterTemp.tuNgay, 'dd/MM/yyyy') || searchFilterTemp.tuNgay;
     searchFilterTemp.denNgay = this.datePipe.transform(searchFilterTemp.denNgay, 'dd/MM/yyyy') || searchFilterTemp.denNgay;
@@ -353,7 +353,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
   checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;

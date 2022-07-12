@@ -54,7 +54,7 @@ export class PhuLuc3Component implements OnInit {
   id: any;
   namHienHanh: number;
   maBieuMau: string;
-  trangThaiPhuLuc: string = '1';
+  trangThaiPhuLuc = '1';
   trangThaiPhuLucGetDeTail!: string;
   initItem: ItemData = {
     id: null,
@@ -78,9 +78,9 @@ export class PhuLuc3Component implements OnInit {
   namBcao: number;
   thuyetMinh: string;
   maDviTien: any;
-  listIdDelete: string = "";
+  listIdDelete = "";
   //trang thai cac nut
-  status: boolean = false;
+  status = false;
   capDv: any;
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
@@ -168,7 +168,7 @@ export class PhuLuc3Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          let obj = {
+          const obj = {
             trangThai: mcn,
             lyDoTuChoi: lyDoTuChoi,
           }
@@ -210,7 +210,7 @@ export class PhuLuc3Component implements OnInit {
 
   // them dong moi
   addLine(id: number): void {
-    let item: ItemData = {
+    const item: ItemData = {
       id: uuid.v4(),
       stt: 0,
       maDvi: '',
@@ -380,16 +380,16 @@ export class PhuLuc3Component implements OnInit {
       return;
     }
     //tinh lai don vi tien va kiem tra gioi han cua chung
-    let lstCtietBcaoTemp: any = [];
+    const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstDchinh.forEach(item => {
-      let khoachQdGiaoNvu = mulMoney(item.khoachQdGiaoNvu, this.maDviTien)
-      let tdiemBcaoDtoan = mulMoney(item.tdiemBcaoDtoan, this.maDviTien)
-      let dkienThienDtoan = mulMoney(item.dkienThienDtoan, this.maDviTien)
-      let dtoanThieuNtruoc = mulMoney(item.dtoanThieuNtruoc, this.maDviTien)
-      let tongNcauDtoanN = mulMoney(item.tongNcauDtoanN, this.maDviTien)
-      let dtoanLke = mulMoney(item.dtoanLke, this.maDviTien)
-      let dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien)
+      const khoachQdGiaoNvu = mulMoney(item.khoachQdGiaoNvu, this.maDviTien)
+      const tdiemBcaoDtoan = mulMoney(item.tdiemBcaoDtoan, this.maDviTien)
+      const dkienThienDtoan = mulMoney(item.dkienThienDtoan, this.maDviTien)
+      const dtoanThieuNtruoc = mulMoney(item.dtoanThieuNtruoc, this.maDviTien)
+      const tongNcauDtoanN = mulMoney(item.tongNcauDtoanN, this.maDviTien)
+      const dtoanLke = mulMoney(item.dtoanLke, this.maDviTien)
+      const dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien)
       if (khoachQdGiaoNvu > MONEY_LIMIT || tdiemBcaoDtoan > MONEY_LIMIT ||
         dkienThienDtoan > MONEY_LIMIT || dtoanThieuNtruoc > MONEY_LIMIT || tongNcauDtoanN > MONEY_LIMIT || dtoanLke > MONEY_LIMIT || dtoanDchinh > MONEY_LIMIT
       ) {
@@ -418,7 +418,7 @@ export class PhuLuc3Component implements OnInit {
         item.id = null;
       }
     })
-    let request = {
+    const request = {
       id: this.id,
       lstCtietDchinh: lstCtietBcaoTemp,
       maBieuMau: this.maBieuMau,
@@ -433,7 +433,7 @@ export class PhuLuc3Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          let obj = {
+          const obj = {
             trangThai: '-1',
             lyDoTuChoi: null,
           };
@@ -450,7 +450,7 @@ export class PhuLuc3Component implements OnInit {
   }
   // action print
   doPrint() {
-    let WindowPrt = window.open(
+    const WindowPrt = window.open(
       '',
       '',
       'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',

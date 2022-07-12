@@ -61,9 +61,9 @@ export class PhuLuc6Component implements OnInit {
   namBcao: number;
   maBieuMau: string;
   thuyetMinh: string;
-  maDviTien: string = '1';
-  listIdDelete: string = "";
-  trangThaiPhuLuc: string = '1';
+  maDviTien = '1';
+  listIdDelete = "";
+  trangThaiPhuLuc = '1';
   initItem: ItemData = {
     id: null,
     stt: "0",
@@ -107,7 +107,7 @@ export class PhuLuc6Component implements OnInit {
     checked: false,
   };
   //trang thai cac nut
-  status: boolean = false;
+  status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
 
@@ -198,15 +198,15 @@ export class PhuLuc6Component implements OnInit {
   }
 
   changeNam(){
-    let a = LINH_VUC.find(el => el.id == 1)
+    const a = LINH_VUC.find(el => el.id == 1)
     a.tenDm = "Tổng cộng năm " + this.namBcao
-    let b = LINH_VUC.find(el => el.id == 2)
+    const b = LINH_VUC.find(el => el.id == 2)
     b.tenDm = "Thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
-    let b1 = LINH_VUC.find(el => el.id == 21)
+    const b1 = LINH_VUC.find(el => el.id == 21)
     b1.tenDm = "VTCT thiếu năm " + (this.namBcao-1) + " chuyển sang " + this.namBcao
-    let b2 = LINH_VUC.find(el => el.id == 22)
+    const b2 = LINH_VUC.find(el => el.id == 22)
     b2.tenDm = "Nhập thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
-    let b3 = LINH_VUC.find(el => el.id == 23)
+    const b3 = LINH_VUC.find(el => el.id == 23)
     b3.tenDm = "Xuất thiếu " + (this.namBcao-1) + " chuyển sang " + this.namBcao
   }
 
@@ -237,21 +237,21 @@ export class PhuLuc6Component implements OnInit {
       return;
     }
     //tinh lai don vi tien va kiem tra gioi han cua chung
-    let lstCtietBcaoTemp: any = [];
+    const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      let kphiDmuc = mulMoney(item.kphiDmuc, this.maDviTien);
-      let kphiTtien = mulMoney(item.kphiTtien, this.maDviTien);
-      let cphiTcong = mulMoney(item.cphiTcong, this.maDviTien);
-      let cphiNtruoc = mulMoney(item.cphiNtruoc, this.maDviTien);
-      let cphiNnay = mulMoney(item.cphiNnay, this.maDviTien);
-      let chenhLech = mulMoney(item.chenhLech, this.maDviTien);
-      let kphiQtoan = mulMoney(item.kphiQtoan, this.maDviTien);
-      let kphiChuaQtoanCong = mulMoney(item.kphiChuaQtoanCong, this.maDviTien);
-      let kphiChuaQtoanKpTchi = mulMoney(item.kphiChuaQtoanKpTchi, this.maDviTien);
-      let kphiChuaQtoanKpTkiem = mulMoney(item.kphiChuaQtoanKpTkiem, this.maDviTien);
-      let soChuaQtoan = mulMoney(item.soChuaQtoan, this.maDviTien);
-      let dtoan2021ThanhQtoan2020 = mulMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien);
+      const kphiDmuc = mulMoney(item.kphiDmuc, this.maDviTien);
+      const kphiTtien = mulMoney(item.kphiTtien, this.maDviTien);
+      const cphiTcong = mulMoney(item.cphiTcong, this.maDviTien);
+      const cphiNtruoc = mulMoney(item.cphiNtruoc, this.maDviTien);
+      const cphiNnay = mulMoney(item.cphiNnay, this.maDviTien);
+      const chenhLech = mulMoney(item.chenhLech, this.maDviTien);
+      const kphiQtoan = mulMoney(item.kphiQtoan, this.maDviTien);
+      const kphiChuaQtoanCong = mulMoney(item.kphiChuaQtoanCong, this.maDviTien);
+      const kphiChuaQtoanKpTchi = mulMoney(item.kphiChuaQtoanKpTchi, this.maDviTien);
+      const kphiChuaQtoanKpTkiem = mulMoney(item.kphiChuaQtoanKpTkiem, this.maDviTien);
+      const soChuaQtoan = mulMoney(item.soChuaQtoan, this.maDviTien);
+      const dtoan2021ThanhQtoan2020 = mulMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien);
       if (
         kphiDmuc > MONEY_LIMIT ||
         kphiTtien > MONEY_LIMIT ||
@@ -296,7 +296,7 @@ export class PhuLuc6Component implements OnInit {
         item.id = null;
       }
     })
-    let request = {
+    const request = {
       id: this.id,
       lstCtietDchinh: lstCtietBcaoTemp,
       maBieuMau: this.maBieuMau,
@@ -311,7 +311,7 @@ export class PhuLuc6Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          let obj = {
+          const obj = {
             trangThai: '-1',
             lyDoTuChoi: null,
           };
@@ -341,7 +341,7 @@ export class PhuLuc6Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          let obj = {
+          const obj = {
             trangThai: mcn,
             lyDoTuChoi: lyDoTuChoi,
           }
@@ -384,21 +384,21 @@ export class PhuLuc6Component implements OnInit {
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
   getChiMuc(str: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
-    var xau: string = "";
-    let chiSo: any = str.split('.');
-    var n: number = chiSo.length - 1;
-    var k: number = parseInt(chiSo[n], 10);
+    let xau = "";
+    const chiSo: any = str.split('.');
+    const n: number = chiSo.length - 1;
+    let k: number = parseInt(chiSo[n], 10);
     if (n == 0) {
-      for (var i = 0; i < this.soLaMa.length; i++) {
+      for (let i = 0; i < this.soLaMa.length; i++) {
         while (k >= this.soLaMa[i].gTri) {
           xau += this.soLaMa[i].kyTu;
           k -= this.soLaMa[i].gTri;
         }
       }
-    };
+    }
     if (n == 1) {
       xau = chiSo[n];
-    };
+    }
     // if (n == 2) {
     //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     // };
@@ -420,9 +420,9 @@ export class PhuLuc6Component implements OnInit {
   }
   //tìm vị trí cần để thêm mới
   findVt(str: string): number {
-    var start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-    var index: number = start;
-    for (var i = start + 1; i < this.lstCtietBcao.length; i++) {
+    const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
+    let index: number = start;
+    for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
       if (this.lstCtietBcao[i].stt.startsWith(str)) {
         index = i;
       }
@@ -433,8 +433,8 @@ export class PhuLuc6Component implements OnInit {
   replaceIndex(lstIndex: number[], heSo: number) {
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
-      var str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-      var nho = this.lstCtietBcao[item].stt;
+      const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+      const nho = this.lstCtietBcao[item].stt;
       this.lstCtietBcao.forEach(item => {
         item.stt = item.stt.replace(nho, str);
       })
@@ -442,13 +442,13 @@ export class PhuLuc6Component implements OnInit {
   }
   //thêm ngang cấp
   addSame(id: any, initItem: ItemData) {
-    var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    var tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
-    var ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
+    const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+    const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+    const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
+    const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
     // tim cac vi tri can thay doi lai stt
-    let lstIndex: number[] = [];
-    for (var i = this.lstCtietBcao.length - 1; i > ind; i--) {
+    const lstIndex: number[] = [];
+    for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
       if (this.getHead(this.lstCtietBcao[i].stt) == head) {
         lstIndex.push(i);
       }
@@ -456,7 +456,7 @@ export class PhuLuc6Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     // them moi phan tu
     if (initItem.id) {
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
       }
@@ -466,7 +466,7 @@ export class PhuLuc6Component implements OnInit {
         data: { ...item }
       };
     } else {
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
@@ -490,14 +490,14 @@ export class PhuLuc6Component implements OnInit {
   }
   //thêm cấp thấp hơn
   addLow(id: any, initItem: ItemData) {
-    var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-    var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    var stt: string;
+    const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+    let index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+    let stt: string;
     if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
       stt = data.stt + '.1';
     } else {
       index = this.findVt(data.stt);
-      for (var i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+      for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
         if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
           stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
           break;
@@ -508,7 +508,7 @@ export class PhuLuc6Component implements OnInit {
 
     // them moi phan tu
     if (initItem.id) {
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         stt: stt,
       }
@@ -522,7 +522,7 @@ export class PhuLuc6Component implements OnInit {
         this.sum(stt);
         this.updateEditCache();
       }
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: stt,
@@ -538,15 +538,15 @@ export class PhuLuc6Component implements OnInit {
   }
   //xóa dòng
   deleteLine(id: any) {
-    var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    var nho: string = this.lstCtietBcao[index].stt;
-    var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    var stt: string = this.lstCtietBcao[index].stt;
+    const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+    const nho: string = this.lstCtietBcao[index].stt;
+    const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+    const stt: string = this.lstCtietBcao[index].stt;
     //xóa phần tử và con của nó
     this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
     //update lại số thức tự cho các phần tử cần thiết
-    let lstIndex: number[] = [];
-    for (var i = this.lstCtietBcao.length - 1; i >= index; i--) {
+    const lstIndex: number[] = [];
+    for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
       if (this.getHead(this.lstCtietBcao[i].stt) == head) {
         lstIndex.push(i);
       }
@@ -620,7 +620,7 @@ export class PhuLuc6Component implements OnInit {
 
 
   updateChecked(id: any) {
-    var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+    const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
     //đặt các phần tử con có cùng trạng thái với nó
     this.lstCtietBcao.forEach(item => {
       if (item.stt.startsWith(data.stt)) {
@@ -628,11 +628,11 @@ export class PhuLuc6Component implements OnInit {
       }
     })
     //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-    var index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
+    let index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
     if (index == -1) {
       this.allChecked = this.checkAllChild('0');
     } else {
-      var nho: boolean = this.lstCtietBcao[index].checked;
+      let nho: boolean = this.lstCtietBcao[index].checked;
       while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
         this.lstCtietBcao[index].checked = !nho;
         index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
@@ -646,7 +646,7 @@ export class PhuLuc6Component implements OnInit {
   }
   //kiểm tra các phần tử con có cùng được đánh dấu hay ko
   checkAllChild(str: string): boolean {
-    var nho: boolean = true;
+    let nho = true;
     this.lstCtietBcao.forEach(item => {
       if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
         nho = item.checked;
@@ -663,7 +663,7 @@ export class PhuLuc6Component implements OnInit {
   }
 
   deleteAllChecked() {
-    var lstId: any[] = [];
+    const lstId: any[] = [];
     this.lstCtietBcao.forEach(item => {
       if (item.checked) {
         lstId.push(item.id);
@@ -678,7 +678,7 @@ export class PhuLuc6Component implements OnInit {
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
     if (initItem.id) {
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         stt: "0.1",
       }
@@ -688,7 +688,7 @@ export class PhuLuc6Component implements OnInit {
         data: { ...item }
       };
     } else {
-      let item: ItemData = {
+      const item: ItemData = {
         ...initItem,
         level: 0,
         id: uuid.v4() + 'FE',
@@ -720,9 +720,9 @@ export class PhuLuc6Component implements OnInit {
       }
       return 0;
     });
-    var lstTemp: any[] = [];
+    const lstTemp: any[] = [];
     this.lstCtietBcao.forEach(item => {
-      var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
       if (index == -1) {
         lstTemp.splice(0, 0, item);
       } else {
@@ -745,17 +745,17 @@ export class PhuLuc6Component implements OnInit {
 
   sortWithoutIndex() {
     this.setDetail();
-    var level = 0;
-    var lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
+    let level = 0;
+    let lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
     this.lstCtietBcao = [];
-    var data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
+    const data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
     this.addFirst(data);
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
-    var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
+    let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
-        let idCha = this.getIdCha( Number(item.loaiMatHang));
-        var index: number = this.lstCtietBcao.findIndex(e => Number(e.loaiMatHang) === idCha);
+        const idCha = this.getIdCha( Number(item.loaiMatHang));
+        let index: number = this.lstCtietBcao.findIndex(e => Number(e.loaiMatHang) === idCha);
         if (index != -1) {
           this.addLow(this.lstCtietBcao[index].id, item);
         } else {
@@ -769,8 +769,8 @@ export class PhuLuc6Component implements OnInit {
   }
 
   addLine(id: any) {
-    var loaiMatHang: any = this.lstCtietBcao.find(e => e.id == id)?.loaiMatHang;
-    let obj = {
+    const loaiMatHang: any = this.lstCtietBcao.find(e => e.id == id)?.loaiMatHang;
+    const obj = {
       maKhoanMuc: loaiMatHang,
       lstKhoanMuc: this.lstMatHang,
     }
@@ -788,9 +788,9 @@ export class PhuLuc6Component implements OnInit {
     });
     modalIn.afterClose.subscribe((res) => {
       if (res) {
-        var index: number = this.lstCtietBcao.findIndex(e => e.loaiMatHang == res.maKhoanMuc);
+        const index: number = this.lstCtietBcao.findIndex(e => e.loaiMatHang == res.maKhoanMuc);
         if (index == -1) {
-          let data: any = {
+          const data: any = {
             ...this.initItem,
             loaiMatHang: res.maKhoanMuc,
             level: this.lstMatHang.find(e => e.id == loaiMatHang)?.level,
@@ -804,7 +804,7 @@ export class PhuLuc6Component implements OnInit {
         id = this.lstCtietBcao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
           if (this.lstCtietBcao.findIndex(e => e.loaiMatHang == item.id) == -1){
-          var data: ItemData = {
+            const data: ItemData = {
             ...this.initItem,
             loaiMatHang: item.id,
             level: item.level,
@@ -819,7 +819,7 @@ export class PhuLuc6Component implements OnInit {
   }
 
   getLowStatus(str: string) {
-    var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+    const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
     if (index == -1) {
       return false;
     }
@@ -829,8 +829,8 @@ export class PhuLuc6Component implements OnInit {
   sum(stt: string) {
     stt = this.getHead(stt);
     while (stt != '0') {
-      var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-      let data = this.lstCtietBcao[index];
+      const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+      const data = this.lstCtietBcao[index];
       this.lstCtietBcao[index] = {
         ...this.initItem,
         id: data.id,
@@ -896,7 +896,7 @@ export class PhuLuc6Component implements OnInit {
 
   // action print
   doPrint() {
-    let WindowPrt = window.open(
+    const WindowPrt = window.open(
       '',
       '',
       'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',

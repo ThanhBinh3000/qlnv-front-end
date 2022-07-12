@@ -66,7 +66,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 	async ngOnInit() {
 		this.spinner.show();
-		let userName = this.userService.getUserName();
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.maDviTao = this.userInfo?.dvql;
 		//lay danh sach danh muc
@@ -113,7 +113,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		if (this.trangThai){
 			trangThais = [this.trangThai];
 		}
-		let requestReport = {
+		const requestReport = {
 			dotBcao: null,
       loaiTimKiem: "1",
       maBcao: "",
