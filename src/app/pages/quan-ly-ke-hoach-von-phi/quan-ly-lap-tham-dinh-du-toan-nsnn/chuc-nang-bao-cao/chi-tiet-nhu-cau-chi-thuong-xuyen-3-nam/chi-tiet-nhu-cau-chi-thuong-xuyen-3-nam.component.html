@@ -34,12 +34,12 @@
     <nz-table nzBordered class="table__body">
         <thead>
             <tr>
-                <th nzWidth="100px">STT</th>
-                <th nzWidth="500px">Lĩnh vực/Nội dung chi</th>
-                <th nzWidth="200px">Thực hiện năm hiện hành {{namHienHanh -1}}</th>
-                <th nzWidth="200px">Nhu cầu dự toán năm {{namHienHanh}}</th>
-                <th nzWidth="200px">Nhu cầu năm {{namHienHanh + 1}}</th>
-                <th nzWidth="200px">Nhu cầu năm {{namHienHanh + 2}}</th>
+                <th>STT</th>
+                <th>Lĩnh vực/Nội dung chi</th>
+                <th>Thực hiện năm hiện hành {{namHienHanh -1}}</th>
+                <th>Nhu cầu dự toán năm {{namHienHanh}}</th>
+                <th>Nhu cầu năm {{namHienHanh + 1}}</th>
+                <th>Nhu cầu năm {{namHienHanh + 2}}</th>
                 <th colspan="3" [hidden]="status"></th>
                 <th [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
@@ -61,10 +61,10 @@
             <tr>
                 <th></th>
                 <th>Trong đó - Chi thường xuyên cơ sở</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>{{chiTx.thNamHienHanhN1}}</th>
+                <th>{{chiTx.ncauNamDtoanN}}</th>
+                <th>{{chiTx.ncauNamN1}}</th>
+                <th>{{chiTx.ncauNamN2}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -73,10 +73,10 @@
             <tr>
                 <th></th>
                 <th>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>{{chiMoi.thNamHienHanhN1}}</th>
+                <th>{{chiMoi.ncauNamDtoanN}}</th>
+                <th>{{chiMoi.ncauNamN1}}</th>
+                <th>{{chiMoi.ncauNamN2}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>

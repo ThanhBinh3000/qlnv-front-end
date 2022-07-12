@@ -25,6 +25,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   searchFilter = {
     maBcao: null,
     maPhanBcao: '1',
+    thongBao: '',
     namQtoan: null,
     ngayTaoDen: null,
     ngayTaoTu: null,
@@ -63,7 +64,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show()
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()
     this.searchFilter.ngayTaoDen = new Date();
@@ -72,13 +73,13 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     this.donViTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
 
-    if (this.userInfo?.roles[0].code == ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
+    if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
       this.status = true;
-      this.searchFilter.trangThai = Utils.TT_BC_2;
+      this.trangThai = Utils.TT_BC_2;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
     } else {
       this.status = true;
-      this.searchFilter.trangThai = Utils.TT_BC_4;
+      this.trangThai = Utils.TT_BC_4;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
     }
     this.onSubmit();
@@ -124,24 +125,23 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
       }
     }
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
+    const searchFilterTemp = Object.assign({},this.searchFilter);
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
 
-		if (!this.trangThai){
-      if(this.userInfo?.roles[0].code == ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
+		// if (!this.trangThai){
+      if(ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
 				searchFilterTemp.trangThais = [Utils.TT_BC_2];
 
-			} else if(this.userInfo?.roles[0].code == ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code)) {
+			} else if(ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code)) {
 				searchFilterTemp.trangThais = [Utils.TT_BC_4];
 
 			}
       else{
         searchFilterTemp.trangThais = [Utils.TT_BC_2,Utils.TT_BC_4]
-
       }
-		}
+		// }
 
     await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
@@ -220,7 +220,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   checkDeleteReport(item: any): boolean {
-    var check: boolean;
+    let check: boolean;
     if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
       this.userInfo?.username == item.nguoiTao) {
       check = true;
