@@ -77,15 +77,15 @@ export class BaoCao04anComponent implements OnInit {
     lstCTietBaoCaoTemp: any[] = [];
 
     thuyetMinh: string;
-    maDviTien: string = '1';
+    maDviTien = '1';
     tuNgay: any;
     denNgay: any;
-    listIdDelete: string = "";
-    trangThaiPhuLuc: string = '1';
+    listIdDelete = "";
+    trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
 
     //trang thai cac nut
-    status: boolean = false;
+    status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     statusBtnExport: boolean;
@@ -158,12 +158,10 @@ export class BaoCao04anComponent implements OnInit {
             }
         })
         await this.addListNoiDungChi(this.noiDungChiFull);
-
-        let dataPL;                 // du lieu default phu luc
-        dataPL = new ItemDataMau0405();
+        const dataPL = new ItemDataMau0405();
         if (this.lstCtietBcao4anB.length == 0) {
             await this.noiDungChiFull.forEach(element => {
-                let data: any = {
+                const data: any = {
                     ...dataPL,
                     maNdungChi: element.id,
                     maVtu: element.id,
@@ -179,7 +177,7 @@ export class BaoCao04anComponent implements OnInit {
         }
         if (this.lstCtietBcao4anB.length > 0) {
             if (!this.lstCtietBcao4anB[0].stt) {
-                let lstTemp = [];
+                const lstTemp = [];
                 await this.noiDungChiFull.forEach(element => {
                     lstTemp.push(this.lstCtietBcao4anB.find(item => item.maNdungChi == element.id));
                 });
@@ -189,7 +187,7 @@ export class BaoCao04anComponent implements OnInit {
                 await this.sortByIndex();
             }
         }
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
         })
@@ -197,7 +195,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     addListNoiDungChi(noiDungChiTemp) {
-        let a = [];
+        const a = [];
         noiDungChiTemp.forEach(item => {
             this.noiDungChis.forEach(el => {
                 if (item.ma == el.maCha) {
@@ -235,7 +233,7 @@ export class BaoCao04anComponent implements OnInit {
 
     // action print
     doPrint() {
-        let WindowPrt = window.open(
+        const WindowPrt = window.open(
             '',
             '',
             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
@@ -256,28 +254,28 @@ export class BaoCao04anComponent implements OnInit {
     getChiMuc(str: string, dauMuc: string, dauMucCha: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
-            var xau: string = "";
-            let chiSo: any = str.split('.');
-            var n: number = chiSo.length - 1;
-            var k: number = parseInt(chiSo[n], 10);
+            let xau = "";
+            const chiSo: string[] = str.split('.');
+            const n: number = chiSo.length - 1;
+            let k: number = parseInt(chiSo[n], 10);
             if (n == 0) {
                 xau = String.fromCharCode(k + 96).toUpperCase();
             }
             if (n == 1) {
                 k = k - 4
-                for (var i = 0; i < this.soLaMa.length; i++) {
+                for (let i = 0; i < this.soLaMa.length; i++) {
                     while (k >= this.soLaMa[i].gTri) {
                         xau += this.soLaMa[i].kyTu;
                         k -= this.soLaMa[i].gTri;
                     }
                 }
-            };
+            }
             if (n == 2) {
                 xau = (parseInt(chiSo[n], 10)).toString();
-            };
+            }
             if (n == 3) {
                 xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-            };
+            }
             if (n == 4) {
                 xau = "-";
             }
@@ -298,10 +296,10 @@ export class BaoCao04anComponent implements OnInit {
     }
     //tìm vị trí cần để thêm mới
     findVt(str: string, phuLuc): number {
-        let baoCao = this.getBieuMau(phuLuc)
-        var start: number = baoCao.findIndex(e => e.stt == str);
-        var index: number = start;
-        for (var i = start + 1; i < baoCao.length; i++) {
+        const baoCao = this.getBieuMau(phuLuc)
+        const start: number = baoCao.findIndex(e => e.stt == str);
+        let index: number = start;
+        for (let i = start + 1; i < baoCao.length; i++) {
             if (baoCao[i].stt.startsWith(str)) {
                 index = i;
             }
@@ -310,11 +308,11 @@ export class BaoCao04anComponent implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
-            var str = this.getHead(baoCao[item].stt) + "." + (this.getTail(baoCao[item].stt) + heSo).toString();
-            var nho = baoCao[item].stt;
+            const str = this.getHead(baoCao[item].stt) + "." + (this.getTail(baoCao[item].stt) + heSo).toString();
+            const nho = baoCao[item].stt;
             baoCao.forEach(item => {
                 item.stt = item.stt.replace(nho, str);
             })
@@ -323,15 +321,12 @@ export class BaoCao04anComponent implements OnInit {
 
     addLine(id: any, phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
-        let dataPL;                 // du lieu default phu luc
-        let lstKmTemp;              // list khoan muc chinh
-        var maKm;                   // ma khoan muc
 
-        dataPL = new ItemDataMau0405();
-        lstKmTemp = this.noiDungChiFull;
-        maKm = baoCao.find(e => e.id == id)?.maNdungChi;
+        const dataPL = new ItemDataMau0405();
+        const lstKmTemp = this.noiDungChiFull;
+        const maKm = baoCao.find(e => e.id == id)?.maNdungChi;
         dataPL.header = phuLuc;
-        let obj = {
+        const obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
             baoCaos : baoCao,
@@ -351,10 +346,9 @@ export class BaoCao04anComponent implements OnInit {
         });
         modalIn.afterClose.subscribe(async (res) => {
             if (res) {
-                var index: number;
-                index = baoCao.findIndex(e => e.maNdungChi == res.maKhoanMuc);
+                const index: number = baoCao.findIndex(e => e.maNdungChi == res.maKhoanMuc);
                 if (index == -1) {
-                    let data: any = {
+                    const data: any = {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
@@ -372,7 +366,7 @@ export class BaoCao04anComponent implements OnInit {
                 id = baoCao.find(e => e.maNdungChi == res.maKhoanMuc)?.id;
 
                 res.lstKhoanMuc.forEach(item => {
-                    var data: any = {
+                    const data: any = {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
@@ -388,29 +382,29 @@ export class BaoCao04anComponent implements OnInit {
 
     //thêm ngang cấp
     addSame(id: any, initItem, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
+        const baoCao = this.getBieuMau(phuLuc);
+        const index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        const head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
+        const tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
+        const ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
         // tim cac vi tri can thay doi lai stt
-        let lstIndex: number[] = [];
-        for (var i = baoCao.length - 1; i > ind; i--) {
+        const lstIndex: number[] = [];
+        for (let i = baoCao.length - 1; i > ind; i--) {
             if (this.getHead(baoCao[i].stt) == head) {
                 lstIndex.push(i);
             }
         }
         this.replaceIndex(lstIndex, 1, phuLuc);
-        var listVtu: vatTu[] = [];
-        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
+        const listVtu: vatTu[] = [];
+        const itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
-            let objTrongD = {
+            const objTrongD = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '0',
                 sl: 0,
             };
-            let objLke = {
+            const objLke = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
@@ -423,7 +417,7 @@ export class BaoCao04anComponent implements OnInit {
 
         // them moi phan tu
         if (initItem?.id) {
-            let item = {
+            const item = {
                 ...initItem,
                 stt: head + "." + (tail + 1).toString(),
                 maLoai: '7',
@@ -435,7 +429,7 @@ export class BaoCao04anComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            let item = {
+            const item = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
@@ -453,7 +447,7 @@ export class BaoCao04anComponent implements OnInit {
 
     // gan editCache.data == lstCtietBcao
     updateEditCache(phuLuc: string): void {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
@@ -464,15 +458,15 @@ export class BaoCao04anComponent implements OnInit {
 
     //thêm cấp thấp hơn
     addLow(id: any, initItem, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var data = baoCao.find(e => e.id == id);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var stt: string;
+        const baoCao = this.getBieuMau(phuLuc);
+        const data = baoCao.find(e => e.id == id);
+        let index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        let stt: string;
         if (baoCao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
             stt = data.stt + '.1';
         } else {
             index = this.findVt(data.stt, phuLuc);
-            for (var i = baoCao.length - 1; i >= 0; i--) {
+            for (let i = baoCao.length - 1; i >= 0; i--) {
                 if (this.getHead(baoCao[i].stt) == data.stt) {
                     stt = data.stt + '.' + (this.getTail(baoCao[i].stt) + 1).toString();
                     break;
@@ -480,16 +474,16 @@ export class BaoCao04anComponent implements OnInit {
             }
         }
 
-        var listVtu: vatTu[] = [];
-        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
+        const listVtu: vatTu[] = [];
+        const itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
-            let objTrongD = {
+            const objTrongD = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '0',
                 sl: 0,
             };
-            let objLke = {
+            const objLke = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
@@ -501,7 +495,7 @@ export class BaoCao04anComponent implements OnInit {
 
         // them moi phan tu
         if (initItem?.id) {
-            let item = {
+            const item = {
                 ...initItem,
                 stt: stt,
                 listCtiet: listVtu,
@@ -515,7 +509,7 @@ export class BaoCao04anComponent implements OnInit {
             if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
                 this.sum(stt, phuLuc);
             }
-            let item = {
+            const item = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
@@ -533,18 +527,18 @@ export class BaoCao04anComponent implements OnInit {
     //xóa dòng
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        const index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
         // khong tim thay thi out ra
         if (index == -1) return;
-        var stt: string = baoCao[index].stt;
-        var nho: string = baoCao[index].stt;
-        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
+        const stt: string = baoCao[index].stt;
+        const nho: string = baoCao[index].stt;
+        const head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
         //xóa phần tử và con của nó
         baoCao = baoCao.filter(e => !e.stt.startsWith(nho));
         this.setBieuMau(baoCao, phuLuc);
         //update lại số thức tự cho các phần tử cần thiết
-        let lstIndex: number[] = [];
-        for (var i = baoCao.length - 1; i >= index; i--) {
+        const lstIndex: number[] = [];
+        for (let i = baoCao.length - 1; i >= index; i--) {
             if (this.getHead(baoCao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -561,7 +555,7 @@ export class BaoCao04anComponent implements OnInit {
 
     // huy thay doi
     cancelEdit(id: string, phuLuc: string): void {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         // lay vi tri hang minh sua
         const index = baoCao.findIndex(item => item.id == id);
         // xoa dong neu truoc do chua co du lieu
@@ -582,15 +576,15 @@ export class BaoCao04anComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
             return;
         }
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         this.editCache[id].data.checked = baoCao.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietbaoCao
         const index = baoCao.findIndex(item => item.id == id); // lay vi tri hang minh sua
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(baoCao[index].stt, phuLuc);
-        let soLuongThucHienGop = baoCao.find(item => item.stt == '0.1.2');
-        let soLuongThucHienNamTruoc = baoCao.find(item => item.stt == '0.1.3');
-        let soLuongThucHienNamNay = baoCao.find(item => item.stt == '0.1.4');
+        const soLuongThucHienGop = baoCao.find(item => item.stt == '0.1.2');
+        const soLuongThucHienNamTruoc = baoCao.find(item => item.stt == '0.1.3');
+        const soLuongThucHienNamNay = baoCao.find(item => item.stt == '0.1.4');
         if (soLuongThucHienGop) {
             await soLuongThucHienGop?.listCtiet?.forEach(item => {
                 item.sl = soLuongThucHienNamTruoc?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl
@@ -602,8 +596,8 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     updateChecked(id: any, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var data = baoCao.find(e => e.id == id);
+        const baoCao = this.getBieuMau(phuLuc);
+        const data = baoCao.find(e => e.id == id);
         //đặt các phần tử con có cùng trạng thái với nó
         baoCao.forEach(item => {
             if (item.stt.startsWith(data.stt)) {
@@ -611,11 +605,11 @@ export class BaoCao04anComponent implements OnInit {
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        var index: number = baoCao.findIndex(e => e.stt == this.getHead(data.stt));
+        let index: number = baoCao.findIndex(e => e.stt == this.getHead(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0', phuLuc);
         } else {
-            var nho: boolean = baoCao[index].checked;
+            let nho: boolean = baoCao[index].checked;
             while (nho != this.checkAllChild(baoCao[index].stt, phuLuc)) {
                 baoCao[index].checked = !nho;
                 index = baoCao.findIndex(e => e.stt == this.getHead(baoCao[index].stt));
@@ -630,8 +624,8 @@ export class BaoCao04anComponent implements OnInit {
 
     //kiểm tra các phần tử con có cùng được đánh dấu hay ko
     checkAllChild(str: string, phuLuc: string): boolean {
-        let baoCao = this.getBieuMau(phuLuc);
-        var nho: boolean = true;
+        const baoCao = this.getBieuMau(phuLuc);
+        let nho = true;
         baoCao.forEach(item => {
             if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
                 nho = item.checked;
@@ -643,9 +637,9 @@ export class BaoCao04anComponent implements OnInit {
     // update all
     updateAllChecked(): void {
         // this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
+            const baoCao = this.getBieuMau(phuLuc);
             baoCao.filter(item => {
                 if (item.level > 2) {
                     item.checked = this.allChecked
@@ -655,10 +649,10 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     deleteAllChecked() {
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
-            var lstId: any[] = [];
+            const baoCao = this.getBieuMau(phuLuc);
+            const lstId: any[] = [];
             baoCao.forEach(item => {
                 if (item.checked) {
                     lstId.push(item.id);
@@ -674,16 +668,16 @@ export class BaoCao04anComponent implements OnInit {
 
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: any, phuLuc: string) {
-        var listVtu: vatTu[] = [];
-        let itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
+        const listVtu: vatTu[] = [];
+        const itemLine = this.luyKes?.find(item => item.maNdungChi == initItem.maNdungChi)?.listCtiet;
         this.listColTemp.forEach((e) => {
-            let objTrongD = {
+            const objTrongD = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '0',
                 sl: 0,
             };
-            let objLke = {
+            const objLke = {
                 id: e.id,
                 maVtu: e.maVtu,
                 loaiMatHang: '1',
@@ -692,7 +686,7 @@ export class BaoCao04anComponent implements OnInit {
             listVtu.push(objTrongD);
             listVtu.push(objLke);
         });
-        let baoCao = [];
+        const baoCao = [];
         let item;
         if (initItem?.id) {
             item = {
@@ -717,7 +711,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     async sortByIndex() {
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
@@ -736,9 +730,9 @@ export class BaoCao04anComponent implements OnInit {
                 }
                 return 0;
             });
-            var lstTemp: any[] = [];
+            const lstTemp: any[] = [];
             baoCao.forEach(item => {
-                var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+                const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
                 if (index == -1) {
                     lstTemp.splice(0, 0, item);
                 } else {
@@ -751,7 +745,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     setDetail(phuLuc) {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
             item.level = this.noiDungChiFull.find(e => e.id == item.maNdungChi)?.level;
         })
@@ -763,23 +757,23 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     async sortWithoutIndex() {
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
             this.setDetail(phuLuc);
-            var level = 0;
-            var danhSachChiTietBaoCaoTemp: any[] = baoCao;
+            let level = 0;
+            let danhSachChiTietBaoCaoTemp: any[] = baoCao;
             baoCao = [];
-            var data = danhSachChiTietBaoCaoTemp.find(e => e.level == 0);
+            const data = danhSachChiTietBaoCaoTemp.find(e => e.level == 0);
             await this.addFirst(data, phuLuc);
             baoCao = this.getBieuMau(phuLuc);
             danhSachChiTietBaoCaoTemp = danhSachChiTietBaoCaoTemp.filter(e => e.id != data.id);
-            var lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
+            let lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
             while (lstTemp.length != 0 || level == 0) {
                 lstTemp.forEach(item => {
-                    let idCha = this.getIdCha(item.maNdungChi);
-                    var index: number = baoCao.findIndex(e => e.maNdungChi == idCha);
+                    const idCha = this.getIdCha(item.maNdungChi);
+                    let index: number = baoCao.findIndex(e => e.maNdungChi == idCha);
                     if (index != -1) {
                         this.addLow(baoCao[index].id, item, phuLuc);
                     } else {
@@ -795,8 +789,8 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     getLowStatus(str: string, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
+        const baoCao = this.getBieuMau(phuLuc);
+        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
         if (index == -1) {
             return false;
         }
@@ -876,7 +870,7 @@ export class BaoCao04anComponent implements OnInit {
 
     tinhTong(id: any) {
         //luy ke default
-        let itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
+        const itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
 
         let tonglstChitietVtuTrongDot = 0;
         let tonglstChitietVtuLuyke = 0;
@@ -885,7 +879,7 @@ export class BaoCao04anComponent implements OnInit {
                 if (e.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += e.sl;
                     //set luy ke tuong ung = luy ke default + chi tiet theo dot
-                    let sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
+                    const sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
                     this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == '1').sl = sl + e.sl;                }
             })
         }
@@ -902,7 +896,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     addAllCol() {
-        let lstDviChon = this.lstVatTuFull.filter(item => this.listColTemp?.findIndex(data => data.maVtu == item.id) == -1);
+        const lstDviChon = this.lstVatTuFull.filter(item => this.listColTemp?.findIndex(data => data.maVtu == item.id) == -1);
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách vật tư',
             nzContent: DialogLuaChonThemDonViComponent,
@@ -925,7 +919,7 @@ export class BaoCao04anComponent implements OnInit {
                 // })
                 // 
             }
-            let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+            const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
             idPhuLuc.forEach(phuLuc => {
                 this.updateEditCache(phuLuc);
             })
@@ -934,19 +928,19 @@ export class BaoCao04anComponent implements OnInit {
 
     addCol(vatTu: any) {
 
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
+            const baoCao = this.getBieuMau(phuLuc);
             baoCao.forEach(data => {
-                let itemLine = this.luyKes?.find(item => item.maNdungChi == data.maNdungChi)?.listCtiet;
-                let objTrongD = {
+                const itemLine = this.luyKes?.find(item => item.maNdungChi == data.maNdungChi)?.listCtiet;
+                const objTrongD = {
                     id: uuid.v4() + 'FE',
                     maVtu: vatTu.id,
                     colName: vatTu.ten,
                     loaiMatHang: '0',
                     sl: 0,
                 }
-                let objLke = {
+                const objLke = {
                     id: uuid.v4() + 'FE',
                     maVtu: vatTu.id,
                     colName: vatTu.ten,
@@ -968,9 +962,9 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     deleteCol(maVtu: string) {
-        let idPhuLuc = LISTBIEUMAUDOT[3].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[3].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
+            const baoCao = this.getBieuMau(phuLuc);
             baoCao.forEach(data => {
                 data.listCtiet = data.listCtiet.filter(e => e.maVtu != maVtu);
             })
@@ -1052,14 +1046,14 @@ export class BaoCao04anComponent implements OnInit {
 
     async saveAppendix(maChucNang: string) {
         await this.saveMau04an();
-        let baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
+        const baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
         baoCaoChiTietTemp.tuNgay = this.tuNgay;
         baoCaoChiTietTemp.denNgay = this.denNgay;
 
-        let checkMoneyRange = true;
+        const checkMoneyRange = true;
         let checkPersonReport = true;
 
         // validate nguoi thuc hien bao cao
@@ -1153,12 +1147,12 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     sum(stt: string, phuLuc) {
-        let dataPL = new ItemDataMau0405();
-        let baoCaoTemp = this.getBieuMau(phuLuc);
+        const dataPL = new ItemDataMau0405();
+        const baoCaoTemp = this.getBieuMau(phuLuc);
         stt = this.getHead(stt);
         while (stt != '0') {
-            var index = baoCaoTemp.findIndex(e => e.stt == stt);
-            let data = baoCaoTemp[index];
+            const index = baoCaoTemp.findIndex(e => e.stt == stt);
+            const data = baoCaoTemp[index];
             data.listCtiet.filter(el => el.sl = 0);
             baoCaoTemp[index] = {
                 ...dataPL,

@@ -287,48 +287,48 @@ export class BaoCaoComponent implements OnInit {
 
 	//tong phu luc 1
 	tongPL1 = new ItemDataPL1();
-	kphiSdungTcong: any;
-	kphiSdungDtoan: any;
-	kphiSdungNguonKhac: any;
-	kphiSdungNguonQuy: any;
-	kphiSdungNstt: any;
-	kphiSdungCk: any;
-	kphiChuyenSangTcong: any;
-	kphiChuyenSangDtoan: any;
-	kphiChuyenSangNguonKhac: any;
-	kphiChuyenSangNguonQuy: any;
-	kphiChuyenSangNstt: any;
-	kphiChuyenSangCk: any;
-	dtoanGiaoTcong: any;
-	dtoanGiaoDtoan: any;
-	dtoanGiaoNguonKhac: any;
-	dtoanGiaoNguonQuy: any;
-	dtoanGiaoNstt: any;
-	dtoanGiaoCk: any;
-	giaiNganThangBcaoTcong: any;
-	giaiNganThangBcaoTcongTle: any;
-	giaiNganThangBcaoDtoan: any;
-	giaiNganThangBcaoDtoanTle: any;
-	giaiNganThangBcaoNguonKhac: any;
-	giaiNganThangBcaoNguonKhacTle: any;
-	giaiNganThangBcaoNguonQuy: any;
-	giaiNganThangBcaoNguonQuyTle: any;
-	giaiNganThangBcaoNstt: any;
-	giaiNganThangBcaoNsttTle: any;
-	giaiNganThangBcaoCk: any;
-	giaiNganThangBcaoCkTle: any;
-	luyKeGiaiNganTcong: any;
-	luyKeGiaiNganTcongTle: any;
-	luyKeGiaiNganDtoan: any;
-	luyKeGiaiNganDtoanTle: any;
-	luyKeGiaiNganNguonKhac: any;
-	luyKeGiaiNganNguonKhacTle: any;
-	luyKeGiaiNganNguonQuy: any;
-	luyKeGiaiNganNguonQuyTle: any;
-	luyKeGiaiNganNstt: any;
-	luyKeGiaiNganNsttTle: any;
-	luyKeGiaiNganCk: any;
-	luyKeGiaiNganCkTle: any;
+	// kphiSdungTcong: any;
+	// kphiSdungDtoan: any;
+	// kphiSdungNguonKhac: any;
+	// kphiSdungNguonQuy: any;
+	// kphiSdungNstt: any;
+	// kphiSdungCk: any;
+	// kphiChuyenSangTcong: any;
+	// kphiChuyenSangDtoan: any;
+	// kphiChuyenSangNguonKhac: any;
+	// kphiChuyenSangNguonQuy: any;
+	// kphiChuyenSangNstt: any;
+	// kphiChuyenSangCk: any;
+	// dtoanGiaoTcong: any;
+	// dtoanGiaoDtoan: any;
+	// dtoanGiaoNguonKhac: any;
+	// dtoanGiaoNguonQuy: any;
+	// dtoanGiaoNstt: any;
+	// dtoanGiaoCk: any;
+	// giaiNganThangBcaoTcong: any;
+	// giaiNganThangBcaoTcongTle: any;
+	// giaiNganThangBcaoDtoan: any;
+	// giaiNganThangBcaoDtoanTle: any;
+	// giaiNganThangBcaoNguonKhac: any;
+	// giaiNganThangBcaoNguonKhacTle: any;
+	// giaiNganThangBcaoNguonQuy: any;
+	// giaiNganThangBcaoNguonQuyTle: any;
+	// giaiNganThangBcaoNstt: any;
+	// giaiNganThangBcaoNsttTle: any;
+	// giaiNganThangBcaoCk: any;
+	// giaiNganThangBcaoCkTle: any;
+	// luyKeGiaiNganTcong: any;
+	// luyKeGiaiNganTcongTle: any;
+	// luyKeGiaiNganDtoan: any;
+	// luyKeGiaiNganDtoanTle: any;
+	// luyKeGiaiNganNguonKhac: any;
+	// luyKeGiaiNganNguonKhacTle: any;
+	// luyKeGiaiNganNguonQuy: any;
+	// luyKeGiaiNganNguonQuyTle: any;
+	// luyKeGiaiNganNstt: any;
+	// luyKeGiaiNganNsttTle: any;
+	// luyKeGiaiNganCk: any;
+	// luyKeGiaiNganCkTle: any;
 
 	//tong phu luc 3
 	qddtTmdtTso: any;
@@ -819,7 +819,6 @@ export class BaoCaoComponent implements OnInit {
 					} else {
 						this.status = true;
 					}
-					//this.getTotal('1111');
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -1018,6 +1017,7 @@ export class BaoCaoComponent implements OnInit {
 		//   default:
 		//     break;
 		// }
+		
 		this.updateEditCache('1111');
 		if (this.danhSachChiTietPhuLucTemp.length > 0) {
 			if (!this.danhSachChiTietPhuLucTemp[0].stt) {
@@ -1027,6 +1027,7 @@ export class BaoCaoComponent implements OnInit {
 			}
 		}
 		this.changeModel();
+		this.getTotal('1111');
 		this.getStatusButtonOk();
 	}
 
@@ -1069,63 +1070,63 @@ export class BaoCaoComponent implements OnInit {
 
 		this.danhSachChiTietPhuLucTemp.forEach(element => {
 			if (element?.stt?.split('.').length == 2) {
-				//Phu luc 1
-				this.kphiSdungTcong += Number(element?.kphiSdungTcong);
-				this.kphiSdungDtoan += Number(element?.kphiSdungDtoan);
-				this.kphiSdungNguonKhac += Number(element?.kphiSdungNguonKhac);
-				this.kphiSdungNguonQuy += Number(element?.kphiSdungNguonQuy);
-				this.kphiSdungNstt += Number(element?.kphiSdungNstt);
-				this.kphiSdungCk += Number(element?.kphiSdungCk);
-				this.kphiChuyenSangTcong += Number(element?.kphiChuyenSangTcong);
-				this.kphiChuyenSangDtoan += Number(element?.kphiChuyenSangDtoan);
-				this.kphiChuyenSangNguonKhac += Number(element?.kphiChuyenSangNguonKhac);
-				this.kphiChuyenSangNguonQuy += Number(element?.kphiChuyenSangNguonQuy);
-				this.kphiChuyenSangNstt += Number(element?.kphiChuyenSangNstt);
-				this.kphiChuyenSangCk += Number(element?.kphiChuyenSangCk);
-				this.dtoanGiaoTcong += Number(element?.dtoanGiaoTcong);
-				this.dtoanGiaoDtoan += Number(element?.dtoanGiaoDtoan);
-				this.dtoanGiaoNguonKhac += Number(element?.dtoanGiaoNguonKhac);
-				this.dtoanGiaoNguonQuy += Number(element?.dtoanGiaoNguonQuy);
-				this.dtoanGiaoNstt += Number(element?.dtoanGiaoNstt);
-				this.dtoanGiaoCk += Number(element?.dtoanGiaoCk);
-				this.giaiNganThangBcaoTcong += Number(element?.giaiNganThangBcaoTcong);
-				this.giaiNganThangBcaoDtoan += Number(element?.giaiNganThangBcaoDtoan);
-				this.giaiNganThangBcaoNguonKhac += Number(element?.giaiNganThangBcaoNguonKhac);
-				this.giaiNganThangBcaoNguonQuy += Number(element?.giaiNganThangBcaoNguonQuy);
-				this.giaiNganThangBcaoNstt += Number(element?.giaiNganThangBcaoNstt);
-				this.giaiNganThangBcaoCk += Number(element?.giaiNganThangBcaoCk);
-				this.luyKeGiaiNganTcong += Number(element?.luyKeGiaiNganTcong);
-				this.luyKeGiaiNganDtoan += Number(element?.luyKeGiaiNganDtoan);
-				this.luyKeGiaiNganNguonKhac += Number(element?.luyKeGiaiNganNguonKhac);
-				this.luyKeGiaiNganNguonQuy += Number(element?.luyKeGiaiNganNguonQuy);
-				this.luyKeGiaiNganNstt += Number(element?.luyKeGiaiNganNstt);
-				this.luyKeGiaiNganCk += Number(element?.luyKeGiaiNganCk);
-				//ty le
-				// this.giaiNganThangBcaoTcongTle = (Number(this.giaiNganThangBcaoTcong) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoTcong) / Number(this.kphiSdungTcong);
-				// this.giaiNganThangBcaoDtoanTle = (Number(this.giaiNganThangBcaoDtoan) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoDtoan) / Number(this.kphiSdungTcong);
-				// this.giaiNganThangBcaoNguonKhacTle = (Number(this.giaiNganThangBcaoNguonKhac) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNguonKhac) / Number(this.kphiSdungTcong);
-				// this.giaiNganThangBcaoNguonQuyTle = (Number(this.giaiNganThangBcaoNguonQuy) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNguonQuy) / Number(this.kphiSdungTcong);
-				// this.giaiNganThangBcaoNsttTle = (Number(this.giaiNganThangBcaoNstt) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNstt) / Number(this.kphiSdungTcong);
-				// this.giaiNganThangBcaoCkTle = (Number(this.giaiNganThangBcaoCk) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoCk) / Number(this.kphiSdungTcong);
-				// this.luyKeGiaiNganTcongTle = (Number(this.luyKeGiaiNganTcong) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.luyKeGiaiNganTcong) / Number(this.kphiSdungTcong);
-				// this.luyKeGiaiNganDtoanTle = (Number(this.luyKeGiaiNganDtoan) == 0 && Number(this.kphiSdungDtoan) == 0) ? '' : Number(this.luyKeGiaiNganDtoan) / Number(this.kphiSdungDtoan);
-				// this.luyKeGiaiNganNguonKhacTle = (Number(this.luyKeGiaiNganNguonKhac) == 0 && Number(this.kphiSdungNguonKhac) == 0) ? '' : Number(this.luyKeGiaiNganNguonKhac) / Number(this.kphiSdungNguonKhac);
-				// this.luyKeGiaiNganNguonQuyTle = (Number(this.luyKeGiaiNganNguonQuy) == 0 && Number(this.kphiSdungNguonQuy) == 0) ? '' : Number(this.luyKeGiaiNganNguonQuy) / Number(this.kphiSdungNguonQuy);
-				// this.luyKeGiaiNganNsttTle = (Number(this.luyKeGiaiNganNstt) == 0 && Number(this.kphiSdungNstt) == 0) ? '' : Number(this.luyKeGiaiNganNstt) / Number(this.kphiSdungNstt);
-				// this.luyKeGiaiNganCkTle = (Number(this.luyKeGiaiNganCk) == 0 && Number(this.kphiSdungCk) == 0) ? '' : Number(this.luyKeGiaiNganCk) / Number(this.kphiSdungCk);
+				// //Phu luc 1
+				// this.kphiSdungTcong += Number(element?.kphiSdungTcong);
+				// this.kphiSdungDtoan += Number(element?.kphiSdungDtoan);
+				// this.kphiSdungNguonKhac += Number(element?.kphiSdungNguonKhac);
+				// this.kphiSdungNguonQuy += Number(element?.kphiSdungNguonQuy);
+				// this.kphiSdungNstt += Number(element?.kphiSdungNstt);
+				// this.kphiSdungCk += Number(element?.kphiSdungCk);
+				// this.kphiChuyenSangTcong += Number(element?.kphiChuyenSangTcong);
+				// this.kphiChuyenSangDtoan += Number(element?.kphiChuyenSangDtoan);
+				// this.kphiChuyenSangNguonKhac += Number(element?.kphiChuyenSangNguonKhac);
+				// this.kphiChuyenSangNguonQuy += Number(element?.kphiChuyenSangNguonQuy);
+				// this.kphiChuyenSangNstt += Number(element?.kphiChuyenSangNstt);
+				// this.kphiChuyenSangCk += Number(element?.kphiChuyenSangCk);
+				// this.dtoanGiaoTcong += Number(element?.dtoanGiaoTcong);
+				// this.dtoanGiaoDtoan += Number(element?.dtoanGiaoDtoan);
+				// this.dtoanGiaoNguonKhac += Number(element?.dtoanGiaoNguonKhac);
+				// this.dtoanGiaoNguonQuy += Number(element?.dtoanGiaoNguonQuy);
+				// this.dtoanGiaoNstt += Number(element?.dtoanGiaoNstt);
+				// this.dtoanGiaoCk += Number(element?.dtoanGiaoCk);
+				// this.giaiNganThangBcaoTcong += Number(element?.giaiNganThangBcaoTcong);
+				// this.giaiNganThangBcaoDtoan += Number(element?.giaiNganThangBcaoDtoan);
+				// this.giaiNganThangBcaoNguonKhac += Number(element?.giaiNganThangBcaoNguonKhac);
+				// this.giaiNganThangBcaoNguonQuy += Number(element?.giaiNganThangBcaoNguonQuy);
+				// this.giaiNganThangBcaoNstt += Number(element?.giaiNganThangBcaoNstt);
+				// this.giaiNganThangBcaoCk += Number(element?.giaiNganThangBcaoCk);
+				// this.luyKeGiaiNganTcong += Number(element?.luyKeGiaiNganTcong);
+				// this.luyKeGiaiNganDtoan += Number(element?.luyKeGiaiNganDtoan);
+				// this.luyKeGiaiNganNguonKhac += Number(element?.luyKeGiaiNganNguonKhac);
+				// this.luyKeGiaiNganNguonQuy += Number(element?.luyKeGiaiNganNguonQuy);
+				// this.luyKeGiaiNganNstt += Number(element?.luyKeGiaiNganNstt);
+				// this.luyKeGiaiNganCk += Number(element?.luyKeGiaiNganCk);
+				// //ty le
+				// // this.giaiNganThangBcaoTcongTle = (Number(this.giaiNganThangBcaoTcong) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoTcong) / Number(this.kphiSdungTcong);
+				// // this.giaiNganThangBcaoDtoanTle = (Number(this.giaiNganThangBcaoDtoan) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoDtoan) / Number(this.kphiSdungTcong);
+				// // this.giaiNganThangBcaoNguonKhacTle = (Number(this.giaiNganThangBcaoNguonKhac) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNguonKhac) / Number(this.kphiSdungTcong);
+				// // this.giaiNganThangBcaoNguonQuyTle = (Number(this.giaiNganThangBcaoNguonQuy) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNguonQuy) / Number(this.kphiSdungTcong);
+				// // this.giaiNganThangBcaoNsttTle = (Number(this.giaiNganThangBcaoNstt) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoNstt) / Number(this.kphiSdungTcong);
+				// // this.giaiNganThangBcaoCkTle = (Number(this.giaiNganThangBcaoCk) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.giaiNganThangBcaoCk) / Number(this.kphiSdungTcong);
+				// // this.luyKeGiaiNganTcongTle = (Number(this.luyKeGiaiNganTcong) == 0 && Number(this.kphiSdungTcong) == 0) ? '' : Number(this.luyKeGiaiNganTcong) / Number(this.kphiSdungTcong);
+				// // this.luyKeGiaiNganDtoanTle = (Number(this.luyKeGiaiNganDtoan) == 0 && Number(this.kphiSdungDtoan) == 0) ? '' : Number(this.luyKeGiaiNganDtoan) / Number(this.kphiSdungDtoan);
+				// // this.luyKeGiaiNganNguonKhacTle = (Number(this.luyKeGiaiNganNguonKhac) == 0 && Number(this.kphiSdungNguonKhac) == 0) ? '' : Number(this.luyKeGiaiNganNguonKhac) / Number(this.kphiSdungNguonKhac);
+				// // this.luyKeGiaiNganNguonQuyTle = (Number(this.luyKeGiaiNganNguonQuy) == 0 && Number(this.kphiSdungNguonQuy) == 0) ? '' : Number(this.luyKeGiaiNganNguonQuy) / Number(this.kphiSdungNguonQuy);
+				// // this.luyKeGiaiNganNsttTle = (Number(this.luyKeGiaiNganNstt) == 0 && Number(this.kphiSdungNstt) == 0) ? '' : Number(this.luyKeGiaiNganNstt) / Number(this.kphiSdungNstt);
+				// // this.luyKeGiaiNganCkTle = (Number(this.luyKeGiaiNganCk) == 0 && Number(this.kphiSdungCk) == 0) ? '' : Number(this.luyKeGiaiNganCk) / Number(this.kphiSdungCk);
 
-				this.giaiNganThangBcaoTcongTle = Number(this.giaiNganThangBcaoTcong) / Number(this.kphiSdungTcong);
-				this.giaiNganThangBcaoDtoanTle = Number(this.giaiNganThangBcaoDtoan) / Number(this.kphiSdungTcong);
-				this.giaiNganThangBcaoNguonKhacTle = Number(this.giaiNganThangBcaoNguonKhac) / Number(this.kphiSdungTcong);
-				this.giaiNganThangBcaoNguonQuyTle = Number(this.giaiNganThangBcaoNguonQuy) / Number(this.kphiSdungTcong);
-				this.giaiNganThangBcaoNsttTle = Number(this.giaiNganThangBcaoNstt) / Number(this.kphiSdungTcong);
-				this.giaiNganThangBcaoCkTle = Number(this.giaiNganThangBcaoCk) / Number(this.kphiSdungTcong);
-				this.luyKeGiaiNganTcongTle = Number(this.luyKeGiaiNganTcong) / Number(this.kphiSdungTcong);
-				this.luyKeGiaiNganDtoanTle = Number(this.luyKeGiaiNganDtoan) / Number(this.kphiSdungDtoan);
-				this.luyKeGiaiNganNguonKhacTle = Number(this.luyKeGiaiNganNguonKhac) / Number(this.kphiSdungNguonKhac);
-				this.luyKeGiaiNganNguonQuyTle = Number(this.luyKeGiaiNganNguonQuy) / Number(this.kphiSdungNguonQuy);
-				this.luyKeGiaiNganNsttTle = Number(this.luyKeGiaiNganNstt) / Number(this.kphiSdungNstt);
-				this.luyKeGiaiNganCkTle = Number(this.luyKeGiaiNganCk) / Number(this.kphiSdungCk);
+				// this.giaiNganThangBcaoTcongTle = Number(this.giaiNganThangBcaoTcong) / Number(this.kphiSdungTcong);
+				// this.giaiNganThangBcaoDtoanTle = Number(this.giaiNganThangBcaoDtoan) / Number(this.kphiSdungTcong);
+				// this.giaiNganThangBcaoNguonKhacTle = Number(this.giaiNganThangBcaoNguonKhac) / Number(this.kphiSdungTcong);
+				// this.giaiNganThangBcaoNguonQuyTle = Number(this.giaiNganThangBcaoNguonQuy) / Number(this.kphiSdungTcong);
+				// this.giaiNganThangBcaoNsttTle = Number(this.giaiNganThangBcaoNstt) / Number(this.kphiSdungTcong);
+				// this.giaiNganThangBcaoCkTle = Number(this.giaiNganThangBcaoCk) / Number(this.kphiSdungTcong);
+				// this.luyKeGiaiNganTcongTle = Number(this.luyKeGiaiNganTcong) / Number(this.kphiSdungTcong);
+				// this.luyKeGiaiNganDtoanTle = Number(this.luyKeGiaiNganDtoan) / Number(this.kphiSdungDtoan);
+				// this.luyKeGiaiNganNguonKhacTle = Number(this.luyKeGiaiNganNguonKhac) / Number(this.kphiSdungNguonKhac);
+				// this.luyKeGiaiNganNguonQuyTle = Number(this.luyKeGiaiNganNguonQuy) / Number(this.kphiSdungNguonQuy);
+				// this.luyKeGiaiNganNsttTle = Number(this.luyKeGiaiNganNstt) / Number(this.kphiSdungNstt);
+				// this.luyKeGiaiNganCkTle = Number(this.luyKeGiaiNganCk) / Number(this.kphiSdungCk);
 
 				//Phu luc 3
 				this.qddtTmdtTso += Number(element?.qddtTmdtTso);
@@ -1882,7 +1883,7 @@ export class BaoCaoComponent implements OnInit {
 		if (dVi && dVi.maDviCha == this.userInfo.dvql) {
 			return utils.getStatusNameParent(Status == '7' ? '6' : Status);
 		}
-	};
+	}
 
 	getStatusAppendixName(id) {
 		const utils = new Utils();
@@ -2036,9 +2037,9 @@ export class BaoCaoComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	doPrint() {
+	// doPrint() {
 
-	}
+	// }
 
 	doShowDialogCopy() {
 		const modalTuChoi = this.modal.create({
@@ -2702,6 +2703,7 @@ export class BaoCaoComponent implements OnInit {
 				luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
 				luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
 				luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
+				level: 0,
 			}
 		} else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
 			const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
@@ -2711,6 +2713,7 @@ export class BaoCaoComponent implements OnInit {
 				luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
 				luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
 				luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+				level: 0,
 			}
 		} else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
 			const itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
@@ -2721,6 +2724,7 @@ export class BaoCaoComponent implements OnInit {
 				luyKeGiaiNganDauNamNsnnVonDt: itemLine?.luyKeGiaiNganDauNamNsnnVonDt ? itemLine?.luyKeGiaiNganDauNamNsnnVonDt : 0,
 				luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
 				luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
+				level: 0,
 			}
 		}
 
@@ -2975,12 +2979,16 @@ export class BaoCaoComponent implements OnInit {
 		return tong;
 	}
 
-	divNumber(num1, num2): number {
+	divNumber(num1, num2) {
 		if ((!num1 && num1 !== 0) &&
 			(!num2 && num2 !== 0)) {
 			return null;
 		}
-		return this.getNumberValue(num1) / this.getNumberValue(num2);
+		if (this.getNumberValue(num2) == 0){
+			return this.getNumberValue(num1) / this.getNumberValue(num2);
+		} else {
+			return (Number(this.getNumberValue(num1) / this.getNumberValue(num2))).toFixed(Utils.ROUND);
+		}
 	}
 	sum(stt: string, phuLuc) {
 		let dataPL;
@@ -3157,6 +3165,7 @@ export class BaoCaoComponent implements OnInit {
 
 	getTotal(phuLuc) {
 		const phuLucTemp = this.getPhuLuc(phuLuc);
+		console.log(phuLucTemp);
 		if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
 			this.tongPL1.kphiSdungTcong = 0;
 			this.tongPL1.kphiSdungDtoan = 0;
@@ -3277,48 +3286,48 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	resetTong() {
-		this.kphiSdungTcong = 0;
-		this.kphiSdungDtoan = 0;
-		this.kphiSdungNguonKhac = 0;
-		this.kphiSdungNguonQuy = 0;
-		this.kphiSdungNstt = 0;
-		this.kphiSdungCk = 0;
-		this.kphiChuyenSangTcong = 0;
-		this.kphiChuyenSangDtoan = 0;
-		this.kphiChuyenSangNguonKhac = 0;
-		this.kphiChuyenSangNguonQuy = 0;
-		this.kphiChuyenSangNstt = 0;
-		this.kphiChuyenSangCk = 0;
-		this.dtoanGiaoTcong = 0;
-		this.dtoanGiaoDtoan = 0;
-		this.dtoanGiaoNguonKhac = 0;
-		this.dtoanGiaoNguonQuy = 0;
-		this.dtoanGiaoNstt = 0;
-		this.dtoanGiaoCk = 0;
-		this.giaiNganThangBcaoTcong = 0;
-		this.giaiNganThangBcaoTcongTle = 0;
-		this.giaiNganThangBcaoDtoan = 0;
-		this.giaiNganThangBcaoDtoanTle = 0;
-		this.giaiNganThangBcaoNguonKhac = 0;
-		this.giaiNganThangBcaoNguonKhacTle = 0;
-		this.giaiNganThangBcaoNguonQuy = 0;
-		this.giaiNganThangBcaoNguonQuyTle = 0;
-		this.giaiNganThangBcaoNstt = 0;
-		this.giaiNganThangBcaoNsttTle = 0;
-		this.giaiNganThangBcaoCk = 0;
-		this.giaiNganThangBcaoCkTle = 0;
-		this.luyKeGiaiNganTcong = 0;
-		this.luyKeGiaiNganTcongTle = 0;
-		this.luyKeGiaiNganDtoan = 0;
-		this.luyKeGiaiNganDtoanTle = 0;
-		this.luyKeGiaiNganNguonKhac = 0;
-		this.luyKeGiaiNganNguonKhacTle = 0;
-		this.luyKeGiaiNganNguonQuy = 0;
-		this.luyKeGiaiNganNguonQuyTle = 0;
-		this.luyKeGiaiNganNstt = 0;
-		this.luyKeGiaiNganNsttTle = 0;
-		this.luyKeGiaiNganCk = 0;
-		this.luyKeGiaiNganCkTle = 0;
+		// this.kphiSdungTcong = 0;
+		// this.kphiSdungDtoan = 0;
+		// this.kphiSdungNguonKhac = 0;
+		// this.kphiSdungNguonQuy = 0;
+		// this.kphiSdungNstt = 0;
+		// this.kphiSdungCk = 0;
+		// this.kphiChuyenSangTcong = 0;
+		// this.kphiChuyenSangDtoan = 0;
+		// this.kphiChuyenSangNguonKhac = 0;
+		// this.kphiChuyenSangNguonQuy = 0;
+		// this.kphiChuyenSangNstt = 0;
+		// this.kphiChuyenSangCk = 0;
+		// this.dtoanGiaoTcong = 0;
+		// this.dtoanGiaoDtoan = 0;
+		// this.dtoanGiaoNguonKhac = 0;
+		// this.dtoanGiaoNguonQuy = 0;
+		// this.dtoanGiaoNstt = 0;
+		// this.dtoanGiaoCk = 0;
+		// this.giaiNganThangBcaoTcong = 0;
+		// this.giaiNganThangBcaoTcongTle = 0;
+		// this.giaiNganThangBcaoDtoan = 0;
+		// this.giaiNganThangBcaoDtoanTle = 0;
+		// this.giaiNganThangBcaoNguonKhac = 0;
+		// this.giaiNganThangBcaoNguonKhacTle = 0;
+		// this.giaiNganThangBcaoNguonQuy = 0;
+		// this.giaiNganThangBcaoNguonQuyTle = 0;
+		// this.giaiNganThangBcaoNstt = 0;
+		// this.giaiNganThangBcaoNsttTle = 0;
+		// this.giaiNganThangBcaoCk = 0;
+		// this.giaiNganThangBcaoCkTle = 0;
+		// this.luyKeGiaiNganTcong = 0;
+		// this.luyKeGiaiNganTcongTle = 0;
+		// this.luyKeGiaiNganDtoan = 0;
+		// this.luyKeGiaiNganDtoanTle = 0;
+		// this.luyKeGiaiNganNguonKhac = 0;
+		// this.luyKeGiaiNganNguonKhacTle = 0;
+		// this.luyKeGiaiNganNguonQuy = 0;
+		// this.luyKeGiaiNganNguonQuyTle = 0;
+		// this.luyKeGiaiNganNstt = 0;
+		// this.luyKeGiaiNganNsttTle = 0;
+		// this.luyKeGiaiNganCk = 0;
+		// this.luyKeGiaiNganCkTle = 0;
 
 		//phu luc 3
 		this.qddtTmdtTso = 0;

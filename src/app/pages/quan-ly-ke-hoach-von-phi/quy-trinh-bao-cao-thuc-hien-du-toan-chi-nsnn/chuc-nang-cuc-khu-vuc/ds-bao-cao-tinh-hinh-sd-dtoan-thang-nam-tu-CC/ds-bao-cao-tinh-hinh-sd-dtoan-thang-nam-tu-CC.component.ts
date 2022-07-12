@@ -1,15 +1,13 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
-import { NgxSpinnerService } from 'ngx-spinner';
-import * as fileSaver from 'file-saver';
 
 
 @Component({
@@ -59,7 +57,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let date = new Date();
+    const date = new Date();
     this.searchFilter.namBcao = date.getFullYear();
     this.searchFilter.thangBcao = date.getMonth();
     this.trangThai = '7';
@@ -88,7 +86,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
+    const searchFilterTemp = Object.assign({},this.searchFilter);
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;

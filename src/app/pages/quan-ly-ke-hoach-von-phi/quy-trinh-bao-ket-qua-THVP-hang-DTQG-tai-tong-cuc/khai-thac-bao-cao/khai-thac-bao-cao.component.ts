@@ -1,15 +1,12 @@
-import { DatePipe, Location} from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI, TRANG_THAI_GUI_DVCT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { UserService } from 'src/app/services/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-khai-thac-bao-cao',
@@ -91,8 +88,8 @@ export class KhaiThacBaoCaoComponent implements OnInit {
   async onSubmit() {
     this.spinner.show();
     this.searchFilter.trangThais= [];
-    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy') || this.searchFilter.ngayTaoTu;
-    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy') || this.searchFilter.ngayTaoDen;
+    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR) || this.searchFilter.ngayTaoTu;
+    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR) || this.searchFilter.ngayTaoDen;
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{
@@ -102,11 +99,11 @@ export class KhaiThacBaoCaoComponent implements OnInit {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
-          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
-          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
-          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
-          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
-          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+          e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
         })
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;

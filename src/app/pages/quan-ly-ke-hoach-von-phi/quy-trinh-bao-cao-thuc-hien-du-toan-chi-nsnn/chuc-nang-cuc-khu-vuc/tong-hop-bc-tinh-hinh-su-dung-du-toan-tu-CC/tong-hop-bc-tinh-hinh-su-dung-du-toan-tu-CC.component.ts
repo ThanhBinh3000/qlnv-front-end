@@ -1,15 +1,13 @@
-import { DatePipe ,Location} from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { DatePipe, Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -58,7 +56,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let date = new Date();
+    const date = new Date();
     this.searchFilter.namBcao = date.getFullYear();
     this.searchFilter.thangBcao = date.getMonth();
     this.searchFilter.maLoaiBcao='526';
@@ -90,11 +88,11 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
       if(res.statusCode==0){
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
-          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
-          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
-          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
-          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
-          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
+          e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
         })
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
@@ -122,13 +120,13 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   // tong hop bao cao tu cap duoi
   tongHop(){
-    let request = {
-      dotBcao: null,
-      maLoaiBcao: this.searchFilter.maLoaiBcao,
-      maPhanBCao: '0',
-      namBcao: this.searchFilter.namBcao,
-      thangBcao: this.searchFilter.thangBcao
-    }
+    // let request = {
+    //   dotBcao: null,
+    //   maLoaiBcao: this.searchFilter.maLoaiBcao,
+    //   maPhanBCao: '0',
+    //   namBcao: this.searchFilter.namBcao,
+    //   thangBcao: this.searchFilter.thangBcao
+    // }
 
       if(!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBcao && this.searchFilter.maLoaiBcao == '526')){
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
