@@ -93,6 +93,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
   }
 
   async ngOnInit() {
+    this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName);
@@ -113,7 +114,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
       },
     );
     this.getPhuongAn();
-
+    this.spinner.hide()
   }
 
   //get user info
