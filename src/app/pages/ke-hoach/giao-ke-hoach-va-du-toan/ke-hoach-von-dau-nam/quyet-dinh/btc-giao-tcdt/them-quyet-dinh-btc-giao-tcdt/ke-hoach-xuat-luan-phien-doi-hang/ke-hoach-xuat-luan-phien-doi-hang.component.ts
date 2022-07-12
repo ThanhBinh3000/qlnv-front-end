@@ -12,16 +12,26 @@ export class KeHoachXuatLuanPhienDoiHangComponent implements OnInit {
 
   rowItem: IXuatLuanPhienDoiHang = {
     id: null,
-    idNoiDung: null,
-    noiDung: null,
+    idLoaiHangHoa: null,
+    tenLoaiHangHoa: null,
+    idHangHoa: null,
+    tenHangHoa: null,
+    idDonViTinh: null,
+    donViTinh: null,
+    soLuong: null,
     duToan: null,
   };
-  dsNoiDung = [];
+  dsLoaiHangHoa = [];
+  dsHangHoa = [];
+  dsDonViTinh = [];
   dataEdit: { [key: string]: { edit: boolean; data: IXuatLuanPhienDoiHang } } =
     {};
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
+  allChecked = false;
+  indeterminate = false;
+  setOfCheckedId = new Set<number>();
 
   constructor() {}
 
@@ -33,26 +43,57 @@ export class KeHoachXuatLuanPhienDoiHangComponent implements OnInit {
     this.dataTable = [
       {
         id: 1,
-        idNoiDung: 1,
-        noiDung: 'Chi thường xuyên',
+        idLoaiHangHoa: 1,
+        tenLoaiHangHoa: 'Thóc',
+        idHangHoa: 1,
+        tenHangHoa: 'Thóc tẻ',
+        idDonViTinh: 1,
+        donViTinh: 'Chiếc',
+        soLuong: 100,
         duToan: 250,
       },
       {
         id: 2,
-        idNoiDung: 2,
-        noiDung: 'Khác',
-        duToan: 350,
+        idLoaiHangHoa: 2,
+        tenLoaiHangHoa: 'Thóc',
+        idHangHoa: 2,
+        tenHangHoa: 'Thóc tẻ',
+        idDonViTinh: 2,
+        donViTinh: 'Chiếc',
+        soLuong: 100,
+        duToan: 250,
       },
     ];
 
-    this.dsNoiDung = [
+    this.dsLoaiHangHoa = [
       {
         id: 1,
-        noiDung: 'Chi thường xuyên',
+        giaTri: 'Thóc',
       },
       {
         id: 2,
-        noiDung: 'Khác',
+        giaTri: 'Muối',
+      },
+    ];
+    this.dsHangHoa = [
+      {
+        id: 1,
+        giaTri: 'Thóc tẻ',
+      },
+      {
+        id: 2,
+        giaTri: 'Muối i-ốt',
+      },
+    ];
+
+    this.dsDonViTinh = [
+      {
+        id: 1,
+        giaTri: 'Chiếc',
+      },
+      {
+        id: 2,
+        giaTri: 'Tấn',
       },
     ];
 
@@ -101,11 +142,43 @@ export class KeHoachXuatLuanPhienDoiHangComponent implements OnInit {
     }, 0);
     return sum;
   }
+
+  onAllChecked(checked) {
+    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.refreshCheckedStatus();
+  }
+
+  updateCheckedSet(id: number, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(id);
+    } else {
+      this.setOfCheckedId.delete(id);
+    }
+  }
+
+  refreshCheckedStatus(): void {
+    this.allChecked = this.dataTable.every(({ id }) =>
+      this.setOfCheckedId.has(id),
+    );
+    this.indeterminate =
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.allChecked;
+  }
+
+  onItemChecked(id: number, checked) {
+    this.updateCheckedSet(id, checked);
+    this.refreshCheckedStatus();
+  }
 }
 
 interface IXuatLuanPhienDoiHang {
   id: number;
-  idNoiDung: number;
-  noiDung: string;
+  idLoaiHangHoa: number;
+  tenLoaiHangHoa: string;
+  idHangHoa: number;
+  tenHangHoa: string;
+  idDonViTinh: number;
+  donViTinh: string;
+  soLuong: number;
   duToan: number;
 }
