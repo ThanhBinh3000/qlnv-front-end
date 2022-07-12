@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { QUAN_LY_THONG_TIN_QUYET_TOAN_LIST } from './quan-ly-thong-tin-quyet-toan.constant';
+import { NgxSpinnerService } from 'ngx-spinner';
 interface DataItem {
   name: string;
   age: number;
@@ -63,10 +64,12 @@ export class QuanLyThongTinQuyetToanComponent implements OnInit {
 		private userService: UserService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
+    private spinner: NgxSpinnerService,
   ) {}
 
   async ngOnInit() {
-    let userName = this.userService.getUserName();
+    this.spinner.show()
+    const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(
@@ -107,6 +110,7 @@ export class QuanLyThongTinQuyetToanComponent implements OnInit {
     }
     this.listOfData = data;
     //////////////
+    this.spinner.hide()
   }
   //get user info
 	async getUserInfo(username: string) {
