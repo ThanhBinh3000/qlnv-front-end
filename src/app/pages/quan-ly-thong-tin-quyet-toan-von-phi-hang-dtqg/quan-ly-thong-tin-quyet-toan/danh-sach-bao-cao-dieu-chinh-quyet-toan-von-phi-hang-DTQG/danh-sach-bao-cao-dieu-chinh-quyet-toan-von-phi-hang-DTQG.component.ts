@@ -51,6 +51,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   newDate = new Date();
   userRole: string;
   status: boolean;
+
   donVis: any[] = [];
   listIdDelete: string[] = [];
   constructor(
@@ -210,7 +211,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.maBcao = null
-    this.searchFilter.trangThai = null
+    this.trangThai = null
   }
 
   taoMoi() {
