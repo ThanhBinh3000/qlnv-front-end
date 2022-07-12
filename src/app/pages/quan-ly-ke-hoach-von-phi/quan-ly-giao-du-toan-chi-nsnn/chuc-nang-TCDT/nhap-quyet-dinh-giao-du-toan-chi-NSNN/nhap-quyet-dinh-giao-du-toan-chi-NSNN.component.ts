@@ -150,6 +150,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.spinner.show()
     //lay id cua ban ghi
     this.id = this.routerActive.snapshot.paramMap.get('id');
     //lay thong tin user

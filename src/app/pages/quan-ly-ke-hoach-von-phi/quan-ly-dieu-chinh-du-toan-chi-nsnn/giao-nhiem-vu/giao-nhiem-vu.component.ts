@@ -322,7 +322,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.trangThaiBaoCao == Utils.TT_BC_10) {
 			this.status = false;
 		} else {
-			this.status = true; 
+			this.status = true;
 		}
 		const roleNguoiTao = this.userInfo?.roles[0]?.code;
 		if( ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) ||  ROLE_LANH_DAO.includes(roleNguoiTao)){
@@ -646,7 +646,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// call chi tiet bao cao
 	async getDetailReport() {
 		this.spinner.show();
-		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet1(this.id).toPromise().then(
+		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;

@@ -122,6 +122,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
 
   async ngOnInit() {
     const userName = this.userService.getUserName();
+    this.spinner.show()
     await this.getUserInfo(userName); //get user info
     this.searchFilter.donViTao = this.userInfo?.dvql;
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
@@ -156,6 +157,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
       }
     );
     // this.onSubmit()@
+    this.spinner.hide()
   }
 
   //get user info

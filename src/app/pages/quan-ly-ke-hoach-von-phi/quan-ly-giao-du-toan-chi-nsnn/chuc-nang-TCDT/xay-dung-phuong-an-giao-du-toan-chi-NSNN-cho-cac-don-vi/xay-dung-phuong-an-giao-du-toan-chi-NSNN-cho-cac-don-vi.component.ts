@@ -167,6 +167,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   ) { }
 
   async ngOnInit() {
+    this.spinner.show()
     //lay id cua ban ghi
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.namDtoan = this.routerActive.snapshot.paramMap.get('namDtoan');

@@ -76,6 +76,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.show()
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);

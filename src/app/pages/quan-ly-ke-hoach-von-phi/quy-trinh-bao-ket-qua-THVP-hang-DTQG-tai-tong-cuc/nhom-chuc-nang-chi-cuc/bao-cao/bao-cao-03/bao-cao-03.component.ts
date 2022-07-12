@@ -61,14 +61,14 @@ export class BaoCao03Component implements OnInit {
     lstCTietBaoCaoTemp: any[] = [];
 
     thuyetMinh: string;
-    maDviTien: string = '1';
+    maDviTien = '1';
     tuNgay: any;
     denNgay: any;
-    listIdDelete: string = "";
-    trangThaiPhuLuc: string = '1';
+    listIdDelete = "";
+    trangThaiPhuLuc = '1';
 
     //trang thai cac nut
-    status: boolean = false;
+    status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     statusBtnExport: boolean;
@@ -169,7 +169,7 @@ export class BaoCao03Component implements OnInit {
             }
         }
         this.changeModel();
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
         })
@@ -193,7 +193,7 @@ export class BaoCao03Component implements OnInit {
 
     // action print
     doPrint() {
-        let WindowPrt = window.open(
+        const WindowPrt = window.open(
             '',
             '',
             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
@@ -214,17 +214,17 @@ export class BaoCao03Component implements OnInit {
     getChiMuc(str: string, dauMuc: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
-            var xau: string = "";
-            let chiSo: any = str.split('.');
-            var n: number = chiSo.length - 1;
-            var k: number = parseInt(chiSo[n], 10);
+            let xau = "";
+            const chiSo: string[] = str.split('.');
+            const n: number = chiSo.length - 1;
+            let k: number = parseInt(chiSo[n], 10);
             if (dauMuc == '1') {
                 if (n == 0) {
                     xau = chiSo[n];
-                };
+                }
                 if (n == 1) {
                     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-                };
+                }
                 if (n == 2) {
                     xau = String.fromCharCode(k + 96);
                 }
@@ -235,7 +235,7 @@ export class BaoCao03Component implements OnInit {
             } else if (dauMuc == '2') {
                 if (n == 0) {
                     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-                };
+                }
                 if (n == 1) {
                     xau = String.fromCharCode(k + 96);
                 }
@@ -258,19 +258,19 @@ export class BaoCao03Component implements OnInit {
                 return xau;
             } else {
                 if (n == 0) {
-                    for (var i = 0; i < this.soLaMa.length; i++) {
+                    for (let i = 0; i < this.soLaMa.length; i++) {
                         while (k >= this.soLaMa[i].gTri) {
                             xau += this.soLaMa[i].kyTu;
                             k -= this.soLaMa[i].gTri;
                         }
                     }
-                };
+                }
                 if (n == 1) {
                     xau = chiSo[n];
-                };
+                }
                 if (n == 2) {
                     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-                };
+                }
                 if (n == 3) {
                     xau = String.fromCharCode(k + 96);
                 }
@@ -291,10 +291,10 @@ export class BaoCao03Component implements OnInit {
     }
     //tìm vị trí cần để thêm mới
     findVt(str: string, phuLuc): number {
-        let baoCao = this.getBieuMau(phuLuc)
-        var start: number = baoCao.findIndex(e => e.stt == str);
-        var index: number = start;
-        for (var i = start + 1; i < baoCao.length; i++) {
+        const baoCao = this.getBieuMau(phuLuc)
+        const start: number = baoCao.findIndex(e => e.stt == str);
+        let index: number = start;
+        for (let i = start + 1; i < baoCao.length; i++) {
             if (baoCao[i].stt.startsWith(str)) {
                 index = i;
             }
@@ -303,11 +303,11 @@ export class BaoCao03Component implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
-            var str = this.getHead(baoCao[item].stt) + "." + (this.getTail(baoCao[item].stt) + heSo).toString();
-            var nho = baoCao[item].stt;
+            const str = this.getHead(baoCao[item].stt) + "." + (this.getTail(baoCao[item].stt) + heSo).toString();
+            const nho = baoCao[item].stt;
             baoCao.forEach(item => {
                 item.stt = item.stt.replace(nho, str);
             })
@@ -316,15 +316,12 @@ export class BaoCao03Component implements OnInit {
 
     addLine(id: any, phuLuc) {
         let baoCao = this.getBieuMau(phuLuc);
-        let dataPL;                 // du lieu default phu luc
-        let lstKmTemp;              // list khoan muc chinh
-        var maKm;                   // ma khoan muc
 
-        dataPL = new ItemDataMau03();
-        lstKmTemp = this.lstVatTuFull;
-        maKm = baoCao.find(e => e.id == id)?.maVtu;
+        const dataPL = new ItemDataMau03();
+        const lstKmTemp = this.lstVatTuFull;
+        const maKm = baoCao.find(e => e.id == id)?.maVtu;
         dataPL.header = phuLuc;
-        let obj = {
+        const obj = {
             maKhoanMuc: maKm,
             lstKhoanMuc: lstKmTemp,
             baoCaos : baoCao,
@@ -344,10 +341,9 @@ export class BaoCao03Component implements OnInit {
         });
         modalIn.afterClose.subscribe(async (res) => {
             if (res) {
-                var index: number;
-                index = baoCao.findIndex(e => e.maVtu == res.maKhoanMuc);
+                const index: number = baoCao.findIndex(e => e.maVtu == res.maKhoanMuc);
                 if (index == -1) {
-                    let data: any = {
+                    const data: any = {
                         ...dataPL,
                         maNdungChi: res.maKhoanMuc,
                         maVtu: res.maKhoanMuc,
@@ -364,7 +360,7 @@ export class BaoCao03Component implements OnInit {
                 id = baoCao.find(e => e.maVtu == res.maKhoanMuc)?.id;
 
                 res.lstKhoanMuc.forEach(item => {
-                    var data: any = {
+                    const data: any = {
                         ...dataPL,
                         maNdungChi: item.id,
                         maVtu: item.id,
@@ -380,14 +376,14 @@ export class BaoCao03Component implements OnInit {
 
     //thêm ngang cấp
     addSame(id: any, initItem, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
+        const baoCao = this.getBieuMau(phuLuc);
+        const index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        const head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
+        const tail: number = this.getTail(baoCao[index].stt); // lay phan duoi cua so tt
+        const ind: number = this.findVt(baoCao[index].stt, phuLuc); // vi tri can duoc them
         // tim cac vi tri can thay doi lai stt
-        let lstIndex: number[] = [];
-        for (var i = baoCao.length - 1; i > ind; i--) {
+        const lstIndex: number[] = [];
+        for (let i = baoCao.length - 1; i > ind; i--) {
             if (this.getHead(baoCao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -399,7 +395,7 @@ export class BaoCao03Component implements OnInit {
 
         // them moi phan tu
         if (initItem?.id) {
-            let item = {
+            const item = {
                 ...initItem,
                 stt: head + "." + (tail + 1).toString(),
                 maLoai: '5',
@@ -411,7 +407,7 @@ export class BaoCao03Component implements OnInit {
                 data: { ...item }
             };
         } else {
-            let item = {
+            const item = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
@@ -428,7 +424,7 @@ export class BaoCao03Component implements OnInit {
 
     // gan editCache.data == lstCtietBcao
     updateEditCache(phuLuc: string): void {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
@@ -439,15 +435,15 @@ export class BaoCao03Component implements OnInit {
 
     //thêm cấp thấp hơn
     addLow(id: any, initItem, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var data = baoCao.find(e => e.id == id);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
-        var stt: string;
+        const baoCao = this.getBieuMau(phuLuc);
+        const data = baoCao.find(e => e.id == id);
+        let index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        let stt: string;
         if (baoCao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
             stt = data.stt + '.1';
         } else {
             index = this.findVt(data.stt, phuLuc);
-            for (var i = baoCao.length - 1; i >= 0; i--) {
+            for (let i = baoCao.length - 1; i >= 0; i--) {
                 if (this.getHead(baoCao[i].stt) == data.stt) {
                     stt = data.stt + '.' + (this.getTail(baoCao[i].stt) + 1).toString();
                     break;
@@ -457,7 +453,7 @@ export class BaoCao03Component implements OnInit {
 
         // them moi phan tu
         if (initItem?.id) {
-            let item = {
+            const item = {
                 ...initItem,
                 stt: stt,
                 listCtiet: []
@@ -471,7 +467,7 @@ export class BaoCao03Component implements OnInit {
             if (baoCao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
                 this.sum(stt, phuLuc);
             }
-            let item = {
+            const item = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
@@ -488,18 +484,18 @@ export class BaoCao03Component implements OnInit {
     //xóa dòng
     deleteLine(id: any, phuLuc: string) {
         let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
+        const index: number = baoCao.findIndex(e => e.id == id); // vi tri hien tai
         // khong tim thay thi out ra
         if (index == -1) return;
-        var stt: string = baoCao[index].stt;
-        var nho: string = baoCao[index].stt;
-        var head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
+        const stt: string = baoCao[index].stt;
+        const nho: string = baoCao[index].stt;
+        const head: string = this.getHead(baoCao[index].stt); // lay phan dau cua so tt
         //xóa phần tử và con của nó
         baoCao = baoCao.filter(e => !e.stt.startsWith(nho));
         this.setBieuMau(baoCao, phuLuc);
         //update lại số thức tự cho các phần tử cần thiết
-        let lstIndex: number[] = [];
-        for (var i = baoCao.length - 1; i >= index; i--) {
+        const lstIndex: number[] = [];
+        for (let i = baoCao.length - 1; i >= index; i--) {
             if (this.getHead(baoCao[i].stt) == head) {
                 lstIndex.push(i);
             }
@@ -516,7 +512,7 @@ export class BaoCao03Component implements OnInit {
 
     // huy thay doi
     cancelEdit(id: string, phuLuc: string): void {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         // lay vi tri hang minh sua
         const index = baoCao.findIndex(item => item.id == id);
         // xoa dong neu truoc do chua co du lieu
@@ -537,7 +533,7 @@ export class BaoCao03Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
             return;
         }
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         this.editCache[id].data.checked = baoCao.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietbaoCao
         const index = baoCao.findIndex(item => item.id == id); // lay vi tri hang minh sua
         Object.assign(baoCao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
@@ -547,8 +543,8 @@ export class BaoCao03Component implements OnInit {
     }
 
     updateChecked(id: any, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var data = baoCao.find(e => e.id == id);
+        const baoCao = this.getBieuMau(phuLuc);
+        const data = baoCao.find(e => e.id == id);
         //đặt các phần tử con có cùng trạng thái với nó
         baoCao.forEach(item => {
             if (item.stt.startsWith(data.stt)) {
@@ -556,11 +552,11 @@ export class BaoCao03Component implements OnInit {
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        var index: number = baoCao.findIndex(e => e.stt == this.getHead(data.stt));
+        let index: number = baoCao.findIndex(e => e.stt == this.getHead(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0', phuLuc);
         } else {
-            var nho: boolean = baoCao[index].checked;
+            let nho: boolean = baoCao[index].checked;
             while (nho != this.checkAllChild(baoCao[index].stt, phuLuc)) {
                 baoCao[index].checked = !nho;
                 index = baoCao.findIndex(e => e.stt == this.getHead(baoCao[index].stt));
@@ -575,8 +571,8 @@ export class BaoCao03Component implements OnInit {
 
     //kiểm tra các phần tử con có cùng được đánh dấu hay ko
     checkAllChild(str: string, phuLuc: string): boolean {
-        let baoCao = this.getBieuMau(phuLuc);
-        var nho: boolean = true;
+        const baoCao = this.getBieuMau(phuLuc);
+        let nho = true;
         baoCao.forEach(item => {
             if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
                 nho = item.checked;
@@ -588,9 +584,9 @@ export class BaoCao03Component implements OnInit {
     // update all
     updateAllChecked(): void {
         // this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
+            const baoCao = this.getBieuMau(phuLuc);
             baoCao.filter(item =>
                 item.checked = this.allChecked
             );
@@ -598,10 +594,10 @@ export class BaoCao03Component implements OnInit {
     }
 
     deleteAllChecked() {
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         idPhuLuc.forEach(phuLuc => {
-            let baoCao = this.getBieuMau(phuLuc);
-            var lstId: any[] = [];
+            const baoCao = this.getBieuMau(phuLuc);
+            const lstId: any[] = [];
             baoCao.forEach(item => {
                 if (item.checked) {
                     lstId.push(item.id);
@@ -617,7 +613,7 @@ export class BaoCao03Component implements OnInit {
 
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: any, phuLuc: string) {
-        let baoCao = [];
+        const baoCao = [];
         let item;
         if (initItem?.id) {
             item = {
@@ -642,7 +638,7 @@ export class BaoCao03Component implements OnInit {
     }
 
     async sortByIndex() {
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
@@ -661,9 +657,9 @@ export class BaoCao03Component implements OnInit {
                 }
                 return 0;
             });
-            var lstTemp: any[] = [];
+            const lstTemp: any[] = [];
             baoCao.forEach(item => {
-                var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+                const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
                 if (index == -1) {
                     lstTemp.splice(0, 0, item);
                 } else {
@@ -676,7 +672,7 @@ export class BaoCao03Component implements OnInit {
     }
 
     setDetail(phuLuc) {
-        let baoCao = this.getBieuMau(phuLuc);
+        const baoCao = this.getBieuMau(phuLuc);
         baoCao.forEach(item => {
             item.level = this.lstVatTuFull.find(e => e.id == item.maVtu)?.level;
         })
@@ -688,22 +684,22 @@ export class BaoCao03Component implements OnInit {
     }
 
     async sortWithoutIndex() {
-        let idPhuLuc = LISTBIEUMAUDOT[1].lstId;
+        const idPhuLuc = LISTBIEUMAUDOT[1].lstId;
         await idPhuLuc.forEach(async phuLuc => {
             await this.setDetail(phuLuc);
             let baoCao = this.getBieuMau(phuLuc);
-            var level = 0;
-            var danhSachChiTietBaoCaoTemp: any[] = baoCao;
+            let level = 0;
+            let danhSachChiTietBaoCaoTemp: any[] = baoCao;
             baoCao = [];
-            var data = danhSachChiTietBaoCaoTemp.find(e => e.level == 0);
+            const data = danhSachChiTietBaoCaoTemp.find(e => e.level == 0);
             await this.addFirst(data, phuLuc);
             baoCao = this.getBieuMau(phuLuc);
             danhSachChiTietBaoCaoTemp = danhSachChiTietBaoCaoTemp.filter(e => e.id != data.id);
-            var lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
+            let lstTemp = danhSachChiTietBaoCaoTemp.filter(e => e.level == level);
             while (lstTemp.length != 0 || level == 0) {
                 lstTemp.forEach(item => {
-                    let idCha = this.getIdCha(item.maVtu);
-                    var index: number = baoCao.findIndex(e => e.maVtu == idCha);
+                    const idCha = this.getIdCha(item.maVtu);
+                    let index: number = baoCao.findIndex(e => e.maVtu == idCha);
                     if (index != -1) {
                         this.addLow(baoCao[index].id, item, phuLuc);
                     } else {
@@ -719,8 +715,8 @@ export class BaoCao03Component implements OnInit {
     }
 
     getLowStatus(str: string, phuLuc: string) {
-        let baoCao = this.getBieuMau(phuLuc);
-        var index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
+        const baoCao = this.getBieuMau(phuLuc);
+        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
         if (index == -1) {
             return false;
         }
@@ -813,14 +809,14 @@ export class BaoCao03Component implements OnInit {
 
     async saveAppendix(maChucNang: string) {
         await this.saveMau03();
-        let baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
+        const baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
 
-        let checkMoneyRange = true;
+        const checkMoneyRange = true;
         let checkPersonReport = true;
 
         // validate nguoi thuc hien bao cao
@@ -897,12 +893,12 @@ export class BaoCao03Component implements OnInit {
     }
 
     sum(stt: string, phuLuc) {
-        let dataPL = new ItemDataMau03();
-        let baoCaoTemp = this.getBieuMau(phuLuc);
+        const dataPL = new ItemDataMau03();
+        const baoCaoTemp = this.getBieuMau(phuLuc);
         stt = this.getHead(stt);
         while (stt != '0') {
-            var index = baoCaoTemp.findIndex(e => e.stt == stt);
-            let data = baoCaoTemp[index];
+            const index = baoCaoTemp.findIndex(e => e.stt == stt);
+            const data = baoCaoTemp[index];
             baoCaoTemp[index] = {
                 ...dataPL,
                 id: data.id,

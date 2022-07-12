@@ -85,6 +85,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info

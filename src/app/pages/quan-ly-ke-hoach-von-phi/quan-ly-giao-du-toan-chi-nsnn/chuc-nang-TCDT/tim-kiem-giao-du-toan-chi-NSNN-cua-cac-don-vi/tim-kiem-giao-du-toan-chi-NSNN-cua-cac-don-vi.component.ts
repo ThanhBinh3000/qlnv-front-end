@@ -88,6 +88,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
 
   async ngOnInit() {
     const userName = this.userService.getUserName();
+    this.spinner.show()
     await this.getUserInfo(userName); //get user info
     this.searchFilter.maDviTao = this.userInfo?.dvql;
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
@@ -119,6 +120,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       }
     );
     this.onSubmit()
+    this.spinner.hide()
   }
 
   //get user info

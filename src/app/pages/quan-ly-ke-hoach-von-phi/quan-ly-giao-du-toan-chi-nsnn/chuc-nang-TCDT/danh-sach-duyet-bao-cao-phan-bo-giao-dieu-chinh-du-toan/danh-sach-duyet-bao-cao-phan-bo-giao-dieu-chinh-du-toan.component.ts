@@ -89,6 +89,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
 
   async ngOnInit() {
     const userName = this.userService.getUserName();
+    this.spinner.show()
     await this.getUserInfo(userName); //get user info
     this.maDviTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;

@@ -210,6 +210,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     let userName = this.userService.getUserName();
@@ -592,10 +593,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     if (n == 2) {
       xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     };
+    // if (n == 3) {
+    //   xau = String.fromCharCode(k + 96);
+    // }
     if (n == 3) {
-      xau = String.fromCharCode(k + 96);
-    }
-    if (n == 4) {
       xau = "-";
     }
     return xau;
@@ -961,13 +962,15 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         id: data.id,
         stt: data.stt,
         maLoaiHang: data.maLoaiHang,
+        donGiaMua: null,
+        soLuong: null,
         checked: data.checked,
         level: data.level,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          // this.lstCtietBcao[index].soLuong += item.soLuong;
-          // this.lstCtietBcao[index].donGiaMua += item.donGiaMua;
+          this.lstCtietBcao[index].soLuong = null;
+          this.lstCtietBcao[index].donGiaMua =null;
           this.lstCtietBcao[index].thanhTien += item.thanhTien;
         }
       })
@@ -982,8 +985,8 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     this.total.thanhTien = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        // this.total.soLuong += item.soLuong;
-        // this.total.donGiaMua += item.donGiaMua;
+        this.total.soLuong = null;
+        this.total.donGiaMua = null;
         this.total.thanhTien += item.thanhTien;
       }
     })
