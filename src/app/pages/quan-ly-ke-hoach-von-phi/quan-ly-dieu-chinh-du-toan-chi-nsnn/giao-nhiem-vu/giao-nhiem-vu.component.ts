@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 import { DialogDieuChinhCopyComponent } from './../../../../components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
 import { DatePipe, Location } from '@angular/common';
@@ -73,7 +74,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
 	ngayCapTrenTraKq!: string;
-	trangThaiBaoCao: string = '1';
+	trangThaiBaoCao = '1';
 	maDviTao!: string;
 	thuyetMinh: string;
 	lyDoTuChoi: string;
@@ -127,7 +128,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			id: Utils.TT_BC_9,
 			tenDm: "Tiếp nhận",
 		},
-	];;
+	];
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[] = [
 		{
@@ -151,22 +152,22 @@ export class GiaoNhiemVuComponent implements OnInit {
 	//beforeUpload: any;
 	listIdFilesDelete: any = [];                        // id file luc call chi tiet
 	//trang thai cac nut
-	status: boolean = false;
-	statusEdit: boolean = false;
-	statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
-	statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
-	statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
-	statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
-	statusBtnGuiDVCT: boolean = true;                   // trang thai nut gui don vi cap tren
-	statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
-	statusBtnCopy: boolean = true;                      // trang thai copy
-	statusBtnPrint: boolean = true;                     // trang thai print
-	statusBtnClose: boolean = false;
+	status = false;
+	statusEdit = false;
+	statusBtnSave = true;                      // trang thai an/hien nut luu
+	statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
+	statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
+	statusBtnLD = true;                        // trang thai an/hien nut lanh dao
+	statusBtnGuiDVCT = true;                   // trang thai nut gui don vi cap tren
+	statusBtnDVCT = true;                      // trang thai nut don vi cap tren
+	statusBtnCopy = true;                      // trang thai copy
+	statusBtnPrint = true;                     // trang thai print
+	statusBtnClose = false;
 	statusBtnOk: boolean;
 	statusBtnFinish: boolean;
 	//khac
 	data: any;
-	selectedIndex: number = 1;
+	selectedIndex = 1;
 	allChecked = false;                         // check all checkbox
 
 	// before uploaf file
@@ -216,10 +217,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.id = this.routerActive.snapshot.paramMap.get('id');
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
-		var dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
+		const dotBcaoDieuChinh = this.routerActive.snapshot.paramMap.get('dotBcao');
     this.dotBcao = parseInt(dotBcaoDieuChinh, 10)
-		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
-		let userName = this.userService.getUserName();
+		const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
+		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		if (this.id) {
 			await this.getDetailReport();
@@ -278,7 +279,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.maBaoCao = '';
 				if (nam) {
 					this.namHienHanh = parseInt(nam, 10);
-				} else {
 				}
 			}
 
@@ -309,7 +309,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.changeDot()
   }
   changeDot(){
-    let item1 = this.phuLucs.find(item => item.id == "1")
+    const item1 = this.phuLucs.find(item => item.id == "1")
     item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao +"/năm " + this.namHienHanh
   }
 
@@ -324,13 +324,13 @@ export class GiaoNhiemVuComponent implements OnInit {
 		} else {
 			this.status = true;
 		}
-		let roleNguoiTao = this.userInfo?.roles[0]?.code;
+		const roleNguoiTao = this.userInfo?.roles[0]?.code;
 		if( ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) ||  ROLE_LANH_DAO.includes(roleNguoiTao)){
 			this.status = true;
 		}
 		let checkParent = false;
 		let checkChirld = false;
-		let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+		const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
 		if (dVi && dVi.maDvi == this.userInfo.dvql) {
 			checkChirld = true;
 		}
@@ -386,9 +386,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
 		upfile.append('folder', this.maBaoCao + '/' + this.maDviTao);
-		let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
 			(data) => {
-				let objfile = {
+				const objfile = {
 					fileName: data.filename,
 					fileSize: data.size,
 					fileUrl: data.url,
@@ -411,10 +411,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	//download file về máy tính
   async downloadFile(id: string) {
-    let file!: File;
-    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
-      let fileAttach = this.lstFiles.find(element => element?.id == id);
+		const fileAttach = this.lstFiles.find(element => element?.id == id);
       if (fileAttach) {
         await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
@@ -443,7 +442,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			},
 		  );
 		} else {
-		  let file: any = this.fileDetail;
+			const file: any = this.fileDetail;
 		  const blob = new Blob([file], { type: "application/octet-stream" });
 		  fileSaver.saveAs(blob, file.name);
 		}
@@ -475,7 +474,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		})
 
     // thêm cac dvi trực thuộc vào danh sách thêm mới sau khi tổng hợp
-		let tongHopTuIds = [];
+	const tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
 		})
@@ -491,12 +490,12 @@ export class GiaoNhiemVuComponent implements OnInit {
         return;
     }
     //get list file url
-    let listFile: any = [];
+    const listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
 
-		let request = JSON.parse(JSON.stringify({
+	const request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: this.lstFiles,
 			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
@@ -514,7 +513,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       return;
     }
     //get file cong van url
-		let file: any = this.fileDetail;
+	const file: any = this.fileDetail;
     if (file) {
       if (file.size > Utils.FILE_SIZE){
           this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
@@ -536,7 +535,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
-			this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+			this.quanLyVonPhiService.trinhDuyetDieuChinhService1(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -558,7 +557,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updateDieuChinh(request).toPromise().then(
+			this.quanLyVonPhiService.updateDieuChinh1(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -647,7 +646,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// call chi tiet bao cao
 	async getDetailReport() {
 		this.spinner.show();
-		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
+		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet1(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;
@@ -686,7 +685,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	// call tong hop dieu chinh
 	async tongHop() {
-		let request = {
+		const request = {
 			dotBcao: this.dotBcao,
 			namBcao: this.namHienHanh,
 		}
@@ -721,7 +720,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// them phu luc
 	addBieuMau() {
 		this.phuLucs.forEach(item => item.status = false);
-		var danhSach = this.phuLucs.filter(item => this.lstDieuChinhs.findIndex(e => e.maLoai == item.id) == -1);
+		const danhSach = this.phuLucs.filter(item => this.lstDieuChinhs.findIndex(e => e.maLoai == item.id) == -1);
 
 		const modalIn = this.modal.create({
 			nzTitle: 'Danh sách biểu mẫu',
@@ -821,11 +820,11 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
   newTab(id: any): void {
-		var index: number = this.tabs.findIndex(e => e.id === id);
+	const index: number = this.tabs.findIndex(e => e.id === id);
 		if (index != -1) {
 			this.selectedIndex = index + 1;
 		} else {
-			let item = this.lstDieuChinhs.find(e => e.maLoai == id);
+			const item = this.lstDieuChinhs.find(e => e.maLoai == id);
 			this.data = {
 				...item,
         maDviTao: this.maDviTao,
@@ -844,7 +843,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	getNewData(obj: any) {
-		let index = this.lstDieuChinhs.findIndex(e => e.maLoai == this.tabs[0].id);
+		const index = this.lstDieuChinhs.findIndex(e => e.maLoai == this.tabs[0].id);
 		if (obj?.trangThai == '-1') {
 			this.getDetailReport();
 			this.data = {
@@ -867,7 +866,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	close() {
-		debugger
 		if (this.loai == "0" && this.maDviTao != this.maDviUser) {
 			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
 			return;
@@ -888,7 +886,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
   showDialogCopy(){
-		let obj = {
+	const obj = {
 			namBcao: this.namHienHanh,
       dotBcao: this.dotBcao,
       loaiCopy: '',
@@ -913,7 +911,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	async doCopy(response: any) {
-		var maBcaoNew: string;
+		let maBcaoNew: string;
 		await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
@@ -928,9 +926,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 				return;
 			}
 		);
-		let lstDieuChinhTemps: any[] = [];
+		const lstDieuChinhTemps: any[] = [];
 		this.lstDieuChinhs.forEach(data => {
-			let lstCtietTemp: any[] = [];
+			const lstCtietTemp: any[] = [];
 			data.lstCtietDchinh?.forEach(item => {
 				lstCtietTemp.push({
 					...item,
@@ -954,7 +952,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         tongHopTuIds.push(item.id);
       })
     }
-		let request = {
+	const request = {
 			id: null,
 			fileDinhKems: [],
 			listIdFiles: [],                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
@@ -996,7 +994,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   // action print
   doPrint() {
-    let WindowPrt = window.open(
+    const WindowPrt = window.open(
       '',
       '',
       'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',

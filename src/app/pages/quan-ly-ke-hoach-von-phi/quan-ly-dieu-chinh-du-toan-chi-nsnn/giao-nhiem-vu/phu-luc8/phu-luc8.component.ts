@@ -50,7 +50,7 @@ export class PhuLuc8Component implements OnInit {
   id: any;
   namHienHanh: number;
   maBieuMau: string;
-  trangThaiPhuLuc: string = '1';
+  trangThaiPhuLuc = '1';
   trangThaiPhuLucGetDeTail!: string;
   initItem: ItemData = {
     id: null,
@@ -70,9 +70,9 @@ export class PhuLuc8Component implements OnInit {
   namBcao: number;
   thuyetMinh: string;
   maDviTien: any;
-  listIdDelete: string = "";
+  listIdDelete = "";
   //trang thai cac nut
-  status: boolean = false;
+  status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
   allChecked = false;                         // check all checkbox
@@ -159,7 +159,7 @@ export class PhuLuc8Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          let obj = {
+          const obj = {
             trangThai: mcn,
             lyDoTuChoi: lyDoTuChoi,
           }
@@ -201,7 +201,7 @@ export class PhuLuc8Component implements OnInit {
 
   // them dong moi
   addLine(id: number): void {
-    let item: ItemData = {
+    const item: ItemData = {
       id: uuid.v4(),
       stt: 0,
       maCongTrinh: '',
@@ -360,16 +360,16 @@ export class PhuLuc8Component implements OnInit {
       return;
     }
     //tinh lai don vi tien va kiem tra gioi han cua chung
-    let lstCtietBcaoTemp: any = [];
+    const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstDchinh.forEach(item => {
-      let kh2021 = mulMoney(item.kh2021, this.maDviTien)
-      let lkeVcap = mulMoney(item.lkeVcap, this.maDviTien)
-      let gtriCtrinh = mulMoney(item.gtriCtrinh, this.maDviTien)
-      let dxuatDchinhTong = mulMoney(item.dxuatDchinhTong, this.maDviTien)
-      let dxuatDchinhTang = mulMoney(item.dxuatDchinhTang, this.maDviTien)
-      let dxuatDchinhGiam = mulMoney(item.dxuatDchinhGiam, this.maDviTien)
-      let kh2021SauDchinh = mulMoney(item.kh2021SauDchinh, this.maDviTien)
+      const kh2021 = mulMoney(item.kh2021, this.maDviTien)
+      const lkeVcap = mulMoney(item.lkeVcap, this.maDviTien)
+      const gtriCtrinh = mulMoney(item.gtriCtrinh, this.maDviTien)
+      const dxuatDchinhTong = mulMoney(item.dxuatDchinhTong, this.maDviTien)
+      const dxuatDchinhTang = mulMoney(item.dxuatDchinhTang, this.maDviTien)
+      const dxuatDchinhGiam = mulMoney(item.dxuatDchinhGiam, this.maDviTien)
+      const kh2021SauDchinh = mulMoney(item.kh2021SauDchinh, this.maDviTien)
       if (kh2021 > MONEY_LIMIT || lkeVcap > MONEY_LIMIT ||
         gtriCtrinh > MONEY_LIMIT || dxuatDchinhTong > MONEY_LIMIT || dxuatDchinhTang > MONEY_LIMIT || dxuatDchinhGiam > MONEY_LIMIT || kh2021SauDchinh > MONEY_LIMIT
       ) {
@@ -398,7 +398,7 @@ export class PhuLuc8Component implements OnInit {
         item.id = null;
       }
     })
-    let request = {
+    const request = {
       id: this.id,
       lstCtietDchinh: lstCtietBcaoTemp,
       maBieuMau: this.maBieuMau,
@@ -413,7 +413,7 @@ export class PhuLuc8Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          let obj = {
+          const obj = {
             trangThai: '-1',
             lyDoTuChoi: null,
           };
@@ -431,7 +431,7 @@ export class PhuLuc8Component implements OnInit {
 
   // action print
   doPrint() {
-    let WindowPrt = window.open(
+    const WindowPrt = window.open(
       '',
       '',
       'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',

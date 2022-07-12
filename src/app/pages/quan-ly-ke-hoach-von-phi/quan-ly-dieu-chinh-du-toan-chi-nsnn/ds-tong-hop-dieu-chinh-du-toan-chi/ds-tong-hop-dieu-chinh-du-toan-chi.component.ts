@@ -121,7 +121,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   //search list bao cao theo tieu chi
   async onSubmit() {
 
-    let requestReport = {
+    const requestReport = {
       maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
       maLoaiBcao: this.searchFilter.LOAI_BAO_CAO,
