@@ -93,6 +93,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
   }
 
   async ngOnInit() {
+    this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName);
@@ -101,7 +102,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
     this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
     this.namGiao = this.newDate.getFullYear();
     this.getPhuongAn();
-
+    this.spinner.hide()
   }
 
   //get user info

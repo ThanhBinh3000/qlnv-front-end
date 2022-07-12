@@ -107,6 +107,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
   date: any = new Date()
   roleUser:string;
+  status: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -120,6 +121,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
 
   async ngOnInit() {
+    this.spinner.show()
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.donViTao = this.userInfo?.dvql;
@@ -128,12 +130,15 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+      this.status = true;
       this.trangThai = '1';
       this.roleUser = 'canbo';
     } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      this.status = false;
       this.trangThai = '2';
       this.roleUser = 'truongBoPhan';
     } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+      this.status = false;
       this.trangThai = '4';
       this.roleUser = 'lanhDao';
     }
@@ -152,6 +157,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
       }
     );
     // this.onSubmit()@
+    this.spinner.hide()
   }
 
   //get user info

@@ -50,6 +50,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   donViTao!: any;
   trangThai!:string;
   newDate = new Date();
+  status: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -61,6 +62,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show()
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()
@@ -71,9 +73,11 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     this.userRole = this.userInfo?.roles[0].code;
 
     if (this.userInfo?.roles[0].code == ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
+      this.status = true;
       this.searchFilter.trangThai = Utils.TT_BC_2;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
     } else {
+      this.status = true;
       this.searchFilter.trangThai = Utils.TT_BC_4;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
     }

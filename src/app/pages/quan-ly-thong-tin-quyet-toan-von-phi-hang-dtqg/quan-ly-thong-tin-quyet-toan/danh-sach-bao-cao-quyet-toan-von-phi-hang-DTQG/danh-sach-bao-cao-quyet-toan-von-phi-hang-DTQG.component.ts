@@ -102,6 +102,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show()
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear() -1
@@ -117,15 +118,18 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.status = true;
 
     if (this.userRole == roleUserCB[0]) {
+      this.status = false;
 			this.trangThai = Utils.TT_BC_1;
 			this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
 			this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
 		}
     else {
 			if (this.userRole == roleUserTPB[0]) {
+        this.status = true;
 				this.trangThai = Utils.TT_BC_2;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else if (this.userRole == roleUserLD[0]){
+        this.status = true;
 				this.trangThai = Utils.TT_BC_4;
 				this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
 			} else {
@@ -134,6 +138,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
       }
 		}
     this.onSubmit();
+    this.spinner.hide()
   }
 
   //get user info

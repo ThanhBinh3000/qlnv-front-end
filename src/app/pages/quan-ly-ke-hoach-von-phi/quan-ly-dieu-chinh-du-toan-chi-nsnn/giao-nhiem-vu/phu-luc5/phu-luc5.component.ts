@@ -180,7 +180,11 @@ export class PhuLuc5Component implements OnInit {
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
     // this.lstDchinh = this.data?.lstCtiet;
-    this.lstFiles = this.data.fileData;
+    if(!this.data.fileData){
+      this.lstFiles = []
+    }else {
+      this.lstFiles = this.data.fileData;
+    }
 
     this.listFile = [];
     this.status = this.data?.status;
@@ -682,8 +686,9 @@ export class PhuLuc5Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
       fileData: this.lstFiles,
+      listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
-    this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
+    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

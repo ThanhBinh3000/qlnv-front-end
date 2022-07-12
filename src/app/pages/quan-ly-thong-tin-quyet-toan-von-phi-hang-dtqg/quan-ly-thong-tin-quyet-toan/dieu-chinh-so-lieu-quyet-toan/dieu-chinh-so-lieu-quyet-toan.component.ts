@@ -208,6 +208,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     let userName = this.userService.getUserName();

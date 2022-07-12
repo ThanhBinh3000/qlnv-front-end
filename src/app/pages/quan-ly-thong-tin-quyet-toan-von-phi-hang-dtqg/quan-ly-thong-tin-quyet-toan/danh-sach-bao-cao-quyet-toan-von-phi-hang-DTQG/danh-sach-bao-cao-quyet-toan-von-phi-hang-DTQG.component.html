@@ -34,7 +34,7 @@
           </div>
 
 					<div nz-col nzSpan="6">
-						<label class="search__label">Quyết toán năm(cần điều chỉnh):</label>
+						<label class="search__label">Quyết toán năm:</label>
 						<nz-input-number [nzSize]="'small'"
 							[class]="searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999 || !searchFilter.namQtoan && this.searchFilter.namQtoan !== 0 ?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.namQtoan"></nz-input-number>
@@ -58,7 +58,7 @@
           </div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
+			<nz-card nzTitle="" [nzExtra]="tableCard1"
 				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
@@ -69,8 +69,8 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
-							<th width="150px">Mã báo cáo điều chỉnh</th>
-							<th width="150px">Mã báo cáo trước khi điều chỉnh</th>
+							<th width="150px">Mã báo cáo</th>
+							<!-- <th width="150px">Mã báo cáo trước khi điều chỉnh</th> -->
 							<th width="150px">Quyết toán năm</th>
 							<th width="200px">Ngày lập</th>
 							<th width="200px">Ngày trình duyệt</th>
@@ -95,9 +95,9 @@
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-							<td>
+							<!-- <td>
 									{{ item.maDchinh}}
-							</td>
+							</td> -->
 							<td>
 									{{ item.maBcao}}
 							</td>
@@ -151,7 +151,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()">
+				<button type="button" class="btn btn-main" [hidden]="status" (click)="taoMoi()">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>

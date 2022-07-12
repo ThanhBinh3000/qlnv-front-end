@@ -34,7 +34,7 @@
     <tr>
       <th rowspan="2">STT</th>
       <th colspan="3" nzWidth="250px">Kế hoạch được giao</th>
-      <th colspan="3">Đơn vị đã thực hiện đến thời điểm báo cáo N</th>
+      <th colspan="3">Đơn vị đã thực hiện đến thời điểm báo cáo {{namBcao}}</th>
       <th colspan="2">Dự kiến thực hiện từ 10/5 đến cuối năm</th>
       <th rowspan="2" nzWidth="200px">Dự toán năm {{namBcao - 1}} còn thiếu</th>
       <th rowspan="2" nzWidth="200px">Tổng nhu cầu dự toán năm {{namBcao}}</th>
@@ -218,7 +218,7 @@
   </div>
 </div>
 <div class="action">
-  <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+  <button type="button" class="btn btn-main" [hidden]="status" (click)="doPrint()">
     <i nz-icon nzType="printer" nzTheme="outline"></i>
     <span>In</span>
   </button>
