@@ -51,12 +51,12 @@
 					</div>
           <div nz-col nzSpan="12">
             <label class="search__label">Thông báo quyết toán năm đối với vốn, phi hàng DTQG</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.maPhanBcao" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.thongBao" />
           </div>
           <div nz-col nzSpan="12">
 						<label class="search__label">Trạng thái</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-							[(ngModel)]="searchFilter.trangThai">
+							[(ngModel)]="trangThai">
 							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>

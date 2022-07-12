@@ -88,6 +88,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   newDate = new Date();
   userRole: string;
   status: boolean;
+  statusBtnXoaDk: boolean;
   donVis: any[] = [];
   maDviTao: string;
   listIdDelete: string[] = [];
@@ -115,8 +116,8 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
-    this.status = true;
-
+    this.status = false;
+    this.statusBtnXoaDk = false;
     if (this.userRole == roleUserCB[0]) {
       this.status = false;
 			this.trangThai = Utils.TT_BC_1;
@@ -250,7 +251,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.maBcao = null
-    this.searchFilter.trangThai = null
+    this.trangThai = null
   }
 
   taoMoi() {
