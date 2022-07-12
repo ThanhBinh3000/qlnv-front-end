@@ -62,6 +62,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show()
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()

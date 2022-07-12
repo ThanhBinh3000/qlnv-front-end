@@ -58,8 +58,9 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show()
     let userName = this.userService.getUserName();
-    await this.getUserInfo(userName); 
+    await this.getUserInfo(userName);
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
@@ -67,6 +68,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     this.status = true;
     this.userRole = this.userInfo?.roles[0].code;
     this.onSubmit()
+    this.spinner.hide()
   }
 
   //get user info
