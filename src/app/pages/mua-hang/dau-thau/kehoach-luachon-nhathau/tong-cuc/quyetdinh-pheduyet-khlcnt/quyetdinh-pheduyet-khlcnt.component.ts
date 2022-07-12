@@ -41,9 +41,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     soQd: '',
     ngayQd: '',
     trichYeu: '',
+    idThHdr: '',
     namKhoach: '',
     tenVthh: '',
-    tenCloaiVthh: '',
   };
   dataTableAll: any[] = [];
   isDetail: boolean = false;
@@ -419,9 +419,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       soQd: '',
       ngayQd: '',
       trichYeu: '',
+      idThHdr: '',
       namKhoach: '',
       tenVthh: '',
-      tenCloaiVthh: '',
     }
   }
 }
