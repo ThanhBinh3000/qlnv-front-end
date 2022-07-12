@@ -2,7 +2,7 @@ export class Utils {
     public static FORMAT_DATE_STR = "dd/MM/yyyy";
     public static FORMAT_DATE_TIME_STR = "dd/MM/yyyy HH:mm:ss";
 
-    public static ROUND = 3;
+    public static ROUND = 4;
 
     // Trang thai response
     public static RESP_SUCC = 0;

@@ -26,7 +26,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string = '/bao-cao/';
+  url = '/bao-cao/';
 
   userInfor: any;
   maDonVi: any;
@@ -77,12 +77,12 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    let date = new Date();
+    const date = new Date();
     this.searchFilter.namBcao = date.getFullYear();
     this.trangThai = '7';
     this.searchFilter.maLoaiBcao = '1';
     this.onSubmit();
-    let userName = this.nguoiDungSerivce.getUserName();
+    const userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -98,7 +98,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       }
     );
 
-    let objectDonViThuocQuanLy = {
+    const objectDonViThuocQuanLy = {
       capDvi: null,
       kieuDvi: null,
       loaiDvi: null,
@@ -156,7 +156,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
-    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
