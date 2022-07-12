@@ -87,7 +87,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
 
     //lay danh sach danh muc
@@ -139,7 +139,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
         },
       );
     } else {
-      let file: any = this.fileDetail;
+      const file: any = this.fileDetail;
       const blob = new Blob([file], { type: "application/octet-stream" });
       fileSaver.saveAs(blob, file.name);
     }
@@ -185,24 +185,24 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
   getChiMuc(str: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
-    var xau: string = "";
-    let chiSo: any = str.split('.');
-    var n: number = chiSo.length - 1;
-    var k: number = parseInt(chiSo[n], 10);
+    let xau = "";
+    const chiSo: any = str.split('.');
+    const n: number = chiSo.length - 1;
+    let k: number = parseInt(chiSo[n], 10);
     if (n == 0) {
-      for (var i = 0; i < this.soLaMa.length; i++) {
+      for (let i = 0; i < this.soLaMa.length; i++) {
         while (k >= this.soLaMa[i].gTri) {
           xau += this.soLaMa[i].kyTu;
           k -= this.soLaMa[i].gTri;
         }
       }
-    };
+    }
     if (n == 1) {
       xau = chiSo[n];
-    };
+    }
     if (n == 2) {
       xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    };
+    }
     if (n == 3) {
       xau = String.fromCharCode(k + 96);
     }
@@ -238,9 +238,9 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
       }
       return 0;
     });
-    var lstTemp: any[] = [];
+    const lstTemp: any[] = [];
     this.lstCtietBcao.forEach(item => {
-      var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
       if (index == -1) {
         lstTemp.splice(0, 0, item);
       } else {

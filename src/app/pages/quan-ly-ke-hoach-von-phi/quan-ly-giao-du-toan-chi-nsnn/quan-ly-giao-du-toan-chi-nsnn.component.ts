@@ -63,7 +63,7 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
 		await this.danhMuc.dMDonVi().toPromise().then(

@@ -76,7 +76,7 @@ export class PhuLuc5Component implements OnInit {
   id: any;
   namHienHanh: number;
   maBieuMau: string;
-  trangThaiPhuLuc: string = '1';
+  trangThaiPhuLuc = '1';
   trangThaiPhuLucGetDeTail!: string;
   // initItem: ItemData = {
   //   id: null,
@@ -119,9 +119,9 @@ export class PhuLuc5Component implements OnInit {
   // namBcao: number = 2022;
   thuyetMinh: string;
   // maDviTien: any;
-  listIdDelete: string = "";
+  listIdDelete = "";
   //trang thai cac nut
-  status: boolean = false;
+  status = false;
   // capDv:any;
   // allChecked = false;                         // check all checkbox
   // editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
@@ -277,9 +277,9 @@ export class PhuLuc5Component implements OnInit {
     const upfile: FormData = new FormData();
     upfile.append('file', file);
     upfile.append('folder', this.maBieuMau + '/' + this.namHienHanh);
-    let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+    const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
-        let objfile = {
+        const objfile = {
           fileName: data.filename,
           fileSize: data.size,
           fileUrl: data.url,
@@ -302,10 +302,9 @@ export class PhuLuc5Component implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
-    let file!: File;
-    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
-      let fileAttach = this.lstFiles.find(element => element?.id == id);
+      const fileAttach = this.lstFiles.find(element => element?.id == id);
       if (fileAttach) {
         await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
@@ -343,7 +342,7 @@ export class PhuLuc5Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          let obj = {
+          const obj = {
             trangThai: mcn,
             lyDoTuChoi: lyDoTuChoi,
           }
@@ -671,11 +670,11 @@ export class PhuLuc5Component implements OnInit {
     // })
 
     //get list file url
-    let listFile: any = [];
+    const listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
-    let request = {
+    const request = {
       id: this.id,
       // lstCtietDchinh: lstCtietBcaoTemp,
       maBieuMau: this.maBieuMau,
@@ -692,7 +691,7 @@ export class PhuLuc5Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          let obj = {
+          const obj = {
             trangThai: '-1',
             lyDoTuChoi: null,
           };

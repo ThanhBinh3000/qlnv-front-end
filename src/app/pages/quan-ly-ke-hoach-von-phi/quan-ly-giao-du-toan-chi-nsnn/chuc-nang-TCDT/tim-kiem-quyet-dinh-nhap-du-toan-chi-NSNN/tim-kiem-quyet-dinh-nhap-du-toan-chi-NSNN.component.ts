@@ -58,8 +58,8 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    const userName = this.userService.getUserName();
     this.spinner.show()
-    let userName = this.userService.getUserName();
     await this.getUserInfo(userName);
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
@@ -110,7 +110,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
         return;
       }
     }
-    let searchFilterTemp = Object.assign({}, this.searchFilter);
+    const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     this.spinner.show();
@@ -236,7 +236,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 	}
 
   checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;

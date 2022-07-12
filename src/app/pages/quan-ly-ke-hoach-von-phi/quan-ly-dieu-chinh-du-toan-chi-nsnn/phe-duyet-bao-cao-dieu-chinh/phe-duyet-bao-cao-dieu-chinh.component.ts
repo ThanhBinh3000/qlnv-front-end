@@ -109,7 +109,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.maDviTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
@@ -208,7 +208,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     } else {
       lstTrangThai = [this.searchFilter.trangThai];
     }
-    let requestReport = {
+    const requestReport = {
       loaiTimKiem: this.searchFilter.loaiTimKiem,
       maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
