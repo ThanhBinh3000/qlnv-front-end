@@ -74,6 +74,28 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         ncauNamN2: 0,
         checked: false,
     };
+    chiTx: ItemData = {
+        id: null,
+        stt: "0",
+        level: 0,
+        maLvucNdChi: 0,
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
+        checked: false,
+    };
+    chiMoi: ItemData = {
+        id: null,
+        stt: "0",
+        level: 0,
+        maLvucNdChi: 0,
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
+        checked: false,
+    };
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -150,6 +172,10 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
+    }
+
+    getLoai(ma: number){
+        return LINH_VUC.find(e => e.id == ma)?.loai;
     }
 
     // luu
@@ -742,12 +768,34 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.total.ncauNamDtoanN = 0;
         this.total.ncauNamN1 = 0;
         this.total.ncauNamN2 = 0;
+
+        this.chiTx.thNamHienHanhN1 = 0;
+        this.chiTx.ncauNamDtoanN = 0;
+        this.chiTx.ncauNamN1 = 0;
+        this.chiTx.ncauNamN2 = 0;
+
+        this.chiMoi.thNamHienHanhN1 = 0;
+        this.chiMoi.ncauNamDtoanN = 0;
+        this.chiMoi.ncauNamN1 = 0;
+        this.chiMoi.ncauNamN2 = 0;
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
                 this.total.thNamHienHanhN1 += item.thNamHienHanhN1;
                 this.total.ncauNamDtoanN += item.ncauNamDtoanN;
                 this.total.ncauNamN1 += item.ncauNamN1;
                 this.total.ncauNamN2 += item.ncauNamN2;
+            }
+            if (this.getLoai(item.maLvucNdChi) == 1){
+                this.chiTx.thNamHienHanhN1 += item.thNamHienHanhN1;
+                this.chiTx.ncauNamDtoanN += item.ncauNamDtoanN;
+                this.chiTx.ncauNamN1 += item.ncauNamN1;
+                this.chiTx.ncauNamN2 += item.ncauNamN2;
+            }
+            if (this.getLoai(item.maLvucNdChi) == 2){
+                this.chiMoi.thNamHienHanhN1 += item.thNamHienHanhN1;
+                this.chiMoi.ncauNamDtoanN += item.ncauNamDtoanN;
+                this.chiMoi.ncauNamN1 += item.ncauNamN1;
+                this.chiMoi.ncauNamN2 += item.ncauNamN2;
             }
         })
     }
