@@ -69,7 +69,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         tranChiN: 0,
         ncauChiN: 0,
         clechTranChiVsNcauChiN: 0,
-        ssanhNcauNVoiN1: 0,
+        ssanhNcauNVoiN1: 0/0,
         tranChiN1: 0,
         ncauChiN1: 0,
         clechTranChiVsNcauChiN1: 0,
@@ -794,13 +794,15 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                     this.lstCtietBcao[index].tranChiN2 += item.tranChiN2;
                     this.lstCtietBcao[index].ncauChiN2 += item.ncauChiN2;
                     this.lstCtietBcao[index].clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
-                    if (!this.lstCtietBcao[index].namHienHanhUocThien) {
-                        this.lstCtietBcao[index].ssanhNcauNVoiN1 = 0;
-                    } else {
-                        this.lstCtietBcao[index].ssanhNcauNVoiN1 = Number((this.lstCtietBcao[index].tranChiN / this.lstCtietBcao[index].namHienHanhUocThien).toFixed(Utils.ROUND));
-                    }
+                    
                 }
             })
+            
+            if (!this.lstCtietBcao[index].namHienHanhUocThien) {
+                this.lstCtietBcao[index].ssanhNcauNVoiN1 = 0 / 0;
+            } else {
+                this.lstCtietBcao[index].ssanhNcauNVoiN1 = Number((this.lstCtietBcao[index].ncauChiN / this.lstCtietBcao[index].namHienHanhUocThien).toFixed(Utils.ROUND));
+            }
             stt = this.getHead(stt);
         }
     }
@@ -808,8 +810,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
         this.editCache[id].data.clechTranChiVsNcauChiN = Number(this.editCache[id].data.tranChiN) - Number(this.editCache[id].data.ncauChiN);
+        
         if (!this.editCache[id].data.namHienHanhUocThien) {
-            this.editCache[id].data.ssanhNcauNVoiN1 = 0;
+            this.editCache[id].data.ssanhNcauNVoiN1 = 0 / 0;
         } else {
             this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN / this.editCache[id].data.namHienHanhUocThien).toFixed(Utils.ROUND));
         }
