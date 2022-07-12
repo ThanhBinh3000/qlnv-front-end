@@ -15,10 +15,11 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
+import {NOI_DUNG} from './nhap-quyet-dinh-giao-du-toan-chi-NSNN.constant';
 
 
 export class ItemData {
@@ -65,7 +66,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   //danh muc
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
-  noiDungs: any[] = KHOAN_MUC;
+  noiDungs: any[] = NOI_DUNG;
   donViTiens: any[] = DON_VI_TIEN;
   trangThais: any[] = TRANG_THAI_TIM_KIEM;
   soLaMa: any[] = LA_MA;

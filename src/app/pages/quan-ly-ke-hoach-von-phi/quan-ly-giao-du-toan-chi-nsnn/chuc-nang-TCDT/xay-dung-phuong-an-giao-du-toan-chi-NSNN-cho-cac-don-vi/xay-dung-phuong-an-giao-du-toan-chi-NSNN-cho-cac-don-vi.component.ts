@@ -18,8 +18,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import {NOI_DUNG} from './xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 export class ItemData {
   id!: any;
   stt: any;
@@ -89,7 +90,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   //danh muc
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
-  noiDungs: any[] = KHOAN_MUC;
+  noiDungs: any[] = NOI_DUNG;
   donViTiens: any[] = DON_VI_TIEN;
   trangThais: any[] = TRANG_THAI_TIM_KIEM;
   soLaMa: any[] = LA_MA;
