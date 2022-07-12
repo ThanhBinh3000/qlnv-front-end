@@ -65,7 +65,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   async ngOnInit() {
     this.spinner.show()
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()
     this.searchFilter.ngayTaoDen = new Date();
@@ -74,9 +74,9 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.donViTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
     //  check va lay gia tri role trong list role
-    let roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
-    let roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
-    let roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
+    const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
 
     if (this.userRole == roleUserCB[0]) {
 			this.status = true;
@@ -141,7 +141,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
       }
     }
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
+    const searchFilterTemp = Object.assign({},this.searchFilter);
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
@@ -282,7 +282,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 	}
 
   checkDeleteReport(item: any): boolean {
-		var check: boolean;
+		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
 			ROLE_CAN_BO.includes(this.userRole)) {
 			check = true;

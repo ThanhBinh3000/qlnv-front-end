@@ -63,7 +63,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show()
-    let userName = this.userService.getUserName();
+    const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()
     this.searchFilter.ngayTaoDen = new Date();
@@ -124,7 +124,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
       }
     }
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
+    const searchFilterTemp = Object.assign({},this.searchFilter);
     searchFilterTemp.trangThais= [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
@@ -220,7 +220,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   checkDeleteReport(item: any): boolean {
-    var check: boolean;
+    let check: boolean;
     if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
       this.userInfo?.username == item.nguoiTao) {
       check = true;
