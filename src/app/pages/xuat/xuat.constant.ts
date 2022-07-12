@@ -3,23 +3,7 @@ import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 export const NHAP_MAIN_ROUTE = 'xuat';
 export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
-    icon: 'htvbdh_tcdt_xuatkhoban',
-    title: 'Xuất kho theo bán đấu giá và bán trực tiếp',
-    url: `/${NHAP_MAIN_ROUTE}/dau-gia`,
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
-    hasTab: false,
-  },
-  {
-    icon: 'htvbdh_tcdt_dieu_chuyen',
-    title: 'Xuất điều chuyển nội bộ',
-    url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
-    hasTab: false,
-  },
-  {
-    icon: 'htvbdh_tcdt_vien_tro',
+    icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Xuất cứu trợ, viện trợ',
     url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
     dropdown: 'dau-thau',
@@ -27,7 +11,23 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_Thanhly',
+    icon: 'htvbdh_tcdt_nhapkhac2',
+    title: 'Xuất theo phương thức bán đấu giá',
+    url: `/${NHAP_MAIN_ROUTE}/dau-gia`,
+    dropdown: 'dau-thau',
+    idHover: 'dauthau',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_dieu_chuyen',
+    title: 'Xuất theo phương thức bán trực tiếp',
+    url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
+    dropdown: 'dau-thau',
+    idHover: 'dauthau',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_nhapkhac2',
     title: 'Xuất Thanh lý, tiêu hủy',
     url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
     dropdown: 'dau-thau',
@@ -35,8 +35,16 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_xuatkhac',
+    icon: 'htvbdh_tcdt_icon-common',
     title: 'Xuất khác',
+    url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
+    dropdown: 'dau-thau',
+    idHover: 'dauthau',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Hợp đồng/Bảng kê, phiếu bán (bán lẻ)',
     url: `/${NHAP_MAIN_ROUTE}/cuu-tro-ho-tro`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',

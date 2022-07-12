@@ -20,7 +20,6 @@ import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-han
     exports: [
         GiaoNhapHangComponent,
         DanhSachGiaoNhapHangComponent,
-        ThemmoiQdinhNhapXuatHangComponent,
     ]
 })
 export class GiaoNhapHangModule { }

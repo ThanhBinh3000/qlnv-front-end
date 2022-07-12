@@ -14,21 +14,23 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
 
 @NgModule({
   declarations: [
-    ThemmoiThongtinDauthauComponent,
+    TrienkhaiLuachonNhathauComponent,
+    QuyetdinhKetquaLcntComponent,
     ThemmoiQuyetdinhKetquaLcntComponent,
     TheoPhuongThucDauThauComponent,
     ThongtinDauthauComponent,
-    QuyetdinhKetquaLcntComponent,
-    TrienkhaiLuachonNhathauComponent
+    ThemmoiThongtinDauthauComponent,
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     MainModule,
-    DauThauModule
   ],
   exports: [
-    TrienkhaiLuachonNhathauComponent
+    TrienkhaiLuachonNhathauComponent,
+    QuyetdinhKetquaLcntComponent,
+    TheoPhuongThucDauThauComponent,
+    ThongtinDauthauComponent,
   ]
 })
 export class TrienkhaiLuachonNhathauModule { }

@@ -10,7 +10,7 @@ import { ThemMoiDieuChinhComponent } from './dieuchinh-luachon-nhathau/themmoi-d
   declarations: [
     DieuChinhComponent,
     DieuchinhLuachonNhathauComponent,
-    ThemMoiDieuChinhComponent
+    ThemMoiDieuChinhComponent,
   ],
   imports: [
     CommonModule,
@@ -18,7 +18,8 @@ import { ThemMoiDieuChinhComponent } from './dieuchinh-luachon-nhathau/themmoi-d
     MainModule,
   ],
   exports: [
-    DieuChinhComponent
+    DieuChinhComponent,
+    DieuchinhLuachonNhathauComponent,
   ]
 })
 export class DieuChinhModule { }
