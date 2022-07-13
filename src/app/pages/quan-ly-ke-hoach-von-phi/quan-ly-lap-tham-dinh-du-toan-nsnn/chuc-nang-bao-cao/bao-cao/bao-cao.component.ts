@@ -525,11 +525,13 @@ export class BaoCaoComponent implements OnInit {
 			}
 		} else {
 			let check = true;
-			this.lstLapThamDinhs.forEach(item => {
-				if (item.trangThai == '2') {
-					check = false;
-				}
-			})
+			if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9){
+				this.lstLapThamDinhs.forEach(item => {
+					if (item.trangThai == '2') {
+						check = false;
+					}
+				})
+			}
 			if (!check) {
 				this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
 				return;

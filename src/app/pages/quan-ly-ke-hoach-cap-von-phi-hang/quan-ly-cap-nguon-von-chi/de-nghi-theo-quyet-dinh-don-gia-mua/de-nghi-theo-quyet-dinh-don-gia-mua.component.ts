@@ -202,7 +202,18 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.addListVtu(res.data);
+                    this.vatTus = [];
+                    if (this.loaiDn == Utils.MUA_MUOI){
+                        this.vatTus.push(res.data.find(e => e.ma == "04"));
+                    } else {
+                        const vatTuTemp = res.data.find(e => e.ma == "01").child;
+                        if (this.loaiDn == Utils.MUA_GAO){
+                            this.vatTus.push(vatTuTemp.find(e => e.ma == "0102"));
+                        }
+                        if (this.loaiDn == Utils.MUA_THOC){
+                            this.vatTus.push(vatTuTemp.find(e => e.ma == "0101"));
+                        }
+                    }
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -641,11 +652,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-        const ind = this.lstCtietBcao.findIndex(e => e.maHang == this.editCache[id].data.maHang);
-        if (ind != -1 && ind != index) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.ERROR_ADD_VTU);
-            return;
-        }
         if (!this.editCache[id].data.maHang ||
             (!this.editCache[id].data.soLuong && this.editCache[id].data.soLuong !== 0) ||
             (!this.editCache[id].data.donGiaMua && this.editCache[id].data.donGiaMua !== 0)) {
