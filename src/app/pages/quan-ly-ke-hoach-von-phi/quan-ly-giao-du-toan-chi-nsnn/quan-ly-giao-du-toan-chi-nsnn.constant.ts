@@ -78,6 +78,10 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
 				"unit": LANH_DAO,
 				"role": 'TC_KH_VP_LD',
 			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": 'C_KH_VP_NV_TVQT',
+			}
     ],
 		isDisabled: false,
   },
