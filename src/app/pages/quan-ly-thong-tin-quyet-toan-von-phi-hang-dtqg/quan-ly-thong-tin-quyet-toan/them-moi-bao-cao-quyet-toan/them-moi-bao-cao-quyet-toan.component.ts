@@ -982,14 +982,12 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   getTotal() {
     this.total.soLuong = 0;
     // this.total.donGiaMua = 0;
-    this.total.thanhTien = 0;
+    this.total.thanhTien = null;
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
         this.total.soLuong = null;
         this.total.donGiaMua = null;
-        // if(this.total.thanhTien != null){
-          this.total.thanhTien += item.thanhTien;
-        // }
+        this.total.thanhTien += item.thanhTien;
       }
     })
     if(this.total.thanhTien == 0){
