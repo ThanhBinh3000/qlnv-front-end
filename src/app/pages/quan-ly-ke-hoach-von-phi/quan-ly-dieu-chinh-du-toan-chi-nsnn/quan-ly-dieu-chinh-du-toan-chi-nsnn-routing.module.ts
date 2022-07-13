@@ -77,7 +77,13 @@ const routes: Routes = [
         './phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
       ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
   },
-
+  {
+    path: 'chi-tiet-giao-nhiem-vu/:loai/:id',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
 ];
 
 @NgModule({

@@ -535,13 +535,13 @@ export class GiaoNhiemVuComponent implements OnInit {
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
-			this.quanLyVonPhiService.trinhDuyetDieuChinhService1(request).toPromise().then(
+			this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
 						if (!this.id) {
 							this.router.navigate([
-								'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/'+ data.data.id
+								'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/chi-tiet-giao-nhiem-vu/'+ this.loai+'/'+ data.data.id,
 							])
 						}
 						else {
@@ -557,7 +557,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updateDieuChinh1(request).toPromise().then(
+			this.quanLyVonPhiService.updateDieuChinh(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -646,7 +646,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// call chi tiet bao cao
 	async getDetailReport() {
 		this.spinner.show();
-		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet1(this.id).toPromise().then(
+		await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstDieuChinhs = data.data.lstDchinhs;
@@ -671,7 +671,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
           			this.dotBcao = data.data.dotBcao;
-					this.loai = "0";
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -866,19 +865,19 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	close() {
-		if (this.loai == "0" && this.maDviTao != this.maDviUser) {
+		if (this.loai == "1" && this.maDviTao != this.maDviUser) {
 			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
 			return;
 		}
-		if(this.loai == "0" && this.maDviTao == this.maDviUser){
-			this.location.back();
+		if(this.loai == "1" && this.maDviTao == this.maDviUser){
+			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
 			return;
 		}
-		if(this.loai == "1"){
-			this.location.back();
+		if(this.loai == "0"){
+			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN']);
 			return;
 		}else{
-			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN']);
+			this.location.back();
 		}
 			//  else {
 			// 	this.location.back();
