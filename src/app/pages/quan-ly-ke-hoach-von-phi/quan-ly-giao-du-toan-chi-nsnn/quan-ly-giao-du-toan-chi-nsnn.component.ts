@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST } from './quan-ly-giao-du-toan-chi-nsnn.constant';
+import { NgxSpinnerService } from 'ngx-spinner';
 interface DataItem {
   name: string;
   age: number;
@@ -60,9 +61,12 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
 		private userService: UserService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
+    private spinner: NgxSpinnerService,
+  
   ) {}
 
   async ngOnInit() {
+    this.spinner.show();
     const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		//lay danh sach danh muc
@@ -104,6 +108,7 @@ export class QuanLyGiaoDuToanChiNSNNComponent implements OnInit {
     }
     this.listOfData = data;
     //////////////
+    this.spinner.hide()
   }
   //get user info
 	async getUserInfo(username: string) {
