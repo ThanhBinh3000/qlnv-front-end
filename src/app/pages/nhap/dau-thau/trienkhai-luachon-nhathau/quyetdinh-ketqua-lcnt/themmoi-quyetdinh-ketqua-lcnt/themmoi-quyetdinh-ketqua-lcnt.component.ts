@@ -141,16 +141,16 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         lyDoHuy: ['']
       }
     );
-    this.formData.controls['soQdPdKhlcnt'].valueChanges.subscribe(value => {
-      if (value) {
-        this.onChangeSoQdKh(value);
-      }
-    });
-    this.formData.controls['idGoiThau'].valueChanges.subscribe(value => {
-      if (value) {
-        this.onChangeGoiThau(value);
-      }
-    });
+    // this.formData.controls['soQdPdKhlcnt'].valueChanges.subscribe(value => {
+    //   if (value) {
+    //     this.onChangeSoQdKh(value);
+    //   }
+    // });
+    // this.formData.controls['idGoiThau'].valueChanges.subscribe(value => {
+    //   if (value) {
+    //     this.onChangeGoiThau(value);
+    //   }
+    // });
   }
 
   async getListPheDuyetLcnt() {
@@ -225,6 +225,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
+    body.detailList = this.dataTableGoiThau;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -408,7 +409,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     const data = this.listQdPdKhlcnt.filter(item => item.soQd == event);
     if (data.length > 0) {
       this.formData.patchValue({
-        ngayQdPdKhlcnt: data[0].ngayQd
+        ngayQdPdKhlcnt: data[0].ngayQd,
+        loaiVthh: data[0].loaiVthh
       });
     }
     let res = await this.ttinDauThauService.getAll(body);
