@@ -99,9 +99,9 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     level: 0,
     maLoaiHang: 0,
     maDviTinh: null,
-    soLuong: 0,
-    donGiaMua: 0,
-    thanhTien: 0,
+    soLuong: null,
+    donGiaMua: null,
+    thanhTien: null,
     checked: false
   };
   total: ItemData = {
@@ -112,7 +112,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     maDviTinh: null,
     soLuong: 0,
     donGiaMua: 0,
-    thanhTien: 0,
+    thanhTien: null,
     checked: false
   };
   id: string;
@@ -987,9 +987,14 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       if (item.level == 0) {
         this.total.soLuong = null;
         this.total.donGiaMua = null;
-        this.total.thanhTien += item.thanhTien;
+        // if(this.total.thanhTien != null){
+          this.total.thanhTien += item.thanhTien;
+        // }
       }
     })
+    if(this.total.thanhTien == 0){
+      this.total.thanhTien = null;
+    }
   }
 
 
