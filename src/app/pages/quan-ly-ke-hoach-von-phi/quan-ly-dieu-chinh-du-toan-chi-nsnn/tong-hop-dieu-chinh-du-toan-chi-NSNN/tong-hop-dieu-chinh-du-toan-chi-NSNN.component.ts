@@ -47,6 +47,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
+	loai = '1';
 	pages = {
 		size: 10,
 		page: 1,
@@ -177,7 +178,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + id,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/chi-tiet-giao-nhiem-vu/'+ this.loai+'/'+ id,
 		])
 	}
 
