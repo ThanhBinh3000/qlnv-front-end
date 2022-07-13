@@ -317,10 +317,12 @@
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm mới</span>
-          </button>
+          <ng-container *ngIf="lstCtietBcao.length == 0">
+            <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm mới</span>
+            </button>
+          </ng-container>
         </div>
       </div>
       <div class="ghi-chu">
