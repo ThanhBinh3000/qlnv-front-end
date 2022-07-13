@@ -1040,6 +1040,33 @@ export function mulMoney(value, maDonViTien): number {
     }
 }
 
+export function sumNumber(num: any): number {
+    let check = true;
+    let tong = 0;
+    num.forEach(item => {
+        if (item || item === 0) {
+            check = false;
+        }
+        tong += this.getNumberValue(item);
+    })
+    if (check) {
+        return null;
+    }
+    return tong;
+}
+
+export function divNumber(num1, num2) {
+    if ((!num1 && num1 !== 0) &&
+        (!num2 && num2 !== 0)) {
+        return null;
+    }
+    if (this.getNumberValue(num2) == 0){
+        return this.getNumberValue(num1) / this.getNumberValue(num2);
+    } else {
+        return (Number(this.getNumberValue(num1) / this.getNumberValue(num2))).toFixed(Utils.ROUND);
+    }
+}
+
 
 // trang thai phan bo du toan chi nsnn
 export const TRANG_THAI_PHAN_BO = [
