@@ -3,7 +3,7 @@
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
-        <input nz-input formControlName="tenGThau" />
+        <input nz-input formControlName="goiThau" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="24">
@@ -17,18 +17,16 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-        <nz-select formControlName="cloaiVthh" (ngModelChange)="changeChungLoai($event)"
-          [ngModelOptions]="{standalone: true}" [mzDisabled]="dataTable.length > 0">
-          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.maVatTu" [nzLabel]="p.tenVatTu"></nz-option>
+        <nz-select formControlName="cloaiVthh" [ngModelOptions]="{standalone: true}"
+          [nzDisabled]="dataTable.length > 0">
+          <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-        <nz-select formControlName="dvTinh">
-          <nz-option nzValue="Chiếc" nzLabel="Chiếc"></nz-option>
-        </nz-select>
+        <input nz-input formControlName="dviTinh" readonly />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -52,8 +50,8 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Hình thức LCNT </nz-form-label>
-        <nz-select formControlName="hThuc">
-          <nz-option nzValue="Đấu thầu rộng rãi trong nước qua mạng" nzLabel="Đấu thầu rộng rãi trong nước qua mạng">
+        <nz-select formControlName="hthucLcnt">
+          <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </nz-form-item>
@@ -61,29 +59,33 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
-        <nz-select formControlName="pThucLCNT">
-          <nz-option nzValue="Một giai đoạn hai túi hồ sơ" nzLabel="Một giai đoạn hai túi hồ sơ"></nz-option>
+        <nz-select formControlName="pthucLcnt">
+          <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+          </nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <input nz-input formControlName="tgianBatDau" />
+        <input nz-input formControlName="tgianBdauThien" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
         <nz-select formControlName="loaiHdong">
-          <nz-option nzValue="Hợp đồng trọn gói" nzLabel="Hợp đồng trọn gói"></nz-option>
+          <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+          </nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
-        <input nz-input formControlName="tgianThucHien" />
+        <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+          [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
       </nz-form-item>
     </div>
   </div>
@@ -107,7 +109,7 @@
           <td></td>
           <td>
             <nz-select [(ngModel)]="thongtinDauThau.maDvi">
-              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
+              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
           </td>
           <td>
@@ -137,10 +139,10 @@
           <td>189</td>
           <td>189</td>
           <td>
-            <a>
+            <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a>
+            <a (click)="deleteRow(i)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -154,13 +156,13 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="handleOk()" class="modal__button--save">
-        <i nz-icon nzType="save"></i>
-        Lưu
-      </button>
       <button nz-button (click)="handleCancel()" class="modal__button--cancel">
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Hủy
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
       </button>
     </div>
   </div>

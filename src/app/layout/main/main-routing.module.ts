@@ -40,21 +40,21 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
       },
-      {
-        path: MAIN_ROUTES.muaHang,
-        loadChildren: () =>
-          import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
-      },
+      // {
+      //   path: MAIN_ROUTES.muaHang,
+      //   loadChildren: () =>
+      //     import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
+      // },
       {
         path: MAIN_ROUTES.luuKho,
         loadChildren: () =>
           import('../../pages/luu-kho/luu-kho.module').then((m) => m.LuuKhoModule),
       },
-      {
-        path: MAIN_ROUTES.banHang,
-        loadChildren: () =>
-          import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
-      },
+      // {
+      //   path: MAIN_ROUTES.banHang,
+      //   loadChildren: () =>
+      //     import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
+      // },
       {
         path: MAIN_ROUTES.khknBaoQuan,
         loadChildren: () =>

@@ -1,7 +1,7 @@
 <div class="list-file">
     <div class="header-file">
         <input type="text" [(ngModel)]="fileAdd.noiDung" placeholder="Nhập tên file" nz-input
-            [disabled]="isViewDetail" />
+            [disabled]="isViewDetail || disabled" />
         <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
             <input placeholder="Nhập tên file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
         </nz-input-group>
@@ -30,7 +30,7 @@
                     <i class="icon htvbdh_tcdt_import "></i>
                 </div>
             </div>
-            <div class="icon-edit" (click)="item.isEdit = true" *ngIf="!isViewDetail">
+            <div class="icon-edit" (click)="!disabled ? item.isEdit = true : item.isEdit = false" *ngIf="!isViewDetail">
                 <i class="fa fa-pencil "></i>
             </div>
             <div class="icon-xoa" (click)="deleteFile(item)" *ngIf="!isViewDetail">
