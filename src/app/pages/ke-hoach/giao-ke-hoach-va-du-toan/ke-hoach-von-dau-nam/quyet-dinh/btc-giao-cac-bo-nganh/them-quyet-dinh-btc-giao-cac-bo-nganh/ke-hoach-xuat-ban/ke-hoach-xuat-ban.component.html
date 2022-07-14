@@ -1,1 +1,107 @@
-<p>ke-hoach-xuat-ban works!</p>
+<div>
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 5%;">STT</th>
+        <th style="width: 75%;">Nội dung</th>
+        <th style="width: 10%;">Dự toán</th>
+        <th style="width: 10%;"></th>
+      </tr>
+      <tr class="row-add">
+        <th></th>
+        <th>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.idNoiDung">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.duToan" [nzMin]="0">
+            </nz-input-number>
+          </nz-input-group>
+        </th>
+
+        <th style="text-align: center;">
+          <a (click)="themMoiItem()">
+            <i class="table-icon icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="clearData()">
+            <i class="table-icon fa fa-trash-o do"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of editRowTable.data; let idx = index">
+        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.noiDung }}</td>
+          <td>{{ data.duToan }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(data.id)">
+              <i class="table-icon fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(data.id)">
+              <i class="table-icon fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[data.id].data.idNoiDung">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.duToan" [nzMin]="0">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+
+          <td class="col-edit">
+            <a (click)="luuEdit(data.id)" class="save">Lưu</a>
+            <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
+        <td>{{ calcTong() }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; font-weight: 700" colspan="2">Tổng giá trị theo QĐ của TTCP</td>
+        <td class="xanh">600</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between">
+      <div class="trai">
+
+      </div>
+      <div class="canphai">
+        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+          [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+          (nzPageSizeChange)="changePageSize($event)">
+          <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+          </ng-template>
+        </nz-pagination>
+      </div>
+    </div>
+  </div>
+</div>

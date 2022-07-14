@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import * as dayjs from 'dayjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { FormBuilder } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import * as dayjs from 'dayjs';
 
 @Component({
-  selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
-  templateUrl: './them-quyet-dinh-btc-giao-cac-bo-nganh.component.html',
-  styleUrls: ['./them-quyet-dinh-btc-giao-cac-bo-nganh.component.scss'],
+  selector: 'app-them-quyet-dinh-btc-giao-tcdt',
+  templateUrl: './them-quyet-dinh-btc-giao-tcdt.component.html',
+  styleUrls: ['./them-quyet-dinh-btc-giao-tcdt.component.scss'],
 })
-export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
+export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Output('close') onClose = new EventEmitter<any>();
 

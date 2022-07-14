@@ -1,0 +1,155 @@
+<div>
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"></th>
+        <th class="text-center" style="width: 5%;">STT</th>
+        <th style="width: 25%;">Loại hàng</th>
+        <th style="width: 25%;">Tên hàng</th>
+        <th style="width: 10%;">Đơn vị tính</th>
+        <th style="width: 10%;">Số lượng</th>
+        <th style="width: 10%;">Dự toán</th>
+        <th style="width: 10%;"></th>
+      </tr>
+      <tr class="row-add">
+        <th></th>
+        <th></th>
+        <th>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.idLoaiHangHoa">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.idHangHoa">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.idDonViTinh">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong" [nzMin]="0">
+            </nz-input-number>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.duToan" [nzMin]="0">
+            </nz-input-number>
+          </nz-input-group>
+        </th>
+
+        <th style="text-align: center;">
+          <a (click)="themMoiItem()">
+            <i class="table-icon icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="clearData()">
+            <i class="table-icon fa fa-trash-o do"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of editRowTable.data; let idx = index">
+        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+          <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+            (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+          <td class="text-center">{{ idx + 1 }}</td>
+          <td>{{ data.tenLoaiHangHoa }}</td>
+          <td>{{ data.tenHangHoa }}</td>
+          <td>{{ data.donViTinh }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.duToan }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(data.id)">
+              <i class="table-icon fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(data.id)">
+              <i class="table-icon fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td></td>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[data.id].data.idLoaiHangHoa">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[data.id].data.idHangHoa">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsHangHoa">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[data.id].data.idDonViTinh">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.soLuong" [nzMin]="0">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.duToan" [nzMin]="0">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+
+          <td class="col-edit">
+            <a (click)="luuEdit(data.id)" class="save">Lưu</a>
+            <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between">
+      <div class="trai">
+
+      </div>
+      <div class="canphai">
+        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+          [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+          (nzPageSizeChange)="changePageSize($event)">
+          <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+          </ng-template>
+        </nz-pagination>
+      </div>
+    </div>
+  </div>
+</div>
