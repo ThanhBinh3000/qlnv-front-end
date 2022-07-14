@@ -106,7 +106,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.spinner.show()
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    this.searchFilter.namQtoan = new Date().getFullYear() -1
+    // this.searchFilter.namQtoan = new Date().getFullYear() -1
     this.searchFilter.ngayTaoDen = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.ngayTaoTu = this.newDate;
@@ -255,9 +255,14 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
 
   taoMoi() {
-    this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan-/' + this.searchFilter.namQtoan,
-    ])
+    if(this.searchFilter.namQtoan <= 1000 ||  this.searchFilter.namQtoan >= 2999){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
+      return;
+    }else{
+      this.router.navigate([
+        '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan-/' + this.searchFilter.namQtoan,
+      ])
+    }
   }
 
   xemChiTiet(id: string) {

@@ -1306,4 +1306,15 @@ getListUser(): Observable<any> {
 getLuyKe(request: any): Observable<any> {
   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/luy-ke',request);
 }
+
+getDinhMuc(request: any): Observable<any> {
+  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc/muc-chi-dvi',request);
+}
+
+getDinhMuc1(request: any): Observable<any> {
+  return this.httpClient.post(
+    'http://192.168.1.105:8094/chung/dinh-muc/muc-chi-dvi',
+    request,
+  );
+}
 }
