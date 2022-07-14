@@ -4,6 +4,9 @@
       Tất cả
       (<span class="number-title-tab">10</span>)
     </ng-template>
+    <ng-template nz-tab>
+      <app-dieuchinh-luachon-nhathau></app-dieuchinh-luachon-nhathau>
+    </ng-template>
   </nz-tab>
   <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_thoc">
     <ng-template #title_thoc>
