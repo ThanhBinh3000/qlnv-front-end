@@ -1272,9 +1272,10 @@ taoMaBaoCao(): Observable<any> {
 }
 
 //xóa báo cáo nút xóa Báo cáo
-xoaBaoCao(id: any): Observable<any> {
-  return this.httpClient.delete(
-    this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa/' + id
+xoaBaoCao(request: any): Observable<any> {
+  return this.httpClient.post(
+    this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa',
+    request
   );
 }
 

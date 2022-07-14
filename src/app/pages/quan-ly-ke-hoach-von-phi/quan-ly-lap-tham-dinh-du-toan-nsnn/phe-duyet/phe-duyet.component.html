@@ -82,10 +82,16 @@
 							<th>Mã báo cáo</th>
 							<th>Ngày tạo</th>
 							<th>Năm báo cáo</th>
-							<th>Ngày trình duyệt</th>
-							<th>Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
-							<th>Ngày duyệt (Ngày lãnh đạo duyệt)</th>
-							<th>Ngày cấp trên trả kết quả</th>
+							<ng-container *ngIf="status; else canBo">
+								<th>Ngày trình duyệt</th>
+								<th>Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
+								<th>Ngày duyệt (Ngày lãnh đạo duyệt)</th>
+								<th>Ngày cấp trên trả kết quả</th>
+							</ng-container>
+							<ng-template #canBo>
+								<th>Ngày trình duyệt <br /> (Ngày đơn vị dưới gửi báo cáo)</th>
+								<th>Ngày duyệt <br />(Ngày cấp trên duyệt báo cáo)</th>
+							</ng-template>
 							<th [hidden]="status">Đơn vị lập</th>
 							<th [hidden]="status">Trạng thái</th>
 							<th class="text-center"></th>
@@ -101,12 +107,14 @@
 							</td>
 							<td>{{item.ngayTao}}</td>
 							<td>{{item.namHienHanh}}</td>
-							<td>
-								{{item.ngayTrinh}}
-							</td>
-							<td>
-								{{item.ngayDuyet}}
-							</td>
+							<ng-container *ngIf="status">
+								<td>
+									{{item.ngayTrinh}}
+								</td>
+								<td>
+									{{item.ngayDuyet}}
+								</td>
+							</ng-container>
 							<td>
 								{{item.ngayPheDuyet}}
 							</td>

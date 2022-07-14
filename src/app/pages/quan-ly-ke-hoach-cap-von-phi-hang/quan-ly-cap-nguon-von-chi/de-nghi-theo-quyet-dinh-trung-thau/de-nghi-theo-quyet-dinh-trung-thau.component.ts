@@ -196,6 +196,22 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             );
             const request = {
                 soQD: this.qdChiTieu,
+                maDvi: this.userInfo?.dvql,
+                loaiVthh: "",
+            }
+            switch (this.loaiDn) {
+                case Utils.MUA_THOC:
+                    request.loaiVthh = "0101"
+                    break;
+                case Utils.MUA_GAO:
+                    request.loaiVthh = "0102"
+                    break;
+                case Utils.MUA_MUOI:
+                    request.loaiVthh = "04"
+                    break;
+                case Utils.MUA_VTU:
+                    request.loaiVthh = "02"
+                    break;
             }
             this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
                 (data) => {

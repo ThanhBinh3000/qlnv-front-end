@@ -128,6 +128,7 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnClose = false;
 	statusBtnOk: boolean;
 	statusBtnFinish: boolean;
+	checkParent = false;
 	statusBtnUser: boolean;
 	statusBtnNhap: boolean;
 	//khac
@@ -283,14 +284,18 @@ export class BaoCaoComponent implements OnInit {
 		} else {
 			this.status = true;
 		}
-		let checkParent = false;
+		this.checkParent = false;
 		let checkChirld = false;
 		const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
 		if (dVi && dVi.maDvi == this.userInfo.dvql) {
 			checkChirld = true;
 		}
 		if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
-			checkParent = true;
+			this.checkParent = true;
+		}
+		if (this.checkParent){
+			const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
+			this.trangThaiBaoCaos[index].tenDm = "Mới";
 		}
 		const utils = new Utils();
 		this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, userRole);
@@ -298,11 +303,11 @@ export class BaoCaoComponent implements OnInit {
 		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, userRole);
 		this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, userRole);
 		this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBaoCao, checkChirld, userRole);
-		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, userRole);
+		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, this.checkParent, userRole);
 		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, userRole);
 		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, userRole);
 
-		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(userRole) && checkParent) ||
+		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(userRole) && this.checkParent) ||
 			(this.trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(userRole) && checkChirld) ||
 			(this.trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(userRole) && checkChirld)) {
 			this.statusBtnOk = true;
@@ -525,11 +530,13 @@ export class BaoCaoComponent implements OnInit {
 			}
 		} else {
 			let check = true;
-			this.lstLapThamDinhs.forEach(item => {
-				if (item.trangThai == '2') {
-					check = false;
-				}
-			})
+			if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9){
+				this.lstLapThamDinhs.forEach(item => {
+					if (item.trangThai == '2') {
+						check = false;
+					}
+				})
+			}
 			if (!check) {
 				this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
 				return;

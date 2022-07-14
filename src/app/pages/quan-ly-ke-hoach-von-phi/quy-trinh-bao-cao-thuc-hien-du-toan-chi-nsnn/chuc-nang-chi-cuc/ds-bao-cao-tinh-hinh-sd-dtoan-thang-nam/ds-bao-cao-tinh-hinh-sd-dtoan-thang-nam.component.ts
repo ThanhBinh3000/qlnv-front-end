@@ -28,6 +28,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	// lenght: any = 0;
 	userInfo: any;
 	roleUser: string;
+	listIdDelete: string[] = [];
 
 	searchFilter = {
 		maPhanBcao: '0',
@@ -136,7 +137,20 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		}
 		await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
 			if (res.statusCode == 0) {
-				this.listBcaoKqua = res.data.content;
+				this.listBcaoKqua = [];
+				res.data.content.forEach(item => {
+					if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+						this.listBcaoKqua.push({
+							...item,
+							checked: false,
+						})
+					} else {
+						this.listBcaoKqua.push({
+							...item, 
+							checked: true,
+						})
+					}
+				})
 				this.listBcaoKqua.forEach(e => {
 					e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
 					e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
@@ -155,7 +169,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		this.spinner.hide();
 	}
 	themMoi() {
-		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || 
+		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao ||
 			(!this.searchFilter.thangBcao && (this.searchFilter.maLoaiBcao == '526' || this.searchFilter.maLoaiBcao == '528'))) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
@@ -185,20 +199,50 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	}
 
 	deleteReport(id) {
+		let request: string[] = [];
 		if (id) {
-			this.quanLyVonPhiService.xoaBaoCao(id).toPromise().then(async res => {
-				if (res.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-					this.onSubmit();
-				} else {
-					this.notification.error(MESSAGE.ERROR, res?.msg);
-				}
-			}, err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			})
+			request = [id];
 		} else {
-			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+			request = this.listIdDelete;
 		}
+		this.quanLyVonPhiService.xoaBaoCao(request).toPromise().then(async res => {
+			if (res.statusCode == 0) {
+				this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+				this.listIdDelete = [];
+				this.onSubmit();
+			} else {
+				this.notification.error(MESSAGE.ERROR, res?.msg);
+			}
+		}, err => {
+			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		})
+	}
+
+	checkAll(){
+		let check = true;
+		this.listBcaoKqua.forEach(item => {
+			if (item.checked){
+				check = false;
+			}
+		})
+		return check;
+	}
+
+	changeListIdDelete(id: string){
+		if (this.listIdDelete.findIndex(e => e == id) == -1){
+			this.listIdDelete.push(id); 
+		} else {
+			this.listIdDelete = this.listIdDelete.filter(e => e != id);
+		}
+	}
+
+	updateAllCheck(){
+		this.listBcaoKqua.forEach(item => {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)){
+				item.checked = true;
+				this.listIdDelete.push(item.id);
+			}
+		})
 	}
 
 	// lay ten trang thai ban ghi
