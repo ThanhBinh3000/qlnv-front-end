@@ -21,6 +21,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   data?: any;
   listVatTu?= [];
   loaiVthh?: any;
+  isReadOnly?: boolean = false;
   listChungLoai = [];
   listDonVi = [];
   page: number = 1;

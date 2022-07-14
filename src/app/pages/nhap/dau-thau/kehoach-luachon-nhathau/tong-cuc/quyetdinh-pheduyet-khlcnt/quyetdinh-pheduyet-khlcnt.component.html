@@ -47,6 +47,7 @@
                     <th>Ngày QĐ</th>
                     <th>Trích yếu</th>
                     <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
+                    <th *ngIf="userService.isTongCuc()">Mã tờ trình</th>
                     <th>Năm kế hoạch</th>
                     <th>Loại hàng hóa</th>
                     <th>Chủng loại hàng hóa</th>
@@ -115,6 +116,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                   </tr>
 
                   <tr *ngFor="let data of basicTable.data; let i = index">
@@ -123,6 +125,7 @@
                     <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
                     <td *ngIf="userService.isTongCuc()">{{ data.idThHdr }}</td>
+                    <td *ngIf="userService.isTongCuc()">{{ data.maTrHdr }}</td>
                     <td>{{data.namKhoach}}</td>
                     <td>{{data.tenVthh}}</td>
                     <td>{{data.tenCloaiVthh}}</td>

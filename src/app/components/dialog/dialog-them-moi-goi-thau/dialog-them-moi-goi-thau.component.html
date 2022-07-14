@@ -3,7 +3,7 @@
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
-        <input nz-input formControlName="goiThau" />
+        <input nz-input formControlName="goiThau" readonly="isReadOnly" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="24">
@@ -18,7 +18,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
         <nz-select formControlName="cloaiVthh" [ngModelOptions]="{standalone: true}"
-          [nzDisabled]="dataTable.length > 0">
+          [nzDisabled]="dataTable.length > 0 && isReadOnly">
           <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -38,7 +38,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="donGia" />
+        <input nz-input formControlName="donGia" readonly="isReadOnly" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -50,7 +50,7 @@
     <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Hình thức LCNT </nz-form-label>
-        <nz-select formControlName="hthucLcnt">
+        <nz-select formControlName="hthucLcnt" [nzDisabled]="isReadOnly">
           <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
@@ -59,7 +59,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
-        <nz-select formControlName="pthucLcnt">
+        <nz-select formControlName="pthucLcnt" [nzDisabled]="isReadOnly">
           <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
@@ -68,13 +68,13 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <input nz-input formControlName="tgianBdauThien" />
+        <input nz-input formControlName="tgianBdauThien" readonly="isReadOnly" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
-        <nz-select formControlName="loaiHdong">
+        <nz-select formControlName="loaiHdong" [nzDisabled]="isReadOnly">
           <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
@@ -84,7 +84,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
         <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-          [nzStep]="1" [nzSize]="'small'">
+          [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isReadOnly">
         </nz-input-number>
       </nz-form-item>
     </div>
@@ -101,11 +101,11 @@
           <th width="120px">Số lượng nhập</th>
           <th>SL chỉ tiêu KH</th>
           <th>SL đã lên KH mua</th>
-          <th>Thao tác</th>
+          <th *ngIf="!isReadOnly">Thao tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr *ngIf="!isReadOnly">
           <td></td>
           <td>
             <nz-select [(ngModel)]="thongtinDauThau.maDvi">
@@ -138,7 +138,7 @@
           <td>{{ data.soLuong }}</td>
           <td>189</td>
           <td>189</td>
-          <td>
+          <td *ngIf="!isReadOnly">
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
             </a>
@@ -160,7 +160,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Hủy
       </button>
-      <button nz-button (click)="handleOk()" class="modal__button--save">
+      <button *ngIf="!isReadOnly" nz-button (click)="handleOk()" class="modal__button--save">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

@@ -248,27 +248,37 @@
                                 <nz-form-item class="display-block">
                                     <nz-form-label [nzNoColon]="true"> Thời điểm đóng thầu
                                     </nz-form-label>
-                                    <nz-form-control>
+                                    <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianDthau"
                                                 nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
                                                 [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                             </nz-date-picker>
                                         </nz-input-group>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                                {{globals.prop.REQUIRED}}
+                                            </ng-container>
+                                        </ng-template>
                                     </nz-form-control>
-                                </nz-form-item>
+                                </nz-form-item> 
                             </div>
                             <div nz-col [nzSpan]="6" class="mb16">
                                 <nz-form-item class="display-block">
                                     <nz-form-label [nzNoColon]="true"> Thời điểm mở thầu
                                     </nz-form-label>
-                                    <nz-form-control>
+                                    <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianMthau"
                                                 nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
                                                 [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01' ">
                                             </nz-date-picker>
                                         </nz-input-group>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                                {{globals.prop.REQUIRED}}
+                                            </ng-container>
+                                        </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -369,12 +379,17 @@
                                                 <nz-form-label [nzNoColon]="true"> Ngày ký biên bản
                                                     thương thảo
                                                 </nz-form-label>
-                                                <nz-form-control>
+                                                <nz-form-control [nzErrorTip]="error">
                                                     <nz-date-picker formControlName="ngayKyBban" class="search__input"
                                                         nzFormat="dd/MM/yyyy"
                                                         nzPlaceHolder="Ngày ký biên bản thương thảo"
                                                         [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                                     </nz-date-picker>
+                                                    <ng-template #error let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{globals.prop.REQUIRED}}
+                                                        </ng-container>
+                                                    </ng-template>
                                                 </nz-form-control>
                                             </nz-form-item>
                                         </div>
@@ -383,13 +398,18 @@
                                                 <nz-form-label [nzNoColon]="true"> Tên nhà thầu thương
                                                     thảo
                                                 </nz-form-label>
-                                                <nz-form-control>
+                                                <nz-form-control [nzErrorTip]="error">
                                                     <nz-select formControlName="idNhaThau"
                                                         [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                                         <nz-option *ngFor="let p of listNthauNopHs"
                                                             [nzValue]="p.idNhaThau" [nzLabel]="p.tenDvi">
                                                         </nz-option>
                                                     </nz-select>
+                                                    <ng-template #error let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{globals.prop.REQUIRED}}
+                                                        </ng-container>
+                                                    </ng-template>
                                                 </nz-form-control>
                                             </nz-form-item>
                                         </div>
@@ -400,12 +420,17 @@
                                                 <nz-form-label [nzNoColon]="true"> Đơn giá hợp đồng
                                                     trước thuế (đồng)
                                                 </nz-form-label>
-                                                <nz-form-control>
+                                                <nz-form-control [nzErrorTip]="error">
                                                     <nz-input-number (change)="calendarGia()"
                                                         formControlName="donGiaTrcVat" nz-input [nzMin]="1"
                                                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                                         [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                                     </nz-input-number>
+                                                    <ng-template #error let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{globals.prop.REQUIRED}}
+                                                        </ng-container>
+                                                    </ng-template>
                                                 </nz-form-control>
                                             </nz-form-item>
                                         </div>
@@ -413,14 +438,24 @@
                                             <nz-form-item>
                                                 <nz-form-label [nzNoColon]="true"> VAT
                                                 </nz-form-label>
-                                                <nz-form-control>
+                                                <nz-form-control [nzErrorTip]="error">
                                                     <nz-input-group nzAddOnAfter="%">
                                                         <nz-input-number (change)="calendarGia()" formControlName="vat"
                                                             nz-input [nzMin]="1" [nzMax]="100" [nzStep]="1"
                                                             [nzSize]="'small'"
                                                             [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                                         </nz-input-number>
+                                                        <ng-template #error let-control>
+                                                            <ng-container *ngIf="control.hasError('required')">
+                                                                {{globals.prop.REQUIRED}}
+                                                            </ng-container>
+                                                        </ng-template>
                                                     </nz-input-group>
+                                                    <ng-template #error let-control>
+                                                        <ng-container *ngIf="control.hasError('required')">
+                                                            {{globals.prop.REQUIRED}}
+                                                        </ng-container>
+                                                    </ng-template>
                                                 </nz-form-control>
                                             </nz-form-item>
                                         </div>

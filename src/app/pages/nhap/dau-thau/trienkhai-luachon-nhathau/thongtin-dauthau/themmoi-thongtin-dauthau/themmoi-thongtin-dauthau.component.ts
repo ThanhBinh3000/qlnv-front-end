@@ -48,7 +48,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   ) {
     this.formGoiThau = this.fb.group({
       id: [''],
-      idGoiThau: [''],
+      idGoiThau: ['', [Validators.required]],
       tenGthau: [''],
       soQdPdKhlcnt: [''],
       ngayQdPdKhlcnt: [''],
@@ -68,18 +68,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       pthucLcnt: [''],
       loaiHdong: [''],
       tgianThienHd: [''],
-      tgianDthau: [''],
-      tgianMthau: [''],
+      tgianDthau: ['', [Validators.required]],
+      tgianMthau: ['', [Validators.required]],
       tgianNhang: [''],
-      ngayKyBban: [''],
-      idNhaThau: [''],
-      donGiaTrcVat: [''],
-      vat: [''],
+      ngayKyBban: ['', [Validators.required]],
+      idNhaThau: ['', [Validators.required]],
+      donGiaTrcVat: ['', [Validators.required]],
+      vat: ['', [Validators.required]],
       donGiaSauVat: [''],
       tongTienSauVat: [''],
       tongTienTrcVat: [''],
-      ghiChu: [''],
-      diaDiemNhap: [[]],
+      ghiChu: ['', [Validators.required]],
+      diaDiemNhap: [],
       trangThai: ['']
     });
   }
@@ -237,19 +237,25 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
           donGiaTrcVat: dataThongTinGt.donGiaTrcVat,
           idNhaThau: dataThongTinGt.idNhaThau,
         });
-        let stringConcat = ''
-        dataDetail.children.forEach(item => {
-          stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
-        });
-        this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-          tenDvi: dataDetail.tenDvi,
-          noiDung: stringConcat.substring(0, stringConcat.length - 2)
-        }];
-
-        this.calendarGia();
+        if (isVatTu) {
+          dataDetail.children.forEach(item => {
+            this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+              tenDvi: item.tenDvi,
+              noiDung: item.soLuong
+            }]
+          });
+        } else {
+          let stringConcat = ''
+          dataDetail.children.forEach(item => {
+            stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
+          });
+          this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+            tenDvi: dataDetail.tenDvi,
+            noiDung: stringConcat.substring(0, stringConcat.length - 2)
+          }];
+          this.calendarGia();
+        }
       }
-      console.log(this.listNthauNopHs);
-      console.log(this.formGoiThau.value);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -331,20 +337,20 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     this.itemRow.id = null;
   }
 
-  updateEditCache(): void {
-    this.listNthauNopHs.forEach((item, index) => {
-      this.editCache[index] = {
-        edit: true,
-        data: { ...item }
-      };
-    });
-    this.listDiaDiemNhapHang.forEach((item, index) => {
-      this.editDiaDiemCache[index] = {
-        edit: true,
-        data: { ...item }
-      };
-    });
-  }
+  // updateEditCache(): void {
+  //   this.listNthauNopHs.forEach((item, index) => {
+  //     this.editCache[index] = {
+  //       edit: true,
+  //       data: { ...item }
+  //     };
+  //   });
+  //   this.listDiaDiemNhapHang.forEach((item, index) => {
+  //     this.editDiaDiemCache[index] = {
+  //       edit: true,
+  //       data: { ...item }
+  //     };
+  //   });
+  // }
 
   startEdit(index: number): void {
     this.editCache[index].edit = true;
@@ -371,6 +377,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   }
 
   async save(trangThaiLuu) {
+    if (trangThaiLuu == '02') {
+      this.helperService.markFormGroupTouched(this.formGoiThau);
+      if (this.formGoiThau.invalid) {
+        console.log(this.formGoiThau.value)
+        return;
+      }
+    }
     let body = this.formGoiThau.value;
     body.nthauDuThauList = this.listNthauNopHs;
     body.trangThaiLuu = trangThaiLuu

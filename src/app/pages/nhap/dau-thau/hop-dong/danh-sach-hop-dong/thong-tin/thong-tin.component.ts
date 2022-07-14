@@ -73,6 +73,8 @@ export class ThongTinComponent implements OnInit {
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
 
+  isVatTu: boolean = false;
+
   formDetailHopDong: FormGroup;
   maHopDongSuffix: string = '';
   dvLQuan: DonviLienQuanModel = {
@@ -286,62 +288,60 @@ export class ThongTinComponent implements OnInit {
   async save(isOther: boolean) {
     let body = this.formDetailHopDong.value;
     console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
+    this.spinner.show();
+    try {
+      if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
+        this.errorGhiChu = true;
+      }
+      else {
+        let body = this.formDetailHopDong.value;
+        body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
+        body.fileDinhKems = this.fileDinhKem,
+          body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
+          body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
+          delete body.ngayHieuLuc;
+        delete body.maHdong;
+        delete body.tenCloaiVthh;
+        delete body.tenVthh;
 
-
-    // this.spinner.show();
-    // try {
-    //   if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
-    //     this.errorGhiChu = true;
-    //   }
-    //   else {
-    //     let body = this.formDetailHopDong.value;
-    //     body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
-    //     body.fileDinhKems = this.fileDinhKem,
-    //       body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
-    //       body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
-    //       delete body.ngayHieuLuc;
-    //     delete body.maHdong;
-    //     delete body.tenCloaiVthh;
-    //     delete body.tenVthh;
-
-    //     body.idNthau = `${this.dvLQuan.id}`;
-    //     body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
-    //     if (this.id > 0) {
-    //       body.id = this.id;
-    //       let res = await this.thongTinHopDong.update(
-    //         body,
-    //       );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         if (!isOther) {
-    //           this.notification.success(
-    //             MESSAGE.SUCCESS,
-    //             MESSAGE.UPDATE_SUCCESS,
-    //           );
-    //           this.back();
-    //         }
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //     } else {
-    //       let res = await this.thongTinHopDong.create(
-    //         body,
-    //       );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         if (!isOther) {
-    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-    //           this.back();
-    //         }
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //     }
-    //   }
-    //   this.spinner.hide();
-    // } catch (e) {
-    //   console.log('error: ', e);
-    //   this.spinner.hide();
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // }
+        body.idNthau = `${this.dvLQuan.id}`;
+        body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
+        if (this.id > 0) {
+          body.id = this.id;
+          let res = await this.thongTinHopDong.update(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (!isOther) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.UPDATE_SUCCESS,
+              );
+              this.back();
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } else {
+          let res = await this.thongTinHopDong.create(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (!isOther) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.back();
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async setTitle() {
@@ -497,6 +497,11 @@ export class ThongTinComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(idCanCu);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
+      if (data.loaiVthh.startsWith("02")) {
+        this.isVatTu = true;
+      } else {
+        this.isVatTu = false;
+      }
       this.listGoiThau = data.hhQdPduyetKqlcntDtlList;
     }
   }

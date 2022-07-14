@@ -166,21 +166,21 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         maDvi: [null]
       }
     );
-    this.formData.controls['tenVthh'].valueChanges.subscribe(value => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
-    this.formData.controls['tenCloaiVthh'].valueChanges.subscribe(value => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
-    this.formData.controls['namKhoach'].valueChanges.subscribe(value => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
+    // this.formData.controls['tenVthh'].valueChanges.subscribe(value => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
+    // this.formData.controls['tenCloaiVthh'].valueChanges.subscribe(value => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
+    // this.formData.controls['namKhoach'].valueChanges.subscribe(value => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
   }
 
   setValidator() {
@@ -399,7 +399,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           if (!this.maTongHopExis(this.listToTrinh, item.id)) {
             this.listToTrinh.push({
               id: item.id,
-              tenTr: item.soDxuat
+              maTrHdr: item.soDxuat
             });
           }
         });
@@ -443,46 +443,47 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   firstInitUpdate: boolean = true;
   async selectMaTongHop(event) {
-    const res = await this.tongHopDeXuatKHLCNTService.getDetail(event)
-    // this.bindingData(res.data);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data;
-      this.formThongTinDX.patchValue({
-        loaiHdong: data.loaiHdong,
-        pthucLcnt: data.pthucLcnt,
-        hthucLcnt: data.hthucLcnt,
-        nguonVon: data.nguonVon,
-        tgianBdauTchuc: [data.tgianBdauTchucTu, data.tgianBdauTchucDen],
-        tgianDthau: [data.tgianDthauTu, data.tgianDthauDen],
-        tgianMthau: [data.tgianMthauTu, data.tgianMthauDen],
-        tgianNhang: [data.tgianNhangTu, data.tgianNhangDen],
-      });
-      if (!this.firstInitUpdate) {
-        this.formData.patchValue({
+    if (event) {
+      const res = await this.tongHopDeXuatKHLCNTService.getDetail(event)
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.formThongTinDX.patchValue({
           loaiHdong: data.loaiHdong,
           pthucLcnt: data.pthucLcnt,
           hthucLcnt: data.hthucLcnt,
           nguonVon: data.nguonVon,
-          tgianBdauTchuc: data.tgianBdauTchucTu,
-          tgianDthau: data.tgianDthauTu,
-          tgianMthau: data.tgianMthauTu,
-          tgianNhang: data.tgianNhangTu
-        })
-        this.danhsachDx = data.hhDxKhLcntThopDtlList;
-        this.danhsachDx.forEach(async (item, index) => {
-          await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsGtDtlList;
-            }
+          tgianBdauTchuc: [data.tgianBdauTchucTu, data.tgianBdauTchucDen],
+          tgianDthau: [data.tgianDthauTu, data.tgianDthauDen],
+          tgianMthau: [data.tgianMthauTu, data.tgianMthauDen],
+          tgianNhang: [data.tgianNhangTu, data.tgianNhangDen],
+        });
+        if (!this.firstInitUpdate) {
+          this.formData.patchValue({
+            loaiHdong: data.loaiHdong,
+            pthucLcnt: data.pthucLcnt,
+            hthucLcnt: data.hthucLcnt,
+            nguonVon: data.nguonVon,
+            tgianBdauTchuc: data.tgianBdauTchucTu,
+            tgianDthau: data.tgianDthauTu,
+            tgianMthau: data.tgianMthauTu,
+            tgianNhang: data.tgianNhangTu
           })
+          this.danhsachDx = data.hhDxKhLcntThopDtlList;
+          this.danhsachDx.forEach(async (item, index) => {
+            await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                item.dsGoiThau = res.data.dsGtDtlList;
+              }
+            })
+          })
+        }
+        this.formData.patchValue({
+          tchuanCluong: data?.tchuanCluong
         })
+        this.firstInitUpdate = false;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.formData.patchValue({
-        tchuanCluong: data?.tchuanCluong
-      })
-      this.firstInitUpdate = false;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -507,7 +508,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.setValidator()
     if (this.formData.invalid) {
       this.helperService.markFormGroupTouched(this.formData);
@@ -519,6 +520,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.dsDeXuat = this.danhsachDx;
     body.dsGoiThau = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
+    let dataTr = this.listToTrinh.filter(item => item.id === body.idTrHdr)
+    if (dataTr.length > 0) {
+      body.maTrHdr = dataTr[0].maTrHdr;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
@@ -526,12 +531,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.quayLai()
+      if (isGuiDuyet) {
+        this.guiDuyet();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.quayLai()
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.quayLai()
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.quayLai()
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -581,7 +590,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async guiDuyet() {
     let trangThai = ''
     let mesg = ''
-    if (this.formData.get('loaiVthh').value == "02") {
+    // Vật tư
+    if (this.formData.get('loaiVthh').value.startsWith('02')) {
       switch (this.formData.get('trangThai').value) {
         case '00':
         case '03': {
@@ -590,6 +600,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           break;
         }
         case '01': {
+          trangThai = '02';
+          mesg = 'Văn bản sẵn sàng duyệt ?'
+          break;
+        }
+        case '02': {
           trangThai = '11';
           mesg = 'Văn bản sẵn sàng ban hành ?'
           break;
@@ -621,8 +636,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           }
           let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.loadChiTiet(res.data.id);
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -664,6 +679,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           this.titleStatus = 'Lãnh đạo duyệt';
           break
         }
+        case '02': {
+          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
+          this.titleButtonDuyet = 'Ban hành';
+          this.titleStatus = 'Đã duyệt';
+          this.styleStatus = 'da-ban-hanh'
+          break
+        }
         case '11': {
           this.titleStatus = 'Ban hành';
           this.styleStatus = 'da-ban-hanh'
@@ -701,11 +723,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     }
   }
-
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
-      let data = res.data;
+      this.listToTrinh = [];
+      this.listDanhSachTongHop = [];
+      const data = res.data;
+      this.isVatTu = data.loaiVthh.startsWith("02");
       this.formData.patchValue({
         id: data.id,
         soQd: data.soQd.split("/")[0],
@@ -716,6 +740,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         idThHdr: data.idThHdr,
+        idTrHdr: data.idTrHdr,
         loaiHdong: data.loaiHdong,
         pthucLcnt: data.pthucLcnt,
         hthucLcnt: data.hthucLcnt,
@@ -729,13 +754,24 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
-      this.danhsachDx = data.hhQdKhlcntDtlList
-      this.listDanhSachTongHop = [
-        ...this.listDanhSachTongHop,
-        {
-          id: data.idThHdr
-        }
-      ]
+      if (this.isVatTu) {
+        this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
+        this.listToTrinh = [
+          ...this.listToTrinh,
+          {
+            id: data.idTrHdr,
+            maTrHdr: data.maTrHdr
+          }
+        ];
+      } else {
+        this.danhsachDx = data.hhQdKhlcntDtlList
+        this.listDanhSachTongHop = [
+          ...this.listDanhSachTongHop,
+          {
+            id: data.idThHdr
+          }
+        ]
+      }
     };
     this.setTitle();
   }
@@ -813,6 +849,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         tenVthh: data.ten,
       })
     }
+    this.danhSachTongHopGetAll();
   }
 
   setValidatorForm() {
@@ -860,4 +897,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     });
   }
+
+  // compareFn = (o1: any, o2: any) => (console.log(o1, o2), o1 && o2 ? o1.id === o2.id : o1 === o2);
+
 }
