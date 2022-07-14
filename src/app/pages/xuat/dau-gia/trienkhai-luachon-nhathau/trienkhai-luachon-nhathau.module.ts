@@ -9,6 +9,10 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { ThemmoiQuyetdinhKetquaLcntComponent } from './quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt.component';
 import { TheoPhuongThucDauThauComponent } from './theo-phuong-thuc-dau-thau/theo-phuong-thuc-dau-thau.component';
 import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component';
+import { ThongBaoDauGiaTaiSanComponent } from './thong-bao-dau-gia-tai-san/thong-bao-dau-gia-tai-san.component';
+import { ChiTietThongBaoDauGiaTaiSanComponent } from './thong-bao-dau-gia-tai-san/chi-tiet-thong-bao-dau-gia-tai-san/chi-tiet-thong-bao-dau-gia-tai-san.component';
+import { ThongBaoDauGiaKhongThanhComponent } from './thong-bao-dau-gia-khong-thanh/thong-bao-dau-gia-khong-thanh.component';
+import { ChiTietThongBaoDauGiaKhongThanhComponent } from './thong-bao-dau-gia-khong-thanh/chi-tiet-thong-bao-dau-gia-khong-thanh/chi-tiet-thong-bao-dau-gia-khong-thanh.component';
 
 
 @NgModule({
@@ -19,6 +23,10 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
     TheoPhuongThucDauThauComponent,
     ThongtinDauthauComponent,
     ThemmoiThongtinDauthauComponent,
+    ThongBaoDauGiaTaiSanComponent,
+    ChiTietThongBaoDauGiaTaiSanComponent,
+    ThongBaoDauGiaKhongThanhComponent,
+    ChiTietThongBaoDauGiaKhongThanhComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +38,8 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
     QuyetdinhKetquaLcntComponent,
     TheoPhuongThucDauThauComponent,
     ThongtinDauthauComponent,
+    ThongBaoDauGiaTaiSanComponent,
+    ThongBaoDauGiaKhongThanhComponent,
   ]
 })
 export class TrienkhaiLuachonNhathauModule { }
