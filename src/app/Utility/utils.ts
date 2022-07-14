@@ -1040,6 +1040,13 @@ export function mulMoney(value, maDonViTien): number {
     }
 }
 
+export function getNumberValue(num): number{
+    if (!num){
+        return 0;
+    }
+    return Number(num);
+}
+
 export function sumNumber(num: any): number {
     let check = true;
     let tong = 0;
@@ -1047,7 +1054,7 @@ export function sumNumber(num: any): number {
         if (item || item === 0) {
             check = false;
         }
-        tong += this.getNumberValue(item);
+        tong += getNumberValue(item);
     })
     if (check) {
         return null;
@@ -1060,10 +1067,10 @@ export function divNumber(num1, num2) {
         (!num2 && num2 !== 0)) {
         return null;
     }
-    if (this.getNumberValue(num2) == 0){
-        return this.getNumberValue(num1) / this.getNumberValue(num2);
+    if (getNumberValue(num2) == 0){
+        return getNumberValue(num1) / getNumberValue(num2);
     } else {
-        return (Number(this.getNumberValue(num1) / this.getNumberValue(num2))).toFixed(Utils.ROUND);
+        return (Number(getNumberValue(num1) / getNumberValue(num2))).toFixed(Utils.ROUND);
     }
 }
 
