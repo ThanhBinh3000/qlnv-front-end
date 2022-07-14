@@ -1,0 +1,184 @@
+<ng-container *ngIf="!isAddNew; else templateThemmoi">
+  <div>
+    <nz-card class="mt16 flex-card p-lr16">
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="ds-ttcp">
+        <div class="search__body" nz-row [nzGutter]="24">
+          <nz-form-item nz-col nzSpan="3" class="form-item">
+            <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="namQd" id="nam-qd">
+                <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzSpan="4" class="form-item">
+            <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
+            <nz-form-control>
+              <nz-input-group id="so-qd">
+                <input type="text" nz-input formControlName="soQd" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzSpan="6" class="form-item">
+            <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+            <nz-form-control>
+              <nz-form-control>
+                <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd" class="search__input">
+                </nz-range-picker>
+              </nz-form-control>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzSpan="10" class="form-item">
+            <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
+            <nz-form-control>
+              <nz-input-group id="trich-yeu">
+                <input type="text" nz-input formControlName="trichYeu" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+        </div>
+      </form>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </nz-card>
+
+    <div class="group-button">
+      <h3>Danh sách quyết định của Bộ tài chính giao Tổng cục dự trữ</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+          <i class="fa fa-trash-o do"></i>
+          <span>Xoá</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="exportData()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+        <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </div>
+
+    <nz-card class="mt-16 flex-card data-table card-border-content">
+      <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <tbody>
+          <tr class="header-row">
+            <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+              (nzCheckedChange)="onAllChecked($event)"></th>
+            <th class="text-center" style="width: 5%;">STT</th>
+            <th style="width: 5%;">Số quyết định</th>
+            <th style="width: 5%;">Ngày QĐ</th>
+            <th style="width: 25%;">Trích yếu</th>
+            <th style="width: 10%;">Tài liệu đính kèm</th>
+            <th style="width: 10%;">Trạng thái</th>
+            <th width="width: 10%;">Hành động</th>
+            <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+              <div class="container">
+                <div class="header">
+                  <h3 class="first">Bộ</h3>
+                  <h3 class="second">Dự toán</h3>
+                </div>
+                <div class="content">
+                  <div class="content-item">
+                    <div class="first">Chi mua lương thực</div>
+                    <div class="second">1000 (triệu đồng)</div>
+                  </div>
+                  <div class="content-item">
+                    <div class="first">Chi mua vật tư, thiết bị</div>
+                    <div class="second">1000 (triệu đồng)</div>
+                  </div>
+                </div>
+                <div class="footer">
+                  <div class="first">Tổng</div>
+                  <div class="second">320.000</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="header-row">
+            <th></th>
+            <th></th>
+            <th class="text-center">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.soQd" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayQd"></nz-date-picker>
+            </th>
+            <th class="text-center">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trichYeu" />
+              </nz-input-group>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </tr>
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+            <td>{{ idx + 1 }}</td>
+            <td>{{ data.soQd }}</td>
+            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.taiLieuDinhKem }}</td>
+            <td>{{ data.trangThai }}</td>
+            <td style="text-align: center; white-space: nowrap;">
+              <a (click)="viewDetail(data.id, false)">
+                <i class="fa fa-download"></i>
+              </a>
+              <a (click)="viewDetail(data.id, false)">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a (click)="viewDetail(data.id, true)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="xoaItem(data.id)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu" id="myTabContent">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai">
+
+          </div>
+          <div class="canphai">
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+              (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              </ng-template>
+            </nz-pagination>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</ng-container>
+
+<ng-template #templateThemmoi>
+  <app-them-quyet-dinh-btc-giao-tcdt [isView]="false" (onClose)="onClose()">
+  </app-them-quyet-dinh-btc-giao-tcdt>
+</ng-template>

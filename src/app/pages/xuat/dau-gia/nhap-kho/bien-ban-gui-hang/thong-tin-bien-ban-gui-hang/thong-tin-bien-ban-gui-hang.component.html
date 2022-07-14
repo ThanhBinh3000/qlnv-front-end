@@ -1,0 +1,353 @@
+<div class="luong-thuc__danh-sach thong-tin-phieu-nhap-kho-tam-gui">
+  <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+        </div>
+        <div class="canphai phai">
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
+            (click)="hoanThanh()">
+            <i class="icon  htvbdh_da-xu-ly"></i>
+            <span>Hoàn thành</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanGuiHang.trangThai == '04' && !isView" (click)="pheDuyet()">
+            <i class="icon htvbdh_dakyduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+            *ngIf="bienBanGuiHang.trangThai == '04' && !isView">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+            *ngIf="(bienBanGuiHang.trangThai == '00' || bienBanGuiHang.trangThai == '03' || id == 0) && !isView">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <span>Quay về</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <div class="title-chi-tieu">
+          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo
+          </span>
+          <span *ngIf="id > 0"
+            [ngClass]="thongTinTrangThai(bienBanGuiHang.trangThai)">{{bienBanGuiHang.tenTrangThai}}</span>
+          <span>Lập biên bản gửi hàng</span>
+        </div>
+        <nz-card nzTitle="" class="flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="2">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số quyết định nhập
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanGuiHang.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đơn vị
+                </nz-form-label>
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Mã QHNS
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.maDvi" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Phiếu nhập kho tạm gửi
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanGuiHang.phieuNkTgId"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of phieuNhapKhoTamGuis" [nzValue]="item.id" [nzLabel]="item.soPhieu">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số biên bản
+                </nz-form-label>
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="bienBanGuiHang.soBienBan"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số hợp đồng
+                </nz-form-label>
+                <input nz-input placeholder="Nhập số hợp đồng" [(ngModel)]="bienBanGuiHang.hopDongId" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày hợp đồng
+                </nz-form-label>
+                <input nz-input placeholder="Ngày hợp đồng" [(ngModel)]="bienBanGuiHang.ngayHopDong" disabled />
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đơn vị cung cấp hàng
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.donViCungCap" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Thời gian
+                </nz-form-label>
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd HH:mm:ss"
+                  [(ngModel)]="bienBanGuiHang.thoiGian" disabled>
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày gửi
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.ngayGui" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Loại hàng hóa
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.loaiVthh" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chủng loại hàng hóa
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.loaiVthh" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.soLuong" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đơn vị tính
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.donViTinh" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tình trạng
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.tinhTrang"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chất lượng
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.chatLuong"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="" class="flex-card p-lr16 phieu-kiem-nghiem">
+          <div class="search__body" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
+                  I. Bên nhận
+                </nz-form-label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Bên nhận
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.benNhan" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16"></div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đại diện bên nhận
+                </nz-form-label>
+                <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenNhan.daiDien"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chức vụ
+                </nz-form-label>
+                <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenNhan.chucVu"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-label [nzNoColon]="true" class="label-empty">
+              </nz-form-label>
+              <div class="btn-plus" (click)="addDaiDien(chiTietBienBanGuiHangBenNhan,'00')" *ngIf="!isView"
+                [ngClass]="chiTietBienBanGuiHangBenNhan.daiDien && chiTietBienBanGuiHangBenNhan.chucVu ? '' : 'disabled'">
+                <i class="icon htvbdh_dau-cong"></i>
+              </div>
+            </div>
+            <ng-container *ngFor="let bienBan of bienBanGuiHang.chiTiets">
+              <ng-container *ngIf="bienBan.loaiBen === '00'">
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <span>{{bienBan.daiDien}}</span>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <span>{{bienBan.chucVu}}</span>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="8">
+                  <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+                    <i class="icon htvbdh_dau-tru"></i>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Trách nhiệm bên nhận
+                </nz-form-label>
+                <textarea rows="3" class="search__input" nz-input [(ngModel)]="bienBanGuiHang.trachNhiemBenNhan"
+                  [disabled]="isView"></textarea>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
+                  II. Bên giao
+                </nz-form-label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Bên giao
+                </nz-form-label>
+                <input nz-input [(ngModel)]="bienBanGuiHang.benGiao" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16"></div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đại diện bên giao
+                </nz-form-label>
+                <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenGiao.daiDien"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chức vụ
+                </nz-form-label>
+                <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenGiao.chucVu"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-label [nzNoColon]="true" class="label-empty">
+              </nz-form-label>
+              <div class="btn-plus" (click)="addDaiDien(chiTietBienBanGuiHangBenGiao, '01')" *ngIf="!isView"
+                [ngClass]="chiTietBienBanGuiHangBenGiao.daiDien && chiTietBienBanGuiHangBenGiao.chucVu ? '' : 'disabled'">
+                <i class="icon htvbdh_dau-cong"></i>
+              </div>
+            </div>
+            <ng-container *ngFor="let bienBan of bienBanGuiHang.chiTiets">
+              <ng-container *ngIf="bienBan.loaiBen === '01'">
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <span>{{bienBan.daiDien}}</span>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <span>{{bienBan.chucVu}}</span>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="8">
+                  <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+                    <i class="icon htvbdh_dau-tru"></i>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Trách nhiệm bên giao
+                </nz-form-label>
+                <textarea rows="3" class="search__input" nz-input [(ngModel)]="bienBanGuiHang.trachNhiemBenGiao"
+                  [disabled]="isView"></textarea>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <div class="ghi-chu">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item class="form-item-ghi-chu">
+                <nz-form-label [nzNoColon]="true">
+                  Ghi chú
+                </nz-form-label>
+                <input nz-input nzSize="large" style="height: 40px !important;" [disabled]="isView"
+                  [(ngModel)]="bienBanGuiHang.ghiChu" />
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

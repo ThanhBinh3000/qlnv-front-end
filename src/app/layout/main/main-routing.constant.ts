@@ -16,6 +16,8 @@ export const MAIN_ROUTES = {
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   quantrihethong: 'quan-tri-he-thong',
+  dieuChuyen: 'dieu-chuyen',
+  suaChua: 'sua-chua',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -31,25 +33,33 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quyết toán vốn, phí hàng',
     route: `${MAIN_ROUTES.quyetToan}`,
   },
-  {
-    title: 'Mua hàng DTQG',
-    route: `${MAIN_ROUTES.muaHang}`,
-  },
+  // {
+  //   title: 'Mua hàng DTQG',
+  //   route: `${MAIN_ROUTES.muaHang}`,
+  // },
   {
     title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
   },
-  {
-    title: 'Lưu kho & QL chất lượng',
-    route: MAIN_ROUTES.luuKho,
-  },
-  {
-    title: 'Bán hàng DTQG',
-    route: MAIN_ROUTES.banHang,
-  },
+  // {
+  //   title: 'Bán hàng DTQG',
+  //   route: MAIN_ROUTES.banHang,
+  // },
   {
     title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
+  },
+  {
+    title: 'Điều chuyển nội bộ',
+    route: MAIN_ROUTES.dieuChuyen,
+  },
+  {
+    title: 'Sửa chữa hàng DTQG',
+    route: MAIN_ROUTES.suaChua,
+  },
+  {
+    title: 'Lưu kho & QL chất lượng',
+    route: MAIN_ROUTES.luuKho,
   },
   {
     title: 'QL Định mức nhập, xuất, bảo quản',
@@ -63,12 +73,12 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
   },
-  {
-    title: 'QTDM',
-    route: MAIN_ROUTES.danhMuc,
-  },
-  {
-    title: 'QTHT',
-    route: MAIN_ROUTES.quantrihethong,
-  },
+  // {
+  //   title: 'QTDM',
+  //   route: MAIN_ROUTES.danhMuc,
+  // },
+  // {
+  //   title: 'QTHT',
+  //   route: MAIN_ROUTES.quantrihethong,
+  // },
 ];

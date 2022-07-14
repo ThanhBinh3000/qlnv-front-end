@@ -103,16 +103,16 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           'diaDiemNhap': res.data.child[i].diaChi,
         };
         this.listDiemKho.push(item);
-        this.filterData();
+        // this.filterData();
       }
     }
   }
 
-  filterData() {
-    this.listOfData.forEach(data => {
-      this.listDiemKho = this.listDiemKho.filter(item => item.value !== data.maDiemKho);
-    })
-  }
+  // filterData() {
+  //   this.listOfData.forEach(data => {
+  //     this.listDiemKho = this.listDiemKho.filter(item => item.value !== data.maDiemKho);
+  //   })
+  // }
 
   changeDiemKho(index?) {
     if (index >= 0) {
@@ -141,7 +141,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.updateEditCache;
       this.thongtinDauThau = new DanhSachGoiThau();
       this.disableChiCuc();
-      this.filterData();
+      // this.filterData();
       this.checkDisabledSave();
     }
   }

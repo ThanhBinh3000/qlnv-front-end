@@ -1,0 +1,45 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { QuyetdinhKetquaLcntComponent } from './quyetdinh-ketqua-lcnt/quyetdinh-ketqua-lcnt.component';
+import { ThongtinDauthauComponent } from './thongtin-dauthau/thongtin-dauthau.component';
+import { TrienkhaiLuachonNhathauComponent } from './trienkhai-luachon-nhathau.component';
+
+import { ComponentsModule } from 'src/app/components/components.module';
+import { MainModule } from 'src/app/layout/main/main.module';
+import { ThemmoiQuyetdinhKetquaLcntComponent } from './quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt.component';
+import { TheoPhuongThucDauThauComponent } from './theo-phuong-thuc-dau-thau/theo-phuong-thuc-dau-thau.component';
+import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component';
+import { ThongBaoDauGiaTaiSanComponent } from './thong-bao-dau-gia-tai-san/thong-bao-dau-gia-tai-san.component';
+import { ChiTietThongBaoDauGiaTaiSanComponent } from './thong-bao-dau-gia-tai-san/chi-tiet-thong-bao-dau-gia-tai-san/chi-tiet-thong-bao-dau-gia-tai-san.component';
+import { ThongBaoDauGiaKhongThanhComponent } from './thong-bao-dau-gia-khong-thanh/thong-bao-dau-gia-khong-thanh.component';
+import { ChiTietThongBaoDauGiaKhongThanhComponent } from './thong-bao-dau-gia-khong-thanh/chi-tiet-thong-bao-dau-gia-khong-thanh/chi-tiet-thong-bao-dau-gia-khong-thanh.component';
+
+
+@NgModule({
+  declarations: [
+    TrienkhaiLuachonNhathauComponent,
+    QuyetdinhKetquaLcntComponent,
+    ThemmoiQuyetdinhKetquaLcntComponent,
+    TheoPhuongThucDauThauComponent,
+    ThongtinDauthauComponent,
+    ThemmoiThongtinDauthauComponent,
+    ThongBaoDauGiaTaiSanComponent,
+    ChiTietThongBaoDauGiaTaiSanComponent,
+    ThongBaoDauGiaKhongThanhComponent,
+    ChiTietThongBaoDauGiaKhongThanhComponent,
+  ],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    MainModule,
+  ],
+  exports: [
+    TrienkhaiLuachonNhathauComponent,
+    QuyetdinhKetquaLcntComponent,
+    TheoPhuongThucDauThauComponent,
+    ThongtinDauthauComponent,
+    ThongBaoDauGiaTaiSanComponent,
+    ThongBaoDauGiaKhongThanhComponent,
+  ]
+})
+export class TrienkhaiLuachonNhathauModule { }

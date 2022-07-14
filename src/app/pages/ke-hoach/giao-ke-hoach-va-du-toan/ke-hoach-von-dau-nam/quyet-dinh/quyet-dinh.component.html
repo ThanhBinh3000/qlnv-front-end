@@ -1,6 +1,10 @@
 <nz-tabset nzType="card" class="tab-level-2">
   <nz-tab [nzTitle]="'TTCP'">
-    <nz-card class="mt16 flex-card p-lr16">
+    <ng-template nz-tab>
+      <app-ttcp></app-ttcp>
+    </ng-template>
+
+    <!-- <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="4">
           <label class="search__label">Số QĐ</label>
@@ -100,27 +104,26 @@
           <div class="tab-pane fade show active justify-content-between">
             <div class="trai"></div>
             <div class="canphai">
-              <!-- begin phân trang  -->
               <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="1" nzShowSizeChanger [nzPageSize]="10"
                 [nzShowTotal]="rangeTemplate">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{ total }} items
                 </ng-template>
               </nz-pagination>
-              <!-- end phân trang  -->
             </div>
           </div>
         </div>
       </nz-tab>
-    </nz-tabset>
+    </nz-tabset> -->
   </nz-tab>
-  <nz-tab [nzTitle]="'BTC'">
-
+  <nz-tab [nzTitle]="'BTC giao các bộ ngành'">
+    <ng-template nz-tab>
+      <app-btc-giao-cac-bo-nganh></app-btc-giao-cac-bo-nganh>
+    </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Chi thường xuyên của BTC giao TCDT'" class="vat-tu__container">
-
-  </nz-tab>
-  <nz-tab [nzTitle]="'Chi mua hàng DTQG của BTC giao TCDT'" class="vat-tu__container">
-
+  <nz-tab [nzTitle]="'BTC giao TCDT'">
+    <ng-template nz-tab>
+      <app-btc-giao-tcdt></app-btc-giao-tcdt>
+    </ng-template>
   </nz-tab>
 </nz-tabset>
