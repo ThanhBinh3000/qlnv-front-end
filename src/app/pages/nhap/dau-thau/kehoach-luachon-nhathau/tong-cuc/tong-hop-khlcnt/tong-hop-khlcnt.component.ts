@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -53,10 +54,23 @@ export class TongHopKhlcntComponent implements OnInit {
     noiDung: ''
   };
 
+  filterTable: any = {
+    id: '',
+    ngayTao: '',
+    noiDung: '',
+    namKhoach: '',
+    tenVthh: '',
+    tenCloaiVthh: '',
+    tenHthucLcnt: '',
+    tenPthucLcnt: '',
+    tenLoaiHdong: '',
+    tenNguonVon: '',
+    trangThai: '',
+  }
+  dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-
   dataTable: any[] = [];
   dataTableDanhSachDX: any[] = [];
   page: number = 1;
@@ -78,7 +92,7 @@ export class TongHopKhlcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
+      this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
       this.spinner.hide();
     }
@@ -166,6 +180,7 @@ export class TongHopKhlcntComponent implements OnInit {
         }
       }
       this.totalRecord = data.totalElements;
+      this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -312,9 +327,10 @@ export class TongHopKhlcntComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.tenVthh = null;
+    this.searchFilter.tenCloaiVthh = null;
+    this.searchFilter.noiDung = null;
     this.searchFilter.ngayTongHop = null;
-    // this.searchFilter.trichYeu = null;
-    // this.searchFilter.soQdinh = null;
     this.search();
   }
 
@@ -447,4 +463,38 @@ export class TongHopKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      id: '',
+      ngayTao: '',
+      noiDung: '',
+      namKhoach: '',
+      tenVthh: '',
+      tenCloaiVthh: '',
+      tenHthucLcnt: '',
+      tenPthucLcnt: '',
+      tenLoaiHdong: '',
+      tenNguonVon: '',
+      trangThai: '',
+    }
+  }
+
 }

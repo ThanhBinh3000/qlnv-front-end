@@ -269,6 +269,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
         tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
         tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
+        dienGiai: dataDetail ? dataDetail.dienGiai : null,
       }
     );
     if (dataDetail) {

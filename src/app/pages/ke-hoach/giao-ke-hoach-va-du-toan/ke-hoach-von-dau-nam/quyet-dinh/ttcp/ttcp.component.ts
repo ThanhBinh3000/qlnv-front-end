@@ -105,7 +105,7 @@ export class TtcpComponent implements OnInit {
     },
   ];
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(private readonly fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -137,9 +137,13 @@ export class TtcpComponent implements OnInit {
     this.formData.reset();
   }
 
-  xoa() {}
+  search() {
 
-  exportData() {}
+  }
+
+  xoa() { }
+
+  exportData() { }
 
   themMoi() {
     this.isAddNew = true;
@@ -176,13 +180,13 @@ export class TtcpComponent implements OnInit {
     this.isAddNew = false;
   }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
-  viewDetail(id: number, isViewDetail: boolean) {}
+  viewDetail(id: number, isViewDetail: boolean) { }
 
-  xoaItem(id: number) {}
+  xoaItem(id: number) { }
 }
 
 interface IQuyetDinhTTCP {
