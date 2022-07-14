@@ -934,7 +934,7 @@ export class PhuLuc4Component implements OnInit {
       trangThai: null,
       typeChi: null
     };
-     this.quanLyVonPhiService.getDinhMuc1(requestDinhMuc).toPromise().then(
+     this.quanLyVonPhiService.getDinhMuc(requestDinhMuc).toPromise().then(
        async (data) => {
          const  contentData = await data?.data?.content; 
          if (contentData.length != 0) {
