@@ -78,11 +78,17 @@
 							<th>Ngày tạo</th>
 							<th>Người tạo</th>
 							<th>Số công văn</th>
-							<th>Ngày trình duyệt</th>
-							<th>Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
-							<th>Ngày phê duyệt<br>(Lãnh đạo duyệt)
-							</th>
-							<th>Ngày đơn vị cấp trên <br /> trả kết quả</th>
+							<ng-container *ngIf="checkParent; else child">
+								<th>Ngày trình duyệt <br /> (Ngày đơn vị dưới gửi báo cáo)</th>
+								<th>Ngày duyệt <br />(Ngày cấp trên duyệt báo cáo)</th>
+							</ng-container>
+							<ng-template #child>
+								<th>Ngày trình duyệt</th>
+								<th>Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
+								<th>Ngày phê duyệt<br>(Lãnh đạo duyệt)
+								</th>
+								<th>Ngày đơn vị cấp trên <br /> trả kết quả</th>
+							</ng-template>
 							<th width>Trạng thái</th>
 						</tr>
 					</thead>
@@ -109,8 +115,10 @@
 									<span>{{congVan?.fileName}}</span>
 								</div>
 							</td>
-							<td>{{ngayTrinhDuyet}}</td>
-							<td>{{ngayDuyetTBP}}</td>
+							<ng-container *ngIf="!checkParent">
+								<td>{{ngayTrinhDuyet}}</td>
+								<td>{{ngayDuyetTBP}}</td>
+							</ng-container>
 							<td>{{ngayDuyetLD}}</td>
 							<td>{{ngayCapTrenTraKq}}</td>
 							<td>

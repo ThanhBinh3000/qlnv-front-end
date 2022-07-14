@@ -1209,12 +1209,12 @@ export class BaoCaoComponent implements OnInit {
 		this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.luyKeGiaiNganCk]);
 
 		// cong luy ke
-		this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganTcong + this.editCache[id].data.giaiNganThangBcaoTcong;
-		this.editCache[id].data.luyKeGiaiNganDtoan = this.editCache[id].data.luyKeGiaiNganDtoan + this.editCache[id].data.giaiNganThangBcaoDtoan;
-		this.editCache[id].data.luyKeGiaiNganNguonKhac = this.editCache[id].data.luyKeGiaiNganNguonKhac + this.editCache[id].data.giaiNganThangBcaoNguonKhac;
-		this.editCache[id].data.luyKeGiaiNganNguonQuy = this.editCache[id].data.luyKeGiaiNganNguonQuy + this.editCache[id].data.giaiNganThangBcaoNguonQuy;
-		this.editCache[id].data.luyKeGiaiNganNstt = this.editCache[id].data.luyKeGiaiNganNstt + this.editCache[id].data.giaiNganThangBcaoNstt;
-		this.editCache[id].data.luyKeGiaiNganCk = this.editCache[id].data.luyKeGiaiNganCk + this.editCache[id].data.giaiNganThangBcaoCk;
+		this.editCache[id].data.luyKeGiaiNganTcong = sumNumber([this.editCache[id].data.luyKeGiaiNganTcong, this.editCache[id].data.giaiNganThangBcaoTcong]);
+		this.editCache[id].data.luyKeGiaiNganDtoan = sumNumber([this.editCache[id].data.luyKeGiaiNganDtoan, this.editCache[id].data.giaiNganThangBcaoDtoan]);
+		this.editCache[id].data.luyKeGiaiNganNguonKhac = sumNumber([this.editCache[id].data.luyKeGiaiNganNguonKhac, this.editCache[id].data.giaiNganThangBcaoNguonKhac]);
+		this.editCache[id].data.luyKeGiaiNganNguonQuy = sumNumber([this.editCache[id].data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangBcaoNguonQuy]);
+		this.editCache[id].data.luyKeGiaiNganNstt = sumNumber([this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.giaiNganThangBcaoNstt]);
+		this.editCache[id].data.luyKeGiaiNganCk = sumNumber([this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.giaiNganThangBcaoCk]);
 
 
 		// this.editCache[id].data.giaiNganThangBcaoTcongTle = (Number(this.editCache[id].data.giaiNganThangBcaoTcong) == 0 && Number(this.editCache[id].data.kphiSdungTcong) == 0) ? '' : Number(this.editCache[id].data.giaiNganThangBcaoTcong) / Number(this.editCache[id].data.kphiSdungTcong);
@@ -1243,13 +1243,6 @@ export class BaoCaoComponent implements OnInit {
 		this.editCache[id].data.luyKeGiaiNganNsttTle = divNumber(this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.kphiSdungNstt);
 		this.editCache[id].data.luyKeGiaiNganCkTle = divNumber(this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.kphiSdungCk)
 
-	}
-
-	getNumberValue(num): number {
-		if (!num) {
-			return 0;
-		}
-		return Number(num);
 	}
 
 	changeModelPL2(id) {

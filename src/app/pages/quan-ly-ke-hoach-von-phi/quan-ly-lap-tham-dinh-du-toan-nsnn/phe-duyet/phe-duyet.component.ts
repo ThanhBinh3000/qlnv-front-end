@@ -81,12 +81,12 @@ export class PheDuyetComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
-		this.spinner.hide();
+		
 		if (ROLE_CAN_BO.includes(this.userRole)) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
-			this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
+			//this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
 			this.trangThais.push({
 				id: Utils.TT_BC_7,
 				tenDm: "Mới",
@@ -107,6 +107,7 @@ export class PheDuyetComponent implements OnInit {
 		}
 		
 		this.onSubmit();
+		this.spinner.hide();
 	}
 
 	//get user info
