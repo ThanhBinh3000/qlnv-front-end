@@ -5,7 +5,7 @@
         <h2 class="du-thao">Dự thảo</h2>
       </div>
       <div class="text-container">
-        <h2>Quyết định của Thủ tướng Chính phủ</h2>
+        <h2>Quyết định của BTC giao bộ ngành</h2>
       </div>
     </div>
     <div class="btn-group">
@@ -76,7 +76,6 @@
   </nz-card>
 
   <div class="group-button">
-    <h3>Kế hoạch giao Bộ ngành</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub btn-xoa" (click)="xoaKeHoach()">
         <i class="fa fa-times do"></i>
@@ -94,68 +93,30 @@
   </div>
 
   <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
-      <thead>
-        <tr>
-          <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
-            (nzCheckedChange)="onAllChecked($event)"></th>
-          <th class="text-center" style="width: 5%;">STT</th>
-          <th style="width: 50%;">Bộ</th>
-          <th style="width: 30%;">Kế hoạch năm {{namHienTai}}</th>
-          <th width=""></th>
-        </tr>
-        <tr>
-          <th></th>
-          <th></th>
-          <th class="text-center">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenBo" />
-            </nz-input-group>
-          </th>
-          <th class="text-center">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.keHoach" />
-            </nz-input-group>
-          </th>
-          <th></th>
-          <ng-template #suffixIconSearch>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-          <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-            (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-          <td>{{ idx + 1 }}</td>
-          <td>{{ data.tenBo }}</td>
-          <td>{{ data.keHoach }}</td>
-          <td style="text-align: center; white-space: nowrap;">
-            <a (click)="viewDetail(data.id, true)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a (click)="xoaItem(data.id)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-    <div class="tab-content tab-menu" id="myTabContent">
-      <div class="tab-pane fade show active justify-content-between">
-        <div class="trai">
+    <nz-tabset nzType="card" class="mt-16 tab-level-3">
+      <nz-tab [nzTitle]="'Mua tăng'">
+        <ng-template nz-tab>
+          <app-ke-hoach-mua-tang [quyetDinh]="quyetDinh"></app-ke-hoach-mua-tang>
+        </ng-template>
+      </nz-tab>
 
-        </div>
-        <div class="canphai">
-          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-            [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-            (nzPageSizeChange)="changePageSize($event)">
-            <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} of {{ total }} items
-            </ng-template>
-          </nz-pagination>
-        </div>
-      </div>
-    </div>
+      <nz-tab [nzTitle]="'Xuất giảm'">
+        <ng-template nz-tab>
+          <app-ke-hoach-xuat-giam [quyetDinh]="quyetDinh"></app-ke-hoach-xuat-giam>
+        </ng-template>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'Xuất bán'">
+        <ng-template nz-tab>
+          <app-ke-hoach-xuat-ban [quyetDinh]="quyetDinh"></app-ke-hoach-xuat-ban>
+        </ng-template>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
+        <ng-template nz-tab>
+          <app-ke-hoach-xuat-luan-phien-doi-hang [quyetDinh]="quyetDinh"></app-ke-hoach-xuat-luan-phien-doi-hang>
+        </ng-template>
+      </nz-tab>
+    </nz-tabset>
   </nz-card>
 </div>

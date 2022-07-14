@@ -13,7 +13,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Output('close') onClose = new EventEmitter<any>();
 
-  formData: FormGroup;
   quyetDinh: IQuyetDinhBTC = {
     id: null,
     soQd: null,
@@ -94,37 +93,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
 
   downloadFileKeHoach(event) {}
 
-  onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
-  }
-
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
-    }
-  }
-
-  refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
-      this.setOfCheckedId.has(id),
-    );
-    this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
-      !this.allChecked;
-  }
-
-  onItemChecked(id: number, checked) {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-
-  viewDetail(id: number, isViewDetail: boolean) {}
-
-  xoaItem(id: number) {}
-
   huy() {
     this.onClose.emit();
   }
@@ -139,9 +107,9 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
 
   changePageSize(event) {}
 
-  themKeHoach() {}
-
   xoaKeHoach() {}
+
+  themKeHoach() {}
 }
 
 interface IQuyetDinhBTC {

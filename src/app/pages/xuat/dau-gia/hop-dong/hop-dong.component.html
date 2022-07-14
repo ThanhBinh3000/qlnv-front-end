@@ -1,0 +1,11 @@
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+    <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_thoc">
+        <ng-template #title_thoc>
+            {{tab.giaTri}}
+            (<span class="number-title-tab">{{tab.count}}</span>)
+        </ng-template>
+        <ng-template nz-tab>
+            <app-danh-sach-hop-dong typeVthh="{{tab.ma}}"></app-danh-sach-hop-dong>
+        </ng-template>
+    </nz-tab>
+</nz-tabset>
