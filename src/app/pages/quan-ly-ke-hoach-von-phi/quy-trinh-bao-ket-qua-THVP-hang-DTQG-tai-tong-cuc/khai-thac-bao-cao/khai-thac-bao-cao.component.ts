@@ -133,4 +133,14 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 		return utils.getStatusName(id);
 	}
 
+	deleteCondition(){
+		this.searchFilter.maBcao = null
+		this.searchFilter.namBcao = null
+		this.searchFilter.dotBcao = null
+		this.searchFilter.ngayTaoTu = null
+		this.searchFilter.ngayTaoDen = null
+		this.searchFilter.maLoaiBcao = null
+		this.trangThai = null
+	}
+
 }

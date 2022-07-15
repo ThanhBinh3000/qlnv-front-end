@@ -17,5 +17,6 @@ export const MESSAGEVALIDATE = {
     DOCUMENTARY: 'Vui lòng lưu file công văn' ,
     ERROR_DATA: "Vui lòng nhập đúng dữ liệu: Bản ghi ",
     OVER_SIZE: "Kích thước file không vượt quá 2MB",
-    NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo"
+    NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
+    EXIST_REPORT: "Báo cáo đã tông tại",
   };

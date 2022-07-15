@@ -5,11 +5,16 @@
 			<div class="trai">
 			</div>
 			<div class="canphai phai action-top">
+				<button nz-button class="search__button--clear" (click)="deleteCondition()">
+					<i nz-icon nzType="close"></i>
+					Xóa điều kiện
+				</button>
 				<button nz-button class="search__button--search"
 					(click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
 					<i nz-icon nzType="search"></i>
 					Tìm kiếm
 				</button>
+				
 				<button nz-button class="search__button--search" (click)="close()">
 					<i nz-icon nzType="stop"></i>
 					Đóng
