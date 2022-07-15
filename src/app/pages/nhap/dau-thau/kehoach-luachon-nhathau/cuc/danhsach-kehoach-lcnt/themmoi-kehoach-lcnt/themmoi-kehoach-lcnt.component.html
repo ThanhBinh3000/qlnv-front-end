@@ -53,8 +53,7 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                    <nz-select formControlName="namKhoach" (ngModelChange)="getDataChiTieu()"
-                      [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                    <nz-select formControlName="namKhoach" (ngModelChange)="getDataChiTieu()" [nzDisabled]="true">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                     <ng-template #namKhoachError let-control>

@@ -60,8 +60,8 @@ export class DanhSachDauThauService extends BaseService {
   //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
   //   return this.httpClient.post<any>(url, body).toPromise();
   // }
-  export(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
+  // export(body: any): Observable<Blob> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
+  //   return this.httpClient.post(url, body, { responseType: 'blob' });
+  // }
 }

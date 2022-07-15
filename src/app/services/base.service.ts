@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { OldResponseData } from '../interfaces/response';
+import { Observable } from 'rxjs';
 
 export abstract class BaseService {
   table = '';
@@ -57,4 +58,10 @@ export abstract class BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/TimTheoMa?ma=${ma}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  export(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
+
 }

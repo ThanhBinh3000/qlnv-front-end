@@ -16,6 +16,8 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
@@ -31,8 +33,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService
   ) {
 
   }
@@ -293,36 +293,35 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayKy: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayKy: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+            : null,
+          soTr: this.searchFilter.soDx,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          trichYeu: this.searchFilter.trichYeu,
+        };
+        this.danhSachDauThauService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
