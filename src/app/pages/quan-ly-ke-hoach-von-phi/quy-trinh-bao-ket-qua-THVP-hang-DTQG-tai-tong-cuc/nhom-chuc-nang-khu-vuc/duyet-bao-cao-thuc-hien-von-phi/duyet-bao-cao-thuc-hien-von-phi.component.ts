@@ -224,6 +224,17 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		this.location.back();
 	}
 
+	deleteCondition(){
+		this.searchFilter.maBcao = null
+		this.searchFilter.namBcao = null
+		this.searchFilter.dotBcao = null
+		this.searchFilter.ngayTaoTu = null
+		this.searchFilter.ngayTaoDen = null
+		this.searchFilter.maDvi = null
+		this.searchFilter.maLoaiBcao = null
+		this.trangThai = null
+	}
+
 	// lay ten trang thai ban ghi
 	getStatusName(id) {
 		return TRANG_THAI_GUI_DVCT.find(item => item.id == id)?.ten

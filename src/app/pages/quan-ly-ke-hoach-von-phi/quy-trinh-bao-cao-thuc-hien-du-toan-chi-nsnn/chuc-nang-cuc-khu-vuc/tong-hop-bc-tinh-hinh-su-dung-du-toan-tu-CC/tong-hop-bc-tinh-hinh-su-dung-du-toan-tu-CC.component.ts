@@ -1,3 +1,4 @@
+import { N } from '@angular/cdk/keycodes';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -143,6 +144,12 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 	// lay ten trang thai ban ghi
 	getStatusName(id) {
 		return TRANG_THAI_GUI_DVCT.find(item => item.id == id)?.ten
+	}
+
+	deleteCondition(){
+		this.searchFilter.namBcao = null
+		this.searchFilter.thangBcao = null
+		this.searchFilter.maLoaiBcao = null
 	}
 
 	close() {
