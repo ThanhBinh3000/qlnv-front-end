@@ -6,7 +6,8 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="3">
               <label class="search__label">Số quyết định nhập</label>
-              <input class="search__input" placeholder="Số quyết định nhập" nz-input [(ngModel)]="searchFilter.soQd" />
+              <input class="search__input" placeholder="Số quyết định nhập" nz-input
+                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số biên bản</label>
@@ -179,10 +180,6 @@
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
-            </button>
-            <button type="button" class="btn btn-sub" (click)="print()">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
             </button>
             <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
               <i class="icon htvbdh_dau-cong"></i>
