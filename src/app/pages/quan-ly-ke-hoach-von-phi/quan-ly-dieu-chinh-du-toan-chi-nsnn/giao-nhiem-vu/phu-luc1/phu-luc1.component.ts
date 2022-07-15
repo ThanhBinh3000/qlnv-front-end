@@ -426,7 +426,7 @@ export class PhuLuc1Component implements OnInit {
     return index;
   }
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-  replaceIndex(lstIndex: number[], heSo: number) {
+  replaceIndex(lstIndex: number[] = [], heSo: number) {
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -540,7 +540,7 @@ export class PhuLuc1Component implements OnInit {
     //xóa phần tử và con của nó
     this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
     //update lại số thức tự cho các phần tử cần thiết
-    let lstIndex: number[];
+    const lstIndex: number[] = [];
     for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
       if (this.getHead(this.lstCtietBcao[i].stt) == head) {
         lstIndex.push(i);

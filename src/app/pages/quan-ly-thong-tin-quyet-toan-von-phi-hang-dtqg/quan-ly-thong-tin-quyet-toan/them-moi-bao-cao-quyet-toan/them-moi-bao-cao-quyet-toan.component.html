@@ -216,12 +216,14 @@
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.soLuong" (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.soLuong" (ngModelChange)="changeModel(data.id)"
+                        [class]="(editCache[data.id].data.soLuong || editCache[data.id].data.soLuong ===0) &&  editCache[data.id].data.soLuong >= 0?'' : 'input-error-validate'">
                       </nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.donGiaMua" (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.donGiaMua" (ngModelChange)="changeModel(data.id)"
+                        [class]="(editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua ===0) &&  editCache[data.id].data.donGiaMua >= 0?'' : 'input-error-validate'">
                       </nz-input-number>
                     </td>
                     <td>
@@ -261,8 +263,14 @@
             </nz-table>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col nzSpan="24">
-                <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
+                <ng-container *ngIf="this.trangThaiBaoCao === '2' ||  this.trangThaiBaoCao === '4'; else thuyetMinhTp">
+                  <label class="search__label">Thuyết minh</label>
+                  <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" disabled></textarea>
+                </ng-container>
+                <ng-template #thuyetMinhTp>
+                  <label class="search__label">Thuyết minh</label>
+                  <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
+                </ng-template>
               </div>
             </div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

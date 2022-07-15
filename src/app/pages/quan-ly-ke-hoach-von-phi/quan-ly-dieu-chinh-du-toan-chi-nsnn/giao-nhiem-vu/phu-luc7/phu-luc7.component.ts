@@ -107,6 +107,7 @@ export class PhuLuc7Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  dsDinhMuc: any[] = [];
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -234,6 +235,7 @@ export class PhuLuc7Component implements OnInit {
     ]
     this.changeNam()
     this.getStatusButton();
+    this.getDsDinhMuc();
     this.spinner.hide();
   }
 
@@ -498,10 +500,16 @@ export class PhuLuc7Component implements OnInit {
     }
     this.replaceIndex(lstIndex, 1);
     // them moi phan tu
+    let dm = 0;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.nhomBquan == initItem.loaiMatHang){
+        return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
+    }})
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -513,6 +521,7 @@ export class PhuLuc7Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -548,12 +557,17 @@ export class PhuLuc7Component implements OnInit {
       }
     }
 
-
+    let dm = 0;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.nhomBquan == initItem.loaiMatHang){
+        return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
+    }})
     // them moi phan tu
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: stt,
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
       this.editCache[item.id] = {
@@ -569,6 +583,7 @@ export class PhuLuc7Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: stt,
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
 
@@ -721,10 +736,16 @@ export class PhuLuc7Component implements OnInit {
   }
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
+    let dm = 0;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.nhomBquan == initItem.loaiMatHang){
+        return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
+    }})
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
@@ -737,6 +758,7 @@ export class PhuLuc7Component implements OnInit {
         level: 0,
         id: uuid.v4() + 'FE',
         stt: "0.1",
+        kphiBqDmuc: dm,
       }
       this.lstCtietBcao.push(item);
 
@@ -963,4 +985,29 @@ export class PhuLuc7Component implements OnInit {
     this.editCache[id].data.soChuaQtoan = this.editCache[id].data.soQtoanChuyenNsauKpTk + this.editCache[id].data.soQtoanChuyenNsauKpTchi + this.editCache[id].data.dtoan2021ThanhQtoan2020;
   }
 
+  getDsDinhMuc(){
+    const requestDinhMuc = {
+      nhomBquan: null,
+      paggingReq: {
+        limit: 20,
+        page: 1
+      },
+      str: null,
+      tenDmuc: null,
+      trangThai: null
+    };
+     this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
+       async (data) => {
+         const  contentData = await data?.data?.content; 
+         if (contentData.length != 0) {
+             this.dsDinhMuc = contentData;
+          } else {
+            this.dsDinhMuc = null;
+          }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+  }
 }
