@@ -36,7 +36,7 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Quyết toán năm:</label>
 						<nz-input-number [nzSize]="'small'"
-							[class]="searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999 || !searchFilter.namQtoan && this.searchFilter.namQtoan !== 0 ?'' : 'input-error-validate'"
+							[class]="searchFilter.namQtoan && searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.namQtoan"></nz-input-number>
           </div>
           <div nz-col nzSpan="6">

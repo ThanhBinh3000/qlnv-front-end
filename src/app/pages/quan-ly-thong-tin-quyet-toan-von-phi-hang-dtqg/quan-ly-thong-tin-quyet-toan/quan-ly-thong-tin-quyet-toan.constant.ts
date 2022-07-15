@@ -1,8 +1,8 @@
 import { QuanLyThongTinQuyetToan } from './quan-ly-thong-tin-quyet-toan.type';
-import {MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG,MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN} from '../../../constants/routerUrl';
-export const ROLE_CAN_BO = ['TC_KH_VP_NV','C_KH_VP_NV_KH','C_KH_VP_NV_TVQT','CC_KH_VP_NV'];
-export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP','C_KH_VP_TBP_TVQT','C_KH_VP_TBP_KH','CC_KH_VP_TBP'];
-export const ROLE_LANH_DAO = ['TC_KH_VP_LD','C_KH_VP_LD','CC_KH_VP_LD'];
+import { MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG, MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN } from '../../../constants/routerUrl';
+export const ROLE_CAN_BO = ['TC_KH_VP_NV', 'C_KH_VP_NV_KH', 'C_KH_VP_NV_TVQT', 'CC_KH_VP_NV'];
+export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP', 'C_KH_VP_TBP_TVQT', 'C_KH_VP_TBP_KH', 'CC_KH_VP_TBP'];
+export const ROLE_LANH_DAO = ['TC_KH_VP_LD', 'C_KH_VP_LD', 'CC_KH_VP_LD'];
 //**************** */ hang so cho cac cap
 //cap chi cuc
 export const CHI_CUC = '3';
@@ -51,8 +51,47 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     title: 'Danh sách báo cáo quyết toán vốn, phí hàng DTQG.',
     description: 'Danh sách báo cáo quyết toán vốn, phí hàng DTQG.',
     url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG`,
-    unRole: [],
-		isDisabled: false,
+    unRole: [
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_KH'
+      },
+
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_TVQT'
+      },
+
+      {
+        "unit": CHI_CUC,
+        "role": 'CC_KH_VP_NV'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_TVQT'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_KH'
+      },
+
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_TBP'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_LD'
+      },
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_LD'
+      },
+    ],
+    isDisabled: false,
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -60,9 +99,46 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     description: 'Danh sách điều chỉnh số liệu sau quyết toán',
     url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG`,
     unRole: [
-      
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_KH'
+      },
+
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_TVQT'
+      },
+
+      {
+        "unit": CHI_CUC,
+        "role": 'CC_KH_VP_NV'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_TVQT'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_KH'
+      },
+
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_TBP'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_LD'
+      },
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_LD'
+      },
     ],
-		isDisabled: false,
+    isDisabled: false,
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -71,11 +147,50 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/duyet-phe-duyet-bao-cao`,
     unRole: [
       {
-				"unit": TONG_CUC,
-				"role": 'TC_KH_VP_NV',
-			},
+        "unit": TONG_CUC,
+        "role": 'TC_KH_VP_NV',
+      },
+
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_KH'
+      },
+
+      {
+        "unit": CUC_KHU_VUC,
+        "role": 'C_KH_VP_NV_TVQT'
+      },
+
+      {
+        "unit": CHI_CUC,
+        "role": 'CC_KH_VP_NV'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_TVQT'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_TBP_KH'
+      },
+
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_TBP'
+      },
+
+      {
+        'unit': CUC_KHU_VUC,
+        'role': 'C_KH_VP_LD'
+      },
+      {
+        'unit': CHI_CUC,
+        'role': 'CC_KH_VP_LD'
+      },
     ],
-		isDisabled: false,
+    isDisabled: false,
   },
 
 ];

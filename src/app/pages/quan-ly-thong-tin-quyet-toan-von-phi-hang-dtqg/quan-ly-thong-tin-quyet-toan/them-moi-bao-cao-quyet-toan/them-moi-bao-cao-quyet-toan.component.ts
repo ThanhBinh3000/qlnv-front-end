@@ -448,7 +448,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     if (file) {
       request.congVan = await this.uploadFile(file);
     }
-    if (!request.congVan) {
+    if (!request.congVan.fileName) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return;
     }
@@ -762,6 +762,20 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
+    if (
+      (!this.editCache[id].data.soLuong && this.editCache[id].data.soLuong !== 0) ||
+      (!this.editCache[id].data.donGiaMua && this.editCache[id].data.donGiaMua !== 0)
+    ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if(
+      this.editCache[id].data.soLuong < 0 ||
+      this.editCache[id].data.donGiaMua < 0
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
