@@ -646,7 +646,7 @@ export class PhuLuc4Component implements OnInit {
   }
 
   deleteAllChecked() {
-    let lstId: any[];
+    const lstId: any[] = [];
     this.lstCtietBcao.forEach(item => {
       if (item.checked) {
         lstId.push(item.id);
