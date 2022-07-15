@@ -110,6 +110,8 @@ export class PhuLuc6Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  dsDinhMuc: any[] = [];
+  maDviTao!: string;
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -139,6 +141,7 @@ export class PhuLuc6Component implements OnInit {
     this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
+    this.maDviTao = this.data?.maDviTao;
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -194,6 +197,7 @@ export class PhuLuc6Component implements OnInit {
     );
     this.changeNam();
     this.getStatusButton();
+    this.getDsDinhMuc();
     this.spinner.hide();
   }
 
@@ -454,11 +458,17 @@ export class PhuLuc6Component implements OnInit {
       }
     }
     this.replaceIndex(lstIndex, 1);
+    let dm : number;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.idDmChi == initItem.loaiMatHang){
+        return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
+    }})
     // them moi phan tu
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -470,6 +480,7 @@ export class PhuLuc6Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -505,12 +516,17 @@ export class PhuLuc6Component implements OnInit {
       }
     }
 
-
+    let dm : number;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.idDmChi == initItem.loaiMatHang){
+        return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
+    }})
     // them moi phan tu
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: stt,
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
       this.editCache[item.id] = {
@@ -526,6 +542,7 @@ export class PhuLuc6Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: stt,
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
 
@@ -675,12 +692,19 @@ export class PhuLuc6Component implements OnInit {
       }
     })
   }
+
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
+    let dm : number;
+    this.dsDinhMuc.forEach(itm => {
+      if(itm.idDmChi == initItem.loaiMatHang){
+        return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
+    }})
     if (initItem.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
@@ -693,6 +717,7 @@ export class PhuLuc6Component implements OnInit {
         level: 0,
         id: uuid.v4() + 'FE',
         stt: "0.1",
+        kphiDmuc: dm,
       }
       this.lstCtietBcao.push(item);
 
@@ -923,5 +948,31 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
   }
 
-
+  getDsDinhMuc(){
+    const requestDinhMuc = {
+      idDmChi: null,
+      maDvi: this.maDviTao,
+      paggingReq: {
+        limit: 20,
+        page: 1
+      },
+      parentId: null,
+      str: null,
+      trangThai: null,
+      typeChi: null
+    };
+     this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
+       async (data) => {
+         const  contentData = await data?.data?.content; 
+         if (contentData.length != 0) {
+             this.dsDinhMuc = contentData;
+          } else {
+            this.dsDinhMuc = null;
+          }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+  }
 }

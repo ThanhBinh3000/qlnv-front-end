@@ -159,10 +159,7 @@
             (ngModelChange)="changeModel(data.id)" disabled></nz-input-number>
         </td>
         <td>
-          <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.thienDinhMuc"
-            (ngModelChange)="changeModel(data.id)"
-            [class]="editCache[data.id].data.thienDinhMuc || editCache[data.id].data.thienDinhMuc ===0?'' : 'input-error-validate'">
-          </nz-input-number>
+          {{editCache[data.id].data.thienDinhMuc}}
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.thienThanhTien"

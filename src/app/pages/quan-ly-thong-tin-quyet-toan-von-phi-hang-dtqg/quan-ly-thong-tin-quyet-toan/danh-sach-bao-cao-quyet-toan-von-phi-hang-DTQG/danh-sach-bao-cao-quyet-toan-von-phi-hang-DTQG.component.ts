@@ -255,7 +255,10 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
 
   taoMoi() {
-    if(this.searchFilter.namQtoan <= 1000 ||  this.searchFilter.namQtoan >= 2999){
+    if(!this.searchFilter.namQtoan){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
+      return;
+    }else if(this.searchFilter.namQtoan <= 1000 ||  this.searchFilter.namQtoan >= 2999){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
       return;
     }else{
