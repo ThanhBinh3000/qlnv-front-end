@@ -29,4 +29,21 @@
     .tt-chung-form {
         padding: 0px 10px !important;
     }
+
+    .them-moi-dc-kh-ban-dg {
+        .ant-card-body {
+            padding: 10px 10px !important;
+        }
+    }
+
+    .dc-ban-dau-gia {
+        z-index: 1 !important;
+        top: 24px !important;
+
+        .tab-menu.tab-content,
+        .tab-menu.tab-content .justify-content-between.active {
+            background: transparent !important;
+        }
+    }
+
 }

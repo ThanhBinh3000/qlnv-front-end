@@ -10,15 +10,15 @@
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="5">
-              <label class="search__label">Số QĐ điều chỉnh KH LCNT</label>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Số quyết định điều chỉnh</label>
               <input class="search__input" nz-input />
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Trích yếu</label>
               <input class="search__input" nz-input />
             </div>
-            <div nz-col nzSpan="4">
+            <div nz-col nzSpan="5">
               <label class="search__label">Ngày ký</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
@@ -37,19 +37,19 @@
         <div class="tab__container">
           <div class="tab-giao-chi-tieu mt-16">
             <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
-              <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách quyết điều chỉnh KH LCNT'">
+              <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách quyết điều chỉnh kế hoạch bán đấu giá'">
                 <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th width="60px">STT</th>
-                      <th width="130px">Số QĐ điều chỉnh KH LCNT</th>
+                      <th width="130px">Số quyết định điều chỉnh</th>
                       <th>Ngày ký</th>
                       <th>Trích yếu</th>
-                      <th class="text-center">Số QĐ phê duyệt KH LCNT</th>
+                      <th class="text-center">Số quyết định phê duyệt KH BĐG</th>
+                      <th class="text-center">Mã tổng hợp</th>
                       <th class="text-center">Năm kế hoạch</th>
                       <th class="text-center">Loại hàng hóa</th>
-                      <th class="text-center">Số gói thầu</th>
                       <th class="text-center">Trạng thái</th>
                       <th width="130px" class="text-center">Hành động</th>
                     </tr>
@@ -59,11 +59,11 @@
                       <td class="text-center">1</td>
                       <td>123/QĐ-TCDT</td>
                       <td>17/02/2022</td>
-                      <td>Về việc điều chỉnh KHLCNT</td>
+                      <td>Bán đấu giá</td>
                       <td>111/QĐ-TCDT</td>
+                      <td>576/KH-CDTVP</td>
                       <td>2022</td>
                       <td>Gạo</td>
-                      <td>2</td>
                       <td>Ban Hành</td>
                       <td class="text-center">
                         <a>
@@ -99,17 +99,17 @@
               </nz-tab>
             </nz-tabset>
             <ng-template #tableCard1>
+              <button type="button" class="btn btn-do">
+                <i class="fa fa-trash-o do"></i>
+                <span>Xóa</span>
+              </button>
               <button type="button" class="btn btn-sub">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
               </button>
-              <button type="button" class="btn btn-sub">
-                <i class="icon htvbdh_tcdt_print"></i>
-                <span>In</span>
-              </button>
               <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
                 <i class="icon htvbdh_soanthao"></i>
-                <span>Tạo quyết định</span>
+                <span>Tạo quyết định điều chỉnh</span>
               </button>
             </ng-template>
           </div>

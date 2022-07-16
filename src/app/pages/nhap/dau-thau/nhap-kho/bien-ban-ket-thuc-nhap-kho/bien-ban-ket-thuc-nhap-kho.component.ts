@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -7,8 +8,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { BienBanKetThucNhapKho } from 'src/app/models/BienBanKetThucNhapKho';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -20,14 +22,10 @@ import { UserService } from 'src/app/services/user.service';
 export class BienBanKetThucNhapKhoComponent implements OnInit {
   @Input() typeVthh: string;
   searchFilter = {
-    soQd: '',
+    soQuyetDinhNhap: '',
     soBienBan: '',
     ngayNhapDayKho: '',
     ngayKetThucNhap: '',
-    maDiemKho: '',
-    maNhaKho: '',
-    maKhoNganLo: '',
-    kyThuatVien: '',
   };
 
   listDiemKho: any[] = [];
@@ -63,9 +61,10 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     noiDung: '',
   }
   dataTableAll: any[] = [];
+  bienBanKetThucNhapKho: BienBanKetThucNhapKho = new BienBanKetThucNhapKho();
   constructor(
     private spinner: NgxSpinnerService,
-    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
+    private quanLyPhieuKetThucNhapKhoService: QuanLyBienBanKetThucNhapKhoService,
     private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
@@ -123,33 +122,24 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
   async search() {
     let param =
     {
-      "denNgay": null,
-      "kyThuatVien": this.searchFilter.kyThuatVien,
-      "maDiemKho": this.searchFilter.maDiemKho,
-      "maDonVi": null,
-      // "maDonVi": this.userInfo.MA_DVI,
-      "maDonViLap": null,
-      "maHang": this.maVthh,
-      "maKhoNganLo": this.searchFilter.maKhoNganLo,
-      "maNhaKho": this.searchFilter.maNhaKho,
-      "ngayBatDauNhap": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
-      "ngayKetThucNhap": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
-      "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
-      "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0 ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD') : null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": 20,
-        "orderBy": null,
-        "orderType": null,
-        "page": 0
-      },
+      "ngayKetThucTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1
+        ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD')
+        : null,
+      "ngayKetThucDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0
+        ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD')
+        : null,
+      "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1
+        ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD')
+        : null,
+      "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0
+        ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD')
+        : null,
+      "pageSize": this.pageSize,
+      "pageNumber": this.page,
       "soBienBan": this.searchFilter.soBienBan,
-      "str": null,
-      "trangThai": null,
-      "tuNgay": null
+      "soQdNhap": this.searchFilter.soQuyetDinhNhap
     }
-    let res = await this.quanLyPhieuNhapDayKhoService.timKiem(param);
+    let res = await this.quanLyPhieuKetThucNhapKhoService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -169,14 +159,10 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
+      soQuyetDinhNhap: '',
       soBienBan: '',
       ngayNhapDayKho: '',
       ngayKetThucNhap: '',
-      maDiemKho: '',
-      maNhaKho: '',
-      maKhoNganLo: '',
-      kyThuatVien: '',
     };
   }
 
@@ -192,7 +178,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapDayKhoService.xoa(item.id).then((res) => {
+          this.quanLyPhieuKetThucNhapKhoService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -296,32 +282,6 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiStr = "Thóc";
-      this.loaiVthh = "01";
-      this.maVthh = "0101";
-      this.idVthh = 2;
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiStr = "Gạo";
-      this.loaiVthh = "00";
-      this.maVthh = "0102";
-      this.idVthh = 6;
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiStr = "Muối";
-      this.loaiVthh = "02";
-      this.maVthh = "04";
-      this.idVthh = 78;
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiStr = "Vật tư";
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
@@ -371,7 +331,45 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
   }
 
   export() {
-
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "ngayKetThucDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0
+            ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD')
+            : null,
+          "ngayKetThucTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1
+            ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD')
+            : null,
+          "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0
+            ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD')
+            : null,
+          "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1
+            ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD')
+            : null,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "orderBy": "string",
+            "orderType": "string",
+            "page": this.page,
+          },
+          "soBienBan": this.searchFilter.soBienBan,
+          "soQdNhap": this.searchFilter.soQuyetDinhNhap
+        };
+        this.quanLyPhieuKetThucNhapKhoService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-bien-ban-ket-thuc-nhap-kho.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   async showList() {
@@ -409,7 +407,4 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     }
   }
 
-  print() {
-
-  }
 }
