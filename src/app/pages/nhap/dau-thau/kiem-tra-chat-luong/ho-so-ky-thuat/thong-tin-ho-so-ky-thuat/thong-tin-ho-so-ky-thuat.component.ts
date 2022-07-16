@@ -135,7 +135,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     if (this.detail.trangThai == '01' || this.detail.trangThai == '02' || this.detail.trangThai == '04' || this.isView) {
       return;
     }
-    let data = this.detail.maVatTuCha;
+    let data = this.detail.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -195,7 +195,10 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       "loaiDaiDien": type,
       "stt": null
     }
-    this.listDaiDien.push(item);
+    this.listDaiDien = [
+      item,
+      ...this.listDaiDien
+    ]
     this.loadDaiDien();
   }
 

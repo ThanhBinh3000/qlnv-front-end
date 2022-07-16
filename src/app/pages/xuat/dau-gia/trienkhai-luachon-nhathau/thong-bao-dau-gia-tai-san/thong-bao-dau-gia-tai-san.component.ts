@@ -27,6 +27,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
     soQuyetDinhNhap: '',
     soBienBan: '',
     ngayBienBan: '',
+    namKh: '',
   };
 
   optionsDonVi: any[] = [];
@@ -35,6 +36,8 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;
+  listNam: any[] = [];
+  yearNow: number = 0;
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -78,6 +81,13 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
+      }
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
       }
       await this.search();
       this.spinner.hide();
@@ -192,6 +202,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       soQuyetDinhNhap: '',
       soBienBan: '',
       ngayBienBan: '',
+      namKh: '',
     };
     this.search();
   }

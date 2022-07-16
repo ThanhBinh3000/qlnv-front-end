@@ -252,6 +252,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.detail.maHangHoa = this.detailHopDong.loaiVthh;
         this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
         this.detail.maHangHoa = this.typeVthh;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);

@@ -17,6 +17,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chi-tiet-thong-bao-dau-gia-tai-san',
@@ -34,6 +35,8 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
   detail: any = {};
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
+  listNam: any[] = [];
+  yearNow: number = 0;
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -47,6 +50,9 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
+  listFileDinhKem: any[] = [];
+  listOfData: any[] = [];
+  mapOfExpandedData2: { [maDvi: string]: any[] } = {};
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -55,7 +61,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private routerActive: ActivatedRoute,
     public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
@@ -68,6 +74,13 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.trangThai = "00";
       await Promise.all([
@@ -84,6 +97,44 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  collapse2(array: any[], data: any, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.idVirtual === d.idVirtual)!;
+          target.expand = false;
+          this.collapse2(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  convertTreeToList2(root: any): any[] {
+    const stack: any[] = [];
+    const array: any[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+    while (stack.length !== 0) {
+      const node = stack.pop();
+      this.visitNode2(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+        }
+      }
+    }
+    return array;
+  }
+
+  visitNode2(node: any, hashMap: { [maDvi: string]: boolean }, array: any[]): void {
+    if (!hashMap[node.idVirtual]) {
+      hashMap[node.idVirtual] = true;
+      array.push(node);
     }
   }
 
@@ -248,7 +299,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         }
       }
     }
-    this.updateEditCache();
   }
 
   async getIdNhap() {
@@ -588,66 +638,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     modalLuongThuc.afterClose.subscribe((res) => {
       if (res) {
       }
-    });
-  }
-
-  cancelEdit(stt: number): void {
-    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
-    this.editDataCache[stt] = {
-      data: { ...this.detail?.ketQuaKiemTra[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(stt: number): void {
-    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
-    Object.assign(this.detail?.ketQuaKiemTra[index], this.editDataCache[stt].data);
-    this.editDataCache[stt].edit = false;
-  }
-
-  deleteRow(data: any) {
-    this.detail.ketQuaKiemTra = this.detail?.ketQuaKiemTra.filter(x => x.stt != data.stt);
-    this.sortTableId();
-    this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
-  }
-
-  addRow() {
-    if (!this.detail?.ketQuaKiemTra) {
-      this.detail.ketQuaKiemTra = [];
-    }
-    this.sortTableId();
-    let item = cloneDeep(this.create);
-    item.stt = this.detail?.ketQuaKiemTra.length + 1;
-    this.detail.ketQuaKiemTra = [
-      ...this.detail?.ketQuaKiemTra,
-      item,
-    ]
-    this.updateEditCache();
-    this.clearItemRow();
-  }
-
-  clearItemRow() {
-    this.create = {};
-  }
-
-  updateEditCache(): void {
-    if (this.detail?.ketQuaKiemTra && this.detail?.ketQuaKiemTra.length > 0) {
-      this.detail?.ketQuaKiemTra.forEach((item) => {
-        this.editDataCache[item.stt] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-    }
-  }
-
-  sortTableId() {
-    this.detail?.ketQuaKiemTra.forEach((lt, i) => {
-      lt.stt = i + 1;
     });
   }
 
