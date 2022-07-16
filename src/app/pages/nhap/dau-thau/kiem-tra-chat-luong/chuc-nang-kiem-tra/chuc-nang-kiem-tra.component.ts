@@ -14,6 +14,8 @@ export class ChucNangKiemTraComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.typeVthh);
+
   }
 
 }

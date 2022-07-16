@@ -59,7 +59,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số Quyết định
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -71,9 +71,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Biên bản kiểm tra HSKT
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.hoSoKyThuatId" (ngModelChange)="changeHoSoKyThuat()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listHoSoKyThuat" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -83,7 +83,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
+                <input nz-input [(ngModel)]="detail.tenDvi" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -219,7 +219,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số Quyết định
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -396,29 +396,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
-                <td></td>
-                <td>
-                  <nz-select [(ngModel)]="create.tenVatTu" (ngModelChange)="changeDanhMucHang(create)">
-                    <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
-                    </nz-option>
-                  </nz-select>
-                </td>
-                <td>{{create.maVatTu}}</td>
-                <td>{{create.donViTinh}}</td>
-                <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongTrenCt"
-                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.soLuongThuc" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                </td>
-                <td class="bg-gray">{{create.thanhTien ?? 0 | number: '1.0-1'}}</td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{i+1}}</td>
+                <td>{{data.tenVatTu}}</td>
+                <td>{{data.maVatTu}}</td>
+                <td>{{data.donViTinh}}</td>
+                <td>{{data.soLuongTrenCt ?? 0 | number: '1.0-1'}}</td>
+                <td>{{data.soLuongThuc ?? 0 | number: '1.0-1'}}</td>
+                <td>{{data.donGia ?? 0 | number: '1.0-1'}}</td>
+                <td class="bg-gray">{{data.thanhTien ?? 0 | number: '1.0-1'}}</td>
               </tr>
               <tr *ngIf="basicTable.data && basicTable.data.length > 0">
                 <td class="background-last-row"></td>

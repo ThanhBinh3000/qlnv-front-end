@@ -528,9 +528,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
 
   checkDataExistKqKiemNghiemChatLuong(kqKiemNghiemChatLuong: KetQuaKiemNghiemChatLuongHang) {
-    console.log(this.phieuKiemNghiemChatLuongHang.kquaKnghiem);
-    console.log(kqKiemNghiemChatLuong);
-
     if (this.phieuKiemNghiemChatLuongHang.kquaKnghiem) {
       let indexExist = this.phieuKiemNghiemChatLuongHang.kquaKnghiem.findIndex(
         (x) => x.tenCtieu == kqKiemNghiemChatLuong.tenCtieu,

@@ -13,12 +13,12 @@
                         <i class="fa fa-arrow-left"></i>
                         <span>Quay lại</span>
                     </button>
-                    <button *ngIf="formData.value.id > 0 && formData.value.trangThai == '00'"
-                        class="btn btn-sub btn-sm waves-effect waves-light" (click)="pheDuyet()">
+                    <button *ngIf="formData.value.trangThai == '00'" class="btn btn-sub btn-sm waves-effect waves-light"
+                        (click)="pheDuyet()">
                         <i class="icon htvbdh_tcdt_guiduyet"></i>
                         <span>Ban hành</span>
                     </button>
-                    <button *ngIf="formData.value.id > 0 && formData.value.trangThai == '00'"
+                    <button *ngIf="formData.value.trangThai == '00'"
                         class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
@@ -143,7 +143,7 @@
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
                                     <nz-select [nzDisabled]="formData.value.trangThai !== '00'" nzAllowClear
-                                        formControlName="soQdPdKhlcnt">
+                                        formControlName="soQdPdKhlcnt" (ngModelChange)="onChangeSoQdKh($event)">
                                         <nz-option *ngFor="let p of listQdPdKhlcnt" [nzValue]="p.soQd"
                                             [nzLabel]="p.soQd">
                                         </nz-option>
@@ -179,7 +179,7 @@
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                     <nz-input-group>
                                         <nz-select [nzDisabled]="formData.value.trangThai !== '00'"
-                                            formControlName="idGoiThau">
+                                            formControlName="idGoiThau" (ngModelChange)="onChangeGoiThau($event)">
                                             <nz-option *ngFor="let p of listGoiThau" [nzValue]="p.idGt"
                                                 [nzLabel]="p.goiThau">
                                             </nz-option>
@@ -193,7 +193,7 @@
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="24" class="ds-qd-dc" *ngIf="userService.isTongCuc()">
-                            <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
+                            <nz-tabset nzType="card" class="tab-level-3">
                                 <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách quyết điều chỉnh KH LCNT'">
                                     <nz-table #basicTable [nzData]="dataTableGoiThau" class="nowrap"
                                         [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -217,26 +217,26 @@
                                                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                                                 <td>{{ data.goiThau }}</td>
                                                 <td>
-                                                    <nz-select [(ngModel)]="data.isTrungThau">
-                                                        <nz-option nzValue='true' nzLabel="Trúng thầu">
+                                                    <nz-select [(ngModel)]="data.trungThau"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <nz-option nzValue=1 nzLabel="Trúng thầu">
                                                         </nz-option>
-                                                        <nz-option nzValue='false' nzLabel="Hủy thầu">
+                                                        <nz-option nzValue=0 nzLabel="Hủy thầu">
                                                         </nz-option>
                                                     </nz-select>
                                                 </td>
-                                                <td></td>
+                                                <td>{{ data.tenNhaThau }}</td>
                                                 <td>
-                                                    <input class="search__input" nz-input />
+                                                    <input [(ngModel)]="data.lyDoHuy" *ngIf="data.trungThau == 0"
+                                                        class="search__input" nz-input
+                                                        [ngModelOptions]="{standalone: true}" />
                                                 </td>
                                                 <td>{{ data.tenVthh }}</td>
                                                 <td>{{ data.tenCloaiVthh }}</td>
-                                                <td>1.000.000</td>
-                                                <td>180</td>
-                                                <td>Trọn gói</td>
+                                                <td>{{ data.thanhGiaGoiThau }}</td>
+                                                <td>{{ data.tgianThienHd }}</td>
+                                                <td>{{ data.tenLoaiHdong }}</td>
                                                 <td class="text-center">
-                                                    <a>
-                                                        <i class="icon htvbdh_checkmark"></i>
-                                                    </a>
                                                     <a (click)="chiTiet()">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
@@ -244,29 +244,8 @@
                                             </tr>
                                         </tbody>
                                     </nz-table>
-                                    <!-- <div class="tab-content tab-menu" id="myTabContent">
-                                        <div class="tab-pane fade show active justify-content-between">
-                                            <div class="trai">
-                                            </div>
-                                            <div class="canphai">
-                                                <nz-pagination class="pagination-card" [nzPageIndex]="10" [nzTotal]="10"
-                                                    nzShowSizeChanger [nzPageSize]="10" [nzShowTotal]="rangeTemplate"
-                                                    (nzPageIndexChange)="changePageIndex($event)"
-                                                    (nzPageSizeChange)="changePageSize($event)">
-                                                    <ng-template #rangeTemplate let-range="range" let-total>
-                                                        {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                                                    </ng-template>
-                                                </nz-pagination>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                 </nz-tab>
                             </nz-tabset>
-                            <ng-template #tableCard1>
-                                <button type="button" class="btn btn-sub">
-                                    <span>Quay lại</span>
-                                </button>
-                            </ng-template>
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>

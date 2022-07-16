@@ -173,7 +173,7 @@
                 </nz-form-label>
                 <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienCuc;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
-                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView || i != 0" />
                   <div class="btn-plus"
                     *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
                     (click)="addDaiDien(capCuc)">
@@ -194,7 +194,7 @@
                 </nz-form-label>
                 <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienChiCuc;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
-                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView || i != 0" />
                   <div class="btn-plus"
                     *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
                     (click)="addDaiDien(capChiCuc)">
@@ -215,7 +215,7 @@
                 </nz-form-label>
                 <div class="pd-b-16 d-flex" *ngFor="let item of listDaiDienDonVi;let i = index">
                   <input nz-input [(ngModel)]="item.daiDien"
-                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView || i != 0" />
                   <div class="btn-plus"
                     *ngIf="i == 0 && !(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)"
                     (click)="addDaiDien(capDonVi)">

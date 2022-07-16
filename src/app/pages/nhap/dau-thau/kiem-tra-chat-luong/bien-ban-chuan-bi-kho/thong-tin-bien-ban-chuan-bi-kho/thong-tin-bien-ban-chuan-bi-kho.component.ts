@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemBienbanNghiemThuKeLotComponent } from 'src/app/components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { BienBanChuanBiKho, ChiTietBienBanChuanBiKho } from 'src/app/models/BienBanChuanBiKho';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
@@ -47,21 +49,24 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
-
+  bienBanChuanBiKho: BienBanChuanBiKho = new BienBanChuanBiKho();
+  dsChiTietChuanBiKhoClone: Array<ChiTietBienBanChuanBiKho> = [];
+  chiTietChuanBiKhoCreate: ChiTietBienBanChuanBiKho = new ChiTietBienBanChuanBiKho();
+  formData: FormGroup;
   constructor(
     private spinner: NgxSpinnerService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
     private userService: UserService,
-    private routerActive: ActivatedRoute,
     public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private thongTinHopDongService: ThongTinHopDongService,
     private donViService: DonviService,
+    private fb: FormBuilder,
+    private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
   ) { }
 
   async ngOnInit() {
@@ -70,6 +75,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.trangThai = "00";
+      this.initForm();
       await Promise.all([
         this.loadDiemKho(),
         this.loadTieuChuan(),
@@ -86,32 +92,226 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  initForm() {
+    this.formData = this.fb.group({
+      soQD: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.qdgnvnxId
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      donVi: [
+        {
+          value: this.userInfo.MA_DVI, disabled: true
+        },
+        [],
+      ],
+      maQHNS: [
+        {
+          value: this.userInfo.TEN_DVI, disabled: true
+        },
+        [],
+      ],
+      soBienBan: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.soBienBan
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      ngayNghiemThu: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.ngayNghiemThu
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      thuTruongDonVi: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.thuTruongDonVi
+            : null,
+          disabled: this.isView ? true : false
+        },
 
-  caculatorSoLuong(item: any) {
-    if (item) {
-      item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
-      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0);
-    }
-  }
+        [],
+      ],
+      keToanDonVi: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.keToanDonVi
+            : null,
+          disabled: this.isView ? true : false
+        },
 
-  caculatorThanhTienTN() {
-    if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienTn).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
-  }
+        [],
+      ],
+      kyThuatVienBaoQuan: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.kyThuatVien
+            : null,
+          disabled: this.isView ? true : false
+        },
 
-  caculatorThanhTienQT() {
-    if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienQt).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
+        [],
+      ],
+      thuKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.thuKho
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      tenHang: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.tenHang
+            : null, disabled: true
+        },
+        [],
+      ],
+      chungLoaiHang: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.chungLoaiHang
+            : null, disabled: true
+        },
+        [],
+      ],
+      loaiHinhKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.loaiHinhKho
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      tichLuong: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.tichLuong
+            : null, disabled: true
+        },
+        [],
+      ],
+      diemKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.maDiemKho
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      nhaKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.maNhaKho
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      nganKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.maNganKho
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      loKho: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.maNganLo
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      phuongThucBaoQuan: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.ptBaoQuan
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      thucNhap: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.thucNhap
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      hinhThucBaoQuan: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.htBaoQuan
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      dinhMucDuocGiao: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.dinhMucDuocGiao
+            : null, disabled: true
+        },
+        [],
+      ],
+      ketLuan: [
+        {
+          value: this.bienBanChuanBiKho
+            ? this.bienBanChuanBiKho.ketLuan
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      tongSo: [
+        {
+          value: this.bienBanChuanBiKho
+            ? null
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      qdgnvnxId: [],
+    });
   }
 
   convertTien(tien: number): string {
-    return convertTienTobangChu(tien);
+    if (tien) {
+      return convertTienTobangChu(tien);
+    }
+    return ''
   }
 
   async loadSoQuyetDinh() {
@@ -147,11 +347,17 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   }
 
   async changeSoQuyetDinh() {
-    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.quyetDinhNhapId);
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.formData.get("soQD").value);
+    this.formData.patchValue({
+      qdgnvnxId: quyetDinh[0].id,
+      tenHang: this.formData.get("tenVthh").value,
+      chungLoaiHang: this.formData.get("tenCloaiVthh").value
+    })
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
       await this.getHopDong(this.detailGiaoNhap.soHd);
     }
+
   }
 
   async loadTieuChuan() {
@@ -211,7 +417,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   }
 
   changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+    let diemKho = this.listDiemKho.filter(x => x.key == this.formData.get("diemKho").value);
     this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
@@ -222,7 +428,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   }
 
   changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.formData.get("nhaKho").value);
     if (nhaKho && nhaKho.length > 0) {
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
@@ -232,7 +438,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   }
 
   changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    let nganKho = this.listNganKho.filter(x => x.key == this.formData.get("nganKho").value);
     if (nganKho && nganKho.length > 0) {
       this.listNganLo = nganKho[0].children;
     }
@@ -240,15 +446,16 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.quanLyPhieuKiemTraChatLuongHangService.chiTiet(id);
+      let res = await this.bienBanChuanBiKhoService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.detail = res.data;
+          this.bienBanChuanBiKho = res.data;
+          this.dsChiTietChuanBiKhoClone = this.bienBanChuanBiKho.chiTiets;
+          this.initForm();
           this.changeDiemKho(true);
         }
       }
     }
-    this.updateEditCache();
   }
 
   async getIdNhap() {
@@ -390,39 +597,32 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "bienSoXe": this.detail.bienSoXe,
-        "diaChi": null,
-        "fileDinhKemId": null,
-        "hopDongId": this.detail.hopDongId,
-        "id": this.id,
-        "ketLuan": this.detail.ketLuan,
-        "ketQuaKiemTra": this.detail.ketQuaKiemTra,
-        "khoiLuong": this.detail.khoiLuong,
-        "khoiLuongDeNghiKt": this.detail.khoiLuongDeNghiKt,
-        "lyDoTuChoi": null,
-        "maDiemKho": this.detail.maDiemKho,
-        "diemKhoId": 1,
-        "maDonVi": this.detail.maDonVi,
-        "maHangHoa": this.typeVthh,
-        "maNganLo": this.detail.maNganLo,
-        "maNhaKho": this.detail.maNhaKho,
-        "maQhns": this.detail.maDonVi,
-        "ngayGdinh": this.detail.ngayGdinh,
-        "ngayKiemTra": null,
-        "ngayPheDuyet": null,
-        "nguoiGiaoHang": this.detail.nguoiGiaoHang,
-        "nguoiPheDuyet": null,
-        "quyetDinhNhapId": this.detail.quyetDinhNhapId,
-        "soChungThuGiamDinh": this.detail.soChungThuGiamDinh,
-        "soPhieu": this.detail.soPhieu,
-        "soPhieuAnToanThucPham": null,
-        "tchucGdinh": this.detail.tchucGdinh,
-        "tenHangHoa": null,
-        "tenNganKho": null,
-        "trangThai": this.detail.trangThai,
+        "chiTiets": this.bienBanChuanBiKho.chiTiets,
+        "htBaoQuan": this.formData.get("hinhThucBaoQuan").value,
+        "id": this.bienBanChuanBiKho.id,
+        "keToanDonVi": this.formData.get("keToanDonVi").value,
+        "ketLuan": this.formData.get("ketLuan").value,
+        "kyThuatVien": this.formData.get("kyThuatVienBaoQuan").value,
+        "loaiHinhKho": this.formData.get("loaiHinhKho").value,
+        "maDiemKho": this.formData.get("diemKho").value,
+        "maNganKho": this.formData.get("nganKho").value,
+        "maNganLo": this.formData.get("loKho").value,
+        "maNhaKho": this.formData.get("nhaKho").value,
+        "maVatTu": "020901",
+        "maVatTuCha": "0209",
+        "nam": null,
+        "ngayNghiemThu": this.formData.get("ngayNghiemThu").value ? dayjs(this.formData.get("ngayNghiemThu").value).format("YYYY-MM-DD") : null,
+        "ptBaoQuan": this.formData.get("phuongThucBaoQuan").value,
+        "qdgnvnxId": this.formData.get("soQD").value,
+        "so": null,
+        "soBienBan": this.formData.get("soBienBan").value,
+        "thuKho": this.formData.get("thuKho").value,
+        "thuTruongDonVi": this.formData.get("thuTruongDonVi").value,
+        "thucNhap": this.formData.get("thucNhap").value,
+        "tongSo": this.formData.get("tongSo").value
       };
       if (this.id > 0) {
-        let res = await this.quanLyPhieuKiemTraChatLuongHangService.sua(
+        let res = await this.bienBanChuanBiKhoService.sua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -437,7 +637,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyPhieuKiemTraChatLuongHangService.them(
+        let res = await this.bienBanChuanBiKhoService.them(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -476,7 +676,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.bienBanChuanBiKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -513,7 +713,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.bienBanChuanBiKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -552,7 +752,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.bienBanChuanBiKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -575,81 +775,6 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  themBienBanNgiemThuKeLot() {
-    const modalLuongThuc = this.modal.create({
-      nzTitle: 'Thêm mới thông tin chi tiết',
-      nzContent: DialogThemBienbanNghiemThuKeLotComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalLuongThuc.afterClose.subscribe((res) => {
-      if (res) {
-      }
-    });
-  }
-
-  cancelEdit(stt: number): void {
-    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
-    this.editDataCache[stt] = {
-      data: { ...this.detail?.ketQuaKiemTra[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(stt: number): void {
-    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
-    Object.assign(this.detail?.ketQuaKiemTra[index], this.editDataCache[stt].data);
-    this.editDataCache[stt].edit = false;
-  }
-
-  deleteRow(data: any) {
-    this.detail.ketQuaKiemTra = this.detail?.ketQuaKiemTra.filter(x => x.stt != data.stt);
-    this.sortTableId();
-    this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
-  }
-
-  addRow() {
-    if (!this.detail?.ketQuaKiemTra) {
-      this.detail.ketQuaKiemTra = [];
-    }
-    this.sortTableId();
-    let item = cloneDeep(this.create);
-    item.stt = this.detail?.ketQuaKiemTra.length + 1;
-    this.detail.ketQuaKiemTra = [
-      ...this.detail?.ketQuaKiemTra,
-      item,
-    ]
-    this.updateEditCache();
-    this.clearItemRow();
-  }
-
-  clearItemRow() {
-    this.create = {};
-  }
-
-  updateEditCache(): void {
-    if (this.detail?.ketQuaKiemTra && this.detail?.ketQuaKiemTra.length > 0) {
-      this.detail?.ketQuaKiemTra.forEach((item) => {
-        this.editDataCache[item.stt] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-    }
-  }
-
-  sortTableId() {
-    this.detail?.ketQuaKiemTra.forEach((lt, i) => {
-      lt.stt = i + 1;
-    });
-  }
 
   thongTinTrangThai(trangThai: string): string {
     if (
@@ -666,5 +791,99 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
 
   print() {
 
+  }
+  newObjectChiTietChuanBiKho() {
+    this.chiTietChuanBiKhoCreate = new ChiTietBienBanChuanBiKho();
+  }
+  addChiTiet() {
+    if (!this.chiTietChuanBiKhoCreate.noiDung) {
+      return;
+    }
+    const chiTietChuanBiKhoTemp = new ChiTietBienBanChuanBiKho();
+    chiTietChuanBiKhoTemp.noiDung = this.chiTietChuanBiKhoCreate.noiDung;
+    chiTietChuanBiKhoTemp.donViTinh = this.chiTietChuanBiKhoCreate.donViTinh;
+    chiTietChuanBiKhoTemp.soLuongTrongNam = this.chiTietChuanBiKhoCreate.soLuongTrongNam;
+    chiTietChuanBiKhoTemp.donGiaTrongNam = this.chiTietChuanBiKhoCreate.donGiaTrongNam;
+    chiTietChuanBiKhoTemp.thanhTienTrongNam = this.chiTietChuanBiKhoCreate.thanhTienTrongNam;
+    chiTietChuanBiKhoTemp.soLuongQt = this.chiTietChuanBiKhoCreate.soLuongQt;
+    chiTietChuanBiKhoTemp.thanhTienQt = this.chiTietChuanBiKhoCreate.thanhTienQt;
+    chiTietChuanBiKhoTemp.tongGiaTri = this.chiTietChuanBiKhoCreate.tongGiaTri;
+    chiTietChuanBiKhoTemp.idVirtual = new Date().getTime();
+    this.bienBanChuanBiKho.chiTiets = [
+      ...this.bienBanChuanBiKho.chiTiets,
+      chiTietChuanBiKhoTemp,
+    ];
+    this.newObjectChiTietChuanBiKho();
+    this.dsChiTietChuanBiKhoClone = cloneDeep(this.bienBanChuanBiKho.chiTiets);
+    console.log(this.dsChiTietChuanBiKhoClone);
+  }
+  deleteData(id: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.bienBanChuanBiKho.chiTiets =
+          this.bienBanChuanBiKho?.chiTiets.filter(
+            (cbKho) => cbKho.idVirtual !== id,
+          );
+        this.dsChiTietChuanBiKhoClone = cloneDeep(
+          this.bienBanChuanBiKho.chiTiets,
+        );
+      },
+    });
+  }
+  startEdit(index: number) {
+    this.dsChiTietChuanBiKhoClone[index].isEdit = true;
+  }
+  saveEdit(i: number) {
+    this.dsChiTietChuanBiKhoClone[i].isEdit = false;
+    Object.assign(
+      this.bienBanChuanBiKho.chiTiets[i],
+      this.dsChiTietChuanBiKhoClone[i],
+    );
+  }
+  cancelEdit(index: number) {
+    this.dsChiTietChuanBiKhoClone = cloneDeep(this.bienBanChuanBiKho.chiTiets);
+    this.dsChiTietChuanBiKhoClone[index].isEdit = false;
+  }
+  calcChiPhiTrongNam(): string {
+    this.chiTietChuanBiKhoCreate.thanhTienTrongNam = +this.chiTietChuanBiKhoCreate.soLuongTrongNam
+      * +this.chiTietChuanBiKhoCreate.donGiaTrongNam;
+    return this.chiTietChuanBiKhoCreate.thanhTienTrongNam
+      ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.thanhTienTrongNam)
+      : '0';
+  }
+  calcTongGiaTri(): string {
+    if (!this.chiTietChuanBiKhoCreate.thanhTienQt) {
+      this.chiTietChuanBiKhoCreate.thanhTienQt = 0;
+    }
+
+    this.chiTietChuanBiKhoCreate.tongGiaTri = +this.chiTietChuanBiKhoCreate.thanhTienTrongNam
+      + this.chiTietChuanBiKhoCreate.thanhTienQt;
+    return this.chiTietChuanBiKhoCreate.tongGiaTri
+      ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.tongGiaTri)
+      : '0';
+  }
+  // calcChiPhiDaQuyetToan(): string {
+  //   this.chiTietChuanBiKhoCreate.thanhTienQt = +this.chiTietChuanBiKhoCreate.soLuongQt
+  //     + +this.chiTietChuanBiKhoCreate.soLuongQt;
+  //   return this.chiTietChuanBiKhoCreate.thanhTienQt
+  //     ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.thanhTienQt)
+  //     : '0';
+  // }
+  calcTongCong(): string {
+    const tong = this.dsChiTietChuanBiKhoClone.length > 0 ?
+      this.dsChiTietChuanBiKhoClone.reduce((total, currentValue) =>
+        total + currentValue.thanhTienTrongNam
+        , 0) : 0
+    this.formData.patchValue({
+      tongSo: tong
+    })
+    return Intl.NumberFormat('en-US').format(tong);
   }
 }
