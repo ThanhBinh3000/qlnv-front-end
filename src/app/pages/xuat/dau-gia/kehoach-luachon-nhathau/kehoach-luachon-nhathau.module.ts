@@ -17,6 +17,8 @@ import { ThemmoiKehoachLcntTongCucComponent } from './tong-cuc/themmoi-kehoach-l
 import { TongCucComponent } from './tong-cuc/tong-cuc.component';
 import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
 import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
+import { QdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/qd-phe-duyet-kh-ban-dau-gia.component';
+import { ThemMoiQdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia.component';
 
 
 @NgModule({
@@ -37,6 +39,8 @@ import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlc
     ThemmoiKehoachLcntTongCucComponent,
     TongHopKhlcntComponent,
     ThemmoiTonghopKhlcntComponent,
+    QdPheDuyetKhBanDauGiaComponent,
+    ThemMoiQdPheDuyetKhBanDauGiaComponent,
   ],
   imports: [
     CommonModule,

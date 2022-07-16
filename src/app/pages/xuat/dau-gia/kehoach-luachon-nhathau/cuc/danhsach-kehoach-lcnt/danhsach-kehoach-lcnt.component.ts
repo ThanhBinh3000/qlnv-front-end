@@ -7,7 +7,13 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {
+  DATEPICKER_CONFIG,
+  LEVEL,
+  LIST_VAT_TU_HANG_HOA,
+  LOAI_HANG_DTQG,
+  PAGE_SIZE_DEFAULT,
+} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
@@ -15,12 +21,15 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import {
+  convertTrangThai,
+  convertVthhToId,
+} from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
   templateUrl: './danhsach-kehoach-lcnt.component.html',
-  styleUrls: ['./danhsach-kehoach-lcnt.component.scss']
+  styleUrls: ['./danhsach-kehoach-lcnt.component.scss'],
 })
 export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
@@ -32,10 +41,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
-    private helperService: HelperService
-  ) {
-
-  }
+    private helperService: HelperService,
+  ) {}
   @Input()
   loaiVthh: string;
   @Input()
@@ -45,17 +52,20 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
-    soDx: '',
+    soKh: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    trichYeu: ''
+    trichYeu: '',
   };
   filterTable: any = {
-    soDxuat: '',
+    soKh: '',
+    ngayLapKh: '',
     ngayKy: '',
     trichYeu: '',
-    soQd: '',
+    tenLoaiHangHoa: '',
+    soQdGiaoChiTieu: '',
+    soQdPheDuyet: '',
     namKhoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
@@ -89,9 +99,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -117,10 +126,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -137,7 +146,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       denNgayKy: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      soTr: this.searchFilter.soDx,
+      soTr: this.searchFilter.soKh,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
@@ -207,7 +216,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
-    this.search()
+    this.search();
   }
 
   detail(data?) {
@@ -223,7 +232,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soDx = null;
+    this.searchFilter.soKh = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
     this.search();
@@ -242,8 +251,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": item.id,
-          }
+            id: item.id,
+          };
           this.danhSachDauThauService.delete(body).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
@@ -256,9 +265,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
             }
           });
           this.spinner.hide();
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -269,25 +277,25 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   convertTrangThai(status: string) {
     switch (status) {
       case '00': {
-        return 'Dự thảo'
+        return 'Dự thảo';
       }
       case '03': {
-        return 'Từ chối - TP'
+        return 'Từ chối - TP';
       }
       case '12': {
-        return 'Từ chối - LĐ Cục'
+        return 'Từ chối - LĐ Cục';
       }
       case '01': {
-        return 'Chờ duyệt - TP'
+        return 'Chờ duyệt - TP';
       }
       case '09': {
-        return 'Chờ duyệt - LĐ Cục'
+        return 'Chờ duyệt - LĐ Cục';
       }
       case '02': {
-        return 'Đã duyệt'
+        return 'Đã duyệt';
       }
       case '05': {
-        return 'Tổng hợp'
+        return 'Tổng hợp';
       }
     }
   }
@@ -361,9 +369,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -373,28 +383,36 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key] &&
+            item[key]
+              .toString()
+              .toLowerCase()
+              .indexOf(value.toString().toLowerCase()) != -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
   clearFilterTable() {
     this.filterTable = {
-      soDxuat: '',
+      soKh: '',
+      ngayLapKh: '',
       ngayKy: '',
       trichYeu: '',
-      soQd: '',
+      tenLoaiHangHoa: '',
+      soQdGiaoChiTieu: '',
+      soQdPheDuyet: '',
       namKhoach: '',
       tenVthh: '',
       tenCloaiVthh: '',
       statusConvert: '',
-    }
+    };
   }
 }
