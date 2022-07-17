@@ -117,20 +117,23 @@
                     <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh"
                       readonly="true" />
                   </nz-input-group>
+                  <ng-template #loaiVthhError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="4" *ngIf="!isVatTu">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp </nz-form-label>
-                <nz-form-control>
-                  <nz-select formControlName="idThHdr"
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="idThHdr" (ngModelChange)="selectMaTongHop($event)"
                     [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
                     nzAllowClear>
                     <nz-option *ngFor="let p of listDanhSachTongHop" [nzValue]="p.id" [nzLabel]="p.id">
                     </nz-option>
                   </nz-select>
-                  <ng-template #soQdCcErr let-control>
+                  <ng-template #error let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                   </ng-template>
                 </nz-form-control>
@@ -139,14 +142,14 @@
             <div nz-col [nzSpan]="4" *ngIf="isVatTu">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã tờ trình </nz-form-label>
-                <nz-form-control>
-                  <nz-select formControlName="idTrHdr"
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="idTrHdr" (ngModelChange)="onChangeIdTrHdr($event)"
                     [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
                     nzAllowClear>
                     <nz-option *ngFor="let p of listToTrinh" [nzValue]="p.id" [nzLabel]="p.tenTr">
                     </nz-option>
                   </nz-select>
-                  <ng-template #soQdCcErr let-control>
+                  <ng-template #error let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                   </ng-template>
                 </nz-form-control>
@@ -494,7 +497,7 @@
           </nz-tab>
           <nz-tab [nzTitle]="'Phụ lục kế hoạch lựa chọn nhà thầu'" class="ds-goi-thau__container" *ngIf="isVatTu">
             <nz-card class="mt16 flex-card p-lr16 card-table">
-              <nz-table #editRowTable nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false"
+              <nz-table #dataTable nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
                 <thead>
                   <tr>
@@ -512,7 +515,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let data of editRowTable.data;let i = index" class="editable-row">
+                  <tr *ngFor="let data of danhsachDx; let i = index" class="editable-row">
                     <td class="text-center">{{i + 1}} </td>
                     <td>{{ data.goiThau }}</td>
                     <td>{{ data.thanhTien }}</td>

@@ -134,6 +134,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         tgianThienHd: dataDetail.tgianThienHd,
         maDvi: dataDetail.maDvi,
         nguonVon: dataDetail.nguonVon,
+        tenNguonVon: dataDetail.tenNguonVon,
         thanhTien: dataDetail.thanhTien,
       })
       this.dataTable = dataDetail.children;

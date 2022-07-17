@@ -95,6 +95,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
   isVatTu: boolean = false;
+  dataNguonVon: any = {};
 
   constructor(
     private router: Router,
@@ -114,67 +115,57 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
+      namKhoach: [dayjs().get('year'), Validators.required],
       soQd: ['', [Validators.required]],
       ngayQd: ['', [Validators.required]],
       ngayHluc: ['', [Validators.required]],
-      idThHdr: ['',],
-      idTrHdr: ['',],
+      idThHdr: [''],
+      idTrHdr: [''],
       trichYeu: [''],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      tgianBdauTchuc: ['', [Validators.required]],
-      tgianDthau: ['', [Validators.required]],
-      tgianMthau: ['', [Validators.required]],
-      tgianNhang: ['', [Validators.required]],
-      ghiChu: ['', Validators.required],
-      loaiVthh: ['', Validators.required],
-      tenVthh: ['', Validators.required],
-      cloaiVthh: ['', Validators.required],
-      tenCloaiVthh: ['', Validators.required],
-      namKhoach: [dayjs().get('year'), Validators.required],
+      hthucLcnt: [''],
+      pthucLcnt: [''],
+      loaiHdong: [''],
+      nguonVon: [''],
+      tgianBdauTchuc: [''],
+      tgianDthau: [''],
+      tgianMthau: [''],
+      tgianNhang: [''],
+      ghiChu: ['', [Validators.required]],
+      loaiVthh: ['', [Validators.required]],
+      tenVthh: ['', [Validators.required]],
+      cloaiVthh: [''],
+      tenCloaiVthh: [''],
       trangThai: [''],
       tchuanCluong: ['']
     })
     this.formThongTinDX = this.fb.group({
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      tgianBdauTchuc: ['', [Validators.required]],
-      tgianDthau: ['', [Validators.required]],
-      tgianMthau: ['', [Validators.required]],
-      tgianNhang: ['', [Validators.required]]
+      hthucLcnt: [''],
+      pthucLcnt: [''],
+      loaiHdong: [''],
+      nguonVon: [''],
+      tgianBdauTchuc: [''],
+      tgianDthau: [''],
+      tgianMthau: [''],
+      tgianNhang: ['']
     })
     this.formThongTinChung = this.fb.group(
       {
-        tenDuAn: [null, [Validators.required]],
+        tenDuAn: [null],
         tenDvi: [null],
-        tongMucDt: [null, [Validators.required]],
-        nguonVon: [null, [Validators.required]],
-        tchuanCluong: [null, [Validators.required]],
-        loaiHdong: [null, [Validators.required]],
-        hthucLcnt: [null, [Validators.required]],
-        pthucLcnt: [null, [Validators.required]],
-        donGia: [null, [Validators.required]],
-        tgianBdauTchuc: [null, [Validators.required]],
-        tgianMthau: [null, [Validators.required]],
-        tgianDthau: [null, [Validators.required]],
-        tgianNhang: [null, [Validators.required]],
+        tongMucDt: [null],
+        nguonVon: [null],
+        tchuanCluong: [null],
+        loaiHdong: [null],
+        hthucLcnt: [null],
+        pthucLcnt: [null],
+        donGia: [null],
+        tgianBdauTchuc: [null],
+        tgianMthau: [null],
+        tgianDthau: [null],
+        tgianNhang: [null],
         maDvi: [null]
       }
     );
-    this.formData.controls['idThHdr'].valueChanges.subscribe(value => {
-      if (value) {
-        this.selectMaTongHop(value);
-      }
-    });
-    this.formData.controls['idTrHdr'].valueChanges.subscribe(value => {
-      if (value) {
-        this.onChangeIdTrHdr(value);
-      }
-    });
     this.formData.controls['tenVthh'].valueChanges.subscribe(value => {
       if (value) {
         this.danhSachTongHopGetAll();
@@ -192,7 +183,38 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
+  setValidator() {
+    if (this.isVatTu) {
+      this.formData.controls["hthucLcnt"].clearValidators();
+      this.formData.controls["pthucLcnt"].clearValidators();
+      this.formData.controls["loaiHdong"].clearValidators();
+      this.formData.controls["nguonVon"].clearValidators();
+      this.formData.controls["tgianBdauTchuc"].clearValidators();
+      this.formData.controls["tgianDthau"].clearValidators();
+      this.formData.controls["tgianMthau"].clearValidators();
+      this.formData.controls["tgianNhang"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["idThHdr"].clearValidators();
+      this.formData.controls["idTrHdr"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
+      this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
+      this.formData.controls["loaiHdong"].setValidators([Validators.required]);
+      this.formData.controls["nguonVon"].setValidators([Validators.required]);
+      this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
+      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianNhang"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["idThHdr"].setValidators([Validators.required]);
+      this.formData.controls["idTrHdr"].clearValidators();
+    }
+  }
+
   deleteSelect() {
+
   }
 
   async ngOnInit() {
@@ -354,7 +376,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async danhSachTongHopGetAll() {
-    this.danhsachDx = []
+    this.spinner.show();
     let body = {
       trangThai: "00",
       loaiVthh: this.formData.get('loaiVthh').value,
@@ -389,6 +411,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         })
       }
     }
+    this.spinner.hide();
   }
 
   maTongHopExis(listDxTh, id) {
@@ -466,18 +489,26 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async onChangeIdTrHdr(data) {
     this.spinner.show();
     this.danhsachDx = [];
-    const res = await this.dxuatKhLcntVatTuService.getDetail(data)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data;
-      console.log(data);
-      this.danhsachDx = data.dsGtDtlList;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    if (data) {
+      const res = await this.dxuatKhLcntVatTuService.getDetail(data)
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.danhsachDx = data.dsGtDtlList;
+        this.dataNguonVon.nguonVon = this.danhsachDx[0].nguonVon;
+        this.dataNguonVon.tenNguonVon = this.danhsachDx[0].tenNguonVon;
+        this.formData.patchValue({
+          ghiChu: data.ghiChu,
+          trichYeu: data.trichYeu
+        })
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
     this.spinner.hide();
   }
 
   async save() {
+    this.setValidator()
     if (this.formData.invalid) {
       this.helperService.markFormGroupTouched(this.formData);
       console.log(this.formData.value);
@@ -613,7 +644,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   setTitle() {
     let trangThai = this.formData.get('trangThai').value
     // Vật tư
-    if (this.formData.get('loaiVthh').value == "02") {
+    if (this.formData.get('loaiVthh').value.startsWith("02")) {
       switch (trangThai) {
         case '00': {
           this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
@@ -784,6 +815,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  setValidatorForm() {
+
+  }
+
   thongTinTrangThai(trangThai: string): string {
     if (
       trangThai === this.globals.prop.DU_THAO ||
@@ -807,19 +842,21 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         data: data,
-        loaiVthh: data.loaiVthh
+        loaiVthh: data ? data.loaiVthh : this.formData.get('loaiVthh').value
       },
     });
     modal.afterClose.subscribe((res) => {
       if (res) {
         console.log(res);
+        console.log(index);
+        res.nguonVon = this.dataNguonVon.nguonVon;
+        res.tenNguonVon = this.dataNguonVon.tenNguonVon;
         if (index >= 0) {
           this.danhsachDx[index] = res;
         } else {
           this.danhsachDx.push(res);
         }
-        // this.bindingDataNguonVon()
-        // this.calendarDinhMuc();
+        console.log(this.danhsachDx)
       }
     });
   }

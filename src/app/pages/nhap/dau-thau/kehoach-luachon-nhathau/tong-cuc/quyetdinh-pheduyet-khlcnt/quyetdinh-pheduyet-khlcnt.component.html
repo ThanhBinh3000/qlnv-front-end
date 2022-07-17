@@ -87,6 +87,15 @@
 
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.idThHdr"
+                          (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                           (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
                       </nz-input-group>
@@ -98,15 +107,6 @@
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
                           (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
-                          (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
