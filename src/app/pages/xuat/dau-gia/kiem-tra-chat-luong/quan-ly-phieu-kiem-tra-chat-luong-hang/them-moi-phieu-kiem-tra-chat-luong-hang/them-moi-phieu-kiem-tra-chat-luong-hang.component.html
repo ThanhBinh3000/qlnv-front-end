@@ -162,7 +162,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng nhập kho
                 </nz-form-label>
-                <input nz-input [(ngModel)]="typeVthh" disabled />
+                <input nz-input [(ngModel)]="detail.tenVatTuCha" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -170,7 +170,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Chủng loại hàng hóa
                 </nz-form-label>
-                <input nz-input [(ngModel)]="typeVthh" disabled />
+                <input nz-input [(ngModel)]="detail.tenVatTu" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -242,7 +242,8 @@
         <nz-card class="flex-card p-lr16">
           <div nz-row [nzGutter]="[18, 6]" class="pd-10">
             <div nz-col nzSpan="24">
-              <textarea rows="3" placeholder="Nhập nội dung" class="search__input" nz-input [(ngModel)]="detail.ketLuan"
+              <textarea rows="3" placeholder="Nhập nội dung" class="search__input" nz-input
+                [(ngModel)]="detail.kqDanhGia"
                 [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"></textarea>
             </div>
           </div>
