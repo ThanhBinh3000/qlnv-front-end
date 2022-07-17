@@ -19,6 +19,12 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmo
 import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
 import { QdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/qd-phe-duyet-kh-ban-dau-gia.component';
 import { ThemMoiQdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia.component';
+import { DeXuatKhBanDauGiaComponent } from './tong-cuc/de-xuat-kh-ban-dau-gia/de-xuat-kh-ban-dau-gia.component';
+import { ThemMoiDeXuatKhBanDauGiaComponent } from './tong-cuc/de-xuat-kh-ban-dau-gia/them-moi-de-xuat-kh-ban-dau-gia/them-moi-de-xuat-kh-ban-dau-gia.component';
+import { QuyetDinhPheDuyetKhBanDauGiaComponent } from './tong-cuc/quyet-dinh-phe-duyet-kh-ban-dau-gia/quyet-dinh-phe-duyet-kh-ban-dau-gia.component';
+import { ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent } from './tong-cuc/quyet-dinh-phe-duyet-kh-ban-dau-gia/them-moi-quyet-dinh-phe-duyet-kh-ban-dau-gia/them-moi-quyet-dinh-phe-duyet-kh-ban-dau-gia.component';
+import { TongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de-xuat-kh-ban-dau-gia/tong-hop-de-xuat-kh-ban-dau-gia.component';
+import { ThemMoiTongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de-xuat-kh-ban-dau-gia/them-moi-tong-hop-de-xuat-kh-ban-dau-gia/them-moi-tong-hop-de-xuat-kh-ban-dau-gia.component';
 
 
 @NgModule({
@@ -41,6 +47,12 @@ import { ThemMoiQdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban
     ThemmoiTonghopKhlcntComponent,
     QdPheDuyetKhBanDauGiaComponent,
     ThemMoiQdPheDuyetKhBanDauGiaComponent,
+    DeXuatKhBanDauGiaComponent,
+    ThemMoiDeXuatKhBanDauGiaComponent,
+    QuyetDinhPheDuyetKhBanDauGiaComponent,
+    ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent,
+    TongHopDeXuatKhBanDauGiaComponent,
+    ThemMoiTongHopDeXuatKhBanDauGiaComponent,
   ],
   imports: [
     CommonModule,
