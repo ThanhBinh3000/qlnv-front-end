@@ -378,8 +378,8 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     }
   }
   addDaiDien(bienBan: ChiTiet, type: string) {
-    if (type === '00' && !this.chiTietBienBanGuiHangBenNhan.daiDien && !this.chiTietBienBanGuiHangBenNhan.chucVu
-      || type === '01' && !this.chiTietBienBanGuiHangBenGiao.daiDien && !this.chiTietBienBanGuiHangBenGiao.chucVu) {
+    if ((type === '00' && !this.chiTietBienBanGuiHangBenNhan.daiDien && !this.chiTietBienBanGuiHangBenNhan.chucVu)
+      || (type === '01' && !this.chiTietBienBanGuiHangBenGiao.daiDien && !this.chiTietBienBanGuiHangBenGiao.chucVu)) {
       return;
     }
 
@@ -400,11 +400,10 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     }
   }
   deleteBienBan(id: number) {
-    this.bienBanGuiHang.chiTiets = this.bienBanGuiHang.chiTiets.filter(bienBan => bienBan.id !== id);
+    this.bienBanGuiHang.chiTiets = this.bienBanGuiHang.chiTiets.filter(bienBan => bienBan.idVirtual !== id);
   }
   async changeSoQuyetDinh() {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanGuiHang.qdgnvnxId);
-    console.log(quyetDinh);
 
     if (quyetDinh && quyetDinh.length > 0) {
       this.quyetDinhNhapHang = quyetDinh[0];
