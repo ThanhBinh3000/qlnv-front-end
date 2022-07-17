@@ -136,7 +136,15 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </td>
-                    <td></td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
                     <td></td>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
@@ -154,7 +162,7 @@
                     <td>{{ data.tenNhaKho }}</td>
                     <td>{{ data.tenNganLo }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td>
                       <a (click)="redirectToChiTiet(data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>

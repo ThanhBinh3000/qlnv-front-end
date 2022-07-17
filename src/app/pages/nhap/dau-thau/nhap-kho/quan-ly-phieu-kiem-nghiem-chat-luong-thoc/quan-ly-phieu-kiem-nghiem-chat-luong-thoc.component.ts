@@ -55,6 +55,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenTrangThai: '',
   }
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
@@ -343,15 +344,6 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
 
   redirectToChiTiet(id: number) {
-    //   if (!isView) {
-    //     let urlChiTiet = this.router.url + '/thong-tin'
-    //     this.router.navigate([urlChiTiet, id,]);
-    //   }
-    //   else {
-    //     let urlChiTiet = this.router.url + '/xem-chi-tiet'
-    //     this.router.navigate([urlChiTiet, id,]);
-    //   }
-    // }
     this.selectedId = id;
     this.isDetail = true;
   }
@@ -389,6 +381,7 @@ export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
+      tenTrangThai: '',
     }
   }
 }

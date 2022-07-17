@@ -125,7 +125,15 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th></th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">

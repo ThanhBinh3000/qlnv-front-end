@@ -242,7 +242,7 @@ th {
 }
 
 .canphai {
-  padding-right: 15px;
+  padding-right: 6px;
 }
 
 .nut .btn {
@@ -2119,4 +2119,13 @@ a.disabled {
   font-weight: 400;
   font-size: 13px;
   color: #2196F3;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+}
+
+.w-p-100 {
+  width: 100%;
 }

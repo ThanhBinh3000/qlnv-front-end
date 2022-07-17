@@ -47,6 +47,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -75,6 +76,9 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       await Promise.all([
         // this.loadDiemKho(),
         // this.loadNganLo(),

@@ -14,9 +14,7 @@
               </div>
               <div nz-col nzSpan="5">
                 <label class="search__label">Số quyết định</label>
-                <!-- <nz-input-group nzAddOnAfter="/KH-CDTVT"> -->
                 <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
-                <!-- </nz-input-group> -->
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Trích yếu</label>
@@ -125,10 +123,11 @@
                         <a (click)="redirectToThongTin(data.id, true)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
-                        <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc()">
+                        <a (click)="redirectToThongTin(data.id, false)"
+                          *ngIf="userService.isCuc() && data.trangThai == '00'">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc()">
+                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == '00'">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>

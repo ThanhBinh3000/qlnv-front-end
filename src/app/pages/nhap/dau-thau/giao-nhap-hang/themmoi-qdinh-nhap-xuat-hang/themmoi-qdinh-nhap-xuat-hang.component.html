@@ -5,11 +5,10 @@
       <div class="trai">
       </div>
       <div class="canphai phai" *ngIf="!isChiTiet">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="!isDetail()"
-          [disabled]="!formData.valid">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
-        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
           *ngIf="!isDetail() && quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO" [disabled]="!formData.valid"
           (click)="guiDuyet()">
@@ -21,18 +20,20 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="!isDetail()"
+          [disabled]="!formData.valid">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="pheDuyet()"
           *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+        <a class="btn btn-main btn-sm waves-effect waves-light" (click)="tuChoi()"
           *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
-        </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
-          <span>Quay về</span>
         </a>
       </div>
     </div>
@@ -42,11 +43,6 @@
   <div class="contentDetail">
     <div class="main-content">
       <div class="title-chi-tieu">
-        <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
-          Dự Thảo
-        </span>
-        <span *ngIf="id > 0"
-          [ngClass]="thongTinTrangThai(quyetDinhNhapXuat.trangThai)">{{quyetDinhNhapXuat.tenTrangThai}}</span>
         <span class="title-form">Thông tin quyết định giao nhiệm vụ nhập hàng</span>
       </div>
       <nz-card class="flex-card p-lr16">
@@ -65,16 +61,12 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>
                   Số quyết định
                 </nz-form-label>
-                <!-- <nz-form-control [nzErrorTip]="soQDError"> -->
                 <nz-input-group nzAddOnAfter="/QĐ-CDTVT">
                   <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                     nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDetail()">
                   </nz-input-number>
                 </nz-input-group>
-                <!-- <ng-template let-control> -->
                 <ng-container *ngIf="formData.hasError('required')">{{errorInputRequired}}</ng-container>
-                <!-- </ng-template> -->
-                <!-- </nz-form-control> -->
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -177,21 +169,6 @@
           </tr>
         </tbody>
       </nz-table>
-      <div class="ghi-chu">
-        <form nz-form [formGroup]="formData" class="mt-16">
-          <div nz-row [nzGutter]="[16, 12]">
-            <div nz-col [nzSpan]="24">
-              <nz-form-item class="form-item-ghi-chu">
-                <nz-form-label [nzNoColon]="true">
-                  Ghi chú
-                </nz-form-label>
-                <input nz-input nzSize="large" formControlName="ghiChu" style="height: 40px !important;"
-                  [readonly]="isDetail()" />
-              </nz-form-item>
-            </div>
-          </div>
-        </form>
-      </div>
     </div>
   </div>
 </div>

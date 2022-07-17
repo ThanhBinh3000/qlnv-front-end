@@ -33,6 +33,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
+  @Input() isTatCa: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -49,12 +50,17 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   listDanhMucHang: any[] = [];
   listSoQuyetDinh: any[] = [];
   listHoSoKyThuat: any[] = [];
+  listHangHoa: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   detailHopDong: any = {};
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
+
+  errorInputRequired: string = MESSAGE.ERROR_NOT_EMPTY;
+
+  errorNhapId: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -84,12 +90,14 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.tenDvi = this.userInfo.TEN_DVI;
+      this.detail.loaiVthh = this.typeVthh;
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
         this.loadHoSoKyThuat(),
+        this.loaiVTHHGetAll(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -97,6 +105,23 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        if (this.isTatCa) {
+          this.listHangHoa = res.data;
+          if (this.id > 0) {
+            this.detail.loaiVthh = this.listHangHoa[0].ma;
+          }
+        }
+        else {
+          this.listHangHoa = res.data.filter(x => x.ma == this.typeVthh);
+        }
+      }
     }
   }
 
@@ -177,6 +202,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   async changeSoQuyetDinh() {
+    this.errorNhapId = false;
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
@@ -633,6 +659,12 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   async save(isOther: boolean) {
     this.spinner.show();
     try {
+      this.errorNhapId = false;
+      if (!this.detail.qdgnvnxId || this.detail.qdgnvnxId == '') {
+        this.errorNhapId = true;
+        this.spinner.hide();
+        return;
+      }
       let body = {
         "bbNghiemThuKlId": this.detail.soQdNvuNhang,
         "diaChiGiaoNhan": null,
@@ -640,6 +672,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "hangHoaList": this.detail?.hangHoaList,
         "id": this.id,
         "loaiHinhNhap": null,
+        "loaiVthh": this.detail?.loaiVthh,
         "maDiemKho": this.detail?.maDiemKho,
         "maDvi": this.detail.maDvi,
         "maNganLo": this.detail.maNganLo,
@@ -693,7 +726,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, (e?.error?.message ?? MESSAGE.SYSTEM_ERROR));
     }
   }
 
