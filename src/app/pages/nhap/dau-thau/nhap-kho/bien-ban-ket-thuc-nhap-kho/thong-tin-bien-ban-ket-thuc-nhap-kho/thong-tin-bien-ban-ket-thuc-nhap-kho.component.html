@@ -56,7 +56,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Số quyết định nhập
                   </nz-form-label>
-                  <nz-select formControlName="soQD" (ngModelChange)="changeSoQuyetDinh()"
+                  <nz-select formControlName="qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
                     [disabled]="bienBanKetThucNhapKho.trangThai == '01' || bienBanKetThucNhapKho.trangThai == '02' || bienBanKetThucNhapKho.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                     </nz-option>
@@ -68,7 +68,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Số biên bản chuẩn bị kho
                   </nz-form-label>
-                  <nz-select formControlName="bbChuanBiKhoId" (ngModelChange)="changeSoBienBan()"
+                  <nz-select formControlName="bbChuanBiKhoId"
                     [disabled]="bienBanKetThucNhapKho.trangThai == '01' || bienBanKetThucNhapKho.trangThai == '02' || bienBanKetThucNhapKho.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listBienBanChuanBiKho" [nzValue]="item.id"
                       [nzLabel]="item.soBienBan">
@@ -208,7 +208,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Lô kho
                   </nz-form-label>
-                  <nz-select formControlName="loKho"
+                  <nz-select formControlName="loKho" (ngModelChange)="changeLoKho()"
                     [disabled]="bienBanKetThucNhapKho.trangThai == '01' || bienBanKetThucNhapKho.trangThai == '02' || bienBanKetThucNhapKho.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
                     </nz-option>
