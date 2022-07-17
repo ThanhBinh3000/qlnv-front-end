@@ -65,8 +65,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.detail.maDonVi = this.userInfo.MA_DVI;
-      this.detail.trangThai = "00";
+      this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.tenDvi = this.userInfo.TEN_DVI;
+      this.detail.trangThai = this.globals.prop.DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadDiemKho(),
         this.loadTieuChuan(),
@@ -157,7 +159,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async loadDiemKho() {
     let body = {
-      maDviCha: this.detail.maDonVi,
+      maDviCha: this.detail.maDvi,
       trangThai: '01',
     }
     const res = await this.donViService.getTreeAll(body);
@@ -229,6 +231,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.quyetDinhNhapId);
           if (res.msg == MESSAGE.SUCCESS) {
             this.detailGiaoNhap = res.data;
+            this.detail.soHopDong = this.detailGiaoNhap.soHd;
             await this.getHopDong(this.detailGiaoNhap.soHd);
           }
           else {
@@ -279,11 +282,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "lyDoTuChoi": null,
         "maDiemKho": this.detail.maDiemKho,
         "diemKhoId": 1,
-        "maDonVi": this.detail.maDonVi,
+        "maDvi": this.detail.maDvi,
         "maHangHoa": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
         "maNhaKho": this.detail.maNhaKho,
-        "maQhns": this.detail.maDonVi,
+        "maQhns": this.detail.maDvi,
         "ngayGdinh": this.detail.ngayGdinh,
         "ngayKiemTra": null,
         "ngayPheDuyet": null,

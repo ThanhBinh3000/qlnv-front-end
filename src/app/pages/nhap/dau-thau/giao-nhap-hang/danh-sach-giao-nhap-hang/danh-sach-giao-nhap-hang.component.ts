@@ -13,6 +13,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhap
 import { UserService } from 'src/app/services/user.service';
 import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
 import dayjs from 'dayjs';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -51,12 +52,14 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   selectedCanCu: any = null;
   searchFilter = {
     soQd: '',
-    ngayQuyetDinh: '',
-    namNhap: '',
+    ngayQuyetDinh: null,
+    namNhap: null,
     trichYeu: ''
   };
   listNam: any[] = [];
   routerUrl: string;
+  yearNow: number;
+  ngayQuyetDinhDefault: any[] = [];
 
   maVthh: string;
   routerVthh: string;
@@ -76,6 +79,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   isViewDetail: boolean;
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -83,6 +87,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) {
   }
 
@@ -90,26 +95,18 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     this.getTitleVthh();
     this.spinner.show();
     try {
-      let dayNow = dayjs().get('year');
+      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: dayNow - i,
-          text: dayNow - i,
+          value: this.yearNow - i,
+          text: this.yearNow - i,
         });
       }
-      // let res = await this.donViService.layTatCaDonVi();
-      // this.optionsDonVi = [];
-      // if (res.msg == MESSAGE.SUCCESS) {
-      //   for (let i = 0; i < res.data.length; i++) {
-      //     var item = {
-      //       ...res.data[i],
-      //       labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-      //     };
-      //     this.optionsDonVi.push(item);
-      //   }
-      // } else {
-      //   this.notification.error(MESSAGE.ERROR, res.msg);
-      // }
+      this.searchFilter.namNhap = this.yearNow;
+      this.ngayQuyetDinhDefault = [];
+      this.ngayQuyetDinhDefault.push(dayjs().subtract(30, 'day').toDate());
+      this.ngayQuyetDinhDefault.push(dayjs().toDate());
+      this.searchFilter.ngayQuyetDinh = this.ngayQuyetDinhDefault;
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -177,11 +174,18 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     this.getCount.emit();
     await this.search()
   }
+
   clearFilter() {
+    // this.searchFilter = {
+    //   soQd: '',
+    //   ngayQuyetDinh: this.ngayQuyetDinhDefault,
+    //   namNhap: this.yearNow,
+    //   trichYeu: ''
+    // }
     this.searchFilter = {
       soQd: '',
-      ngayQuyetDinh: '',
-      namNhap: '',
+      ngayQuyetDinh: null,
+      namNhap: null,
       trichYeu: ''
     }
     this.search();
