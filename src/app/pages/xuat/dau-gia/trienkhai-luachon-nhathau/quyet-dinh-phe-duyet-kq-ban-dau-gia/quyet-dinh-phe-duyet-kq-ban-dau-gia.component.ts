@@ -16,11 +16,11 @@ import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
-  selector: 'app-quyetdinh-ketqua-lcnt',
-  templateUrl: './quyetdinh-ketqua-lcnt.component.html',
-  styleUrls: ['./quyetdinh-ketqua-lcnt.component.scss']
+  selector: 'app-quyet-dinh-phe-duyet-kq-ban-dau-gia',
+  templateUrl: './quyet-dinh-phe-duyet-kq-ban-dau-gia.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-kq-ban-dau-gia.component.scss']
 })
-export class QuyetdinhKetquaLcntComponent implements OnInit {
+export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   constructor(
     private router: Router,

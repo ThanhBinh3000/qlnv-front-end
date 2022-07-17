@@ -68,9 +68,10 @@
                   <nz-form-label [nzNoColon]="true">
                     Số biên bản chuẩn bị kho
                   </nz-form-label>
-                  <nz-select formControlName="soBienBanChuanBiKho" (ngModelChange)="changeSoQuyetDinh()"
+                  <nz-select formControlName="bbChuanBiKhoId" (ngModelChange)="changeSoBienBan()"
                     [disabled]="bienBanKetThucNhapKho.trangThai == '01' || bienBanKetThucNhapKho.trangThai == '02' || bienBanKetThucNhapKho.trangThai == '04' || isView">
-                    <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                    <nz-option *ngFor="let item of listBienBanChuanBiKho" [nzValue]="item.id"
+                      [nzLabel]="item.soBienBan">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -141,7 +142,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Thủ kho
                   </nz-form-label>
-                  <input nz-input placeholder="Nhập tên thủ kho" formControlName="thuKho" [disabled]="!isAction()" />
+                  <input nz-input placeholder="Nhập tên thủ kho" formControlName="thuKho" />
                 </nz-form-item>
               </div>
             </div>

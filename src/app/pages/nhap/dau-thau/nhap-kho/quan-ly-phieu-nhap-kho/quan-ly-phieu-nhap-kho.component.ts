@@ -262,7 +262,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   async search() {
     let body = {
       "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
-      "maDvi": this.userInfo.MA_DVI,
+      "maDvi": null,
       "orderBy": null,
       "orderDirection": null,
       "pageNumber": this.page,
