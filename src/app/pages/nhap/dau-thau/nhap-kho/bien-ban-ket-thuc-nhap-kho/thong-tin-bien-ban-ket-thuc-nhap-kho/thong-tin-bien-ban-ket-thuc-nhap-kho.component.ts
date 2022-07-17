@@ -1,3 +1,4 @@
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -52,6 +53,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   isChiTiet: boolean = false;
   formData: FormGroup;
   listSoQuyetDinh: any[] = [];
+  listPhieuNhapKho: any[] = [];
   listBienBanChuanBiKho: any[] = [];
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
@@ -69,6 +71,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     private thongTinHopDongService: ThongTinHopDongService,
     private fb: FormBuilder,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
+    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
 
   ) { }
 
@@ -83,7 +86,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadSoQuyetDinh(),
-        this.loadBienBanChuanBiKho()
+        this.loadBienBanChuanBiKho(),
+        this.loadPhieuNhapKho()
       ]);
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
@@ -127,6 +131,29 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+  async loadPhieuNhapKho() {
+    let body = {
+      "denNgayNhapKho": null,
+      "maDvi": this.userInfo.MA_DVI,
+      "loaiVthh": this.typeVthh,
+      "orderBy": null,
+      "orderDirection": null,
+      "pageNumber": 1,
+      "pageSize": 1000,
+      "soPhieu": null,
+      "soQdNhap": null,
+      "str": null,
+      "trangThai": null,
+      "tuNgayNhapKho": null,
+    }
+    let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listPhieuNhapKho = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   async changeSoQuyetDinh() {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.formData.get("soQD").value);
     this.formData.patchValue({
@@ -138,12 +165,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     }
 
   }
-  changeSoBienBan() {
-    // let soBienBan = this.listBienBanChuanBiKho.filter(x => x.id == this.formData.get("bbChuanBiKhoId").value);
-    // this.formData.patchValue({
-    //   soBienBan: soBienBan[0].soBienBan,
-    // })
-  }
+
 
   async getHopDong(id) {
     if (id) {
@@ -284,7 +306,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
           value: this.bienBanKetThucNhapKho
             ? this.bienBanKetThucNhapKho.soBienBan
             : null,
-          disabled: this.isView ? true : false
+          disabled: true
         },
         [],
       ],
@@ -420,7 +442,12 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
 
         [],
       ],
-      qdgnvnxId: [],
+      qdgnvnxId: [{
+        value: this.bienBanKetThucNhapKho
+          ? this.bienBanKetThucNhapKho.ngayKetThucNhap
+          : null,
+        disabled: this.isView ? true : false
+      },],
     });
   }
   save(isGuiDuyet?: boolean) {
@@ -455,7 +482,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "ngayBatDauNhap": this.formData.get("ngayBatDauNhap").value ? dayjs(this.formData.get("ngayBatDauNhap").value).format("YYYY-MM-DD") : null,
       "ngayKetThucKho": this.formData.get("ngayKetThucKho").value ? dayjs(this.formData.get("ngayKetThucKho").value).format("YYYY-MM-DD") : null,
       "ngayKetThucNhap": this.formData.get("ngayKetThucNhap").value ? dayjs(this.formData.get("ngayKetThucNhap").value).format("YYYY-MM-DD") : null,
-      "qdgnvnxId": this.formData.get("soQD").value,
+      "qdgnvnxId": this.formData.get("qdgnvnxId").value,
       "soBienBan": this.formData.get("soBienBan").value,
       "thuKho": this.formData.get("thuKho").value,
       "thuTruongDonVi": this.formData.get("thuTruongDonVi").value,
@@ -692,103 +719,20 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   }
 
   disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.bienBanKetThucNhapKho.ngayKetThucNhap) {
+    if (!startValue || !this.formData.get("ngayKetThucNhap").value) {
       return false;
     }
-    return startValue.getTime() > new Date(this.bienBanKetThucNhapKho.ngayKetThucNhap).getTime();
+    return startValue.getTime() > new Date(this.formData.get("ngayKetThucNhap").value).getTime();
   };
 
   disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.bienBanKetThucNhapKho.ngayBatDauNhap) {
+    if (!endValue || !this.formData.get("ngayBatDauNhap").value) {
       return false;
     }
-    return endValue.getTime() <= new Date(this.bienBanKetThucNhapKho.ngayBatDauNhap).getTime();
+    return endValue.getTime() <= new Date(this.formData.get("ngayBatDauNhap").value).getTime();
   };
 
 
-
-  themmoi() {
-    // if (this.bienBanKetThucNhapKhoDetailCreate.thanhTien == 0 || !this.bienBanKetThucNhapKhoDetailCreate.thanhTien) {
-    //   return;
-    // }
-    // const bbNhapDayKhoTemp = new DetailbienBanKetThucNhapKho();
-    // bbNhapDayKhoTemp.soLuong = this.bienBanKetThucNhapKhoDetailCreate.soLuong;
-    // bbNhapDayKhoTemp.donGia = this.bienBanKetThucNhapKhoDetailCreate.donGia;
-    // bbNhapDayKhoTemp.thanhTien = this.bienBanKetThucNhapKhoDetailCreate.thanhTien;
-    // bbNhapDayKhoTemp.ghiChu = this.bienBanKetThucNhapKhoDetailCreate.ghiChu;
-    // this.bienBanKetThucNhapKho.chiTiets = [
-    //   ...this.bienBanKetThucNhapKho.chiTiets,
-    //   bbNhapDayKhoTemp,
-    // ];
-    // this.bienBanKetThucNhapKho.chiTiets.forEach((lt, i) => {
-    //   lt.stt = i + 1;
-    // });
-    // this.newObjectbienBanKetThucNhapKho();
-    // this.dsbienBanKetThucNhapKhoDetailClone = cloneDeep(this.bienBanKetThucNhapKho.chiTiets);
-  }
-
-  clearNew() {
-    this.newObjectbienBanKetThucNhapKho();
-  }
-
-  newObjectbienBanKetThucNhapKho() {
-    // this.bienBanKetThucNhapKhoDetailCreate = new DetailbienBanKetThucNhapKho();
-  }
-
-  startEdit(index: number) {
-    // this.dsbienBanKetThucNhapKhoDetailClone[index].isEdit = true;
-  }
-
-  deleteData(stt: number) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.bienBanKetThucNhapKho.chiTiets =
-          this.bienBanKetThucNhapKho?.chiTiets.filter(
-            (khlt) => khlt.stt !== stt,
-          );
-        this.bienBanKetThucNhapKho?.chiTiets.forEach((lt, i) => {
-          if (i >= stt - 1) {
-            lt.stt = i + 1;
-          }
-        });
-        // this.dsbienBanKetThucNhapKhoDetailClone = cloneDeep(
-        //   this.bienBanKetThucNhapKho.chiTiets,
-        // );
-        // this.loadData();
-      },
-    });
-  }
-
-  saveEditBBDayKho(i: number): void {
-    // this.dsbienBanKetThucNhapKhoDetailClone[i].isEdit = false;
-    // Object.assign(
-    //   this.bienBanKetThucNhapKho.chiTiets[i],
-    //   this.dsbienBanKetThucNhapKhoDetailClone[i],
-    // );
-  }
-
-  cancelEditBBDayKho(index: number) {
-    // this.dsbienBanKetThucNhapKhoDetailClone = cloneDeep(this.bienBanKetThucNhapKho.chiTiets);
-    // this.dsbienBanKetThucNhapKhoDetailClone[index].isEdit = false;
-  }
-
-  calculatorThanhTienEdit(i: number) {
-    // this.dsbienBanKetThucNhapKhoDetailClone[i].thanhTien =
-    //   +this.dsbienBanKetThucNhapKhoDetailClone[i].soLuong *
-    //   +this.dsbienBanKetThucNhapKhoDetailClone[i].donGia;
-    // return this.dsbienBanKetThucNhapKhoDetailClone[i].thanhTien
-    //   ? Intl.NumberFormat('en-US').format(
-    //     this.dsbienBanKetThucNhapKhoDetailClone[i].thanhTien,
-    //   )
-    //   : '0';
-  }
 
   loadPhieuNhapDayKho() {
     this.quanLyPhieuKetThucNhapKhoService
@@ -814,60 +758,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     return true;
   }
 
-  deleteTaiLieuDinhKemTag(data: any) {
-    // if (!this.isView) {
-    //   this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-    //     (x) => x.id !== data.id,
-    //   );
-    //   this.bienBanKetThucNhapKho.fileDinhKems = this.bienBanKetThucNhapKho.fileDinhKems.filter((x) => x.idVirtual !== data.id);
-    // }
-  }
-
-  // openFile(event) {
-  //   if (!this.isView) {
-  //     let item = {
-  //       id: new Date().getTime(),
-  //       text: event.name,
-  //     };
-  //     if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-  //       this.uploadFileService
-  //         .uploadFile(event.file, event.name)
-  //         .then((resUpload) => {
-  //           if (!this.bienBanKetThucNhapKho.fileDinhKems) {
-  //             this.bienBanKetThucNhapKho.fileDinhKems = [];
-  //           }
-  //           const fileDinhKem = new FileDinhKem();
-  //           fileDinhKem.fileName = resUpload.filename;
-  //           fileDinhKem.fileSize = resUpload.size;
-  //           fileDinhKem.fileUrl = resUpload.url;
-  //           fileDinhKem.idVirtual = item.id;
-  //           this.bienBanKetThucNhapKho.fileDinhKems.push(fileDinhKem);
-  //           this.taiLieuDinhKemList.push(item);
-  //         });
-  //     }
-  //   }
-  // }
-
-  downloadFileKeHoach(event) {
-    // let body = {
-    //   "dataType": "",
-    //   "dataId": 0
-    // }
-    // switch (event) {
-    //   case 'tai-lieu-dinh-kem':
-    //     body.dataType = this.bienBanKetThucNhapKho.fileDinhKems[0].dataType;
-    //     body.dataId = this.bienBanKetThucNhapKho.fileDinhKems[0].dataId;
-    //     if (this.taiLieuDinhKemList.length > 0) {
-    //       this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-    //         saveAs(blob, this.bienBanKetThucNhapKho.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.bienBanKetThucNhapKho.fileDinhKems[0].fileName);
-    //       });
-    //     }
-    //     break;
-    //   default:
-    //     break;
-    // }
-  }
-
   async loadBienBanChuanBiKho() {
     let body = {
       "ngayBienBanTu": null,
@@ -887,7 +777,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   }
   async loadDiemKho() {
     let body = {
-      maDviCha: this.detail.maDonVi,
+      maDviCha: this.bienBanKetThucNhapKho.maDvi,
       trangThai: '01',
     }
     const res = await this.donViService.getTreeAll(body);
@@ -909,7 +799,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
 
   changeDiemKho(fromChiTiet: boolean) {
     let diemKho = this.listDiemKho.filter(x => x.key == this.formData.get("diemKho").value);
-    this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
@@ -933,6 +822,25 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     if (nganKho && nganKho.length > 0) {
       this.listNganLo = nganKho[0].children;
     }
+  }
+  changeLoKho() {
+    const ketQuaNhapKho = this.getKetQuaNhapKho();
+    console.log(ketQuaNhapKho);
+
+
+  }
+
+  getKetQuaNhapKho() {
+    this.listPhieuNhapKho.forEach(phieuNhapKho => {
+      if (this.formData.get("qdgnvnxId").value == phieuNhapKho.qdgnvnxId &&
+        this.formData.get("diemKho").value == phieuNhapKho.maDiemKho &&
+        this.formData.get("nhaKho").value == phieuNhapKho.maNhaKho &&
+        this.formData.get("nganKho").value == phieuNhapKho.maNganKho &&
+        this.formData.get("loKho").value == phieuNhapKho.maNganLo) {
+        return phieuNhapKho;
+      }
+    })
+    return null;
   }
 
 }
