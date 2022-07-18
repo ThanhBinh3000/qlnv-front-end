@@ -1,9 +1,12 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -43,15 +46,24 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
-  ) {}
+    public globals: Globals,
+    private danhMucService: DanhMucService
+  ) {
+    this.formData = this.fb.group(
+      {
+        id: [],
+        soQd: [, [Validators.required]],
+        ngayQd: [null, [Validators.required]],
+        namKhoach: [dayjs().get('year'), [Validators.required]],
+        trichYeu: [null, [Validators.required]],
+      }
+    );
+  }
 
   ngOnInit(): void {
-    this.initData();
-  }
-
-  initData() {
     this.loadDsNam();
   }
+
 
   loadDsNam() {
     this.namHienTai = dayjs().get('year');
@@ -93,52 +105,21 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) {}
+  downloadFileKeHoach(event) { }
 
-  onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
-  }
+  viewDetail(id: number, isViewDetail: boolean) { }
 
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
-    }
-  }
-
-  refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
-      this.setOfCheckedId.has(id),
-    );
-    this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
-      !this.allChecked;
-  }
-
-  onItemChecked(id: number, checked) {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-
-  viewDetail(id: number, isViewDetail: boolean) {}
-
-  xoaItem(id: number) {}
+  xoaItem(id: number) { }
 
   huy() {
     this.onClose.emit();
   }
 
-  banHanh() {}
+  banHanh() { }
 
-  luu() {}
+  luu() { }
 
-  exportData() {}
-
-  changePageIndex(event) {}
-
-  changePageSize(event) {}
+  exportData() { }
 
   themKeHoach() {
     const modalQD = this.modal.create({
@@ -146,14 +127,15 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {},
     });
-    modalQD.afterClose.subscribe((data) => {});
+    modalQD.afterClose.subscribe((data) => { });
   }
 
-  xoaKeHoach() {}
+
+  xoaKeHoach() { }
 }
 
 interface IQuyetDinhTTCP {

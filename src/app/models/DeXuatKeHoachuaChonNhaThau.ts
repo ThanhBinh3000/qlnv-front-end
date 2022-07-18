@@ -124,3 +124,13 @@ export class CanCuXacDinh {
   fileDinhKems: Array<FileDinhKem>;
   children: Array<FileDinhKem>;
 }
+
+export class ThongTinQuyetDinh {
+  id: number;
+  loaiVthh: string;
+  tenVthh: string;
+  cloaiVthh: string;
+  tenCloaiVthh: string;
+  dviTinh: string;
+  soLuong: number;
+}
