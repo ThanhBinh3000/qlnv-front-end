@@ -15,11 +15,13 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt?`;
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho?`;
     if (body.denNgayNhapKho)
       url_ += 'denNgayNhapKho=' + encodeURIComponent('' + body.denNgayNhapKho) + '&';
     if (body.maDvi)
-      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+      url_ += 'maDvis=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.loaiVthh)
+      url_ += 'loaiVthh=' + encodeURIComponent('' + body.loaiVthh) + '&';
     if (body.soQdNhap)
       url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
     if (body.tuNgayNhapKho)
@@ -35,37 +37,37 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
   }
 
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho`;
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
   deleteData(id: number): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/${id}`;
     return this.httpClient.delete<any>(url).toPromise();
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/delete/multiple`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt/export/list`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

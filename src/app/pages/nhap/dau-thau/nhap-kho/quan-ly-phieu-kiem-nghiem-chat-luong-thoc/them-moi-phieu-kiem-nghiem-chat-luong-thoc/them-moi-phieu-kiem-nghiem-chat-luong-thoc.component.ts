@@ -72,6 +72,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.phieuKiemNghiemChatLuongHang.maDonVi = this.userInfo.MA_DVI;
       this.phieuKiemNghiemChatLuongHang.tenDonVi = this.userInfo.TEN_DVI;
+      this.phieuKiemNghiemChatLuongHang.trangThai = this.globals.prop.DU_THAO;
+      this.phieuKiemNghiemChatLuongHang.tenTrangThai = 'Dự thảo';
       await Promise.all([
         // this.getIdNhap(),
         this.loadDiemKho(),
@@ -528,9 +530,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
 
   checkDataExistKqKiemNghiemChatLuong(kqKiemNghiemChatLuong: KetQuaKiemNghiemChatLuongHang) {
-    console.log(this.phieuKiemNghiemChatLuongHang.kquaKnghiem);
-    console.log(kqKiemNghiemChatLuong);
-
     if (this.phieuKiemNghiemChatLuongHang.kquaKnghiem) {
       let indexExist = this.phieuKiemNghiemChatLuongHang.kquaKnghiem.findIndex(
         (x) => x.tenCtieu == kqKiemNghiemChatLuong.tenCtieu,

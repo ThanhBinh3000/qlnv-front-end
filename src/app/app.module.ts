@@ -32,7 +32,6 @@ const ngZorroConfig: NzConfig = {
     AppRoutingModule,
     ComponentsModule,
     HttpClientModule,
-    ComponentsModule,
     DirectivesModule,
   ],
   providers: [
@@ -48,4 +47,4 @@ const ngZorroConfig: NzConfig = {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

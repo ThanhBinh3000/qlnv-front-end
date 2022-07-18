@@ -47,6 +47,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -75,6 +76,9 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       await Promise.all([
         // this.loadDiemKho(),
         // this.loadNganLo(),
@@ -263,6 +267,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     let body = {
       "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
       "maDvi": this.userInfo.MA_DVI,
+      "loaiVthh": this.typeVthh,
       "orderBy": null,
       "orderDirection": null,
       "pageNumber": this.page,

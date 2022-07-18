@@ -21,6 +21,7 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
       {
         giaTri: 'Tất cả',
         value: null,
+        count: 0,
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();

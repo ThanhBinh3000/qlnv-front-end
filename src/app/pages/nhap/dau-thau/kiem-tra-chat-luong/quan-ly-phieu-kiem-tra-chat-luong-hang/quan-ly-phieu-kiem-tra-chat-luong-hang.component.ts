@@ -56,12 +56,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   filterTable: any = {
     soPhieu: '',
     ngayGdinh: '',
-    ketLuan: '',
+    kqDanhGia: '',
     soQuyetDinhNhap: '',
     soBienBan: '',
     tenDiemKho: '',
     tenNganLo: '',
     tenNhaKho: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -126,7 +127,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
+      "kqDanhGia": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
@@ -146,7 +147,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "page": this.page - 1
       },
       "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
+      "soQd": this.searchFilter.soQuyetDinh,
       "str": null,
       "tenNguoiGiao": null,
       "trangThai": null
@@ -256,7 +257,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
+          "kqDanhGia": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
           "maHangHoa": this.typeVthh,
           "maNganKho": null,
@@ -340,7 +341,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
             temp.push(item)
           }
         });
@@ -356,12 +357,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.filterTable = {
       soPhieu: '',
       ngayGdinh: '',
-      ketLuan: '',
+      kqDanhGia: '',
       soQuyetDinhNhap: '',
       soBienBan: '',
       tenDiemKho: '',
       tenNganLo: '',
       tenNhaKho: '',
+      tenTrangThai: '',
     }
   }
 

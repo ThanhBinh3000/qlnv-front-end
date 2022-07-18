@@ -378,8 +378,8 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     }
   }
   addDaiDien(bienBan: ChiTiet, type: string) {
-    if (type === '00' && !this.chiTietBienBanGuiHangBenNhan.daiDien && !this.chiTietBienBanGuiHangBenNhan.chucVu
-      || type === '01' && !this.chiTietBienBanGuiHangBenGiao.daiDien && !this.chiTietBienBanGuiHangBenGiao.chucVu) {
+    if (!this.chiTietBienBanGuiHangBenNhan.daiDien && !this.chiTietBienBanGuiHangBenNhan.chucVu
+      || !this.chiTietBienBanGuiHangBenGiao.daiDien && !this.chiTietBienBanGuiHangBenGiao.chucVu) {
       return;
     }
 

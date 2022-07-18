@@ -6,10 +6,10 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="4">
               <label class="search__label">Số Quyết định</label>
-              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
-                <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
-                  appNumberOnly />
-              </nz-input-group>
+              <!-- <nz-input-group nzAddOnAfter="/{{qdTCDT}}"> -->
+              <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
+                appNumberOnly />
+              <!-- </nz-input-group> -->
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Số phiếu</label>
@@ -118,14 +118,22 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ketLuan"
-                          (input)="filterInTable('ketLuan',filterTable.ketLuan)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.kqDanhGia"
+                          (input)="filterInTable('kqDanhGia',filterTable.kqDanhGia)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th></th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
@@ -140,7 +148,7 @@
                     <td>{{ data.tenNhaKho }}</td>
                     <td>{{ data.tenNganLo }}</td>
                     <td>{{ data.ngayGdinh }}</td>
-                    <td>{{ data.ketLuan }}</td>
+                    <td>{{ data.kqDanhGia }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-right">
                       <a (click)="redirectToChiTiet(true, data.id)">
