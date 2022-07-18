@@ -440,7 +440,7 @@ export class PhuLuc6Component implements OnInit {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
       const nho = this.lstCtietBcao[item].stt;
       this.lstCtietBcao.forEach(item => {
-        item.stt = item.stt.replace(nho, str);
+        item.stt.replace(nho, str);
       })
     })
   }
