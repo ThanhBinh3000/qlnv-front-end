@@ -13,7 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
@@ -61,6 +61,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   routerVthh: string;
   today = new Date();
   listNam: any[] = [];
+
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -111,6 +116,31 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
   openDialogQuyetDinhGiaoChiTieu() {
     if (this.isChiTiet) {
