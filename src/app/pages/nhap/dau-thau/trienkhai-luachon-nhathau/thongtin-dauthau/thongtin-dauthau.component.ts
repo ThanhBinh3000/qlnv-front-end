@@ -268,8 +268,8 @@ export class ThongtinDauthauComponent implements OnInit {
           soQdPd: this.searchFilter.soQdPd,
           maDvi: this.searchFilter.maDvi
         };
-        this.tongHopDeXuatKHLCNTService
-          .exportList(body)
+        this.dauThauService
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
           );
