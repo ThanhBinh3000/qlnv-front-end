@@ -122,6 +122,7 @@ export class ThongtinDauthauComponent implements OnInit {
       denNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
+
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
