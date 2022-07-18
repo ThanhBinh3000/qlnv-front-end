@@ -152,7 +152,7 @@
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.slHangTte || editCache[data.id].data.slHangTte ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.slHangTte || editCache[data.id].data.slHangTte ===0) &&  editCache[data.id].data.slHangTte >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.slHangTte" (ngModelChange)="changeModel(data.id)"></nz-input-number>
         </td>
         <td>
@@ -166,12 +166,12 @@
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.cphiBqNtruoc || editCache[data.id].data.cphiBqNtruoc ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.cphiBqNtruoc || editCache[data.id].data.cphiBqNtruoc ===0) &&  editCache[data.id].data.cphiBqNtruoc >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.cphiBqNtruoc" (ngModelChange)="changeModel(data.id)"></nz-input-number>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.cphiBqNnay || editCache[data.id].data.cphiBqNnay ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.cphiBqNnay || editCache[data.id].data.cphiBqNnay ===0) &&  editCache[data.id].data.cphiBqNnay >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.cphiBqNnay" (ngModelChange)="changeModel(data.id)"></nz-input-number>
         </td>
         <td>
@@ -179,24 +179,24 @@
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.soQtoan || editCache[data.id].data.soQtoan ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.soQtoan || editCache[data.id].data.soQtoan ===0) &&  editCache[data.id].data.soQtoan >= 0?'' : 'input-error-validate'"
             [(ngModel)]="editCache[data.id].data.soQtoan"></nz-input-number>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.soQtoanChuyenNsauKpTk || editCache[data.id].data.soQtoanChuyenNsauKpTk ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.soQtoanChuyenNsauKpTk || editCache[data.id].data.soQtoanChuyenNsauKpTk ===0) &&  editCache[data.id].data.soQtoanChuyenNsauKpTk >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.soQtoanChuyenNsauKpTk" (ngModelChange)="changeModel(data.id)">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.soQtoanChuyenNsauKpTchi || editCache[data.id].data.soQtoanChuyenNsauKpTchi ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.soQtoanChuyenNsauKpTchi || editCache[data.id].data.soQtoanChuyenNsauKpTchi ===0) &&  editCache[data.id].data.soQtoanChuyenNsauKpTchi >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.soQtoanChuyenNsauKpTchi" (ngModelChange)="changeModel(data.id)">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small"
-            [class]="editCache[data.id].data.dtoan2021ThanhQtoan2020 || editCache[data.id].data.dtoan2021ThanhQtoan2020 ===0?'' : 'input-error-validate'"
+            [class]="(editCache[data.id].data.dtoan2021ThanhQtoan2020 || editCache[data.id].data.dtoan2021ThanhQtoan2020 ===0) &&  editCache[data.id].data.dtoan2021ThanhQtoan2020 >= 0?'' : 'input-error-validate'"
              [(ngModel)]="editCache[data.id].data.dtoan2021ThanhQtoan2020" (ngModelChange)="changeModel(data.id)">
           </nz-input-number>
         </td>
