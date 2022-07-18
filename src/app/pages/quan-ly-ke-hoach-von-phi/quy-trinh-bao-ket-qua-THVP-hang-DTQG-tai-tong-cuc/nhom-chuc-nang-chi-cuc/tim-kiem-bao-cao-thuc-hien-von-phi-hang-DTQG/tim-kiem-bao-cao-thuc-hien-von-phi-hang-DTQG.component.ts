@@ -133,14 +133,14 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 			if (res.statusCode == 0) {
 				this.listBcaoKqua = [];
 				res.data.content.forEach(item => {
-					if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+					if (this.listIdDelete.findIndex(e => e == item.id) == -1) {
 						this.listBcaoKqua.push({
 							...item,
 							checked: false,
 						})
 					} else {
 						this.listBcaoKqua.push({
-							...item, 
+							...item,
 							checked: true,
 						})
 					}
@@ -165,13 +165,44 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 
 
-	themMoi() {
+	async themMoi() {
 		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.dotBcao && this.searchFilter.maLoaiBcao == '1')) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
 		if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+			return;
+		}
+
+		let check = false;
+		const request = {
+			maPhanBcao: '1',
+			trangThais: [],
+			maLoaiBcao: this.searchFilter.maLoaiBcao,
+			namBcao: this.searchFilter.namBcao,
+			dotBcao: this.searchFilter.dotBcao,
+			paggingReq: {
+				limit: 10,
+				page: 1
+			},
+			str: "",
+			loaiTimKiem: '0',
+		}
+		await this.quanLyVonPhiService.timBaoCao(request).toPromise().then(res => {
+			if (res.statusCode == 0) {
+				if (res.data.content?.length > 0){
+					check = true;
+				}
+			} else {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		}, err => {
+			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		})
+
+		if (!check){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
 			return;
 		}
 		this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/bao-cao/" + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.maLoaiBcao == '1' ? this.searchFilter.dotBcao : '0') + '/' + this.searchFilter.namBcao])
@@ -191,6 +222,16 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	close() {
 		this.location.back();
+	}
+
+	deleteCondition() {
+		this.searchFilter.maBcao = null
+		this.searchFilter.namBcao = null
+		this.searchFilter.dotBcao = null
+		this.searchFilter.ngayTaoTu = null
+		this.searchFilter.ngayTaoDen = null
+		this.searchFilter.maLoaiBcao = null
+		this.trangThai = null
 	}
 
 	deleteReport(id) {
@@ -213,27 +254,27 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		})
 	}
 
-	checkAll(){
+	checkAll() {
 		let check = true;
 		this.listBcaoKqua.forEach(item => {
-			if (item.checked){
+			if (item.checked) {
 				check = false;
 			}
 		})
 		return check;
 	}
 
-	changeListIdDelete(id: string){
-		if (this.listIdDelete.findIndex(e => e == id) == -1){
-			this.listIdDelete.push(id); 
+	changeListIdDelete(id: string) {
+		if (this.listIdDelete.findIndex(e => e == id) == -1) {
+			this.listIdDelete.push(id);
 		} else {
 			this.listIdDelete = this.listIdDelete.filter(e => e != id);
 		}
 	}
 
-	updateAllCheck(){
+	updateAllCheck() {
 		this.listBcaoKqua.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)){
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

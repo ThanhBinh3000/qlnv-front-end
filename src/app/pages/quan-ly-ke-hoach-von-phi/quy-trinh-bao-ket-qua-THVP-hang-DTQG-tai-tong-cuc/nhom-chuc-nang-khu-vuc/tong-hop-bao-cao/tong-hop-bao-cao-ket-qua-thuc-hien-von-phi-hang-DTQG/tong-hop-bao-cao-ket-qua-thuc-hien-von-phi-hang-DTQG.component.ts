@@ -133,6 +133,12 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 	close() {
 		this.location.back();
 	}
+
+	deleteCondition(){
+		this.searchFilter.namBcao = null
+		this.searchFilter.dotBcao = null
+		this.searchFilter.maLoaiBcao = null
+	}
 }
 
 

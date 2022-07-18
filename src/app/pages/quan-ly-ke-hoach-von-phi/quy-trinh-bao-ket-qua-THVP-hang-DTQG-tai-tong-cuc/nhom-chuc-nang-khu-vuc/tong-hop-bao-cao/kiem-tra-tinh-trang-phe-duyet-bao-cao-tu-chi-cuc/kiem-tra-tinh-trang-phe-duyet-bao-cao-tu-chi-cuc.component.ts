@@ -127,4 +127,11 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
 	getStatusName(id) {
 		return TRANG_THAI_KIEM_TRA_BAO_CAO.find(item => item.id == id)?.ten
 	}
+
+	deleteCondition(){
+		this.searchFilter.namBcao = null
+		this.searchFilter.dotBcao = null
+		this.searchFilter.maLoaiBcao = null
+		this.trangThai = null
+	}
 }

@@ -122,6 +122,13 @@ export class KiemTraComponent implements OnInit {
 		this.onSubmit();
 	}
 
+	deleteCondition(){
+		this.searchFilter.namBcao = null
+		this.searchFilter.thangBcao = null
+		this.searchFilter.maLoaiBcao = null
+		this.trangThai = null
+	}
+
 	close() {
 		this.location.back();
 	}

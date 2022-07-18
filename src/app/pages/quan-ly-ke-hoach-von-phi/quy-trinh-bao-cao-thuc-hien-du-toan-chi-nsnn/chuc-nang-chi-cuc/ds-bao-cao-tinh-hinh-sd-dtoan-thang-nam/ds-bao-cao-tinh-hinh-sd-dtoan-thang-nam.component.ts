@@ -168,7 +168,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		})
 		this.spinner.hide();
 	}
-	themMoi() {
+	async themMoi() {
 		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao ||
 			(!this.searchFilter.thangBcao && (this.searchFilter.maLoaiBcao == '526' || this.searchFilter.maLoaiBcao == '528'))) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -176,6 +176,42 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		}
 		if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+			return;
+		}
+		
+		let check = false;					//kiem tra bao cao da ton tai chua
+		const request = {
+			maPhanBcao: '0',
+			namBcao: this.searchFilter.namBcao,
+			thangBcao: this.searchFilter.thangBcao,
+			maLoaiBcao: this.searchFilter.maLoaiBcao,
+			trangThais: [],
+			paggingReq: {
+				limit: 10,
+				page: 1
+			},
+			str: "",
+			loaiTimKiem: '0',
+		}
+
+		if (request.maLoaiBcao == '527'){
+			request.thangBcao = null
+		}
+
+		await this.quanLyVonPhiService.timBaoCao(request).toPromise().then(res => {
+			if (res.statusCode == 0) {
+				if (res.data.content?.lenght > 0){
+					check = true;
+				}
+			} else {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		}, err => {
+			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		})
+
+		if (!check){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
 			return;
 		}
 
@@ -192,6 +228,16 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	onPageSizeChange(size) {
 		this.searchFilter.paggingReq.limit = size;
 		this.onSubmit();
+	}
+
+	deleteCondition(){
+		this.searchFilter.maBcao = null
+		this.searchFilter.namBcao = null
+		this.searchFilter.thangBcao = null
+		this.searchFilter.ngayTaoTu = null
+		this.searchFilter.ngayTaoDen = null
+		this.trangThai = null
+		this.searchFilter.maLoaiBcao = null
 	}
 
 	close() {
@@ -250,4 +296,5 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		const utils = new Utils();
 		return utils.getStatusName(id);
 	}
+
 }
