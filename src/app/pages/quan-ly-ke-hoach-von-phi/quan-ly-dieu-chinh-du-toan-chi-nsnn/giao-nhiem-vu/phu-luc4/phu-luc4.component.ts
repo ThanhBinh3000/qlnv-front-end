@@ -403,7 +403,7 @@ export class PhuLuc4Component implements OnInit {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
       const nho = this.lstCtietBcao[item].stt;
       this.lstCtietBcao.forEach(item => {
-        item.stt = item.stt.replace(nho, str);
+        item.stt.replace(nho, str);
       })
     })
   }
@@ -587,8 +587,7 @@ export class PhuLuc4Component implements OnInit {
       this.editCache[id].data.kphiTcong <0 ||
       this.editCache[id].data.kphiQtoanNtruoc <0 ||
       this.editCache[id].data.kphiDtoanGiaoTnam <0 ||
-      this.editCache[id].data.kphiPvcTcDchuyen <0 ||
-      this.editCache[id].data.dtoanDchinh <0
+      this.editCache[id].data.kphiPvcTcDchuyen <0
     ){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
       return

@@ -101,7 +101,7 @@
           {{getChiMuc(data.stt)}}
         </td>
         <td>
-          <div *ngFor="let item of noiDungFull">
+          <div *ngFor="let item of noiDungs">
             <div *ngIf="item.id == data.maNdung">
               {{item.tenDm}}
             </div>
@@ -144,7 +144,7 @@
           {{getChiMuc(editCache[data.id].data.stt)}}
         </td>
         <td>
-          <div *ngFor="let item of noiDungFull">
+          <div *ngFor="let item of noiDungs">
             <div *ngIf="item.id == data.maNdung">
               {{item.tenDm}}
             </div>
