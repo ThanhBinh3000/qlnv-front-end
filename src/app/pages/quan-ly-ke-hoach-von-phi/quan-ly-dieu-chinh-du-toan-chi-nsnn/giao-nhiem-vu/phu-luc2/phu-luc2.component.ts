@@ -64,15 +64,15 @@ export class PhuLuc2Component implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    maDviTinh: 0,
-    thienSluongKhoachDgiao: 0,
-    thienSluongTteThien: 0,
-    thienSluongUocThien: 0,
-    thienCong: 0,
-    thienDinhMuc: 0,
-    thienThanhTien: 0,
-    kphiThieuNtruoc: 0,
-    ncauKphi: 0,
+    maDviTinh: null,
+    thienSluongKhoachDgiao: null,
+    thienSluongTteThien: null,
+    thienSluongUocThien: null,
+    thienCong: null,
+    thienDinhMuc: null,
+    thienThanhTien: null,
+    kphiThieuNtruoc: null,
+    ncauKphi: null,
     checked: false,
   };
   total: ItemData = {
@@ -80,15 +80,15 @@ export class PhuLuc2Component implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    maDviTinh: 0,
-    thienSluongKhoachDgiao: 0,
-    thienSluongTteThien: 0,
-    thienSluongUocThien: 0,
-    thienCong: 0,
-    thienDinhMuc: 0,
-    thienThanhTien: 0,
-    kphiThieuNtruoc: 0,
-    ncauKphi: 0,
+    maDviTinh: null,
+    thienSluongKhoachDgiao: null,
+    thienSluongTteThien: null,
+    thienSluongUocThien: null,
+    thienCong: null,
+    thienDinhMuc: null,
+    thienThanhTien: null,
+    kphiThieuNtruoc: null,
+    ncauKphi: null,
     checked: false,
   };
   //trang thai cac nut
@@ -420,7 +420,7 @@ export class PhuLuc2Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -432,7 +432,7 @@ export class PhuLuc2Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -478,7 +478,7 @@ export class PhuLuc2Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: stt,
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
       this.editCache[item.id] = {
@@ -494,7 +494,7 @@ export class PhuLuc2Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: stt,
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
 
@@ -547,10 +547,7 @@ export class PhuLuc2Component implements OnInit {
       (!this.editCache[id].data.thienSluongTteThien && this.editCache[id].data.thienSluongTteThien !== 0) ||
       (!this.editCache[id].data.thienSluongUocThien && this.editCache[id].data.thienSluongUocThien !== 0) ||
       (!this.editCache[id].data.thienCong && this.editCache[id].data.thienCong !== 0) ||
-      (!this.editCache[id].data.thienDinhMuc && this.editCache[id].data.thienDinhMuc !== 0) ||
-      (!this.editCache[id].data.thienThanhTien && this.editCache[id].data.thienThanhTien !== 0) ||
       (!this.editCache[id].data.kphiThieuNtruoc && this.editCache[id].data.kphiThieuNtruoc !== 0) ||
-      (!this.editCache[id].data.ncauKphi && this.editCache[id].data.ncauKphi !== 0) ||
       (!this.editCache[id].data.maDviTinh)
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
@@ -561,10 +558,7 @@ export class PhuLuc2Component implements OnInit {
       this.editCache[id].data.thienSluongTteThien < 0 ||
       this.editCache[id].data.thienSluongUocThien < 0 ||
       this.editCache[id].data.thienCong < 0 ||
-      this.editCache[id].data.thienDinhMuc < 0 ||
-      this.editCache[id].data.thienThanhTien < 0 ||
-      this.editCache[id].data.kphiThieuNtruoc < 0 ||
-      this.editCache[id].data.ncauKphi < 0
+      this.editCache[id].data.kphiThieuNtruoc < 0
     ){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
@@ -645,7 +639,7 @@ export class PhuLuc2Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
@@ -658,7 +652,7 @@ export class PhuLuc2Component implements OnInit {
         level: 0,
         id: uuid.v4() + 'FE',
         stt: "0.1",
-        thienDinhMuc: dm,
+        thienDinhMuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.push(item);
 
@@ -842,6 +836,22 @@ export class PhuLuc2Component implements OnInit {
         this.total.ncauKphi += item.ncauKphi;
       }
     })
+    if(this.total.thienSluongKhoachDgiao == 0||
+      this.total.thienSluongTteThien == 0||
+      this.total.thienSluongUocThien == 0||
+      this.total.thienCong == 0||
+      this.total.thienThanhTien == 0||
+      this.total.kphiThieuNtruoc == 0||
+      this.total.ncauKphi == 0
+      ){
+        this.total.thienSluongKhoachDgiao = null,
+        this.total.thienSluongTteThien = null,
+        this.total.thienSluongUocThien = null,
+        this.total.thienCong = null,
+        this.total.thienThanhTien = null
+        this.total.kphiThieuNtruoc = null,
+        this.total.ncauKphi = null
+    }
   }
 
   // action print
@@ -866,6 +876,9 @@ export class PhuLuc2Component implements OnInit {
 
   //gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
+    if(this.editCache[id].data.thienDinhMuc == null){
+      this.editCache[id].data.thienDinhMuc = 0
+    }
     this.editCache[id].data.thienCong = this.editCache[id].data.thienSluongTteThien + this.editCache[id].data.thienSluongUocThien;
     this.editCache[id].data.thienThanhTien = this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc;
     this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
@@ -889,8 +902,6 @@ export class PhuLuc2Component implements OnInit {
          const  contentData = await data?.data?.content; 
          if (contentData.length != 0) {
              this.dsDinhMuc = contentData;
-          } else {
-            this.dsDinhMuc = null;
           }
       },
       err => {

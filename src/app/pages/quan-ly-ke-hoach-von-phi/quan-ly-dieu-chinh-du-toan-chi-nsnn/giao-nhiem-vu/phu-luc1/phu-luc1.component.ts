@@ -66,13 +66,13 @@ export class PhuLuc1Component implements OnInit {
     level: 0,
     maNdung: 0,
     maLoaiKhoan: "",
-    tongNcauDtoanKphi: 0,
-    dtoanKphiNtruoc: 0,
-    dtoanKphiDaGiao: 0,
-    dtoanKphiCong: 0,
-    kphiUocThien: 0,
-    kphiDchinhTang: 0,
-    kphiDchinhGiam: 0,
+    tongNcauDtoanKphi: null,
+    dtoanKphiNtruoc: null,
+    dtoanKphiDaGiao: null,
+    dtoanKphiCong: null,
+    kphiUocThien: null,
+    kphiDchinhTang: null,
+    kphiDchinhGiam: null,
     checked: false,
   };
   total: ItemData = {
@@ -81,13 +81,13 @@ export class PhuLuc1Component implements OnInit {
     level: 0,
     maNdung: 0,
     maLoaiKhoan: "",
-    tongNcauDtoanKphi: 0,
-    dtoanKphiNtruoc: 0,
-    dtoanKphiDaGiao: 0,
-    dtoanKphiCong: 0,
-    kphiUocThien: 0,
-    kphiDchinhTang: 0,
-    kphiDchinhGiam: 0,
+    tongNcauDtoanKphi: null,
+    dtoanKphiNtruoc: null,
+    dtoanKphiDaGiao: null,
+    dtoanKphiCong: null,
+    kphiUocThien: null,
+    kphiDchinhTang: null,
+    kphiDchinhGiam: null,
     checked: false,
   };
 
@@ -862,6 +862,22 @@ export class PhuLuc1Component implements OnInit {
         this.total.kphiDchinhGiam += item.kphiDchinhGiam;
       }
     })
+    if(this.total.tongNcauDtoanKphi == 0 ||
+      this.total.dtoanKphiNtruoc == 0 ||
+      this.total.dtoanKphiDaGiao == 0 ||
+      this.total.dtoanKphiCong == 0 ||
+      this.total.kphiUocThien == 0 ||
+      this.total.kphiDchinhTang == 0 ||
+      this.total.kphiDchinhGiam == 0 
+      ){
+      this.total.tongNcauDtoanKphi = null,
+      this.total.dtoanKphiNtruoc = null,
+      this.total.dtoanKphiDaGiao = null,
+      this.total.dtoanKphiCong = null,
+      this.total.kphiUocThien = null,
+      this.total.kphiDchinhTang = null,
+      this.total.kphiDchinhGiam = null
+    }
   }
 
   // action print

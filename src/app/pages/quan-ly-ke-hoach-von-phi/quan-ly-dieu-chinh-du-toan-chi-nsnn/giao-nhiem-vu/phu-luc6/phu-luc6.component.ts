@@ -69,20 +69,20 @@ export class PhuLuc6Component implements OnInit {
     stt: "0",
     level: 0,
     loaiMatHang: 0,
-    maDviTinh: 0,
-    slHangTte: 0,
-    kphiDmuc: 0,
-    kphiTtien: 0,
-    cphiTcong: 0,
-    cphiNtruoc: 0,
-    cphiNnay: 0,
-    chenhLech: 0,
-    kphiQtoan: 0,
-    kphiChuaQtoanCong: 0,
-    kphiChuaQtoanKpTkiem: 0,
-    kphiChuaQtoanKpTchi: 0,
-    dtoan2021ThanhQtoan2020: 0,
-    soChuaQtoan: 0,
+    maDviTinh: null,
+    slHangTte: null,
+    kphiDmuc: null,
+    kphiTtien: null,
+    cphiTcong: null,
+    cphiNtruoc: null,
+    cphiNnay: null,
+    chenhLech: null,
+    kphiQtoan: null,
+    kphiChuaQtoanCong: null,
+    kphiChuaQtoanKpTkiem: null,
+    kphiChuaQtoanKpTchi: null,
+    dtoan2021ThanhQtoan2020: null,
+    soChuaQtoan: null,
     checked: false,
   };
   total: ItemData = {
@@ -90,20 +90,20 @@ export class PhuLuc6Component implements OnInit {
     stt: "0",
     level: 0,
     loaiMatHang: 0,
-    maDviTinh: 0,
-    slHangTte: 0,
-    kphiDmuc: 0,
-    kphiTtien: 0,
-    cphiTcong: 0,
-    cphiNtruoc: 0,
-    cphiNnay: 0,
-    chenhLech: 0,
-    kphiQtoan: 0,
-    kphiChuaQtoanCong: 0,
-    kphiChuaQtoanKpTkiem: 0,
-    kphiChuaQtoanKpTchi: 0,
-    dtoan2021ThanhQtoan2020: 0,
-    soChuaQtoan: 0,
+    maDviTinh: null,
+    slHangTte: null,
+    kphiDmuc: null,
+    kphiTtien: null,
+    cphiTcong: null,
+    cphiNtruoc: null,
+    cphiNnay: null,
+    chenhLech: null,
+    kphiQtoan: null,
+    kphiChuaQtoanCong: null,
+    kphiChuaQtoanKpTkiem: null,
+    kphiChuaQtoanKpTchi: null,
+    dtoan2021ThanhQtoan2020: null,
+    soChuaQtoan: null,
     checked: false,
   };
   //trang thai cac nut
@@ -468,7 +468,7 @@ export class PhuLuc6Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -480,7 +480,7 @@ export class PhuLuc6Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
@@ -526,7 +526,7 @@ export class PhuLuc6Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: stt,
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
       this.editCache[item.id] = {
@@ -542,7 +542,7 @@ export class PhuLuc6Component implements OnInit {
         ...initItem,
         id: uuid.v4() + "FE",
         stt: stt,
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.splice(index + 1, 0, item);
 
@@ -594,12 +594,9 @@ export class PhuLuc6Component implements OnInit {
     if (
       // (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
       (!this.editCache[id].data.maDviTinh) ||
-      (!this.editCache[id].data.kphiDmuc && this.editCache[id].data.kphiDmuc !== 0) ||
-      (!this.editCache[id].data.kphiTtien && this.editCache[id].data.kphiTtien !== 0) ||
       (!this.editCache[id].data.cphiTcong && this.editCache[id].data.cphiTcong !== 0) ||
       (!this.editCache[id].data.cphiNtruoc && this.editCache[id].data.cphiNtruoc !== 0) ||
       (!this.editCache[id].data.cphiNnay && this.editCache[id].data.cphiNnay !== 0) ||
-      (!this.editCache[id].data.chenhLech && this.editCache[id].data.chenhLech !== 0) ||
       (!this.editCache[id].data.kphiQtoan && this.editCache[id].data.kphiQtoan !== 0) ||
       (!this.editCache[id].data.kphiChuaQtoanCong && this.editCache[id].data.kphiChuaQtoanCong !== 0) ||
       (!this.editCache[id].data.kphiChuaQtoanKpTchi && this.editCache[id].data.kphiChuaQtoanKpTchi !== 0) ||
@@ -611,12 +608,9 @@ export class PhuLuc6Component implements OnInit {
       return;
     }
     if(
-      this.editCache[id].data.kphiDmuc <0 ||
-      this.editCache[id].data.kphiTtien <0 ||
       this.editCache[id].data.cphiTcong <0 ||
       this.editCache[id].data.cphiNtruoc <0 ||
       this.editCache[id].data.cphiNnay <0 ||
-      this.editCache[id].data.chenhLech <0 ||
       this.editCache[id].data.kphiQtoan <0 ||
       this.editCache[id].data.kphiChuaQtoanCong <0 ||
       this.editCache[id].data.kphiChuaQtoanKpTchi <0 ||
@@ -704,7 +698,7 @@ export class PhuLuc6Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
@@ -717,7 +711,7 @@ export class PhuLuc6Component implements OnInit {
         level: 0,
         id: uuid.v4() + 'FE',
         stt: "0.1",
-        kphiDmuc: dm,
+        kphiDmuc: dm != 0? dm : null,
       }
       this.lstCtietBcao.push(item);
 
@@ -917,6 +911,35 @@ export class PhuLuc6Component implements OnInit {
         this.total.dtoan2021ThanhQtoan2020 += item.dtoan2021ThanhQtoan2020;
       }
     })
+    if(
+      this.total.slHangTte == 0 ||
+      this.total.kphiDmuc == 0 ||
+      this.total.kphiTtien == 0 ||
+      this.total.cphiTcong == 0 ||
+      this.total.cphiNtruoc == 0 ||
+      this.total.cphiNnay == 0 ||
+      this.total.chenhLech == 0 ||
+      this.total.kphiQtoan == 0 ||
+      this.total.kphiChuaQtoanCong == 0 ||
+      this.total.kphiChuaQtoanKpTkiem == 0 ||
+      this.total.kphiChuaQtoanKpTchi == 0 ||
+      this.total.soChuaQtoan == 0 ||
+      this.total.dtoan2021ThanhQtoan2020 == 0
+    ){
+      this.total.slHangTte = null,
+      this.total.kphiDmuc = null,
+      this.total.kphiTtien = null,
+      this.total.cphiTcong = null,
+      this.total.cphiNtruoc = null,
+      this.total.cphiNnay = null,
+      this.total.chenhLech = null,
+      this.total.kphiQtoan = null,
+      this.total.kphiChuaQtoanCong = null,
+      this.total.kphiChuaQtoanKpTkiem = null,
+      this.total.kphiChuaQtoanKpTchi = null,
+      this.total.soChuaQtoan = null,
+      this.total.dtoan2021ThanhQtoan2020 = null
+    }
   }
 
   // action print
@@ -941,6 +964,9 @@ export class PhuLuc6Component implements OnInit {
 
   // gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
+    if(this.editCache[id].data.kphiDmuc == null){
+      this.editCache[id].data.kphiDmuc = 0
+    }
     this.editCache[id].data.soChuaQtoan = Number(this.editCache[id].data.kphiChuaQtoanCong) - Number(this.editCache[id].data.dtoan2021ThanhQtoan2020);
     this.editCache[id].data.kphiChuaQtoanCong = Number(this.editCache[id].data.kphiChuaQtoanKpTkiem) + Number(this.editCache[id].data.kphiChuaQtoanKpTchi);
     this.editCache[id].data.chenhLech = Number(this.editCache[id].data.kphiTtien) - Number(this.editCache[id].data.cphiTcong);
@@ -966,8 +992,6 @@ export class PhuLuc6Component implements OnInit {
          const  contentData = await data?.data?.content; 
          if (contentData.length != 0) {
              this.dsDinhMuc = contentData;
-          } else {
-            this.dsDinhMuc = null;
           }
       },
       err => {
