@@ -161,7 +161,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 
   async xoaQuyetDinh(id: any) {
     this.spinner.show();
-    await this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(
+    await this.quanLyVonPhiService.xoaBanGhiGiaoBTC([id]).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);

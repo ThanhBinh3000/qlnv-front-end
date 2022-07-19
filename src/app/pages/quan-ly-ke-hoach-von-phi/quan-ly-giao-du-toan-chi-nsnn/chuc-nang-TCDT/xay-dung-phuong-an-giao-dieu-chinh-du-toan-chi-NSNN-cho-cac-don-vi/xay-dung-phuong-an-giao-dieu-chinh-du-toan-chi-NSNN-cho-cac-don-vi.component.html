@@ -205,7 +205,7 @@
 												<div *ngIf="e.maDviNhan == item.maDvi">
 													<nz-input-number class="search__input" nzSize="small"
 														[(ngModel)]="e.soTranChi"
-														[class]="e.soTranChi || e.soTranChi === 0 ?'' : 'input-error-validate'">
+														[class]="(e.soTranChi || e.soTranChi ===0) &&  e.soTranChi >= 0?'' : 'input-error-validate'">
 													</nz-input-number>
 												</div>
 											</div>
