@@ -1,30 +1,17 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
+import { saveAs } from 'file-saver';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import {
-  DATEPICKER_CONFIG,
-  LEVEL,
-  LIST_VAT_TU_HANG_HOA,
-  LOAI_HANG_DTQG,
-  PAGE_SIZE_DEFAULT,
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { UserService } from 'src/app/services/user.service';
-import {
-  convertTrangThai,
-  convertVthhToId,
-} from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
@@ -33,16 +20,12 @@ import {
 })
 export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
-    private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private modal: NzModalService,
     public userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService,
-  ) {}
+  ) { }
   @Input()
   loaiVthh: string;
   @Input()
@@ -54,7 +37,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   searchFilter = {
     soKh: '',
     namKh: dayjs().get('year'),
-    ngayTongHop: '',
+    ngayKy: '',
     loaiVthh: '',
     trichYeu: '',
   };
@@ -85,6 +68,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+
+  isView = false;
 
   async ngOnInit() {
     try {
@@ -140,11 +125,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+      tuNgayKy: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
         : null,
-      denNgayKy: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+      denNgayKy: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
         : null,
       soTr: this.searchFilter.soKh,
       loaiVthh: this.searchFilter.loaiVthh,
@@ -155,7 +140,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         page: this.page - 1,
       },
     };
-    let res = await this.danhSachDauThauService.search(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -205,12 +190,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   themMoi() {
     this.isDetail = true;
+    this.isView = false;
     if (this.userService.isTongCuc()) {
       this.isVatTu = true;
     } else {
       this.isVatTu = false;
     }
-    this.selectedId = null;
+    this.selectedId = 0;
     this.loaiVthh = this.loaiVthhCache;
   }
 
@@ -219,10 +205,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.search();
   }
 
-  detail(data?) {
+  detail(data?, isView?) {
     this.selectedId = data.id;
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
+    this.isView = isView;
     if (data.loaiVthh.startsWith('02')) {
       this.isVatTu = true;
     } else {
@@ -233,7 +220,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soKh = null;
-    this.searchFilter.ngayTongHop = null;
+    this.searchFilter.ngayKy = null;
     this.searchFilter.trichYeu = null;
     this.search();
   }
@@ -253,7 +240,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           let body = {
             id: item.id,
           };
-          this.danhSachDauThauService.delete(body).then((res) => {
+          this.deXuatKeHoachBanDauGiaService.delete(body).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -301,36 +288,39 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayKy: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayKy: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          soTr: this.searchFilter.soKh,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          trichYeu: this.searchFilter.trichYeu,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+        };
+        this.deXuatKeHoachBanDauGiaService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-ke-hoach-ban-dau-gia.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
@@ -354,13 +344,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

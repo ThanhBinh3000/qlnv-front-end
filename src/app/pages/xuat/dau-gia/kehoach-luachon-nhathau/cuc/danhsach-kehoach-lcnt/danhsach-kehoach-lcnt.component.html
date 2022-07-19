@@ -20,7 +20,7 @@
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày ký</label>
-              <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
           </div>
           <div nz-col class="cangiua group-button-search-center">
@@ -165,14 +165,14 @@
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
-                      <a (click)="detail(data)">
+                      <a (click)="detail(data, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' || data.trangThai=='12')"
-                        (click)="detail(data)">
+                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' || data.trangThai=='12') && userService.isCuc()"
+                        (click)="detail(data, false)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai=='00' && userService.isCuc()" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -199,7 +199,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -207,7 +207,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="themMoi()">
+            <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -219,7 +219,8 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <ng-container *ngIf="!isVatTu">
-    <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
+    <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" [isView]="isView"
+      (showListEvent)="showList()">
     </app-themmoi-kehoach-lcnt>
   </ng-container>
   <ng-container *ngIf="isVatTu">
