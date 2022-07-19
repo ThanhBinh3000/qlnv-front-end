@@ -241,10 +241,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
           denNgayTao: this.searchFilter.ngayTongHop
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,
-          paggingReq: {
-            limit: this.pageSize,
-            page: this.page - 1,
-          },
           soQdinh: this.searchFilter.soQdinh,
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach
