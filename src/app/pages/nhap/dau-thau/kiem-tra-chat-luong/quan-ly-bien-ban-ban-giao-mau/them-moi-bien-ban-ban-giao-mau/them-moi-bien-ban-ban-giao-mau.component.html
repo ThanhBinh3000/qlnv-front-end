@@ -6,32 +6,31 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="isAction()">
-            <i class="icon htvbdh_tcdt_save"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="(bienBanLayMau.trangThai == '00' || bienBanLayMau.trangThai == '03' || id == 0) && !isView"
+            (click)="guiDuyet()">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Lưu và gửi duyệt</span>
+          </button>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(bienBanLayMau.trangThai == '00' || bienBanLayMau.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
+            <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="isAction()" (click)="guiDuyet()">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Gửi duyệt</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.LANH_DAO_DUYET">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Ban hành</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="bienBanLayMau.trangThai == '04' && !isView" (click)="pheDuyet()">
+            <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.LANH_DAO_DUYET || bienBanLayMau.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
+          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="bienBanLayMau.trangThai == '04' && !isView"
+            (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
-          </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectBienBanLayMau()">
-            <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Quay về</span>
           </a>
         </div>
       </div>
