@@ -1,37 +1,27 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import {
-  DATEPICKER_CONFIG,
-  LEVEL,
-  LIST_VAT_TU_HANG_HOA,
-  LOAI_HANG_DTQG,
-  PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from 'src/app/services/user.service';
+import { HelperService } from 'src/app/services/helper.service';
+import * as dayjs from 'dayjs';
 import {
-  convertTrangThai,
-  convertVthhToId,
-} from 'src/app/shared/commonFunction';
+  PAGE_SIZE_DEFAULT,
+  LIST_VAT_TU_HANG_HOA,
+} from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { MESSAGE } from 'src/app/constants/message';
+import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'app-danhsach-kehoach-lcnt',
-  templateUrl: './danhsach-kehoach-lcnt.component.html',
-  styleUrls: ['./danhsach-kehoach-lcnt.component.scss'],
+  selector: 'app-de-xuat-kh-ban-dau-gia',
+  templateUrl: './de-xuat-kh-ban-dau-gia.component.html',
+  styleUrls: ['./de-xuat-kh-ban-dau-gia.component.scss'],
 })
-export class DanhsachKehoachLcntComponent implements OnInit {
+export class DeXuatKhBanDauGiaComponent implements OnInit {
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -57,6 +47,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     ngayTongHop: '',
     loaiVthh: '',
     trichYeu: '',
+    idDvi: '',
   };
   filterTable: any = {
     soKh: '',
@@ -70,6 +61,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     tenVthh: '',
     tenCloaiVthh: '',
     statusConvert: '',
+    tenDvi: '',
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -77,6 +69,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  listDonVi = [];
 
   userInfo: UserLogin;
   selectedId: number = 0;
@@ -235,6 +228,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.soKh = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
+    this.searchFilter.idDvi = null;
     this.search();
   }
 
@@ -413,6 +407,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       tenVthh: '',
       tenCloaiVthh: '',
       statusConvert: '',
+      tenDvi: '',
     };
   }
 }

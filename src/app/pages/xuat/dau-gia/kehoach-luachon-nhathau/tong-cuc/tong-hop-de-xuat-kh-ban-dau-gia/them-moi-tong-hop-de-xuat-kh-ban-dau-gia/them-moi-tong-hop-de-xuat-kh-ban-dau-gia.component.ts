@@ -1,93 +1,44 @@
-import { cloneDeep } from 'lodash';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
-import { MESSAGE } from 'src/app/constants/message';
 import {
-  CanCuXacDinh,
-  DanhSachGoiThau,
   FileDinhKem,
-  ThongTinChung,
-  ThongTinDeXuatKeHoachLuaChonNhaThau,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
+  DanhSachGoiThau,
+  CanCuXacDinh,
 } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { UserLogin } from 'src/app/models/userlogin';
+import { Subject } from 'rxjs';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { environment } from 'src/environments/environment';
+import { PAGE_SIZE_DEFAULT, API_STATUS_CODE } from 'src/app/constants/config';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
-import VNnum2words from 'vn-num2words';
-import * as dayjs from 'dayjs';
-import * as XLSX from 'xlsx';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Globals } from 'src/app/shared/globals';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { ObservableService } from 'src/app/services/observable.service';
-import { environment } from 'src/environments/environment';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import * as dayjs from 'dayjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import VNnum2words from 'vn-num2words';
+import { saveAs } from 'file-saver';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 
-interface ItemData {
-  id: string;
-  stt: string;
-  goiThau: string;
-  soLuong: string;
-  diaDiem: string;
-  donGia: string;
-  thanhTien: string;
-  bangChu: string;
-}
-
-export interface TreeNodeInterface {
-  key: string;
-  maDvi: string;
-  tenDvi: string;
-  goiThau: string;
-  soLuongTheoChiTieu?: number;
-  maDiemKho?: string;
-  soLuongDaMua?: number;
-  diaDiemNhap?: string;
-  soLuong?: number;
-  donGia?: number;
-  thanhTien?: string;
-  bangChu?: string;
-  name: string;
-  age?: number;
-  level?: number;
-  expand?: boolean;
-  address?: string;
-  children?: TreeNodeInterface[];
-  parent?: TreeNodeInterface;
-}
 @Component({
-  selector: 'app-themmoi-kehoach-lcnt',
-  templateUrl: './themmoi-kehoach-lcnt.component.html',
-  styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
+  selector: 'app-them-moi-tong-hop-de-xuat-kh-ban-dau-gia',
+  templateUrl: './them-moi-tong-hop-de-xuat-kh-ban-dau-gia.component.html',
+  styleUrls: ['./them-moi-tong-hop-de-xuat-kh-ban-dau-gia.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent implements OnInit {
+export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -195,32 +146,15 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [],
-      soDxuat: [null, [Validators.required]],
-      trichYeu: [null],
-      ghiChu: [null, [Validators.required]],
       namKhoach: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       tenVthh: [, [Validators.required]],
-      ngayKy: [null, [Validators.required]],
-      ngayLapKh: [null, [Validators.required]],
-      qdGiaoChiTieu: [null, [Validators.required]],
-      trangThai: [''],
-      maDvi: [],
-      tenDuAn: [null, [Validators.required]],
-      tenDvi: [null],
-      tongMucDt: [null, [Validators.required]],
-      nguonVon: [null, [Validators.required]],
-      tchuanCluong: [null],
-      loaiHdong: [null, [Validators.required]],
-      hthucLcnt: [null, [Validators.required]],
-      pthucLcnt: [null, [Validators.required]],
-      tgianBdauTchuc: [null, [Validators.required]],
-      tgianMthau: [null, [Validators.required]],
-      tgianDthau: [null, [Validators.required]],
-      gtriDthau: [null, [Validators.required]],
-      gtriHdong: [null, [Validators.required]],
-      tgianThienHd: [null, [Validators.required]],
-      tgianNhang: [null, [Validators.required]],
+      ngayKyDeXuat: [[null, null], [Validators.required]],
+      ngayTongHop: [null, [Validators.required]],
+      ndTongHop: [null, [Validators.required]],
+      thoiGianDuKienToChucTu: [null, [Validators.required]],
+      thoiGianDuKienToChucDen: [null, [Validators.required]],
+      ghiChu: [null, [Validators.required]],
     });
     this.loaiVTHHGetAll();
   }
@@ -303,6 +237,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
       tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
       tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
+      ngayKyDeXuat: dataDetail
+        ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen]
+        : [null, null],
     });
     if (dataDetail) {
       this.fileDinhKem = dataDetail.fileDinhKems;
@@ -312,7 +249,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
       this.bindingCanCu(dataDetail.ccXdgDtlList);
     }
-    this.setTitle();
   }
 
   bindingCanCu(data) {

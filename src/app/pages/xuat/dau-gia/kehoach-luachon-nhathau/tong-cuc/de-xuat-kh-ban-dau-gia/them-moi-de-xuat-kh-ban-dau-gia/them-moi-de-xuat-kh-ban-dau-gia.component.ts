@@ -1,54 +1,37 @@
-import { cloneDeep } from 'lodash';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { UserLogin } from 'src/app/models/userlogin';
 import { Subject } from 'rxjs';
-import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
-import { MESSAGE } from 'src/app/constants/message';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import {
-  CanCuXacDinh,
   DanhSachGoiThau,
+  CanCuXacDinh,
   FileDinhKem,
-  ThongTinChung,
-  ThongTinDeXuatKeHoachLuaChonNhaThau,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
 } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { environment } from 'src/environments/environment';
+import { PAGE_SIZE_DEFAULT, API_STATUS_CODE } from 'src/app/constants/config';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
-import VNnum2words from 'vn-num2words';
-import * as dayjs from 'dayjs';
-import * as XLSX from 'xlsx';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Globals } from 'src/app/shared/globals';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { ObservableService } from 'src/app/services/observable.service';
-import { environment } from 'src/environments/environment';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import * as dayjs from 'dayjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import VNnum2words from 'vn-num2words';
+import { saveAs } from 'file-saver';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 
 interface ItemData {
   id: string;
@@ -82,12 +65,13 @@ export interface TreeNodeInterface {
   children?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
 }
+
 @Component({
-  selector: 'app-themmoi-kehoach-lcnt',
-  templateUrl: './themmoi-kehoach-lcnt.component.html',
-  styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
+  selector: 'app-them-moi-de-xuat-kh-ban-dau-gia',
+  templateUrl: './them-moi-de-xuat-kh-ban-dau-gia.component.html',
+  styleUrls: ['./them-moi-de-xuat-kh-ban-dau-gia.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent implements OnInit {
+export class ThemMoiDeXuatKhBanDauGiaComponent implements OnInit {
   @Input()
   loaiVthhInput: string;
   @Input()

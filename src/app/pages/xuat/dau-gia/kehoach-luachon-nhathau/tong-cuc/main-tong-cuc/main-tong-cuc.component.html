@@ -1,29 +1,27 @@
 <nz-tabset id="selectedTab" nzType="card" class="mt-16 tab-level-2 no-scroll">
     <nz-tab [nzTitle]="title_tongHop" *ngIf="loaiVthh != '02'">
         <ng-template #title_tongHop>
-            Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
+            Đề xuất KH bán đấu giá
         </ng-template>
         <ng-template nz-tab>
-            <app-tong-hop-khlcnt [loaiVthh]="loaiVthh"></app-tong-hop-khlcnt>
+            <app-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-de-xuat-kh-ban-dau-gia>
         </ng-template>
     </nz-tab>
     <nz-tab [nzTitle]="title_keHoach">
         <ng-template #title_keHoach>
-            Đề xuất kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
+            Tổng hợp đề xuất KH bán đấu giá
         </ng-template>
         <ng-template nz-tab>
-            <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
+            <app-tong-hop-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh">
+            </app-tong-hop-de-xuat-kh-ban-dau-gia>
         </ng-template>
     </nz-tab>
     <nz-tab [nzTitle]="title_quyetDinh">
         <ng-template #title_quyetDinh>
-            Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
+            Quyết định phê duyệt KH bán đấu giá
         </ng-template>
         <ng-template nz-tab>
-            <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
+            <app-quyet-dinh-phe-duyet-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-dau-gia>
         </ng-template>
     </nz-tab>
 </nz-tabset>

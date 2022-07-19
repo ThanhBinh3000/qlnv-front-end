@@ -1,37 +1,27 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import {
-  DATEPICKER_CONFIG,
-  LEVEL,
-  LIST_VAT_TU_HANG_HOA,
-  LOAI_HANG_DTQG,
-  PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from 'src/app/services/user.service';
+import { HelperService } from 'src/app/services/helper.service';
+import * as dayjs from 'dayjs';
 import {
-  convertTrangThai,
-  convertVthhToId,
-} from 'src/app/shared/commonFunction';
+  PAGE_SIZE_DEFAULT,
+  LIST_VAT_TU_HANG_HOA,
+} from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { MESSAGE } from 'src/app/constants/message';
+import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'app-danhsach-kehoach-lcnt',
-  templateUrl: './danhsach-kehoach-lcnt.component.html',
-  styleUrls: ['./danhsach-kehoach-lcnt.component.scss'],
+  selector: 'app-tong-hop-de-xuat-kh-ban-dau-gia',
+  templateUrl: './tong-hop-de-xuat-kh-ban-dau-gia.component.html',
+  styleUrls: ['./tong-hop-de-xuat-kh-ban-dau-gia.component.scss'],
 })
-export class DanhsachKehoachLcntComponent implements OnInit {
+export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -52,23 +42,20 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
-    soKh: '',
+    soDx: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    trichYeu: '',
+    ndTongHop: '',
   };
   filterTable: any = {
-    soKh: '',
-    ngayLapKh: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenLoaiHangHoa: '',
-    soQdGiaoChiTieu: '',
-    soQdPheDuyet: '',
+    maTongHop: '',
+    ngayTongHop: '',
+    ndTongHop: '',
+    soQd: '',
     namKhoach: '',
     tenVthh: '',
-    tenCloaiVthh: '',
+    soQdPheDuyet: '',
     statusConvert: '',
   };
   dataTableAll: any[] = [];
@@ -146,10 +133,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       denNgayKy: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      soTr: this.searchFilter.soKh,
+      soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
-      trichYeu: this.searchFilter.trichYeu,
+      ndTongHop: this.searchFilter.ndTongHop,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -232,9 +219,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soKh = null;
+    this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
-    this.searchFilter.trichYeu = null;
+    this.searchFilter.ndTongHop = null;
     this.search();
   }
 
@@ -402,16 +389,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soKh: '',
-      ngayLapKh: '',
-      ngayKy: '',
-      trichYeu: '',
-      tenLoaiHangHoa: '',
-      soQdGiaoChiTieu: '',
-      soQdPheDuyet: '',
+      maTongHop: '',
+      ngayTongHop: '',
+      ndTongHop: '',
+      soQd: '',
       namKhoach: '',
       tenVthh: '',
-      tenCloaiVthh: '',
+      soQdPheDuyet: '',
       statusConvert: '',
     };
   }
