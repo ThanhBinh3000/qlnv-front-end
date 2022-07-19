@@ -75,9 +75,9 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    tongCong: 0,
-    nguonNsnn: 0,
-    nguonKhac: 0,
+    tongCong: null,
+    nguonNsnn: null,
+    nguonKhac: null,
     checked: false,
   };
   total: ItemData = {
@@ -85,9 +85,9 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     stt: "0",
     level: 0,
     maNdung: 0,
-    tongCong: 0,
-    nguonNsnn: 0,
-    nguonKhac: 0,
+    tongCong: null,
+    nguonNsnn: null,
+    nguonKhac: null,
     checked: false,
   };
   //trang thai cac nut
@@ -222,11 +222,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   }
   //check role cho các nut trinh duyet
   getStatusButton() {
-    if (this.id) {
-      this.status = true;
-    } else {
-      this.status = false;
-    }
+    // if (this.id) {
+    //   this.status = true;
+    // } else {
+    //   this.status = false;
+    // }
 
     let checkChirld = false;
     const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
@@ -787,6 +787,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
+    if (this.editCache[id].data.nguonKhac < 0 ||
+      this.editCache[id].data.nguonNsnn < 0){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+      return;
+    }
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
@@ -1181,6 +1186,15 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         this.total.nguonKhac += item.nguonKhac;
       }
     })
+    if(
+      this.total.nguonKhac == 0,
+      this.total.nguonNsnn == 0,
+      this.total.tongCong == 0
+    ){
+      this.total.nguonKhac = null,
+      this.total.nguonNsnn = null,
+      this.total.tongCong = null
+    }
   }
 
   showDialogCopy() {

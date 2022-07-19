@@ -554,6 +554,13 @@ export class QuanLyVonPhiService extends BaseService {
       // 'http://192.168.1.103:8094/giao_du_toan/danh-sach/phuong-an-duyet'
     );
   }
+  // tim kiem danh sach ma phuong an giao dieu chinh du toan NSNN
+  timKiemMaPaGiaoNSNN1(): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach/phuong-an-duyet'
+      'http://192.168.1.105:8094/giao_du_toan/danh-sach/phuong-an-duyet'
+    );
+  }
   //chi tiet ma phuong an
   ctietPhuongAn(id: any): Observable<any> {
     return this.httpClient.get(
@@ -940,16 +947,17 @@ export class QuanLyVonPhiService extends BaseService {
     )
   }
   //tim kiem giao danh sách nội dung khoản mục
-  xoaBanGhiGiaoBTC(id: any): Observable<any> {
-    return this.httpClient.delete(
-      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa/' + id,
+  xoaBanGhiGiaoBTC(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa',
+      request
     )
   }
   //tim kiem giao danh sách nội dung khoản mục
-  xoaBanGhiGiaoBTC1(id: any): Observable<any> {
-    return this.httpClient.delete(
-      'http://192.168.1.105:8094/giao_du_toan/xoa/' + id,
-
+  xoaBanGhiGiaoBTC1(request: any): Observable<any> {
+    return this.httpClient.post(
+      'http://192.168.1.105:8094/giao_du_toan/xoa',
+      request
     )
   }
 
