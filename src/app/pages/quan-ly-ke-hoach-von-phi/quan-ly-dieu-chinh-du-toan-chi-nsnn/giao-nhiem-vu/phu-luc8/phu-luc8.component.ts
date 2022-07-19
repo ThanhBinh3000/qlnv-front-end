@@ -56,13 +56,13 @@ export class PhuLuc8Component implements OnInit {
     id: null,
     stt: 0,
     maCongTrinh: "",
-    kh2021: 0,
-    lkeVcap: 0,
-    gtriCtrinh: 0,
-    dxuatDchinhTong: 0,
-    dxuatDchinhTang: 0,
-    dxuatDchinhGiam: 0,
-    kh2021SauDchinh: 0,
+    kh2021: null,
+    lkeVcap: null,
+    gtriCtrinh: null,
+    dxuatDchinhTong: null,
+    dxuatDchinhTang: null,
+    dxuatDchinhGiam: null,
+    kh2021SauDchinh: null,
     ghiChu: "",
     checked: false,
   };
@@ -205,13 +205,13 @@ export class PhuLuc8Component implements OnInit {
       id: uuid.v4(),
       stt: 0,
       maCongTrinh: '',
-      kh2021: 0,
-      lkeVcap: 0,
-      gtriCtrinh: 0,
-      dxuatDchinhTong: 0,
-      dxuatDchinhTang: 0,
-      dxuatDchinhGiam: 0,
-      kh2021SauDchinh: 0,
+      kh2021: null,
+      lkeVcap: null,
+      gtriCtrinh: null,
+      dxuatDchinhTong: null,
+      dxuatDchinhTang: null,
+      dxuatDchinhGiam: null,
+      kh2021SauDchinh: null,
       ghiChu: '',
       checked: false,
     };
@@ -292,11 +292,7 @@ export class PhuLuc8Component implements OnInit {
     if (!this.editCache[id].data.maCongTrinh
       || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
       || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
-      || (!this.editCache[id].data.dxuatDchinhTong && this.editCache[id].data.dxuatDchinhTong !== 0)
       || (!this.editCache[id].data.gtriCtrinh && this.editCache[id].data.gtriCtrinh !== 0)
-      || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
-      || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
-      || (!this.editCache[id].data.dxuatDchinhTong && this.editCache[id].data.dxuatDchinhTong !== 0)
       || (!this.editCache[id].data.kh2021SauDchinh && this.editCache[id].data.kh2021SauDchinh !== 0)
     ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -305,11 +301,7 @@ export class PhuLuc8Component implements OnInit {
     if(
       this.editCache[id].data.dxuatDchinhGiam < 0 ||
       this.editCache[id].data.dxuatDchinhTang < 0 ||
-      this.editCache[id].data.dxuatDchinhTong < 0 ||
       this.editCache[id].data.gtriCtrinh < 0 ||
-      this.editCache[id].data.dxuatDchinhGiam < 0 ||
-      this.editCache[id].data.dxuatDchinhTang < 0 ||
-      this.editCache[id].data.dxuatDchinhTong < 0 ||
       this.editCache[id].data.kh2021SauDchinh < 0
     ){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)

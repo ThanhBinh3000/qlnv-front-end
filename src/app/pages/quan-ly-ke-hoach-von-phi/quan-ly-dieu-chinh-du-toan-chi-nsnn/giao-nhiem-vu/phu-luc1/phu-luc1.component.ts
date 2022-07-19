@@ -66,13 +66,13 @@ export class PhuLuc1Component implements OnInit {
     level: 0,
     maNdung: 0,
     maLoaiKhoan: "",
-    tongNcauDtoanKphi: 0,
-    dtoanKphiNtruoc: 0,
-    dtoanKphiDaGiao: 0,
-    dtoanKphiCong: 0,
-    kphiUocThien: 0,
-    kphiDchinhTang: 0,
-    kphiDchinhGiam: 0,
+    tongNcauDtoanKphi: null,
+    dtoanKphiNtruoc: null,
+    dtoanKphiDaGiao: null,
+    dtoanKphiCong: null,
+    kphiUocThien: null,
+    kphiDchinhTang: null,
+    kphiDchinhGiam: null,
     checked: false,
   };
   total: ItemData = {
@@ -81,13 +81,13 @@ export class PhuLuc1Component implements OnInit {
     level: 0,
     maNdung: 0,
     maLoaiKhoan: "",
-    tongNcauDtoanKphi: 0,
-    dtoanKphiNtruoc: 0,
-    dtoanKphiDaGiao: 0,
-    dtoanKphiCong: 0,
-    kphiUocThien: 0,
-    kphiDchinhTang: 0,
-    kphiDchinhGiam: 0,
+    tongNcauDtoanKphi: null,
+    dtoanKphiNtruoc: null,
+    dtoanKphiDaGiao: null,
+    dtoanKphiCong: null,
+    kphiUocThien: null,
+    kphiDchinhTang: null,
+    kphiDchinhGiam: null,
     checked: false,
   };
 
@@ -172,18 +172,18 @@ export class PhuLuc1Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
 
-    await this.listNoiDung.forEach(item => {
-        if (item.maCha == "string") {
-            this.noiDungFull.push({
-                ...item,
-                tenDm: item.giaTri,
-                ten: item.giaTri,
-                level: 0,
-                idCha: 0,
-            })
-        }
-    })
-    await this.addListNoiDungChi(this.noiDungFull);
+    // await this.listNoiDung.forEach(item => {
+    //     if (item.maCha == "string") {
+    //         this.noiDungFull.push({
+    //             ...item,
+    //             tenDm: item.giaTri,
+    //             ten: item.giaTri,
+    //             level: 0,
+    //             idCha: 0,
+    //         })
+    //     }
+    // })
+    // await this.addListNoiDungChi(this.noiDungFull);
 
     await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
       (data) => {
@@ -201,27 +201,27 @@ export class PhuLuc1Component implements OnInit {
     this.spinner.hide();
   }
 
-  addListNoiDungChi(noiDungChiTemp) {
-    const a = [];
-    noiDungChiTemp.forEach(item => {
-        this.listNoiDung.forEach(el => {
-            if (item.ma == el.maCha) {
-                el = {
-                    ...el,
-                    tenDm: el.giaTri,
-                    ten: el.giaTri,
-                    level: item.level + 1,
-                    idCha: item.id,
-                }
-                this.noiDungFull.push(el);
-                a.push(el);
-            }
-        });
-    })
-    if (a.length > 0) {
-        this.addListNoiDungChi(a);
-    }
-  }
+  // addListNoiDungChi(noiDungChiTemp) {
+  //   const a = [];
+  //   noiDungChiTemp.forEach(item => {
+  //       this.listNoiDung.forEach(el => {
+  //           if (item.ma == el.maCha) {
+  //               el = {
+  //                   ...el,
+  //                   tenDm: el.giaTri,
+  //                   ten: el.giaTri,
+  //                   level: item.level + 1,
+  //                   idCha: item.id,
+  //               }
+  //               this.noiDungFull.push(el);
+  //               a.push(el);
+  //           }
+  //       });
+  //   })
+  //   if (a.length > 0) {
+  //       this.addListNoiDungChi(a);
+  //   }
+  // }
 
   getStatusButton() {
     if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
@@ -755,7 +755,7 @@ export class PhuLuc1Component implements OnInit {
   }
 
   addLine(id: any) {
-    const lstNoiDungTemp = this.noiDungFull;
+    const lstNoiDungTemp = this.noiDungs;
     const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
     const obj = {
       maKhoanMuc: maNdung,
@@ -862,6 +862,22 @@ export class PhuLuc1Component implements OnInit {
         this.total.kphiDchinhGiam += item.kphiDchinhGiam;
       }
     })
+    if(this.total.tongNcauDtoanKphi == 0 ||
+      this.total.dtoanKphiNtruoc == 0 ||
+      this.total.dtoanKphiDaGiao == 0 ||
+      this.total.dtoanKphiCong == 0 ||
+      this.total.kphiUocThien == 0 ||
+      this.total.kphiDchinhTang == 0 ||
+      this.total.kphiDchinhGiam == 0 
+      ){
+      this.total.tongNcauDtoanKphi = null,
+      this.total.dtoanKphiNtruoc = null,
+      this.total.dtoanKphiDaGiao = null,
+      this.total.dtoanKphiCong = null,
+      this.total.kphiUocThien = null,
+      this.total.kphiDchinhTang = null,
+      this.total.kphiDchinhGiam = null
+    }
   }
 
   // action print
