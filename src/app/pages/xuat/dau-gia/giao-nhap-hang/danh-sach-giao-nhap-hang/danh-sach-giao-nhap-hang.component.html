@@ -5,25 +5,24 @@
         <div class="main-content">
           <nz-card class="mt16 flex-card p-lr16">
             <div class="search__body" nz-row [nzGutter]="[18, 12]">
-              <div nz-col nzSpan="2">
-                <label class="search__label">Năm nhập</label>
-                <nz-select [(ngModel)]="searchFilter.namNhap" nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                  </nz-option>
-                </nz-select>
-              </div>
-              <div nz-col nzSpan="5">
-                <label class="search__label">Số quyết định</label>
-                <!-- <nz-input-group nzAddOnAfter="/KH-CDTVT"> -->
+              <div nz-col nzSpan="4">
+                <label class="search__label">Số quyết định nhập</label>
                 <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
-                <!-- </nz-input-group> -->
               </div>
-              <div nz-col nzSpan="12">
+              <div nz-col nzSpan="4">
+                <label class="search__label">Số biên bản</label>
+                <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
+              </div>
+              <div nz-col nzSpan="4">
+                <label class="search__label">Số phiếu</label>
+                <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
+              </div>
+              <!-- <div nz-col nzSpan="12">
                 <label class="search__label">Trích yếu</label>
                 <input nz-input [(ngModel)]="searchFilter.trichYeu" />
-              </div>
-              <div nz-col nzSpan="5">
-                <label class="search__label">Ngày quyết định</label>
+              </div> -->
+              <div nz-col nzSpan="12">
+                <label class="search__label">Ngày lập phiếu</label>
                 <nz-range-picker [(ngModel)]="searchFilter.ngayQuyetDinh" nzFormat="dd/MM/yyyy">
                 </nz-range-picker>
               </div>
@@ -41,7 +40,7 @@
           </nz-card>
           <div class="tab-giao-chi-tieu">
             <nz-tabset nzType="card" class="tab-level-3">
-              <nz-tab nzTitle="Danh sách quyết định giao nhiệm vụ nhập hàng">
+              <nz-tab nzTitle="Danh sách quyết định giao nhiệm vụ xuất hàng">
                 <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
                   <thead>
@@ -53,8 +52,10 @@
                       <th class="text-center" width="60px">STT</th>
                       <th>Số quyết định</th>
                       <th>Ngày quyết định</th>
-                      <th>Năm nhập</th>
-                      <th>Trích yếu quyết định </th>
+                      <th>Số hợp đồng</th>
+                      <th>Loại xuất</th>
+                      <th>Người lập phiếu</th>
+                      <th>Phiếu xuất kho</th>
                       <th>Trạng thái </th>
                       <th>Hành động</th>
                     </tr>
@@ -108,6 +109,24 @@
                           <i nz-icon nzType="search"></i>
                         </ng-template>
                       </td>
+                      <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                            (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                          <i nz-icon nzType="search"></i>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                            (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                          <i nz-icon nzType="search"></i>
+                        </ng-template>
+                      </td>
                       <td></td>
                     </tr>
                     <tr *ngFor="let data of basicTable.data; let i = index">
@@ -119,16 +138,19 @@
                       <td>{{ data.soQd }}</td>
                       <td>{{ data.ngayQdinh | date: 'dd/MM/YYYY'}}</td>
                       <td>{{ data.namNhap }}</td>
+                      <td>{{ data.namNhap }}</td>
+                      <td>{{ data.namNhap }}</td>
                       <td>{{ data.trichYeu }}</td>
                       <td>{{ data.tenTrangThai }}</td>
                       <td class="text-right">
                         <a (click)="redirectToThongTin(data.id, true)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
-                        <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc()">
+                        <a (click)="redirectToThongTin(data.id, false)"
+                          *ngIf="userService.isCuc() && data.trangThai == '00'">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc()">
+                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == '00'">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -138,7 +160,6 @@
                 <div class="tab-content tab-menu" id="myTabContent">
                   <div class="tab-pane fade show active justify-content-between">
                     <div class="trai">
-
                     </div>
                     <div class="canphai">
                       <!-- begin phân trang  -->
@@ -160,7 +181,7 @@
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
               </button>
-              <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isCuc()">
+              <button type="button" class="btn btn-sub" (click)="export()">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
               </button>
