@@ -40,10 +40,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
 
   searchFilter = {
     soQdinh: '',
-    namKh: dayjs().get('year'),
+    namKhoach: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    soQd: ''
+    trichYeu: ''
   };
   filterTable: any = {
     soQd: '',
@@ -118,7 +118,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       },
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh
+      namKhoach: this.searchFilter.namKhoach,
+      trichYeu: this.searchFilter.trichYeu
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -246,7 +247,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
           },
           soQdinh: this.searchFilter.soQdinh,
           loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh
+          namKhoach: this.searchFilter.namKhoach
 
         };
         this.quyetDinhPheDuyetKetQuaLCNTService
