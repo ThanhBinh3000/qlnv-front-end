@@ -7,7 +7,7 @@
 
             <div nz-col nzSpan="2">
               <label class="search__label"> Năm kế hoạch </label>
-              <nz-select [(ngModel)]="searchFilter.namKh">
+              <nz-select [(ngModel)]="searchFilter.namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
@@ -21,7 +21,7 @@
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Trích yếu</label>
-              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.soQd" />
+              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
             </div>
             <div nz-col nzSpan="5">
               <label class="search__label">Ngày QĐ từ ngày</label>

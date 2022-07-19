@@ -204,10 +204,13 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   clearFilter() {
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.soQdPd = null;
+    this.searchFilter.ngayQd = null;
+    this.searchFilter.maDvi = null;
+    this.searchFilter.trichYeu = null;
+    this.searchFilter.loaiVthh = null;
+    this.search();
   }
 
   xoaItem(item: any) {

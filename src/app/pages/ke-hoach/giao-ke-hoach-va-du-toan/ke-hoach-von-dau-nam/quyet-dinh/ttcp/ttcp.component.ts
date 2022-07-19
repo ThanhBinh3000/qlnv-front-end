@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,6 +9,8 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { saveAs } from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 
 @Component({
   selector: 'app-ttcp',
@@ -24,7 +26,7 @@ export class TtcpComponent implements OnInit {
   );
   allChecked = false;
   indeterminate = false;
-
+  getCount = new EventEmitter<any>();
   dsNam: string[] = [];
   searchInTable: any = {
     soQd: '',
@@ -53,6 +55,7 @@ export class TtcpComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
+    private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
       namQd: [null],
@@ -94,6 +97,7 @@ export class TtcpComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
+
 
     }
     let res = await this.quyetDinhTtcpService.search(body);
@@ -178,13 +182,69 @@ export class TtcpComponent implements OnInit {
     this.isAddNew = false;
   }
 
-  changePageIndex(event) { }
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
-  changePageSize(event) { }
-
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
   viewDetail(id: number, isViewDetail: boolean) { }
 
-  xoaItem(id: number) { }
+
+  xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.quyetDinhTtcpService.delete({ id: item.id }).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+              this.getCount.emit();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 
   filterInTable(key: string, value: string) {
     if (value && value != '') {
@@ -215,13 +275,3 @@ export class TtcpComponent implements OnInit {
     }
   }
 }
-
-// interface IQuyetDinhTTCP {
-//   id: number;
-//   soQd: string;
-//   namQd: string;
-//   ngayQd: Date;
-//   trichYeu: string;
-//   taiLieuDinhKem: any;
-//   trangThai: string;
-// }
