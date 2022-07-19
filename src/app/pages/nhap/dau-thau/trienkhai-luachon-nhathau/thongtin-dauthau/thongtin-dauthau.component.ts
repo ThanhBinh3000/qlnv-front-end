@@ -15,7 +15,7 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhP
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-thongtin-dauthau',
   templateUrl: './thongtin-dauthau.component.html',
@@ -252,36 +252,36 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayQd: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayQd: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
+          soQdPd: this.searchFilter.soQdPd,
+          maDvi: this.searchFilter.maDvi
+        };
+        this.dauThauService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   dateChange() {

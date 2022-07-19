@@ -12,6 +12,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -266,7 +267,49 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   exportData() {
-
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let maDonVi = null;
+        let tenDvi = null;
+        let donviId = null;
+        if (this.inputDonVi && this.inputDonVi.length > 0) {
+          let getDonVi = this.optionsDonVi.filter(
+            (x) => x.labelDonVi == this.inputDonVi,
+          );
+          if (getDonVi && getDonVi.length > 0) {
+            maDonVi = getDonVi[0].maDvi;
+            tenDvi = getDonVi[0].tenDvi;
+            donviId = getDonVi[0].id;
+          }
+        }
+        let body = {
+          "loaiVthh": '',
+          "maDvi": maDonVi,
+          "nhaCcap": this.nhaCungCap ?? '',
+          "tenHd": this.tenHd ?? '',
+          soHd: this.soHd,
+          denNgayKy: this.ngayKy && this.ngayKy.length > 1
+            ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          tuNgayKy: this.ngayKy && this.ngayKy.length > 0
+            ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
+            : null,
+        };
+        this.thongTinHopDong
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'thong-tin-hop-dong.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {

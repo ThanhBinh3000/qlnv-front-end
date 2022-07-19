@@ -234,22 +234,25 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          // "denNgayTao": this.endValue
-          //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-          //   : null,
-          // "loaiVthh": this.searchFilter.loaiVthh,
-          // "namKhoach": this.searchFilter.namKh,
-          // "paggingReq": null,
-          // "str": "",
-          // "trangThai": "",
-          // "tuNgayTao": this.startValue
-          //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-          //   : null,
+          tuNgayTao: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayTao: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+            : null,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+          soQdinh: this.searchFilter.soQdinh,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKhoach: this.searchFilter.namKh
+
         };
-        this.tongHopDeXuatKHLCNTService
-          .exportList(body)
+        this.quyetDinhPheDuyetKetQuaLCNTService
+          .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+            saveAs(blob, 'quyet-dinh-phe-duyet-ket0-qua-lcnt.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

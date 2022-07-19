@@ -329,28 +329,30 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayQd": this.endValue
-            ? dayjs(this.endValue).format('DD/MM/YYYY')
+          tuNgayQd: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
             : null,
-          "loaiVthh": this.selectHang.ma ?? "00",
-          "namKhoach": this.searchFilter.namKhoach,
-          "paggingReq": null,
-          "soQd": this.searchFilter.soQd,
-          "str": null,
-          "tuNgayQd": this.startValue
-            ? dayjs(this.startValue).format('DD/MM/YYYY')
+          denNgayQd: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
             : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
+          soQd: this.searchFilter.soQd,
         }
-        this.quyetDinhPheDuyetKeHoachLCNTService.exportList(body).subscribe(
-          blob => saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
-        );
+        this.quyetDinhPheDuyetKeHoachLCNTService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+          );
         this.spinner.hide();
-      }
-      catch (e) {
-        console.log('error: ', e)
+      } catch (e) {
+        console.log('error: ', e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 
