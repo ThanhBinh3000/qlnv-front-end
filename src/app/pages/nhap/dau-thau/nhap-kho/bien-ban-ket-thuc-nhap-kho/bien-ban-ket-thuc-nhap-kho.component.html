@@ -72,7 +72,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                          (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                          (input)="filterInTable('soQuyetDinhNhap',filterTable.soQd)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -116,14 +116,22 @@
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDung"
-                          (input)="filterInTable('noiDung',filterTable.noiDung)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                          (input)="filterInTable('noiDung',filterTable.trangThai)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </td>
-                    <td></td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.trangThai)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
                     <td></td>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
