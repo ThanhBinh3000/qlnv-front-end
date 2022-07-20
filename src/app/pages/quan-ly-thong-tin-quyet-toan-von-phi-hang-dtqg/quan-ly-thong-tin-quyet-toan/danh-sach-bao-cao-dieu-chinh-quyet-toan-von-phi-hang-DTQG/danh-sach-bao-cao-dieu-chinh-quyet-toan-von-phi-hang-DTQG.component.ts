@@ -105,7 +105,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.spinner.show()
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    this.searchFilter.namQtoan = new Date().getFullYear()
+    this.searchFilter.namQtoan = new Date().getFullYear() -1
     this.searchFilter.ngayTaoDen = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.ngayTaoTu = this.newDate;
@@ -172,11 +172,23 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (this.searchFilter.namQtoan || this.searchFilter.namQtoan === 0) {
-      if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-        return;
-      }
+    if (
+      (!this.searchFilter.namQtoan && this.searchFilter.namQtoan !== 0)
+    ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+    if(!this.searchFilter.ngayTaoTu || !this.searchFilter.ngayTaoDen){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if (this.searchFilter.ngayTaoTu > this.searchFilter.ngayTaoDen) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
+      return;
     }
     this.spinner.show();
     const searchFilterTemp = Object.assign({},this.searchFilter);
@@ -248,6 +260,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.maBcao = null
+    this.searchFilter.thongBao = null
     this.trangThai = null
   }
 
