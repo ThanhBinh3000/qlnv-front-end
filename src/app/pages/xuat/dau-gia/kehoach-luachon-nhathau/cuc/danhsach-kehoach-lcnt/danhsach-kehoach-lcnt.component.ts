@@ -35,24 +35,24 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
-    soKh: '',
+    soKeHoach: '',
     namKh: dayjs().get('year'),
     ngayKy: '',
     loaiVthh: '',
     trichYeu: '',
   };
   filterTable: any = {
-    soKh: '',
-    ngayLapKh: '',
+    soKeHoach: '',
+    ngayLapKeHoach: '',
     ngayKy: '',
     trichYeu: '',
     tenLoaiHangHoa: '',
-    soQdGiaoChiTieu: '',
-    soQdPheDuyet: '',
-    namKhoach: '',
+    soQuyetDinhGiaoChiTieu: '',
+    soQuyetDinhPheDuyet: '',
+    namKeHoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -125,29 +125,24 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayKy: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-        : null,
-      soTr: this.searchFilter.soKh,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKh: this.searchFilter.namKh,
+      ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+      ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+      soKeHoach: this.searchFilter.soKeHoach,
+      loaiVatTuHangHoa: this.searchFilter.loaiVthh,
+      namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      },
+      maDvis: this.userInfo.MA_DVI,
+      pageNumber: this.pageSize,
+      pageSize: this.page,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.statusConvert = this.convertTrangThai(item.trangThai);
+          item.tenTrangThai = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -219,7 +214,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soKh = null;
+    this.searchFilter.soKeHoach = null;
     this.searchFilter.ngayKy = null;
     this.searchFilter.trichYeu = null;
     this.search();
@@ -292,25 +287,19 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayKy: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayKy: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-            : null,
-          soTr: this.searchFilter.soKh,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKh: this.searchFilter.namKh,
+          ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+          ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+          soKeHoach: this.searchFilter.soKeHoach,
+          loaiVatTuHangHoa: this.searchFilter.loaiVthh,
+          namKeHoach: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
-          paggingReq: {
-            limit: this.pageSize,
-            page: this.page - 1,
-          },
+          maDvis: [this.userInfo.MA_DVI],
+          pageable: null,
         };
         this.deXuatKeHoachBanDauGiaService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-ke-hoach-ban-dau-gia.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -392,17 +381,17 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soKh: '',
-      ngayLapKh: '',
+      soKeHoach: '',
+      ngayLapKeHoach: '',
       ngayKy: '',
       trichYeu: '',
       tenLoaiHangHoa: '',
-      soQdGiaoChiTieu: '',
-      soQdPheDuyet: '',
-      namKhoach: '',
+      soQuyetDinhGiaoChiTieu: '',
+      soQuyetDinhPheDuyet: '',
+      namKeHoach: '',
       tenVthh: '',
       tenCloaiVthh: '',
-      statusConvert: '',
+      tenTrangThai: '',
     };
   }
 }
