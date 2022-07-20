@@ -470,25 +470,9 @@ export class DanhMucHDVService extends BaseService {
   }
 
   // lay danh sach cuc khu vuc
-  dMCucKhuVuc(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-donvi/ds-donvi-child",
-      {
-        capDvi: "2",
-        kieuDvi: null,
-        loaiDvi: null,
-        maDvi: "0",
-        maPhuong: null,
-        maQuan: null,
-        maTinh: null,
-        paggingReq: {
-          "limit": 20,
-          "page": 1
-        },
-        str: "string",
-        tenDvi: "string",
-        trangThai: "01"
-      }
+  dMDviCon(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-donvi/ds-donvi-child"
     );
   }
   //chung loai

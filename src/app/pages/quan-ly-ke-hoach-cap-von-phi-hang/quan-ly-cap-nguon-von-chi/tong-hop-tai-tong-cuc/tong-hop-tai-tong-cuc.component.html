@@ -198,7 +198,7 @@
 										<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 											<td>{{ i + 1 }}</td>
 											<td>
-												<div *ngFor="let item of donVis">
+												<div *ngFor="let item of cucKhuVucs">
 													<div *ngIf="item.maDvi == data.maCucKv">
 														{{item.tenDvi}}
 													</div>
@@ -250,7 +250,7 @@
 										<ng-template #editTemplate>
 											<td>{{ i + 1 }}</td>
 											<td>
-												<div *ngFor="let item of donVis">
+												<div *ngFor="let item of cucKhuVucs">
 													<div *ngIf="item.maDvi == data.maCucKv">
 														{{item.tenDvi}}
 													</div>
