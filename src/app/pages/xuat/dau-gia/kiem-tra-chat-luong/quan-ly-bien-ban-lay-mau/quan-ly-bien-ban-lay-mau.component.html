@@ -4,19 +4,29 @@
       <div class="main-content">
         <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số Quyết định</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
-            </div>
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="6">
               <label class="search__label">Số biên bản</label>
               <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBienBan" />
             </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Ngày biên bản</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày lấy mẫu</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Điểm kho</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input
+                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Nhà kho</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input
+                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngăn lô</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input
+                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -42,14 +52,14 @@
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px">STT</th>
-                    <th width="931px">Số biên bản</th>
-                    <th width="931px">Số quyết định</th>
-                    <th width="161px">Ngày lấy mẫu</th>
-                    <th width="203px">Số hợp đồng</th>
-                    <th width="295px">Điểm kho</th>
-                    <th width="295px">Nhà kho</th>
-                    <th width="295px">Ngăn/lô</th>
-                    <th width="295px">Trạng thái</th>
+                    <th>Số biên bản</th>
+                    <th width="160px">Ngày lấy mẫu</th>
+                    <th width="260px">Số hợp đồng</th>
+                    <th width="160px">Điểm kho</th>
+                    <th width="160px">Nhà kho</th>
+                    <th width="160px">Ngăn kho</th>
+                    <th width="160px">Lô kho</th>
+                    <th width="160px">Trạng thái</th>
                     <th width="130px">Hành động</th>
                   </tr>
                 </thead>

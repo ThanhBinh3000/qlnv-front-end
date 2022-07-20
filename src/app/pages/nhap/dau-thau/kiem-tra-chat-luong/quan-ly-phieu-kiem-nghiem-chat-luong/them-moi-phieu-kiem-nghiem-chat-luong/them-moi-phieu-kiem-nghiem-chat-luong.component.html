@@ -6,11 +6,11 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
-            *ngIf="disableBanHanh() && !isView" [disabled]="!isValid">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            (click)="redirectPhieuKiemNghiemChatLuongHang()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh() && !isView"
             (click)="guiDuyet()" [disabled]="!isValid">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -31,11 +31,11 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            (click)="redirectPhieuKiemNghiemChatLuongHang()">
-            <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Quay về</span>
-          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+            *ngIf="disableBanHanh() && !isView" [disabled]="!isValid">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
         </div>
       </div>
     </div>
