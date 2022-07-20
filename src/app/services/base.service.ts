@@ -13,6 +13,7 @@ export abstract class BaseService {
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
+  local = 'http://localhost:8098'
 
   getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
