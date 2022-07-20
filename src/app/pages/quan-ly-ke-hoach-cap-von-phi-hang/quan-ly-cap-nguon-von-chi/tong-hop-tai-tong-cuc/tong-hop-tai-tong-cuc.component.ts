@@ -192,11 +192,12 @@ export class TongHopTaiTongCucComponent implements OnInit {
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.donVis = res.data;
-                    this.cucKhuVucs = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+                    //this.donVis = res.data;
+                    //this.cucKhuVucs = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+                    this.cucKhuVucs = res.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -221,19 +222,19 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 this.lstCtietBcao.push({
                     id: uuid.v4() + "FE",
                     maCucKv: item.maDvi,
-                    vonCapThoc: 0,
-                    vonUngThoc: 0,
-                    tongSoThoc: 0,
-                    giaoDuToanGao: 0,
-                    vonCapGao: 0,
-                    vonUngGao: 0,
-                    tongSoGao: 0,
-                    giaoDuToanMuoi: 0,
-                    vonCapMuoi: 0,
-                    vonUngMuoi: 0,
-                    tongSoMuoi: 0,
-                    capVonVttb: 0,
-                    tcGiaoVonHoanUngNam: 0,
+                    vonCapThoc: null,
+                    vonUngThoc: null,
+                    tongSoThoc: null,
+                    giaoDuToanGao: null,
+                    vonCapGao: null,
+                    vonUngGao: null,
+                    tongSoGao: null,
+                    giaoDuToanMuoi: null,
+                    vonCapMuoi: null,
+                    vonUngMuoi: null,
+                    tongSoMuoi: null,
+                    capVonVttb: null,
+                    tcGiaoVonHoanUngNam: null,
                     checked: false,
                 })
             })
@@ -287,8 +288,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             this.status = true;
         }
         let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
+        if (this.maDviTao == this.userInfo.dvql) {
             checkChirld = true;
         }
         const utils = new Utils();
@@ -678,12 +678,6 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.tongSo.tongSoMuoi += heSo * item.tongSoMuoi;
         this.tongSo.capVonVttb += heSo * item.capVonVttb;
         this.tongSo.tcGiaoVonHoanUngNam += heSo * item.tcGiaoVonHoanUngNam;
-    }
-
-
-    //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
     }
 
     getStatusName() {
