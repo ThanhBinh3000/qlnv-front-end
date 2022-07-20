@@ -71,8 +71,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     id: null,
     stt: "0",
     level: 0,
-    maNdung: 0,
-    tongCong: 0,
+    maNdung: null,
+    tongCong: null,
     lstCtietDvis: [],
     checked: false,
   };
@@ -81,8 +81,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     id: null,
     stt: "0",
     level: 0,
-    maNdung: 0,
-    tongCong: 0,
+    maNdung: null,
+    tongCong: null,
     lstCtietDvis: [],
     checked: false,
   };
@@ -877,13 +877,13 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       const mm: ItemDvi = {
         id: uuid.v4() + 'FE',
         maDviNhan: item.maDvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       const mm1: ItemDvi = {
         id: mm.id,
         maDviNhan: item.Dvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       data.push(mm);
@@ -894,7 +894,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: head + "." + (tail + 1).toString(),
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: data,
       checked: false,
     };
@@ -903,7 +903,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: data1,
       checked: false,
     };
@@ -922,7 +922,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         data.push({
           id: e.id,
           maDviNhan: e.maDviNhan,
-          soTranChi: e.soTranChi,
+          soTranChi: e.soTranChi == 0? null : e.soTranChi,
           trangThai: e.trangThai,
         });
       })
@@ -933,7 +933,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           stt: item.stt,
           level: item.level,
           maNdung: item.maNdung,
-          tongCong: item.tongCong,
+          tongCong: item.tongCong == 0? null : item.tongCong,
           lstCtietDvis: data,
           checked: false,
         }
@@ -964,13 +964,13 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       const mm: ItemDvi = {
         id: uuid.v4() + 'FE',
         maDviNhan: item.maDvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       const mm1: ItemDvi = {
         id: mm.id,
         maDviNhan: item.Dvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       obj.push(mm);
@@ -981,7 +981,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: obj,
       checked: false,
     };
@@ -990,7 +990,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: obj1,
       checked: false,
     };
@@ -1052,11 +1052,21 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     const data: ItemDvi[] = [];
+    for(let itm of this.editCache[id].data.lstCtietDvis){
+      if (!itm.soTranChi && itm.soTranChi !== 0){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+        return;
+      }
+      if (itm.soTranChi < 0){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
+        return;
+      }
+    }
     this.editCache[id].data.lstCtietDvis.forEach(item => {
       data.push({
         id: item.id,
         maDviNhan: item.maDviNhan,
-        soTranChi: item.soTranChi,
+        soTranChi: item.soTranChi == 0? null : item.soTranChi,
         trangThai: item.trangThai,
       })
     })
@@ -1135,13 +1145,13 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       const mm: ItemDvi = {
         id: uuid.v4() + 'FE',
         maDviNhan: item.maDvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       const mm1: ItemDvi = {
         id: mm.id,
         maDviNhan: item.Dvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       }
       data.push(mm);
@@ -1152,7 +1162,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: '0.1',
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: data,
       checked: false,
     };
@@ -1161,7 +1171,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongCong: 0,
+      tongCong: null,
       lstCtietDvis: data1,
       checked: false,
     };
@@ -1274,7 +1284,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       data.lstCtietDvis.push({
         id: uuid.v4() + 'FE',
         maDviNhan: maDvi,
-        soTranChi: 0,
+        soTranChi: null,
         trangThai: "0",
       })
     })
@@ -1313,6 +1323,9 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
       this.lstCtietBcao[index].tongCong += item.soTranChi;
     })
+    if(this.lstCtietBcao[index].tongCong == 0){
+      this.lstCtietBcao[index].tongCong = null
+    }
   }
 
   close() {
@@ -1531,7 +1544,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       data.lstCtietDvis.forEach(item => {
         mm.push({
           ...item,
-          soTranChi: 0,
+          soTranChi: null,
         })
       })
       this.lstCtietBcao[index] = {
@@ -1539,7 +1552,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         stt: data.stt,
         level: data.stt,
         maNdung: data.maNdung,
-        tongCong: 0,
+        tongCong: null,
         lstCtietDvis: mm,
         checked: false,
       }
@@ -1547,12 +1560,32 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         if (this.getHead(item.stt) == stt) {
           item.lstCtietDvis.forEach(e => {
             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
+            if(
+              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi == null
+            ){
+              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi = 0
+            }
             this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
+            if(
+              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi == 0
+            ){
+              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi = null
+            }
           })
         }
       })
       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+        if(
+          this.lstCtietBcao[index].tongCong == null
+        ){
+          this.lstCtietBcao[index].tongCong = 0
+        }
         this.lstCtietBcao[index].tongCong += item.soTranChi;
+        if(
+          this.lstCtietBcao[index].tongCong == 0
+        ){
+          this.lstCtietBcao[index].tongCong = null
+        }
       })
       stt = this.getHead(stt);
     }
