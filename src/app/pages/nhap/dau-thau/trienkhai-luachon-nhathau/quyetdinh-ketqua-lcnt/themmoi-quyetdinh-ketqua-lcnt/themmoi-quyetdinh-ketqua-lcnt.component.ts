@@ -45,7 +45,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
 
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
-
   formData: FormGroup;
   formThongTinChung: FormGroup;
   listOfData: DanhSachGoiThau[] = [];
@@ -118,16 +117,16 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        soQd: [,],
-        ngayQd: [null,],
-        ngayHluc: [null,],
-        namKhoach: [dayjs().get('year'),],
+        soQd: [, [Validators.required]],
+        ngayQd: [null, [Validators.required]],
+        ngayHluc: [null, [Validators.required]],
+        namKhoach: [dayjs().get('year'), [Validators.required]],
         loaiVthh: ['',],
         tenVthh: ['',],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
         trichYeu: [null,],
-        soQdPdKhlcnt: [''],
+        soQdPdKhlcnt: ['', [Validators.required]],
         ngayQdPdKhlcnt: [null,],
         idGoiThau: [null,],
         ghiChu: [null,],
@@ -314,7 +313,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     });
   }
 
-  chiTiet() {
+  async chiTiet(data) {
+    console.log(data);
+    const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(data.idGt);
     const modalTuChoi = this.modal.create({
       nzTitle: 'Thông tin gói thầu',
       nzContent: DialogThemMoiGoiThauComponent,
@@ -322,7 +323,11 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: res.data,
+        loaiVthh: res.data.loaiVthh,
+        isReadOnly: true
+      },
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
 

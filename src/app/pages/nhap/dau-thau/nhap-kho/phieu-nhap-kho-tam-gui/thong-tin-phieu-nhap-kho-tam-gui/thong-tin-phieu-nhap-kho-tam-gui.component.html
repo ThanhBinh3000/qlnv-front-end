@@ -6,15 +6,10 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>In</span>
-          </button> -->
-          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
-            <i class="icon htvbdh_trinh"></i>
-            <span>Lưu và gửi duyệt</span>
-          </button> -->
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
           <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
             (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
@@ -35,9 +30,6 @@
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>

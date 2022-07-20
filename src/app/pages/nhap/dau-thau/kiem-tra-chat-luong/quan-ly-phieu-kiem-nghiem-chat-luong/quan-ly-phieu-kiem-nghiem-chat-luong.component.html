@@ -128,13 +128,14 @@
                     <td>{{ data.soLuongMauHangKt }}</td>
                     <td>{{ data.trangThaiDuyet }}</td>
                     <td class="text-center">
-                      <a (click)="redirectToChiTiet(false, data.id)">
-                        <i class="fa fa-pencil"></i>
-                      </a>
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="xoaItem(data.id)">
+                      <a (click)="redirectToChiTiet(false, data.id)"
+                        *ngIf="userService.isChiCuc() && data.trangThai == '00'">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="xoaItem(data.id)" *ngIf="userService.isChiCuc() && data.trangThai == '00'">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -159,7 +160,7 @@
               </div>
             </nz-tab>
           </nz-tabset>
-          <div class="action-giao-chi-tieu" *ngIf="userService.isCuc()">
+          <div class="action-giao-chi-tieu" *ngIf="userService.isChiCuc()">
             <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
@@ -172,7 +173,8 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>In</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+              *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

@@ -2,8 +2,8 @@
   <nz-form-item nz-col nzSpan="16" class="form-item" style="padding-right: 15px;">
     <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
     <nz-form-control>
-      <nz-select [(ngModel)]="keHoach.idBoNganh" id="bo-nganh">
-        <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenBoNganh}}" *ngFor="let item of dsBoNganh">
+      <nz-select>
+        <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsBoNganh">
         </nz-option>
       </nz-select>
     </nz-form-control>
@@ -21,33 +21,27 @@
 <div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">
   <nz-tabset nzType="card" class="mt-16 tab-level-3">
     <nz-tab [nzTitle]="'Lương thực'">
-      <ng-template nz-tab>
-        <app-ke-hoach-luong-thuc [keHoach]="keHoach"></app-ke-hoach-luong-thuc>
-      </ng-template>
+      <app-ke-hoach-luong-thuc [keHoach]="keHoach"></app-ke-hoach-luong-thuc>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua tăng'">
-      <ng-template nz-tab>
-        <app-ke-hoach-mua-tang [keHoach]="keHoach"></app-ke-hoach-mua-tang>
-      </ng-template>
+      <app-ke-hoach-xuat-giam [dsHangHoa]="dsHangHoa" [dataTable]="dataMuaTang">
+      </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất giảm'">
-      <ng-template nz-tab>
-        <app-ke-hoach-xuat-giam [keHoach]="keHoach"></app-ke-hoach-xuat-giam>
-      </ng-template>
+      <app-ke-hoach-xuat-giam [dsHangHoa]="dsHangHoa" [dataTable]="dataXuatGiam">
+      </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán'">
-      <ng-template nz-tab>
-        <app-ke-hoach-xuat-ban [keHoach]="keHoach"></app-ke-hoach-xuat-ban>
-      </ng-template>
+      <app-ke-hoach-xuat-giam [dsHangHoa]="dsHangHoa" [dataTable]="dataXuatBan">
+      </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Luân phiên đổi hàng'">
-      <ng-template nz-tab>
-        <app-ke-hoach-luan-phien-doi-hang [keHoach]="keHoach"></app-ke-hoach-luan-phien-doi-hang>
-      </ng-template>
+      <app-ke-hoach-xuat-giam [dsHangHoa]="dsHangHoa" [dataTable]="dataLuanPhien">
+      </app-ke-hoach-xuat-giam>
     </nz-tab>
   </nz-tabset>
 </div>

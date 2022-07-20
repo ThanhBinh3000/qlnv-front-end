@@ -48,7 +48,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search">
+        <button nz-button class="search__button--search" (click)="search()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -113,27 +113,52 @@
           <tr class="header-row">
             <th></th>
             <th></th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.soQd" />
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
             </th>
             <th>
-              <nz-select class="filter-in-table" [(ngModel)]="searchInTable.namQd">
-                <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
-                </nz-option>
-              </nz-select>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+                  (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
             </th>
             <th>
-              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayQd"></nz-date-picker>
-            </th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trichYeu" />
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
+                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
             </th>
             <th></th>
-            <th></th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                  (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
             <th></th>
             <ng-template #suffixIconSearch>
               <i nz-icon nzType="search"></i>
@@ -144,7 +169,7 @@
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td>{{ idx + 1 }}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.namQd }}</td>
+            <td>{{ data.namKhoach }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.taiLieuDinhKem }}</td>

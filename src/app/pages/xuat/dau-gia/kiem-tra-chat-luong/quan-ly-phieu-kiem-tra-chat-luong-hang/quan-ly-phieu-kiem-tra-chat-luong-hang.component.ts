@@ -56,7 +56,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   filterTable: any = {
     soPhieu: '',
     ngayGdinh: '',
-    ketLuan: '',
+    kqDanhGia: '',
     soQuyetDinhNhap: '',
     soBienBan: '',
     tenDiemKho: '',
@@ -126,7 +126,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
+      "kqDanhGia": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
@@ -256,7 +256,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
+          "kqDanhGia": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
           "maHangHoa": this.typeVthh,
           "maNganKho": null,
@@ -356,7 +356,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.filterTable = {
       soPhieu: '',
       ngayGdinh: '',
-      ketLuan: '',
+      kqDanhGia: '',
       soQuyetDinhNhap: '',
       soBienBan: '',
       tenDiemKho: '',

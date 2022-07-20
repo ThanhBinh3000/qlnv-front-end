@@ -249,9 +249,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.detailHopDong = res.data;
         this.detail.hopDongId = this.detailHopDong.id;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
-        this.detail.maHangHoa = this.detailHopDong.loaiVthh;
         this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
-        this.detail.maHangHoa = this.typeVthh;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -269,6 +271,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "hopDongId": this.detail.hopDongId,
         "id": this.id,
         "ketLuan": this.detail.ketLuan,
+        "kqDanhGia": this.detail.kqDanhGia,
         "ketQuaKiemTra": this.detail.ketQuaKiemTra,
         "khoiLuong": this.detail.khoiLuong,
         "khoiLuongDeNghiKt": this.detail.khoiLuongDeNghiKt,
@@ -279,6 +282,8 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "maHangHoa": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
         "maNhaKho": this.detail.maNhaKho,
+        "maVatTu": this.detail.maVatTu,
+        "maVatTuCha": this.detail.maVatTuCha,
         "maQhns": this.detail.maDonVi,
         "ngayGdinh": this.detail.ngayGdinh,
         "ngayKiemTra": null,

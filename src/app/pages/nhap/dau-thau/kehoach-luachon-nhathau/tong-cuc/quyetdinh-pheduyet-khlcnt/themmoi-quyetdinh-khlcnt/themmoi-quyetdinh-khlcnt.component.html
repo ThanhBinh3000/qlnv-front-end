@@ -9,7 +9,18 @@
           <span>Quay lại</span>
         </button>
         <button
-          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '01' || formData.value.trangThai == '03') && userService.isTongCuc()"
+          *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03' ) && userService.isTongCuc()"
+          type="button" class="btn btn-main" (click)="save(true)">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == '01' && userService.isTongCuc()" type="button" class="btn btn-sub"
+          (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button
+          *ngIf="(formData.value.trangThai == '01' || formData.value.trangThai == '02') && userService.isTongCuc()"
           type="button" class="btn btn-main" (click)="guiDuyet()">
           <i class="icon {{iconButtonDuyet}}"></i>
           <span>{{titleButtonDuyet}}</span>
@@ -19,11 +30,6 @@
           type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
-        </button>
-        <button *ngIf="formData.value.trangThai == '01' && userService.isTongCuc()" type="button" class="btn btn-sub"
-          (click)="tuChoi()">
-          <i class="icon htvbdh_tcdt_tuchoi do"></i>
-          <span>Từ chối</span>
         </button>
       </div>
     </div>
@@ -45,7 +51,7 @@
               <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
-                <nz-select formControlName="namKhoach" nzAllowClear
+                <nz-select formControlName="namKhoach" nzAllowClear (ngModelChange)="danhSachTongHopGetAll()"
                   [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
@@ -146,7 +152,7 @@
                   <nz-select formControlName="idTrHdr" (ngModelChange)="onChangeIdTrHdr($event)"
                     [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
                     nzAllowClear>
-                    <nz-option *ngFor="let p of listToTrinh" [nzValue]="p.id" [nzLabel]="p.tenTr">
+                    <nz-option *ngFor="let p of listToTrinh" [nzValue]="p.id" [nzLabel]="p.maTrHdr">
                     </nz-option>
                   </nz-select>
                   <ng-template #error let-control>

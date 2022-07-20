@@ -13,8 +13,8 @@
                         <i class="fa fa-arrow-left"></i>
                         <span>Quay lại</span>
                     </button>
-                    <button *ngIf="formData.value.trangThai == '00'" class="btn btn-sub btn-sm waves-effect waves-light"
-                        (click)="pheDuyet()">
+                    <button *ngIf="formData.value.trangThai == '00' && formData.value.id > 0"
+                        class="btn btn-sub btn-sm waves-effect waves-light" (click)="pheDuyet()">
                         <i class="icon htvbdh_tcdt_guiduyet"></i>
                         <span>Ban hành</span>
                     </button>
@@ -78,7 +78,7 @@
                                     Số quyết định phê duyệt KQLCNT
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
-                                    <nz-input-group nzAddOnAfter="/QĐ-CDTHN">
+                                    <nz-input-group nzAddOnAfter="{{maQd}}">
                                         <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
                                             [nzStep]="1" [nzSize]="'small'"
                                             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
@@ -215,7 +215,7 @@
                                         <tbody>
                                             <tr *ngFor="let data of basicTable.data; let i = index">
                                                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                                                <td>{{ data.goiThau }}</td>
+                                                <td>{{ data.tenGthau }}</td>
                                                 <td>
                                                     <nz-select [(ngModel)]="data.trungThau"
                                                         [ngModelOptions]="{standalone: true}">
@@ -237,7 +237,7 @@
                                                 <td>{{ data.tgianThienHd }}</td>
                                                 <td>{{ data.tenLoaiHdong }}</td>
                                                 <td class="text-center">
-                                                    <a (click)="chiTiet()">
+                                                    <a (click)="chiTiet(data)">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </td>
@@ -431,8 +431,8 @@
                                 <nz-form-label [nzNoColon]="true"> Trúng / Hủy thầu </nz-form-label>
                                 <nz-radio-group [nzDisabled]="formData.value.trangThai !== '00'"
                                     formControlName="trungThau">
-                                    <label nz-radio [nzValue]="true">Xác định được đơn vị trúng thầu</label>
-                                    <label nz-radio [nzValue]="false">Hủy thầu</label>
+                                    <label nz-radio [nzValue]="1">Xác định được đơn vị trúng thầu</label>
+                                    <label nz-radio [nzValue]="0">Hủy thầu</label>
                                 </nz-radio-group>
                             </nz-form-item>
                         </div>

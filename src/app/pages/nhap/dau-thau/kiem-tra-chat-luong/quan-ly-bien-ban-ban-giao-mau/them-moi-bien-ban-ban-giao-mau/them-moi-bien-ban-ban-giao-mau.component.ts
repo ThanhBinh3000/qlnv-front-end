@@ -440,7 +440,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     });
   }
 
-  huyBo() {
+  back() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

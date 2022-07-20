@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { sortBy } from 'lodash';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DanhMucService } from './../../../services/danhmuc.service';
+import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -9,6 +13,16 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./dialog-chi-tiet-ke-hoach-giao-bo-nganh.component.scss'],
 })
 export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
+
+
+  dataKhXg: any;
+
+  dataMuaTang = [];
+  dataXuatGiam = [];
+  dataXuatBan = [];
+  dataLuanPhien = [];
+
+
   keHoach: IKeHoachGiaoBoNganh = {
     id: null,
     idBoNganh: null,
@@ -37,34 +51,47 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     khLuanPhienDoiHang: null,
     tongGiaTri: null,
   };
-  dsBoNganh = [
-    {
-      id: 1,
-      tenBoNganh: 'Bộ ngoại giao',
-    },
-    {
-      id: 2,
-      tenBoNganh: 'Bộ công an',
-    },
-    {
-      id: 2,
-      tenBoNganh: 'Bộ tài chính',
-    },
-  ];
+  dsBoNganh: any[];
+  dsHangHoa: any[];
 
-  constructor(private readonly _modalRef: NzModalRef) {}
+  constructor(
+    private readonly _modalRef: NzModalRef,
+    private danhMucService: DanhMucService,
+  ) { }
 
-  ngOnInit(): void {
-    this.initData();
+  async ngOnInit() {
+    await Promise.all([
+      this.getListBoNganh(),
+      this.loadDanhMucHang()
+    ]);
   }
 
-  initData() {}
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsBoNganh = res.data;
+    }
+  }
 
-  luu() {}
+  async loadDanhMucHang() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      console.log(hangHoa);
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
+        this.dsHangHoa = dataVatTu[0].child;
+      }
+    })
+  }
+
+  luu() {
+    console.log(this.dataMuaTang, this.dataXuatGiam, this.dataXuatBan, this.dataLuanPhien)
+  }
 
   onCancel() {
     this._modalRef.close();
   }
+
 }
 
 interface IKeHoachGiaoBoNganh {

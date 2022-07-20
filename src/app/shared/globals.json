@@ -10,5 +10,6 @@
     "TU_CHOI": "03",
     "DU_THAO_TRINH_DUYET": "04",
     "MA_VTHH": "04",
-    "KEY_ENTER": 13
+    "KEY_ENTER": 13,
+    "REQUIRED": "Dữ liệu không được để trống."
 }

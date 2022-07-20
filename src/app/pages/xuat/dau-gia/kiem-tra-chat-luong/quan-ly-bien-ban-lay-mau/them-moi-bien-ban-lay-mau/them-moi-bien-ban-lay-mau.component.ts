@@ -20,6 +20,7 @@ import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
 import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -41,8 +42,13 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   detailGiaoNhap: any = {};
   maVthh: string;
   phuongPhapLayMaus: Array<PhuongPhapLayMau>;
+
   listSoQuyetDinh: any[] = [];
   listBienBanDayKho: any[] = [];
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganKho: any[] = [];
+  listNganLo: any[] = [];
 
   capCuc: string = '2';
   capChiCuc: string = '3';
@@ -79,6 +85,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
+    private donViService: DonviService,
   ) { }
 
   async ngOnInit() {
@@ -88,16 +95,113 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.bienBanLayMau.maDvi = this.userInfo.MA_DVI;
     this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
     this.bienBanLayMau.maVatTuCha = this.typeVthh;
+    this.bienBanLayMau.trangThai = this.globals.prop.DU_THAO;
     await Promise.all([
       this.loadPhuongPhapLayMau(),
       this.loadSoQuyetDinh(),
       this.loaiVTHHGetAll(),
+      this.loadDiemKho(),
     ]);
     if (this.id > 0) {
       await this.loadBienbanLayMau();
     }
     else {
       this.loadDaiDien();
+    }
+  }
+
+  async loadDiemKho() {
+    let body = {
+      maDviCha: this.bienBanLayMau.maDvi,
+      trangThai: '01',
+    }
+    this.listDiemKho = [];
+    const res = await this.donViService.getTreeAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+          }
+        });
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDiemKho(fromChiTiet: boolean) {
+    let diemKho = this.listDiemKho.filter(x => x.key == this.bienBanLayMau.maDiemKho);
+    this.bienBanLayMau.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      this.listNhaKho = diemKho[0].children;
+      if (fromChiTiet) {
+        this.changeNhaKho(fromChiTiet);
+      }
+    }
+  }
+
+  changeNhaKho(fromChiTiet: boolean) {
+    let nhaKho = this.listNhaKho.filter(x => x.key == this.bienBanLayMau.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKho = nhaKho[0].children;
+      if (fromChiTiet) {
+        this.changeNganKho();
+      }
+    }
+  }
+
+  changeNganKho() {
+    let nganKho = this.listNganKho.filter(x => x.key == this.bienBanLayMau.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLo = nganKho[0].children;
+    }
+  }
+
+  selectHangHoa() {
+    let data = "02";
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: { data },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.bindingDataHangHoa(data);
+      }
+    });
+  }
+
+  async bindingDataHangHoa(data) {
+    if (data.loaiHang == "M" || data.loaiHang == "LT") {
+      this.bienBanLayMau.maVatTuCha = data.parent.ma;
+      this.bienBanLayMau.tenVatTuCha = data.parent.ten;
+      this.bienBanLayMau.maVatTu = data.ma;
+      this.bienBanLayMau.tenVatTu = data.ten;
+      this.bienBanLayMau.donViTinh = data.maDviTinh;
+    }
+    if (data.loaiHang == "VT") {
+      if (data.cap == "3") {
+        this.bienBanLayMau.maVatTuCha = data.parent.parent.ma;
+        this.bienBanLayMau.tenVatTuCha = data.parent.parent.ten;
+        this.bienBanLayMau.maVatTu = data.parent.ma;
+        this.bienBanLayMau.tenVatTu = data.parent.ten;
+        this.bienBanLayMau.donViTinh = data.parent.maDviTinh;
+      }
+      if (data.cap == "2") {
+        this.bienBanLayMau.maVatTuCha = data.parent.ma;
+        this.bienBanLayMau.tenVatTuCha = data.parent.ten;
+        this.bienBanLayMau.maVatTu = data.ma;
+        this.bienBanLayMau.tenVatTu = data.ten;
+        this.bienBanLayMau.donViTinh = data.maDviTinh;
+      }
     }
   }
 
