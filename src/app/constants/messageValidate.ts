@@ -19,4 +19,5 @@ export const MESSAGEVALIDATE = {
     OVER_SIZE: "Kích thước file không vượt quá 2MB",
     NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
     EXIST_REPORT: "Báo cáo đã tông tại",
+    WRONG_DAY:'"Đến ngày" cần lớn "Ngày từ"',
   };

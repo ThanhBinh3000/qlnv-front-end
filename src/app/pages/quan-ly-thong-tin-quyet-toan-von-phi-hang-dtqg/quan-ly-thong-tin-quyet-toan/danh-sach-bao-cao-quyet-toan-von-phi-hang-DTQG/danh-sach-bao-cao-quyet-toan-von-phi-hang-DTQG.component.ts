@@ -36,14 +36,14 @@ export const TRANG_THAI_TIM_KIEM = [
       id: "6",
       tenDm: 'Lãnh đạo phê duyệt'
   },
-  {
-      id: "8",
-      tenDm: 'Đơn vị cấp trên từ chối'
-  },
-  {
-      id: "9",
-      tenDm: 'Đơn vị cấp trên tiếp nhận'
-  },
+  // {
+  //     id: "8",
+  //     tenDm: 'Đơn vị cấp trên từ chối'
+  // },
+  // {
+  //     id: "9",
+  //     tenDm: 'Đơn vị cấp trên tiếp nhận'
+  // },
   // {
   //     id: "10",
   //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
@@ -106,7 +106,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.spinner.show()
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
-    // this.searchFilter.namQtoan = new Date().getFullYear() -1
+    this.searchFilter.namQtoan = new Date().getFullYear() -1
     this.searchFilter.ngayTaoDen = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() -1);
 		this.searchFilter.ngayTaoTu = this.newDate;
@@ -175,11 +175,23 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (this.searchFilter.namQtoan || this.searchFilter.namQtoan === 0) {
-      if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-        return;
-      }
+    if (
+      (!this.searchFilter.namQtoan && this.searchFilter.namQtoan !== 0)
+    ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+    if(!this.searchFilter.ngayTaoTu || !this.searchFilter.ngayTaoDen){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+      return;
+    }
+    if (this.searchFilter.ngayTaoTu > this.searchFilter.ngayTaoDen) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
+      return;
     }
     this.spinner.show();
     const searchFilterTemp = Object.assign({},this.searchFilter);
@@ -258,7 +270,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     if(!this.searchFilter.namQtoan){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
       return;
-    }else if(this.searchFilter.namQtoan <= 1000 ||  this.searchFilter.namQtoan >= 2999){
+    }else if(this.searchFilter.namQtoan < 1000 ||  this.searchFilter.namQtoan > 2999){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
       return;
     }else{

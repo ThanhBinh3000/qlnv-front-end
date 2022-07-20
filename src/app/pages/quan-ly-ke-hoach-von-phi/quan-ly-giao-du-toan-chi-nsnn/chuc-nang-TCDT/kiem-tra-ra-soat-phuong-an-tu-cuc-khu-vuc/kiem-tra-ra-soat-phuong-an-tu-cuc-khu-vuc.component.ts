@@ -95,6 +95,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
       }
     );
     this.listBcaoKqua = []
+    this.spinner.hide();
   }
 
   // lay ten don vi tao

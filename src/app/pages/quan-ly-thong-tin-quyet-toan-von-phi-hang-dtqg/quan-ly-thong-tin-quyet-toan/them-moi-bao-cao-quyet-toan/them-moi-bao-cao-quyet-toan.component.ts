@@ -161,6 +161,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   // khac
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
+  statusTrinhDuyet = false;
 
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -368,6 +369,12 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
+    for(const itm of this.lstCtietBcao){
+      if(!itm.maDviTinh && !itm.soLuong && !itm.donGiaMua && !itm.thanhTien){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+        return;
+      }
+    }
     this.lstCtietBcao.forEach(element => {
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
@@ -496,6 +503,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         item.id = uuid.v4() + 'FE';
       }
     });
+    this.statusTrinhDuyet = true;
     this.spinner.hide();
   }
 
@@ -523,6 +531,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
+    if(this.statusTrinhDuyet != true){
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+      return;
+    }
     if (this.id) {
       const requestGroupButtons = {
         id: this.id,
@@ -1108,7 +1120,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     this.location.back();
   }
   close() {
-    this.location.back();
+    // this.location.back();
+    this.router.navigate([
+      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
+    ]);
   }
 
   showDialogCopy() {
