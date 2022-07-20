@@ -4,7 +4,9 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from './../../../services/danhmuc.service';
+import { KeHoachLuongThucComponent } from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 
 @Component({
@@ -14,56 +16,57 @@ import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-gia
 })
 export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
-
-  dataKhXg: any;
-
-  dataMuaTang = [];
-  dataXuatGiam = [];
-  dataXuatBan = [];
-  dataLuanPhien = [];
+  @ViewChild('keHoachLuongThuc') keHoachLuongThucComponent: KeHoachLuongThucComponent;
 
 
-  keHoach: IKeHoachGiaoBoNganh = {
+  errorBn: boolean = false;
+  errorTt: boolean = false;
+  keHoach: any = {
     id: null,
-    idBoNganh: null,
+    maBoNganh: null,
     tenBoNganh: null,
-    khLuongThuc: {
-      tonDauKy: {
-        gao: 250234,
-        thoc: 250234,
-      },
-      xuatRa: {
-        gao: 250234,
-        thoc: 250234,
-      },
-      muaVao: {
-        gao: 250234,
-        thoc: 250234,
-      },
-      duTruCuoiNam: {
-        gao: 250234,
-        thoc: 250234,
-      },
-    },
-    khMuaTang: null,
-    khXuatGiam: null,
-    khXuatBan: null,
-    khLuanPhienDoiHang: null,
-    tongGiaTri: null,
+    tongTien: null,
+    ltGaoMua: null,
+    ltThocMua: null,
+    ltGaoXuat: null,
+    ltThocXuat: null,
+    ttMuaTang: null,
+    ttXuatBan: null,
+    ttXuatGiam: null,
+    muaTangList: [],
+    xuatGiamList: [],
+    xuatBanList: [],
+    luanPhienList: [],
   };
   dsBoNganh: any[];
   dsHangHoa: any[];
-
+  dataEdit: any;
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
+    public globals: Globals
   ) { }
 
   async ngOnInit() {
+    this.bindingData(this.dataEdit)
     await Promise.all([
       this.getListBoNganh(),
       this.loadDanhMucHang()
     ]);
+  }
+
+  bindingData(dataEdit) {
+    if (dataEdit) {
+      console.log(dataEdit);
+      this.keHoach = dataEdit;
+    }
+  }
+
+  onChangeBoNganh(event) {
+    const boNganh = this.dsBoNganh.filter(item => item.ma == event)
+    if (boNganh.length > 0) {
+      this.keHoach.tenBoNganh = boNganh[0].giaTri;
+    }
   }
 
   async getListBoNganh() {
@@ -76,7 +79,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
   async loadDanhMucHang() {
     await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      console.log(hangHoa);
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
         this.dsHangHoa = dataVatTu[0].child;
@@ -85,7 +87,28 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   luu() {
-    console.log(this.dataMuaTang, this.dataXuatGiam, this.dataXuatBan, this.dataLuanPhien)
+    this.keHoachLuongThucComponent.onChangeInput();
+    console.log(this.keHoach);
+    if (this.validateData()) {
+      this._modalRef.close(this.keHoach);
+    }
+  }
+
+  validateData() {
+    if (!this.keHoach.maBoNganh) {
+      this.errorBn = true;
+      return false;
+    } else {
+      this.errorBn = false;
+    }
+
+    if (!this.keHoach.tongTien) {
+      this.errorTt = true;
+      return false;
+    } else {
+      this.errorTt = false;
+    }
+    return true;
   }
 
   onCancel() {
@@ -94,14 +117,3 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
 }
 
-interface IKeHoachGiaoBoNganh {
-  id: number;
-  idBoNganh: number;
-  tenBoNganh: string;
-  khLuongThuc: any;
-  khMuaTang: any;
-  khXuatGiam: any;
-  khXuatBan: any;
-  khLuanPhienDoiHang: any;
-  tongGiaTri: number;
-}

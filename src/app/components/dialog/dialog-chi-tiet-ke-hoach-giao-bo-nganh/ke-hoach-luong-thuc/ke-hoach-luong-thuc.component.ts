@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { sortBy } from 'lodash';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -8,79 +7,44 @@ import { sortBy } from 'lodash';
 })
 export class KeHoachLuongThucComponent implements OnInit {
   @Input('keHoach') keHoach: any;
+  @Input()
+  ltGaoMua: number
+  @Output()
+  ltGaoMuaChange = new EventEmitter<number>();
+
+  @Input()
+  ltGaoXuat: number
+  @Output()
+  ltGaoXuatChange = new EventEmitter<number>();
+
+  @Input()
+  ltThocXuat: number
+  @Output()
+  ltThocXuatChange = new EventEmitter<number>();
+
+  @Input()
+  ltThocMua: number
+  @Output()
+  ltThocMuaChange = new EventEmitter<number>();
+
   dataTable = [];
   namHienTai: number = 2022;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.initData();
   }
 
   initData() {
-    const keHoachLuongThuc = this.keHoach.khLuongThuc;
-    const dataTemp = [];
-    for (const key in keHoachLuongThuc) {
-      let order;
-      if (key === 'tonDauKy') {
-        order = 1;
-        dataTemp.push({
-          stt: 'I',
-          textTitle: 'Lương thực tồn kho đầu kỳ (quy thóc)',
-          value: keHoachLuongThuc[key]?.gao + keHoachLuongThuc[key]?.thoc,
-          isEditable: false,
-          order,
-        });
-      } else if (key === 'xuatRa') {
-        order = 4;
-        dataTemp.push({
-          stt: 'II',
-          textTitle: 'Lương thực xuất ra (quy thóc)',
-          value: keHoachLuongThuc[key]?.gao + keHoachLuongThuc[key]?.thoc,
-          isEditable: false,
-          order,
-        });
-      } else if (key === 'muaVao') {
-        order = 7;
-        dataTemp.push({
-          stt: 'III',
-          textTitle: 'Lương thực mua vào (quy thóc)',
-          value: keHoachLuongThuc[key]?.gao + keHoachLuongThuc[key]?.thoc,
-          isEditable: false,
-          order,
-        });
-      } else if (key === 'duTruCuoiNam') {
-        order = 10;
-        dataTemp.push({
-          stt: 'IV',
-          textTitle: 'Lương thực dự trữ cuối năm (quy thóc)',
-          value: keHoachLuongThuc[key]?.gao + keHoachLuongThuc[key]?.thoc,
-          isEditable: false,
-          order,
-        });
-      }
+    console.log(this.keHoach)
+  }
 
-      for (const childKey in keHoachLuongThuc[key]) {
-        if (childKey === 'thoc') {
-          dataTemp.push({
-            stt: '-',
-            textTitle: 'Thóc',
-            value: keHoachLuongThuc[key][childKey],
-            isEditable: key === 'xuatRa' || key === 'muaVao',
-            order: order + 1,
-          });
-        } else if (childKey === 'gao') {
-          dataTemp.push({
-            stt: '-',
-            textTitle: 'Gạo',
-            value: keHoachLuongThuc[key][childKey],
-            isEditable: key === 'xuatRa' || key === 'muaVao',
-            order: order + 2,
-          });
-        }
-      }
-    }
-
-    this.dataTable = sortBy(dataTemp, ['order']);
+  onChangeInput() {
+    console.log("avvv");
+    this.ltThocMuaChange.emit(this.ltThocMua);
+    this.ltThocXuatChange.emit(this.ltThocXuat);
+    this.ltGaoXuatChange.emit(this.ltGaoXuat);
+    this.ltGaoMuaChange.emit(this.ltGaoMua);
   }
 }

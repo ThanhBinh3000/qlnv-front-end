@@ -42,6 +42,8 @@ export class TtcpComponent implements OnInit {
     taiLieuDinhKem: '',
     trangThai: '',
   };
+  idSelected: number = 0;
+  isViewDetail: boolean = false;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -49,8 +51,8 @@ export class TtcpComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
 
-
-  constructor(private readonly fb: FormBuilder,
+  constructor(
+    private readonly fb: FormBuilder,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -97,8 +99,6 @@ export class TtcpComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
-
-
     }
     let res = await this.quyetDinhTtcpService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -151,6 +151,12 @@ export class TtcpComponent implements OnInit {
     this.isAddNew = true;
   }
 
+  async onClose() {
+    this.isAddNew = false;
+    await this.search()
+
+  }
+
   onAllChecked(checked) {
     this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
@@ -176,10 +182,6 @@ export class TtcpComponent implements OnInit {
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
-  }
-
-  onClose() {
-    this.isAddNew = false;
   }
 
   async changePageIndex(event) {
@@ -209,8 +211,12 @@ export class TtcpComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  viewDetail(id: number, isViewDetail: boolean) { }
 
+  viewDetail(id: number, isViewDetail: boolean) {
+    this.idSelected = id;
+    this.isViewDetail = isViewDetail;
+    this.isAddNew = true;
+  }
 
   xoaItem(item: any) {
     this.modal.confirm({
