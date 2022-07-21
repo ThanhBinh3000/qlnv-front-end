@@ -153,6 +153,6 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		window.location.reload();
 	}
 }

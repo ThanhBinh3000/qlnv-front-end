@@ -132,6 +132,10 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 		const utils = new Utils();
 		return utils.getStatusName(id);
 	}
+	
+	close() {
+		window.location.reload();
+	}
 
 	deleteCondition(){
 		this.searchFilter.maBcao = null
