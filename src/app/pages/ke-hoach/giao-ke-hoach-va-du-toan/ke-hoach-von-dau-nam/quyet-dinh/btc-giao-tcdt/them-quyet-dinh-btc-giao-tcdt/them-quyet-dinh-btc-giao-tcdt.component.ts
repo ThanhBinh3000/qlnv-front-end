@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import * as dayjs from 'dayjs';
 
@@ -13,6 +13,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Output('close') onClose = new EventEmitter<any>();
 
+  formData: FormGroup;
+
   quyetDinh: IQuyetDinhBTC = {
     id: null,
     soQd: null,
@@ -24,7 +26,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   };
   namHienTai: number;
   taiLieuDinhKemList = [];
-  dsNam: string[] = [];
+  dsNam: any[] = [];
 
   allChecked = false;
   indeterminate = false;
@@ -41,20 +43,36 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
-  ) {}
-
-  ngOnInit(): void {
-    this.initData();
+  ) {
+    this.formData = this.fb.group(
+      {
+        id: [],
+        soQd: [, [Validators.required]],
+        ngayQd: [null, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
+        trichYeu: [null],
+        trangThai: ['00']
+      }
+    );
   }
 
-  initData() {
+  ngOnInit(): void {
     this.loadDsNam();
   }
 
+  initData() {
+  }
+
   loadDsNam() {
-    this.namHienTai = dayjs().get('year');
+    // this.namHienTai = dayjs().get('year');
+    // for (let i = -3; i < 23; i++) {
+    //   this.dsNam.push((this.namHienTai - i).toString());
+    // }
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((this.namHienTai - i).toString());
+      this.dsNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
     }
   }
 
@@ -91,25 +109,25 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) {}
+  downloadFileKeHoach(event) { }
 
   huy() {
     this.onClose.emit();
   }
 
-  banHanh() {}
+  banHanh() { }
 
-  luu() {}
+  luu() { }
 
-  exportData() {}
+  exportData() { }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
-  xoaKeHoach() {}
+  xoaKeHoach() { }
 
-  themKeHoach() {}
+  themKeHoach() { }
 }
 
 interface IQuyetDinhBTC {

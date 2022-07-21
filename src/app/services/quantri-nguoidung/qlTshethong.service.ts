@@ -9,7 +9,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
   providedIn: 'root',
 })
 export class QlTShethongService extends BaseService {
-  gateway: string = '/qlnv-gateway/qlnv-system'
+  gateway: string = '/qlnv-system'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'user', '');
   }

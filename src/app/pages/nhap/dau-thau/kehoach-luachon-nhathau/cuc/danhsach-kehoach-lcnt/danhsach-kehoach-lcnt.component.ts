@@ -59,6 +59,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     namKhoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
+    soGoiThau: '',
     statusConvert: '',
   };
   dataTableAll: any[] = [];
@@ -393,6 +394,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       namKhoach: '',
       tenVthh: '',
       tenCloaiVthh: '',
+      soGoiThau: '',
       statusConvert: '',
     }
   }

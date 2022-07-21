@@ -51,7 +51,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of editRowTable.data; let idx = index">
+      <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenVthh }}</td>
@@ -114,9 +114,10 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr>
+      <tr *ngIf="tabName != 'LuanPhien'">
         <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-        <td><input [(ngModel)]="tongGtri" style="text-align: left;" type="text" nz-input /></td>
+        <td><input [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;" type="number"
+            nz-input /></td>
         <td></td>
       </tr>
     </tfoot>

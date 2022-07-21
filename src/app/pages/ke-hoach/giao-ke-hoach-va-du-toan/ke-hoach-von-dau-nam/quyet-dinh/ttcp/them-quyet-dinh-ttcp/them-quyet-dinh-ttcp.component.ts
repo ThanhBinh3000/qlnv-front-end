@@ -5,8 +5,13 @@ import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dia
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -15,60 +20,80 @@ import { MESSAGE } from 'src/app/constants/message';
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
   @Input('isView') isView: boolean;
-  @Output('close') onClose = new EventEmitter<any>();
+  @Input()
+  idInput: number;
+  @Output('onClose') onClose = new EventEmitter<any>();
 
   formData: FormGroup;
-  quyetDinh: IQuyetDinhTTCP = {
-    id: null,
-    soQd: null,
-    namQd: null,
-    ngayQd: new Date(),
-    trichYeu: null,
-    taiLieuDinhKem: null,
-    keHoach: [],
-  };
-  namHienTai: number;
+
   taiLieuDinhKemList = [];
-  dsNam: string[] = [];
-
-  allChecked = false;
-  indeterminate = false;
-
-  searchInTable: any = {
-    tenBo: null,
-    keHoach: null,
-  };
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
-  setOfCheckedId = new Set<number>();
+  dsNam: any[] = [];
+  maQd: string
+  userInfo: UserLogin;
   dataTable: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
-    private danhMucService: DanhMucService
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    public userService: UserService,
+    private helperService: HelperService,
   ) {
     this.formData = this.fb.group(
       {
         id: [],
         soQd: [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
-        namKhoach: [dayjs().get('year'), [Validators.required]],
-        trichYeu: [null, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
+        trichYeu: [null],
+        trangThai: ['00'],
+        muaTangList: [],
+        xuatGiamList: [],
+        xuatBanList: [],
+        luanPhienList: [],
       }
     );
   }
 
-  ngOnInit(): void {
-    this.loadDsNam();
+  async ngOnInit() {
+    this.spinner.show();
+    console.log(this.isView);
+    await Promise.all([
+      this.userInfo = this.userService.getUserLogin(),
+      this.loadDsNam(),
+      this.maQd = '/' + this.userInfo.MA_QD,
+      this.getDataDetail(this.idInput),
+    ])
+    this.spinner.hide();
+  }
+
+  async getDataDetail(id) {
+    if (id > 0) {
+      let res = await this.quyetDinhTtcpService.getDetail(id);
+      const data = res.data;
+      console.log(data);
+      this.formData.patchValue({
+        id: data.id,
+        namQd: data.namQd,
+        ngayQd: data.ngayQd,
+        soQd: data.soQd.split('/')[0],
+        trangThai: data.trangThai,
+        trichYeu: data.trichYeu
+      })
+      this.dataTable = data.listBoNganh
+    }
   }
 
 
   loadDsNam() {
-    this.namHienTai = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((this.namHienTai - i).toString());
+      this.dsNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
     }
   }
 
@@ -107,43 +132,76 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   downloadFileKeHoach(event) { }
 
-  viewDetail(id: number, isViewDetail: boolean) { }
 
   xoaItem(id: number) { }
 
-  huy() {
+  quayLai() {
     this.onClose.emit();
   }
 
-  banHanh() { }
+  pheDuyet() { }
 
-  luu() { }
+  async save() {
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      console.log(this.formData.value)
+      this.spinner.hide();
+      return;
+    }
+    if (this.dataTable.length == 0) {
+      this.notification.error(MESSAGE.ERROR, "Danh sách kế hoạch không được để trống");
+      this.spinner.hide();
+      return;
+    }
+    let body = this.formData.value;
+    body.soQd = body.soQd + this.maQd;
+    body.listBoNganh = this.dataTable;
+    let res
+    if (this.idInput > 0) {
+      res = await this.quyetDinhTtcpService.update(body);
+    } else {
+      res = await this.quyetDinhTtcpService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.idInput > 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.quayLai();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
 
   exportData() { }
 
-  themKeHoach() {
+  themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin điều chỉnh của cục',
+      nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        dataEdit: data,
+        isView: isView,
+      },
     });
-    modalQD.afterClose.subscribe((data) => { });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        console.log(data);
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          this.dataTable.push(data);
+        }
+      }
+    });
   }
 
-
   xoaKeHoach() { }
-}
-
-interface IQuyetDinhTTCP {
-  id: number;
-  soQd: string;
-  namQd: string;
-  ngayQd: Date;
-  trichYeu: string;
-  taiLieuDinhKem: any;
-  keHoach: any;
 }

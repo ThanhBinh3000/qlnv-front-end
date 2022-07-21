@@ -31,7 +31,7 @@
           <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
           <nz-form-control>
             <nz-select [(ngModel)]="quyetDinh.namQd" id="nam-qd">
-              <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
+              <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
               </nz-option>
             </nz-select>
           </nz-form-control>

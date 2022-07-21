@@ -14,6 +14,14 @@ export class KeHoachXuatGiamComponent implements OnInit {
   dsHangHoa = [];
   @Input()
   dataTable = [];
+  @Input()
+  tabName: String;
+  @Output()
+  dataTableChange = new EventEmitter<any[]>();
+  @Input()
+  tongGtri: number
+  @Output()
+  tongGtriChange = new EventEmitter<number>();
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
@@ -21,43 +29,43 @@ export class KeHoachXuatGiamComponent implements OnInit {
   dsDonViTinh = [];
   dsKeHoachNam = [];
 
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
-  tongGtri: number;
-
   constructor(
-    private danhMucService: DanhMucService
   ) { }
 
   ngOnInit(): void {
-  }
-
-  async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      console.log(hangHoa);
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        console.log(dataVatTu);
-      }
-    })
+    this.updateEditCache()
+    this.emitDataTable();
   }
 
   initData() {
 
   }
 
+  onChangeTongGtri() {
+    this.tongGtriChange.emit(this.tongGtri)
+  }
+
+  emitDataTable() {
+    this.dataTableChange.emit(this.dataTable)
+  }
+
   editItem(id: number): void {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) { }
+  xoaItem(id: number) {
+
+  }
 
   themMoiItem() {
-    console.log(this.rowItem);
-    this.dataTable = [...this.dataTable, this.rowItem];
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    // this.dataTable.push(this.rowItem);
+    this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
+    this.emitDataTable()
   }
 
   clearData() {
@@ -79,12 +87,14 @@ export class KeHoachXuatGiamComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach((item) => {
-      this.dataEdit[item.id] = {
-        edit: false,
-        data: { ...item },
-      };
-    });
+    if (this.dataTable) {
+      this.dataTable.forEach((item) => {
+        this.dataEdit[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
   }
 
   onChangeLoaiVthh(event) {
@@ -92,7 +102,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
     this.rowItem.dviTinh = null;
     const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
     if (loaiVthh.length > 0) {
-      console.log(loaiVthh);
       this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
       this.rowItem.tenVthh = loaiVthh[0].ten;
       this.dsChungLoaiHangHoa = loaiVthh[0].child;

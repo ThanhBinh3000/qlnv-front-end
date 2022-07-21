@@ -6,9 +6,9 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class ThongTinPhuLucHopDongService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/phu-luc', '/qlnv-gateway/qlnv-hang');
+    super(httpClient, 'dx-kh/phu-luc', '/qlnv-hang');
   }
 }

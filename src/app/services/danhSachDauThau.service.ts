@@ -13,9 +13,9 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class DanhSachDauThauService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/lcnt', '/qlnv-gateway/qlnv-hang');
+    super(httpClient, 'dx-kh/lcnt', '/qlnv-hang');
   }
 
   getChiTietDeXuatKeHoachLuaChonNhaThau(

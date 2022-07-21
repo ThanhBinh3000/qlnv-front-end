@@ -132,7 +132,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
 
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
