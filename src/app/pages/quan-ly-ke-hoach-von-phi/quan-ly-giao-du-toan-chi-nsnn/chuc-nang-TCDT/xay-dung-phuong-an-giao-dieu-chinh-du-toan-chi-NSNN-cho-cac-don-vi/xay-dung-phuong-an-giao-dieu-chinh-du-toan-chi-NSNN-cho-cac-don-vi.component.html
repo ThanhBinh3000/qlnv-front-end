@@ -348,7 +348,7 @@
 					</nz-tab>
 				</nz-tabset>
 				<div class="action">
-					<button type="button" class="btn btn-main" (click)="deleteAllChecked()">
+					<button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
