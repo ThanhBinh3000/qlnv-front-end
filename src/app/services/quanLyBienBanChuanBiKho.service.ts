@@ -8,7 +8,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class QuanLyBienBanChuanBiKhoService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyBienBanChuanBiKho', '');

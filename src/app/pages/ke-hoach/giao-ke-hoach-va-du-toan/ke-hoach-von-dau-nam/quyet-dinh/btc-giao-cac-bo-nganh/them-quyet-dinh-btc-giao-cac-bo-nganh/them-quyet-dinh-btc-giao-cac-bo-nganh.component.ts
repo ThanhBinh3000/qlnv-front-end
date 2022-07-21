@@ -1,8 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -11,52 +19,110 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 })
 export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   @Input('isView') isView: boolean;
-  @Output('close') onClose = new EventEmitter<any>();
+  @Input()
+  idInput: number;
+  @Output('onClose') onClose = new EventEmitter<any>();
 
-  quyetDinh: IQuyetDinhBTC = {
-    id: null,
-    soQd: null,
-    namQd: null,
-    ngayQd: new Date(),
-    trichYeu: null,
-    taiLieuDinhKem: null,
-    keHoach: [],
-  };
-  namHienTai: number;
+  formData: FormGroup;
+
+  // quyetDinh: IQuyetDinhBTC = {
+  //   id: null,
+  //   soQd: null,
+  //   namQd: null,
+  //   ngayQd: new Date(),
+  //   trichYeu: null,
+  //   taiLieuDinhKem: null,
+  //   keHoach: [],
+  // };
+
+  quyetDinh: any;
   taiLieuDinhKemList = [];
-  dsNam: string[] = [];
+  dsNam: any[] = [];
+  dsBoNganh: any[] = [];
 
-  allChecked = false;
-  indeterminate = false;
+  userInfo: UserLogin;
+  maQd: string;
 
-  searchInTable: any = {
-    tenBo: null,
-    keHoach: null,
-  };
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
-  setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
-  ) {}
+    private spinner: NgxSpinnerService,
+    public userService: UserService,
+    public globals: Globals,
+    private helperService: HelperService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
 
-  ngOnInit(): void {
-    this.initData();
+  ) {
+    this.formData = this.fb.group(
+      {
+        id: [],
+        soQd: [, [Validators.required]],
+        ngayQd: [null, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
+        trichYeu: [null],
+        trangThai: ['00'],
+        muaTangList: [[],],
+        xuatGiamList: [[]],
+        xuatBanList: [[]],
+        luanPhienList: [[]],
+        idBoNganh: [, [Validators.required]]
+      }
+    );
   }
 
-  initData() {
-    this.loadDsNam();
+  async ngOnInit() {
+    this.spinner.show();
+    await Promise.all([
+      this.userInfo = this.userService.getUserLogin(),
+      this.loadDsNam(),
+      this.maQd = '/' + this.userInfo.MA_QD,
+      // this.getDataDetail(this.idInput),
+      this.quyetDinh = [
+        {
+          id: 1,
+          idNoiDung: 1,
+          noiDung: 'Chi thường xuyên',
+          duToan: 250,
+        },
+        {
+          id: 2,
+          idNoiDung: 2,
+          noiDung: 'Khác',
+          duToan: 350,
+        },
+      ],
+    ])
+    this.spinner.hide();
+  }
+
+  async onChangeNamQd(namQd) {
+    let body = {
+      namQd: namQd,
+      trangThai: "11"
+    }
+    let res = await this.quyetDinhTtcpService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.content;
+      if (data) {
+        let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
+        if (detail.msg == MESSAGE.SUCCESS) {
+          this.dsBoNganh = detail.data.listBoNganh;
+        }
+      }
+    }
   }
 
   loadDsNam() {
-    this.namHienTai = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((this.namHienTai - i).toString());
+      this.dsNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
     }
   }
+
 
   openFile(event) {
     // if (!this.isView) {
@@ -91,25 +157,30 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) {}
+  downloadFileKeHoach(event) { }
 
-  huy() {
+  quayLai() {
     this.onClose.emit();
   }
 
-  banHanh() {}
+  banHanh() { }
 
-  luu() {}
+  save() {
+    // this.spinner.show();
+    // this.helperService.markFormGroupTouched(this.formData);
+    // if (this.formData.invalid) {
+    //   console.log(this.formData.value)
+    //   this.spinner.hide();
+    //   return;
+    // }
+    let body = this.formData.value;
+    body.soQd = body.soQd + this.maQd;
+    console.log(body);
+  }
 
-  exportData() {}
+  xoaKeHoach() { }
 
-  changePageIndex(event) {}
-
-  changePageSize(event) {}
-
-  xoaKeHoach() {}
-
-  themKeHoach() {}
+  themKeHoach() { }
 }
 
 interface IQuyetDinhBTC {

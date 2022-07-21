@@ -8,16 +8,96 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
-        <td>{{ data.stt }}</td>
-        <td>{{ data.textTitle }}</td>
+      <tr>
+        <td>I</td>
+        <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
         <td style="text-align: right;">
-          <div *ngIf="data.isEditable; else notEdit">
-            <input style="text-align: right;" type="text" nz-input [value]="data.value" />
+          532232
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          250234
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          250236
+        </td>
+      </tr>
+      <tr>
+        <td>II</td>
+        <td>Lương thực xuất ra (quy thóc) </td>
+        <td style="text-align: right;">
+          {{ +ltThocXuat + +ltGaoXuat }}
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          <div>
+            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocXuat" type="number" />
           </div>
-          <ng-template #notEdit>
-            {{ data.value }}
-          </ng-template>
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          <div>
+            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoXuat" type="number" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>III</td>
+        <td>Lương thực mua vào (quy thóc)</td>
+        <td style="text-align: right;">
+          {{ +ltThocMua + +ltGaoMua }}
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          <div>
+            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocMua" type="number" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          <div>
+            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoMua" type="number" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>IV</td>
+        <td>Lương thực dự trữ cuối năm (quy thóc) </td>
+        <td style="text-align: right;">
+          523042
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          250236
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          250236
         </td>
       </tr>
     </tbody>

@@ -9,10 +9,10 @@ import { BaseService } from './base.service';
 })
 export class QuyetDinhTtcpService extends BaseService {
 
-  gateway: string = '/qlnv-gateway/qlnv-khoach'
+  gateway: string = '/qlnv-khoach'
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp', '/qlnv-gateway/qlnv-khoach');
+    super(httpClient, 'giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp', '/qlnv-khoach');
   }
 
 }

@@ -8,8 +8,8 @@ import { OldResponseData } from '../interfaces/response';
   providedIn: 'root',
 })
 export class DonviLienQuanService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-category'
+  GATEWAY = '/qlnv-category'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dmuc-dvi-lquan', '/qlnv-gateway/qlnv-category');
+    super(httpClient, 'dmuc-dvi-lquan', '/qlnv-category');
   }
 }

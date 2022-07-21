@@ -13,6 +13,7 @@ export abstract class BaseService {
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
+  local = 'http://localhost:9898'
 
   getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
@@ -40,7 +41,7 @@ export abstract class BaseService {
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
+    const url = `${this.local}/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 

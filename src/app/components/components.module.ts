@@ -104,10 +104,7 @@ import { DialogDiaDiemKhoComponent } from './dialog/dialog-dia-diem-kho/dialog-d
 import { DanhSachQuyetDinhPhanBoComponent } from './dialog/dialog-ds-qd-phan-bo/dialog-ds-qd-phan-bo.component';
 import { DialogChiTietKeHoachGiaoBoNganhComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
 import { KeHoachLuongThucComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
-import { KeHoachMuaTangComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-mua-tang/ke-hoach-mua-tang.component';
 import { KeHoachXuatGiamComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
-import { KeHoachXuatBanComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-ban/ke-hoach-xuat-ban.component';
-import { KeHoachLuanPhienDoiHangComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luan-phien-doi-hang/ke-hoach-luan-phien-doi-hang.component';
 import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
 
 @NgModule({
@@ -162,10 +159,7 @@ import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-
     FilterPipe,
     DialogChiTietKeHoachGiaoBoNganhComponent,
     KeHoachLuongThucComponent,
-    KeHoachMuaTangComponent,
     KeHoachXuatGiamComponent,
-    KeHoachXuatBanComponent,
-    KeHoachLuanPhienDoiHangComponent,
     DialogTTPhuLucQDDCBanDauGiaComponent
   ],
   imports: [

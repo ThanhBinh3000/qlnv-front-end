@@ -72,7 +72,7 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   lastBreadcrumb: string;
   userInfo: UserLogin;
@@ -186,7 +186,7 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     });
   }
 
-  deleteSelect() {}
+  deleteSelect() { }
 
   async ngOnInit() {
     this.spinner.show();

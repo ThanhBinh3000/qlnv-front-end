@@ -44,6 +44,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   listNganLo: any[] = [];
   listTieuChuan: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listHopDong: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -119,7 +120,17 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.quyetDinhNhapId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = this.detailGiaoNhap.children1;
+      this.detail.soHopDong = null;
+      this.detail.hopDongId = null;
+      this.detail.ngayHopDong = null;
+      this.detail.maHangHoa = null;
+      this.detail.khoiLuongKiemTra = null;
+      this.detail.maHangHoa = null;
+      this.detail.tenVatTuCha = null;
+      this.detail.tenVatTu = null;
+      this.detail.maVatTuCha = null;
+      this.detail.maVatTu = null;
     }
   }
 
@@ -220,32 +231,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.updateEditCache();
   }
 
-  async getIdNhap() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/chi-tiet/");
-      if (index != -1) {
-        let url = this.router.url.substring(index + 10);
-        let temp = url.split("/");
-        if (temp && temp.length > 0) {
-          this.detail.quyetDinhNhapId = +temp[0];
-          let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.quyetDinhNhapId);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.detailGiaoNhap = res.data;
-            this.detail.soHopDong = this.detailGiaoNhap.soHd;
-            await this.getHopDong(this.detailGiaoNhap.soHd);
-          }
-          else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-      }
-    }
-  }
-
-  async getHopDong(id) {
-    if (id) {
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
       let body = {
-        "str": id
+        "str": this.detail.soHopDong
       }
       let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {

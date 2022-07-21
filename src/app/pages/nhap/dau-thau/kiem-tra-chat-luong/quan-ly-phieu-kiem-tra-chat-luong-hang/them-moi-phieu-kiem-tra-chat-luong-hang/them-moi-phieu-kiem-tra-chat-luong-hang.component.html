@@ -137,7 +137,11 @@
                 <nz-form-label [nzNoColon]="true">
                   Theo hợp đồng số
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.soHopDong" disabled />
+                <nz-select [(ngModel)]="detail.soHopDong" (ngModelChange)="changeHopDong()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listHopDong" [nzValue]="item.soHd" [nzLabel]="item.soHd">
+                  </nz-option>
+                </nz-select>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">

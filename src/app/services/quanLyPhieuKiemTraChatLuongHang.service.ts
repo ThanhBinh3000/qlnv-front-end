@@ -10,7 +10,7 @@ import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
   providedIn: 'root',
 })
 export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang', '');

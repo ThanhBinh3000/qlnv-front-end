@@ -167,7 +167,7 @@
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-            <td>{{ idx + 1 }}</td>
+            <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.namKhoach }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
@@ -184,7 +184,7 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)">
+              <a (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

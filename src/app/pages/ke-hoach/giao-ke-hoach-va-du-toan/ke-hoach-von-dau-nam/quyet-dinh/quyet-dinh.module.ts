@@ -19,4 +19,4 @@ import { BtcGiaoTcdtModule } from './btc-giao-tcdt/btc-giao-tcdt.module';
   ],
   exports: [QuyetDinhComponent],
 })
-export class QuyetDinhModule {}
+export class QuyetDinhModule { }
