@@ -116,21 +116,50 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     }
   }
 
-  async changeSoQuyetDinh() {
+  async changeSoQuyetDinh(autoChange: boolean) {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.quyetDinhNhapId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
       this.listHopDong = this.detailGiaoNhap.children1;
-      this.detail.soHopDong = null;
-      this.detail.hopDongId = null;
-      this.detail.ngayHopDong = null;
-      this.detail.maHangHoa = null;
-      this.detail.khoiLuongKiemTra = null;
-      this.detail.maHangHoa = null;
-      this.detail.tenVatTuCha = null;
-      this.detail.tenVatTu = null;
-      this.detail.maVatTuCha = null;
-      this.detail.maVatTu = null;
+      if (!autoChange) {
+        this.detail.soHopDong = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      }
+      if (autoChange) {
+        await this.changeHopDong();
+      }
+    }
+  }
+
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
+      let body = {
+        "str": this.detail.soHopDong
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
+        this.detail.maHangHoa = this.detailHopDong.loaiVthh;
+        this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
+        this.detail.maHangHoa = this.typeVthh;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -225,34 +254,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         if (res.data) {
           this.detail = res.data;
           this.changeDiemKho(true);
+          await this.changeSoQuyetDinh(true);
         }
       }
     }
     this.updateEditCache();
-  }
-
-  async changeHopDong() {
-    if (this.detail.soHopDong) {
-      let body = {
-        "str": this.detail.soHopDong
-      }
-      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.detailHopDong = res.data;
-        this.detail.hopDongId = this.detailHopDong.id;
-        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
-        this.detail.maHangHoa = this.detailHopDong.loaiVthh;
-        this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
-        this.detail.maHangHoa = this.typeVthh;
-        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
-        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
-        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
-        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
-      }
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
   }
 
   async save(isOther: boolean) {

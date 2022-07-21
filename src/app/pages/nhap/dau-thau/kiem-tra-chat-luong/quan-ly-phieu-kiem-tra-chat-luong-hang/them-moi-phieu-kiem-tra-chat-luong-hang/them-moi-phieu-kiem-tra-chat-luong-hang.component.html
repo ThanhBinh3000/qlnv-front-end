@@ -16,13 +16,8 @@
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
-            <i class="icon htvbdh_trinh"></i>
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
-          </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
-            <i class="icon  htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
           </button>
           <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
             (click)="pheDuyet()">
@@ -34,6 +29,11 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số Quyết định
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.quyetDinhNhapId" (ngModelChange)="changeSoQuyetDinh()"
+                <nz-select [(ngModel)]="detail.quyetDinhNhapId" (ngModelChange)="changeSoQuyetDinh(false)"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -80,8 +80,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số phiếu" [(ngModel)]="detail.soPhieu"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập số phiếu" [(ngModel)]="detail.soPhieu" [disabled] />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
@@ -139,7 +138,8 @@
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.soHopDong" (ngModelChange)="changeHopDong()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listHopDong" [nzValue]="item.soHd" [nzLabel]="item.soHd">
+                  <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.soHd"
+                    [nzLabel]="item.hopDong.soHd">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
