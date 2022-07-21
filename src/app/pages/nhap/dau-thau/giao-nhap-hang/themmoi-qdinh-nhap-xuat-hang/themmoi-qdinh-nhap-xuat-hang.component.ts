@@ -61,6 +61,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   routerVthh: string;
   today = new Date();
   listNam: any[] = [];
+  hopDongList: any[] = [];
+  listFileDinhKem: any[] = [];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -123,14 +126,27 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: this.hopDongList
+      },
     });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.formData.patchValue({
-          canCu: data.soHd,
-          hopDongId: data.id
+    modalQD.afterClose.subscribe((hopDongs) => {
+      if (hopDongs) {
+        let canCuHd = '';
+        this.hopDongList = hopDongs;
+        hopDongs.forEach((hd, i) => {
+          canCuHd += hd.soHd
+          if (i < hopDongs.length - 1) {
+            canCuHd += ' - '
+          }
+          this.quyetDinhNhapXuat.hopDongIds.push(hd.id);
         });
+        this.formData.patchValue({
+          canCu: canCuHd,
+          // hopDongId: hopDongList.id
+        });
+        console.log(this.hopDongList);
+
       }
     });
   }
@@ -339,17 +355,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       );
     }
   }
-  saveEditQdNhapXuat(i: number): void {
-    this.dsQuyetDinhNhapXuatDetailClone[i].isEdit = false;
-    Object.assign(
-      this.quyetDinhNhapXuat.detail[i],
-      this.dsQuyetDinhNhapXuatDetailClone[i],
-    );
-  }
-  cancelEditQdNhapXuat(index: number) {
-    this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(this.quyetDinhNhapXuat.detail);
-    this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
-  }
+
   save(isGuiDuyet?: boolean) {
     if (!this.formData.valid) {
       return;
@@ -357,19 +363,32 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.spinner.show();
     this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value + '/QĐ-CDTVT';
     this.quyetDinhNhapXuat.namNhap = dayjs().get('year');
-    this.quyetDinhNhapXuat.ngayQdinh = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : dayjs().toString();
+    this.quyetDinhNhapXuat.ngayQdinh = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : '';
     this.quyetDinhNhapXuat.soHd = this.formData.get('canCu').value;
     this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
     this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
-    this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
+    // this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
+    // this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
     this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
-    this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
+    this.hopDongList.forEach(hd => {
+      let detailQuyetDinhNhapXuat = new DetailQuyetDinhNhapXuat();
+      detailQuyetDinhNhapXuat.denNgayThien = hd.denNgayThien;
+      detailQuyetDinhNhapXuat.donViTinh = hd.donViTinh;
+      detailQuyetDinhNhapXuat.loaiNx = hd.loaiNx;
+      detailQuyetDinhNhapXuat.maDvi = hd.maDvi;
+      detailQuyetDinhNhapXuat.maVthh = hd.maVthh;
+      detailQuyetDinhNhapXuat.soLuong = hd.soLuong;
+      detailQuyetDinhNhapXuat.tenVthh = hd.tenVthh;
+      detailQuyetDinhNhapXuat.tuNgayThien = hd.tuNgayThien;
+      this.dsQuyetDinhNhapXuatDetailClone.push(detailQuyetDinhNhapXuat);
+    })
+    this.quyetDinhNhapXuat.detail = this.dsQuyetDinhNhapXuatDetailClone;
     if (this.quyetDinhNhapXuat.id > 0) {
       const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();
       quyetDinhNhapXuatInput.detail = this.quyetDinhNhapXuat.detail;
-      quyetDinhNhapXuatInput.fileDinhKems = this.quyetDinhNhapXuat.fileDinhKems;
+      quyetDinhNhapXuatInput.fileDinhKems = this.listFileDinhKem;
       quyetDinhNhapXuatInput.ghiChu = this.quyetDinhNhapXuat.ghiChu;
       quyetDinhNhapXuatInput.id = this.quyetDinhNhapXuat.id;
       quyetDinhNhapXuatInput.soQd = this.quyetDinhNhapXuat.soQd;
@@ -381,6 +400,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       quyetDinhNhapXuatInput.loaiVthh = this.quyetDinhNhapXuat.loaiVthh;
       quyetDinhNhapXuatInput.trichYeu = this.quyetDinhNhapXuat.trichYeu;
       quyetDinhNhapXuatInput.maDvi = this.quyetDinhNhapXuat.maDvi;
+      quyetDinhNhapXuatInput.hopDongIds = this.quyetDinhNhapXuat.hopDongIds;
       this.quyetDinhNhapXuatService
         .sua(quyetDinhNhapXuatInput)
         .then((res) => {
@@ -473,24 +493,34 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           this.quyetDinhNhapXuat.detail?.forEach((nhapXuat, i) => {
             nhapXuat.stt = i + 1;
           })
-          if (this.quyetDinhNhapXuat?.fileDinhKems?.length > 0) {
-            this.quyetDinhNhapXuat.fileDinhKems.forEach((file) => {
-              const item = {
-                id: file.id,
-                text: file.fileName,
-              };
-              this.taiLieuDinhKemList.push(item);
-            });
-          }
+          this.listFileDinhKem = this.quyetDinhNhapXuat?.fileDinhKems;
           this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(
             this.quyetDinhNhapXuat.detail,
           );
+          this.quyetDinhNhapXuat.ngayQdinh = this.quyetDinhNhapXuat.ngayQdinh.split(' ')[0];
           this.initForm();
+          console.log(this.quyetDinhNhapXuat.ngayQdinh);
+
           this.formData.patchValue({
             soQdinh: this.quyetDinhNhapXuat.soQd?.split('/')[0],
             donVi: this.quyetDinhNhapXuat.tenDvi,
             maDonVi: this.quyetDinhNhapXuat.maDvi,
+            ngayQdinh: this.quyetDinhNhapXuat.ngayQdinh,
           })
+          let listHopDong = res.data.children1;
+          if (listHopDong) {
+            let canCuHd = '';
+            listHopDong.forEach((hd, i) => {
+              canCuHd += hd.hopDong.soHd
+              if (i < listHopDong.length - 1) {
+                canCuHd += ' - '
+              }
+              this.hopDongList.push(hd.hopDong);
+            });
+            this.formData.patchValue({
+              canCu: canCuHd,
+            });
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
