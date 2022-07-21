@@ -19,7 +19,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   text: string = "";
-
+  hopDongList: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -40,15 +40,14 @@ export class DialogCanCuHopDongComponent implements OnInit {
   }
 
   handleOk(item: any) {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-    this._modalRef.close(item);
+    // this._modalRef.close(item);
+    if (this.hopDongList.findIndex(hd => hd.id == item.id) == -1) {
+      this.hopDongList.push(item);
+    }
+    console.log(this.hopDongList);
+
   }
 
-  handleCancel() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-  }
 
   onCancel() {
     this._modalRef.close();
