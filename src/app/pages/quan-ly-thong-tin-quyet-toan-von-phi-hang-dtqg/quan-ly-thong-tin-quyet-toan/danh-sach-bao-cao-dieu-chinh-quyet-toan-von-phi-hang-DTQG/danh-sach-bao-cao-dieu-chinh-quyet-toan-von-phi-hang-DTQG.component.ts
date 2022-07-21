@@ -264,10 +264,25 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.trangThai = null
   }
 
-  taoMoi() {
-    this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan-/' + this.searchFilter.namQtoan ,
-    ])
+  async taoMoi() {
+    const res = {
+      namQtoan: this.searchFilter.namQtoan
+    }
+    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
+      async (data) => {
+        if (data.statusCode != 0) {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.CHUA_CO_BAO_CAO);
+          return;
+        }else{
+          this.router.navigate([
+            '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan-/' + this.searchFilter.namQtoan ,
+          ])
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
   }
 
   xemChiTiet(id: string) {

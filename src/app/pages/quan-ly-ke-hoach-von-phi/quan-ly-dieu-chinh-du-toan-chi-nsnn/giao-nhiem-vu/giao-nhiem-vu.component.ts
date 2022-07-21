@@ -504,8 +504,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 			maDvi: this.maDviTao,
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
-      dotBcao: this.dotBcao,
-      congVan: this.congVan,
+      		dotBcao: this.dotBcao,
+      		congVan: this.congVan,
+			thuyetMinh: this.thuyetMinh,
 			tongHopTuIds: tongHopTuIds,
 		}));
     if (request.congVan.fileName == null){
@@ -671,6 +672,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					})
           			this.dotBcao = data.data.dotBcao;
+					this.thuyetMinh = data.data.thuyetMinh;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

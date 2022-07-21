@@ -82,6 +82,18 @@
               <th width="150px">Năm phương án</th>
               <th width="150px" style="text-align: center">Trạng thái</th>
               <th width="150px">Hành động</th>
+              <th width="150px" [hidden]="!status">
+								<ng-container *ngIf="checkAll(); else xoa">
+									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
+										<span>Tất cả</span>
+									</button>
+								</ng-container>
+								<ng-template #xoa>
+									<button type="button" class="btn btn-main" (click)="xoaBaoCao('')">
+										<span>Xóa</span>
+									</button>
+								</ng-template>
+							</th>
             </tr>
           </thead>
           <tbody>
@@ -111,6 +123,12 @@
                 </button>
 
               </td>
+              <td [hidden]="!status">
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+									(ngModelChange)="changeListIdDelete(item.id)"></label>
+								</ng-container>
+							</td>
             </tr>
           </tbody>
         </nz-table>
