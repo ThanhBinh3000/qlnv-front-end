@@ -347,7 +347,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.chiTiet(id);
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         this.chiTiet = res.data;
         if (this.id > 0) {
@@ -485,7 +485,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
             "lyDo": null,
             "trangThai": "01"
           }
-          await this.quyetDinhPheDuyetKeHoachLCNTService.updateStatus(body);
+          await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
           this.spinner.hide();
         } catch (e) {

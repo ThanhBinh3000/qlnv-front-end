@@ -31,7 +31,8 @@
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd" [nzDisabled]="isView" nzAllowClear="true">
+              <nz-select formControlName="namQd" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="isView"
+                nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -64,13 +65,13 @@
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd" [nzDisabled]="isView" nzAllowClear="true">
-                <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
+              <nz-select formControlName="idBoNganh" [nzDisabled]="isView" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
                 </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+                </ng-template>
               </nz-select>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -98,16 +99,16 @@
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-tabset nzType="card" class="mt-16 tab-level-3">
       <nz-tab [nzTitle]="'Mua tăng'">
-        <app-ke-hoach-mua-tang [(data)]="quyetDinh"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.muaTangList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất giảm'">
-        <app-ke-hoach-mua-tang [(data)]="quyetDinh"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.xuatGiamList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất bán'">
-        <app-ke-hoach-mua-tang [(data)]="quyetDinh"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.xuatBanList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-        <app-ke-hoach-mua-tang [(data)]="quyetDinh"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.luanPhienList"></app-ke-hoach-mua-tang>
       </nz-tab>
     </nz-tabset>
   </nz-card>
