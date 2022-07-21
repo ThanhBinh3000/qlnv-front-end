@@ -49,13 +49,18 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00']
+        trangThai: ['00'],
+        muaTangList: [],
+        xuatGiamList: [],
+        xuatBanList: [],
+        luanPhienList: [],
       }
     );
   }
 
   async ngOnInit() {
     this.spinner.show();
+    console.log(this.isView);
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
@@ -173,7 +178,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   exportData() { }
 
-  themKeHoach(data?: any, index?) {
+  themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
       nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
@@ -183,6 +188,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        isView: isView,
       },
     });
     modalQD.afterClose.subscribe((data) => {

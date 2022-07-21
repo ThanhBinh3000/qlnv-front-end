@@ -64,7 +64,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
 
   async ngOnInit() {
     this.loadDsNam();
-    this.search();
+    // this.search();
   }
 
   initForm(): void {

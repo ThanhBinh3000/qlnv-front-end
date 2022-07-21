@@ -85,7 +85,7 @@
             <th style="width: 7%;">Ngày QĐ</th>
             <th style="width: 20%;">Trích yếu</th>
             <th style="width: 10%;">Trạng thái</th>
-            <th width="width: 10%;">Hành động</th>
+            <th width="width: 5%;">Thao tác</th>
             <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">
@@ -182,10 +182,10 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.trangThai }}</td>
             <td style="text-align: left; white-space: nowrap;">
-              <a (click)="viewDetail(data.id, false)">
+              <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)">
+              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">

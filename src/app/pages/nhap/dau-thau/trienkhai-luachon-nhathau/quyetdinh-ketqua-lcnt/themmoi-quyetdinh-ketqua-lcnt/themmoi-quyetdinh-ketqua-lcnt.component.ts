@@ -61,7 +61,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   iconButtonDuyet: string = '';
   danhMucDonVi: any;
   ktDiemKho: any;
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
   fileList: any[] = [];
 
   editId: string | null = null;

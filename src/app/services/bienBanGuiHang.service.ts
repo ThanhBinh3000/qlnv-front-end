@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class BienBanGuiHangService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
   BIEN_BAN_GUI_HANG = 'bien-ban-gui-hang'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'BienBanGuiHang', '');

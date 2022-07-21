@@ -7,8 +7,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
 export class KeHoachMuaTangComponent implements OnInit {
-  @Input('quyetDinh') quyetDinh: any;
-  dataTable = [];
+  @Input('data') dataTable: any[] = [];
 
   rowItem: IMuaTang = {
     id: null,
@@ -22,10 +21,11 @@ export class KeHoachMuaTangComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
-    this.initData();
+    // this.initData();
+    console.log(this.dataTable)
   }
 
   initData() {
@@ -62,9 +62,9 @@ export class KeHoachMuaTangComponent implements OnInit {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) {}
-  themMoiItem() {}
-  clearData() {}
+  xoaItem(id: number) { }
+  themMoiItem() { }
+  clearData() { }
 
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.id === id);
@@ -89,9 +89,9 @@ export class KeHoachMuaTangComponent implements OnInit {
     });
   }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {

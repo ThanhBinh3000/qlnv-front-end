@@ -131,7 +131,7 @@ export class ThemMoiDeXuatKhBanDauGiaComponent implements OnInit {
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
 
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
@@ -483,7 +483,7 @@ export class ThemMoiDeXuatKhBanDauGiaComponent implements OnInit {
     });
   }
 
-  xoaFile(item) {}
+  xoaFile(item) { }
 
   themMoiGoiThau(data?: DanhSachGoiThau) {
     if (!this.formData.get('loaiVthh').value) {
@@ -1239,7 +1239,7 @@ export class ThemMoiDeXuatKhBanDauGiaComponent implements OnInit {
     });
   }
 
-  xoaItem(data: any) {}
+  xoaItem(data: any) { }
 
   async changePageIndex(event) {
     this.spinner.show();

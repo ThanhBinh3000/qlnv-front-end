@@ -52,7 +52,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   listLoaiHopDong: any[] = [];
   listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   lastBreadcrumb: string;
   userInfo: UserLogin;
