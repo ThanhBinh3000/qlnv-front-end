@@ -102,9 +102,6 @@
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviBenNhan"
                           (input)="filterInTable('tenDviBenNhan',filterTable.tenDviBenNhan)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
