@@ -117,22 +117,22 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   getTitleVthh() {
-    console.log(this.typeVthh);
+    // console.log(this.typeVthh);
 
-    this.loaiVthh = convertTenVthh(this.typeVthh);
-    if (this.typeVthh == 'thoc') {
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.typeVthh == 'gao') {
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.typeVthh == 'muoi') {
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.typeVthh == 'vat-tu') {
-      this.maVthh = null;
-      this.routerVthh = 'vat-tu';
-    }
+    // this.loaiVthh = convertTenVthh(this.typeVthh);
+    // if (this.typeVthh == 'thoc') {
+    //   this.maVthh = "0101";
+    //   this.routerVthh = 'thoc';
+    // } else if (this.typeVthh == 'gao') {
+    //   this.maVthh = "0102";
+    //   this.routerVthh = 'gao';
+    // } else if (this.typeVthh == 'muoi') {
+    //   this.maVthh = "04";
+    //   this.routerVthh = 'muoi';
+    // } else if (this.typeVthh == 'vat-tu') {
+    //   this.maVthh = null;
+    //   this.routerVthh = 'vat-tu';
+    // }
   }
 
   openDialogHopDong() {

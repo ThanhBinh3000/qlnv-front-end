@@ -20,6 +20,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   dataTable: any[] = [];
   text: string = "";
   hopDongList: any[] = [];
+  data: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -40,17 +41,18 @@ export class DialogCanCuHopDongComponent implements OnInit {
   }
 
   handleOk(item: any) {
-    // this._modalRef.close(item);
-    if (this.hopDongList.findIndex(hd => hd.id == item.id) == -1) {
-      this.hopDongList.push(item);
+    if (item.checked) {
+      if (this.hopDongList.findIndex(hd => hd.id == item.id) == -1) {
+        this.hopDongList.push(item);
+      }
+    } else {
+      this.hopDongList = this.hopDongList.filter(hd => hd.id !== item.id);
     }
-    console.log(this.hopDongList);
-
   }
 
 
   onCancel() {
-    this._modalRef.close();
+    this._modalRef.close(this.hopDongList);
   }
 
   async search() {
@@ -80,6 +82,9 @@ export class DialogCanCuHopDongComponent implements OnInit {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+        this.dataTable.forEach(hd => {
+
+        })
       }
       this.totalRecord = data.totalElements;
     } else {
