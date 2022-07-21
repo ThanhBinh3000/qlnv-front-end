@@ -120,7 +120,7 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		window.location.reload();
 	}
 
 	// lay ten trang thai ban ghi

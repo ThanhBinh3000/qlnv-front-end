@@ -131,7 +131,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 	}
 
 	close() {
-		this.location.back();
+		window.location.reload();
 	}
 
 	deleteCondition(){
