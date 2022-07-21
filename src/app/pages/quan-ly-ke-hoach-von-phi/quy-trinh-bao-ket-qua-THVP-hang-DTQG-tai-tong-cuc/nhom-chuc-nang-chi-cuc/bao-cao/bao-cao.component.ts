@@ -76,7 +76,7 @@ export class ItemData {
 export class ItemDataMau02 {
   id = null;
   header = null;
-  stt = '0';
+  stt = '0'; 
   checked = false;
   level = 0;
   maVtu = null;
