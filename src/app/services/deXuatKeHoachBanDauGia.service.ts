@@ -15,23 +15,27 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia?`
-    if (body.denNgay)
-      url_ += 'denNgayNhap=' + encodeURIComponent('' + body.denNgay) + '&';
-    if (body.maDonVi)
-      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.maVatTuCha)
-      url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
-    if (body.soQdNhap)
-      url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
-    if (body.soBangKe)
-      url_ += 'soBangKe=' + encodeURIComponent('' + body.soBangKe) + '&';
-    if (body.tuNgay)
-      url_ += 'tuNgayNhap=' + encodeURIComponent('' + body.tuNgay) + '&';
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/search?`
+    if (body.id)
+      url_ += 'id=' + encodeURIComponent('' + body.id) + '&';
+    if (body.namKeHoach)
+      url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
+    if (body.maDvis)
+      url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
+    if (body.soKeHoach)
+      url_ += 'soKeHoach=' + encodeURIComponent('' + body.soKeHoach) + '&';
+    if (body.trichYeu)
+      url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
+    if (body.ngayKyTuNgay)
+      url_ += 'ngayKyTuNgay=' + encodeURIComponent('' + body.ngayKyTuNgay) + '&';
+    if (body.ngayKyDenNgay)
+      url_ += 'ngayKyDenNgay=' + encodeURIComponent('' + body.ngayKyDenNgay) + '&';
+    if (body.loaiVatTuHangHoa)
+      url_ += 'loaiVatTuHangHoa=' + encodeURIComponent('' + body.loaiVatTuHangHoa) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
-      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+      url_ += 'pageable.pageNumber=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
-      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'pageable.pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
@@ -62,7 +66,7 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/trang-thai`;
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
