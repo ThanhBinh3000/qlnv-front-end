@@ -2006,3 +2006,19 @@ td.action.ant-table-cell {
   cursor: pointer;
   margin-left: 10px;
 }
+
+.label-empty {
+  padding: 0px !important;
+}
+
+.btn-delete {
+  background: #ff0000;
+  color: #fff;
+  width: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  margin-left: 10px;
+  cursor: pointer;
+}
