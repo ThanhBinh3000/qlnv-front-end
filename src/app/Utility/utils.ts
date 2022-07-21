@@ -1068,7 +1068,7 @@ export function divNumber(num1, num2) {
         return null;
     }
     if (getNumberValue(num2) == 0){
-        return getNumberValue(num1) / getNumberValue(num2);
+        return 0 / 0;
     } else {
         return (Number(getNumberValue(num1) / getNumberValue(num2))).toFixed(Utils.ROUND);
     }

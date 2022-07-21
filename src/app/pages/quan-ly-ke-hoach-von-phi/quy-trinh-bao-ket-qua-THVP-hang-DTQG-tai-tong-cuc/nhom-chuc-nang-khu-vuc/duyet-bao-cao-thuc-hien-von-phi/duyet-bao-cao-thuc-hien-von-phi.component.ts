@@ -221,7 +221,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		window.location.reload();
 	}
 
 	deleteCondition(){

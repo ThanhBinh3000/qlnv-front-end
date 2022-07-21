@@ -352,7 +352,7 @@ export class QuanLyVonPhiService extends BaseService {
   updateBieuMau(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/cap-nhat',
-      // 'http://192.168.1.104:8094/lap-tham-dinh/cap-nhat',
+      // 'http://192.168.1.141:8094/lap-tham-dinh/cap-nhat',
       request,
     );
   }
