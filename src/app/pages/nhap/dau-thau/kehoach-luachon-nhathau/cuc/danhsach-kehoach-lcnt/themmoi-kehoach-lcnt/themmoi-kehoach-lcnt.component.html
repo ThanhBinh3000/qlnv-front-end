@@ -468,7 +468,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let data of expandTable.data">
+                  <!-- <ng-container *ngFor="let data of expandTable.data">
                     <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">
                       <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
                         <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children"
@@ -477,7 +477,7 @@
                           {{ item.tenDvi }}
                         </td>
                         <td>{{ item.goiThau }}</td>
-                        <td>{{ item.tenDiemKho }}</td>
+                        <td>{{ item.diaDiemNhap }}</td>
                         <td>{{ item.soLuongTheoChiTieu }}</td>
                         <td>{{ item.soLuongTheoChiTieu }}</td>
                         <td>{{ item.soLuong }}</td>
@@ -498,7 +498,28 @@
                         </td>
                       </tr>
                     </ng-container>
-                  </ng-container>
+                  </ng-container> -->
+                  <tr *ngFor="let item of expandTable.data; let i = index">
+                    <td>{{ item.tenDvi }}</td>
+                    <td>{{ item.goiThau }}</td>
+                    <td>{{ item.diaDiemNhap }}</td>
+                    <td>{{ item.soLuongTheoChiTieu }}</td>
+                    <td>{{ item.soLuongTheoChiTieu }}</td>
+                    <td>{{ item.soLuong }}</td>
+                    <td>{{item.donGia}}</td>
+                    <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+                    <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
+                    <td class="text-right" *ngIf="userService.isCuc()">
+                      <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                        (click)="themMoiGoiThau(item,i)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                        (click)="deleteRow(i)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </tr>
                 </tbody>
               </nz-table>
             </nz-tab>
