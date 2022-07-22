@@ -178,7 +178,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		let check = false;
 		const request = {
 			maPhanBcao: '1',
-			trangThais: [],
+			trangThais: [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9],
 			maLoaiBcao: this.searchFilter.maLoaiBcao,
 			namBcao: this.searchFilter.namBcao,
 			dotBcao: this.searchFilter.dotBcao,
@@ -191,9 +191,10 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		}
 		await this.quanLyVonPhiService.timBaoCao(request).toPromise().then(res => {
 			if (res.statusCode == 0) {
-				if (res.data.content?.length > 0){
-					check = true;
-				}
+				// if (res.data.content?.length > 0){
+				// 	check = true;
+				// }
+				check = !res.data?.empty;
 			} else {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
@@ -201,7 +202,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 		})
 
-		if (!check){
+		if (check){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
 			return;
 		}
