@@ -142,5 +142,18 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
 
     ],
     isDisabled: false,
-  }
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Phê duyệt phương án tại đơn vị',
+    description: 'Phê duyệt phương án tại đơn vị',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/duyet-phuong-an-tai-don-vi`,
+    Role: [
+      TRUONG_BP_TC,
+      LANH_DAO_TC,
+      TRUONG_BP_CKV,
+      LANH_DAO_CKV,
+    ],
+    isDisabled: false,
+  },
 ];

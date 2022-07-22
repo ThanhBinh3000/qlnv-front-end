@@ -18,6 +18,6 @@ export const MESSAGEVALIDATE = {
     ERROR_DATA: "Vui lòng nhập đúng dữ liệu: Bản ghi ",
     OVER_SIZE: "Kích thước file không vượt quá 2MB",
     NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
-    EXIST_REPORT: "Báo cáo đã tông tại",
+    EXIST_REPORT: "Báo cáo đã tồn tại",
     WRONG_DAY:'"Đến ngày" cần lớn "Ngày từ"',
   };
