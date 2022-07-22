@@ -196,11 +196,13 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	//doi so trang
 	onPageIndexChange(page) {
 		this.pages.page = page;
+		this.onSubmit();
 	}
 
 	//doi so luong phan tu tren 1 trang
 	onPageSizeChange(size) {
 		this.pages.size = size;
+		this.onSubmit();
 	}
 	redirectChiTieuKeHoachNam() {
 		this.location.back()

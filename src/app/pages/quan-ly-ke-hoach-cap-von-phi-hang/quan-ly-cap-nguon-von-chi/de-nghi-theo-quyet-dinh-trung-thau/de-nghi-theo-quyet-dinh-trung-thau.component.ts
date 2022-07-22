@@ -91,6 +91,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     fileDetail: NzUploadFile;
     listIdFilesDelete: any = [];
 
+    formatter = value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    parser = value => value.replace(/\$\s?|(,*)/g, '');
+
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -177,11 +180,11 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                 this.qdChiTieu = obj?.qdChiTieu;
                 this.loaiDn = obj?.loaiDn;
             })
-            if (!this.qdChiTieu){
+            if (!this.qdChiTieu) {
                 this.close();
             }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            
+
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -244,10 +247,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     }
 
-    addListVtu(lstVtu: any){
+    addListVtu(lstVtu: any) {
         lstVtu.forEach(item => {
             this.vatTus.push(item);
-            if (item.child){
+            if (item.child) {
                 this.addListVtu(item.child);
             }
         })
@@ -284,6 +287,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         } else {
             this.status = true;
         }
+
         let checkChirld = false;
         const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
         if (dVi && dVi.maDvi == this.userInfo.dvql) {
@@ -292,7 +296,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         const utils = new Utils();
         this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
         this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
-        if (this.trangThai == Utils.TT_BC_2){
+        if (this.trangThai == Utils.TT_BC_2) {
             this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, userRole);
         } else {
             this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
@@ -383,13 +387,13 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.loaiDn = data.data.loaiDnghi;
                     this.congVan = data.data.congVan;
                     this.tongTien = data.data.tongTien,
-                    this.kphiDaCap = data.data.kphiDaCap,
-                    this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+                        this.kphiDaCap = data.data.kphiDaCap,
+                        this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.trangThai = data.data.trangThai;
                     this.thuyetMinh = data.data.thuyetMinh,
-                    this.lstFiles = data.data.lstFiles;
+                        this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -454,8 +458,12 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.kphiDaCap && this.kphiDaCap !== 0){
+        if (!this.kphiDaCap && this.kphiDaCap !== 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        if (this.kphiDaCap < 0) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
         if (this.kphiDaCap > this.tongTien) {
@@ -466,11 +474,11 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         let checkFile = true;
         for (const iterator of this.listFile) {
             console.log(iterator);
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -507,14 +515,14 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {
-            if (file.size > Utils.FILE_SIZE){
+            if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
+                return;
             } else {
                 request.congVan = await this.uploadFile(file);
             }
         }
-        if (!request.congVan){
+        if (!request.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -572,10 +580,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
 
     close() {
-        if (this.id && !this.loai){
+        if (this.id && !this.loai) {
             this.location.back();
         }
-        if (!this.loai){
+        if (!this.loai) {
             this.loai = "0";
         }
         this.router.navigate([

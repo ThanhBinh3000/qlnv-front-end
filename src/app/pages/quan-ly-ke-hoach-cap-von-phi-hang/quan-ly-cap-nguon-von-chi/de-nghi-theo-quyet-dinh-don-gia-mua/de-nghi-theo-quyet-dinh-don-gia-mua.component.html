@@ -279,7 +279,7 @@
 												</ng-container>
 												<ng-template #edit>
 													<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"
-													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) ?'' : 'input-error-validate' "></nz-input-number>
+													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap > 0)?'' : 'input-error-validate' "></nz-input-number>
 												</ng-template>
 											</td>
 											<td>
