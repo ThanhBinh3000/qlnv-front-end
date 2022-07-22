@@ -91,6 +91,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
 
   listCanCu: any[] = [];
   listFileDinhKem: any[] = [];
+  listHopDong: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -117,6 +118,8 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.detail.tenDvi = this.userInfo.TEN_DVI;
       this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.trangThai = this.globals.prop.DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadBanGiaoMau(),
         this.loadSoQuyetDinh(),
@@ -250,18 +253,33 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     }
   }
 
-  async changeSoQuyetDinh() {
+  async changeSoQuyetDinh(autoChange: boolean) {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = this.detailGiaoNhap.children1;
+      if (!autoChange) {
+        this.detail.soHopDong = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      }
+      if (autoChange) {
+        await this.changeHopDong();
+      }
     }
   }
 
-  async getHopDong(id) {
-    if (id) {
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
       let body = {
-        "str": id
+        "str": this.detail.soHopDong
       }
       let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -270,6 +288,10 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         this.detail.soHopDong = this.detailHopDong.soHd;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
         this.detail.loaiVthh = this.detailHopDong.loaiVthh;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -299,6 +321,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           if (this.detail.fileDinhKems) {
             this.listFileDinhKem = this.detail.fileDinhKems;
           }
+          await this.changeSoQuyetDinh(true);
         }
       }
     }

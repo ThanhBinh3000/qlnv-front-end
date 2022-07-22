@@ -21,6 +21,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import * as dayjs from 'dayjs';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -40,6 +41,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
+  detailGiaoNhap: any = {};
+  detailHopDong: any = {};
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -50,6 +53,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   listPTBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listHopDong: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -66,6 +70,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private thongTinHopDongService: ThongTinHopDongService,
     public globals: Globals,
   ) { }
 
@@ -73,9 +78,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.spinner.show();
     try {
       this.create.dvt = "Tấn";
-      this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.trangThai = this.globals.prop.DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadDiemKho(),
         this.loadThuKho(),
@@ -90,6 +96,49 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeSoQuyetDinh(autoChange: boolean) {
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
+    if (quyetDinh && quyetDinh.length > 0) {
+      this.detailGiaoNhap = quyetDinh[0];
+      this.listHopDong = this.detailGiaoNhap.children1;
+      if (!autoChange) {
+        this.detail.soHopDong = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      }
+      if (autoChange) {
+        await this.changeHopDong();
+      }
+    }
+  }
+
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
+      let body = {
+        "str": this.detail.soHopDong
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -134,6 +183,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           if (this.detail.children) {
             this.detail.detail = this.detail.children;
           }
+          await this.changeSoQuyetDinh(true);
         }
       }
     }
