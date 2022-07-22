@@ -41,7 +41,7 @@ export abstract class BaseService {
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${this.local}/${this.table}/chi-tiet/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
