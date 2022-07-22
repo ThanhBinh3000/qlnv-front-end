@@ -33,6 +33,7 @@ date:null
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
   @Input() typeVthh: string;
+
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -159,10 +160,6 @@ date:null
   }
 
   addDaiDien(type) {
-
-
-
-
     if (!this.listDaiDien) {
       this.listDaiDien = [];
     }
