@@ -1,0 +1,37 @@
+<nz-tabset nzType="card" class="chuc-nang-nhap-kho mt-16 tab-level-2">
+
+  <nz-tab [nzTitle]="'Phiếu xuất kho'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <div>Phiếu xuất kho</div>
+    </ng-template>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'Bảng kê cân hàng'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <app-bang-ke-can-bang [typeVthh]="typeVthh"></app-bang-ke-can-bang>
+    </ng-template>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'Biên bản tịnh kho'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <div>Biên bản tịnh kho</div>
+
+    </ng-template>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'Biên bản hao đôi'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <div>Biên bản hao đôi</div>
+
+    </ng-template>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'Bảng kê xuất vật tư'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <div>Bảng kê xuất vật tư</div>
+
+    </ng-template>
+  </nz-tab>
+
+
+</nz-tabset>
