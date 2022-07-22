@@ -498,24 +498,35 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     let checkMoneyRange = true;
 
     // gui du lieu trinh duyet len server
-    this.lstCtietBcao.forEach(item => {
+    let tongTranChi = 0;
+    const data: ItemDvi[] = [];
+    for(const item of this.lstCtietBcao){
       if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
-      let data: ItemDvi[] = [];
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
           soTranChi: mulMoney(e.soTranChi, this.maDviTien),
         })
+        tongTranChi += e.soTranChi
       })
+      if(tongTranChi == 0){
+        this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
+        return;
+      }
+      if(tongTranChi > item.tongCong){
+        this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
+        return;
+      }
+
       lstCtietBcaoTemp.push({
         ...item,
         tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
       })
-    })
+    }
 
     if (!checkMoneyRange == true) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -1064,14 +1075,22 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     let data: ItemDvi[] = [];
     for(let itm of this.editCache[id].data.lstCtietDvis){
-      if (!itm.soTranChi && itm.soTranChi !== 0){
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-        return;
-      }
       if (itm.soTranChi < 0){
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
         return;
       }
+    }
+    let tongTranChi = 0;
+    this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+      tongTranChi += item.soTranChi;
+    })
+    if(tongTranChi == 0){
+      this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
+      return;
+    }
+    if(tongTranChi > this.lstCtietBcao[index].tongCong){
+      this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
+      return;
     }
     this.editCache[id].data.lstCtietDvis.forEach(item => {
       data.push({
@@ -1085,7 +1104,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       ...this.editCache[id].data,
       lstCtietDvis: data,
     }
-    this.total(id);
     this.sum(this.lstCtietBcao[index].stt);
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
   }
@@ -1283,9 +1301,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     })
     this.lstDviChon.push(this.lstDvi.find(e => e.maDvi == maDvi));
     this.lstDvi = this.lstDvi.filter(e => e.maDvi != maDvi);
-    this.lstCtietBcao.forEach(item => {
-      this.total(item.id);
-    })
   }
 
   addCol(maDvi: string) {
@@ -1320,23 +1335,9 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             this.addCol(item.maDvi);
           }
         })
-        this.lstCtietBcao.forEach(item => {
-          this.total(item.id);
-        })
         this.updateEditCache();
       }
     });
-  }
-
-  total(id: any) {
-    var index: number = this.lstCtietBcao.findIndex(e => e.id == id);
-    this.lstCtietBcao[index].tongCong = 0;
-    this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-      this.lstCtietBcao[index].tongCong += item.soTranChi;
-    })
-    if(this.lstCtietBcao[index].tongCong == 0){
-      this.lstCtietBcao[index].tongCong = null
-    }
   }
 
   close() {
