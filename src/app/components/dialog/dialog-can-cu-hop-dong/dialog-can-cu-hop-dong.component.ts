@@ -31,6 +31,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.hopDongList = this.data;
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -83,7 +84,11 @@ export class DialogCanCuHopDongComponent implements OnInit {
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
         this.dataTable.forEach(hd => {
-
+          this.data.forEach(dt => {
+            if (dt.id == hd.id) {
+              hd.checked = true;
+            }
+          });
         })
       }
       this.totalRecord = data.totalElements;
