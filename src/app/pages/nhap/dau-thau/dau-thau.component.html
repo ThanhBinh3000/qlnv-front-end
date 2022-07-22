@@ -2,37 +2,37 @@
     <div class="contentDetail">
         <div class="main-content tab-menu-new">
             <nz-tabset nzType="card" class="tab-level-0">
-                <nz-tab [nzTitle]="'Kế hoạch lựa chọn nhà thầu'">
+                <nz-tab [nzTitle]="'Kế hoạch lựa chọn nhà thầu'" *ngIf="!userService.isChiCuc()">
                     <ng-template nz-tab>
                         <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Tổ chức triển khai KH lựa chọn nhà thầu'">
+                <nz-tab [nzTitle]="'Tổ chức triển khai KH lựa chọn nhà thầu'" *ngIf="!userService.isChiCuc()">
                     <ng-template nz-tab>
                         <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Điều chỉnh KH lựa chọn nhà thầu'">
+                <nz-tab [nzTitle]="'Điều chỉnh KH lựa chọn nhà thầu'" *ngIf="!userService.isChiCuc()">
                     <ng-template nz-tab>
                         <app-dieu-chinh></app-dieu-chinh>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Hợp đồng'">
+                <nz-tab [nzTitle]="'Hợp đồng'" *ngIf="!userService.isChiCuc()">
                     <ng-template nz-tab>
                         <app-hop-dong></app-hop-dong>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Quyết định giao nhiệm vụ nhập hàng'">
+                <nz-tab [nzTitle]="'Quyết định giao nhiệm vụ nhập hàng'" *ngIf="!userService.isTongCuc()">
                     <ng-template nz-tab>
                         <app-giao-nhap-hang></app-giao-nhap-hang>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Kiểm tra chất lượng'">
+                <nz-tab [nzTitle]="'Kiểm tra chất lượng'" *ngIf="!userService.isTongCuc()">
                     <ng-template nz-tab>
                         <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
                     </ng-template>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Nhập kho'">
+                <nz-tab [nzTitle]="'Nhập kho'" *ngIf="!userService.isTongCuc()">
                     <ng-template nz-tab>
                         <app-nhap-kho></app-nhap-kho>
                     </ng-template>

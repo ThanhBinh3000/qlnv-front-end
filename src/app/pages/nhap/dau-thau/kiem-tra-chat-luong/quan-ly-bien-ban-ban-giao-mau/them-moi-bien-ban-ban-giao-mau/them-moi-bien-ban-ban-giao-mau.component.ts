@@ -212,7 +212,19 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanLayMau.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      this.listHopDong = this.detailGiaoNhap.children1;
+      this.listHopDong = [];
+      this.detailGiaoNhap.children1.forEach(element => {
+        if (element && element.hopDong) {
+          if (this.typeVthh) {
+            if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+              this.listHopDong.push(element);
+            }
+          }
+          else {
+            this.listHopDong.push(element);
+          }
+        }
+      });
       if (!autoChange) {
         this.bienBanLayMau.soHopDong = null;
         this.bienBanLayMau.hopDongId = null;
@@ -224,8 +236,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
         this.bienBanLayMau.tenVatTu = null;
         this.bienBanLayMau.maVatTuCha = null;
         this.bienBanLayMau.maVatTu = null;
-      }
-      if (autoChange) {
+      } else {
         await this.changeHopDong();
       }
     }

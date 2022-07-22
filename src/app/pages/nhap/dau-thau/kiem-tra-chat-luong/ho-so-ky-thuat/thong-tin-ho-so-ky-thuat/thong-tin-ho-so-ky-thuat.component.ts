@@ -113,6 +113,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.typeVthh = '02';
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
@@ -126,6 +127,8 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       ]);
       await this.loadChiTiet(this.id);
       this.loadDaiDien();
+      this.detail.loaiVthh = this.typeVthh;
+      this.detail.tenVthh = "Vật tư";
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -257,7 +260,14 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      this.listHopDong = this.detailGiaoNhap.children1;
+      this.listHopDong = [];
+      this.detailGiaoNhap.children1.forEach(element => {
+        if (element && element.hopDong) {
+          if (element.hopDong.loaiVthh.startsWith('02')) {
+            this.listHopDong.push(element);
+          }
+        }
+      });
       if (!autoChange) {
         this.detail.soHopDong = null;
         this.detail.hopDongId = null;
@@ -269,8 +279,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         this.detail.tenVatTu = null;
         this.detail.maVatTuCha = null;
         this.detail.maVatTu = null;
-      }
-      if (autoChange) {
+      } else {
         await this.changeHopDong();
       }
     }
@@ -287,7 +296,6 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         this.detail.hopDongId = this.detailHopDong.id;
         this.detail.soHopDong = this.detailHopDong.soHd;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
-        this.detail.loaiVthh = this.detailHopDong.loaiVthh;
         this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
         this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
         this.detail.maVatTuCha = this.detailHopDong.loaiVthh;

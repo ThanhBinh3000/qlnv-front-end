@@ -174,7 +174,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.detail.maDvi,
-      "maVthh": this.typeVthh,
+      "maVthh": this.detail.loaiVthh,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",

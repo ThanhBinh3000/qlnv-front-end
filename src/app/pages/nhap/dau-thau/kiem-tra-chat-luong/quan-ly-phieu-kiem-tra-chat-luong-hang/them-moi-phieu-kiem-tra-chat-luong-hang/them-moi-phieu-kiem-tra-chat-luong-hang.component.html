@@ -19,13 +19,12 @@
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
+          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="pheDuyet()">
             <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
-            (click)="tuChoi()">
+          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
@@ -80,7 +79,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số phiếu" [(ngModel)]="detail.soPhieu" [disabled] />
+                <input nz-input placeholder="Nhập số phiếu" [(ngModel)]="detail.soPhieu" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
