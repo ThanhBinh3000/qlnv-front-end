@@ -11,6 +11,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { DON_VI_TIEN, KHOAN_MUC, LA_MA, TRANG_THAI_GIAO, Utils, mulMoney } from 'src/app/Utility/utils';
+import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 
 export class ItemData {
   id!: any;
@@ -70,7 +71,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   lstCtietBcao: ItemData[] = [];
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
-  noiDungs: any[] = KHOAN_MUC;
+  noiDungs: any[] = NOI_DUNG;
   soLaMa: any[] = LA_MA;
   //file
   fileDetail: NzUploadFile;
