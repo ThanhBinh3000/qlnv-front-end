@@ -185,7 +185,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 			namBcao: this.searchFilter.namBcao,
 			thangBcao: this.searchFilter.thangBcao,
 			maLoaiBcao: this.searchFilter.maLoaiBcao,
-			trangThais: [],
+			trangThais: [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9],
 			paggingReq: {
 				limit: 10,
 				page: 1
@@ -200,9 +200,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 		await this.quanLyVonPhiService.timBaoCao(request).toPromise().then(res => {
 			if (res.statusCode == 0) {
-				if (res.data.content?.lenght > 0){
-					check = true;
-				}
+				check = !res.data?.empty;
 			} else {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
@@ -210,7 +208,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 		})
 
-		if (!check){
+		if (check){
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
 			return;
 		}
