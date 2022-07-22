@@ -132,13 +132,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((hopDongs) => {
       if (hopDongs) {
+        console.log("hopDongs: ", hopDongs);
         let canCuHd = '';
         this.hopDongList = hopDongs;
+        this.quyetDinhNhapXuat.hopDongIds = [];
         hopDongs.forEach((hd, i) => {
           canCuHd += hd.soHd
           if (i < hopDongs.length - 1) {
             canCuHd += ' - '
           }
+
           this.quyetDinhNhapXuat.hopDongIds.push(hd.id);
         });
         this.formData.patchValue({
@@ -497,15 +500,12 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(
             this.quyetDinhNhapXuat.detail,
           );
-          this.quyetDinhNhapXuat.ngayQdinh = this.quyetDinhNhapXuat.ngayQdinh.split(' ')[0];
           this.initForm();
-          console.log(this.quyetDinhNhapXuat.ngayQdinh);
-
           this.formData.patchValue({
             soQdinh: this.quyetDinhNhapXuat.soQd?.split('/')[0],
             donVi: this.quyetDinhNhapXuat.tenDvi,
             maDonVi: this.quyetDinhNhapXuat.maDvi,
-            ngayQdinh: this.quyetDinhNhapXuat.ngayQdinh,
+            ngayQdinh: dayjs(this.quyetDinhNhapXuat.ngayQdinh.split('')[0]).format("YYYY-MM-DD"),
           })
           let listHopDong = res.data.children1;
           if (listHopDong) {
