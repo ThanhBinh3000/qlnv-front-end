@@ -155,9 +155,13 @@ const routes: Routes = [
         './chuc-nang-TCDT/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan.module'
       ).then((m) => m.DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanModule),
   },
-
-
-
+  {
+    path: 'duyet-phuong-an-tai-don-vi',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/duyet-phuong-an-tai-don-vi/duyet-phuong-an-tai-don-vi.module'
+      ).then((m) => m.DuyetPhuongAnTaiDonViModule),
+  },
 
 ];
 
