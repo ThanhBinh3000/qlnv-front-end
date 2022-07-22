@@ -514,7 +514,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       dsGoiThauDialog.thanhTien = res.value.thanhTien;
       dsGoiThauDialog.idVirtual = new Date().getTime();
       dsGoiThauDialog.children = res.value.children;
-      if (index > 0) {
+      if (index >= 0) {
         this.listOfData[index] = dsGoiThauDialog
       } else {
         this.listOfData = [

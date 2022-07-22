@@ -87,11 +87,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       console.log(this.dataEdit);
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
+        tenDvi: this.dataEdit.tenDvi,
         goiThau: this.dataEdit.goiThau,
+        tenCcuc: this.dataEdit.tenCcuc,
         soLuong: this.dataEdit.soLuong,
         donGia: this.dataEdit.donGia,
         thanhTien: this.dataEdit.thanhTien
       })
+      this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     }
     this.checkDisabledSave();
