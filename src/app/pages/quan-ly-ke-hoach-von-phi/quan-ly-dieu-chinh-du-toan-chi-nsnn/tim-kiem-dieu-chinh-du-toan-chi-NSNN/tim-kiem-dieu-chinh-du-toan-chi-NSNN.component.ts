@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { TRANGTHAIBAOCAO } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { TRANGTHAIBAOCAO } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 // trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
   {
@@ -130,7 +130,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
     this.status = true;
-    
+
     if (this.userRole == roleUserCB[0]) {
       this.trangThai = Utils.TT_BC_1;
       this.searchFilter.loaiTimKiem = '0';

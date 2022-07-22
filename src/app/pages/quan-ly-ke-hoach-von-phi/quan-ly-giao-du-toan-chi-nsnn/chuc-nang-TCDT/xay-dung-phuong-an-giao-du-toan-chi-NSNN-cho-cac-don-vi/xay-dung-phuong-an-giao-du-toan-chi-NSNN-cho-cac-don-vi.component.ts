@@ -378,7 +378,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.lstCtietBcao.forEach(item => {
             item.tongCong = divMoney(item.tongCong, this.maDviTien);
             item.lstCtietDvis.forEach(e => {
-              e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
+              e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0? null : divMoney(e.soTranChi, this.maDviTien);
             })
           })
           this.namPa = data.data.namPa;
@@ -1034,7 +1034,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       data.push({
         id: item.id,
         maDviNhan: item.maDviNhan,
-        soTranChi: item.soTranChi,
+        soTranChi: item.soTranChi == 0? null : item.soTranChi,
         trangThai: item.trangThai,
       })
     })
