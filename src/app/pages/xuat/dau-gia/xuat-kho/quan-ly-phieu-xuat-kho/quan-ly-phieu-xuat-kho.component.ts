@@ -30,8 +30,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
 
   searchFilter = {
     soPhieu: '',
-    ngayNhapKho: '',
+    ngayXuatKho: '',
     soQuyetDinh: '',
+    soHopDong:''
   };
 
   listDiemKho: any[] = [];
@@ -56,7 +57,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   filterTable: any = {
     soQuyetDinhNhap: '',
     soPhieu: '',
-    ngayNhapKho: '',
+    ngayXuatKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
@@ -218,8 +219,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soPhieu: '',
-      ngayNhapKho: '',
+      ngayXuatKho: '',
       soQuyetDinh: '',
+      soHopDong:''
     };
     this.search();
   }
@@ -263,7 +265,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
 
   async search() {
     let body = {
-      "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
+      "denNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 1 ? dayjs(this.searchFilter.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
       "maDvi": this.userInfo.MA_DVI,
       "orderBy": null,
       "orderDirection": null,
@@ -273,7 +275,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "str": null,
       "trangThai": null,
-      "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
+      "tuNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 0 ? dayjs(this.searchFilter.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
     };
     let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -297,7 +299,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       try {
         let body =
         {
-          "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
+          "denNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 1 ? dayjs(this.searchFilter.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
           "maDvi": this.userInfo.MA_DVI,
           "orderBy": null,
           "orderDirection": null,
@@ -306,12 +308,12 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
           "soQdNhap": this.searchFilter.soQuyetDinh,
           "str": null,
           "trangThai": null,
-          "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
+          "tuNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 0 ? dayjs(this.searchFilter.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
         }
         this.quanLyPhieuNhapKhoService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-xuat-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -388,7 +390,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
     this.filterTable = {
       soQuyetDinhNhap: '',
       soPhieu: '',
-      ngayNhapKho: '',
+      ngayXuatKho: '',
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
