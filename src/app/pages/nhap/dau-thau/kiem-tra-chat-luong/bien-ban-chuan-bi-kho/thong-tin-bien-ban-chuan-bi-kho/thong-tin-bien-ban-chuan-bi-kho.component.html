@@ -338,7 +338,7 @@
                   </nz-input-number>
                 </td>
                 <td>{{calcTongGiaTri()}}</td>
-                <td class="text-right">
+                <td>
                   <a (click)="addChiTiet()"
                     [class.disabled]="!chiTietChuanBiKhoCreate.noiDung || !chiTietChuanBiKhoCreate.donViTinh|| chiTietChuanBiKhoCreate.noiDung == '' || chiTietChuanBiKhoCreate.donViTinh == ''">
                     <i class="fa fa-plus"></i>
@@ -405,7 +405,7 @@
                     </nz-input-number>
                   </td>
                   <td>{{dsChiTietChuanBiKhoClone[i].tongGiaTri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="saveEdit(i)"
                       [class.disabled]="!dsChiTietChuanBiKhoClone[i].noiDung || !dsChiTietChuanBiKhoClone[i].donViTinh || dsChiTietChuanBiKhoClone[i].noiDung == '' || dsChiTietChuanBiKhoClone[i].donViTinh == ''">
                       <i class="fa fa-save"></i>

@@ -511,7 +511,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(

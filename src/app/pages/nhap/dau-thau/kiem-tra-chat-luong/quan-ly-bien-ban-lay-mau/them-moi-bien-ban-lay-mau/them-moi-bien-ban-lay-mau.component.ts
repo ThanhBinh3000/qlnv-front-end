@@ -95,6 +95,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.loadPhuongPhapLayMau(),
       this.loadSoQuyetDinh(),
       this.loaiVTHHGetAll(),
+      this.loadBienBanDayKho(),
     ]);
     if (this.id > 0) {
       await this.loadBienbanLayMau();
@@ -152,6 +153,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 0,
       "pageSize": 1000,
+      "trangThai": "02",
     }
     let res = await this.quanLyPhieuNhapDayKhoService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
