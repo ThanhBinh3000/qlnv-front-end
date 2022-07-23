@@ -20,6 +20,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   dataTable: any[] = [];
   text: string = "";
   hopDongList: any[] = [];
+  hopDongListUpdate: any[] = [];
   data: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
@@ -32,6 +33,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
     this.spinner.show();
     try {
       this.hopDongList = this.data;
+      this.hopDongListUpdate = this.data;
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -53,6 +55,15 @@ export class DialogCanCuHopDongComponent implements OnInit {
 
 
   onCancel() {
+    this.hopDongList.forEach(hd => {
+      this.dataTable.forEach(dt => {
+        if (hd.id === dt.id) {
+          hd.hhDdiemNhapKhoList = dt.hhDdiemNhapKhoList
+        }
+      })
+    })
+    console.log(this.hopDongList);
+
     this._modalRef.close(this.hopDongList);
   }
 

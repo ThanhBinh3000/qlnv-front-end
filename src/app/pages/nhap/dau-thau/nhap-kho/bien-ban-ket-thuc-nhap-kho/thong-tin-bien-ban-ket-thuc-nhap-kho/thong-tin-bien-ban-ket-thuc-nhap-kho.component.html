@@ -145,6 +145,19 @@
                   <input nz-input placeholder="Nhập tên thủ kho" formControlName="thuKho" />
                 </nz-form-item>
               </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Theo hợp đồng số
+                  </nz-form-label>
+                  <nz-select formControlName="soHdId" (ngModelChange)="changeHopDong()"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                    <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
+                      [nzLabel]="item.hopDong.soHd">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
             </div>
           </nz-card>
           <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
@@ -236,8 +249,8 @@
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="24" class="bien-ban-day-kho">
-                <nz-table #basicTable class="mt-16 table__body" #bbNhapDayKhoDetail nzBordered [nzData]="null"
-                  [nzFrontPagination]="false" [nzShowPagination]="false">
+                <nz-table #basicTable class="mt-16 table__body" #bbNhapDayKhoDetail nzBordered
+                  [nzData]="ketQuaNhapKhoList" [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th rowSpan="2" class="text-center">STT <br> (A)</th>

@@ -62,6 +62,8 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   chiTietDaiDienChiCuc: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
   chiTietDaiDienCuc: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
   chiTietDaiDienBenGiao: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
+  listHopDong: any[] = [];
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -291,6 +293,16 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           : null,
         disabled: this.isView ? true : false
       }],
+      soHdId: [
+        {
+          value: this.bienBanGiaoNhan
+            ? this.bienBanGiaoNhan.hopDongId
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
     });
   }
   async loadSoQuyetDinh() {
@@ -338,9 +350,10 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           this.bienBanGiaoNhan.chiTiets.forEach(bienBan => {
             bienBan.idVirtual = bienBan.id
           })
-          console.log(this.bienBanGiaoNhan.chiTiets);
+          console.log("this.bienBanGiaoNhan: ", this.bienBanGiaoNhan);
 
           this.initForm();
+          this.changeSoQuyetDinh();
         }
       }
     }
@@ -744,7 +757,32 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       this.bienBanGiaoNhan.qdgnvnxId = quyetDinh[0].id;
       this.detailGiaoNhap = quyetDinh[0];
       this.bienBanGiaoNhan.hopDongId = this.detailHopDong.id;
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = this.detailGiaoNhap.children1;
+
+      this.changeHopDong();
+    }
+  }
+  async changeHopDong() {
+    console.log("this.formData.get.value:", this.formData.get("soHdId").value);
+
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("soHdId").value);
+    let body = {
+      "str": hopDong.hopDong.soHd
+    }
+    let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailHopDong = res.data;
+      this.formData.patchValue({
+        tenHang: this.detailHopDong.tenVthh,
+        tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
+        hopDongId: this.detailHopDong.id,
+        ngayHopDong: this.detailHopDong.ngayKy,
+      })
+      console.log(this.formData.get("hopDongId"));
+
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
   async getHopDong(id) {
@@ -775,6 +813,9 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
     let bbGuiHang = this.listBienBanGuiHang.find(x => x.id == this.formData.get("bbGuiHangId").value);
     if (bbGuiHang && bbGuiHang.length > 0) {
       this.bienBanGiaoNhan.bbGuiHangId = bbGuiHang.id;
+      this.formData.patchValue({
+        ngayKyBbGh: bbGuiHang.ngayHopDong
+      })
     }
   }
   changeHoSoKyThuat() {

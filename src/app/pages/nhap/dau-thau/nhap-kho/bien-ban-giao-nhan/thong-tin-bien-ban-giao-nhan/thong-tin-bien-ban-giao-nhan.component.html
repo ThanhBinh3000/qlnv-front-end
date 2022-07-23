@@ -112,9 +112,22 @@
               <div nz-col nzSpan="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
+                    Theo hợp đồng số
+                  </nz-form-label>
+                  <nz-select formControlName="soHdId" (ngModelChange)="changeHopDong()"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                    <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
+                      [nzLabel]="item.hopDong.soHd">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
                     Số hợp đồng
                   </nz-form-label>
-                  <input nz-input placeholder="Nhập số biên bản" formControlName="hopDongId"
+                  <input nz-input placeholder="Số hợp đồng" formControlName="hopDongId"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView" />
                 </nz-form-item>
               </div>
@@ -124,7 +137,7 @@
                     Ngày hợp đồng
                   </nz-form-label>
                   <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                    nzPlaceHolder="Ngày nhập kho" formControlName="ngayHopDong"
+                    nzPlaceHolder="Ngày hợp đồng" formControlName="ngayHopDong"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView">
                   </nz-date-picker>
                 </nz-form-item>
@@ -176,7 +189,7 @@
                   </nz-date-picker>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="8">
+              <div nz-col nzSpan="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
                     Tên hàng

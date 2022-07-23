@@ -59,6 +59,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   listFileDinhKem: any[] = [];
+  listHopDong: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -161,7 +162,10 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     if (quyetDinh && quyetDinh.length > 0) {
       this.bienBanKetThucNhapKho.qdgnvnxId = quyetDinh[0].id;
       this.detailGiaoNhap = quyetDinh[0];
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = this.detailGiaoNhap.children1;
+      // console.log(this.typeVthh);
+      // this.listHopDong = this.listHopDong.filter(hd => hd.loaiVthh == this.typeVthh);
+      // console.log(this.listHopDong);
     }
   }
 
@@ -184,7 +188,26 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       }
     }
   }
+  async changeHopDong() {
 
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("soHdId").value);
+    let body = {
+      "str": hopDong.hopDong.soHd
+    }
+    let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailHopDong = res.data;
+      this.formData.patchValue({
+        tenHang: this.detailHopDong.tenVthh,
+        chungLoaiHang: this.detailHopDong.tenCloaiVthh
+      })
+      console.log("this.detailHopDong: ", this.detailHopDong);
+
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   selectHangHoa() {
     let data = this.typeVthh;
     const modalTuChoi = this.modal.create({
@@ -435,6 +458,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
         {
           value: this.bienBanKetThucNhapKho
             ? this.bienBanKetThucNhapKho.ngayKetThucNhap
+            : null,
+          disabled: this.isView ? true : false
+        },
+
+        [],
+      ],
+      soHdId: [
+        {
+          value: this.bienBanKetThucNhapKho
+            ? this.bienBanKetThucNhapKho.soHdId
             : null,
           disabled: this.isView ? true : false
         },

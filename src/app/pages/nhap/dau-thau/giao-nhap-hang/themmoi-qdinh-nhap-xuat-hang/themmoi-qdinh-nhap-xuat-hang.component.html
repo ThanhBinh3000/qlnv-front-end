@@ -134,16 +134,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let dataNhapXuat of hopDongList, let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{dataNhapXuat.tenDvi}}</td>
-            <td>{{dataNhapXuat.loaiVthh}}</td>
-            <td>{{dataNhapXuat.tenVthh}}</td>
-            <td>{{dataNhapXuat.tenCloaiVthh}}</td>
-            <td>{{dataNhapXuat.donViTinh}}</td>
-            <td class="text-right">{{dataNhapXuat.soLuong}}</td>
-            <td class="text-right">{{dataNhapXuat.tgianNkho}}</td>
-          </tr>
+
+          <ng-container *ngIf="quyetDinhNhapXuat.id; else elseBlock">
+            <tr *ngFor="let item of hopDongList, let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{item.tenDvi}}</td>
+              <td>{{item.loaiVthh}}</td>
+              <td>{{item.tenVthh}}</td>
+              <td>{{item.tenCloaiVthh}}</td>
+              <td>{{item.dviTinh}}</td>
+              <td class="text-right">{{item.soLuong}}</td>
+              <td class="text-right">{{item.tgianNkho}}</td>
+            </tr>
+          </ng-container>
+          <ng-template #elseBlock>
+            <ng-container *ngFor="let dataNhapXuat of hopDongList, let i = index">
+              <tr *ngFor="let item of dataNhapXuat.hhDdiemNhapKhoList">
+                <td>{{ i + 1 }}</td>
+                <td>{{item.tenDvi}}</td>
+                <td>{{dataNhapXuat.loaiVthh}}</td>
+                <td>{{dataNhapXuat.tenVthh}}</td>
+                <td>{{dataNhapXuat.tenCloaiVthh}}</td>
+                <td>{{dataNhapXuat.dviTinh}}</td>
+                <td class="text-right">{{item.soLuong}}</td>
+                <td class="text-right">{{dataNhapXuat.tgianNkho}}</td>
+              </tr>
+            </ng-container>
+          </ng-template>
         </tbody>
       </nz-table>
     </div>
