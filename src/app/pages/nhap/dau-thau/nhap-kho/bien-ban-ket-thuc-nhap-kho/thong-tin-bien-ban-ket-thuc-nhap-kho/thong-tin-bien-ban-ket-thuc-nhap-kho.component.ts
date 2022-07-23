@@ -211,10 +211,9 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.detailHopDong = res.data;
       this.formData.patchValue({
-        tenHang: this.detailHopDong.tenVthh,
+        tenVthh: this.detailHopDong.tenVthh,
         chungLoaiHang: this.detailHopDong.tenCloaiVthh
       })
-      console.log("this.detailHopDong: ", this.detailHopDong);
 
     }
     else {
@@ -403,7 +402,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
         },
         [],
       ],
-      loaiHangHoa: [
+      tenVthh: [
         {
           value: this.bienBanKetThucNhapKho
             ? this.bienBanKetThucNhapKho.tenHang

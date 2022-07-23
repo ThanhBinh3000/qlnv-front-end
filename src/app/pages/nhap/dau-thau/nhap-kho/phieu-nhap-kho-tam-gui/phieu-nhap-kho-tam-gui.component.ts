@@ -252,7 +252,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
         this.phieuNhapKhoTamGuiService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-nhap-kho-tam-gui.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
