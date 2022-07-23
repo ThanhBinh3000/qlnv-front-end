@@ -106,7 +106,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.ngayQuyetDinhDefault = [];
       this.ngayQuyetDinhDefault.push(dayjs().subtract(30, 'day').toDate());
       this.ngayQuyetDinhDefault.push(dayjs().toDate());
-      this.searchFilter.ngayQuyetDinh = this.ngayQuyetDinhDefault;
+      // this.searchFilter.ngayQuyetDinh = this.ngayQuyetDinhDefault;
       await this.search();
       this.spinner.hide();
     } catch (e) {
