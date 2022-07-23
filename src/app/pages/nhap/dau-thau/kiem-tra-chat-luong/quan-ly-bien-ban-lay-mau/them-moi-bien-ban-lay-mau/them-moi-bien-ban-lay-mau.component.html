@@ -18,19 +18,14 @@
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.LANH_DAO_DUYET">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Ban hành</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="bienBanLayMau.trangThai == '04'"
+            (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="bienBanLayMau.trangThai == globals.prop.LANH_DAO_DUYET || bienBanLayMau.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanLayMau.trangThai == '04' || bienBanLayMau.trangThai == '01'" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="isAction()">

@@ -604,6 +604,10 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -618,7 +622,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyBangKeCanHangService.updateStatus(

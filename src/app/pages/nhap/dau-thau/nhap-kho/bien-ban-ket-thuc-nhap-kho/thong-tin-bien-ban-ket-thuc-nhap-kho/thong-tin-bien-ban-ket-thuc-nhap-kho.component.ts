@@ -586,6 +586,10 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.bienBanKetThucNhapKho.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -600,7 +604,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.BANH_HANH,
+            trangThai: trangThai,
           };
           const res = await this.quanLyPhieuKetThucNhapKhoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

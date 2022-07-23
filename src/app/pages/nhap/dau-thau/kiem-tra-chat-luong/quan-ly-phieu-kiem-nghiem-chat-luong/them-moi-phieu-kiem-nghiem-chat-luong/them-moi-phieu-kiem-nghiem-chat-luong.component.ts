@@ -240,6 +240,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     });
   }
   pheDuyet() {
+    let trangThai = '02';
+    if (this.phieuKiemNghiemChatLuongHang.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -254,7 +258,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: trangThai,
           };
           const res =
             await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);

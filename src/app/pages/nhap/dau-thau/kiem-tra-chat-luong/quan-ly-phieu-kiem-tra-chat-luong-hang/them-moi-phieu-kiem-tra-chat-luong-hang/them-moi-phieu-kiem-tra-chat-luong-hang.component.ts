@@ -236,11 +236,13 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   changeDiemKho(fromChiTiet: boolean) {
     let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
-    this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
+      }
+      else {
+        this.detail.maNhaKho = null;
       }
     }
   }
@@ -251,6 +253,9 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
         this.changeNganKho();
+      }
+      else {
+        this.detail.maNganKho = null;
       }
     }
   }
@@ -297,6 +302,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "maHangHoa": this.typeVthh,
         "maNganLo": this.detail.maNganLo,
         "maNhaKho": this.detail.maNhaKho,
+        "maNganKho": this.detail.maNganKho,
         "maVatTu": this.detail.maVatTu,
         "maVatTuCha": this.detail.maVatTuCha,
         "maQhns": this.detail.maDvi,
@@ -389,6 +395,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -403,7 +413,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(

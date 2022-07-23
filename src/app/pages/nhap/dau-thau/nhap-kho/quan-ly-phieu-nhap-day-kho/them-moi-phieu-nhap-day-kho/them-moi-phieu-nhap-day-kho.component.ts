@@ -409,6 +409,10 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -423,7 +427,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: trangThai,
           };
           const res = await this.quanLyPhieuNhapDayKhoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

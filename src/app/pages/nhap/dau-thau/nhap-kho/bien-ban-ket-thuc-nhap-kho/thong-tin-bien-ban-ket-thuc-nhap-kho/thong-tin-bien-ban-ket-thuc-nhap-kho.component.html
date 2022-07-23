@@ -22,7 +22,8 @@
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="bienBanKetThucNhapKho.trangThai == '04'" (click)="tuChoi()">
+            *ngIf="bienBanKetThucNhapKho.trangThai == '04' || bienBanKetThucNhapKho.trangThai == '01'"
+            (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>

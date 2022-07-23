@@ -386,6 +386,10 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.bienBanLayMau.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -400,7 +404,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: trangThai,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
