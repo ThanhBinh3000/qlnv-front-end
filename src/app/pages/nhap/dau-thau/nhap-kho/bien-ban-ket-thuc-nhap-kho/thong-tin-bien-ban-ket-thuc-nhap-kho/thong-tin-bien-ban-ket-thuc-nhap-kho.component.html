@@ -17,7 +17,8 @@
             <span>Lưu và gửi duyệt</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="bienBanKetThucNhapKho.trangThai == '04'" (click)="pheDuyet()">
+            *ngIf="bienBanKetThucNhapKho.trangThai == '04' || bienBanKetThucNhapKho.trangThai == '01'"
+            (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
