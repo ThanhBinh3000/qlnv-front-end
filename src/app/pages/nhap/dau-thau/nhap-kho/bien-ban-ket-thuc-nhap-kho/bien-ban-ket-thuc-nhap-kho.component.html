@@ -149,13 +149,14 @@
                     <td></td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td>
-                      <a (click)="redirectToChiTiet(data.id, false)" *ngIf="userService.isChiCuc()">
-                        <i class="fa fa-pencil"></i>
-                      </a>
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="xoaItem(data)" *ngIf="userService.isChiCuc()">
+                      <a (click)="redirectToChiTiet(data.id, false)"
+                        *ngIf="userService.isChiCuc() && data.trangThai == '00'">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="xoaItem(data)" *ngIf="userService.isChiCuc() && data.trangThai == '00'">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
