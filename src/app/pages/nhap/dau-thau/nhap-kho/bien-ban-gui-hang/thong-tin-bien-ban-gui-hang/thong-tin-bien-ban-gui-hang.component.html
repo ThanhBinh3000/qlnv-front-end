@@ -102,7 +102,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Theo hợp đồng số
                 </nz-form-label>
-                <nz-select [(ngModel)]="bienBanGuiHang.soHdId" (ngModelChange)="changeHopDong()"
+                <nz-select [(ngModel)]="bienBanGuiHang.hopDongId" (ngModelChange)="changeHopDong()"
                   [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id" [nzLabel]="item.hopDong.soHd">
                   </nz-option>
@@ -157,7 +157,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng hóa
                 </nz-form-label>
-                <input nz-input [(ngModel)]="bienBanGuiHang.loaiVthh" disabled />
+                <input nz-input [(ngModel)]="bienBanGuiHang.tenVthh" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -165,7 +165,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Chủng loại hàng hóa
                 </nz-form-label>
-                <input nz-input [(ngModel)]="bienBanGuiHang.loaiVthh" disabled />
+                <input nz-input [(ngModel)]="bienBanGuiHang.tenCloaiVthh" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">

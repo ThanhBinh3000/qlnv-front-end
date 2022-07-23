@@ -1,4 +1,3 @@
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -13,6 +12,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -162,10 +162,23 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     if (quyetDinh && quyetDinh.length > 0) {
       this.bienBanKetThucNhapKho.qdgnvnxId = quyetDinh[0].id;
       this.detailGiaoNhap = quyetDinh[0];
-      this.listHopDong = this.detailGiaoNhap.children1;
-      // console.log(this.typeVthh);
-      // this.listHopDong = this.listHopDong.filter(hd => hd.loaiVthh == this.typeVthh);
-      // console.log(this.listHopDong);
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
     }
   }
 
