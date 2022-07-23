@@ -51,6 +51,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   listThuKho: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
+  listHinhThucBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
   listSoQuyetDinh: any[] = [];
   listHopDong: any[] = [];
@@ -89,6 +90,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.loadPTBaoQuan(),
         this.loadDonViTinh(),
         this.loadSoQuyetDinh(),
+        this.loadHinhThucBaoQuan(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -103,7 +105,21 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      this.listHopDong = this.detailGiaoNhap.children1;
+      this.listHopDong = [];
+      this.detailGiaoNhap.children1.forEach(element => {
+        if (element && element.hopDong) {
+          if (this.typeVthh) {
+            if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+              this.listHopDong.push(element);
+            }
+          }
+          else {
+            if (!element.hopDong.loaiVthh.startsWith('02')) {
+              this.listHopDong.push(element);
+            }
+          }
+        }
+      });
       if (!autoChange) {
         this.detail.soHopDong = null;
         this.detail.hopDongId = null;
@@ -115,8 +131,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.detail.tenVatTu = null;
         this.detail.maVatTuCha = null;
         this.detail.maVatTu = null;
-      }
-      if (autoChange) {
+      } else {
         await this.changeHopDong();
       }
     }
@@ -161,7 +176,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -300,6 +315,27 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
         this.listPTBaoQuan = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadHinhThucBaoQuan() {
+    let body = {
+      "maHthuc": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenHthuc": null,
+      "trangThai": null
+    }
+    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listHinhThucBaoQuan = res.data.content;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -475,7 +511,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -608,10 +644,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "kyThuatVien": this.detail?.kyThuatVien,
         "ldoTuchoi": null,
         "lhKho": this.detail?.lhKho,
-        "loaiVthh": this.typeVthh,
+        "loaiVthh": this.detail.maVatTuCha,
         "maDvi": this.detail?.maDvi,
         "maNganlo": this.detail?.maNganlo,
-        "maVthh": this.typeVthh,
+        "maVthh": this.detail.maVatTuCha,
+        "maVatTu": this.detail.maVatTu,
+        "maVatTuCha": this.detail.maVatTuCha,
         "ngayKthuc": null,
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,

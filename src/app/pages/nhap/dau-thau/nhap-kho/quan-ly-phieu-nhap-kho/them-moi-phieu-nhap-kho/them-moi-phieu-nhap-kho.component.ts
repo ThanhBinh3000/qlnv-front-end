@@ -136,6 +136,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "pageNumber": 1,
       "soBienBan": null,
       "soQdNhap": null,
+      "trangThai": '02',
     };
     let res = await this.hoSoKyThuatService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -174,7 +175,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.detail.maDvi,
-      "maVthh": this.typeVthh,
+      "maVthh": this.detail.loaiVthh,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",
@@ -188,7 +189,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -272,7 +273,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": '02'
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

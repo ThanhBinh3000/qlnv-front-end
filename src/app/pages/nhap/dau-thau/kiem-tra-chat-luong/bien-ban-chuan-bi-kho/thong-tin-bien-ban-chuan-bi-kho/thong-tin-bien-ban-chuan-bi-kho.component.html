@@ -10,30 +10,28 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
           </a>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>In</span>
-          </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
+            *ngIf="(bienBanChuanBiKho.trangThai == '00' || bienBanChuanBiKho.trangThai == '03' || id == 0) && !isView"
+            (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanChuanBiKho.trangThai == '04'" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="bienBanChuanBiKho.trangThai == '04'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </a>
           <button class="btn btn-main btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
+            *ngIf="(bienBanChuanBiKho.trangThai == '00' || bienBanChuanBiKho.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
-            (click)="pheDuyet()">
-            <i class="icon htvbdh_dakyduyet"></i>
-            <span>Duyệt</span>
-          </button>
-          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
-            (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Từ chối</span>
-          </a>
         </div>
       </div>
     </div>
@@ -57,7 +55,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Số Quyết định nhập
                   </nz-form-label>
-                  <nz-select formControlName="soQD" (ngModelChange)="changeSoQuyetDinh()"
+                  <nz-select formControlName="soQD" (ngModelChange)="changeSoQuyetDinh(false)"
                     [disabled]="bienBanChuanBiKho.trangThai == '01' || bienBanChuanBiKho.trangThai == '02' || bienBanChuanBiKho.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                     </nz-option>
@@ -72,7 +70,7 @@
                   <input nz-input formControlName="donVi" />
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6">
+              <div nz-col nzSpan="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
                     Mã QHNS
@@ -80,12 +78,25 @@
                   <input nz-input formControlName="maQHNS" />
                 </nz-form-item>
               </div>
+              <div nz-col nzSpan="3">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Số hợp đồng
+                  </nz-form-label>
+                  <nz-select formControlName="soHopDong" (ngModelChange)="changeHopDong()"
+                    [disabled]="bienBanChuanBiKho.trangThai == '01' || bienBanChuanBiKho.trangThai == '02' || bienBanChuanBiKho.trangThai == '04' || isView">
+                    <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.soHd"
+                      [nzLabel]="item.hopDong.soHd">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
               <div nz-col nzSpan="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
                     Số biên bản
                   </nz-form-label>
-                  <input nz-input placeholder="Nhập số phiếu" formControlName="soBienBan" />
+                  <input nz-input placeholder="Nhập số phiếu" formControlName="soBienBan" readonly />
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="6">
@@ -139,7 +150,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Tên hàng
                   </nz-form-label>
-                  <input nz-input formControlName="tenHang"
+                  <input nz-input formControlName="tenVatTuCha"
                     [disabled]="bienBanChuanBiKho.trangThai == '01' || bienBanChuanBiKho.trangThai == '02' || bienBanChuanBiKho.trangThai == '04' || isView" />
                 </nz-form-item>
               </div>
@@ -148,7 +159,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Chủng loại hàng hóa
                   </nz-form-label>
-                  <input nz-input formControlName="chungLoaiHang"
+                  <input nz-input formControlName="tenVatTu"
                     [disabled]="bienBanChuanBiKho.trangThai == '01' || bienBanChuanBiKho.trangThai == '02' || bienBanChuanBiKho.trangThai == '04' || isView" />
                 </nz-form-item>
               </div>
@@ -329,7 +340,7 @@
                   </nz-input-number>
                 </td>
                 <td>{{calcTongGiaTri()}}</td>
-                <td class="text-right">
+                <td>
                   <a (click)="addChiTiet()"
                     [class.disabled]="!chiTietChuanBiKhoCreate.noiDung || !chiTietChuanBiKhoCreate.donViTinh|| chiTietChuanBiKhoCreate.noiDung == '' || chiTietChuanBiKhoCreate.donViTinh == ''">
                     <i class="fa fa-plus"></i>
@@ -396,7 +407,7 @@
                     </nz-input-number>
                   </td>
                   <td>{{dsChiTietChuanBiKhoClone[i].tongGiaTri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="saveEdit(i)"
                       [class.disabled]="!dsChiTietChuanBiKhoClone[i].noiDung || !dsChiTietChuanBiKhoClone[i].donViTinh || dsChiTietChuanBiKhoClone[i].noiDung == '' || dsChiTietChuanBiKhoClone[i].donViTinh == ''">
                       <i class="fa fa-save"></i>

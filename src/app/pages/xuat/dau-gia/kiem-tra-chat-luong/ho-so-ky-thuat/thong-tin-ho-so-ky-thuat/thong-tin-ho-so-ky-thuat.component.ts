@@ -212,6 +212,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
+      "trangThai": "02",
     }
     let res = await this.quanLyBienBanBanGiaoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -237,6 +238,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
+      "trangThai": "02",
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

@@ -6,20 +6,32 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView"
             (click)="guiDuyet()">
-            <i class="icon htvbdh_trinh"></i>
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="bienBanGiaoNhan.trangThai == '04'"
+            (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="bienBanGiaoNhan.trangThai == '04'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>

@@ -121,7 +121,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -145,7 +145,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soPhieu": null,
       "soQdNhap": null,
       "str": null,
-      "trangThai": null,
+      "trangThai": "02",
       "tuNgayNhapKho": null,
     }
     let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
@@ -268,7 +268,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": "02"
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -633,7 +633,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.BANH_HANH,
           };
           const res = await this.quanLyPhieuKetThucNhapKhoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -798,7 +798,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "pageSize": 1000,
       "pageNumber": 1,
       "soBienBan": null,
-      "soQdNhap": null
+      "soQdNhap": null,
+      "trangThai": "02"
     };
     let res = await this.bienBanChuanBiKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

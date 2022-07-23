@@ -11,6 +11,8 @@ export class BienBanChuanBiKho {
     maNhaKho: string;
     maVatTu: string;
     maVatTuCha: string;
+    tenVatTu: string;
+    tenVatTuCha: string;
     nam: number;
     ngayNghiemThu: string;
     ptBaoQuan: string;
@@ -30,6 +32,8 @@ export class BienBanChuanBiKho {
     dinhMucDuocGiao: string;
     trangThai: string;
     tenTrangThai: string;
+    soHopDong: string;
+    hopDongId: number;
 
     constructor(chiTiets: Array<ChiTietBienBanChuanBiKho> = []) {
         this.chiTiets = chiTiets;

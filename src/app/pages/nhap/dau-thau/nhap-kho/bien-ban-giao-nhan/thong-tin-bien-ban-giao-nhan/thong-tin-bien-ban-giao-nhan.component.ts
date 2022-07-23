@@ -324,7 +324,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -509,7 +509,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.quanLyBienBanBanGiaoNhanService.updateStatus(
@@ -706,6 +706,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
+      "trangThai": "02",
     }
     let res = await this.quanLyPhieuKetThucNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -721,6 +722,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
+      "trangThai": "02",
     }
     let res = await this.bienBanGuiHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

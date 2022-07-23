@@ -30,6 +30,8 @@ export class QuanLyBienBanLayMauService extends BaseService {
       url_ += 'ngayLayMauTu=' + encodeURIComponent('' + body.ngayLayMauTu) + '&';
     if (body.ngayLayMauDen)
       url_ += 'ngayLayMauDen=' + encodeURIComponent('' + body.ngayLayMauDen) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)

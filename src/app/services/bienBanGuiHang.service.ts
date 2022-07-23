@@ -32,6 +32,9 @@ export class BienBanGuiHangService extends BaseService {
         'paggingReq.page=' +
         encodeURIComponent('' + (body.pageNumber - 1)) +
         '&';
+    if (body.trangThai) {
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
+    }
     if (body.pageSize)
       url_ +=
         'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';

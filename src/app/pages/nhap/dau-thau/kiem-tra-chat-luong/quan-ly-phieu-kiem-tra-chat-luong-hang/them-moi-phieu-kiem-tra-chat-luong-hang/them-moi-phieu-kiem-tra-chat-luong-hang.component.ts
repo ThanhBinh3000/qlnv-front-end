@@ -103,7 +103,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -120,7 +120,23 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.quyetDinhNhapId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      this.listHopDong = this.detailGiaoNhap.children1;
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
       if (!autoChange) {
         this.detail.soHopDong = null;
         this.detail.hopDongId = null;
@@ -132,8 +148,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.detail.tenVatTu = null;
         this.detail.maVatTuCha = null;
         this.detail.maVatTu = null;
-      }
-      if (autoChange) {
+      } else {
         await this.changeHopDong();
       }
     }
@@ -388,7 +403,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(

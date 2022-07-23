@@ -79,7 +79,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -116,7 +116,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.phieuKiemNghiemChatLuongHang.trangThai ===
-        this.globals.prop.DU_THAO ||
+      this.globals.prop.DU_THAO ||
       this.id === 0 ||
       this.phieuKiemNghiemChatLuongHang.trangThai === this.globals.prop.TU_CHOI
     );
@@ -138,18 +138,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       nganLoId: this.phieuKiemNghiemChatLuongHang.nganLoId ?? null,
       ngayKnghiem: this.phieuKiemNghiemChatLuongHang.ngayKnghiem
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayKnghiem).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayLayMau: this.phieuKiemNghiemChatLuongHang.ngayLayMau
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayLayMau).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayNhapDay: this.phieuKiemNghiemChatLuongHang.ngayNhapDay
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayNhapDay).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       nhaKhoId: this.phieuKiemNghiemChatLuongHang.nhaKhoId ?? null,
       sluongBquan: this.phieuKiemNghiemChatLuongHang.sluongBquan ?? null,
@@ -254,7 +254,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.BAN_HANH,
           };
           const res =
             await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
@@ -401,7 +401,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       orderDirection: '',
       pageNumber: 1,
       pageSize: 1000,
-      trangThai: '', // Đã duyệt ??
+      trangThai: '02', // Đã duyệt ??
     };
 
     const res = await this.quanLyBienBanBanGiaoService.timKiem(body);

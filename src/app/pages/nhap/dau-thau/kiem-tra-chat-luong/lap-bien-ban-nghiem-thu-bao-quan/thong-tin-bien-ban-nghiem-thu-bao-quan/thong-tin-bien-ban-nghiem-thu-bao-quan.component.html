@@ -10,7 +10,8 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
           </a>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="print()">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
           </button>
@@ -19,14 +20,14 @@
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="pheDuyet()">
-            <i class="icon htvbdh_dakyduyet"></i>
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
           <button class="btn btn-main btn-sm waves-effect waves-light"
@@ -64,8 +65,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -113,7 +113,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Tên hàng hóa
                 </nz-form-label>
-                <input nz-input [(ngModel)]="typeVthh" disabled />
+                <input nz-input [(ngModel)]="detail.tenVatTuCha" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="3">
@@ -121,7 +121,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Chủng loại hàng hóa
                 </nz-form-label>
-                <input nz-input [(ngModel)]="typeVthh" disabled />
+                <input nz-input [(ngModel)]="detail.tenVatTu" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="3">
@@ -261,8 +261,9 @@
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.hthucBquan"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option nzValue="00" nzLabel="Mới"></nz-option>
-                  <nz-option nzValue="01" nzLabel="Bổ sung"></nz-option>
+                  <nz-option *ngFor="let thuKho of listHinhThucBaoQuan" [nzValue]="thuKho.maHthuc"
+                    [nzLabel]="thuKho.tenHthuc">
+                  </nz-option>
                 </nz-select>
               </nz-form-item>
             </div>
@@ -335,7 +336,7 @@
                   </nz-input-number>
                 </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                <td class="text-right">
+                <td>
                   <a (click)="addRow()"
                     [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
                     <i class="fa fa-plus"></i>
@@ -404,7 +405,7 @@
                     </nz-input-number>
                   </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="saveEdit(data.stt)" class="save"
                       [class.disabled]="!editDataCache[data.stt]?.data.noiDung || !editDataCache[data.stt]?.data.dvt || editDataCache[data.stt]?.data.noiDung == '' || editDataCache[data.stt]?.data.dvt == ''">
                       <i class="fa fa-save"></i>
