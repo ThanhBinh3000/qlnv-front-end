@@ -83,6 +83,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.bienBanKetThucNhapKho.maDvi = this.userInfo.MA_DVI;
       this.bienBanKetThucNhapKho.tenDvi = this.userInfo.TEN_DVI;
+      this.bienBanKetThucNhapKho.trangThai = "00";
       this.initForm();
       await Promise.all([
         this.loadDiemKho(),
@@ -499,17 +500,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     let body = {
       "bbChuanBiKhoId": this.formData.get("bbChuanBiKhoId").value,
       "capDvi": null,
-      "chiTiets": [
-        // {
-        //   "bbKtNhapKhoId": 0,
-        //   "donGia": 0,
-        //   "ghiChu": "string",
-        //   "id": 0,
-        //   "soLuong": 0,
-        //   "stt": 0,
-        //   "thanhTien": 0
-        // }
-      ],
+      "chiTiets": [],
       "fileDinhKemReqs": this.listFileDinhKem,
       "id": this.bienBanKetThucNhapKho.id,
       "keToanDonVi": this.formData.get("keToanDonVi").value,
@@ -529,6 +520,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soBienBan": this.formData.get("soBienBan").value,
       "thuKho": this.formData.get("thuKho").value,
       "thuTruongDonVi": this.formData.get("thuTruongDonVi").value,
+      "trangThai": this.bienBanKetThucNhapKho.trangThai,
     }
     if (this.id > 0) {
       this.quanLyPhieuKetThucNhapKhoService.sua(
