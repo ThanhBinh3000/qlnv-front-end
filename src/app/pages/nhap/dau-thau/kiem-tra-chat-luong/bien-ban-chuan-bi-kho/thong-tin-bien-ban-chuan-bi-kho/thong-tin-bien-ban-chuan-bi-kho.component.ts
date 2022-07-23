@@ -346,7 +346,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
