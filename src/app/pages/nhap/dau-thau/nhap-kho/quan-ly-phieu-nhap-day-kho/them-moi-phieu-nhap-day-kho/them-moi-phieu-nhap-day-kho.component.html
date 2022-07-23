@@ -51,7 +51,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định nhập
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.qdgnvnxId"
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh(false)"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
@@ -63,9 +63,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản nghiệm thu bảo quản
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.nghiemThuBaoQuanId"
+                <nz-select [(ngModel)]="detail.bbNghiemThuId" (ngModelChange)="changeBienBanNghiemThu()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listNghiemThuBaoQuan" [nzValue]="item.id" [nzLabel]="item.soBb">
+                  <nz-option *ngFor="let item of bbNghiemThuBaoQuans" [nzValue]="item.id" [nzLabel]="item.soBb">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -110,8 +110,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ trưởng đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.thuTruong" placeholder="Nhập tên thủ trưởng"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.thuTruong" placeholder="Nhập tên thủ trưởng" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -119,8 +118,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Kế toán đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.keToan" placeholder="Nhập tên kế toán đơn vị"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.keToan" placeholder="Nhập tên kế toán đơn vị" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -128,8 +126,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Kỹ thuật viên bảo quản
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.kyThuatVien" placeholder="Nhập tên kỹ thuật viên"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="detail.kyThuatVien" placeholder="Nhập tên kỹ thuật viên" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -137,8 +134,20 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ kho
                 </nz-form-label>
-                <input nz-input placeholder="Nhập tên thủ kho" [(ngModel)]="detail.thuKho"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập tên thủ kho" [(ngModel)]="detail.thuKho" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Theo hợp đồng số
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.soHopDong" (ngModelChange)="changeHopDong()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.soHd"
+                    [nzLabel]="item.hopDong.soHd">
+                  </nz-option>
+                </nz-select>
               </nz-form-item>
             </div>
           </div>
@@ -168,11 +177,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
-                  </nz-option>
-                </nz-select>
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenDiemKho"
+                  readonly="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -180,11 +186,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
-                  </nz-option>
-                </nz-select>
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenNhaKho"
+                  readonly="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">
@@ -192,11 +195,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
-                  </nz-option>
-                </nz-select>
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenNganKho"
+                  readonly="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
@@ -204,11 +204,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Lô kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganLo"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
-                  </nz-option>
-                </nz-select>
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="detail.tenNganLo"
+                  readonly="true" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="5">

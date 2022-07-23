@@ -757,13 +757,27 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       this.bienBanGiaoNhan.qdgnvnxId = quyetDinh[0].id;
       this.detailGiaoNhap = quyetDinh[0];
       this.bienBanGiaoNhan.hopDongId = this.detailHopDong.id;
-      this.listHopDong = this.detailGiaoNhap.children1;
-
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
       this.changeHopDong();
     }
   }
   async changeHopDong() {
-    console.log("this.formData.get.value:", this.formData.get("soHdId").value);
 
     let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("soHdId").value);
     let body = {
