@@ -250,7 +250,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": '02'
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -423,7 +423,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.BAN_HANH,
           };
           const res = await this.quanLyPhieuNhapDayKhoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

@@ -11,22 +11,24 @@
             <span>Quay lại</span>
           </a>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
+            *ngIf="(bienBanChuanBiKho.trangThai == '00' || bienBanChuanBiKho.trangThai == '03' || id == 0) && !isView"
+            (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
-            (click)="pheDuyet()">
-            <i class="icon htvbdh_dakyduyet"></i>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanChuanBiKho.trangThai == '04'" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04' && !isView"
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="bienBanChuanBiKho.trangThai == '04'"
             (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
           <button class="btn btn-main btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
+            *ngIf="(bienBanChuanBiKho.trangThai == '00' || bienBanChuanBiKho.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>

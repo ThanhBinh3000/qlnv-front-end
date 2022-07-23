@@ -106,7 +106,8 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       soQuyetDinh: null,
       ngayNhapKho: null,
       pageSize: 1000,
-      pageNumber: 1
+      pageNumber: 1,
+      "trangThai": "02",
     };
     let res = await this.phieuNhapKhoTamGuiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -181,7 +182,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.bienBanGuiHangService.updateStatus(

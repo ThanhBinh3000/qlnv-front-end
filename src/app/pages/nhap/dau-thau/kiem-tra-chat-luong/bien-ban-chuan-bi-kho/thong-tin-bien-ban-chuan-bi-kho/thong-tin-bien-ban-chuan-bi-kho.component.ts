@@ -723,7 +723,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.bienBanChuanBiKhoService.updateStatus(

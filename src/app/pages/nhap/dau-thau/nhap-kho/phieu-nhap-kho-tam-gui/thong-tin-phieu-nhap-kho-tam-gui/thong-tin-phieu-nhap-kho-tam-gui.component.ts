@@ -370,7 +370,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.phieuNhapKhoTamGuiService.updateStatus(

@@ -110,6 +110,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,
       "pageSize": 1000,
+      "trangThai": "02",
     }
     let res = await this.bienBanLayMauService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -400,7 +401,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.BAN_HANH,
           };
           const res = await this.quanLyBienBanBanGiaoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

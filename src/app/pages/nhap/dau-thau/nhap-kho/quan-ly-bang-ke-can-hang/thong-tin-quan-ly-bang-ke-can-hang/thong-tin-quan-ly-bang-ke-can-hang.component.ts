@@ -233,7 +233,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       },
       "soPhieu": null,
       "str": null,
-      "trangThai": null,
+      "trangThai": '02',
       "tuNgay": null,
       "maHangHoa": this.typeVthh
     };
@@ -453,7 +453,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": '02'
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -618,7 +618,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '02',
           };
           let res =
             await this.quanLyBangKeCanHangService.updateStatus(

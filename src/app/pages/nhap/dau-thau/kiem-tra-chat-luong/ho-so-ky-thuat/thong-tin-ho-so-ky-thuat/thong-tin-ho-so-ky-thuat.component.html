@@ -19,13 +19,14 @@
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="pheDuyet()">
-            <i class="icon htvbdh_dakyduyet"></i>
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'" (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
           <button class="btn btn-main btn-sm waves-effect waves-light"

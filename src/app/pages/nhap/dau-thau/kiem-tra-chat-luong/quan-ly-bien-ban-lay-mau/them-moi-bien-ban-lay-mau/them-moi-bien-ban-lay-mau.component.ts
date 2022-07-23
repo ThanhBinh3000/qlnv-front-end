@@ -151,7 +151,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     let param = {
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      "pageNumber": 0,
+      "pageNumber": 1,
       "pageSize": 1000,
       "trangThai": "02",
     }

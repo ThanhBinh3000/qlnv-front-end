@@ -160,11 +160,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai !=='02') && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThai === '00') && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai !=='02' && userService.isChiCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai === '00' && userService.isChiCuc()" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -198,10 +198,6 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <!-- <button type="button" class="btn btn-sub" (click)="print()">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
-            </button> -->
             <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
