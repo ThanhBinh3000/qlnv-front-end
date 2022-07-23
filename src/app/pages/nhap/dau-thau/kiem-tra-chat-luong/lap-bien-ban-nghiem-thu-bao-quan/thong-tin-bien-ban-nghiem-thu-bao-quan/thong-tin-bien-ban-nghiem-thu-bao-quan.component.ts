@@ -199,6 +199,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
             this.detail.detail = this.detail.children;
           }
           await this.changeSoQuyetDinh(true);
+          await this.changeDiemKho(true);
         }
       }
     }
@@ -409,11 +410,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   changeDiemKho(fromChiTiet: boolean) {
     let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
-    this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
+      }
+      else {
+        this.detail.maNhaKho = null;
       }
     }
   }

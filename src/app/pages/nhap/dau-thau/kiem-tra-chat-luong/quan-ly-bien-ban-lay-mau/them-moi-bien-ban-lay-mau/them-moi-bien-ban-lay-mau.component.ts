@@ -197,7 +197,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   async changeSoQuyetDinh(autoChange: boolean) {
-    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanLayMau.quyetDinhNhapId);
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanLayMau.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
       this.listHopDong = [];

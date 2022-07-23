@@ -92,8 +92,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenDiemkho"
-                                                    (input)="filterInTable('tenDiemkho',filterTable.tenDiemkho)" />
+                                                    [(ngModel)]="filterTable.tenDiemKho"
+                                                    (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -102,8 +102,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenNhakho"
-                                                    (input)="filterInTable('tenNhakho',filterTable.tenNhakho)" />
+                                                    [(ngModel)]="filterTable.tenNhaKho"
+                                                    (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -112,8 +112,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenNganlo"
-                                                    (input)="filterInTable('tenNganlo',filterTable.tenNganlo)" />
+                                                    [(ngModel)]="filterTable.tenNganLo"
+                                                    (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -171,9 +171,9 @@
                                         <td>{{ data.soBb }}</td>
                                         <td>{{ data.soQuyetDinhNhap }}</td>
                                         <td>{{ data.ngayNghiemThuShow }}</td>
-                                        <td>{{ data.tenDiemkho }}</td>
-                                        <td>{{ data.tenNhakho }}</td>
-                                        <td>{{ data.tenNganlo }}</td>
+                                        <td>{{ data.tenDiemKho }}</td>
+                                        <td>{{ data.tenNhaKho }}</td>
+                                        <td>{{ data.tenNganLo }}</td>
                                         <td>{{ data.chiPhiThucHienTrongNam | number: '1.0-1' }}</td>
                                         <td>{{ data.chiPhiThucHienNamTruoc | number: '1.0-1' }}</td>
                                         <td>{{ data.tongGiaTri | number: '1.0-1' }}</td>

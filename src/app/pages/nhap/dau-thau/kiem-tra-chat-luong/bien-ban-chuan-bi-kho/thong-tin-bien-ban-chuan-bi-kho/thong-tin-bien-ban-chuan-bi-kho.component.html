@@ -17,12 +17,12 @@
             <span>Lưu và gửi duyệt</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '04' || detail.trangThai == '01'" (click)="pheDuyet()">
+            *ngIf="bienBanChuanBiKho.trangThai == '04' || bienBanChuanBiKho.trangThai == '01'" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '04' || detail.trangThai == '01'" (click)="tuChoi()">
+            *ngIf="bienBanChuanBiKho.trangThai == '04' || bienBanChuanBiKho.trangThai == '01'" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
@@ -262,8 +262,9 @@
                   </nz-form-label>
                   <nz-select formControlName="hinhThucBaoQuan"
                     [disabled]="bienBanChuanBiKho.trangThai == '01' || bienBanChuanBiKho.trangThai == '02' || bienBanChuanBiKho.trangThai == '04' || isView">
-                    <nz-option nzValue="00" nzLabel="Mới"></nz-option>
-                    <nz-option nzValue="01" nzLabel="Bổ sung"></nz-option>
+                    <nz-option *ngFor="let thuKho of listHinhThucBaoQuan" [nzValue]="thuKho.maHthuc"
+                      [nzLabel]="thuKho.tenHthuc">
+                    </nz-option>
                   </nz-select>
                 </nz-form-item>
               </div>

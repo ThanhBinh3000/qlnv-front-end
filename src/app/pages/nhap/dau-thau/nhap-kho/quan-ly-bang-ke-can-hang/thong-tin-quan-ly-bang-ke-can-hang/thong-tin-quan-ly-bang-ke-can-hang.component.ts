@@ -86,11 +86,9 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     try {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      if (this.id == 0) {
-        this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
-        this.detail.tenDvi = this.userInfo.TEN_DVI;
-        this.detail.maDvi = this.userInfo.MA_DVI;
-      }
+      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+      this.detail.tenDvi = this.userInfo.TEN_DVI;
+      this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -246,6 +244,17 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
+  changePhieuNhapKho() {
+    let item = this.listSoPhieuNhapKho.filter(x => x.id == this.detail.qlPhieuNhapKhoLtId);
+    if (item && item.length > 0) {
+      this.detail.maDiemKho = item[0].maDiemKho;
+      this.detail.maNhaKho = item[0].maNhaKho;
+      this.detail.maNganKho = item[0].maNganKho;
+      this.detail.maNganLo = item[0].maNganLo;
+      this.changeDiemKho(true);
+    }
+  }
+
   async loadSoQuyetDinh() {
     let body = {
       "denNgayQd": null,
@@ -279,7 +288,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   }
 
   async changeSoQuyetDinh(autoChange: boolean) {
-    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.quyetDinhNhapId);
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
       if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
@@ -476,8 +485,9 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           if (this.detail.soKho) {
             this.detail.soKho = +this.detail.soKho;
           }
-          this.changeDiemKho(true);
+          await this.loadDiemKho();
           await this.changeSoQuyetDinh(true);
+          await this.changeDiemKho(true);
         }
       }
     }

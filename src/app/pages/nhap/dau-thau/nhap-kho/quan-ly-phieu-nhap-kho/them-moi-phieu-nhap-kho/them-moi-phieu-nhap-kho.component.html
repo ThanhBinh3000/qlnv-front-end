@@ -79,7 +79,7 @@
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.hoSoKyThuatId" (ngModelChange)="changeHoSoKyThuat()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listHoSoKyThuat" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listHoSoKyThuat" [nzValue]="item.id" [nzLabel]="item.soBienBan">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -276,7 +276,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu kiểm tra chất lượng
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.phieuKtClId" (ngModelChange)="changePhieuKiemTra()"
+                <nz-select [(ngModel)]="detail.phieuKtClIds" (ngModelChange)="changePhieuKiemTra()" nzMode="multiple"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id"
                     [nzLabel]="item.soPhieu">
@@ -320,8 +320,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)" disabled>
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -332,8 +331,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)" disabled>
                   <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -344,8 +342,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()" disabled>
                   <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -356,8 +353,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Lô kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganLo"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNganLo" disabled>
                   <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -466,7 +462,7 @@
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
             <div nz-col nzSpan="24">
-              <file-list></file-list>
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="isView"></file-list>
             </div>
           </div>
         </div>

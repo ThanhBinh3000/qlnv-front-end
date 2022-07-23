@@ -95,7 +95,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
         this.loadSoQuyetDinh(),
       ]);
       if (this.id > 0) {
-        this.loadPhieuKiemNghiemChatLuong();
+        await this.loadPhieuKiemNghiemChatLuong();
       } else {
         this.phieuKiemNghiemChatLuongHang.trangThai = this.globals.prop.DU_THAO;
       }
@@ -169,19 +169,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
     try {
       let res;
+      if (isGuiDuyet) {
+        body.trangThai = this.globals.prop.DU_THAO_TRINH_DUYET;
+      }
       if (this.id > 0) {
-        // Update
-        if (isGuiDuyet) {
-          body.trangThai = this.globals.prop.DU_THAO_TRINH_DUYET;
-        }
         res = await this.phieuKiemNghiemChatLuongHangService.sua(body);
       } else {
-        // Thêm
         res = await this.phieuKiemNghiemChatLuongHangService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           const body = {
             id: res.data.id,
-            trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+            trangThai: this.globals.prop.DU_THAO,
           };
           await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
         }

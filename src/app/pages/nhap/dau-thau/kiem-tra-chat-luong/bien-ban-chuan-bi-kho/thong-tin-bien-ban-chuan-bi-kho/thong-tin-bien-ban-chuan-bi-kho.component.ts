@@ -54,6 +54,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   chiTietChuanBiKhoCreate: ChiTietBienBanChuanBiKho = new ChiTietBienBanChuanBiKho();
   formData: FormGroup;
   listHopDong: any[] = [];
+  listHinhThucBaoQuan: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -76,7 +77,8 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     try {
       this.typeVthh = '02';
       this.userInfo = this.userService.getUserLogin();
-      this.detail.maDonVi = this.userInfo.MA_DVI;
+      this.bienBanChuanBiKho.maDvi = this.userInfo.MA_DVI;
+      this.bienBanChuanBiKho.tenDvi = this.userInfo.TEN_DVI;
       this.detail.trangThai = "00";
 
       this.initForm();
@@ -87,6 +89,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
         this.loadDonViTinh(),
+        this.loadHinhThucBaoQuan(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -96,6 +99,28 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async loadHinhThucBaoQuan() {
+    let body = {
+      "maHthuc": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenHthuc": null,
+      "trangThai": null
+    }
+    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listHinhThucBaoQuan = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
   initForm() {
     this.formData = this.fb.group({
       soQD: [
@@ -109,13 +134,13 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       ],
       donVi: [
         {
-          value: this.userInfo.MA_DVI, disabled: true
+          value: this.bienBanChuanBiKho.tenDvi, disabled: true
         },
         [],
       ],
       maQHNS: [
         {
-          value: this.userInfo.TEN_DVI, disabled: true
+          value: this.bienBanChuanBiKho.maDvi, disabled: true
         },
         [],
       ],
@@ -447,7 +472,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
 
   async loadDiemKho() {
     let body = {
-      maDviCha: this.detail.maDonVi,
+      maDviCha: this.bienBanChuanBiKho.maDvi,
       trangThai: '01',
     }
     const res = await this.donViService.getTreeAll(body);
@@ -632,7 +657,8 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
         "thuKho": this.formData.get("thuKho").value,
         "thuTruongDonVi": this.formData.get("thuTruongDonVi").value,
         "thucNhap": this.formData.get("thucNhap").value,
-        "tongSo": this.formData.get("tongSo").value
+        "tongSo": this.formData.get("tongSo").value,
+        "maDvi": this.bienBanChuanBiKho.maDvi,
       };
       if (this.id > 0) {
         let res = await this.bienBanChuanBiKhoService.sua(
@@ -710,7 +736,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
 
   pheDuyet() {
     let trangThai = '02';
-    if (this.detail.trangThai == '04') {
+    if (this.bienBanChuanBiKho.trangThai == '04') {
       trangThai = '01';
     }
     this.modal.confirm({

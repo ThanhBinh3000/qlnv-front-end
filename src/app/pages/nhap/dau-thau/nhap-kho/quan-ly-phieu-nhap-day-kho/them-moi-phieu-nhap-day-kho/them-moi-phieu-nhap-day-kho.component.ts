@@ -1,7 +1,6 @@
-import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,18 +8,18 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { BienBanNhapDayKho, DetailBienBanNhapDayKho } from 'src/app/models/BienBanNhapDayKho';
+import { DetailBienBanNhapDayKho } from 'src/app/models/BienBanNhapDayKho';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -49,6 +48,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listNghiemThuBaoQuan: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -62,17 +62,15 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
     private modal: NzModalService,
     private userService: UserService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private donViService: DonviService,
     public globals: Globals,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
   ) { }
 
   async ngOnInit() {
@@ -89,7 +87,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       }
       await Promise.all([
         this.loadDiemKho(),
-        this.loadPhieuKiemTraChatLuong(),
+        this.loadNghiemThuBaoQuan(),
         this.loadSoQuyetDinh(),
       ]);
       if (this.id > 0) {
@@ -231,31 +229,20 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
-  async loadPhieuKiemTraChatLuong() {
+  async loadNghiemThuBaoQuan() {
     let body = {
+      "maVatTuCha": this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
-      "maHangHoa": this.maVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": null,
-      "ngayKiemTraTuNgay": null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
       "paggingReq": {
         "limit": 1000,
-        "orderBy": null,
-        "orderType": null,
-        "page": 1
+        "page": 0
       },
-      "soPhieu": null,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": '02'
+      "trangThai": "02",
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listPhieuKiemTraChatLuong = data.content;
+      this.listNghiemThuBaoQuan = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

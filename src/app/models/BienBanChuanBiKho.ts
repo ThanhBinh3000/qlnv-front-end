@@ -24,8 +24,8 @@ export class BienBanChuanBiKho {
     thucNhap: string;
     tongSo: number;
     chiTiets: Array<ChiTietBienBanChuanBiKho>;
-    donVi: string;
-    maQHNS: string;
+    tenDvi: string;
+    maDvi: string;
     tenHang: string;
     chungLoaiHang: string;
     tichLuong: string;

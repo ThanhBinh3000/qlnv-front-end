@@ -739,7 +739,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
         "phieuNhapKhoId": this.detail.phieuNhapKhoId,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soBangKe": this.detail.soBangKe,
-        "trangThai": null
+        "trangThai": this.detail.trangThai,
       };
       if (this.id > 0) {
         let res = await this.quanLyBangKeVatTuService.sua(

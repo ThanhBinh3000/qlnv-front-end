@@ -281,7 +281,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "chiTiets": this.listDaiDien,
       "chiTieuKiemTra": this.bienBanLayMau.chiTieuKiemTra,
       "id": this.id,
-      "maVatTu": null,
+      "maVatTu": this.bienBanLayMau.maVatTu,
       "maVatTuCha": this.bienBanLayMau.maVatTuCha,
       "ngayBanGiaoMau": this.bienBanLayMau.ngayBanGiaoMau ? dayjs(this.bienBanLayMau.ngayBanGiaoMau).format('YYYY-MM-DD') : null,
       "qdgnvnxId": this.bienBanLayMau.qdgnvnxId,
@@ -289,6 +289,8 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "soLuongMau": this.bienBanLayMau.soLuongMau,
       "tenDviBenNhan": this.bienBanLayMau.tenDviBenNhan,
       "ttNiemPhongMauHang": this.bienBanLayMau.ttNiemPhongMauHang,
+      "hopDongId": this.bienBanLayMau.hopDongId,
+      "diaDiemBanGiao": this.bienBanLayMau.diaDiemBanGiao,
     }
     if (this.id > 0) {
       this.quanLyBienBanBanGiaoService.sua(body).then((res) => {
