@@ -1,4 +1,3 @@
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder, FormGroup,
@@ -22,6 +21,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -64,7 +64,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   listNam: any[] = [];
   hopDongList: any[] = [];
   listFileDinhKem: any[] = [];
-  hopDongListUpdate: any[] = [];
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -129,7 +128,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        data: this.quyetDinhNhapXuat.id ? cloneDeep(this.hopDongListUpdate) : cloneDeep(this.hopDongList)
+        data: cloneDeep(this.hopDongList)
       },
     });
     modalQD.afterClose.subscribe((hopDongs) => {
@@ -374,8 +373,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
-    // this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
-    // this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
     this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
 
 
@@ -454,7 +451,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           detailQuyetDinhNhapXuat.donViTinh = hd.donViTinh;
           detailQuyetDinhNhapXuat.loaiNx = hd.loaiNx;
           detailQuyetDinhNhapXuat.maDvi = element.maDvi;
-          detailQuyetDinhNhapXuat.maVthh = hd.maVthh;
+          detailQuyetDinhNhapXuat.maVthh = hd.loaiVthh;
           detailQuyetDinhNhapXuat.soLuong = element.soLuong;
           detailQuyetDinhNhapXuat.tenVthh = hd.tenVthh;
           detailQuyetDinhNhapXuat.tuNgayThien = hd.tuNgayThien;
@@ -528,7 +525,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             ngayQdinh: dayjs(this.quyetDinhNhapXuat.ngayQdinh.split('')[0]).format("YYYY-MM-DD"),
           })
           let listHopDong = res.data.children1;
-          this.hopDongList = res.data.children;
           if (listHopDong) {
             let canCuHd = '';
             listHopDong.forEach((hd, i) => {
@@ -537,7 +533,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
                 canCuHd += ' - '
               }
               this.quyetDinhNhapXuat.hopDongIds.push(hd.hopDong.id);
-              this.hopDongListUpdate.push(hd.hopDong);
+              this.hopDongList.push(hd.hopDong);
             });
             this.formData.patchValue({
               canCu: canCuHd,

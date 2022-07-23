@@ -114,7 +114,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Theo hợp đồng số
                   </nz-form-label>
-                  <nz-select formControlName="soHdId" (ngModelChange)="changeHopDong()"
+                  <nz-select formControlName="hopDongId" (ngModelChange)="changeHopDong()"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
                       [nzLabel]="item.hopDong.soHd">
@@ -127,7 +127,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Số hợp đồng
                   </nz-form-label>
-                  <input nz-input placeholder="Số hợp đồng" formControlName="hopDongId"
+                  <input nz-input placeholder="Số hợp đồng" formControlName="soHd"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView" />
                 </nz-form-item>
               </div>

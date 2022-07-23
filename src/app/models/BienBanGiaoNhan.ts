@@ -27,6 +27,7 @@ export class BienBanGiaoNhan {
     tenDvi: string;
     tenHang: string;
     chungLoaiHangHoa: string;
+    soHd: string;
     constructor(chiTiets: Array<ChiTietBienBanGiaoNhan> = [], fileDinhKemReqs: Array<FileDinhKem> = []) {
         this.chiTiets = chiTiets;
         this.fileDinhKemReqs = fileDinhKemReqs;

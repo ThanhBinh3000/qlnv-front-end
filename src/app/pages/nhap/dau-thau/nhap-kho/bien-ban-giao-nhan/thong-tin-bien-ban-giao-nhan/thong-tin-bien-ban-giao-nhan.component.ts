@@ -159,7 +159,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           value: this.bienBanGiaoNhan
             ? this.bienBanGiaoNhan.hopDongId
             : null,
-          disabled: true
+          disabled: this.isView ? true : false
         },
 
         [],
@@ -293,12 +293,12 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           : null,
         disabled: this.isView ? true : false
       }],
-      soHdId: [
+      soHd: [
         {
           value: this.bienBanGiaoNhan
-            ? this.bienBanGiaoNhan.hopDongId
+            ? this.bienBanGiaoNhan.soHd
             : null,
-          disabled: this.isView ? true : false
+          disabled: true
         },
 
         [],
@@ -350,8 +350,6 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           this.bienBanGiaoNhan.chiTiets.forEach(bienBan => {
             bienBan.idVirtual = bienBan.id
           })
-          console.log("this.bienBanGiaoNhan: ", this.bienBanGiaoNhan);
-
           this.initForm();
           this.changeSoQuyetDinh();
         }
@@ -641,12 +639,12 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
         "canCus": this.listCanCu,
         "ghiChu": this.formData.get("ghiChu").value,
         "hoSKyThuatId": this.formData.get("hoSKyThuatId").value,
-        "hopDongId": 101,
+        "hopDongId": this.formData.get("hopDongId").value,
         "id": this.bienBanGiaoNhan.id,
         "ketLuan": this.formData.get("ketLuan").value,
         "maDvi": this.formData.get("maQHNS").value,
-        "maVatTu": "020901",
-        "maVatTuCha": "0209",
+        "maVatTu": this.bienBanGiaoNhan.maVatTu,
+        "maVatTuCha": this.bienBanGiaoNhan.maVatTuCha,
         "ngayHopDong": this.formData.get("ngayHopDong").value,
         "ngayKy": this.formData.get("ngayKy").value,
         "ngayKyBbGh": this.formData.get("ngayKyBbGh").value,
@@ -778,22 +776,32 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
     }
   }
   async changeHopDong() {
-
-    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("soHdId").value);
+    if (!this.formData.get("hopDongId").value) {
+      return;
+    }
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("hopDongId").value);
     let body = {
       "str": hopDong.hopDong.soHd
     }
     let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.detailHopDong = res.data;
-      this.formData.patchValue({
-        tenHang: this.detailHopDong.tenVthh,
-        tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
-        hopDongId: this.detailHopDong.id,
-        ngayHopDong: this.detailHopDong.ngayKy,
-      })
-      console.log(this.formData.get("hopDongId"));
+      // this.formData.patchValue({
+      //   tenHang: this.detailHopDong.tenVthh,
+      //   tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
+      //   hopDongId: this.detailHopDong.id,
+      //   ngayHopDong: this.detailHopDong.ngayKy,
+      //   soHd: this.detailHopDong.soHd,
+      // })
+      this.bienBanGiaoNhan.soHd = this.detailHopDong.soHd;
+      this.bienBanGiaoNhan.tenHang = this.detailHopDong.tenVthh;
+      this.bienBanGiaoNhan.chungLoaiHangHoa = this.detailHopDong.tenCloaiVthh;
+      this.bienBanGiaoNhan.hopDongId = this.detailHopDong.id;
+      this.bienBanGiaoNhan.ngayHopDong = this.detailHopDong.ngayKy;
+      this.bienBanGiaoNhan.maVatTuCha = this.detailHopDong.loaiVthh;
+      this.bienBanGiaoNhan.maVatTu = this.detailHopDong.cloaiVthh;
 
+      this.initForm();
     }
     else {
       this.notification.error(MESSAGE.ERROR, res.msg);

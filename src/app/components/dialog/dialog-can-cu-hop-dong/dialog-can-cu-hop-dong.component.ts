@@ -20,7 +20,6 @@ export class DialogCanCuHopDongComponent implements OnInit {
   dataTable: any[] = [];
   text: string = "";
   hopDongList: any[] = [];
-  hopDongListUpdate: any[] = [];
   data: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
@@ -33,7 +32,6 @@ export class DialogCanCuHopDongComponent implements OnInit {
     this.spinner.show();
     try {
       this.hopDongList = this.data;
-      this.hopDongListUpdate = this.data;
       await this.search();
       this.spinner.hide();
     } catch (e) {

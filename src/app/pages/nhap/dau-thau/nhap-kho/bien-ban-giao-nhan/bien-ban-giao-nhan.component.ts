@@ -358,7 +358,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
         this.quanLyBienBanBanGiaoNhanService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-ket-thuc-nhap-kho.xlsx'),
+            saveAs(blob, 'danh-sach-bien-ban-giao-nhan.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
