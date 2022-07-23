@@ -27,6 +27,7 @@ export class BienBanGuiHang {
     trangThai: string;
     tenTrangThai: string;
     chiTiets: Array<ChiTiet>;
+    soHdId: Array<ChiTiet>;
     constructor(chiTiets: Array<ChiTiet> = []) {
         this.chiTiets = chiTiets;
     }

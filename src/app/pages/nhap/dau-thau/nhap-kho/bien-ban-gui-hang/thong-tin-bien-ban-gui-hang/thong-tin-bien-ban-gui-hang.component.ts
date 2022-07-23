@@ -38,6 +38,9 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   chiTietBienBanGuiHangBenNhan: ChiTiet = new ChiTiet();
   quyetDinhNhapHang: QuyetDinhNhapXuat = new QuyetDinhNhapXuat();
   hopDong: any = {};
+  listHopDong: any[] = [];
+  detailHopDong: any = {};
+  detailGiaoNhap: any = {};
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -97,6 +100,29 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
     } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async changeHopDong() {
+    if (!this.bienBanGuiHang.soHdId) {
+      return;
+    }
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.bienBanGuiHang.soHdId);
+    let body = {
+      "str": hopDong.hopDong.soHd
+    }
+    let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailHopDong = res.data;
+      // this.formData.patchValue({
+      //   tenHang: this.detailHopDong.tenVthh,
+      //   tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
+      //   hopDongId: this.detailHopDong.id,
+      //   ngayHopDong: this.detailHopDong.ngayKy,
+      // })
+      console.log(this.detailHopDong);
+    }
+    else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
@@ -412,8 +438,10 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     console.log(quyetDinh);
 
     if (quyetDinh && quyetDinh.length > 0) {
-      this.quyetDinhNhapHang = quyetDinh[0];
-      await this.getHopDong(this.quyetDinhNhapHang.soHd);
+      this.detailGiaoNhap = quyetDinh[0];
+      this.bienBanGuiHang.qdgnvnxId = quyetDinh[0].id;
+      this.listHopDong = this.detailGiaoNhap.children1;
+      this.changeHopDong();
     }
   }
 

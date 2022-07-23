@@ -89,13 +89,24 @@
                 </nz-select>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="bienBanGuiHang.soBienBan"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="bienBanGuiHang.soBienBan" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Theo hợp đồng số
+                </nz-form-label>
+                <nz-select [(ngModel)]="bienBanGuiHang.soHdId" (ngModelChange)="changeHopDong()"
+                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id" [nzLabel]="item.hopDong.soHd">
+                  </nz-option>
+                </nz-select>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">

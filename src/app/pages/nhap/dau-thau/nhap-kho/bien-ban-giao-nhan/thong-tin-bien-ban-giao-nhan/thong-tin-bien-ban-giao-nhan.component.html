@@ -115,7 +115,7 @@
                     Theo hợp đồng số
                   </nz-form-label>
                   <nz-select formControlName="soHdId" (ngModelChange)="changeHopDong()"
-                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                    [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView">
                     <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
                       [nzLabel]="item.hopDong.soHd">
                     </nz-option>
