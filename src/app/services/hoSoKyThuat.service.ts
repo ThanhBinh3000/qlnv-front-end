@@ -30,6 +30,8 @@ export class HoSoKyThuatService extends BaseService {
       url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
     if (body.soQdNhap)
       url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)

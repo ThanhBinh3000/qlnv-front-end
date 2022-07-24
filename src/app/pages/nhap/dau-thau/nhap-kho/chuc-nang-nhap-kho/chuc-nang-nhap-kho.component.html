@@ -24,11 +24,6 @@
       <quan-ly-phieu-nhap-day-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-day-kho>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Lập và ký phiếu kiểm nghiệm chất lượng'" *ngIf="typeVthh != '02'">
-    <ng-template nz-tab>
-      <quan-ly-phieu-kiem-nghiem-chat-luong-thoc [typeVthh]="typeVthh"></quan-ly-phieu-kiem-nghiem-chat-luong-thoc>
-    </ng-template>
-  </nz-tab>
   <nz-tab [nzTitle]="'Bảng kê nhập vật tư'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
     <ng-template nz-tab>
       <app-bang-ke-nhap-vat-tu [typeVthh]="typeVthh"></app-bang-ke-nhap-vat-tu>

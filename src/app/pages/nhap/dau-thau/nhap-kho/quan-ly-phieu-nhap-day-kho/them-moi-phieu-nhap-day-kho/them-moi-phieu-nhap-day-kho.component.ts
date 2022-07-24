@@ -1,7 +1,7 @@
-import { saveAs } from 'file-saver';
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,18 +9,18 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { BienBanNhapDayKho, DetailBienBanNhapDayKho } from 'src/app/models/BienBanNhapDayKho';
+import { DetailBienBanNhapDayKho } from 'src/app/models/BienBanNhapDayKho';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -49,6 +49,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listNghiemThuBaoQuan: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -56,23 +57,24 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   bienBanNhapDayKhoDetailCreate: DetailBienBanNhapDayKho = new DetailBienBanNhapDayKho();
   dsBienBanNhapDayKhoDetailClone: Array<DetailBienBanNhapDayKho> = [];
   isChiTiet: boolean = false;
-
+  listHopDong: any[] = [];
   taiLieuDinhKemList: any[] = [];
-
+  detailHopDong: any = {};
+  detailGiaoNhap: any = {};
+  bbNghiemThuBaoQuans: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
     private modal: NzModalService,
     private userService: UserService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private donViService: DonviService,
     public globals: Globals,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private thongTinHopDongService: ThongTinHopDongService,
+    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
   ) { }
 
   async ngOnInit() {
@@ -89,8 +91,9 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       }
       await Promise.all([
         this.loadDiemKho(),
-        this.loadPhieuKiemTraChatLuong(),
+        this.loadNghiemThuBaoQuan(),
         this.loadSoQuyetDinh(),
+        this.loadBienBanNghiemThuBaoQuan(),
       ]);
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
@@ -144,7 +147,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -231,31 +234,20 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
-  async loadPhieuKiemTraChatLuong() {
+  async loadNghiemThuBaoQuan() {
     let body = {
+      "maVatTuCha": this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
-      "maHangHoa": this.maVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": null,
-      "ngayKiemTraTuNgay": null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
       "paggingReq": {
         "limit": 1000,
-        "orderBy": null,
-        "orderType": null,
-        "page": 1
+        "page": 0
       },
-      "soPhieu": null,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": "02",
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listPhieuKiemTraChatLuong = data.content;
+      this.listNghiemThuBaoQuan = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -307,6 +299,8 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       "thuKho": this.detail.thuKho ?? null,
       "thuTruong": this.detail.thuTruong ?? null,
       "qdgnvnxId": this.detail.qdgnvnxId,
+      "bbNghiemThuId": this.detail.bbNghiemThuId,
+      "hopDongId": this.detail.hopDongId,
     }
     if (this.id > 0) {
       this.quanLyPhieuNhapDayKhoService.sua(
@@ -409,6 +403,10 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -423,7 +421,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: trangThai,
           };
           const res = await this.quanLyPhieuNhapDayKhoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -661,6 +659,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detail = res.data;
           this.dsBienBanNhapDayKhoDetailClone = this.detail?.chiTiets ?? [];
+          await this.changeSoQuyetDinh(true);
           await this.changeDiemKho(true);
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -726,5 +725,89 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
 
   print() {
 
+  }
+  async changeSoQuyetDinh(autoChange: boolean) {
+    let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
+    if (quyetDinh && quyetDinh.length > 0) {
+      this.detailGiaoNhap = quyetDinh[0];
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
+      if (!autoChange) {
+        this.detail.soHd = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      } else {
+        await this.changeHopDong();
+      }
+    }
+  }
+  async changeBienBanNghiemThu(autoChange?: boolean) {
+    let bienBanNghiemThu = this.bbNghiemThuBaoQuans.find(x => x.id == this.detail.bbNghiemThuId);
+    if (bienBanNghiemThu) {
+      this.detail.thuTruong = bienBanNghiemThu.thuTruong;
+      this.detail.keToan = bienBanNghiemThu.keToan;
+      this.detail.kyThuatVien = bienBanNghiemThu.kyThuatVien;
+      this.detail.thuKho = bienBanNghiemThu.thuKho;
+      this.detail.tenDiemKho = bienBanNghiemThu.tenDiemKho;
+      this.detail.tenNhaKho = bienBanNghiemThu.tenNhaKho;
+      this.detail.tenNganKho = bienBanNghiemThu.tenNganKho;
+      this.detail.tenNganLo = bienBanNghiemThu.tenNganLo;
+    }
+  }
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
+      let body = {
+        "str": this.detail.soHopDong
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+  async loadBienBanNghiemThuBaoQuan() {
+    let body = {
+      pageSize: 1000,
+      pageNumber: 0,
+      trangThai: "02",
+    };
+    let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.bbNghiemThuBaoQuans = res.data.content;
+      console.log("res.data.content: ", res.data.content);
+
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 }

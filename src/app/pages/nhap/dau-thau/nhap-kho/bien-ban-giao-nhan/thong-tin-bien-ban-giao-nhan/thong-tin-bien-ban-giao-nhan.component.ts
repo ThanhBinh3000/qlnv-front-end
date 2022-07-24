@@ -62,6 +62,8 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   chiTietDaiDienChiCuc: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
   chiTietDaiDienCuc: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
   chiTietDaiDienBenGiao: ChiTietBienBanGiaoNhan = new ChiTietBienBanGiaoNhan();
+  listHopDong: any[] = [];
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -157,7 +159,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           value: this.bienBanGiaoNhan
             ? this.bienBanGiaoNhan.hopDongId
             : null,
-          disabled: true
+          disabled: this.isView ? true : false
         },
 
         [],
@@ -291,6 +293,16 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           : null,
         disabled: this.isView ? true : false
       }],
+      soHd: [
+        {
+          value: this.bienBanGiaoNhan
+            ? this.bienBanGiaoNhan.soHd
+            : null,
+          disabled: true
+        },
+
+        [],
+      ],
     });
   }
   async loadSoQuyetDinh() {
@@ -312,7 +324,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -338,9 +350,8 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           this.bienBanGiaoNhan.chiTiets.forEach(bienBan => {
             bienBan.idVirtual = bienBan.id
           })
-          console.log(this.bienBanGiaoNhan.chiTiets);
-
           this.initForm();
+          this.changeSoQuyetDinh();
         }
       }
     }
@@ -482,6 +493,10 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.bienBanGiaoNhan.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -496,7 +511,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyBienBanBanGiaoNhanService.updateStatus(
@@ -624,12 +639,12 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
         "canCus": this.listCanCu,
         "ghiChu": this.formData.get("ghiChu").value,
         "hoSKyThuatId": this.formData.get("hoSKyThuatId").value,
-        "hopDongId": 101,
+        "hopDongId": this.formData.get("hopDongId").value,
         "id": this.bienBanGiaoNhan.id,
         "ketLuan": this.formData.get("ketLuan").value,
         "maDvi": this.formData.get("maQHNS").value,
-        "maVatTu": "020901",
-        "maVatTuCha": "0209",
+        "maVatTu": this.bienBanGiaoNhan.maVatTu,
+        "maVatTuCha": this.bienBanGiaoNhan.maVatTuCha,
         "ngayHopDong": this.formData.get("ngayHopDong").value,
         "ngayKy": this.formData.get("ngayKy").value,
         "ngayKyBbGh": this.formData.get("ngayKyBbGh").value,
@@ -693,6 +708,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
+      "trangThai": "02",
     }
     let res = await this.quanLyPhieuKetThucNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -708,6 +724,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
+      "trangThai": "02",
     }
     let res = await this.bienBanGuiHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -738,7 +755,56 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       this.bienBanGiaoNhan.qdgnvnxId = quyetDinh[0].id;
       this.detailGiaoNhap = quyetDinh[0];
       this.bienBanGiaoNhan.hopDongId = this.detailHopDong.id;
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
+      this.changeHopDong();
+    }
+  }
+  async changeHopDong() {
+    if (!this.formData.get("hopDongId").value) {
+      return;
+    }
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.formData.get("hopDongId").value);
+    let body = {
+      "str": hopDong.hopDong.soHd
+    }
+    let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailHopDong = res.data;
+      // this.formData.patchValue({
+      //   tenHang: this.detailHopDong.tenVthh,
+      //   tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
+      //   hopDongId: this.detailHopDong.id,
+      //   ngayHopDong: this.detailHopDong.ngayKy,
+      //   soHd: this.detailHopDong.soHd,
+      // })
+      this.bienBanGiaoNhan.soHd = this.detailHopDong.soHd;
+      this.bienBanGiaoNhan.tenHang = this.detailHopDong.tenVthh;
+      this.bienBanGiaoNhan.chungLoaiHangHoa = this.detailHopDong.tenCloaiVthh;
+      this.bienBanGiaoNhan.hopDongId = this.detailHopDong.id;
+      this.bienBanGiaoNhan.ngayHopDong = this.detailHopDong.ngayKy;
+      this.bienBanGiaoNhan.maVatTuCha = this.detailHopDong.loaiVthh;
+      this.bienBanGiaoNhan.maVatTu = this.detailHopDong.cloaiVthh;
+
+      this.initForm();
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
   async getHopDong(id) {
@@ -769,6 +835,9 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
     let bbGuiHang = this.listBienBanGuiHang.find(x => x.id == this.formData.get("bbGuiHangId").value);
     if (bbGuiHang && bbGuiHang.length > 0) {
       this.bienBanGiaoNhan.bbGuiHangId = bbGuiHang.id;
+      this.formData.patchValue({
+        ngayKyBbGh: bbGuiHang.ngayHopDong
+      })
     }
   }
   changeHoSoKyThuat() {

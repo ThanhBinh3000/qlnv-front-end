@@ -6,33 +6,34 @@
         <div class="trai">
         </div>
         <div class="canphai phai" *ngIf="!viewChiTiet">
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="isAction()" (click)="guiDuyet()">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectbienBanKetThucNhapKho()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="(bienBanKetThucNhapKho.trangThai == '00' || bienBanKetThucNhapKho.trangThai == '03' || id == 0) && !isView"
+            (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-            *ngIf="bienBanKetThucNhapKho.trangThai == globals.prop.LANH_DAO_DUYET">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Ban hành</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-            *ngIf="bienBanKetThucNhapKho.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanKetThucNhapKho.trangThai == '04' || bienBanKetThucNhapKho.trangThai == '01'"
+            (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="bienBanKetThucNhapKho.trangThai == globals.prop.LANH_DAO_DUYET || bienBanKetThucNhapKho.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanKetThucNhapKho.trangThai == '04' || bienBanKetThucNhapKho.trangThai == '01'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="isAction()">
-            <i class="icon htvbdh_tcdt_save"></i>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(bienBanKetThucNhapKho.trangThai == '00' || bienBanKetThucNhapKho.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
+            <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectbienBanKetThucNhapKho()">
-            <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>
@@ -145,6 +146,19 @@
                   <input nz-input placeholder="Nhập tên thủ kho" formControlName="thuKho" />
                 </nz-form-item>
               </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Theo hợp đồng số
+                  </nz-form-label>
+                  <nz-select formControlName="soHdId" (ngModelChange)="changeHopDong()"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                    <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
+                      [nzLabel]="item.hopDong.soHd">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
             </div>
           </nz-card>
           <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
@@ -153,8 +167,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
                   <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input class="search__input" [readonly]="true" nz-input formControlName="loaiHangHoa"
-                      readonly="true" />
+                    <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
                   </nz-input-group>
                 </nz-form-item>
               </div>
@@ -236,8 +249,8 @@
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="24" class="bien-ban-day-kho">
-                <nz-table #basicTable class="mt-16 table__body" #bbNhapDayKhoDetail nzBordered [nzData]="null"
-                  [nzFrontPagination]="false" [nzShowPagination]="false">
+                <nz-table #basicTable class="mt-16 table__body" #bbNhapDayKhoDetail nzBordered
+                  [nzData]="ketQuaNhapKhoList" [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th rowSpan="2" class="text-center">STT <br> (A)</th>

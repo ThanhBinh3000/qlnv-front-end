@@ -6,20 +6,32 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView"
             (click)="guiDuyet()">
-            <i class="icon htvbdh_trinh"></i>
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanGiaoNhan.trangThai == '04' || bienBanGiaoNhan.trangThai == '01'" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="bienBanGiaoNhan.trangThai == '04' || bienBanGiaoNhan.trangThai == '01'" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(bienBanGiaoNhan.trangThai == '00' || bienBanGiaoNhan.trangThai == '03' || id == 0) && !isView"
+            (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>
@@ -100,9 +112,22 @@
               <div nz-col nzSpan="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
+                    Theo hợp đồng số
+                  </nz-form-label>
+                  <nz-select formControlName="hopDongId" (ngModelChange)="changeHopDong()"
+                    [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView">
+                    <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id"
+                      [nzLabel]="item.hopDong.soHd">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
                     Số hợp đồng
                   </nz-form-label>
-                  <input nz-input placeholder="Nhập số biên bản" formControlName="hopDongId"
+                  <input nz-input placeholder="Số hợp đồng" formControlName="soHd"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView" />
                 </nz-form-item>
               </div>
@@ -112,7 +137,7 @@
                     Ngày hợp đồng
                   </nz-form-label>
                   <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                    nzPlaceHolder="Ngày nhập kho" formControlName="ngayHopDong"
+                    nzPlaceHolder="Ngày hợp đồng" formControlName="ngayHopDong"
                     [disabled]="bienBanGiaoNhan.trangThai == '01' || bienBanGiaoNhan.trangThai == '02' || bienBanGiaoNhan.trangThai == '04' || isView">
                   </nz-date-picker>
                 </nz-form-item>
@@ -164,7 +189,7 @@
                   </nz-date-picker>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="8">
+              <div nz-col nzSpan="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
                     Tên hàng

@@ -57,6 +57,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
   listSoKho: any[] = [];
   listSoQuyetDinh: any[] = [];
   listSoPhieuNhapKho: any[] = [];
+  listHopDong: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -86,6 +87,8 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+      this.detail.trangThai = this.globals.prop.DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -218,7 +221,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
       },
       "soPhieu": null,
       "str": null,
-      "trangThai": null,
+      "trangThai": "02",
       "tuNgay": null,
       "maHangHoa": this.typeVthh
     };
@@ -250,7 +253,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -263,24 +266,50 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
     }
   }
 
-  async changeSoQuyetDinh() {
+  async changeSoQuyetDinh(autoChange: boolean) {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      this.detail.soHopDong = this.detailGiaoNhap.soHd;
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = [];
+      this.detailGiaoNhap.children1.forEach(element => {
+        if (element && element.hopDong) {
+          if (element.hopDong.loaiVthh.startsWith('02')) {
+            this.listHopDong.push(element);
+          }
+        }
+      });
+      if (!autoChange) {
+        this.detail.soHopDong = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      } else {
+        await this.changeHopDong();
+      }
     }
   }
 
-  async getHopDong(id) {
-    if (id) {
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
       let body = {
-        "str": id
+        "str": this.detail.soHopDong
       }
       let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
-        this.detail.hopDongId = res.data.id;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.soHopDong = this.detailHopDong.soHd;
+        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -403,7 +432,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": '02'
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -427,6 +456,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
             this.detail.soKho = +this.detail.soKho;
           }
           this.changeDiemKho(true);
+          await this.changeSoQuyetDinh(true);
         }
       }
     }
@@ -557,6 +587,10 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -571,7 +605,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyBangKeVatTuService.updateStatus(
@@ -705,7 +739,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
         "phieuNhapKhoId": this.detail.phieuNhapKhoId,
         "qdgnvnxId": this.detail.qdgnvnxId,
         "soBangKe": this.detail.soBangKe,
-        "trangThai": null
+        "trangThai": this.detail.trangThai,
       };
       if (this.id > 0) {
         let res = await this.quanLyBangKeVatTuService.sua(
@@ -745,5 +779,18 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
 
   print() {
 
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
+    }
   }
 }

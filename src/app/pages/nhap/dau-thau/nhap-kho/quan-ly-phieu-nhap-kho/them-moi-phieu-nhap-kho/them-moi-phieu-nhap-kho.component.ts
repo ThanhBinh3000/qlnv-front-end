@@ -51,6 +51,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   listSoQuyetDinh: any[] = [];
   listHoSoKyThuat: any[] = [];
   listHangHoa: any[] = [];
+  listPhieuKiemTraChatLuongFull: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   detailHopDong: any = {};
@@ -136,6 +137,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "pageNumber": 1,
       "soBienBan": null,
       "soQdNhap": null,
+      "trangThai": '02',
     };
     let res = await this.hoSoKyThuatService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -174,7 +176,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.detail.maDvi,
-      "maVthh": this.typeVthh,
+      "maVthh": this.detail.loaiVthh,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",
@@ -188,7 +190,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -226,30 +228,42 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   changePhieuKiemTra() {
-    let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.detail.phieuKtClId);
-    if (phieuKt && phieuKt.length > 0) {
-      this.detail.maDiemKho = phieuKt[0].maDiemKho;
-      this.detail.maNhaKho = phieuKt[0].maNhaKho;
-      this.detail.maNganKho = phieuKt[0].maNganKho;
-      this.detail.maNganLo = phieuKt[0].maNganLo;
-      this.changeDiemKho(true);
-      let itemVatTu = this.listDanhMucHang.filter(x => x.ma == phieuKt[0].maVatTu);
+    if (this.detail.phieuKtClIds && this.detail.phieuKtClIds.length > 0) {
       this.detail.hangHoaList = [];
-      let itemHangHoa = {
-        "donGia": this.detailHopDong?.donGiaVat ?? 0,
-        "donViTinh": itemVatTu && itemVatTu.length > 0 ? itemVatTu[0].maDviTinh : null,
-        "id": 0,
-        "maVatTu": phieuKt[0].maVatTu,
-        "tenVatTu": phieuKt[0].tenVatTu,
-        "soChungTu": 0,
-        "soLuongThuc": 0,
-        "soLuongTrenCt": phieuKt[0].khoiLuong,
-        "soThucNhap": 0,
-        "stt": 1,
-        "thanhTien": 0,
-        "vthh": null
+      for (let i = 0; i < this.detail.phieuKtClIds.length; i++) {
+        let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == +this.detail.phieuKtClIds[i]);
+        if (phieuKt && phieuKt.length > 0) {
+          this.detail.maDiemKho = phieuKt[0].maDiemKho;
+          this.detail.maNhaKho = phieuKt[0].maNhaKho;
+          this.detail.maNganKho = phieuKt[0].maNganKho;
+          this.detail.maNganLo = phieuKt[0].maNganLo;
+          let checkVatTu = this.detail.hangHoaList.findIndex(x => x.maVatTu == phieuKt[0].maVatTu);
+          if (checkVatTu != -1) {
+            this.detail.hangHoaList[checkVatTu].soLuongTrenCt += phieuKt[0].khoiLuong;
+          }
+          else {
+            let itemVatTu = this.listDanhMucHang.filter(x => x.ma == phieuKt[0].maVatTu);
+            let itemHangHoa = {
+              "donGia": this.detailHopDong?.donGiaVat ?? 0,
+              "donViTinh": itemVatTu && itemVatTu.length > 0 ? itemVatTu[0].maDviTinh : null,
+              "id": 0,
+              "maVatTu": phieuKt[0].maVatTu,
+              "tenVatTu": phieuKt[0].tenVatTu,
+              "soChungTu": 0,
+              "soLuongThuc": 0,
+              "soLuongTrenCt": phieuKt[0].khoiLuong,
+              "soThucNhap": 0,
+              "stt": 1,
+              "thanhTien": 0,
+              "vthh": null
+            }
+            this.detail.hangHoaList.push(itemHangHoa);
+          }
+        }
       }
-      this.detail.hangHoaList.push(itemHangHoa);
+      this.listPhieuKiemTraChatLuong = this.listPhieuKiemTraChatLuongFull.filter(x => x.maNganLo == this.detail.maNganLo && x.maNganKho == this.detail.maNganKho
+        && x.maNhaKho == this.detail.maNhaKho && x.maDiemKho == this.detail.maDiemKho);
+      this.changeDiemKho(true);
     }
   }
 
@@ -272,12 +286,13 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": null
+      "trangThai": '02'
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listPhieuKiemTraChatLuong = data.content;
+      this.listPhieuKiemTraChatLuongFull = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -316,6 +331,9 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
           this.changeDiemKho(true);
           if (this.detail.hangHoaRes) {
             this.detail.hangHoaList = this.detail.hangHoaRes;
+          }
+          if (this.detail.chungTus) {
+            this.taiLieuDinhKemList = this.detail.chungTus;
           }
         }
       }
@@ -502,7 +520,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quanLyPhieuNhapKhoService.updateStatus(
@@ -525,6 +543,10 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -539,7 +561,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyPhieuNhapKhoService.updateStatus(
@@ -684,7 +706,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "ngayQdNvuNhang": this.detail.ngayQdNvuNhang,
         "ngayTao": this.detail.ngayTao,
         "nguoiGiaoHang": this.detail.nguoiGiaoHang,
-        "phieuKtClId": this.detail.phieuKtClId,
+        "phieuKtClIds": this.detail.phieuKtClIds,
         "soPhieu": this.detail.soPhieu,
         "soQdNvuNhang": this.detail.soQdNvuNhang,
         "taiKhoanCo": this.detail.taiKhoanCo,
@@ -693,6 +715,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "tenNguoiGiaoNhan": this.detail.nguoiGiaoHang,
         "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan,
         "qdgnvnxId": this.detail.qdgnvnxId,
+        "chungTus": this.taiLieuDinhKemList,
+        "hoSoKyThuatId": this.detail.hoSoKyThuatId,
       };
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
