@@ -4,23 +4,19 @@
       <div class="main-content">
         <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số Quyết định</label>
-              <input class="search__input" placeholder="Số Quyết định" nz-input
+            <div nz-col nzSpan="4">
+              <label class="search__label">Số biên bản</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input
                 [(ngModel)]="searchFilter.soQuyetDinhNhap" />
             </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Ngày bàn giao mẫu</label>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày ký</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayBanGiaoMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số hợp đồng</label>
-              <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
-            </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số biên bản bàn giao mẫu</label>
-              <input class="search__input" placeholder="Số biên bản bàn giao mẫu" nz-input
+            <div nz-col nzSpan="4">
+              <label class="search__label">Số biên bản lấy mẫu</label>
+              <input class="search__input" placeholder="Số biên bản lấy mẫu" nz-input
                 [(ngModel)]="searchFilter.soBienBan" />
             </div>
           </div>
@@ -37,7 +33,7 @@
         </nz-card>
         <div class="tab-giao-chi-tieu mt-16">
           <nz-tabset nzType="card" class="tab-level-3">
-            <nz-tab nzTitle="Danh sách biên bản lấy mẫu">
+            <nz-tab nzTitle="Danh sách biên bản bàn giao mẫu">
               <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
                 <thead>
@@ -47,11 +43,11 @@
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px">STT</th>
-                    <th width="931px">Số biên bản</th>
-                    <th width="931px">Số quyết định</th>
+                    <th width="161px">Số biên bản</th>
+                    <th width="161px">Số biên bản lấy mẫu</th>
                     <th width="161px">Ngày bàn giao mẫu</th>
-                    <th width="161px">Cục dự trữ nhà nước khu vực (Bên giao)</th>
-                    <th width="161px">Đơn vị tổ chức thử nghiệm (Bên nhận)</th>
+                    <th width="161px">Cục dự trữ nhà nước khu vực</th>
+                    <th width="161px">Đơn vị tổ chức thử nghiệm</th>
                     <th width="203px">Số lượng mẫu hàng kiểm tra</th>
                     <th width="295px">Trạng thái</th>
                     <th width="130px">Hành động</th>
@@ -132,11 +128,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isCuc()"
+                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00' && userService.isCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -162,7 +158,7 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -170,7 +166,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
+            <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
               (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
