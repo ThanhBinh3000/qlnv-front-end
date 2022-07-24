@@ -13,3 +13,129 @@
         }
     }
 }
+
+
+
+
+.group-button-search {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.thong-tin-ho-so-ki-thuat {
+    padding: 24px;
+}
+
+
+
+.title-chi-tiet,
+.title-form-chi-tiet {
+    font-weight: 500;
+    font-size: 16px;
+    color: #444444;
+}
+
+.title-chi-tiet {
+    text-transform: uppercase;
+}
+
+.title-form-chi-tiet {
+    margin-bottom: 10px;
+}
+
+.ban-hanh {
+    font-weight: 500;
+    font-size: 13px;
+    margin-right: 10px;
+    padding: 6px 7px;
+    text-align: center;
+    background: #efffec;
+    border: 1px solid currentColor;
+    line-height: 15px;
+    text-transform: uppercase;
+    color: #24e837;
+}
+
+.add__input {
+    margin-top: 8px;
+    padding: 4.5px 10px;
+    background: #f3f3f3;
+    border: 1px solid #c4c9cc;
+}
+
+.text-area-chi-tiet {
+    background-color: #f3f3f3;
+    border: 1px solid #eaeaea;
+}
+
+.date__input {
+    width: 100%;
+    background: #f3f3f3;
+    border: 1px solid #c4c9cc;
+}
+
+.other-files-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.file-content {
+    font-size: 13px;
+    color: #000;
+    display: flex;
+    gap: 32px;
+}
+
+.file-upload {
+    font-size: 13px;
+    padding-left: 16px;
+    display: flex;
+    justify-content: space-between;
+    color: #2196f3;
+
+    .file-icon {
+        height: 30px;
+        width: 30px;
+        border: 1px solid #c4c9cc;
+        background-color: #f8f9fa;
+        text-align: center;
+        line-height: 30px;
+
+        i {
+            color: #000;
+            font-size: 14px;
+        }
+    }
+}
+
+.btn-affix {
+    padding: 4px 16px;
+    font-size: 14px;
+    background-color: #eff0f6;
+    text-align: center;
+    border: solid 1px #cfd1e3;
+    display: flex;
+    gap: 12px;
+    color: #444;
+    align-items: center;
+
+    &:hover {
+        background-color: #353a64;
+        border: solid 1px #353a64;
+        color: #fff;
+
+        .affix-icon {
+            fill: #fff;
+        }
+    }
+}
+
+.btn-save {
+    background-color: #353a64;
+    border: solid 1px #353a64;
+    color: #fff;
+}

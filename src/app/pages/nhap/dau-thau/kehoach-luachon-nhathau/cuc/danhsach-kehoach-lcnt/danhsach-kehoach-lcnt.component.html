@@ -58,6 +58,7 @@
                     <th width="">Năm kế hoạch</th>
                     <th width="">Hàng hóa</th>
                     <th *ngIf="userService.isCuc()" width="">Chủng loại hàng hóa</th>
+                    <th width="">Số gói thầu</th>
                     <th width="">Trạng thái của đề xuất</th>
                     <th width="90px">Hành động</th>
                   </tr>
@@ -139,6 +140,15 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
+                          (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.statusConvert"
                           (input)="filterInTable('statusConvert',filterTable.statusConvert)" size="small" />
                       </nz-input-group>
@@ -171,6 +181,7 @@
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.tenVthh }}</td>
                     <td *ngIf="userService.isCuc()">{{ data.tenCloaiVthh }}</td>
+                    <td>{{data.soGoiThau}}</td>
                     <td>{{ data.statusConvert }}</td>
                     <td class="text-left">
                       <a (click)="detail(data)">

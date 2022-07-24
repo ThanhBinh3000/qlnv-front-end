@@ -7,6 +7,8 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { ChucNangXuatKhoComponent } from './chuc-nang-xuat-kho/chuc-nang-xuat-kho.component';
 import { BangKeCanBangComponent } from './bang-ke-can-bang/bang-ke-can-bang.component';
 import { ThongTinBangKeCanBangComponent } from './bang-ke-can-bang/thong-tin-bang-ke-can-bang/thong-tin-bang-ke-can-bang.component';
+import { ThemMoiPhieuXuatKhoComponent } from './quan-ly-phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
+import { QuanLyPhieuXuatKhoComponent } from './quan-ly-phieu-xuat-kho/quan-ly-phieu-xuat-kho.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { ThongTinBangKeCanBangComponent } from './bang-ke-can-bang/thong-tin-ban
     ChucNangXuatKhoComponent,
     BangKeCanBangComponent,
     ThongTinBangKeCanBangComponent,
-
+    QuanLyPhieuXuatKhoComponent,
+    ThemMoiPhieuXuatKhoComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +26,9 @@ import { ThongTinBangKeCanBangComponent } from './bang-ke-can-bang/thong-tin-ban
   ],
   exports: [
     XuatKhoComponent,
-
+    ChucNangXuatKhoComponent,
+    BangKeCanBangComponent,
+    QuanLyPhieuXuatKhoComponent,
   ]
 })
 export class XuatKhoModule { }

@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/qd-pduyet-kqlcnt', '/qlnv-gateway/qlnv-hang');
+    super(httpClient, 'dx-kh/qd-pduyet-kqlcnt', '/qlnv-hang');
   }
 
 }

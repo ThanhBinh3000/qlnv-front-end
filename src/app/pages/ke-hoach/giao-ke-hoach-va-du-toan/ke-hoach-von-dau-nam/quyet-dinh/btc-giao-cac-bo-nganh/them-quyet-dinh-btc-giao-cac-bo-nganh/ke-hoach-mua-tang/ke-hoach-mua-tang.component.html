@@ -76,11 +76,11 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr>
+      <!-- <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
         <td>{{ calcTong() }}</td>
         <td></td>
-      </tr>
+      </tr> -->
       <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Tổng giá trị theo QĐ của TTCP</td>
         <td class="xanh">600</td>
@@ -88,20 +88,4 @@
       </tr>
     </tfoot>
   </nz-table>
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between">
-      <div class="trai">
-
-      </div>
-      <div class="canphai">
-        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-          [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-          (nzPageSizeChange)="changePageSize($event)">
-          <ng-template #rangeTemplate let-range="range" let-total>
-            {{ range[0] }}-{{ range[1] }} of {{ total }} items
-          </ng-template>
-        </nz-pagination>
-      </div>
-    </div>
-  </div>
 </div>

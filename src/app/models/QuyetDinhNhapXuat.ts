@@ -22,12 +22,15 @@ export class QuyetDinhNhapXuat {
     tenTrangThai: string;
     hopDongId: number;
     namNhap: number;
+    hopDongIds: Array<number>;
     constructor(
         fileDinhKemReqs: Array<FileDinhKem> = [],
-        details: Array<DetailQuyetDinhNhapXuat> = []
+        details: Array<DetailQuyetDinhNhapXuat> = [],
+        hopDongIds: Array<number> = []
     ) {
         this.fileDinhKems = fileDinhKemReqs;
         this.detail = details;
+        this.hopDongIds = hopDongIds;
     }
 }
 export class DetailQuyetDinhNhapXuat {

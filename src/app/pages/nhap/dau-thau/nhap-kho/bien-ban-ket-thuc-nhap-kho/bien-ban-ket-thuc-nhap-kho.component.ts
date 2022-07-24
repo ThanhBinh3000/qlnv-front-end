@@ -58,7 +58,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
-    noiDung: '',
+    trangThai: '',
   }
   dataTableAll: any[] = [];
   bienBanKetThucNhapKho: BienBanKetThucNhapKho = new BienBanKetThucNhapKho();
@@ -164,6 +164,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       ngayNhapDayKho: '',
       ngayKetThucNhap: '',
     };
+    this.search();
   }
 
   xoaItem(item: any) {
@@ -178,7 +179,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKetThucNhapKhoService.delete(item.id).then((res) => {
+          this.quanLyPhieuKetThucNhapKhoService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -309,13 +310,14 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.quanLyPhieuNhapKhoService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyPhieuKetThucNhapKhoService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.allChecked = false;
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -403,7 +405,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
-      noiDung: '',
+      trangThai: '',
     }
   }
 

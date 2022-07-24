@@ -9,9 +9,9 @@ import { last } from 'lodash';
   providedIn: 'root',
 })
 export class DonviService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-category';
+  GATEWAY = '/qlnv-category';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dmuc-donvi', '/qlnv-gateway/qlnv-category');
+    super(httpClient, 'dmuc-donvi', '/qlnv-category');
   }
 
   layTatCaDonVi(): Promise<any> {
@@ -25,12 +25,12 @@ export class DonviService extends BaseService {
   }
 
   layDonViCon(): Promise<any> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dmuc-donvi/ds-donvi-child`;
+    const url = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/ds-donvi-child`;
     return this.httpClient.get<any>(url).toPromise();
   }
 
   layDonViChiCuc(): Promise<any> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dmuc-donvi/ds-donvi-child`;
+    const url = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/ds-donvi-child`;
     return this.httpClient.get<any>(url).toPromise();
   }
 

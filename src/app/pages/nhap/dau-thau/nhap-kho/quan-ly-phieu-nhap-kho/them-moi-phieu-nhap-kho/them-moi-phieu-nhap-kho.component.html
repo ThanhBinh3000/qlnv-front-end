@@ -6,38 +6,30 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>In</span>
-          </button> -->
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
-            <i class="icon htvbdh_trinh"></i>
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <!-- <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '01' && !isView" (click)="hoanThanh()">
-            <i class="icon  htvbdh_da-xu-ly"></i>
-            <span>Hoàn thành phiếu</span>
-          </button> -->
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="detail.trangThai == '04' && !isView" (click)="pheDuyet()">
-            <i class="icon htvbdh_dakyduyet"></i>
+            *ngIf="detail.trangThai == '04' || detail.trangThai == '01'" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="detail.trangThai == '04'">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="detail.trangThai == '04' || detail.trangThai == '01'" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
+          <button class="btn btn-main btn-sm waves-effect waves-light"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>
@@ -52,7 +44,7 @@
           <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
           <span class="title-form">Phiếu nhập kho</span>
         </div>
-        <nz-card nzTitle="" class="flex-card p-lr16" *ngIf="typeVthh === '02'">
+        <nz-card nzTitle="" class="flex-card p-lr16" *ngIf="detail.loaiVthh === '02'">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="6">
               <nz-form-item>
@@ -87,7 +79,7 @@
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.hoSoKyThuatId" (ngModelChange)="changeHoSoKyThuat()"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listHoSoKyThuat" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  <nz-option *ngFor="let item of listHoSoKyThuat" [nzValue]="item.id" [nzLabel]="item.soBienBan">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -226,7 +218,7 @@
             </div>
           </div>
         </nz-card>
-        <nz-card nzTitle="" class="flex-card p-lr16" *ngIf="typeVthh !== '02'">
+        <nz-card nzTitle="" class="flex-card p-lr16" *ngIf="detail.loaiVthh !== '02'">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="6">
               <nz-form-item>
@@ -284,7 +276,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu kiểm tra chất lượng
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.phieuKtClId" (ngModelChange)="changePhieuKiemTra()"
+                <nz-select [(ngModel)]="detail.phieuKtClIds" (ngModelChange)="changePhieuKiemTra()" nzMode="multiple"
                   [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
                   <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id"
                     [nzLabel]="item.soPhieu">
@@ -328,8 +320,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)" disabled>
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -340,8 +331,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)" disabled>
                   <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -352,8 +342,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()" disabled>
                   <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -364,8 +353,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Lô kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganLo"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="detail.maNganLo" disabled>
                   <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
                   </nz-option>
                 </nz-select>
@@ -474,7 +462,7 @@
           <div class="comment-last" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
             <div nz-col nzSpan="24">
-              <file-list></file-list>
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="isView"></file-list>
             </div>
           </div>
         </div>

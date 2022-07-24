@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class BienBanGuiHangService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
   BIEN_BAN_GUI_HANG = 'bien-ban-gui-hang'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'BienBanGuiHang', '');
@@ -32,6 +32,9 @@ export class BienBanGuiHangService extends BaseService {
         'paggingReq.page=' +
         encodeURIComponent('' + (body.pageNumber - 1)) +
         '&';
+    if (body.trangThai) {
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
+    }
     if (body.pageSize)
       url_ +=
         'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';

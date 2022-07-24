@@ -8,7 +8,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class QuanLyBienBanChuanBiKhoService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyBienBanChuanBiKho', '');
@@ -25,6 +25,9 @@ export class QuanLyBienBanChuanBiKhoService extends BaseService {
     }
     if (body.ngayBienBanDen) {
       url_ += 'ngayBienBanDen=' + encodeURIComponent('' + body.ngayBienBanDen) + '&';
+    }
+    if (body.trangThai) {
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     }
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';

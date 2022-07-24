@@ -1,0 +1,137 @@
+.search__label {
+    margin-bottom: 8px;
+
+    &:last-child {
+        display: block;
+    }
+}
+
+.search__input {
+    padding: 4.5px 10px;
+    border: 1px solid #c4c9cc;
+}
+
+.group-button-search {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.search__button {
+    &--clear {
+        color: #4e5484;
+        border: 0.5px solid #c4c9cc;
+    }
+
+    &--search {
+        color: #fff;
+        background-color: #4e5484;
+        border: 0.5px solid #4e5484;
+    }
+
+    padding: 4.5px 12px 4.5px 8px;
+    border-radius: 0;
+    outline: none;
+}
+
+.tab_content {
+    padding: 24px !important;
+}
+
+.search__table-header {
+    font-size: 14px;
+
+    th {
+        background-color: #f8f9fa;
+        border: 0.5px solid #d9d9d9;
+        text-align: center;
+        color: #444;
+    }
+}
+
+.search__table {
+    font-size: 13px;
+
+    th,
+    td {
+        padding: 7px 12px;
+        background-color: #f3f3f3;
+        border: 0.5px solid #d9d9d9;
+        text-align: center;
+        white-space: nowrap;
+    }
+}
+
+.search__table-item {
+
+    th,
+    td {
+        padding: 7px 12px;
+        background-color: #fff;
+        color: #444;
+        border: 0.5px solid #d9d9d9;
+        text-align: left;
+        white-space: nowrap;
+    }
+}
+
+.tab_title {
+    color: #444;
+    font-weight: 500;
+}
+
+.tab-pane {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tab-menu {
+    background-color: #f2f2f2;
+    padding: 5px 12px;
+}
+
+.list_hoso {
+    position: relative;
+}
+
+.action_hoso {
+    position: absolute;
+    right: 24px;
+    display: flex;
+    gap: 8px;
+    top: 24px;
+}
+
+.btn {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border-radius: 0px;
+    padding: 0 10px;
+}
+
+.btn-do {
+    background: #fff3f3;
+    border: 1px solid #ff9393;
+    color: #ff4d4f;
+}
+
+.btn-sub {
+    background-color: #f8f9fa;
+    border: 1px solid #dfdfdf;
+    color: #444444;
+}
+
+.btn-main {
+    background: #353a64;
+    border: 1px solid #e3f9f9;
+    color: #ffffff;
+}
+
+.action-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+}

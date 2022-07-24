@@ -14,24 +14,21 @@
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh() && !isView"
             (click)="guiDuyet()" [disabled]="!isValid">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Gửi duyệt</span>
+            <span>Lưu và gửi duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == globals.prop.LANH_DAO_DUYET && !isView">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Ban hành</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == globals.prop.DU_THAO_TRINH_DUYET && !isView">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == '04' || phieuKiemNghiemChatLuongHang.trangThai == '01'"
+            (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="(phieuKiemNghiemChatLuongHang.trangThai == globals.prop.LANH_DAO_DUYET || phieuKiemNghiemChatLuongHang.trangThai == globals.prop.DU_THAO_TRINH_DUYET) && !isView ">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == '04' || phieuKiemNghiemChatLuongHang.trangThai == '01'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
             *ngIf="disableBanHanh() && !isView" [disabled]="!isValid">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>

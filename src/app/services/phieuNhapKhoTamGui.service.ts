@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class PhieuNhapKhoTamGuiService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
   PHIEU_NHAP_KHO_TAM_GUI = 'phieu-nhap-kho-tam-gui'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'PhieuNhapKhoTam', '');

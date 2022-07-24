@@ -7,10 +7,10 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class DanhMucTieuChuanService extends BaseService {
-  gateway: string = '/qlnv-gateway/qlnv-category'
+  gateway: string = '/qlnv-category'
   table: string = 'dm-tieu-chuan'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dm-tieu-chuan', '/qlnv-gateway/qlnv-category');
+    super(httpClient, 'dm-tieu-chuan', '/qlnv-category');
   }
 
   getDetailByMaHh(maHh): Promise<any> {

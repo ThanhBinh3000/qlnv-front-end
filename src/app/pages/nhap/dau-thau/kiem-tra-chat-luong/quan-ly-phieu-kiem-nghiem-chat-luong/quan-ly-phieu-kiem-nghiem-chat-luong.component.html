@@ -127,7 +127,7 @@
                     <td>{{ data.tenDiemKho }}</td>
                     <td>{{ data.soLuongMauHangKt }}</td>
                     <td>{{ data.trangThaiDuyet }}</td>
-                    <td class="text-center">
+                    <td>
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
@@ -168,10 +168,6 @@
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
-            </button>
-            <button type="button" class="btn btn-sub" (click)="printTable()">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>In</span>
             </button>
             <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
               *ngIf="userService.isChiCuc()">

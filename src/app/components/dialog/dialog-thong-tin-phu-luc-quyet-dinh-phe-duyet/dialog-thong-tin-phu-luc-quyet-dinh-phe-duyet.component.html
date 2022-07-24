@@ -96,7 +96,7 @@
           <nz-input-number nz-input [(ngModel)]="addGoiThau.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
           </nz-input-number>
         </td>
-        <td class="text-right">
+        <td>
           <a (click)="addNew()" class="save">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
@@ -110,7 +110,7 @@
           <td>{{ data.maDiemKho }}</td>
           <td>{{ data.diaDiemNhap }}</td>
           <td>{{ data.soLuong | number: '1.0-1' }}</td>
-          <td class="text-right">
+          <td>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
             </a>
@@ -131,7 +131,7 @@
               [nzSize]="'small'">
             </nz-input-number>
           </td>
-          <td class="text-right">
+          <td>
             <a (click)="saveEdit(i)" class="save">
               <i class="icon htvbdh_tcdt_save"></i>
             </a>

@@ -1,4 +1,5 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-chuc-nang-xuat-kho',
@@ -7,9 +8,7 @@ import { Component, OnInit,Input } from '@angular/core';
 })
 export class ChucNangXuatKhoComponent implements OnInit {
   @Input() typeVthh: string;
-
-  constructor() { }
-
+  constructor(private userService :UserService) { }
   ngOnInit(): void {
   }
 

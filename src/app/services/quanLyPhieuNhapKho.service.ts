@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuanLyPhieuNhapKhoService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyPhieuNhapKho', '');
@@ -28,6 +28,8 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
       url_ += 'tuNgayNhapKho=' + encodeURIComponent('' + body.tuNgayNhapKho) + '&';
     if (body.soPhieu)
       url_ += 'soPhieu=' + encodeURIComponent('' + body.soPhieu) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
