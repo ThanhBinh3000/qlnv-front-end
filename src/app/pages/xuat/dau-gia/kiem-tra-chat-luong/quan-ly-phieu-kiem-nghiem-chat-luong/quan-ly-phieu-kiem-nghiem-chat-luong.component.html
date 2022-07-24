@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach" *ngIf="isDetail">
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -6,8 +6,7 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
               <label class="search__label">Số phiếu kiểm nghiệm</label>
-              <input class="search__input"  nz-input
-                [(ngModel)]="this.searchFilter.soQdNhap" />
+              <input class="search__input" nz-input [(ngModel)]="this.searchFilter.soQdNhap" />
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày kiểm nghiệm</label>
@@ -16,8 +15,7 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Số biên bản lấy mẫu</label>
-              <input class="search__input"  nz-input
-                [(ngModel)]="searchFilter.soHopDong" />
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soHopDong" />
             </div>
 
           </div>
@@ -39,8 +37,9 @@
                 [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
                 <thead>
                   <tr>
-                    <th width="32px">
-
+                    <th width="45px">
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                        [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="32px">STT</th>
                     <th width="114px">Số phiếu</th>
@@ -67,9 +66,9 @@
                     </td>
                     <td>
                       <nz-date-picker class="filter-in-table" [(ngModel)]="filterTable.ngayBanGiaoMau"
-                      nzFormat="dd/MM/yyyy"
-                      (ngModelChange)="filterInTable('ngayBanGiaoMau',filterTable.ngayBanGiaoMau)">
-                    </nz-date-picker>
+                        nzFormat="dd/MM/yyyy"
+                        (ngModelChange)="filterInTable('ngayBanGiaoMau',filterTable.ngayBanGiaoMau)">
+                      </nz-date-picker>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -79,9 +78,9 @@
                     </td>
                     <td>
                       <nz-date-picker class="filter-in-table" [(ngModel)]="filterTable.ngayBanGiaoMau"
-                      nzFormat="dd/MM/yyyy"
-                      (ngModelChange)="filterInTable('ngayBanGiaoMau',filterTable.ngayBanGiaoMau)">
-                    </nz-date-picker>
+                        nzFormat="dd/MM/yyyy"
+                        (ngModelChange)="filterInTable('ngayBanGiaoMau',filterTable.ngayBanGiaoMau)">
+                      </nz-date-picker>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -113,17 +112,14 @@
                           (input)="filterInTable('trangThaiDuyet', filterTable.trangThaiDuyet)" size="small" />
                       </nz-input-group>
                     </td>
-
                     <td></td>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                   </tr>
-
-
-                  <tr >
+                  <tr>
                     <th width="45px">
-                      <label nz-checkbox ></label>
+                      <label nz-checkbox (ngModelChange)="updateSingleChecked()"></label>
                     </th>
                     <td class="text-center">1</td>
                     <td>576/KH-CDTVP</td>
@@ -135,15 +131,14 @@
                     <td>Ngăn lô 1</td>
                     <td>Ngăn lô 1</td>
                     <td>Dự thảo</td>
-
                     <td class="text-center">
-                      <a >
+                      <a>
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a >
+                      <a>
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a >
+                      <a>
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -153,27 +148,23 @@
               </nz-table>
               <div class="tab-content tab-menu">
                 <div class="tab-pane fade show active justify-content-between">
-                  <div class="trai">
-                    1-10 trên tổng số 73 bản ghi
-                  </div>
+                  <div class="trai"></div>
                   <div class="canphai">
                     <!-- begin phân trang  -->
-                    <!-- <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
                       nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                       (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                       <ng-template #rangeTemplate let-range="range" let-total>
                         {{ range[0] }}-{{ range[1] }} of {{ total }} items
                       </ng-template>
-                    </nz-pagination> -->
-
-                    <nz-pagination [nzPageIndex]="4" [nzTotal]="40" nzShowSizeChanger [nzPageSize]="10"></nz-pagination>
+                    </nz-pagination>
                     <!-- end phân trang  -->
                   </div>
                 </div>
               </div>
             </nz-tab>
           </nz-tabset>
-          <!-- <div class="action-giao-chi-tieu" *ngIf="userService.isCuc()">
+          <div class="action-giao-chi-tieu" *ngIf="userService.isChiCuc()">
             <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
@@ -182,21 +173,18 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="printTable()">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>In</span>
-            </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+              *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="chi-tiet" *ngIf="!isDetail">
+<div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-phieu-kiem-nghiem-chat-luong [typeVthh]="typeVthh" [id]="selectedId" [isView]="isView"
     (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>

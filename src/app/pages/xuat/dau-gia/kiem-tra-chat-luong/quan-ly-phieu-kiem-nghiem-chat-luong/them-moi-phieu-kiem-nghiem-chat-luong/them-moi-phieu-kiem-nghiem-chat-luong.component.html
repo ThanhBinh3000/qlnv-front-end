@@ -6,36 +6,33 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            (click)="redirectPhieuKiemNghiemChatLuongHang()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh() && !isView"
+            (click)="guiDuyet()" [disabled]="!isValid">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == '04' || phieuKiemNghiemChatLuongHang.trangThai == '01'"
+            (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == '04' || phieuKiemNghiemChatLuongHang.trangThai == '01'"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
             *ngIf="disableBanHanh() && !isView" [disabled]="!isValid">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh() && !isView"
-            (click)="guiDuyet()" [disabled]="!isValid">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Gửi duyệt</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == globals.prop.LANH_DAO_DUYET && !isView">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Ban hành</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-            *ngIf="phieuKiemNghiemChatLuongHang.trangThai == globals.prop.DU_THAO_TRINH_DUYET && !isView">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Duyệt</span>
-          </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="(phieuKiemNghiemChatLuongHang.trangThai == globals.prop.LANH_DAO_DUYET || phieuKiemNghiemChatLuongHang.trangThai == globals.prop.DU_THAO_TRINH_DUYET) && !isView ">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Từ chối</span>
-          </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            (click)="redirectPhieuKiemNghiemChatLuongHang()">
-            <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Quay về</span>
-          </a>
         </div>
       </div>
     </div>
@@ -43,45 +40,13 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-
-
-
         <div class="title-chi-tieu">
           <span
             [ngClass]="thongTinTrangThai(phieuKiemNghiemChatLuongHang.trangThai)">{{thongTinTrangThaiText(phieuKiemNghiemChatLuongHang.trangThai)}}</span>
           <span class="title-form">Phiếu kiểm nghiệm chất lượng</span>
         </div>
-
-
-
-
-
         <nz-card nzTitle="" class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
-            <!-- <div nz-col nzSpan="3">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
-                  Số quyết định nhập
-                </nz-form-label>
-                <nz-select [(ngModel)]="phieuKiemNghiemChatLuongHang.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
-                  [disabled]="phieuKiemNghiemChatLuongHang.trangThai == '01' || phieuKiemNghiemChatLuongHang.trangThai == '02' || phieuKiemNghiemChatLuongHang.trangThai == '04' || isView">
-                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
-                  </nz-option>
-                </nz-select>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="3">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
-                  Số biên bản bàn giao mẫu
-                </nz-form-label>
-                <nz-select [(ngModel)]="phieuKiemNghiemChatLuongHang.bbBanGiaoMauId" [disabled]="isView"
-                  (ngModelChange)="changeSoBBBanGiaoMau()">
-                  <nz-option *ngFor="let item of listBbBanGiaoMau" [nzValue]="item.id" [nzLabel]="item.soBienBan">
-                  </nz-option>
-                </nz-select>
-              </nz-form-item>
-            </div> -->
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -94,7 +59,6 @@
                 </nz-select>
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -160,7 +124,6 @@
                 </nz-input-group>
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -169,7 +132,6 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.tenDonVi" />
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -178,7 +140,6 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.tenDonVi" />
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -187,7 +148,6 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.tenDonVi" />
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -198,7 +158,6 @@
                 </nz-input-group>
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -207,7 +166,6 @@
                 <input nz-input readonly [(ngModel)]="phieuKiemNghiemChatLuongHang.tenDonVi" />
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -218,7 +176,6 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -229,7 +186,6 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -240,15 +196,8 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-
-
-
           </div>
         </nz-card>
-
-
-
-
         <nz-card nzTitle="" class="flex-card p-lr16 phieu-kiem-nghiem">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24">
@@ -276,42 +225,37 @@
                     <th class="text-center w-400">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
                     <th class="text-center w-400">Kết quả phân tích</th>
                     <th class="text-center w-400">Phương pháp</th>
-
                   </tr>
                 </thead>
                 <tbody>
-                  <tr >
+                  <tr>
                     <td></td>
                     <td>Load theo danh sách chỉ tiêu chất lượng của gạo</td>
                     <td>Chỉ số chất lượng load theo chỉ tiêu chất lượng</td>
                     <td>0</td>
                     <td>0</td>
                   </tr>
-
-                  <tr >
+                  <tr>
                     <td>1</td>
                     <td>Kích thước hạt (mm)</td>
                     <td>...</td>
                     <td>0</td>
                     <td>0</td>
                   </tr>
-
-                  <tr >
+                  <tr>
                     <td>2</td>
                     <td>Hạt nguyên (%)</td>
                     <td>...</td>
                     <td>0</td>
                     <td>Bán đấu giá</td>
                   </tr>
-
-                  <tr >
+                  <tr>
                     <td>3</td>
                     <td>...</td>
                     <td>...</td>
                     <td>0</td>
                     <td>Bán đấu giá</td>
                   </tr>
-
                   <tr></tr>
 
 
@@ -364,17 +308,21 @@
                   </tr> -->
                 </tbody>
               </nz-table>
-
-              <tr nz-row >
-                <div nz-col nzSpan="16">
-                  1-10 trên tổng số 73 bản ghi
+              <div class="tab-content tab-menu">
+                <div class="tab-pane fade show active justify-content-between">
+                  <div class="trai"></div>
+                  <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="10" nzShowSizeChanger
+                      [nzPageSize]="10" [nzShowTotal]="rangeTemplate">
+                      <ng-template #rangeTemplate let-range="range" let-total>
+                        {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                      </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                  </div>
                 </div>
-                <div nz-col nzSpan="8" nzJustify="end">
-
-                  <nz-pagination [nzPageIndex]="4" [nzTotal]="400" nzShowSizeChanger [nzPageSize]="10"></nz-pagination>
-                </div>
-              </tr>
-
+              </div>
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
