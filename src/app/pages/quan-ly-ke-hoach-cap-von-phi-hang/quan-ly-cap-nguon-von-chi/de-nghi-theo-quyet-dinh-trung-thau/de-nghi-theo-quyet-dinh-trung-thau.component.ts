@@ -407,6 +407,10 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
+        if (!this.congVan){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         if (this.id) {
             const requestGroupButtons = {
                 id: this.id,

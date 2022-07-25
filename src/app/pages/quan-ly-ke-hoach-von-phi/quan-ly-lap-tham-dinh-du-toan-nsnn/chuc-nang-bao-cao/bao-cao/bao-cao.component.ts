@@ -746,10 +746,8 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	xemChiTiet(id: string) {
-		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
-		])
-		// window.location.reload();
+		const url = '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id;
+		window.open(url, '_blank');
 	}
 
 	getStatusName(trangThai: string) {
