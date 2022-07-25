@@ -36,19 +36,18 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Quyết toán năm(cần điều chỉnh):</label>
 						<nz-input-number [nzSize]="'small'"
-							[class]="searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999 && searchFilter.namQtoan?'' : 'input-error-validate'"
+							[class]="(searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999) || !searchFilter.namQtoan?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.namQtoan"></nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy"
-							[class]="searchFilter.ngayTaoTu?'' : 'input-error-validate'">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
 						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"
-							nzFormat="dd/MM/yyyy" [class]="searchFilter.ngayTaoDen?'' : 'input-error-validate'">
+							nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="12">
