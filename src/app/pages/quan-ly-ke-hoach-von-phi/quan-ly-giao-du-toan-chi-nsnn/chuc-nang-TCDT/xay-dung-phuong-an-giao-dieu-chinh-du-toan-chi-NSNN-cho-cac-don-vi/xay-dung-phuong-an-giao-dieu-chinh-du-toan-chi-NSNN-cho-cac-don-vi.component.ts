@@ -496,15 +496,15 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
     let lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
-
-    // gui du lieu trinh duyet len server
     let tongTranChi = 0;
-    const data: ItemDvi[] = [];
-    for(const item of this.lstCtietBcao){
+    
+    // gui du lieu trinh duyet len server
+    this.lstCtietBcao.forEach(item => {
       if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
+      const data: ItemDvi[] = [];
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
@@ -512,20 +512,16 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         })
         tongTranChi += e.soTranChi
       })
-      if(tongTranChi == 0){
-        this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
-        return;
-      }
-      if(tongTranChi > item.tongCong){
-        this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
-        return;
-      }
-
       lstCtietBcaoTemp.push({
         ...item,
         tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
       })
+    })
+
+    if(tongTranChi == 0){
+      this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
+      return;
     }
 
     if (!checkMoneyRange == true) {
@@ -1074,29 +1070,28 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     let data: ItemDvi[] = [];
-    for(let itm of this.editCache[id].data.lstCtietDvis){
+    let tongTranChi = 0;
+
+    for (let itm of this.editCache[id].data.lstCtietDvis) {
       if (itm.soTranChi < 0){
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
         return;
       }
+      tongTranChi += itm.soTranChi;
     }
-    let tongTranChi = 0;
-    this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-      tongTranChi += item.soTranChi;
-    })
     if(tongTranChi == 0){
       this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
       return;
-    }
-    if(tongTranChi > this.lstCtietBcao[index].tongCong){
+    }else if(tongTranChi > this.lstCtietBcao[index].tongCong){
       this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
       return;
     }
+
     this.editCache[id].data.lstCtietDvis.forEach(item => {
       data.push({
         id: item.id,
         maDviNhan: item.maDviNhan,
-        soTranChi: item.soTranChi <= 0? null : item.soTranChi,
+        soTranChi: item.soTranChi == 0 ? null : item.soTranChi,
         trangThai: item.trangThai,
       })
     })

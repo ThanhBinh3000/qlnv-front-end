@@ -176,22 +176,20 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   //search list bao cao theo tieu chi
   async onSubmit() {
     if (
-      (!this.searchFilter.namQtoan && this.searchFilter.namQtoan !== 0)
+      (this.searchFilter.namQtoan)
     ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
+      if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+        return;
+      }
     }
-    if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-      return;
-    }
-    if(!this.searchFilter.ngayTaoTu || !this.searchFilter.ngayTaoDen){
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
-    if (this.searchFilter.ngayTaoTu > this.searchFilter.ngayTaoDen) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
-      return;
+    if (
+      (this.searchFilter.ngayTaoTu && this.searchFilter.ngayTaoDen)
+    ) {
+      if (this.searchFilter.ngayTaoTu > this.searchFilter.ngayTaoDen) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
+        return;
+      }
     }
     this.spinner.show();
     const searchFilterTemp = Object.assign({},this.searchFilter);
@@ -208,7 +206,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           // this.danhSachBaoCao = data.data.content;

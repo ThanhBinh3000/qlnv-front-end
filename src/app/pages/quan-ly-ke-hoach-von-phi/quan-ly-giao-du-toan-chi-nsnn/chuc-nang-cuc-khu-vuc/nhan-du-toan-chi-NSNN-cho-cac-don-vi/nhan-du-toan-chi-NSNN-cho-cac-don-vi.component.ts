@@ -91,6 +91,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.spinner.show();
     this.id = this.routerActive.snapshot.paramMap.get('id');
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
@@ -113,7 +114,8 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     if (this.id) {
       this.getDetailReport();
     }
-
+    this.statusBtnNew = true;
+    this.spinner.hide();
   }
 
   //get user info
@@ -302,6 +304,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.statusBtnNew = false;
     this.spinner.hide();
   }
 
