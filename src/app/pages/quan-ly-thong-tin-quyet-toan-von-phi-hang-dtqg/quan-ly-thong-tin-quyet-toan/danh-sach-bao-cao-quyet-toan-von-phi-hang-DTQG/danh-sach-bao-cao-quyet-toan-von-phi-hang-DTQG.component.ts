@@ -92,6 +92,8 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   donVis: any[] = [];
   maDviTao: string;
   listIdDelete: string[] = [];
+  statusBtnValidate = true;
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -175,14 +177,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (
-      (this.searchFilter.namQtoan)
-    ) {
-      if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-        return;
-      }
-    }
+    this.statusBtnValidate = true;
     if (
       (this.searchFilter.ngayTaoTu && this.searchFilter.ngayTaoDen)
     ) {
@@ -206,7 +201,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           // this.danhSachBaoCao = data.data.content;
@@ -265,6 +260,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
 
   taoMoi() {
+    this.statusBtnValidate = false;
     if(!this.searchFilter.namQtoan){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
       return;

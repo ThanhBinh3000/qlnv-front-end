@@ -861,7 +861,6 @@ export class PhuLuc6Component implements OnInit {
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
           this.lstCtietBcao[index].slHangTte += item.slHangTte;
-          this.lstCtietBcao[index].kphiDmuc += item.kphiDmuc;
           this.lstCtietBcao[index].kphiTtien += item.kphiTtien;
           this.lstCtietBcao[index].cphiTcong += item.cphiTcong;
           this.lstCtietBcao[index].cphiNtruoc += item.cphiNtruoc;
@@ -873,6 +872,9 @@ export class PhuLuc6Component implements OnInit {
           this.lstCtietBcao[index].kphiChuaQtoanKpTchi += item.kphiChuaQtoanKpTchi;
           this.lstCtietBcao[index].soChuaQtoan += item.soChuaQtoan;
           this.lstCtietBcao[index].dtoan2021ThanhQtoan2020 += item.dtoan2021ThanhQtoan2020;
+          if(!isNaN(item.kphiDmuc)){
+            this.lstCtietBcao[index].kphiDmuc += item.kphiDmuc;
+          }
         }
       })
       stt = this.getHead(stt);
