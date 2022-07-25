@@ -11,10 +11,6 @@ import { KehoachLuachonNhathauModule } from './kehoach-luachon-nhathau/kehoach-l
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
 import { NhapKhoModule } from './nhap-kho/nhap-kho.module';
 import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
-import { XuatKhoComponent } from './xuat-kho/xuat-kho.component';
-import { ChucNangXuatKhoComponent } from './xuat-kho/chuc-nang-xuat-kho/chuc-nang-xuat-kho.component';
-import { QuanLyPhieuXuatKhoComponent } from './xuat-kho/quan-ly-phieu-xuat-kho/quan-ly-phieu-xuat-kho.component';
-import { ThemMoiPhieuXuatKhoComponent } from './xuat-kho/quan-ly-phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
 import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
 @NgModule({
   declarations: [
