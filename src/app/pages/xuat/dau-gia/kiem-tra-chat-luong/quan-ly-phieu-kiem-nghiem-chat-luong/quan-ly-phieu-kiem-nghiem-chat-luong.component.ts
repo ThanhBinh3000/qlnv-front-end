@@ -51,12 +51,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     soBbBanGiao: '',
   };
   filterTable = {
-    soQuyetDinhNhap: '',
     soPhieu: '',
-    ngayBanGiaoMau: null,
+    ngayKnghiem: null,
+    soBienBanLayMau: '',
+    ngayLayMau: null,
     tenDiemKho: '',
-    tenDvi: '',
-    soLuongMauHangKt: '',
+    tenNhaKho: '',
+    tenNganKho: '',
+    tenNganLo: '',
     trangThaiDuyet: '',
   };
   listDiemKho: any[] = [];
@@ -89,7 +91,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -156,6 +158,9 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       pageSize: this.pageSize,
     };
     let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
+
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = [...data.content];
@@ -356,12 +361,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinhNhap: '',
       soPhieu: '',
-      ngayBanGiaoMau: null,
+      ngayKnghiem: null,
+      soBienBanLayMau: '',
+      ngayLayMau: null,
       tenDiemKho: '',
-      tenDvi: '',
-      soLuongMauHangKt: '',
+      tenNhaKho: '',
+      tenNganKho: '',
+      tenNganLo: '',
       trangThaiDuyet: '',
     };
   }
