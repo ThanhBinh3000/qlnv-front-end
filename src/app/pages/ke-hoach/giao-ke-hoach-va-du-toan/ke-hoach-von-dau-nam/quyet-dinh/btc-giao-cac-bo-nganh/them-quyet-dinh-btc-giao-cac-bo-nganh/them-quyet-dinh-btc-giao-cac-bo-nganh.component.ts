@@ -8,6 +8,9 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -35,9 +38,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   quyetDinh: any;
   taiLieuDinhKemList = [];
   dsNam: any[] = [];
+  dsBoNganh: any[] = [];
+
   userInfo: UserLogin;
   maQd: string;
-
 
   dataTable: any[] = [];
   constructor(
@@ -47,6 +51,9 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private helperService: HelperService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
+
   ) {
     this.formData = this.fb.group(
       {
@@ -55,7 +62,12 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00']
+        trangThai: ['00'],
+        muaTangList: [[],],
+        xuatGiamList: [[]],
+        xuatBanList: [[]],
+        luanPhienList: [[]],
+        idBoNganh: [, [Validators.required]]
       }
     );
   }
@@ -85,7 +97,22 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.hide();
   }
 
-
+  async onChangeNamQd(namQd) {
+    let body = {
+      namQd: namQd,
+      trangThai: "11"
+    }
+    let res = await this.quyetDinhTtcpService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.content;
+      if (data) {
+        let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
+        if (detail.msg == MESSAGE.SUCCESS) {
+          this.dsBoNganh = detail.data.listBoNganh;
+        }
+      }
+    }
+  }
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
@@ -139,13 +166,13 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   banHanh() { }
 
   save() {
-    this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      console.log(this.formData.value)
-      this.spinner.hide();
-      return;
-    }
+    // this.spinner.show();
+    // this.helperService.markFormGroupTouched(this.formData);
+    // if (this.formData.invalid) {
+    //   console.log(this.formData.value)
+    //   this.spinner.hide();
+    //   return;
+    // }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     console.log(body);

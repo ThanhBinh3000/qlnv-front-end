@@ -38,6 +38,9 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   chiTietBienBanGuiHangBenNhan: ChiTiet = new ChiTiet();
   quyetDinhNhapHang: QuyetDinhNhapXuat = new QuyetDinhNhapXuat();
   hopDong: any = {};
+  listHopDong: any[] = [];
+  detailHopDong: any = {};
+  detailGiaoNhap: any = {};
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -88,7 +91,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }
@@ -100,13 +103,41 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+  async changeHopDong() {
+    if (!this.bienBanGuiHang.hopDongId) {
+      return;
+    }
+    let hopDong = this.listHopDong.find(x => x.hopDong.id == this.bienBanGuiHang.hopDongId);
+    let body = {
+      "str": hopDong.hopDong.soHd
+    }
+    let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailHopDong = res.data;
+      this.bienBanGuiHang.hopDongId = this.detailHopDong.id;
+      this.bienBanGuiHang.ngayHopDong = this.detailHopDong.ngayKy;
+      this.bienBanGuiHang.donViCungCap = this.detailHopDong.tenDvi;
+      this.bienBanGuiHang.thoiGian = dayjs().format('YYYY-MM-DDTHH:mm:ss');
+      this.bienBanGuiHang.ngayGui = dayjs().format('YYYY-MM-DD');
+      this.bienBanGuiHang.tenVthh = this.detailHopDong.tenVthh;
+      this.bienBanGuiHang.tenCloaiVthh = this.detailHopDong.tenCloaiVthh;
+      this.bienBanGuiHang.soLuong = this.detailHopDong.soLuong;
+      this.bienBanGuiHang.donViTinh = this.detailHopDong.donViTinh;
+      this.bienBanGuiHang.benGiao = this.detailHopDong.tenNguoiDdien;
+      this.bienBanGuiHang.benNhan = this.userInfo.TEN_DVI;
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   async loadPhieuNhapKhoTamGui() {
     let body = {
       soPhieu: null,
       soQuyetDinh: null,
       ngayNhapKho: null,
       pageSize: 1000,
-      pageNumber: 1
+      pageNumber: 1,
+      "trangThai": "02",
     };
     let res = await this.phieuNhapKhoTamGuiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -122,6 +153,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.bienBanGuiHang = res.data;
+          this.changeSoQuyetDinh();
         }
       }
     }
@@ -167,6 +199,10 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.bienBanGuiHang.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -181,7 +217,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.bienBanGuiHangService.updateStatus(
@@ -378,8 +414,8 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     }
   }
   addDaiDien(bienBan: ChiTiet, type: string) {
-    if (!this.chiTietBienBanGuiHangBenNhan.daiDien && !this.chiTietBienBanGuiHangBenNhan.chucVu
-      || !this.chiTietBienBanGuiHangBenGiao.daiDien && !this.chiTietBienBanGuiHangBenGiao.chucVu) {
+    if ((type == '00' && (!this.chiTietBienBanGuiHangBenNhan.daiDien || !this.chiTietBienBanGuiHangBenNhan.chucVu))
+      || (type == '01' && (!this.chiTietBienBanGuiHangBenGiao.daiDien || !this.chiTietBienBanGuiHangBenGiao.chucVu))) {
       return;
     }
 
@@ -404,11 +440,28 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   }
   async changeSoQuyetDinh() {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.bienBanGuiHang.qdgnvnxId);
-    console.log(quyetDinh);
 
     if (quyetDinh && quyetDinh.length > 0) {
-      this.quyetDinhNhapHang = quyetDinh[0];
-      await this.getHopDong(this.quyetDinhNhapHang.soHd);
+      this.detailGiaoNhap = quyetDinh[0];
+      this.bienBanGuiHang.qdgnvnxId = quyetDinh[0].id;
+      if (this.detailGiaoNhap.children1 && this.detailGiaoNhap.children1.length > 0) {
+        this.listHopDong = [];
+        this.detailGiaoNhap.children1.forEach(element => {
+          if (element && element.hopDong) {
+            if (this.typeVthh) {
+              if (element.hopDong.loaiVthh.startsWith(this.typeVthh)) {
+                this.listHopDong.push(element);
+              }
+            }
+            else {
+              if (!element.hopDong.loaiVthh.startsWith('02')) {
+                this.listHopDong.push(element);
+              }
+            }
+          }
+        });
+      }
+      this.changeHopDong();
     }
   }
 

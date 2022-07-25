@@ -91,6 +91,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
 
   listCanCu: any[] = [];
   listFileDinhKem: any[] = [];
+  listHopDong: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -112,17 +113,22 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.typeVthh = '02';
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.tenDvi = this.userInfo.TEN_DVI;
       this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.trangThai = this.globals.prop.DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadBanGiaoMau(),
         this.loadSoQuyetDinh(),
       ]);
       await this.loadChiTiet(this.id);
       this.loadDaiDien();
+      this.detail.loaiVthh = this.typeVthh;
+      this.detail.tenVthh = "Vật tư";
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -215,6 +221,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
+      "trangThai": "02",
     }
     let res = await this.quanLyBienBanBanGiaoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -240,6 +247,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
+      "trangThai": "02",
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -250,18 +258,39 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     }
   }
 
-  async changeSoQuyetDinh() {
+  async changeSoQuyetDinh(autoChange: boolean) {
     let quyetDinh = this.listSoQuyetDinh.filter(x => x.id == this.detail.qdgnvnxId);
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
-      await this.getHopDong(this.detailGiaoNhap.soHd);
+      this.listHopDong = [];
+      this.detailGiaoNhap.children1.forEach(element => {
+        if (element && element.hopDong) {
+          if (element.hopDong.loaiVthh.startsWith('02')) {
+            this.listHopDong.push(element);
+          }
+        }
+      });
+      if (!autoChange) {
+        this.detail.soHopDong = null;
+        this.detail.hopDongId = null;
+        this.detail.ngayHopDong = null;
+        this.detail.maHangHoa = null;
+        this.detail.khoiLuongKiemTra = null;
+        this.detail.maHangHoa = null;
+        this.detail.tenVatTuCha = null;
+        this.detail.tenVatTu = null;
+        this.detail.maVatTuCha = null;
+        this.detail.maVatTu = null;
+      } else {
+        await this.changeHopDong();
+      }
     }
   }
 
-  async getHopDong(id) {
-    if (id) {
+  async changeHopDong() {
+    if (this.detail.soHopDong) {
       let body = {
-        "str": id
+        "str": this.detail.soHopDong
       }
       let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -269,7 +298,10 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         this.detail.hopDongId = this.detailHopDong.id;
         this.detail.soHopDong = this.detailHopDong.soHd;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
-        this.detail.loaiVthh = this.detailHopDong.loaiVthh;
+        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
+        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
+        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
+        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -299,6 +331,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           if (this.detail.fileDinhKems) {
             this.listFileDinhKem = this.detail.fileDinhKems;
           }
+          await this.changeSoQuyetDinh(true);
         }
       }
     }
@@ -343,6 +376,10 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = '02';
+    if (this.detail.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -357,7 +394,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.hoSoKyThuatService.updateStatus(

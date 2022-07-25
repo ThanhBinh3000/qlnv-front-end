@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?nfeqwj');
-  src:  url('fonts/htvbdh.eot?nfeqwj#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?nfeqwj') format('truetype'),
-    url('fonts/htvbdh.woff?nfeqwj') format('woff'),
-    url('fonts/htvbdh.svg?nfeqwj#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?93pnkc');
+  src:  url('fonts/htvbdh.eot?93pnkc#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?93pnkc') format('truetype'),
+    url('fonts/htvbdh.woff?93pnkc') format('woff'),
+    url('fonts/htvbdh.svg?93pnkc#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_lien-ket:before {
+  content: "\eb23";
+}
 .htvbdh_tcdt_viewdetail2:before {
   content: "\eb21";
 }

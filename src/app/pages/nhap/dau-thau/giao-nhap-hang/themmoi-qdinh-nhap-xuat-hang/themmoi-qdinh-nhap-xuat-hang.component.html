@@ -74,8 +74,8 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>
                   Ngày quyết định
                 </nz-form-label>
-                <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày quyết định"
-                  formControlName="ngayQdinh" [nzDisabled]="isDetail()">
+                <nz-date-picker nzPlaceHolder="Ngày quyết định" formControlName="ngayQdinh" nzFormat="dd/MM/yyyy"
+                  [nzDisabled]="isDetail()">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -114,11 +114,7 @@
                   Tài liệu đính kèm
                 </nz-form-label>
               </nz-form-item>
-              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu" icon="icon htvbdh_tcdt_tep"
-                [data]="taiLieuDinhKemList" [trangThai]="quyetDinhNhapXuat.trangThai" type="file" [disable]="isDetail()"
-                (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"
-                [showDowloadFile]="false">
-              </multiple-tag>
+              <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </div>
         </form>
@@ -138,35 +134,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let dataNhapXuat of quyetDinhNhapXuatDetail.data, let i = index">
-            <ng-container *ngIf="!dsQuyetDinhNhapXuatDetailClone[i].isEdit; else editTemplate">
-              <td>{{dataNhapXuat.stt }}</td>
-              <td>{{dataNhapXuat.tenDvi}}</td>
-              <td>{{dataNhapXuat.maVthh}}</td>
+          <ng-container *ngFor="let dataNhapXuat of hopDongList, let i = index">
+            <tr *ngFor="let item of dataNhapXuat.hhDdiemNhapKhoList">
+              <td>{{ i + 1 }}</td>
+              <td>{{item.tenDvi}}</td>
+              <td>{{dataNhapXuat.loaiVthh}}</td>
               <td>{{dataNhapXuat.tenVthh}}</td>
-              <td>{{dataNhapXuat.chungLoaiHh}}</td>
-              <td>{{dataNhapXuat.donViTinh}}</td>
-              <td class="text-right">{{dataNhapXuat.soLuong}}</td>
-              <td class="text-right">{{dataNhapXuat.thoiGianNhapKhoMuonNhat | date:'yyyy-MM-dd'}}</td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td>{{dataNhapXuat.stt }}</td>
-              <td>{{dataNhapXuat.tenDonVi}}</td>
-              <td>{{dataNhapXuat.maVthh}}</td>
-              <td>{{dataNhapXuat.tenVthh}}</td>
-              <td>{{dataNhapXuat.donViTinh}}</td>
-              <td>
-                <nz-input-number type="text" nz-input name="goiThau" [nzMin]="0" [nzMax]="" [nzSize]="'small'"
-                  [(ngModel)]="dsQuyetDinhNhapXuatDetailClone[i].soLuong">
-                </nz-input-number>
-              </td>
-              <td>
-                <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd"
-                  [(ngModel)]="dsQuyetDinhNhapXuatDetailClone[i].thoiGianNhapKhoMuonNhat">
-                </nz-date-picker>
-              </td>
-            </ng-template>
-          </tr>
+              <td>{{dataNhapXuat.tenCloaiVthh}}</td>
+              <td>{{dataNhapXuat.dviTinh}}</td>
+              <td class="text-right">{{item.soLuong}}</td>
+              <td class="text-right">{{dataNhapXuat.tgianNkho}}</td>
+            </tr>
+          </ng-container>
         </tbody>
       </nz-table>
     </div>

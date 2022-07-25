@@ -12,6 +12,7 @@ import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luon
 import { NhapKhoModule } from './nhap-kho/nhap-kho.module';
 import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
 
+
 @NgModule({
   declarations: [
     DauThauComponent,
@@ -28,6 +29,7 @@ import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trien
     HopDongModule,
     KehoachLuachonNhathauModule,
     TrienkhaiLuachonNhathauModule,
+
   ],
 })
 export class DauThauModule { }

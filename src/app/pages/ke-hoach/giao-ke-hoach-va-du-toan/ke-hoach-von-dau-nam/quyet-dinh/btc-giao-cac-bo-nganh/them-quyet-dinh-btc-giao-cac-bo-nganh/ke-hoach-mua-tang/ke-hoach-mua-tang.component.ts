@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 
 @Component({
@@ -7,7 +7,10 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
 export class KeHoachMuaTangComponent implements OnInit {
-  @Input('data') dataTable: any[] = [];
+  @Input()
+  dataTable = [];
+  @Output()
+  dataTableChange = new EventEmitter<any[]>();
 
   rowItem: IMuaTang = {
     id: null,
@@ -17,33 +20,10 @@ export class KeHoachMuaTangComponent implements OnInit {
   };
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: IMuaTang } } = {};
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
 
   constructor() { }
 
   ngOnInit(): void {
-    // this.initData();
-    console.log(this.dataTable)
-  }
-
-  initData() {
-    this.dataTable = [
-      {
-        id: 1,
-        idNoiDung: 1,
-        noiDung: 'Chi thường xuyên',
-        duToan: 250,
-      },
-      {
-        id: 2,
-        idNoiDung: 2,
-        noiDung: 'Khác',
-        duToan: 350,
-      },
-    ];
-
     this.dsNoiDung = [
       {
         id: 1,
@@ -54,8 +34,12 @@ export class KeHoachMuaTangComponent implements OnInit {
         noiDung: 'Khác',
       },
     ];
-
+    this.emitDataTable();
     this.updateEditCache();
+  }
+
+  initData() {
+
   }
 
   editItem(id: number): void {
@@ -63,7 +47,13 @@ export class KeHoachMuaTangComponent implements OnInit {
   }
 
   xoaItem(id: number) { }
-  themMoiItem() { }
+
+  themMoiItem() {
+    this.dataTable = [...this.dataTable, this.rowItem]
+    this.emitDataTable();
+    this.updateEditCache();
+  }
+
   clearData() { }
 
   huyEdit(id: number): void {
@@ -81,17 +71,20 @@ export class KeHoachMuaTangComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach((item) => {
-      this.dataEdit[item.id] = {
-        edit: false,
-        data: { ...item },
-      };
-    });
+    if (this.dataTable) {
+      this.dataTable.forEach((item) => {
+        this.dataEdit[item.id] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
   }
 
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
+  emitDataTable() {
+    console.log(this.dataTable);
+    this.dataTableChange.emit(this.dataTable);
+  }
 
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {

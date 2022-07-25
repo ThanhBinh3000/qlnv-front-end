@@ -79,7 +79,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -95,7 +95,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
         this.loadSoQuyetDinh(),
       ]);
       if (this.id > 0) {
-        this.loadPhieuKiemNghiemChatLuong();
+        await this.loadPhieuKiemNghiemChatLuong();
       } else {
         this.phieuKiemNghiemChatLuongHang.trangThai = this.globals.prop.DU_THAO;
       }
@@ -116,7 +116,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.phieuKiemNghiemChatLuongHang.trangThai ===
-        this.globals.prop.DU_THAO ||
+      this.globals.prop.DU_THAO ||
       this.id === 0 ||
       this.phieuKiemNghiemChatLuongHang.trangThai === this.globals.prop.TU_CHOI
     );
@@ -138,18 +138,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       nganLoId: this.phieuKiemNghiemChatLuongHang.nganLoId ?? null,
       ngayKnghiem: this.phieuKiemNghiemChatLuongHang.ngayKnghiem
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayKnghiem).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayLayMau: this.phieuKiemNghiemChatLuongHang.ngayLayMau
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayLayMau).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayNhapDay: this.phieuKiemNghiemChatLuongHang.ngayNhapDay
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayNhapDay).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       nhaKhoId: this.phieuKiemNghiemChatLuongHang.nhaKhoId ?? null,
       sluongBquan: this.phieuKiemNghiemChatLuongHang.sluongBquan ?? null,
@@ -169,19 +169,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
     try {
       let res;
+      if (isGuiDuyet) {
+        body.trangThai = this.globals.prop.DU_THAO_TRINH_DUYET;
+      }
       if (this.id > 0) {
-        // Update
-        if (isGuiDuyet) {
-          body.trangThai = this.globals.prop.DU_THAO_TRINH_DUYET;
-        }
         res = await this.phieuKiemNghiemChatLuongHangService.sua(body);
       } else {
-        // Thêm
         res = await this.phieuKiemNghiemChatLuongHangService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           const body = {
             id: res.data.id,
-            trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+            trangThai: this.globals.prop.DU_THAO,
           };
           await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
         }
@@ -240,6 +238,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     });
   }
   pheDuyet() {
+    let trangThai = '02';
+    if (this.phieuKiemNghiemChatLuongHang.trangThai == '04') {
+      trangThai = '01';
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -254,7 +256,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: trangThai,
           };
           const res =
             await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
@@ -401,7 +403,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       orderDirection: '',
       pageNumber: 1,
       pageSize: 1000,
-      trangThai: '', // Đã duyệt ??
+      trangThai: '02', // Đã duyệt ??
     };
 
     const res = await this.quanLyBienBanBanGiaoService.timKiem(body);

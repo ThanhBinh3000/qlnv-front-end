@@ -290,7 +290,7 @@
                   </nz-input-number>
                 </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                <td class="text-right">
+                <td>
                   <a (click)="addRow()"
                     [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
                     <i class="fa fa-plus"></i>
@@ -359,7 +359,7 @@
                     </nz-input-number>
                   </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="saveEdit(data.stt)" class="save"
                       [class.disabled]="!editDataCache[data.stt]?.data.noiDung || !editDataCache[data.stt]?.data.dvt || editDataCache[data.stt]?.data.noiDung == '' || editDataCache[data.stt]?.data.dvt == ''">
                       <i class="fa fa-save"></i>

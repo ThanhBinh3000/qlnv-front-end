@@ -232,7 +232,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       },
       "soPhieu": null,
       "str": null,
-      "trangThai": null,
+      "trangThai": "02",
       "tuNgay": null,
       "maHangHoa": this.typeVthh
     };
@@ -264,7 +264,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayQd": null,
       "veViec": null
     }

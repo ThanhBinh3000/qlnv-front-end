@@ -24,6 +24,8 @@ export class BienBanGuiHang {
     tinhTrang: string;
     trachNhiemBenGiao: string;
     trachNhiemBenNhan: string;
+    tenVthh: string;
+    tenCloaiVthh: string;
     trangThai: string;
     tenTrangThai: string;
     chiTiets: Array<ChiTiet>;

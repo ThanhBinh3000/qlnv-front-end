@@ -76,7 +76,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      // await this.search();
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -252,7 +252,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
         this.phieuNhapKhoTamGuiService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-nhap-kho-tam-gui.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

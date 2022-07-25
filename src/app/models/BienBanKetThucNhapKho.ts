@@ -30,6 +30,7 @@ export class BienBanKetThucNhapKho {
     chungLoaiHangHoa: string;
     tenHang: string;
     tenTrangThai: string;
+    soHdId: number;
     constructor(fileDinhKemReqs: Array<FileDinhKem> = [], chiTiets: Array<chiTietBienBanKetThucNhapKho> = []) {
         this.fileDinhKemReqs = fileDinhKemReqs;
         this.chiTiets = chiTiets;
