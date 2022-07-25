@@ -833,7 +833,6 @@ export class PhuLuc4Component implements OnInit {
           this.lstCtietBcao[index].slBquanTte += item.slBquanTte;
           this.lstCtietBcao[index].slBquanUocThien += item.slBquanUocThien;
           this.lstCtietBcao[index].slBquanTcong += item.slBquanTcong;
-          this.lstCtietBcao[index].dinhMuc += item.dinhMuc;
           this.lstCtietBcao[index].thanhTien += item.thanhTien;
           this.lstCtietBcao[index].dtoanThieuNTruoc += item.dtoanThieuNTruoc;
           this.lstCtietBcao[index].tongNcauKphi += item.tongNcauKphi;
@@ -842,6 +841,9 @@ export class PhuLuc4Component implements OnInit {
           this.lstCtietBcao[index].kphiDtoanGiaoTnam += item.kphiDtoanGiaoTnam;
           this.lstCtietBcao[index].kphiPvcTcDchuyen += item.kphiPvcTcDchuyen;
           this.lstCtietBcao[index].dtoanDchinh += item.dtoanDchinh;
+          if(!isNaN(item.dinhMuc)){
+            this.lstCtietBcao[index].dinhMuc += item.dinhMuc;
+          }
         }
       })
       stt = this.getHead(stt);

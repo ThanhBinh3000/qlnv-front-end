@@ -205,7 +205,7 @@ export class QuanLyVonPhiService extends BaseService {
   CtietBcaoQuyetToanNam1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
-      'http://192.168.1.105:8094/quyet-toan/tra-cuu' ,
+      'http://192.168.1.107:8094/quyet-toan/tra-cuu' ,
       request,
     );
   }
@@ -283,7 +283,7 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDuyetServiceQuyetToan1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/quyet-toan/them-moi',
-      'http://192.168.1.105:8094/quyet-toan/them-moi',
+      'http://192.168.1.107:8094/quyet-toan/them-moi',
       request,
     );
   }
@@ -370,7 +370,7 @@ export class QuanLyVonPhiService extends BaseService {
   updateBaoCaoQuyetToan1(request: any): Observable<any> {
     return this.httpClient.put(
       // this.urlDefault + '/qlnv-khoachphi/quyet-toan/cap-nhat',
-      'http://192.168.1.105:8094/quyet-toan/cap-nhat',
+      'http://192.168.1.107:8094/quyet-toan/cap-nhat',
       request,
     );
   }

@@ -804,10 +804,12 @@ export class PhuLuc2Component implements OnInit {
           this.lstCtietBcao[index].thienSluongTteThien += item.thienSluongTteThien;
           this.lstCtietBcao[index].thienSluongUocThien += item.thienSluongUocThien;
           this.lstCtietBcao[index].thienCong += item.thienCong;
-          this.lstCtietBcao[index].thienDinhMuc += item.thienDinhMuc;
           this.lstCtietBcao[index].thienThanhTien += item.thienThanhTien;
           this.lstCtietBcao[index].kphiThieuNtruoc += item.kphiThieuNtruoc;
           this.lstCtietBcao[index].ncauKphi += item.ncauKphi;
+          if(!isNaN(item.thienDinhMuc)){
+            this.lstCtietBcao[index].thienDinhMuc += item.thienDinhMuc;
+          }
         }
       })
       stt = this.getHead(stt);
