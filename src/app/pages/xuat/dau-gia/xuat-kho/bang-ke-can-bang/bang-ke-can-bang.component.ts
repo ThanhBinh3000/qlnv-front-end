@@ -1,4 +1,8 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-bang-ke-can-bang',
@@ -10,14 +14,14 @@ export class BangKeCanBangComponent implements OnInit {
 
   isDetail: boolean = false;
 
-  status= [
-    {id:'00',name:'Chờ duyệt - LĐ Chi Cục'},
-    {id:'01',name:'Từ chối - LĐ Chi Cục'},
-    {id:'02',name:'Đã duyệt'},
-    {id:'03',name:'Dự thảo'}
-    ];
+  status = [
+    { id: '00', name: 'Chờ duyệt - LĐ Chi Cục' },
+    { id: '01', name: 'Từ chối - LĐ Chi Cục' },
+    { id: '02', name: 'Đã duyệt' },
+    { id: '03', name: 'Dự thảo' }
+  ];
 
-  statusId:string = '00';
+  statusId: string = '00';
 
   async showList() {
     this.isDetail = false;
@@ -29,7 +33,7 @@ export class BangKeCanBangComponent implements OnInit {
   }
 
 
-  redirectToChiTiet(statusName: string){
+  redirectToChiTiet(statusName: string) {
     this.isDetail = true;
     this.statusId = statusName;
 

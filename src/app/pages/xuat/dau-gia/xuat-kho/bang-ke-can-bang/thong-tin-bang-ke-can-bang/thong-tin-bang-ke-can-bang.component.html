@@ -6,7 +6,8 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="statusId == '03'" (click)="redirectBangkecanbang()" >
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="statusId == '03'"
+            (click)="redirectBangkecanbang()">
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
           </a>
@@ -20,8 +21,8 @@
           </button>
 
           <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="statusId == '03'">
-          <i class="icon  htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
           </button>
 
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="statusId == '00'">
@@ -47,13 +48,13 @@
       <div class="main-content">
 
         <div class="title-chi-tieu">
-          <span  class="du-thao-va-lanh-dao-duyet" *ngIf="statusId == '03'">
+          <span class="du-thao-va-lanh-dao-duyet" *ngIf="statusId == '03'">
             Dự Thảo
           </span>
-          <span  class="da-ban-hanh" *ngIf="statusId == '02'">
+          <span class="da-ban-hanh" *ngIf="statusId == '02'">
             BAN HÀNH
           </span>
-          <span  class="du-thao-va-lanh-dao-duyet" *ngIf="statusId == '00'">
+          <span class="du-thao-va-lanh-dao-duyet" *ngIf="statusId == '00'">
             CHỜ DUYỆT - LĐ CHI CỤC
           </span>
           <!-- <span  ngClass="da-ban-hanh">{{detail.tenTrangThai}}</span> -->
@@ -67,8 +68,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định xuất
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -78,8 +79,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số phiếu xuất kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -89,7 +90,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input />
+                <input nz-input disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -97,7 +98,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
-                <input nz-input  />
+                <input nz-input disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -105,7 +106,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Số bảng kê
                 </nz-form-label>
-                <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập số bảng kê"></nz-input-number>
+                <nz-input-number type="text" disabled="false" readonly nz-input [nzSize]="'small'"
+                  placeholder="Nhập số bảng kê">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -113,8 +116,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Họ tên thủ kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -124,8 +127,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -135,8 +138,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -146,8 +149,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -157,8 +160,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Lô kho
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -168,7 +171,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa điểm
                 </nz-form-label>
-                <input nz-input placeholder="Nhập địa điểm"  />
+                <input nz-input placeholder="Nhập địa điểm" disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -176,8 +179,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị tính
                 </nz-form-label>
-                <nz-select >
-                  <nz-option >
+                <nz-select disabled="false" readonly>
+                  <nz-option>
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -187,7 +190,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Tên người nhận
                 </nz-form-label>
-                <input nz-input placeholder="Nhập"  />
+                <input nz-input placeholder="Nhập" disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -195,7 +198,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa chỉ người nhận
                 </nz-form-label>
-                <input nz-input placeholder="Nhập"  />
+                <input nz-input placeholder="Nhập" disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -203,7 +206,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Theo hợp đồng (nếu có)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập"  [disabled]="true" />
+                <input nz-input placeholder="Nhập" disabled="false" readonly />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -211,26 +214,23 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày nhập
                 </nz-form-label>
-                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  >
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd">
                 </nz-date-picker>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tên hàng</nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open" >
-                  <input class="search__input" [readonly]="true" nz-input
-                    readonly="true" />
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input class="search__input" disabled="false" readonly nz-input readonly="true" />
                 </nz-input-group>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open" >
-                  <input class="search__input" [readonly]="true" nz-input
-                    readonly="true" />
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input class="search__input" disabled="false" readonly nz-input readonly="true" />
                 </nz-input-group>
               </nz-form-item>
             </div>
@@ -239,8 +239,7 @@
 
 
         <div class="flex-card p-lr16 pd-10">
-          <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-            >
+          <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th width="60px" class="text-center">STT<br />(A)</th>
@@ -251,34 +250,34 @@
               </tr>
             </thead>
             <tbody>
-              <tr >
+              <tr>
                 <td></td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'"  [nzMin]="0"></nz-input-number>
+                  <nz-input-number type="text" nz-input [nzSize]="'small'" [nzMin]="0"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" ></nz-input-number>
+                  <nz-input-number type="text" nz-input [nzSize]="'small'"></nz-input-number>
                 </td>
                 <td>
-                  <a >
+                  <a>
                     <i class="fa fa-plus"></i>
                   </a>
-                  <a >
+                  <a>
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
               </tr>
 
-              <tr >
-                <ng-container >
+              <tr>
+                <ng-container>
                   <td class="text-center">1</td>
                   <td>15</td>
                   <td>450</td>
                   <td>
-                    <a >
+                    <a>
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a >
+                    <a>
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -287,8 +286,7 @@
                 <ng-template #editTemplate>
                   <td></td>
                   <td>
-                    <nz-input-number type="text" nz-input [nzSize]="'small'"
-                       [nzMin]="0" >
+                    <nz-input-number type="text" nz-input [nzSize]="'small'" [nzMin]="0">
                     </nz-input-number>
                   </td>
                   <td>
@@ -296,16 +294,16 @@
                     </nz-input-number>
                   </td>
                   <td>
-                    <a  class="save">
+                    <a class="save">
                       <i class="fa fa-save"></i>
                     </a>
-                    <a >
+                    <a>
                       <i class="fa fa-times do"></i>
                     </a>
                   </td>
                 </ng-template>
               </tr>
-              <tr >
+              <tr>
                 <td class="background-last-row">Cộng</td>
                 <td class="background-last-row">0</td>
                 <td class="background-last-row">0</td>
@@ -325,7 +323,8 @@
                       Tổng trọng lượng kể cả bao bì
 
                     </nz-form-label>
-                    <input nz-input class="search__input" value="Lấy tổng số trọng lượng bao bì (2)"  [disabled]="true" />
+                    <input nz-input class="search__input" value="Lấy tổng số trọng lượng bao bì (2)"
+                      [disabled]="true" />
                   </nz-form-item>
                 </div>
 
@@ -335,7 +334,7 @@
                       Tổng trọng lượng kể cả bao bì
 
                     </nz-form-label>
-                    <input nz-input class="search__input" value="Tổng trọng lượng bao bì"  [disabled]="true" />
+                    <input nz-input class="search__input" value="Tổng trọng lượng bao bì" [disabled]="true" />
                   </nz-form-item>
                 </div>
               </div>
@@ -347,7 +346,8 @@
                     <nz-form-label [nzNoColon]="true">
                       Tổng trọng lượng hàng đã trừ bì viết bằng số
                     </nz-form-label>
-                    <input nz-input class="search__input" value="(Tổng trọng lượng kể cả bao bì) - (Tổng trọng lượng bao bì)"  [disabled]="true" />
+                    <input nz-input class="search__input"
+                      value="(Tổng trọng lượng kể cả bao bì) - (Tổng trọng lượng bao bì)" [disabled]="true" />
                   </nz-form-item>
                 </div>
               </div>

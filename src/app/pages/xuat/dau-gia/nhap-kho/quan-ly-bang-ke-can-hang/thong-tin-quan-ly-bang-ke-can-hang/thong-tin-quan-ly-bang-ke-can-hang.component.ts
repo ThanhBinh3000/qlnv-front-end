@@ -111,6 +111,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
 
   selectHangHoa() {
     let data = this.typeVthh;
+
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -128,6 +129,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   }
 
   async bindingDataHangHoa(data) {
+
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
       this.detail.maVatTuCha = data.parent.ma;
       this.detail.tenVatTuCha = data.parent.ten;
