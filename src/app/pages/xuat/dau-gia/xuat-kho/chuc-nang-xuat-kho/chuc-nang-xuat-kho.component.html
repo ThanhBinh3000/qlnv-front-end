@@ -1,29 +1,27 @@
 <nz-tabset nzType="card" class="chuc-nang-nhap-kho mt-16 tab-level-2">
-  <nz-tab [nzTitle]="'Phiếu xuất kho'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+  <nz-tab [nzTitle]="'Phiếu xuất kho'">
     <ng-template nz-tab>
-      <!-- <app-phieu-nhap-kho-tam-gui [typeVthh]="typeVthh"></app-phieu-nhap-kho-tam-gui> -->
-      <app-quan-ly-phieu-xuat-kho [typeVthh]=""></app-quan-ly-phieu-xuat-kho>
+      <app-quan-ly-phieu-xuat-kho [typeVthh]="typeVthh"></app-quan-ly-phieu-xuat-kho>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Bảng kê cân hàng'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+  <nz-tab [nzTitle]="'Bảng kê cân hàng'">
     <ng-template nz-tab>
-      <!-- <app-bien-ban-gui-hang [typeVthh]="typeVthh"></app-bien-ban-gui-hang> -->
+        <app-bang-ke-can-hang></app-bang-ke-can-hang>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản tịnh kho'">
     <ng-template nz-tab>
-      <!-- <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho> -->
+    <app-bien-ban-tinh-kho></app-bien-ban-tinh-kho>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản hao dôi'">
     <ng-template nz-tab>
-      <!-- <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho> -->
+    <app-bien-ban-hao-doi></app-bien-ban-hao-doi>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'Bảng kê xuất vật tư'" *ngIf="typeVthh != '02'">
+  <nz-tab [nzTitle]="'Bảng kê xuất vật tư'">
     <ng-template nz-tab>
-      <!-- <quan-ly-bang-ke-can-hang [typeVthh]="typeVthh"></quan-ly-bang-ke-can-hang> -->
+    <app-bang-ke-xuat-vat-tu></app-bang-ke-xuat-vat-tu>
     </ng-template>
   </nz-tab>
-
 </nz-tabset>

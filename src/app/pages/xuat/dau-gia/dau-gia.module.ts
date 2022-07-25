@@ -15,6 +15,10 @@ import { XuatKhoComponent } from './xuat-kho/xuat-kho.component';
 import { ChucNangXuatKhoComponent } from './xuat-kho/chuc-nang-xuat-kho/chuc-nang-xuat-kho.component';
 import { QuanLyPhieuXuatKhoComponent } from './xuat-kho/quan-ly-phieu-xuat-kho/quan-ly-phieu-xuat-kho.component';
 import { ThemMoiPhieuXuatKhoComponent } from './xuat-kho/quan-ly-phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
+import { BangKeCanHangComponent } from './xuat-kho/bang-ke-can-hang/bang-ke-can-hang.component';
+import { BienBanTinhKhoComponent } from './xuat-kho/bien-ban-tinh-kho/bien-ban-tinh-kho.component';
+import { BienBanHaoDoiComponent } from './xuat-kho/bien-ban-hao-doi/bien-ban-hao-doi.component';
+import { BangKeXuatVatTuComponent } from './xuat-kho/bang-ke-xuat-vat-tu/bang-ke-xuat-vat-tu.component';
 @NgModule({
   declarations: [
     DauGiaComponent,
@@ -22,6 +26,10 @@ import { ThemMoiPhieuXuatKhoComponent } from './xuat-kho/quan-ly-phieu-xuat-kho/
     ChucNangXuatKhoComponent,
     QuanLyPhieuXuatKhoComponent,
     ThemMoiPhieuXuatKhoComponent,
+    BangKeCanHangComponent,
+    BienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    BangKeXuatVatTuComponent,
   ],
   imports: [
     CommonModule,

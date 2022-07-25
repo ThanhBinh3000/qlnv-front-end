@@ -663,6 +663,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     }
   }
   thongTinTrangThai(trangThai: string): string {
+
     if (
       trangThai === '00' ||
       trangThai === '01' ||
@@ -673,6 +674,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
     }
+
 
   }
 

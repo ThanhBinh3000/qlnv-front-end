@@ -26,6 +26,11 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
 export class QuanLyPhieuXuatKhoComponent implements OnInit {
 
 
+
+
+
+
+
  @Input() typeVthh: string;
 
   searchFilter = {
@@ -38,6 +43,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
+  listLoKho:any[]=[];
 
   userInfo: UserLogin;
 
@@ -55,12 +61,15 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinhNhap: '',
     soPhieu: '',
+    soQuyetDinhXuat: '',
+    soHopDong:'',
     ngayXuatKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenLoKho:'',
+    trangThaiDuyet:''
   };
 
   constructor(

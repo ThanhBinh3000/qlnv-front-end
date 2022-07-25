@@ -17,7 +17,7 @@ export class XuatKhoComponent implements OnInit {
   ngOnInit(): void {
     this.loaiVTHHGetAll()
   }
-
+// VTHH: loại vật tư hàng hoá
   async loaiVTHHGetAll(){
    this.tabs = []
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -26,10 +26,10 @@ export class XuatKhoComponent implements OnInit {
       res.data.forEach(element => {
       element.count = 0 ;
        this.tabs.push(element);
-   });
-}
-}
-  }
+      });
+     };
+    };
+  };
 
 
 
