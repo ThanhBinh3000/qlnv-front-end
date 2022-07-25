@@ -1,3 +1,4 @@
+import { DialogThemDiaDiemNhapKhoComponent } from './../../../../../../../components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
 import {
   Component,
   EventEmitter,
@@ -204,7 +205,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       loaiHangHoa: [, [Validators.required]],
       loaiHopDong: [null, [Validators.required]],
       qdGiaoChiTieuId: [null, [Validators.required]],
-      qdGiaoChiTieuName: [null],
+      qdGiaoChiTieuNam: [null],
       tieuChuanChatLuong: [null],
       soLuong: [null],
       khoanTienDatTruoc: [null, [Validators.required]],
@@ -329,14 +330,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          isDexuat: true
+          capDonVi: 2
         },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
+          console.log(data);
+
           this.formData.patchValue({
             qdGiaoChiTieuId: data ? data.id : null,
-            qdGiaoChiTieuName: data ? data.soQd : null,
+            qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
           });
           this.spinner.hide();
         }
@@ -518,15 +521,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
+      nzContent: DialogThemDiaDiemNhapKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1162px',
       nzFooter: null,
       nzComponentParams: {
-        thongtinDauThau: data,
-        dataChiTieu: this.dataChiTieu,
-        loaiVthh: this.formData.get('loaiHangHoa').value,
+        // thongtinDauThau: data,
+        // dataChiTieu: this.dataChiTieu,
+        // loaiVthh: this.formData.get('loaiHangHoa').value,
+        loaiHangHoa: this.formData.get("loaiHangHoa").value,
+        idChiTieu: this.formData.get("qdGiaoChiTieuId").value,
       },
     });
     modalGT.afterClose.subscribe((res) => {
