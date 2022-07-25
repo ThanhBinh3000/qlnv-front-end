@@ -396,6 +396,10 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
+        if (!this.congVan){
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         if (this.id) {
             const requestGroupButtons = {
                 id: this.id,
@@ -626,15 +630,13 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         await this.quanLyVonPhiService.ctietDeNghi(id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
+                    let url: string;
                     if (data.data.loaiDn == Utils.HD_TRUNG_THAU) {
-                        this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id,
-                        ])
+                        url = '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id;
                     } else {
-                        this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id,
-                        ])
+                        url = '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id;
                     }
+                    window.open(url, '_blank');
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

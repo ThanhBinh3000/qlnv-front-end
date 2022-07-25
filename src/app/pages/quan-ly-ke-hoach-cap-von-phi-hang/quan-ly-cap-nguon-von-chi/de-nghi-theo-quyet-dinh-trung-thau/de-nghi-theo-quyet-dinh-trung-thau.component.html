@@ -193,7 +193,7 @@
 													{{kphiDaCap}}
 												</ng-container>
 												<ng-template #edit>
-													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap" 
+													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap"
 													[nzFormatter]="formatter" 
 													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap >= 0) ?'' : 'input-error-validate' "></nz-input-number>
 												</ng-template>
@@ -202,7 +202,7 @@
 												Yêu cầu cấp thêm:
 											</td>
 											<td>
-												{{tongTien-kphiDaCap}}
+													{{tongTien-kphiDaCap}}
 											</td>
 										</tr>
 									</tbody>
