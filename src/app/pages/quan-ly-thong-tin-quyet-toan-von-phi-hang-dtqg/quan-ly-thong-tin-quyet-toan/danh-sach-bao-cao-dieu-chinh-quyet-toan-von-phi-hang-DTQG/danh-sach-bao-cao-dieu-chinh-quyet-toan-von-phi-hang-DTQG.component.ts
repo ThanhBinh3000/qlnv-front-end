@@ -203,7 +203,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           // this.danhSachBaoCao = data.data.content;
