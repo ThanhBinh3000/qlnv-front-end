@@ -45,6 +45,8 @@
             </button>
           </div>
         </nz-card>
+
+
         <div class="tab-giao-chi-tieu">
           <nz-tabset nzType="card" class="tab-level-3">
             <nz-tab nzTitle="Danh sách hồ sơ kỹ thuật">
@@ -145,7 +147,7 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isCuc()"
+                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' ) && userService.isCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
@@ -170,6 +172,7 @@
                   </div>
                 </div>
               </div>
+
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">

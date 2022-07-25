@@ -5,8 +5,8 @@
                 <nz-card class="mt16 flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[18, 12]">
                         <div nz-col nzSpan="4">
-                            <label class="search__label">Số Quyết định nhập</label>
-                            <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
+                            <label class="search__label">Số quyết định xuất</label>
+                            <input class="search__input" placeholder="Nhập Số quyết định xuất" nz-input
                                 [(ngModel)]="searchFilter.soQuyetDinh" />
                         </div>
                         <div nz-col nzSpan="4">
@@ -44,8 +44,8 @@
                                                 [nzIndeterminate]="indeterminate"></label>
                                         </th>
                                         <th width="30px">STT</th>
-                                        <th width="295px">Số quyết định xuất</th>
                                         <th width="161px">Số biên bản</th>
+                                        <th width="295px">Số quyết định xuất</th>
                                         <th width="161px">Ngày biên bản</th>
                                         <th width="295px">Điểm kho</th>
                                         <th width="295px">Nhà kho</th>
@@ -79,7 +79,7 @@
                                                 <i nz-icon nzType="search"></i>
                                             </ng-template>
                                         </th>
-                                        <!-- Ngày biên bản -->
+                                        <!-- Ngày biên bản  (chưa get đươc trường)-->
                                         <th>
                                             <!-- <nz-date-picker [(ngModel)]="searchFilter.ngayBienBan" nzFormat="dd/MM/yyyy"></nz-date-picker> -->
 
@@ -136,7 +136,7 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input [(ngModel)]="filterTable.trangThaiDuyet"
-                                                    (input)="filterInTable('tenNganLo',filterTable.trangThaiDuyet)" />
+                                                    (input)="filterInTable('trangThaiDuyet',filterTable.trangThaiDuyet)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -227,10 +227,10 @@
                                             <a (click)="redirectToChiTiet(true, 0)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a *ngIf="('00' || '03')" (click)="redirectToChiTiet(true, 0)">
+                                            <a (click)="redirectToChiTiet(true, 0)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a *ngIf="'00'">
+                                            <a>
                                                 <i class="fa fa-trash-o do" (click)="xoaItem({})"></i>
                                             </a>
                                         </td>
@@ -272,9 +272,9 @@
                                     <div class="trai"></div>
                                     <div class="canphai">
                                         <!-- begin phân trang  -->
-                                        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="40"
-                                            nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                                            (nzPageIndexChange)="changePageIndex($event)">
+                                        <nz-pagination class="pagination-card" [nzPageIndex]="page"
+                                            [nzTotal]="totalRecord" nzShowSizeChanger [nzPageSize]="pageSize"
+                                            [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)">
                                             <ng-template #rangeTemplate let-range="range" let-total>
                                                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
                                             </ng-template>

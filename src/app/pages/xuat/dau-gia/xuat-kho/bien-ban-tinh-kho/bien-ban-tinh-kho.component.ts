@@ -64,7 +64,7 @@ export class BienBanTinhKhoComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    private quanLyBienBanTinhKhoService: QuanLyPhieuNhapKhoService,
     private notification: NzNotificationService,
     private router: Router,
     public userService: UserService,
@@ -239,7 +239,7 @@ export class BienBanTinhKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapKhoService.deleteData(item.id).then((res) => {
+          this.quanLyBienBanTinhKhoService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -274,7 +274,7 @@ export class BienBanTinhKhoComponent implements OnInit {
       "trangThai": null,
       "tungayBienBan": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0 ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD') : null,
     };
-    let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
+    let res = await this.quanLyBienBanTinhKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -307,7 +307,7 @@ export class BienBanTinhKhoComponent implements OnInit {
           "trangThai": null,
           "tungayBienBan": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0 ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD') : null,
         }
-        this.quanLyPhieuNhapKhoService
+        this.quanLyBienBanTinhKhoService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-tinh-kho.xlsx'),
@@ -344,7 +344,7 @@ export class BienBanTinhKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuNhapKhoService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBienBanTinhKhoService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

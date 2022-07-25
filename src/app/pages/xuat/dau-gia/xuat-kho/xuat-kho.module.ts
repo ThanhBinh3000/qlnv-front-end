@@ -9,6 +9,8 @@ import { BangKeCanBangComponent } from './bang-ke-can-bang/bang-ke-can-bang.comp
 import { ThongTinBangKeCanBangComponent } from './bang-ke-can-bang/thong-tin-bang-ke-can-bang/thong-tin-bang-ke-can-bang.component';
 import { ThemMoiPhieuXuatKhoComponent } from './quan-ly-phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
 import { QuanLyPhieuXuatKhoComponent } from './quan-ly-phieu-xuat-kho/quan-ly-phieu-xuat-kho.component';
+import { BienBanTinhKhoComponent } from './bien-ban-tinh-kho/bien-ban-tinh-kho.component';
+import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 
 @NgModule({
   declarations: [
@@ -18,17 +20,15 @@ import { QuanLyPhieuXuatKhoComponent } from './quan-ly-phieu-xuat-kho/quan-ly-ph
     ThongTinBangKeCanBangComponent,
     QuanLyPhieuXuatKhoComponent,
     ThemMoiPhieuXuatKhoComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
   ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
+  imports: [CommonModule, ComponentsModule, DirectivesModule],
   exports: [
     XuatKhoComponent,
     ChucNangXuatKhoComponent,
     BangKeCanBangComponent,
     QuanLyPhieuXuatKhoComponent,
-  ]
+  ],
 })
-export class XuatKhoModule { }
+export class XuatKhoModule {}

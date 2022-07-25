@@ -11,7 +11,7 @@
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản tịnh kho'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
     <ng-template nz-tab>
-      <div>Biên bản tịnh kho</div>
+      <app-bien-ban-tinh-kho [typeVthh]="typeVthh"></app-bien-ban-tinh-kho>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản hao đôi'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
