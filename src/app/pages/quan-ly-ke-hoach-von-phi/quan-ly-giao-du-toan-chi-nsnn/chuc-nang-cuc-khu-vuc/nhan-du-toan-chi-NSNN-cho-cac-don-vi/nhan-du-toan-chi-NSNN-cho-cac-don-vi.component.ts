@@ -291,7 +291,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
       maLoai: "1"
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
