@@ -279,8 +279,14 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao == Utils.TT_BC_3 ||
       this.trangThaiBaoCao == Utils.TT_BC_5 ||
       this.trangThaiBaoCao == Utils.TT_BC_8 ||
-      this.trangThaiBaoCao == Utils.TT_BC_10) {
-      this.status = false;
+      this.trangThaiBaoCao == Utils.TT_BC_10
+    ) {
+      if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
+        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+        this.status = true;
+      }else{
+        this.status = false;
+      }
     } else {
       this.status = true;
     }

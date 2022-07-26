@@ -110,6 +110,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   status: boolean;
   listIdDelete: any[] = [];
   userRole: string;
+  statusCreate = true;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -197,6 +198,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
 
   //search list bao cao theo tieu chi
   async onSubmit() {
+    this.statusCreate = true;
     if (this.searchFilter.namPa || this.searchFilter.namPa === 0) {
       if (this.searchFilter.namPa >= 3000 || this.searchFilter.namPa < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
@@ -250,6 +252,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
 
   async taoMoi() {
+    this.statusCreate = false;
     if (!this.searchFilter.maLoaiDan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
@@ -309,7 +312,8 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.searchFilter.ngayTaoDen = null;
     this.searchFilter.ngayTaoTu = null;
     this.searchFilter.maPa = null;
-    // this.searchFilter.maLoaiDan = null;
+    this.searchFilter.maLoaiDan = null;
+    this.trangThai = null;
   }
 
   xoaBaoCao(id: string) {
