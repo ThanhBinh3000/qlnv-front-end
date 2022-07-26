@@ -32,6 +32,8 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
       url_ += 'ngayKyDenNgay=' + encodeURIComponent('' + body.ngayKyDenNgay) + '&';
     if (body.loaiVatTuHangHoa)
       url_ += 'loaiVatTuHangHoa=' + encodeURIComponent('' + body.loaiVatTuHangHoa) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'pageable.pageNumber=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
