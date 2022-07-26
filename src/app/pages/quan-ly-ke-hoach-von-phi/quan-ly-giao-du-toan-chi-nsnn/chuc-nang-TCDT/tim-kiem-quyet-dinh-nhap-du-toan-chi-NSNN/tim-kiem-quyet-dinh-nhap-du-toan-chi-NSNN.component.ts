@@ -1,4 +1,4 @@
-import { ROLE_CAN_BO } from './../../../../../Utility/utils';
+import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from './../../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -65,7 +65,12 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
-    this.status = true;
+    if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
+        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+      this.status = false;
+    } else {
+      this.status = true;
+    }
     this.userRole = this.userInfo?.roles[0].code;
     this.onSubmit()
     this.spinner.hide()

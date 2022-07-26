@@ -399,13 +399,17 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           this.checkSumUp = !data.data.checkSumUp;
-          if (
-            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+          if (this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
             this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
-            this.status = false;
+            if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
+              this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+              this.status = true;
+            } else {
+              this.status = false;
+            }
           } else {
             this.status = true;
           }
@@ -496,7 +500,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     let tongTranChi = 0;
-    
+
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
       if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
@@ -518,11 +522,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       })
     })
 
-    if(tongTranChi == 0){
+    if (tongTranChi == 0) {
       this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
       return;
     }
-    
+
     if (!checkMoneyRange == true) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
       return;
@@ -1069,16 +1073,16 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     let tongTranChi = 0;
 
     for (let itm of this.editCache[id].data.lstCtietDvis) {
-      if (itm.soTranChi < 0){
+      if (itm.soTranChi < 0) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
         return;
       }
       tongTranChi += itm.soTranChi;
     }
-    if(tongTranChi == 0){
+    if (tongTranChi == 0) {
       this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
       return;
-    }else if(tongTranChi > this.lstCtietBcao[index].tongCong){
+    } else if (tongTranChi > this.lstCtietBcao[index].tongCong) {
       this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
       return;
     }

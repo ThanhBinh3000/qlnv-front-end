@@ -124,7 +124,7 @@
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											Xem
 										</button>
-										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)"
+										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)" [hidden]="!status"
 											*ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
 											<span>Xóa</span>
 										</button>

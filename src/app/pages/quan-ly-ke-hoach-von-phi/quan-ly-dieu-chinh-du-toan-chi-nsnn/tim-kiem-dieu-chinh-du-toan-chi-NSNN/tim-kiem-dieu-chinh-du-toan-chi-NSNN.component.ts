@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { DataService } from '../../quan-ly-dieu-chinh-du-toan-chi-nsnn/data.service';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 // trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
@@ -100,6 +101,8 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   donVis: any[] = [];
   maDviTao: string;
   loai = '0';
+  statusBtnValidate = true;
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -109,6 +112,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
+    private dataSource: DataService,
   ) {
   }
 
@@ -129,7 +133,12 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
-    this.status = true;
+    if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
+        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+      this.status = false;
+    } else {
+      this.status = true;
+    }
 
     if (this.userRole == roleUserCB[0]) {
       this.trangThai = Utils.TT_BC_1;
@@ -188,6 +197,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
+    this.statusBtnValidate = true;
     if (this.searchFilter.nam || this.searchFilter.nam === 0) {
       if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
@@ -248,6 +258,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   }
 
   taoMoi() {
+    this.statusBtnValidate = false;
     if (this.searchFilter.nam || this.searchFilter.nam === 0) {
       if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
@@ -261,6 +272,10 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
+    const obj = {
+			dotBcao : this.searchFilter.dotBcao,
+		}
+		this.dataSource.changeData(obj);
     this.router.navigate([
       '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/0/' + this.searchFilter.nam,
     ]);
@@ -299,6 +314,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBcao = null
     this.searchFilter.dotBcao = null
+    this.trangThai = null
   }
 
   xoaBaoCao(id: string) {
