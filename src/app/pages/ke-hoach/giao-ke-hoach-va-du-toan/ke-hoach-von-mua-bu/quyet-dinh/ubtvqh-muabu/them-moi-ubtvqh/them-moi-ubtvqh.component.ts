@@ -12,13 +12,20 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
+import {
+  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent
+} from "../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component";
+import {
+  QuyetDinhUbtvqhMuaBuBoSungService
+} from "../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
 
 @Component({
-  selector: 'app-them-quyet-dinh-ttcp',
-  templateUrl: './them-quyet-dinh-ttcp.component.html',
-  styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
+  selector: 'app-them-moi-ubtvqh',
+  templateUrl: './them-moi-ubtvqh.component.html',
+  styleUrls: ['./them-moi-ubtvqh.component.scss']
 })
-export class ThemQuyetDinhTtcpComponent implements OnInit {
+export class ThemMoiUbtvqhComponent implements OnInit {
+
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
@@ -36,7 +43,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
-    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    private quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -72,7 +79,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.quyetDinhTtcpService.getDetail(id);
+      let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(id);
       const data = res.data;
       console.log(data);
       this.formData.patchValue({
@@ -159,7 +166,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
             trangThai: '11',
           };
           let res =
-            await this.quyetDinhTtcpService.approve(
+            await this.quyetDinhUbtvqhMuBuBoSung.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -197,9 +204,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-      res = await this.quyetDinhTtcpService.update(body);
+      res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
     } else {
-      res = await this.quyetDinhTtcpService.create(body);
+      res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -219,15 +226,15 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
       nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
-      nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
+      nzContent: DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
       nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        isView: isView,
-      },
+      // nzComponentParams: {
+      //   dataEdit: data,
+      //   isView: isView,
+      // },
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
@@ -241,5 +248,4 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
   }
 
-  xoaKeHoach() { }
 }

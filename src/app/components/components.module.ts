@@ -106,6 +106,9 @@ import { DialogChiTietKeHoachGiaoBoNganhComponent } from './dialog/dialog-chi-ti
 import { KeHoachLuongThucComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import { KeHoachXuatGiamComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
+import { DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
+import { MuaBuComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component';
+import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bo-sung/mua-bo-sung.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +163,10 @@ import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-
     DialogChiTietKeHoachGiaoBoNganhComponent,
     KeHoachLuongThucComponent,
     KeHoachXuatGiamComponent,
-    DialogTTPhuLucQDDCBanDauGiaComponent
+    DialogTTPhuLucQDDCBanDauGiaComponent,
+    DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+    MuaBuComponent,
+    MuaBoSungComponent
   ],
   imports: [
     CommonModule,
