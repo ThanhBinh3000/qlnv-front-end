@@ -15,7 +15,7 @@
                 [(ngModel)]="this.searchFilter.soPhieu" />
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Ngày bàn giao mẫu</label>
+              <label class="search__label">Ngày lấy mẫu</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayBanGiaoMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </div>
@@ -25,8 +25,8 @@
                 [(ngModel)]="searchFilter.soHopDong" />
             </div>
             <div nz-col nzSpan="4">
-              <label class="search__label">Số biên bản bàn giao mẫu</label>
-              <input class="search__input" placeholder="Nhập số biên bản bàn giao mẫu" nz-input
+              <label class="search__label">Số biên bản lấy mẫu</label>
+              <input class="search__input" placeholder="Nhập số biên bản lấy mẫu" nz-input
                 [(ngModel)]="searchFilter.soBbBanGiao" />
             </div>
           </div>
@@ -55,12 +55,11 @@
                     <th width="60px">STT</th>
                     <th width="161px">Số phiếu</th>
                     <th width="161px">Số quyết định nhập</th>
-                    <th width="161px">Ngày bàn giao mẫu</th>
-                    <th width="203px">Cục dự trữ nhà nước khu vực</th>
-                    <th width="203px">Đơn vị tổ chức thử nghiệm</th>
-                    <th width="161px">Số lượng mẫu hàng kiểm tra</th>
+                    <th width="161px">Ngày lấy mẫu</th>
+                    <th width="300px">Cục dự trữ nhà nước khu vực</th>
+                    <th width="300px">Số lượng mẫu hàng kiểm tra</th>
                     <th width="161px">Trạng thái</th>
-                    <th width="130px"></th>
+                    <th width="130px">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -93,12 +92,6 @@
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                          (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
-                      </nz-input-group>
-                    </td>
-                    <td>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLuongMauHangKt"
                           (input)="filterInTable('soLuongMauHangKt',filterTable.soLuongMauHangKt)" size="small" />
                       </nz-input-group>
@@ -124,7 +117,6 @@
                     <td>{{ data.soQuyetDinhNhap }}</td>
                     <td>{{ data.ngayBanGiaoMau }}</td>
                     <td>{{ data.tenDvi }}</td>
-                    <td>{{ data.tenDiemKho }}</td>
                     <td>{{ data.soLuongMauHangKt }}</td>
                     <td>{{ data.trangThaiDuyet }}</td>
                     <td>

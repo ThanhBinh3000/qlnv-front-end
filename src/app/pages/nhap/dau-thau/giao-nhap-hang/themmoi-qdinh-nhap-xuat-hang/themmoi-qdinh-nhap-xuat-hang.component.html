@@ -10,13 +10,24 @@
           <span>Quay lại</span>
         </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="!isDetail() && quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO" [disabled]="!formData.valid"
-          (click)="guiDuyet()">
+          *ngIf="!isDetail() && quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO && typeVthh == '02'"
+          [disabled]="!formData.valid" (click)="guiDuyet()">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Gửi duyệt</span>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <a class="btn btn-main btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </a>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="pheDuyet()"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET && typeVthh == '02'">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET">
+          *ngIf="(quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET && typeVthh == '02') || (typeVthh != '02' && !isDetail())"
+          [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
@@ -25,16 +36,6 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <a class="btn btn-main btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
       </div>
     </div>
   </div>
