@@ -18,7 +18,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
 import { Utils } from './../../../../Utility/utils';
 import { NOI_DUNG } from './dieu-chinh-so-lieu-quyet-toan.constant';
 export const TRANG_THAI_TIM_KIEM = [
@@ -280,10 +280,10 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao == Utils.TT_BC_8 ||
       this.trangThaiBaoCao == Utils.TT_BC_10
     ) {
-      if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
-        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+      if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
+        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
         this.status = true;
-      }else{
+      } else {
         this.status = false;
       }
     } else {
