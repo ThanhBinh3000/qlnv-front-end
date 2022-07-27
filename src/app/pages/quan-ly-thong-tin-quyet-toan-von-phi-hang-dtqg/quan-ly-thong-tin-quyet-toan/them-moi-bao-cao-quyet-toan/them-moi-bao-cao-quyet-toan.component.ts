@@ -281,10 +281,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao == Utils.TT_BC_8 ||
       this.trangThaiBaoCao == Utils.TT_BC_10
     ) {
-      if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
-        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+      if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
+        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
         this.status = true;
-      }else{
+      } else {
         this.status = false;
       }
     } else {
@@ -375,8 +375,8 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
-    for(const itm of this.lstCtietBcao){
-      if(!itm.maDviTinh && !itm.soLuong && !itm.donGiaMua && !itm.thanhTien){
+    for (const itm of this.lstCtietBcao) {
+      if (!itm.maDviTinh && !itm.soLuong && !itm.donGiaMua && !itm.thanhTien) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
         return;
       }
@@ -537,7 +537,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if(this.statusTrinhDuyet != true){
+    if (this.statusTrinhDuyet != true) {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
       return;
     }
@@ -787,10 +787,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
-    if(
+    if (
       this.editCache[id].data.soLuong < 0 ||
       this.editCache[id].data.donGiaMua < 0
-    ){
+    ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
     }
@@ -1022,7 +1022,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         this.total.thanhTien += item.thanhTien;
       }
     })
-    if(this.total.thanhTien == 0){
+    if (this.total.thanhTien == 0) {
       this.total.thanhTien = null;
     }
   }

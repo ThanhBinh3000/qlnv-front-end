@@ -133,8 +133,8 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
-    if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
-        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+    if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
+        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
       this.status = false;
     } else {
       this.status = true;

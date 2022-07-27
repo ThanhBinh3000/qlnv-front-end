@@ -404,8 +404,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
             this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
-            if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
-              this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+            if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
+              ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
               this.status = true;
             } else {
               this.status = false;

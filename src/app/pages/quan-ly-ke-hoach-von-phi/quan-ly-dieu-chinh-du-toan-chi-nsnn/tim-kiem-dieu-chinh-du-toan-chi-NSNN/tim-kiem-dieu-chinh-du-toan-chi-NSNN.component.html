@@ -75,6 +75,7 @@
               <th nzWidth="60px">STT</th>
               <th nzWidth="150px">Mã báo cáo</th>
               <th nzWidth="200px">Ngày tạo</th>
+              <th nzWidth="150px">Đợt báo cáo</th>
               <th nzWidth="150px">Năm báo cáo</th>
               <th nzWidth="150px">Ngày trình duyệt</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
@@ -103,6 +104,7 @@
               <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">{{ item.maBcao}}</a></td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
+              <td>{{item.dotBcao}}</td>
               <!-- <td class="text-center">{{getStatusName(item.trangThai)}}</td> -->
               <!-- <td [hidden]="status"><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Nhập dữ liệu/Sửa</a></td>
               <td [hidden]="status">
@@ -126,16 +128,22 @@
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
-              <td [hidden]="status">
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
-                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
-                </button>
-                <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)"
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-                  <span>Xóa</span>
-                </button>
+              <td>
+                <ng-container *ngIf="item.trangThai == '1' || item.trangThai == '2' || item.trangThai == '4' || item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Xem</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)" [hidden]="!status">
+                    <span>Nhập/Sửa dữ liệu</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)" [hidden]="!status">
+                    <span>Xóa</span>
+                  </button>
+                </ng-container>
               </td>
               <td [hidden]="!status">
 								<ng-container *ngIf="checkDeleteReport(item)">
@@ -166,7 +174,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="taoMoi()">
+        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

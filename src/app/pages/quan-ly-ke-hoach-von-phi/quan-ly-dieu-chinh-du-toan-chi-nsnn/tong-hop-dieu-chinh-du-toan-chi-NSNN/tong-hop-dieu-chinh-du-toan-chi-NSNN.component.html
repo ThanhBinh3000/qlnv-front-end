@@ -27,7 +27,7 @@
           <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
             <nz-descriptions-item nzTitle="Năm báo cáo" [nzSpan]="1">
               <nz-input-number class="input__search" nzSize="small"
-                [class]="namHienTai && namHienTai < 3000 && namHienTai > 999 ?'' : 'input-error-validate' "
+                [class]="statusBtnValidate || (namHienTai && namHienTai >= 1000 &&  namHienTai <= 2999)?'' : 'input-error-validate' "
                 [(ngModel)]="namHienTai"></nz-input-number>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Đợt báo cáo" [nzSpan]="1">
