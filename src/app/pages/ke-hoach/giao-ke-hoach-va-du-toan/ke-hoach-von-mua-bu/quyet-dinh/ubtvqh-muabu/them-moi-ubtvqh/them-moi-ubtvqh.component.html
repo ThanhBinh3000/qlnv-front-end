@@ -116,10 +116,10 @@
         <td>{{data.ttMuaBsung}}</td>
         <td></td>
         <td style="text-align: left; white-space: nowrap;">
-          <a (click)="themKeHoach(data, idx)">
+          <a (click)="themKeHoach(data, idx,true)">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="true" (click)="themKeHoach(data, idx)">
+          <a *ngIf="true" (click)="themKeHoach(data, idx,false)">
             <i class="fa fa-pencil"></i>
           </a>
           <a *ngIf="!false" (click)="xoaItem(data.id)">

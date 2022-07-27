@@ -57,10 +57,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        muaTangList: [],
-        xuatGiamList: [],
-        xuatBanList: [],
-        luanPhienList: [],
+        listBoNganh: []
       }
     );
   }
@@ -207,6 +204,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
     } else {
       res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);
+      console.log(body)
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -231,10 +229,10 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       nzClosable: false,
       nzWidth: '1200px',
       nzFooter: null,
-      // nzComponentParams: {
-      //   dataEdit: data,
-      //   isView: isView,
-      // },
+      nzComponentParams: {
+        dataEdit: data,
+        isView: isView,
+      },
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
@@ -246,6 +244,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         }
       }
     });
+    this.formData.get('listBoNganh').setValue(this.dataTable);
   }
 
 }
