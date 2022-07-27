@@ -12,18 +12,18 @@ import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 // loai trang thai kiem tra
 export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
-  {
-      id: '9',
-      ten: 'Tiếp nhận'
-  },
-  {
-      id: '7',
-      ten: 'Mới'
-  },
-  {
-      id: '-1',
-      ten: 'Chưa gửi đơn vị cấp trên'
-  },
+	{
+		id: '9',
+		ten: 'Tiếp nhận'
+	},
+	{
+		id: '7',
+		ten: 'Mới'
+	},
+	{
+		id: '-1',
+		ten: 'Chưa gửi đơn vị cấp trên'
+	},
 ]
 
 
@@ -39,7 +39,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	namHienTai: number;
 	trangThai: string = Utils.TT_BC_9;
 	maDviTao: string;
-  dotBcao: number;
+	dotBcao: number;
 	//danh muc
 	danhSachDieuChinh: any[] = [];
 	trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
@@ -52,6 +52,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		size: 10,
 		page: 1,
 	}
+	statusBtnValidate = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -106,29 +107,32 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-			return;
+		this.statusBtnValidate = true;
+		if (this.namHienTai || this.namHienTai === 0) {
+			if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
+				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+				return;
+			}
 		}
 		let trangThais = [];
-		if (this.trangThai){
+		if (this.trangThai) {
 			trangThais = [this.trangThai];
 		}
 		const requestReport = {
 			dotBcao: null,
-      loaiTimKiem: "1",
-      maBcao: "",
-      maDvi:this.maDviTao,
-      namBcao: this.namHienTai,
-      ngayTaoDen: "",
-      ngayTaoTu: "",
-      paggingReq: {
+			loaiTimKiem: "1",
+			maBcao: "",
+			maDvi: this.maDviTao,
+			namBcao: this.namHienTai,
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-      str: "",
-      thangBcao: null,
-      trangThai: this.trangThai,
+			str: "",
+			thangBcao: null,
+			trangThai: this.trangThai,
 			trangThais: trangThais,
 		};
 		this.spinner.show();
@@ -156,11 +160,12 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
 	tongHop() {
+		this.statusBtnValidate = false;
 		if (!this.namHienTai) {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		if (this.namHienTai < 1000 && this.namHienTai > 2999) {
+		if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
@@ -178,7 +183,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/chi-tiet-giao-nhiem-vu/'+ this.loai+'/'+ id,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/chi-tiet-giao-nhiem-vu/' + this.loai + '/' + id,
 		])
 	}
 
@@ -195,16 +200,16 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		this.location.back()
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai)?.ten;
 	}
 
-	getUnitName(maDvi: string){
+	getUnitName(maDvi: string) {
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
 
-  xoaDieuKien(){
-    this.namHienTai = null
-    this.dotBcao = null
-  }
+	xoaDieuKien() {
+		this.namHienTai = null
+		this.dotBcao = null
+	}
 }
