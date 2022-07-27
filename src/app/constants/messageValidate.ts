@@ -20,4 +20,5 @@ export const MESSAGEVALIDATE = {
     NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
     EXIST_REPORT: "Báo cáo đã tồn tại",
     WRONG_DAY:'"Đến ngày" cần lớn hơn "Ngày từ"',
+    EXIST_CONTRACT: "Hợp đồng không tồn tại",
   };
