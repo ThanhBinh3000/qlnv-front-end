@@ -86,7 +86,7 @@ export class BaoCaoComponent implements OnInit {
 		},
 		{
 			id: Utils.TT_BC_4,
-			tenDm: "Trưởng BP chấp nhận",
+			tenDm: "Trưởng BP duyệt",
 		},
 		{
 			id: Utils.TT_BC_5,
@@ -94,7 +94,7 @@ export class BaoCaoComponent implements OnInit {
 		},
 		{
 			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo chấp nhận",
+			tenDm: "Lãnh đạo phê duyệt",
 		},
 		{
 			id: Utils.TT_BC_8,

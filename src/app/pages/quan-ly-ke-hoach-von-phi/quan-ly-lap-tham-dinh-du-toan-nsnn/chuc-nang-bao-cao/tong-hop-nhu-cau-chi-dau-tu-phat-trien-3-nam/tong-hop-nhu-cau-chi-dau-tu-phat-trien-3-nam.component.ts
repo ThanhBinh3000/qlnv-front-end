@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, fixedNumber, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, fixedNumber, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constant';
 
 
@@ -156,21 +156,6 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
     // luu
     async save(trangThai: string) {
-        const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 100);
-        const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 200);
-        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 300);
-        if (data1 && data2 && data3) {
-            console.log(data1.thNamHienHanhN1 - data2.thNamHienHanhN1);
-            if (((data1.thNamHienHanhN1 || data1.thNamHienHanhN1 === 0)  && fixedNumber(data1.thNamHienHanhN1 - data2.thNamHienHanhN1) != fixedNumber(data3.thNamHienHanhN1)) ||
-                ((data1.ncauNamDtoanN || data1.ncauNamDtoanN === 0)  && fixedNumber(data1.ncauNamDtoanN - data2.ncauNamDtoanN) != fixedNumber(data3.ncauNamDtoanN) ) ||
-                ((data1.ncauNamN1 || data1.ncauNamN1 === 0)  && fixedNumber(data1.ncauNamN1 - data2.ncauNamN1) != fixedNumber(data3.ncauNamN1)) ||
-                ((data1.ncauNamN2 || data1.ncauNamN2 === 0)  && fixedNumber(data1.ncauNamN2 - data2.ncauNamN2) != fixedNumber(data3.ncauNamN2))) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
-                    this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
-                return;
-            }
-        }
-        
         let checkSaveEdit;
         if (!this.maDviTien) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -723,6 +708,9 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
     }
     getLowStatus(str: string) {
+        if (this.lstCtietBcao.find(e => e.stt == str)?.maNdung == 300){
+            return true;
+        }
         const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
         if (index == -1) {
             return false;
@@ -752,6 +740,21 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 }
             })
             stt = this.getHead(stt);
+        }
+        let data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 100);
+        let data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 200);
+        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 300);
+        if (!data1) {
+            data1 = new ItemData();
+        }
+        if (!data2){
+            data2 = new ItemData();
+        }
+        if (data1 && data2 && data3) {
+            data3.thNamHienHanhN1 = sumNumber([data1.thNamHienHanhN1, -data2.thNamHienHanhN1]);
+            data3.ncauNamDtoanN = sumNumber([data1.ncauNamDtoanN, -data2.ncauNamDtoanN]);
+            data3.ncauNamN1 = sumNumber([data1.ncauNamN1, -data2.ncauNamN1]);
+            data3.ncauNamN2 = sumNumber([data1.ncauNamN2, -data2.ncauNamN2]);
         }
     }
 
