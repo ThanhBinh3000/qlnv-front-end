@@ -243,7 +243,7 @@ export class BaoCaoComponent implements OnInit {
 				if (nam) {
 					this.namHienHanh = parseInt(nam, 10);
 				} else {
-					this.namHienHanh = new Date().getFullYear();
+					this.namHienHanh = new Date().getFullYear() + 1;
 				}
 			}
 

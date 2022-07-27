@@ -179,6 +179,20 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             await this.dataSource.currentData.subscribe(obj => {
                 this.qdChiTieu = obj?.qdChiTieu;
                 this.loaiDn = obj?.loaiDn;
+                obj?.hopDong.forEach(item => {
+                    this.lstCtietBcao.push({
+                        ...item,
+                        thanhTien: item.soLuong * item.donGia,
+                        maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
+                        dviThanhTien: "1",
+                        donGiaMua: item.donGia,
+                        id: null,
+                    })
+                });
+                this.tongTien = 0;
+                this.lstCtietBcao.forEach(item => {
+                    this.tongTien += mulMoney(item.thanhTien, item.dviThanhTien);
+                })
             })
             if (!this.qdChiTieu) {
                 this.close();
@@ -197,50 +211,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-            const request = {
-                soQD: this.qdChiTieu,
-                maDvi: this.userInfo?.dvql,
-                loaiVthh: "",
-            }
-            switch (this.loaiDn) {
-                case Utils.MUA_THOC:
-                    request.loaiVthh = "0101"
-                    break;
-                case Utils.MUA_GAO:
-                    request.loaiVthh = "0102"
-                    break;
-                case Utils.MUA_MUOI:
-                    request.loaiVthh = "04"
-                    break;
-                case Utils.MUA_VTU:
-                    request.loaiVthh = "02"
-                    break;
-            }
-            this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
-                (data) => {
-                    if (data.statusCode == 0) {
-                        data.data.forEach(item => {
-                            this.lstCtietBcao.push({
-                                ...item,
-                                thanhTien: item.soLuong * item.donGia,
-                                maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
-                                dviThanhTien: "1",
-                                donGiaMua: item.donGia,
-                                id: null,
-                            })
-                        })
-                        this.tongTien = 0;
-                        this.lstCtietBcao.forEach(item => {
-                            this.tongTien += mulMoney(item.thanhTien, item.dviThanhTien);
-                        })
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
+            
         }
         this.getStatusButton();
         this.spinner.hide();
@@ -407,7 +378,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.congVan){
+        if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }

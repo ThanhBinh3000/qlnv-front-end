@@ -517,7 +517,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     giaoSoTranChi(maBcao: string) {
         const lstGiao: any[] = [];
-
         if (maBcao) {
             const lstCtiet: any[] = [];
             this.lstCtietBcao.forEach(item => {
@@ -548,7 +547,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                         lstCtiet.push({
                             stt: data.stt,
                             maNoiDung: data.maNhom,
-                            soTien: data.listCtietDvi.find(e => e.maBcao == maBcao)?.soTranChi,
+                            soTien: data.listCtietDvi.find(e => e.maBcao == item.maBcao)?.soTranChi,
                         })
                     })
                     lstGiao.push({

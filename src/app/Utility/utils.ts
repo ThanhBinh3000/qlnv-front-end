@@ -1062,7 +1062,7 @@ export function sumNumber(num: any): number {
     return tong;
 }
 
-export function divNumber(num1, num2) {
+export function divNumber(num1, num2): number {
     if ((!num1 && num1 !== 0) &&
         (!num2 && num2 !== 0)) {
         return null;
@@ -1070,8 +1070,12 @@ export function divNumber(num1, num2) {
     if (getNumberValue(num2) == 0){
         return 0 / 0;
     } else {
-        return (Number(getNumberValue(num1) / getNumberValue(num2))).toFixed(Utils.ROUND);
+        return Number((getNumberValue(num1) / getNumberValue(num2)).toFixed(Utils.ROUND));
     }
+}
+
+export function fixedNumber(num: number): number{
+    return Number(num.toFixed(Utils.ROUND));
 }
 
 
