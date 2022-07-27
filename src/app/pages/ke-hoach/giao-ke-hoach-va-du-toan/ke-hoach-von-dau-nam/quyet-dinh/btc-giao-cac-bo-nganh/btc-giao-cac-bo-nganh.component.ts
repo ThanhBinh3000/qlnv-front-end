@@ -28,18 +28,19 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   dsNam: string[] = [];
   searchInTable: any = {
     soQd: null,
-    namQd: null,
+    namQd: dayjs().get('year'),
     ngayQd: new Date(),
     trichYeu: null,
   };
   filterTable: any = {
     soQd: '',
-    namKhoach: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
-    taiLieuDinhKem: '',
     trangThai: '',
   };
+  idSelected: number = 0;
+  isViewDetail: boolean = false;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -85,6 +86,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
   }
+
   async search() {
     this.spinner.show();
     let body = this.formData.value;
@@ -145,6 +147,12 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     this.isAddNew = true;
   }
 
+  async onClose() {
+    this.isAddNew = false;
+    await this.search()
+
+  }
+
   onAllChecked(checked) {
     this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
@@ -172,9 +180,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     this.refreshCheckedStatus();
   }
 
-  onClose() {
-    this.isAddNew = false;
-  }
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -203,8 +208,12 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  viewDetail(id: number, isViewDetail: boolean) {
+    this.idSelected = id;
+    this.isViewDetail = isViewDetail;
+    this.isAddNew = true;
+  }
 
-  viewDetail(id: number, isViewDetail: boolean) { }
 
   xoaItem(item: any) {
     this.modal.confirm({
@@ -261,22 +270,12 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
-      namKhoach: '',
+      namQd: '',
       ngayQd: '',
       trichYeu: '',
-      taiLieuDinhKem: '',
       trangThai: '',
     }
   }
 }
 
 
-// interface IBTCGiaoCacBoNganh {
-//   id: number;
-//   soQd: string;
-//   namQd: string;
-//   ngayQd: Date;
-//   trichYeu: string;
-//   taiLieuDinhKem: any;
-//   trangThai: string;
-// }

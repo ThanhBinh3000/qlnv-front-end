@@ -84,7 +84,7 @@
             <th style="width: 5%;">Năm QĐ</th>
             <th style="width: 5%;">Ngày QĐ</th>
             <th style="width: 20%;">Trích yếu</th>
-            <th style="width: 10%;">Tài liệu đính kèm</th>
+            <!-- <th style="width: 10%;">Tài liệu đính kèm</th> -->
             <th style="width: 10%;">Trạng thái</th>
             <th width="width: 10%;">Hành động</th>
             <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
@@ -124,8 +124,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
-                  (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"
+                  (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -149,7 +149,7 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th></th>
+            <!-- <th></th> -->
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
@@ -169,22 +169,18 @@
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.namKhoach }}</td>
+            <td>{{ data.namQd }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.taiLieuDinhKem }}</td>
             <td>{{ data.trangThai }}</td>
-            <td style="text-align: center; white-space: nowrap;">
-              <a (click)="viewDetail(data.id, false)">
-                <i class="fa fa-download"></i>
-              </a>
-              <a (click)="viewDetail(data.id, false)">
+            <td style="text-align: left; white-space: nowrap;">
+              <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)">
+              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -212,6 +208,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-quyet-dinh-btc-giao-cac-bo-nganh [isView]="false" (onClose)="onClose()">
+  <app-them-quyet-dinh-btc-giao-cac-bo-nganh [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
   </app-them-quyet-dinh-btc-giao-cac-bo-nganh>
 </ng-template>

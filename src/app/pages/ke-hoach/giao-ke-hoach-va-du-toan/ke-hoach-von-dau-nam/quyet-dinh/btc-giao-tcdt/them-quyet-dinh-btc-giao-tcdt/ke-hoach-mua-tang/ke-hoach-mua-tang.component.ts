@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 
 @Component({
@@ -7,8 +7,10 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
 export class KeHoachMuaTangComponent implements OnInit {
-  @Input('quyetDinh') quyetDinh: any;
+  @Input()
   dataTable = [];
+  @Output()
+  dataTableChange = new EventEmitter<any[]>();
 
   rowItem: IMuaTang = {
     id: null,
@@ -32,38 +34,9 @@ export class KeHoachMuaTangComponent implements OnInit {
   indeterminate = false;
   setOfCheckedId = new Set<number>();
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
-    this.initData();
-  }
-
-  initData() {
-    this.dataTable = [
-      {
-        id: 1,
-        idLoaiHangHoa: 1,
-        tenLoaiHangHoa: 'Thóc',
-        idHangHoa: 1,
-        tenHangHoa: 'Thóc tẻ',
-        idDonViTinh: 1,
-        donViTinh: 'Chiếc',
-        soLuong: 100,
-        duToan: 250,
-      },
-      {
-        id: 2,
-        idLoaiHangHoa: 2,
-        tenLoaiHangHoa: 'Thóc',
-        idHangHoa: 2,
-        tenHangHoa: 'Thóc tẻ',
-        idDonViTinh: 2,
-        donViTinh: 'Chiếc',
-        soLuong: 100,
-        duToan: 250,
-      },
-    ];
-
     this.dsLoaiHangHoa = [
       {
         id: 1,
@@ -96,16 +69,33 @@ export class KeHoachMuaTangComponent implements OnInit {
       },
     ];
 
+    this.emitDataTable();
     this.updateEditCache();
+  }
+
+  initData() {
   }
 
   editItem(id: number): void {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) {}
-  themMoiItem() {}
-  clearData() {}
+  xoaItem(id: number) { }
+
+  themMoiItem() {
+    this.dataTable = [...this.dataTable, this.rowItem]
+    this.emitDataTable();
+    this.updateEditCache();
+  }
+
+
+  emitDataTable() {
+    console.log(this.dataTable);
+    this.dataTableChange.emit(this.dataTable);
+  }
+
+
+  clearData() { }
 
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.id === id);
@@ -130,9 +120,9 @@ export class KeHoachMuaTangComponent implements OnInit {
     });
   }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {

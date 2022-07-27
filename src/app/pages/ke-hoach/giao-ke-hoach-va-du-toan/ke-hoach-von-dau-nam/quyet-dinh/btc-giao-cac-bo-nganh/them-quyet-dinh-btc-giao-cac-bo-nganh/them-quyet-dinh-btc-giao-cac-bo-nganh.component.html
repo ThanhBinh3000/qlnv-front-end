@@ -99,16 +99,16 @@
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-tabset nzType="card" class="mt-16 tab-level-3">
       <nz-tab [nzTitle]="'Mua tăng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.muaTangList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất giảm'">
-        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.xuatGiamList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất bán'">
-        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.xuatBanList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="formData.value.luanPhienList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
       </nz-tab>
     </nz-tabset>
   </nz-card>
