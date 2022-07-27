@@ -176,6 +176,15 @@
                       <input nz-input [readonly]="true" type="string" appNumberOnly formControlName="gtriHdSauVat" />
                     </nz-form-item>
                   </div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label [nzNoColon]="true"> Thời gian bảo hành (tháng), kể từ ngày ký biên bản giao nhận
+                      </nz-form-label>
+                      <input nz-input type="string" appNumberOnly formControlName="tgianBhanh" />
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="18">
+                  </div>
                   <div nz-col [nzSpan]="6" class="btn-tep">
                     <nz-form-control>
                       <button class="btn btn-sm waves-effect waves-light" [disabled]="isView"

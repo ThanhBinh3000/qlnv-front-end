@@ -32,5 +32,6 @@ export const MESSAGE = {
   DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
   DON_VI_TINH_LUONG_THUC: 'Tấn',
   GUI_DUYET_SUCCESS: 'Gửi duyệt thành công',
-  PHE_DUYET_SUCCESS: 'Phê duyệt thành công'
+  PHE_DUYET_SUCCESS: 'Phê duyệt thành công',
+  BAN_HANH_SUCCESS: 'Ban hành thành công'
 };

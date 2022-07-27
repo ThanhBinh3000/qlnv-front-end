@@ -128,7 +128,7 @@ export class ThongTinComponent implements OnInit {
         dviTinh: [null],
         donGiaVat: [null],
         gtriHdSauVat: [null],
-
+        tgianBhanh: [null],
         maDvi: [null],
         tenDvi: [null],
         diaChi: [null],
@@ -208,6 +208,7 @@ export class ThongTinComponent implements OnInit {
             tgianNkho: this.detail.tgianNkho ?? null,
             soLuong: this.detail.soLuong ?? null,
             donGiaVat: this.detail.donGiaVat ?? null,
+            tgianBhanh: this.detail.tgianBhanh ?? null,
             gtriHdSauVat: this.detail.gtriHdSauVat ?? null,
             maDvi: this.detail.maDvi ?? null,
             tenDvi: this.detail.tenDvi ?? null,

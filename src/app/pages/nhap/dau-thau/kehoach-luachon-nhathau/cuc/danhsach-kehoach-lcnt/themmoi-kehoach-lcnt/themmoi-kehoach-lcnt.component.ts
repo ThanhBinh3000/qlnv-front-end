@@ -216,22 +216,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
 
-  startEdit(index: number): void {
-    this.editCache[index].edit = true;
-    this.changeChiCuc(this.editCache[index].data.maDvi, null);
-  }
-
-  cancelEdit(index: number): void {
-    this.editCache[index].edit = false;
-  }
-
-  saveEdit(index: number): void {
-    Object.assign(
-      this.listOfData[index],
-      this.editCache[index].data,
-    );
-    this.editCache[index].edit = false;
-  }
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
@@ -441,7 +425,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let res = await this.dmTieuChuanService.getDetailByMaHh(this.formData.get('cloaiVthh').value);
     if (res.statusCode == API_STATUS_CODE.SUCCESS) {
       this.formData.patchValue({
-        tchuanCluong: res.data.tenQchuan
+        tchuanCluong: res.data ? res.data.tenQchuan : null
       })
     }
   }
@@ -495,8 +479,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   }
 
-
-  themMoiGoiThau(data?: DanhSachGoiThau) {
+  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return
@@ -506,10 +489,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        thongtinDauThau: data,
+        dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value
       },
@@ -531,16 +514,19 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       dsGoiThauDialog.thanhTien = res.value.thanhTien;
       dsGoiThauDialog.idVirtual = new Date().getTime();
       dsGoiThauDialog.children = res.value.children;
-      this.listOfData = [
-        ...this.listOfData,
-        dsGoiThauDialog
-      ]
+      if (index >= 0) {
+        this.listOfData[index] = dsGoiThauDialog
+      } else {
+        this.listOfData = [
+          ...this.listOfData,
+          dsGoiThauDialog
+        ]
+      }
       let tongMucDt: number = 0;
       this.listOfData.forEach(item => {
         tongMucDt = tongMucDt + (item.soLuong * item.donGia);
         this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
       });
-      console.log(tongMucDt)
       this.formData.patchValue({
         tongMucDt: tongMucDt
       })
@@ -816,54 +802,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
     }
   }
-
-  // export() {
-  //   const workbook = XLSX.utils.book_new();
-  //   if (this.tabSelected == 'dsGoiThau') {
-  //     const tableDanhSachGoiThau = document
-  //       .getElementById('table-danh-sach-goi-thau')
-  //       .getElementsByTagName('table');
-  //     if (tableDanhSachGoiThau && tableDanhSachGoiThau.length > 0) {
-  //       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableDanhSachGoiThau[0]);
-  //       sheetLuongThuc['!cols'] = [];
-  //       sheetLuongThuc['!cols'][7] = { hidden: true };
-  //       XLSX.utils.book_append_sheet(
-  //         workbook,
-  //         sheetLuongThuc,
-  //         'Danh sách đấu thầu',
-  //       );
-  //       XLSX.writeFile(workbook, 'danh-sach-dau-thau.xlsx');
-  //     }
-  //   } else if (this.tabSelected == 'ccXacDinh') {
-  //     const tableBaoGiaThiTruong = document
-  //       .getElementById('table-bao-gia-thi-truong')
-  //       .getElementsByTagName('table');
-  //     if (tableBaoGiaThiTruong && tableBaoGiaThiTruong.length > 0) {
-  //       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableBaoGiaThiTruong[0]);
-  //       sheetLuongThuc['!cols'] = [];
-  //       sheetLuongThuc['!cols'][2] = { hidden: true };
-  //       XLSX.utils.book_append_sheet(
-  //         workbook,
-  //         sheetLuongThuc,
-  //         'Báo giá thị trường',
-  //       );
-  //     }
-  //     const tableCanCuXacDinh = document
-  //       .getElementById('table-can-cu-khac')
-  //       .getElementsByTagName('table');
-  //     if (tableCanCuXacDinh && tableCanCuXacDinh.length > 0) {
-  //       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableCanCuXacDinh[0]);
-  //       sheetLuongThuc['!cols'] = [];
-  //       sheetLuongThuc['!cols'][2] = { hidden: true };
-  //       XLSX.utils.book_append_sheet(
-  //         workbook,
-  //         sheetLuongThuc,
-  //         'Căn cứ xác định',
-  //       );
-  //     }
-  //     XLSX.writeFile(workbook, 'can-cu-xac-dinh.xlsx');
-  //   }
-  // }
 
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
@@ -1224,34 +1162,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   xoaItem(data: any) {
 
-  }
-
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      if (this.page === 1) {
-
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
   }
 
 }

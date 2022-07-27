@@ -132,14 +132,46 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   downloadFileKeHoach(event) { }
 
-
-  xoaItem(id: number) { }
-
   quayLai() {
     this.onClose.emit();
   }
 
-  pheDuyet() { }
+  pheDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: '11',
+          };
+          let res =
+            await this.quyetDinhTtcpService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 
   async save() {
     this.spinner.show();
@@ -203,5 +235,22 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
   }
 
-  xoaKeHoach() { }
+  xoaKeHoach(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error: ', e);
+        }
+      },
+    });
+  }
 }
