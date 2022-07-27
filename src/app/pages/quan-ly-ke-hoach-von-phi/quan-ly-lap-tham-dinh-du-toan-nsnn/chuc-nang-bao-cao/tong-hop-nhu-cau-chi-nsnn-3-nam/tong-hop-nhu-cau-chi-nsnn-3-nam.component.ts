@@ -165,9 +165,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     // luu
     async save(trangThai: string) {
-        const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 100);
-        const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 200);
-        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 300);
+        const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 1000);
+        const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 2000);
+        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 3000);
         if ((data2 ||data3) && !data1){
             this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường TỔNG NHU CẦU CHI");
             return;

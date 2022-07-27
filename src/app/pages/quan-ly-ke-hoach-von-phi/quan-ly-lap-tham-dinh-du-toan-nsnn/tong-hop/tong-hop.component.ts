@@ -164,7 +164,7 @@ export class TongHopComponent implements OnInit {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
-		if (this.namHienTai < 1000 && this.namHienTai > 2999) {
+		if (this.namHienTai < 1000 || this.namHienTai > 2999) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}

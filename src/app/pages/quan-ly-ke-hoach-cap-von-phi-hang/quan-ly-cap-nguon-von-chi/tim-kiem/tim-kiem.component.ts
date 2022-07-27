@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, Utils } from 'src/app/Utility/utils';
+import { utils } from 'xlsx';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { DataService } from '../data.service';
@@ -235,7 +236,7 @@ export class TimKiemComponent implements OnInit {
 		}
 	}
 
-	taoMoi() {
+	async taoMoi() {
 		this.statusBtnNew = false;
 		if (!this.searchFilter.qdChiTieu ||
 			!this.searchFilter.canCuGia ||
@@ -247,6 +248,49 @@ export class TimKiemComponent implements OnInit {
 			qdChiTieu: this.searchFilter.qdChiTieu,
 			canCuGia: this.searchFilter.canCuGia,
 			loaiDn: this.searchFilter.loaiDn,
+			hopDong: [],
+		}
+		let check = true; //kiem tra hop dong da ton tai chua
+		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU){
+			const request = {
+                soQD: this.searchFilter.qdChiTieu,
+                maDvi: this.searchFilter.maDviTao,
+                loaiVthh: "",
+            }
+            switch (this.searchFilter.loaiDn) {
+                case Utils.MUA_THOC:
+                    request.loaiVthh = "0101"
+                    break;
+                case Utils.MUA_GAO:
+                    request.loaiVthh = "0102"
+                    break;
+                case Utils.MUA_MUOI:
+                    request.loaiVthh = "04"
+                    break;
+                case Utils.MUA_VTU:
+                    request.loaiVthh = "02"
+                    break;
+            }
+            await this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
+                (data) => {
+                    if (data.statusCode == 0) {
+						if (data.data.length == 0){
+							check = false;
+						} else {
+							obj.hopDong = data.data;
+						}
+                    } else {
+						check = false;
+                    }
+                },
+                (err) => {
+					check = false
+                },
+            );
+		}
+		if (!check){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_CONTRACT);
+			return;
 		}
 		this.dataSource.changeData(obj);
 		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
