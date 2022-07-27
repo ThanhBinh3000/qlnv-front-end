@@ -79,7 +79,7 @@ export const NOI_DUNG = [
     },
     {
         id: 300,
-        tenDm: "CHÊNH LỆCH TRẦN CHI-NHU CẦU (I-II)",
+        tenDm: "CHÊNH LỆCH TRẦN CHI-NHU CẦU",
         level: 0,
         idCha: 0,
     },

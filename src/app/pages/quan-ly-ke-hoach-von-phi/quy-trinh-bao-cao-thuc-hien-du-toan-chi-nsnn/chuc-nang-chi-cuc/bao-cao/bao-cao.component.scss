@@ -1,17 +1,35 @@
+
 .action-top {
   padding-right: 50px;
 }
 
-.chi-tieu__body {
-  .flex-card.ant-card {
-    border: 1px solid #ececec !important;
-    background: transparent;
-    box-shadow: unset;
-    margin-bottom: 0px !important;
-    margin-top: 11px !important;
-    border-radius: 6px;
+::ng-deep{
+  .chi-tieu__body {
+    .flex-card.ant-card {
+      border: 1px solid #ececec !important;
+      background: transparent;
+      box-shadow: unset;
+      margin-bottom: 0px !important;
+      margin-top: 11px !important;
+      border-radius: 6px;
+    }
+  
+    .tab__container {
+			position: relative;
+      margin-top: 12px;
+		}
+
+    
+    .action {
+      position: absolute;
+      right: 25px;
+      top: 0;
+    }
   }
+  
 }
+
+
 
 .table__body {
   margin: 12px 0px 0px 0px !important;
@@ -37,6 +55,7 @@
     margin-left: 5px;
   }
 }
+
 
 .ant-input-number {
   width: 100px !important;

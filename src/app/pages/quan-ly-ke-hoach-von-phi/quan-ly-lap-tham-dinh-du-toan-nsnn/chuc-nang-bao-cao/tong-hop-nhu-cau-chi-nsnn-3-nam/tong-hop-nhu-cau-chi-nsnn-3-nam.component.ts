@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../Utility/utils";
+import { divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-nsnn-3-nam.constant';
 
 export class ItemData {
@@ -126,6 +126,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 tranChiN2: divMoney(item.tranChiN2, this.maDviTien),
                 ncauChiN2: divMoney(item.ncauChiN2, this.maDviTien),
                 clechTranChiVsNcauChiN2: divMoney(item.clechTranChiVsNcauChiN2, this.maDviTien),
+                ssanhNcauNVoiN1: divNumber(item.ncauChiN, item.namHienHanhUocThien),
                 checked: false,
             })
         })

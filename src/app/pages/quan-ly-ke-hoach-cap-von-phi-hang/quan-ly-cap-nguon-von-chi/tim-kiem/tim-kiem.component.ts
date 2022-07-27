@@ -54,7 +54,7 @@ export class TimKiemComponent implements OnInit {
 		},
 		{
 			id: Utils.TT_BC_7,
-			tenDm: "Lãnh đạo duyệt",
+			tenDm: "Lãnh đạo phê duyệt",
 		},
 	];
 	donVis: any[] = [];

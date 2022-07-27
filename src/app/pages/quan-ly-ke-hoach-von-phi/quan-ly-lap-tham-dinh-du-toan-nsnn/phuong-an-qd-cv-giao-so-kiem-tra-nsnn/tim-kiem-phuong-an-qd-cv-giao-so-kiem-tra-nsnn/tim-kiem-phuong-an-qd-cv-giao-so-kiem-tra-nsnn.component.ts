@@ -62,7 +62,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         },
         {
             id: Utils.TT_BC_4,
-            tenDm: "Trưởng BP chấp nhận",
+            tenDm: "Trưởng BP duyệt",
         },
         {
             id: Utils.TT_BC_5,
@@ -70,7 +70,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         },
         {
             id: Utils.TT_BC_6,
-            tenDm: "Lãnh đạo chấp nhận",
+            tenDm: "Lãnh đạo phê duyệt",
         },
     ];
     //phan trang
