@@ -132,11 +132,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   downloadFileKeHoach(event) { }
 
-
-  xoaItem(id: number) {
-
-  }
-
   quayLai() {
     this.onClose.emit();
   }
@@ -176,7 +171,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         }
       },
     });
-
   }
 
   async save() {
@@ -241,5 +235,22 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
   }
 
-  xoaKeHoach() { }
+  xoaKeHoach(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error: ', e);
+        }
+      },
+    });
+  }
 }
