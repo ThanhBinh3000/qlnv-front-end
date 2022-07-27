@@ -24,13 +24,6 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
   styleUrls: ['./quan-ly-phieu-xuat-kho.component.scss']
 })
 export class QuanLyPhieuXuatKhoComponent implements OnInit {
-
-
-
-
-
-
-
  @Input() typeVthh: string;
 
   searchFilter = {
