@@ -12,13 +12,13 @@
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
-        <input nz-input readonly [(ngModel)]="diaDiemNhapKho.soLuong" name="soLuong" />
+        <input nz-input readonly name="soLuong" [(ngModel)]="diaDiemNhapKho.soLuong" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng theo chỉ tiêu </nz-form-label>
-        <input nz-input readonly [(ngModel)]="diaDiemNhapKho.soLuongTheoChiTieu" name="soLuongTheoChiTieu" />
+        <input nz-input readonly name="soLuongTheoChiTieu" [(ngModel)]="diaDiemNhapKho.soLuongTheoChiTieu" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
@@ -46,6 +46,8 @@
           <th>Tồn kho</th>
           <th>Số lượng</th>
           <th>Đơn giá chưa VAT(đồng)</th>
+          <th>Giá khởi điểm (đồng)</th>
+          <th>Số tiền đặt trước (đồng)</th>
           <th>Hành động</th>
         </tr>
       </thead>
@@ -105,6 +107,12 @@
               class="w-150">
             </nz-input-number>
           </td>
+          <td>
+            {{calcGiaKhoiDiem()}}
+          </td>
+          <td>
+            {{calcSoTienDatTruoc()}}
+          </td>
           <td class="text-center">
             <a (click)="addDiaDiem()">
               <i class="icon htvbdh_dau-cong"></i>
@@ -127,6 +135,8 @@
             <td>{{data.tonKho}}</td>
             <td>{{data.soLuong}}</td>
             <td>{{data.donGiaChuaVAT}}</td>
+            <td>{{data.giaKhoiDiem}}</td>
+            <td>{{data.soTienDatTruoc}}</td>
             <td class="text-center">
               <a (click)="startEdit(i)">
                 <i class="fa fa-pencil"></i>
@@ -141,28 +151,28 @@
             <td>
               <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maDiemKho"
                 (ngModelChange)="changeDiemKho(dsChiTietDiemNhapKhoClone[i].maDiemKho,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+                <nz-option *ngFor="let item of listDiemKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
               <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNhaKho"
                 (ngModelChange)="changeNhaKho(dsChiTietDiemNhapKhoClone[i].maNhaKho,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
+                <nz-option *ngFor="let item of listNhaKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
               <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNganKho"
                 (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maNganKho,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
+                <nz-option *ngFor="let item of listNganKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
               <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNganLo"
                 (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maNganLo,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+                <nz-option *ngFor="let item of listNganLoEdit" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
@@ -192,6 +202,12 @@
                 class="w-150">
               </nz-input-number>
             </td>
+            <td>
+              {{ calcGiaKhoiDiemEdit(i) }}
+            </td>
+            <td>
+              {{ calcSoTienDatTruocEdit(i) }}
+            </td>
             <td class="text-center">
               <a (click)="saveEdit(i)">
                 <i class="icon htvbdh_dau-cong"></i>
@@ -215,6 +231,8 @@
           <td>
             {{calcSoLuong()}}
           </td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
