@@ -278,8 +278,14 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao == Utils.TT_BC_3 ||
       this.trangThaiBaoCao == Utils.TT_BC_5 ||
       this.trangThaiBaoCao == Utils.TT_BC_8 ||
-      this.trangThaiBaoCao == Utils.TT_BC_10) {
-      this.status = false;
+      this.trangThaiBaoCao == Utils.TT_BC_10
+    ) {
+      if (this.userInfo?.roles[0]?.code == 'TC_KH_VP_TBP' ||
+        this.userInfo?.roles[0]?.code == 'TC_KH_VP_LD') {
+        this.status = true;
+      }else{
+        this.status = false;
+      }
     } else {
       this.status = true;
     }
@@ -405,12 +411,12 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     let countCheck = 0;
-    for(const itm of this.lstCtietBcao){
-      if(itm.maDviTinh && itm.soLuong && itm.donGiaMua && itm.thanhTien){
+    for (const itm of this.lstCtietBcao) {
+      if (itm.maDviTinh && itm.soLuong && itm.donGiaMua && itm.thanhTien) {
         countCheck += 1;
       }
     }
-    if(countCheck == 0){
+    if (countCheck == 0) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
@@ -453,15 +459,15 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     })
     //get list file url
     let checkFile = true;
-        for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
-                checkFile = false;
-            }
-        }
-        if (!checkFile){
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
-        }
+    for (const iterator of this.listFile) {
+      if (iterator.size > Utils.FILE_SIZE) {
+        checkFile = false;
+      }
+    }
+    if (!checkFile) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+    }
     const listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -471,7 +477,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       return
     }
 
-    if(this.thongBao == null){
+    if (this.thongBao == null) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -495,20 +501,20 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     //get file cong van url
     const file: any = this.fileDetail;
     if (file) {
-      if (file.size > Utils.FILE_SIZE){
-          this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-      return;
+      if (file.size > Utils.FILE_SIZE) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        return;
       } else {
-          request.congVan = await this.uploadFile(file);
+        request.congVan = await this.uploadFile(file);
       }
     }
     if (file) {
       request.congVan = await this.uploadFile(file);
     }
-    if (!request.congVan){
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
+    if (!request.congVan) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
 
     //call service them moi
     this.spinner.show();
@@ -580,9 +586,9 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if(this.trangThaiBaoCao == Utils.TT_BC_1 && this.congVan){
+    if (this.trangThaiBaoCao == Utils.TT_BC_1 && this.congVan) {
       this.save();
-    }else{
+    } else {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT)
       return;
     }
@@ -832,10 +838,10 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
-    if(
+    if (
       this.editCache[id].data.soLuong < 0 ||
       this.editCache[id].data.donGiaMua < 0
-    ){
+    ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
     }
@@ -1007,14 +1013,14 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         }
         id = this.lstCtietBcao.find(e => e.maLoaiHang == res.maKhoanMuc)?.id;
         res.lstKhoanMuc.forEach(item => {
-          if (this.lstCtietBcao.findIndex(e => e.maLoaiHang == item.id) == -1){
-          const data: ItemData = {
-            ...this.initItem,
-            maLoaiHang: item.id,
-            level: item.level,
-          };
-          this.addLow(id, data);
-        }
+          if (this.lstCtietBcao.findIndex(e => e.maLoaiHang == item.id) == -1) {
+            const data: ItemData = {
+              ...this.initItem,
+              maLoaiHang: item.id,
+              level: item.level,
+            };
+            this.addLow(id, data);
+          }
         })
         this.updateEditCache();
       }
@@ -1066,7 +1072,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         this.total.thanhTien += item.thanhTien;
       }
     })
-    if(this.total.thanhTien == 0){
+    if (this.total.thanhTien == 0) {
       this.total.thanhTien = null;
     }
   }

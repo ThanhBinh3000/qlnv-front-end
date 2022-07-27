@@ -31,23 +31,23 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Năm dự toán</label>
             <nz-input-number [nzSize]="'small'"
-              [class]="searchFilter.namGiao >= 1000 &&  searchFilter.namGiao <= 2999 || !searchFilter.namGiao && this.searchFilter.namGiao !== 0 ?'' : 'input-error-validate'"
-              [(ngModel)]="searchFilter.namGiao"></nz-input-number>
+              [class]="searchFilter.namDtoan >= 1000 &&  searchFilter.namDtoan <= 2999 || !searchFilter.namDtoan && this.searchFilter.namDtoan !== 0 ?'' : 'input-error-validate'"
+              [(ngModel)]="searchFilter.namDtoan"></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày giao từ</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy">
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayGiaoTu" nzFormat="dd/MM/yyyy">
             </nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayGiaoDen" nzFormat="dd/MM/yyyy">
             </nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại dự án</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDuAn"
-              [class]="searchFilter.loaiDuAn ?'' : 'input-error-validate'">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.maLoaiDan"
+              [class]="searchFilter.maLoaiDan ?'' : 'input-error-validate'">
               <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
@@ -60,7 +60,8 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đơn vị nhận</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="searchFilter.maDviNhan">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="searchFilter.maDviNhan"
+            [class]="searchFilter.maDviNhan ?'' : 'input-error-validate'">
               <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>

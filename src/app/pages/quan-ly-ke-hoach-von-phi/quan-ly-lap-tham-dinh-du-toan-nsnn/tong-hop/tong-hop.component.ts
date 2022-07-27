@@ -111,11 +111,12 @@ export class TongHopComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		this.statusBtnValidate = true;
 		if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
+			this.statusBtnValidate = false;
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
+		this.statusBtnValidate = true;
 		let trangThais: string[] = [];
 		if (this.trangThai){
 			trangThais = [this.trangThai];

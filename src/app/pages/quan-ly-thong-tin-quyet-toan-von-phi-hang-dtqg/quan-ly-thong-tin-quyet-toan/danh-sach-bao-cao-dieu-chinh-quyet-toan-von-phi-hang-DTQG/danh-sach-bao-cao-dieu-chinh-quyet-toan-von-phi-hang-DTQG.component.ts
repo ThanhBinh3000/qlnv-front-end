@@ -91,6 +91,8 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   donVis: any[] = [];
   listIdDelete: string[] = [];
+  statusBtnValidate = true;
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -172,14 +174,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (
-      (this.searchFilter.namQtoan)
-    ) {
-      if (this.searchFilter.namQtoan >= 3000 || this.searchFilter.namQtoan < 1000) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-        return;
-      }
-    }
+    this.statusBtnValidate = true;
     if (
       (this.searchFilter.ngayTaoTu && this.searchFilter.ngayTaoDen)
     ) {
@@ -263,6 +258,14 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   }
 
   async taoMoi() {
+    this.statusBtnValidate = false;
+    if(!this.searchFilter.namQtoan){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
+      return;
+    }else if(this.searchFilter.namQtoan < 1000 ||  this.searchFilter.namQtoan > 2999){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
+      return;
+    }
     const res = {
       namQtoan: this.searchFilter.namQtoan
     }

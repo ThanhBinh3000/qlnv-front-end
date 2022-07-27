@@ -265,6 +265,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBaoCao = null
     this.searchFilter.trangThai = null
+    this.searchFilter.donViTao = null
   }
 
   xemChiTiet(id: string) {

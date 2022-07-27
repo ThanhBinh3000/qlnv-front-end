@@ -37,11 +37,11 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     maPhanGiao: '2',
     maLoai: '1',
     loaiTimKiem: '0',
-    namGiao: null,
-    ngayTaoTu: "",
-    ngayTaoDen: "",
-    maDviTao: "",
-    loaiDuAn: null,
+    namDtoan: null,
+    ngayGiaoTu: "",
+    ngayGiaoDen: "",
+    maDvi: "",
+    maLoaiDan: null,
     maDviNhan: "",
     maPa: "",
     trangThais: [],
@@ -90,11 +90,11 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     const userName = this.userService.getUserName();
     this.spinner.show()
     await this.getUserInfo(userName); //get user info
-    this.searchFilter.maDviTao = this.userInfo?.dvql;
-    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.searchFilter.maDvi = this.userInfo?.dvql;
+    this.searchFilter.ngayGiaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
-    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
-    this.searchFilter.namGiao = new Date().getFullYear()
+    this.searchFilter.ngayGiaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.namDtoan = new Date().getFullYear()
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
       this.trangThai = '1';
       this.roleUser = 'canbo';
@@ -156,16 +156,16 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (this.searchFilter.namGiao || this.searchFilter.namGiao === 0) {
-      if (this.searchFilter.namGiao >= 3000 || this.searchFilter.namGiao < 1000) {
+    if (this.searchFilter.namDtoan || this.searchFilter.namDtoan === 0) {
+      if (this.searchFilter.namDtoan >= 3000 || this.searchFilter.namDtoan < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
         return;
       }
     }
     const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
-    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
-    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    searchFilterTemp.ngayGiaoTu = this.datePipe.transform(searchFilterTemp.ngayGiaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayGiaoTu;
+    searchFilterTemp.ngayGiaoDen = this.datePipe.transform(searchFilterTemp.ngayGiaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayGiaoDen;
     if (this.trangThai) {
       searchFilterTemp.trangThais.push(this.trangThai)
     } else {
@@ -223,12 +223,12 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
   }
   xoaDieuKien(){
-    this.searchFilter.namGiao = null;
-    this.searchFilter.ngayTaoDen = null;
-    this.searchFilter.ngayTaoTu = null;
+    this.searchFilter.namDtoan = null;
+    this.searchFilter.ngayGiaoDen = null;
+    this.searchFilter.ngayGiaoTu = null;
     this.searchFilter.maPa = null;
     this.searchFilter.maDviNhan = null;
     this.trangThai = null
-    this.searchFilter.loaiDuAn = null;
+    this.searchFilter.maLoaiDan = null;
   }
 }
