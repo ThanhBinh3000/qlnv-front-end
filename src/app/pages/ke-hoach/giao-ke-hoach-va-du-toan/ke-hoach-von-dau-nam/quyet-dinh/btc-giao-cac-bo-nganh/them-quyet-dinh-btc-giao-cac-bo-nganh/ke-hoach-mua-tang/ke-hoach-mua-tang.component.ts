@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -12,14 +13,10 @@ export class KeHoachMuaTangComponent implements OnInit {
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
-  rowItem: IMuaTang = {
-    id: null,
-    idNoiDung: null,
-    noiDung: null,
-    duToan: null,
-  };
+  rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
+
   dsNoiDung = [];
-  dataEdit: { [key: string]: { edit: boolean; data: IMuaTang } } = {};
+  dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
 
   constructor() { }
 
@@ -27,10 +24,14 @@ export class KeHoachMuaTangComponent implements OnInit {
     this.dsNoiDung = [
       {
         id: 1,
-        noiDung: 'Chi thường xuyên',
+        noiDung: 'Chi dự trữ quốc gia',
       },
       {
         id: 2,
+        noiDung: 'Chi thường xuyên',
+      },
+      {
+        id: 3,
         noiDung: 'Khác',
       },
     ];
@@ -50,6 +51,7 @@ export class KeHoachMuaTangComponent implements OnInit {
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItem = new KeHoachMuaXuat();
     this.emitDataTable();
     this.updateEditCache();
   }
@@ -81,23 +83,26 @@ export class KeHoachMuaTangComponent implements OnInit {
     }
   }
 
+  onChangeNoiDung(idNoiDung) {
+    const dataNd = this.dsNoiDung.filter(d => d.id == idNoiDung)
+    console.log(dataNd);
+
+    this.rowItem.noiDung = dataNd[0].noiDung;
+  }
+
   emitDataTable() {
     console.log(this.dataTable);
     this.dataTableChange.emit(this.dataTable);
   }
 
   calcTong() {
-    const sum = this.dataTable.reduce((prev, cur) => {
-      prev += cur.duToan;
-      return prev;
-    }, 0);
-    return sum;
+    if (this.dataTable.length > 0) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur.duToan;
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 }
 
-interface IMuaTang {
-  id: number;
-  idNoiDung: number;
-  noiDung: string;
-  duToan: number;
-}

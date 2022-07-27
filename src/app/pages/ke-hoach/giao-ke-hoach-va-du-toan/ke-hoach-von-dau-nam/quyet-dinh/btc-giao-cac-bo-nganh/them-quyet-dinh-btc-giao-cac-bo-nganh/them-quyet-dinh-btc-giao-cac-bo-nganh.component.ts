@@ -72,6 +72,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       this.loadDsNam(),
       this.maQd = '/' + this.userInfo.MA_QD,
       this.getDataDetail(this.idInput),
+      this.onChangeNamQd(this.formData.get('namQd').value),
     ])
     this.spinner.hide();
   }

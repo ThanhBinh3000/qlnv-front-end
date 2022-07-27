@@ -61,7 +61,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    // this.dataTable.push(this.rowItem);
+    console.log(this.rowItem);
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()

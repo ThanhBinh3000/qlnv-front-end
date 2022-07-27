@@ -11,8 +11,7 @@
         <th></th>
         <th>
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.idNoiDung">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            <nz-select [(ngModel)]="rowItem.idNoiDung" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
               </nz-option>
             </nz-select>
@@ -76,11 +75,11 @@
       </tr>
     </tbody>
     <tfoot>
-      <!-- <tr>
+      <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
         <td>{{ calcTong() }}</td>
         <td></td>
-      </tr> -->
+      </tr>
       <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Tổng giá trị theo QĐ của TTCP</td>
         <td class="xanh">600</td>
