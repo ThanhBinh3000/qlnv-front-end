@@ -68,8 +68,6 @@ export class DanhSachKeHoachBanDauGiaComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    console.log("uqwggdajhgd");
-
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

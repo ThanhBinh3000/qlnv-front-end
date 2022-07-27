@@ -60,8 +60,6 @@ export class DialogCanCuHopDongComponent implements OnInit {
         }
       })
     })
-    console.log(this.hopDongList);
-
     this._modalRef.close(this.hopDongList);
   }
 
