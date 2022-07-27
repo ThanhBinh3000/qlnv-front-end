@@ -738,6 +738,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
+          this.id = res.data?.id;
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();

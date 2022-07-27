@@ -35,7 +35,8 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     diemkho: '',
     nhaKho: '',
     nganLoBaoQuan: '',
-    soBienBan: ''
+    soBienBan: '',
+    tenTrangThai: '',
   };
   routerUrl: string;
 
@@ -201,7 +202,8 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
       diemkho: '',
       nhaKho: '',
       nganLoBaoQuan: '',
-      soBienBan: ''
+      soBienBan: '',
+      tenTrangThai: '',
     };
     this.search();
   }

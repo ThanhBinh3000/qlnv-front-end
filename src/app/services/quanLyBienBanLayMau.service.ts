@@ -21,7 +21,7 @@ export class QuanLyBienBanLayMauService extends BaseService {
     if (body.capDvis)
       url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
     if (body.maVatTuCha)
-      url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
+      url_ += 'loaiVthh=' + encodeURIComponent('' + body.maVatTuCha) + '&';
     if (body.soQuyetDinhNhap)
       url_ += 'soQuyetDinhNhap=' + encodeURIComponent('' + body.soQuyetDinhNhap) + '&';
     if (body.soBienBan)
