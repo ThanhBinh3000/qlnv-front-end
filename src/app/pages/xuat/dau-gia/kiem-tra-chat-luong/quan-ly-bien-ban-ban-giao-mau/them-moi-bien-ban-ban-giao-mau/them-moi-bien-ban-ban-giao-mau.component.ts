@@ -25,10 +25,15 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./them-moi-bien-ban-ban-giao-mau.component.scss'],
 })
 export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
+
+date:null
+
+
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
   @Input() typeVthh: string;
+
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -505,6 +510,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
+    trangThai =this.globals.prop.BAN_HANH
     if (
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.LANH_DAO_DUYET ||
