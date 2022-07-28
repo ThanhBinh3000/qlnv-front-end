@@ -69,7 +69,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         },
         {
             id: Utils.TT_BC_7,
-            tenDm: "Lãnh đạo duyệt",
+            tenDm: "Lãnh đạo phê duyệt",
         },
     ];
     loaiDns: any[] = LOAI_DE_NGHI;
