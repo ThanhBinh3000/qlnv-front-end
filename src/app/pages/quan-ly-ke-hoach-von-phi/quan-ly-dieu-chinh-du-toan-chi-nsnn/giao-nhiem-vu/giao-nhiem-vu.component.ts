@@ -208,13 +208,14 @@ export class GiaoNhiemVuComponent implements OnInit {
 		private userService: UserService,
 		private notification: NzNotificationService,
 		private location: Location,
-		private modal: NzModalService,		
+		private modal: NzModalService,
 		private dataSource: DataService,
 	) {
 		this.ngayNhap = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR,)
 	}
 
 	async ngOnInit() {
+		this.spinner.show();
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -265,7 +266,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.trangThaiBaoCao = "1";
 				this.nguoiNhap = this.userInfo?.username;
 				this.maDviTao = this.userInfo?.dvql;
-				this.spinner.show();
 				this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 					(data) => {
 						if (data.statusCode == 0) {

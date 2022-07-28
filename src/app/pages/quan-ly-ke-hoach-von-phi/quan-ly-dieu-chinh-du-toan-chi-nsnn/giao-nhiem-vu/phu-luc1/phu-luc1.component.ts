@@ -661,7 +661,7 @@ export class PhuLuc1Component implements OnInit {
   }
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
