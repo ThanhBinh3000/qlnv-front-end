@@ -234,6 +234,7 @@ export class BaoCaoComponent implements OnInit {
 	getLuyKe() {
 		const request = {
 			dotBcao: null,
+			maLoaiBcao: this.baoCao.maLoaiBcao,
 			maPhanBcao: "0",
 			namBcao: this.baoCao?.namBcao,
 			thangBcao: this.baoCao?.thangBcao,
@@ -661,7 +662,9 @@ export class BaoCaoComponent implements OnInit {
 			this.data = {
 				...item,
 				trangThaiBaoCao: this.baoCao.trangThai,
+				maLoaiBcao: this.baoCao.maLoaiBcao,
 				maPhuLuc: maPhuLuc,
+				idBcao: this.baoCao.id,
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
 				luyKeDetail: this.luyKes.find(e => e.maLoai == maPhuLuc),
@@ -680,9 +683,12 @@ export class BaoCaoComponent implements OnInit {
 			this.data = {
 				...this.baoCao.lstBcaos[index],
 				maPhuLuc: this.tabs[0]?.maPhuLuc,
+				maLoaiBcao: this.baoCao.maLoaiBcao,
+				idBcao: this.baoCao.id,
 				trangThaiBaoCao: this.baoCao?.trangThai,
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
+				luyKeDetail: this.luyKes.find(e => e.maLoai == this.tabs[0].maPhuLuc),
 				status: this.status,
 			}
 			this.tabs = [];

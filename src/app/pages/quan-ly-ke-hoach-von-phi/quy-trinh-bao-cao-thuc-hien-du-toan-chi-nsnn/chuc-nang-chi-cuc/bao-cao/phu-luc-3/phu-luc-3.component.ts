@@ -1,6 +1,7 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import * as fileSaver from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -88,9 +89,11 @@ export class PhuLucIIIComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     luyKeDetail: any[] = [];
+    maLoaiBcao: string;
 
     //thong tin chung
     id: string;
+    idBcao: string;
     namHienHanh: number;
     maPhuLuc: string;
     thuyetMinh: string;
@@ -125,7 +128,9 @@ export class PhuLucIIIComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.id = this.data?.id;
+        this.idBcao = this.data?.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
+        this.maLoaiBcao = this.data?.maLoaiBcao;
         this.maDviTien = this.data?.maDviTien;
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
@@ -517,7 +522,7 @@ export class PhuLucIIIComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, 1);
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maDan);
+        const itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
         // them moi phan tu
         if (initItem.id) {
             const item: ItemData = {
@@ -540,7 +545,13 @@ export class PhuLucIIIComponent implements OnInit {
                 luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
                 luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
             }
+            item.luyKeGiaiNganDauNamTsoTle = divNumber(item.luyKeGiaiNganDauNamTso, item.khoachNamVonTso);
+            item.luyKeGiaiNganDauNamNsnnTle = divNumber(item.luyKeGiaiNganDauNamNsnn, item.khoachNamVonNsnn);
+            item.luyKeGiaiNganDauNamNsnnTleVonDt = divNumber(item.luyKeGiaiNganDauNamNsnnVonDt, item.khoachNamVonDt);
+            item.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(item.luyKeGiaiNganDauNamNsnnVonThue, item.khoachNamVonThue);
+            item.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(item.luyKeGiaiNganDauNamNsnnVonScl, item.khoachNamVonScl);
             this.lstCtietBcao.splice(ind + 1, 0, item);
+            this.sum(item.stt);
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -574,7 +585,7 @@ export class PhuLucIIIComponent implements OnInit {
             }
         }
 
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maDan);
+        const itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
 
         // them moi phan tu
         if (initItem.id) {
@@ -588,10 +599,7 @@ export class PhuLucIIIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                this.sum(stt);
-                this.updateEditCache();
-            }
+            
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
@@ -608,7 +616,10 @@ export class PhuLucIIIComponent implements OnInit {
             item.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(item.luyKeGiaiNganDauNamNsnnVonThue, item.khoachNamVonThue);
             item.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(item.luyKeGiaiNganDauNamNsnnVonScl, item.khoachNamVonScl);
             this.lstCtietBcao.splice(index + 1, 0, item);
-
+            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt);
+                this.updateEditCache();
+            }
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -728,7 +739,7 @@ export class PhuLucIIIComponent implements OnInit {
     }
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: ItemData) {
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maDan);
+        const itemLine = this.luyKeDetail.find(item => item.maDan == initItem.maDan);
         if (initItem.id) {
             const item: ItemData = {
                 ...initItem,
@@ -751,8 +762,13 @@ export class PhuLucIIIComponent implements OnInit {
                 luyKeGiaiNganDauNamNsnnVonThue: itemLine?.luyKeGiaiNganDauNamNsnnVonThue ? itemLine?.luyKeGiaiNganDauNamNsnnVonThue : 0,
                 luyKeGiaiNganDauNamNsnnVonScl: itemLine?.luyKeGiaiNganDauNamNsnnVonScl ? itemLine?.luyKeGiaiNganDauNamNsnnVonScl : 0,
             }
+            item.luyKeGiaiNganDauNamTsoTle = divNumber(item.luyKeGiaiNganDauNamTso, item.khoachNamVonTso);
+            item.luyKeGiaiNganDauNamNsnnTle = divNumber(item.luyKeGiaiNganDauNamNsnn, item.khoachNamVonNsnn);
+            item.luyKeGiaiNganDauNamNsnnTleVonDt = divNumber(item.luyKeGiaiNganDauNamNsnnVonDt, item.khoachNamVonDt);
+            item.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(item.luyKeGiaiNganDauNamNsnnVonThue, item.khoachNamVonThue);
+            item.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(item.luyKeGiaiNganDauNamNsnnVonScl, item.khoachNamVonScl);
             this.lstCtietBcao.push(item);
-
+            this.getTotal();
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -1027,6 +1043,18 @@ export class PhuLucIIIComponent implements OnInit {
 		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonDt = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.khoachNamVonDt);
 		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.khoachNamVonThue);
 		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl, this.editCache[id].data.khoachNamVonScl);
+    }
+
+    export() {
+        const baoCao = "phuLuc3.xlsx";
+        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+            (data) => {
+                fileSaver.saveAs(data, baoCao);
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
 }

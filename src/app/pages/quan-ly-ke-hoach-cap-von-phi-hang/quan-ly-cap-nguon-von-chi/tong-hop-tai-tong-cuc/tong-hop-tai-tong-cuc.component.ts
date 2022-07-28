@@ -725,14 +725,13 @@ export class TongHopTaiTongCucComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     maDeNghiNew = res.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                } 
             },
         );
+        if (!maDeNghiNew){
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            return;
+        }
 
         const lstCtietBcaoTemp: any[] = [];
         this.lstCtietBcao.forEach(item => {
