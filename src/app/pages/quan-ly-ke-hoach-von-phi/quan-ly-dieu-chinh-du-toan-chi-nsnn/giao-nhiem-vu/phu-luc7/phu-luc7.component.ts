@@ -505,7 +505,7 @@ export class PhuLuc7Component implements OnInit {
       if(itm.nhomBquan == initItem.loaiMatHang){
         return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
     }})
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
@@ -563,7 +563,7 @@ export class PhuLuc7Component implements OnInit {
         return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
     }})
     // them moi phan tu
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: stt,
@@ -731,7 +731,7 @@ export class PhuLuc7Component implements OnInit {
       if(itm.nhomBquan == initItem.loaiMatHang){
         return dm += (parseInt(itm.mucPhi,10) * parseInt(itm.maDviTinh,10))
     }})
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
