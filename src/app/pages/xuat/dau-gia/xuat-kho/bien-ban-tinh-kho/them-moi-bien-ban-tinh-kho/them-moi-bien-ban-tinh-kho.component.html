@@ -1,342 +1,298 @@
 <div class="luong-thuc__danh-sach thong-tin-phieu-nhap-kho-tam-gui">
-    <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
-        <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-                aria-labelledby="banhanh-tab">
-                <div class="trai">
-                </div>
-                <div class="canphai phai">
-                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
-            </button> -->
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                        *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
-                        (click)="guiDuyet()">
-                        <i class="icon htvbdh_trinh"></i>
-                        <span>Lưu và gửi duyệt</span>
-                    </button>
-                    <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
-                        (click)="hoanThanh()">
-                        <i class="icon  htvbdh_da-xu-ly"></i>
-                        <span>Hoàn thành</span>
-                    </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                        *ngIf="detail.trangThai == '04' && isView" (click)="pheDuyet()">
-                        <i class="icon htvbdh_dakyduyet"></i>
-                        <span>Duyệt</span>
-                    </button>
-                    <a class="btn btn-outline-grey btn-tu-choi btn-sm waves-effect waves-light" (click)="tuChoi()"
-                        *ngIf="detail.trangThai == '04' && isView">
-                        <i class="icon htvbdh_tcdt_tuchoi"></i>
-                        <span>Từ chối</span>
-                    </a>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-                        *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
-                        <i class="icon  htvbdh_tcdt_save"></i>
-                        <span>Lưu</span>
-                    </button>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-                        <span>Quay về</span>
-                    </a>
-                </div>
-            </div>
+  <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
         </div>
-    </nz-affix>
-    <div class="contentBor chi-tieu__body">
-        <div class="contentDetail">
-            <div class="main-content">
-                <div class="title-chi-tieu">
-                    <span *ngIf="detail.trangThai === '00' || detail.trangThai === '03' "
-                        class="du-thao-va-lanh-dao-duyet">
-                        {{detail.tenTrangThai}}
-                    </span>
-                    <span *ngIf="detail.trangThai !== '00' && detail.trangThai !== '03'"
-                        [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
-                    <span>Biên bản tịnh kho</span>
-                </div>
-                <nz-card nzTitle="" class="flex-card p-lr16">
-                    <div class="search__body" nz-row [nzGutter]="[18, 6]">
-                        <!-- Số quyết định -->
-                        <div nz-col nzSpan="3">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số quyết định
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id"
-                                        [nzLabel]="item.soQd">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Loại hàng hoá (Chưa get đúng trường)-->
-                        <div nz-col nzSpan="3">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Loại hàng hoá
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id"
-                                        [nzLabel]="item.soQd">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Chủng loại hàng hoá (Chưa get đúng trường) -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Chủng loại hàng hoá
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id"
-                                        [nzLabel]="item.soQd">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Đơn vị -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Đơn vị
-                                </nz-form-label>
-                                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
-                            </nz-form-item>
-                        </div>
-                        <!-- Mã QHNS -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Mã QHNS
-                                </nz-form-label>
-                                <input nz-input [(ngModel)]="detail.maDonVi" disabled />
-                            </nz-form-item>
-                        </div>
-                        <!-- Điểm kho -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Điểm kho
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key"
-                                        [nzLabel]="item.title">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Nhà kho -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Nhà kho
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key"
-                                        [nzLabel]="item.title">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Ngăn kho -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Ngăn kho
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key"
-                                        [nzLabel]="item.title">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Lô kho -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Lô kho
-                                </nz-form-label>
-                                <nz-select [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                    <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key"
-                                        [nzLabel]="item.title">
-                                    </nz-option>
-                                </nz-select>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số biên bản tịnh kho -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số biên bản tịnh kho
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soBienBan"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng nhập -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng nhập
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soLuongNhap"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng xuất -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng xuất
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soLuongNhap"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng còn lại -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng còn lại theo sổ sách
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [value]="detail.soLuongNhap - detail.soLuongXuat" disabled />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng thực tế còn lại khi xuất kho lần cuối -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng thực tế còn lại khi xuất kho lần cuối
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soLuongNhap"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng thừa thực tế còn lại khi xuất kho lần cuối -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng thừa thực tế còn lại khi xuất kho lần cuối
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soLuongNhap"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Số lượng thiếu thực tế còn lại khi xuất kho lần cuối -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Số lượng thiếu thực tế còn lại khi xuất kho lần cuối
-                                </nz-form-label>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]="detail.soLuongNhap"
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Nguyên nhân -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Nguyên nhân
-                                </nz-form-label>
-                                <nz-input-group [(ngModel)]="nguyenNhan">
-
-                                    <input type="text" nz-input
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai  == '04' || isView">
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Kiến nghị -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Kiến nghị
-                                </nz-form-label>
-                                <nz-input-group [(ngModel)]="kienNghi">
-
-                                    <input type="text" nz-input
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai  == '04' || isView">
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Ngày lập phiếu -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Ngày lập phiếu
-                                </nz-form-label>
-                                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                                    [(ngModel)]="detail.ngayTaoPhieu" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai
-                                    == '04' || isView">
-                                </nz-date-picker>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6"></div>
-                        <div nz-col nzSpan="6"></div>
-
-                        <!-- Đại diện chi cục DTNN -->
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Đại diện chi cục DTNN
-                                </nz-form-label>
-                                <nz-input-group [(ngModel)]="daiDienChiCuc">
-                                    <input type="text" nz-input
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                                </nz-input-group>
-                            </nz-form-item>
-                        </div>
-                        <!-- Chức vụ -->
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
-                                    Chức vụ
-                                </nz-form-label>
-                                <nz-input-group [(ngModel)]="chucVu">
-                                    <input type="text" nz-input
-                                        [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
-                                </nz-input-group>
-                                <ng-template *ngIf="detail.trangThai == '00' || detail.trangThai == '03'">
-                                    <i nz-icon nzType="plus" nzTheme="outline"></i>
-
-                                </ng-template>
-
-                            </nz-form-item>
-                        </div>
-                    </div>
-                </nz-card>
-
-            </div>
+        <div class="canphai phai">
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Lưu và gửi duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
+            (click)="hoanThanh()">
+            <i class="icon  htvbdh_da-xu-ly"></i>
+            <span>Hoàn thành</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+            *ngIf="detail.trangThai == '04' && isView" (click)="pheDuyet()">
+            <i class="icon htvbdh_dakyduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <a class="btn btn-outline-grey btn-tu-choi btn-sm waves-effect waves-light" (click)="tuChoi()"
+            *ngIf="detail.trangThai == '04' && isView">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </a>
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+            *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <span>Quay về</span>
+          </a>
         </div>
+      </div>
     </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+       <div class="title-chi-tieu">
+          <span *ngIf="detail.trangThai === '00' || detail.trangThai === '03' " class="du-thao-va-lanh-dao-duyet">
+            {{detail.tenTrangThai ? detail.tenTrangThai :"dự thảo"}}
+          </span>
+          <span *ngIf="detail.trangThai !== '00' && detail.trangThai !== '03'"
+            [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+          <span>Biên bản tịnh kho</span>
+        </div>
+        <nz-card nzTitle="" class="flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 6]">
+            <div nz-col nzSpan="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số quyết định
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Loại hàng hoá
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chủng loại hàng hoá
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đơn vị
+                </nz-form-label>
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Mã QHNS
+                </nz-form-label>
+                <input nz-input [(ngModel)]="detail.maDonVi" disabled />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Điểm kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho(false)"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Nhà kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngăn kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Lô kho
+                </nz-form-label>
+                <nz-select [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                  <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+                  </nz-option>
+                </nz-select>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số biên bản tịnh kho
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soBienBan" placeholder="Tự động sinh"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng nhập
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soLuongNhap" placeholder="Tự tính"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
+                    disabled="" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng xuất
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soLuongNhap"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng còn lại theo sổ sách
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [value]="detail.soLuongNhap - detail.soLuongXuat" disabled />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng thực tế còn lại khi xuất kho lần cuối
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soLuongNhap"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng thừa thực tế còn lại khi xuất kho lần cuối
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soLuongNhap"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Số lượng thiếu thực tế còn lại khi xuất kho lần cuối
+                </nz-form-label>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="detail.soLuongNhap"
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Nguyên nhân
+                </nz-form-label>
+                <nz-input-group [(ngModel)]="nguyenNhan">
+
+                  <input type="text" nz-input
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai  == '04' || isView">
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Kiến nghị
+                </nz-form-label>
+                <nz-input-group [(ngModel)]="kienNghi">
+
+                  <input type="text" nz-input
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai  == '04' || isView">
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày lập phiếu
+                </nz-form-label>
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
+                  [(ngModel)]="detail.ngayTaoPhieu" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai
+                                    == '04' || isView">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12"></div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Đại diện chi cục DTNN
+                </nz-form-label>
+                <nz-input-group [(ngModel)]="daiDienChiCuc">
+                  <input type="text" nz-input
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Chức vụ
+                </nz-form-label>
+                <nz-input-group [(ngModel)]="chucVu">
+                  <input type="text" nz-input
+                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                </nz-input-group>
+                <ng-template *ngIf="detail.trangThai == '00' || detail.trangThai == '03'">
+                  <i nz-icon nzType="plus" nzTheme="outline"></i>
+                </ng-template>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
 </div>

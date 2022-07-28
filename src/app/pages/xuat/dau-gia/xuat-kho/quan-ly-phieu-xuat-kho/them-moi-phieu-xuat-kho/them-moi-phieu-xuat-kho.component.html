@@ -6,10 +6,14 @@
         <div class="trai">
         </div>
         <div class="canphai phai">
-          <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </a>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="print()">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
-          </button> -->
+          </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
             *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
             <i class="icon htvbdh_trinh"></i>
@@ -35,9 +39,7 @@
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-            <span>Quay về</span>
-          </a>
+
         </div>
       </div>
     </div>
@@ -72,8 +74,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input placeholder="Tự động hiển thị" [(ngModel)]="userInfo.TEN_DVI"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Tự động hiển thị" [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -81,8 +82,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
-                <input nz-input placeholder="Tự động hiển thị" [(ngModel)]="detail.maDvi"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                <input nz-input placeholder="Tự động hiển thị" [(ngModel)]="detail.maDvi" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -134,7 +134,7 @@
                   Ngày tạo phiếu
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="detail.ngayTao" disabled>
+                  [(ngModel)]="detail.ngayTao" disabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -189,8 +189,7 @@
                   Lý do xuất kho
                 </nz-form-label>
                 <input nz-input placeholder="Nhập lý do xuất kho"
-                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
-                  [(ngModel)]="detail.ngayTao" />
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
           </div>
@@ -219,10 +218,11 @@
               <tr *ngIf="!(detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView)">
                 <td></td>
                 <td>
-                  <nz-select [(ngModel)]="create.tenVatTu" (ngModelChange)="changeDanhMucHang(create)">
+                  <!-- <nz-select [(ngModel)]="create.tenVatTu" (ngModelChange)="changeDanhMucHang(create)">
                     <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
                     </nz-option>
-                  </nz-select>
+                  </nz-select> -->
+                  <input type="text" nz-input>
                 </td>
                 <td>{{create.maVatTu}}</td>
                 <td>{{create.donViTinh}}</td>
@@ -255,49 +255,42 @@
               </tr>
             </tbody>
           </nz-table>
-          <div class="summary-table-data flex-card p-lr16 pd-10" nz-row [nzGutter]="[18, 6]">
+        </div>
+        <div class="summary-table-data flex-card p-lr16 pd-10" nzSpan="24" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="24" class="text-summary">
+            PHIẾU XUẤT KHO
+          </div>
+          <div nz-col nzSpan="24">
             <div nz-col nzSpan="24" class="text-summary">
-              PHIẾU XUẤT KHO
+              Tổng số tiền (viết bằng chữ)
             </div>
-            <div nz-col nzSpan="24">
-              <div nz-row>
-                <div nz-col nzSpan="4" class="text-summary">
-                  Tổng số tiền (viết bằng chữ)
+            <div nz-col nzSpan="24" class="bg-gray text-center text-money text-specical-money">
+              <!-- {{ convertTien(caculatorSoLuongTN()) }} -->
+              0
+            </div>
+            </div>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" nzSpan="24">
+                Chứng từ kèm theo
+              </nz-form-label>
+            </nz-form-item>
+            <nz-form-item>
+              <div class="list-file" nz-col nzSpan="24">
+                <file-list [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                </file-list>
                 </div>
-                <div nz-col nzSpan="20" class="bg-gray text-center text-money text-specical-money">
-                  <!-- {{ convertTien(caculatorSoLuongTN()) }} -->
-                  0
+                </nz-form-item>
                 </div>
-              </div>
-            </div>
+                <div nz-col nzSpan="24">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Ghi chú
+                    </nz-form-label>
+              <textarea [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
+                nz-input [(ngModel)]="detail.ketLuan"></textarea>
+              </nz-form-item>
           </div>
-          <div class="flex-card p-lr16 pd-10">
-            <div nz-row [nzGutter]="[18, 6]">
-              <div nz-col nzSpan="24">
-                <nz-form-item nz-row>
-                  <nz-form-label [nzNoColon]="true" nzSpan="24">
-                    Chứng từ kèm theo
-                  </nz-form-label>
-                </nz-form-item>
-                <nz-form-item nz-row>
-                  <div class="list-file" nz-col nzSpan="24">
-                    <file-list [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
-                    </file-list>
-                  </div>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true">
-                    Ghi chú
-                  </nz-form-label>
-                  <textarea [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
-                    nz-input [(ngModel)]="detail.ketLuan"></textarea>
-                </nz-form-item>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
