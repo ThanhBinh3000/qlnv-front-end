@@ -195,18 +195,34 @@
             <td>{{total.dtoanGiaoNguonQuy}}</td>
             <td>{{total.dtoanGiaoNstt}}</td>
             <td>{{total.dtoanGiaoCk}}</td>
-            <td>{{total.giaiNganThangBcaoTcong}}</td>
-            <td>{{total.giaiNganThangBcaoTcongTle}}</td>
-            <td>{{total.giaiNganThangBcaoDtoan}}</td>
-            <td>{{total.giaiNganThangBcaoDtoanTle}}</td>
-            <td>{{total.giaiNganThangBcaoNguonKhac}}</td>
-            <td>{{total.giaiNganThangBcaoNguonKhacTle}}</td>
-            <td>{{total.giaiNganThangBcaoNguonQuy}}</td>
-            <td>{{total.giaiNganThangBcaoNguonQuyTle}}</td>
-            <td>{{total.giaiNganThangBcaoNstt}}</td>
-            <td>{{total.giaiNganThangBcaoNsttTle}}</td>
-            <td>{{total.giaiNganThangBcaoCk}}</td>
-            <td>{{total.giaiNganThangBcaoCkTle}}</td>
+            <ng-container *ngIf="maLoaiBcao != '527'; else tongLuyKeNam">
+                <td>{{total.giaiNganThangBcaoTcong}}</td>
+                <td>{{total.giaiNganThangBcaoTcongTle}}</td>
+                <td>{{total.giaiNganThangBcaoDtoan}}</td>
+                <td>{{total.giaiNganThangBcaoDtoanTle}}</td>
+                <td>{{total.giaiNganThangBcaoNguonKhac}}</td>
+                <td>{{total.giaiNganThangBcaoNguonKhacTle}}</td>
+                <td>{{total.giaiNganThangBcaoNguonQuy}}</td>
+                <td>{{total.giaiNganThangBcaoNguonQuyTle}}</td>
+                <td>{{total.giaiNganThangBcaoNstt}}</td>
+                <td>{{total.giaiNganThangBcaoNsttTle}}</td>
+                <td>{{total.giaiNganThangBcaoCk}}</td>
+                <td>{{total.giaiNganThangBcaoCkTle}}</td>
+            </ng-container>
+            <ng-template #tongLuyKeNam>
+                <td>{{total.luyKeGiaiNganTcong}}</td>
+                <td>{{total.luyKeGiaiNganTcongTle}}</td>
+                <td>{{total.luyKeGiaiNganDtoan}}</td>
+                <td>{{total.luyKeGiaiNganDtoanTle}}</td>
+                <td>{{total.luyKeGiaiNganNguonKhac}}</td>
+                <td>{{total.luyKeGiaiNganNguonKhacTle}}</td>
+                <td>{{total.luyKeGiaiNganNguonQuy}}</td>
+                <td>{{total.luyKeGiaiNganNguonQuyTle}}</td>
+                <td>{{total.luyKeGiaiNganNstt}}</td>
+                <td>{{total.luyKeGiaiNganNsttTle}}</td>
+                <td>{{total.luyKeGiaiNganCk}}</td>
+                <td>{{total.luyKeGiaiNganCkTle}}</td>
+            </ng-template>
             <td>{{total.luyKeGiaiNganTcong}}</td>
             <td>{{total.luyKeGiaiNganTcongTle}}</td>
             <td>{{total.luyKeGiaiNganDtoan}}</td>
@@ -254,18 +270,34 @@
                 <td>{{data.dtoanGiaoNguonQuy}}</td>
                 <td>{{data.dtoanGiaoNstt}}</td>
                 <td>{{data.dtoanGiaoCk}}</td>
-                <td>{{data.giaiNganThangBcaoTcong}}</td>
-                <td>{{data.giaiNganThangBcaoTcongTle}}</td>
-                <td>{{data.giaiNganThangBcaoDtoan}}</td>
-                <td>{{data.giaiNganThangBcaoDtoanTle}}</td>
-                <td>{{data.giaiNganThangBcaoNguonKhac}}</td>
-                <td>{{data.giaiNganThangBcaoNguonKhacTle}}</td>
-                <td>{{data.giaiNganThangBcaoNguonQuy}}</td>
-                <td>{{data.giaiNganThangBcaoNguonQuyTle}}</td>
-                <td>{{data.giaiNganThangBcaoNstt}}</td>
-                <td>{{data.giaiNganThangBcaoNsttTle}}</td>
-                <td>{{data.giaiNganThangBcaoCk}}</td>
-                <td>{{data.giaiNganThangBcaoCkTle}}</td>
+                <ng-container *ngIf="maLoaiBcao != '527'; else luyKeNam">
+                    <td>{{data.giaiNganThangBcaoTcong}}</td>
+                    <td>{{data.giaiNganThangBcaoTcongTle}}</td>
+                    <td>{{data.giaiNganThangBcaoDtoan}}</td>
+                    <td>{{data.giaiNganThangBcaoDtoanTle}}</td>
+                    <td>{{data.giaiNganThangBcaoNguonKhac}}</td>
+                    <td>{{data.giaiNganThangBcaoNguonKhacTle}}</td>
+                    <td>{{data.giaiNganThangBcaoNguonQuy}}</td>
+                    <td>{{data.giaiNganThangBcaoNguonQuyTle}}</td>
+                    <td>{{data.giaiNganThangBcaoNstt}}</td>
+                    <td>{{data.giaiNganThangBcaoNsttTle}}</td>
+                    <td>{{data.giaiNganThangBcaoCk}}</td>
+                    <td>{{data.giaiNganThangBcaoCkTle}}</td>
+                </ng-container>
+                <ng-template #luyKeNam>
+                    <td>{{data.luyKeGiaiNganTcong}}</td>
+                    <td>{{data.luyKeGiaiNganTcongTle}}</td>
+                    <td>{{data.luyKeGiaiNganDtoan}}</td>
+                    <td>{{data.luyKeGiaiNganDtoanTle}}</td>
+                    <td>{{data.luyKeGiaiNganNguonKhac}}</td>
+                    <td>{{data.luyKeGiaiNganNguonKhacTle}}</td>
+                    <td>{{data.luyKeGiaiNganNguonQuy}}</td>
+                    <td>{{data.luyKeGiaiNganNguonQuyTle}}</td>
+                    <td>{{data.luyKeGiaiNganNstt}}</td>
+                    <td>{{data.luyKeGiaiNganNsttTle}}</td>
+                    <td>{{data.luyKeGiaiNganCk}}</td>
+                    <td>{{data.luyKeGiaiNganCkTle}}</td>
+                </ng-template>
                 <td>{{data.luyKeGiaiNganTcong}}</td>
                 <td>{{data.luyKeGiaiNganTcongTle}}</td>
                 <td>{{data.luyKeGiaiNganDtoan}}</td>
@@ -347,14 +379,12 @@
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.kphiChuyenSangNstt"
-                        (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.kphiChuyenSangNstt" (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.kphiChuyenSangCk"
-                        (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.kphiChuyenSangCk" (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
@@ -367,14 +397,12 @@
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.dtoanGiaoNguonKhac"
-                        (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.dtoanGiaoNguonKhac" (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.dtoanGiaoNguonQuy"
-                        (ngModelChange)="changeModel(data.id)">
+                        [(ngModel)]="editCache[data.id].data.dtoanGiaoNguonQuy" (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
@@ -387,57 +415,98 @@
                         [(ngModel)]="editCache[data.id].data.dtoanGiaoCk" (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoTcong}}
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoTcongTle}}
-                </td>
-                <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoDtoan"
-                        (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoDtoanTle}}
-                </td>
-                <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNguonKhac"
-                        (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoNguonKhacTle}}
-                </td>
-                <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNguonQuy"
-                        (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoNguonQuyTle}}
-                </td>
-                <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNstt"
-                        (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoNsttTle}}
-                </td>
-                <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoCk"
-                        (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
-                </td>
-                <td>
-                    {{editCache[data.id].data.giaiNganThangBcaoCkTle}}
-                </td>
+                <ng-container *ngIf="maLoaiBcao != '527'; else bcaoNam">
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoTcong}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoTcongTle}}
+                    </td>
+                    <td>
+                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
+                            [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoDtoan"
+                            (ngModelChange)="changeModel(data.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoDtoanTle}}
+                    </td>
+                    <td>
+                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
+                            [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNguonKhac"
+                            (ngModelChange)="changeModel(data.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoNguonKhacTle}}
+                    </td>
+                    <td>
+                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
+                            [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNguonQuy"
+                            (ngModelChange)="changeModel(data.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoNguonQuyTle}}
+                    </td>
+                    <td>
+                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
+                            [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoNstt"
+                            (ngModelChange)="changeModel(data.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoNsttTle}}
+                    </td>
+                    <td>
+                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'"
+                            [(ngModel)]="editCache[data.id].data.giaiNganThangBcaoCk"
+                            (ngModelChange)="changeModel(data.id)">
+                        </nz-input-number>
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.giaiNganThangBcaoCkTle}}
+                    </td>
+                </ng-container>
+                <ng-template #bcaoNam>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganTcong}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganTcongTle}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganDtoan}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganDtoanTle}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNguonKhac}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNguonKhacTle}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNguonQuy}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNguonQuyTle}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNstt}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganNsttTle}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganCk}}
+                    </td>
+                    <td>
+                        {{editCache[data.id].data.luyKeGiaiNganCkTle}}
+                    </td>
+                </ng-template>
+
                 <td>
                     {{editCache[data.id].data.luyKeGiaiNganTcong}}
                 </td>
@@ -517,4 +586,8 @@
         <i nz-icon nzType="close" nzTheme="outline"></i>
         <span>Not OK</span>
     </button>
+    <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
+        <i class="icon htvbdh_tcdt_import"></i>
+        <span>Export</span>
+      </button>
 </div>

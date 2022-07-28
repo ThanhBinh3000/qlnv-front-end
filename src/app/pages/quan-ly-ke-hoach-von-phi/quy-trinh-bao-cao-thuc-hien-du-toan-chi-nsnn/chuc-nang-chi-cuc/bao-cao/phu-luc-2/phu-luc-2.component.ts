@@ -1,6 +1,7 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import * as fileSaver from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -62,6 +63,7 @@ export class PhuLucIIComponent implements OnInit {
     luyKeDetail: any[] = [];
 
     //thong tin chung
+    idBcao: string;
     id: string;
     namHienHanh: number;
     maPhuLuc: string;
@@ -97,6 +99,7 @@ export class PhuLucIIComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.id = this.data?.id;
+        this.idBcao = this.data.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
         this.maDviTien = this.data?.maDviTien;
         this.thuyetMinh = this.data?.thuyetMinh;
@@ -791,6 +794,18 @@ export class PhuLucIIComponent implements OnInit {
 		this.editCache[id].data.luyKeGiaiNganNguonNsnn = sumNumber([data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.giaiNganThangNguonNsnn, -data.giaiNganThangNguonNsnn]);
 		this.editCache[id].data.luyKeGiaiNganNguonSn = sumNumber([data.luyKeGiaiNganNguonSn, this.editCache[id].data.giaiNganThangNguonSn, -data.giaiNganThangNguonSn]);
 		this.editCache[id].data.luyKeGiaiNganNguonQuy = sumNumber([data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangNguonQuy, -data.giaiNganThangNguonQuy]);
+    }
+
+    export() {
+        const baoCao = "phuLuc2.xlsx";
+        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+            (data) => {
+                fileSaver.saveAs(data, baoCao);
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
 }
