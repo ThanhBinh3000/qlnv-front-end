@@ -416,7 +416,7 @@ export class PhuLuc2Component implements OnInit {
         return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
     }})
     // them moi phan tu
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
@@ -474,7 +474,7 @@ export class PhuLuc2Component implements OnInit {
         return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
     }})
     // them moi phan tu
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: stt,
@@ -635,7 +635,7 @@ export class PhuLuc2Component implements OnInit {
       if(itm.idDmChi == initItem.maNdung){
         return dm = (parseInt(itm.nvuCmon,10) + parseInt(itm.cucDhanh,10) + parseInt(itm.ttoanCnhan,10))
     }})
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",

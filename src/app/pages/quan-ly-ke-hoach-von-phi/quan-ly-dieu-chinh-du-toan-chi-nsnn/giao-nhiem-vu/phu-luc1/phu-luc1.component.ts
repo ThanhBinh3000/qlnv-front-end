@@ -451,7 +451,7 @@ export class PhuLuc1Component implements OnInit {
     }
     this.replaceIndex(lstIndex, 1);
     // them moi phan tu
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
@@ -503,7 +503,7 @@ export class PhuLuc1Component implements OnInit {
 
 
     // them moi phan tu
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: stt,
@@ -661,7 +661,7 @@ export class PhuLuc1Component implements OnInit {
   }
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
-    if (initItem.id) {
+    if (initItem?.id) {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
