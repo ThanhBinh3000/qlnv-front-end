@@ -66,6 +66,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     tenNhaKho: '',
     tenNganLo: '',
     noiDung: '',
+    tenTrangThai: '',
   }
   dataTableAll: any[] = [];
 
@@ -403,6 +404,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       tenNhaKho: '',
       tenNganLo: '',
       noiDung: '',
+      tenTrangThai: '',
     }
   }
 

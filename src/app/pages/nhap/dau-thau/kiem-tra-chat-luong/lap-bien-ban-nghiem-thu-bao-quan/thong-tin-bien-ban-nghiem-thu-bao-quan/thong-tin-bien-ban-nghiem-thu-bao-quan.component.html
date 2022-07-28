@@ -315,25 +315,21 @@
                   </nz-select>
                 </td>
                 <td>
-                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.soLuongTn" [nzMin]="0"
-                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongTn"
+                    (input)="caculatorSoLuong(create)" maxlength="18" />
                 </td>
                 <td>
-                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.donGiaTn" [nzMin]="0"
-                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaTn"
+                    (input)="caculatorSoLuong(create)" maxlength="18" />
                 </td>
                 <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
                 <td>
-                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongQt"
-                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongQt"
+                    (input)="caculatorSoLuong(create)" maxlength="18" />
                 </td>
                 <td class="bg-gray">
-                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.thanhTienQt" [nzMin]="create.soLuongQt ?? 0"
-                    [nzMax]="globals.prop.MAX_INPUT">
-                  </nz-input-number>
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.thanhTienQt"
+                    (input)="caculatorSoLuong(create)" maxlength="18" />
                 </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
                 <td>
@@ -380,29 +376,25 @@
                     </nz-select>
                   </td>
                   <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
-                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongTn" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                    <input [readonly]="isView" nz-input type="string" appNumberOnly
+                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongTn"
+                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)" maxlength="18" />
                   </td>
                   <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
-                      [(ngModel)]="editDataCache[data.stt]?.data.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
-                    </nz-input-number>
+                    <input [readonly]="isView" nz-input type="string" appNumberOnly
+                      [(ngModel)]="editDataCache[data.stt]?.data.donGiaTn"
+                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)" maxlength="18" />
                   </td>
                   <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
                   <td>
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongQt" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                    <input [readonly]="isView" nz-input type="string" appNumberOnly
+                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongQt"
+                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)" maxlength="18" />
                   </td>
                   <td class="bg-gray">
-                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
-                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
+                    <input [readonly]="isView" nz-input type="string" appNumberOnly
                       [(ngModel)]="editDataCache[data.stt]?.data.thanhTienQt"
-                      [nzMin]="editDataCache[data.stt]?.data.soLuongQt ?? 0" [nzMax]="globals.prop.MAX_INPUT">
-                    </nz-input-number>
+                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)" maxlength="18" />
                   </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
                   <td>

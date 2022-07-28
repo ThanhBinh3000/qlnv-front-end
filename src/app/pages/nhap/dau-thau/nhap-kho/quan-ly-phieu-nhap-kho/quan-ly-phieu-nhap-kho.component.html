@@ -36,7 +36,7 @@
                 [nzData]="dataTable">
                 <thead>
                   <tr>
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
@@ -44,16 +44,16 @@
                     <th width="161px">Số phiếu</th>
                     <th width="161px">Số quyết định nhập</th>
                     <th width="161px">Ngày nhập kho</th>
-                    <th>Điểm kho</th>
+                    <th width="295px">Điểm kho</th>
                     <th width="295px">Nhà kho</th>
                     <th width="295px">Ngăn Lô</th>
-                    <th width="295px">Trạng thái</th>
-                    <th width="140px" class="text-right">Hành động</th>
+                    <th width="161px">Trạng thái</th>
+                    <th width="140px">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="search-table">
-                    <th></th>
+                    <th *ngIf="userService.isChiCuc()"></th>
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -109,11 +109,19 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th></th>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>
@@ -129,11 +137,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03')"
+                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -166,6 +174,10 @@
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="print()">
+              <i class="icon htvbdh_tcdt_print"></i>
+              <span>In</span>
             </button>
             <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
               *ngIf="userService.isChiCuc()">
