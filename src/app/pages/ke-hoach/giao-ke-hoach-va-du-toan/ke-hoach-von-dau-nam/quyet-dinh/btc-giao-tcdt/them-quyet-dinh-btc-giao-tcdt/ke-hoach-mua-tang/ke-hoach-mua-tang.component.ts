@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 
 @Component({
@@ -34,7 +35,7 @@ export class KeHoachMuaTangComponent implements OnInit {
   indeterminate = false;
   setOfCheckedId = new Set<number>();
 
-  constructor() { }
+  constructor(private modal: NzModalService,) { }
 
   ngOnInit(): void {
     this.dsLoaiHangHoa = [
@@ -80,7 +81,26 @@ export class KeHoachMuaTangComponent implements OnInit {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) { }
+  xoaItem(index: number) {
+    console.log(index, this.dataTable);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]

@@ -31,13 +31,13 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
 
+  userInfo: UserLogin;
+  maQd: string;
+
   muaTangList: any[] = []
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
   luanPhienList: any[] = []
-
-  userInfo: UserLogin;
-  maQd: string;
 
   dataTable: any[] = [];
   constructor(
@@ -88,9 +88,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
+        trichYeu: data.trichYeu,
       })
-      this.dataTable = data.listBoNganh
+      this.muaTangList = data.muaTangList;
+      this.xuatGiamList = data.xuatGiamList;
+      this.xuatBanList = data.xuatBanList;
+      this.luanPhienList = data.luanPhienList;
+      console.log(this.muaTangList);
+
     }
   }
 

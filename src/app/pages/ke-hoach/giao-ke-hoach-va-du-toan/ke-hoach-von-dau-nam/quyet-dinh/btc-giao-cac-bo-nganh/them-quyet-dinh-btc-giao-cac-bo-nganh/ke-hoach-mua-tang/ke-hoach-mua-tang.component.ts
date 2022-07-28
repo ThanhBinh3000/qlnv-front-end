@@ -1,4 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
@@ -18,9 +22,14 @@ export class KeHoachMuaTangComponent implements OnInit {
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
 
-  constructor() { }
+  constructor(
+    private modal: NzModalService,
 
-  ngOnInit(): void {
+  ) {
+    // this.dataTable.subscribe()
+  }
+
+  async ngOnInit() {
     this.dsNoiDung = [
       {
         id: 1,
@@ -35,19 +44,49 @@ export class KeHoachMuaTangComponent implements OnInit {
         noiDung: 'Khác',
       },
     ];
-    this.emitDataTable();
-    this.updateEditCache();
+    await this.updateEditCache();
+    await this.emitDataTable();
   }
 
   initData() {
 
   }
 
+  subscribeData() {
+    let data = new Subject();
+    data.subscribe(data => {
+      console.log(data);
+    })
+  }
+
+  emitDataTable() {
+    this.dataTableChange.emit(this.dataTable)
+  }
+
+
   editItem(id: number): void {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) { }
+  xoaItem(index: number) {
+    console.log(index, this.dataTable);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
@@ -81,6 +120,7 @@ export class KeHoachMuaTangComponent implements OnInit {
         };
       });
     }
+    console.log(this.dataEdit);
   }
 
   onChangeNoiDung(idNoiDung) {
@@ -90,10 +130,7 @@ export class KeHoachMuaTangComponent implements OnInit {
     this.rowItem.noiDung = dataNd[0].noiDung;
   }
 
-  emitDataTable() {
-    console.log(this.dataTable);
-    this.dataTableChange.emit(this.dataTable);
-  }
+
 
   calcTong() {
     if (this.dataTable.length > 0) {
@@ -104,5 +141,8 @@ export class KeHoachMuaTangComponent implements OnInit {
       return sum;
     }
   }
+
+
 }
+
 
