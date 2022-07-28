@@ -93,6 +93,7 @@ date:null
     this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
     this.bienBanLayMau.maVatTuCha = this.isTatCa ? null : this.typeVthh;
     this.bienBanLayMau.trangThai = this.globals.prop.DU_THAO;
+
     await Promise.all([
       this.loadSoQuyetDinh(),
       this.loaiVTHHGetAll(),
@@ -118,6 +119,8 @@ date:null
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBienBanLayMau = data.content;
+    console.log(this.bienBanLayMau);
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

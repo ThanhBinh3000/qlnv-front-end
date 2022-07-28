@@ -1,29 +1,31 @@
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
+import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+
 @Component({
-  selector: 'app-bang-ke-xuat-vat-tu',
-  templateUrl: './bang-ke-xuat-vat-tu.component.html',
-  styleUrls: ['./bang-ke-xuat-vat-tu.component.scss'],
+  selector: 'app-ban-ke-can-hang',
+  templateUrl: './ban-ke-can-hang.component.html',
+  styleUrls: ['./ban-ke-can-hang.component.scss'],
 })
-export class BangKeXuatVatTuComponent implements OnInit {
+export class BanKeCanHangComponent implements OnInit {
   @Input() typeVthh: string;
 
   searchFilter = {
     soQuyetDinh: '',
     soBangKe: '',
-    ngayTaoBangKe: '',
+    ngayNhapXuat: '',
+    soHopDong: '',
   };
 
   listDiemKho: any[] = [];
@@ -41,15 +43,14 @@ export class BangKeXuatVatTuComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
 
   filterTable: any = {
     soQuyetDinhNhap: '',
-    soBangKe: '',
-    ngayTaoBangKe: '',
+    soPhieuNhapKho: '',
+    ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
@@ -57,7 +58,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
+    private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
@@ -68,9 +69,6 @@ export class BangKeXuatVatTuComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         // this.loadDiemKho(),
@@ -119,16 +117,16 @@ export class BangKeXuatVatTuComponent implements OnInit {
 
   async search() {
     let param = {
-      "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
+      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
-      "maDvis": [this.userInfo.MA_DVI],
-      "loaiVthh": this.isTatCa ? null : this.typeVthh,
+      "maDonVi": this.userInfo.MA_DVI,
+      "maHang": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,
-      "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
     }
-    let res = await this.quanLyBangKeVatTuService.timKiem(param);
+    let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -150,7 +148,8 @@ export class BangKeXuatVatTuComponent implements OnInit {
     this.searchFilter = {
       soQuyetDinh: '',
       soBangKe: '',
-      ngayTaoBangKe: '',
+      ngayNhapXuat: '',
+      soHopDong: '',
     };
   }
 
@@ -166,7 +165,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeVatTuService.xoa(item.id).then((res) => {
+          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -286,18 +285,21 @@ export class BangKeXuatVatTuComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "maDvis": [this.userInfo.MA_DVI],
-          "loaiVthh": this.isTatCa ? null : this.typeVthh,
+          "denNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+          "maDvi": this.userInfo.MA_DVI,
+          "orderBy": null,
+          "orderDirection": null,
           "paggingReq": null,
           "soBangKe": this.searchFilter.soBangKe,
-          "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "str": null,
+          "trangThai": null,
+          "tuNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
         }
-        this.quanLyBangKeVatTuService
+        this.quanLyBangKeCanHangService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bang-ke-vat-tu.xlsx'),
+            saveAs(blob, 'danh-sach-bang-ke-can-hang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -331,7 +333,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBangKeVatTuService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBangKeCanHangService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -373,8 +375,8 @@ export class BangKeXuatVatTuComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQuyetDinhNhap: '',
-      soBangKe: '',
-      ngayTaoBangKe: '',
+      soPhieuNhapKho: '',
+      ngayNhapKho: '',
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
@@ -384,5 +386,4 @@ export class BangKeXuatVatTuComponent implements OnInit {
   print() {
 
   }
-
 }
