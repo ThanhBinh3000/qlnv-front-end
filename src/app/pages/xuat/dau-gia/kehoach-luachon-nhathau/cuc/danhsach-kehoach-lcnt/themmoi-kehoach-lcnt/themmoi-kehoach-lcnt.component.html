@@ -394,6 +394,12 @@
                     <td>{{ item.diaChi }}</td>
                     <td>{{ item.soLuong }}</td>
                   </tr>
+                  <tr>
+                    <td></td>
+                    <td>Cộng</td>
+                    <td></td>
+                    <td>{{formData.get("soLuong").value}}</td>
+                  </tr>
                 </tbody>
               </nz-table>
               <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16 mb-16">

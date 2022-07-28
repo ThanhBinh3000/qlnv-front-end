@@ -451,11 +451,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const ddGiaoNhan = new DiaDiemGiaoNhan();
-              ddGiaoNhan.id = res.data.id;
-              ddGiaoNhan.tenChiCuc = res.data.tenDvi;
-              ddGiaoNhan.diaChi = res.data.diaChi;
+              ddGiaoNhan.id = res.data?.id;
+              ddGiaoNhan.tenChiCuc = res.data?.tenDvi;
+              ddGiaoNhan.diaChi = res.data?.diaChi;
               ddGiaoNhan.soLuong = phanLo.soLuong;
               this.diaDiemGiaoNhanList = [...this.diaDiemGiaoNhanList, ddGiaoNhan];
+              const tongSoLuong = this.diaDiemGiaoNhanList.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
+                0);
+              this.formData.patchValue({
+                soLuong: tongSoLuong ? Intl.NumberFormat('en-US').format(tongSoLuong) : '0'
+              })
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -577,9 +582,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.loaiVthhInput) {
         this.listHangHoa = res.data;
+        this.listHangHoa = this.listHangHoa.filter(hh => hh.ma != '02')
       }
       else {
-        this.listHangHoa = res.data.filter(x => x.ma == this.loaiVthhInput);
+        this.listHangHoa = res.data?.filter(x => x.ma == this.loaiVthhInput);
       };
     }
   }
@@ -782,7 +788,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .getDetailByMaHh(this.formData.get("loaiHangHoa").value)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.khBanDauGia.tieuChuanChatLuong = res.data.tenQchuan;
+          this.khBanDauGia.tieuChuanChatLuong = res.data?.tenQchuan;
           this.formData.patchValue({
             tieuChuanChatLuong: this.khBanDauGia.tieuChuanChatLuong
           })
