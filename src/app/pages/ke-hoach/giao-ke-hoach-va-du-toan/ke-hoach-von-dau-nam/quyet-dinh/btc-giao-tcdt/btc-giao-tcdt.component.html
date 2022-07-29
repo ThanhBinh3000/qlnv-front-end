@@ -162,14 +162,14 @@
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td style="text-align: center; white-space: nowrap;">
+            <td>
               <a (click)="viewDetail(data.id, false)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)">
+              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

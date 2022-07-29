@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
@@ -10,37 +10,37 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   templateUrl: './ke-hoach-mua-tang.component.html',
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
-export class KeHoachMuaTangComponent implements OnInit {
+export class KeHoachMuaTangComponent implements OnInit, DoCheck {
   @Input()
   dataTable = [];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
+  @Input()
+  dsHangHoa = [];
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-
+  iterableDiffer: any;
   dsChungLoaiHangHoa = [];
-  dsHangHoa = [];
   dsDonViTinh = [];
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
-  allChecked = false;
-  indeterminate = false;
-  setOfCheckedId = new Set<number>();
 
   constructor(
     private danhMucService: DanhMucService,
-    private modal: NzModalService
-  ) { }
-
-  ngOnInit(): void {
-    this.initData();
-    this.loadDanhMucHang();
+    private modal: NzModalService,
+    private iterableDiffers: IterableDiffers,
+  ) {
+    this.iterableDiffer = iterableDiffers.find([]).create(null);
   }
 
-  initData() {
-    this.updateEditCache();
+  ngOnInit(): void {
+  }
+
+  ngDoCheck(): void {
+    const changes = this.iterableDiffer.diff(this.dataTable);
+    if (changes) {
+      this.updateEditCache();
+      this.emitDataTable();
+    }
   }
 
   editItem(id: number): void {
@@ -70,8 +70,6 @@ export class KeHoachMuaTangComponent implements OnInit {
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
-    this.emitDataTable();
-    this.updateEditCache();
   }
 
 
@@ -89,6 +87,10 @@ export class KeHoachMuaTangComponent implements OnInit {
       data: { ...this.dataTable[index] },
       edit: false,
     };
+  }
+
+  calcularTongTien() {
+    this.rowItem.tongTien = +this.rowItem.soLuong * +this.rowItem.donGia;
   }
 
   luuEdit(id: number): void {
@@ -112,15 +114,6 @@ export class KeHoachMuaTangComponent implements OnInit {
       return prev;
     }, 0);
     return sum;
-  }
-
-  async loadDanhMucHang() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
-      }
-    })
   }
 
   onChangeLoaiVthh(event) {

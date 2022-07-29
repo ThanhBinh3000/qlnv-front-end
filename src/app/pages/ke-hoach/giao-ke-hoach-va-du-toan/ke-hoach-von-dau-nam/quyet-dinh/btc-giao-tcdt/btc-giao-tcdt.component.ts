@@ -146,6 +146,8 @@ export class BtcGiaoTcdtComponent implements OnInit {
   }
 
   themMoi() {
+    this.idSelected = 0;
+    this.isViewDetail = false;
     this.isAddNew = true;
   }
 

@@ -95,8 +95,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       this.xuatGiamList = data.xuatGiamList;
       this.xuatBanList = data.xuatBanList;
       this.luanPhienList = data.luanPhienList;
-      this.dataTable = data.listBoNganh
-      console.log(this.muaTangList);
     }
   }
 

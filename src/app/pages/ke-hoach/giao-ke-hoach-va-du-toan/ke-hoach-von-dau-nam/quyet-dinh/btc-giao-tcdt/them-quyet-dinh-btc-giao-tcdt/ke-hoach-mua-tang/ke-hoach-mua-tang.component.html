@@ -39,18 +39,21 @@
         </th>
         <th>
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" />
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"
+              (ngModelChange)="calcularTongTien()" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong * rowItem.donGia" [nzMin]="0">
+            <nz-input-number [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
+              [(ngModel)]="rowItem.donGia" [nzMin]="0">
+            </nz-input-number>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="true" [(ngModel)]="rowItem.tongTien" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </th>
@@ -69,11 +72,12 @@
       <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
           <td class="text-center">{{ idx + 1 }}</td>
-          <td>{{ data.tenLoaiHangHoa }}</td>
-          <td>{{ data.tenHangHoa }}</td>
+          <td>{{ data.tenVthh }}</td>
+          <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.donViTinh }}</td>
           <td>{{ data.soLuong }}</td>
-          <td>{{ data.duToan }}</td>
+          <td>{{ data.donGia }}</td>
+          <td>{{ data.tongTien }}</td>
           <td style="text-align: center;">
             <a (click)="editItem(data.id)">
               <i class="table-icon fa fa-pencil"></i>

@@ -14,7 +14,7 @@
         <span>Quay lại</span>
       </button>
       <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
-        (click)="banHanh()">
+        (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Ban hành</span>
       </button>
@@ -94,19 +94,19 @@
       </nz-tab>
 
       <nz-tab [nzTitle]="'Mua tăng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
       </nz-tab>
 
       <nz-tab [nzTitle]="'Xuất giảm'">
-        <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
       </nz-tab>
 
       <nz-tab [nzTitle]="'Xuất bán'">
-        <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
       </nz-tab>
 
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
       </nz-tab>
     </nz-tabset>
   </nz-card>

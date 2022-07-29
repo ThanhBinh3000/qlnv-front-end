@@ -134,6 +134,7 @@ export class ThongTinQuyetDinh {
   dviTinh: string;
   soLuong: number;
   donGia: number;
+  tongTien: number;
 }
 
 export class KeHoachMuaXuat {

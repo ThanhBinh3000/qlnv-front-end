@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -11,6 +11,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -21,7 +22,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
-  @Output('close') onClose = new EventEmitter<any>();
+  @Output('onClose') onClose = new EventEmitter<any>();
 
   userInfo: UserLogin;
   formData: FormGroup;
@@ -44,7 +45,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   luanPhienList: any = []
 
   dataTable: any[] = [];
-
+  dsHangHoa: any[] = [];
+  iterableDiffer: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -54,6 +56,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private helperService: HelperService,
+    private danhMucService: DanhMucService,
   ) {
     this.formData = this.fb.group(
       {
@@ -74,8 +77,18 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.loadDsNam(),
       this.maQd = '/' + this.userInfo.MA_QD,
       this.getDataDetail(this.idInput),
+      this.loadDanhMucHang()
     ])
     this.spinner.hide();
+  }
+
+  async loadDanhMucHang() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
+        this.dsHangHoa = dataVatTu[0].child;
+      }
+    })
   }
 
   async getDataDetail(id) {
@@ -91,7 +104,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
-      this.dataTable = data.listBoNganh
+      this.muaTangList = data.muaTangList;
+      this.xuatGiamList = data.xuatGiamList;
+      this.xuatBanList = data.xuatBanList;
+      this.luanPhienList = data.luanPhienList;
     }
   }
 
@@ -143,7 +159,42 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() { }
+  pheDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: '11',
+          };
+          let res =
+            await this.quyetDinhBtcTcdtService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 
   async save() {
     this.spinner.show();
