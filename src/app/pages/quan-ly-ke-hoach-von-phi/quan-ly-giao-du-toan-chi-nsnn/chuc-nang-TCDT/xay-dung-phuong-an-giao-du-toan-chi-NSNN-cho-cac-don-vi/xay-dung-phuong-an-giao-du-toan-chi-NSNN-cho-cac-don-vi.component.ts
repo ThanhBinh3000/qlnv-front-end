@@ -107,7 +107,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
   statusBtnGiao: boolean;
-  statusBtnGiaoToanBo: boolean;
+  statusBtnGiaoToanBo = true ;
   statusBtnTongHop = true;
   statusAn = true;
   allChecked = false;
@@ -290,8 +290,19 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     // this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
-    if (this.userInfo?.roles[0]?.code == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') && this.soQd && this.trangThaiBanGhi == '6') {
+    let checkGiao = 0;
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && this.soQd && this.trangThaiBanGhi == '6') { // == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') 
       this.statusBtnGiao = false;
+      for(const itm of this.lstCtietBcao[0].lstCtietDvis){
+        if(itm.trangThai != null){
+          checkGiao += 1;
+        }
+      } 
+      if(checkGiao == 0){
+        this.statusBtnGiaoToanBo = false;
+      }else{
+        this.statusBtnGiaoToanBo = true;
+      }
     } else {
       this.statusBtnGiao = true;
       this.statusBtnGiaoToanBo = true;
