@@ -19,7 +19,7 @@
         </th>
         <th>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.duToan" [nzMin]="0">
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </th>
@@ -39,7 +39,7 @@
         <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.noiDung }}</td>
-          <td>{{ data.duToan }}</td>
+          <td>{{ data.sluongDtoan }}</td>
           <td style="text-align: center;">
             <a (click)="editItem(data.id)">
               <i class="table-icon fa fa-pencil"></i>
@@ -62,7 +62,7 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.duToan" [nzMin]="0">
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.sluongDtoan" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>

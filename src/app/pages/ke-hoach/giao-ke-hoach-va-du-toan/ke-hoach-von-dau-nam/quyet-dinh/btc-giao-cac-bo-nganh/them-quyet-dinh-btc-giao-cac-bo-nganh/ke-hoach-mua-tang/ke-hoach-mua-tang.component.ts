@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,25 +11,33 @@ import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
   templateUrl: './ke-hoach-mua-tang.component.html',
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
-export class KeHoachMuaTangComponent implements OnInit {
+export class KeHoachMuaTangComponent implements OnInit, DoCheck {
   @Input()
   dataTable = [];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
   rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
-
+  iterableDiffer: any
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
 
   constructor(
     private modal: NzModalService,
-
+    private iterableDiffers: IterableDiffers,
   ) {
-    // this.dataTable.subscribe()
+    this.iterableDiffer = iterableDiffers.find([]).create(null);
   }
 
-  async ngOnInit() {
+  ngDoCheck(): void {
+    const changes = this.iterableDiffer.diff(this.dataTable);
+    if (changes) {
+      this.updateEditCache();
+      this.emitDataTable();
+    }
+  }
+
+  ngOnInit(): void {
     this.dsNoiDung = [
       {
         id: 1,
@@ -44,19 +52,11 @@ export class KeHoachMuaTangComponent implements OnInit {
         noiDung: 'Khác',
       },
     ];
-    await this.updateEditCache();
-    await this.emitDataTable();
+
   }
 
   initData() {
 
-  }
-
-  subscribeData() {
-    let data = new Subject();
-    data.subscribe(data => {
-      console.log(data);
-    })
   }
 
   emitDataTable() {
@@ -91,8 +91,6 @@ export class KeHoachMuaTangComponent implements OnInit {
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new KeHoachMuaXuat();
-    this.emitDataTable();
-    this.updateEditCache();
   }
 
   clearData() { }
@@ -133,9 +131,9 @@ export class KeHoachMuaTangComponent implements OnInit {
 
 
   calcTong() {
-    if (this.dataTable.length > 0) {
+    if (this.dataTable) {
       const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.duToan;
+        prev += cur.sluongDtoan;
         return prev;
       }, 0);
       return sum;

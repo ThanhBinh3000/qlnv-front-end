@@ -60,7 +60,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        idBoNganh: [, [Validators.required]]
+        idTtcpBoNganh: [, [Validators.required]]
       }
     );
   }
@@ -70,7 +70,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd = '/QĐ-BTC',
       this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namQd').value),
     ])
@@ -89,13 +89,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
+        idTtcpBoNganh: data.idTtcpBoNganh
       })
       this.muaTangList = data.muaTangList;
       this.xuatGiamList = data.xuatGiamList;
       this.xuatBanList = data.xuatBanList;
       this.luanPhienList = data.luanPhienList;
+      this.dataTable = data.listBoNganh
       console.log(this.muaTangList);
-
     }
   }
 

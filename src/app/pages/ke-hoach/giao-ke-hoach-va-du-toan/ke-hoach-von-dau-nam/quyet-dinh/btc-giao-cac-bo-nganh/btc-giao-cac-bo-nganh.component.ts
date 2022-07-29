@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
@@ -16,6 +16,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./btc-giao-cac-bo-nganh.component.scss'],
 })
 export class BtcGiaoCacBoNganhComponent implements OnInit {
+  @Output()
+  getCount = new EventEmitter<any>();
   isAddNew = false;
   formData: FormGroup;
   toDay = new Date();
@@ -24,7 +26,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   );
   allChecked = false;
   indeterminate = false;
-  getCount = new EventEmitter<any>();
+
   dsNam: string[] = [];
   searchInTable: any = {
     soQd: null,
@@ -37,7 +39,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     namQd: '',
     ngayQd: '',
     trichYeu: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
   idSelected: number = 0;
   isViewDetail: boolean = false;
@@ -118,7 +120,49 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.hide();
   }
 
-  xoa() { }
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhBtcNganhService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -144,6 +188,8 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   themMoi() {
+    this.idSelected = 0;
+    this.isViewDetail = false;
     this.isAddNew = true;
   }
 
@@ -273,9 +319,41 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       namQd: '',
       ngayQd: '',
       trichYeu: '',
-      trangThai: '',
+      tenTrangThai: '',
     }
   }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
 }
 
 

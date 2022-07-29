@@ -139,5 +139,5 @@ export class KeHoachMuaXuat {
   id: number;
   idNoiDung: number;
   noiDung: string;
-  duToan: number;
+  sluongDtoan: number;
 }
