@@ -205,11 +205,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
     this.isView = isView;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
+    // if (data.loaiVthh.startsWith('02')) {
+    //   this.isVatTu = true;
+    // } else {
+    //   this.isVatTu = false;
+    // }
   }
 
   clearFilter() {
