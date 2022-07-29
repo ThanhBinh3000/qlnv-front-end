@@ -19,7 +19,6 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
 
   isView: boolean = false;
   errorBn: boolean = false;
-  errorTt: boolean = false;
   keHoach: any = {
     id: null,
     maBoNganh: null,
@@ -80,8 +79,8 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
   }
 
   luu() {
-    // console.log(this.keHoach);
     if (this.validateData()) {
+      this.keHoach.tongTien = this.keHoach.ttMuaBsung + this.keHoach.ttMuaBu;
       this._modalRef.close(this.keHoach);
     }
   }
@@ -92,13 +91,6 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
       return false;
     } else {
       this.errorBn = false;
-    }
-
-    if (!this.keHoach.tongTien) {
-      this.errorTt = true;
-      return false;
-    } else {
-      this.errorTt = false;
     }
     return true;
   }

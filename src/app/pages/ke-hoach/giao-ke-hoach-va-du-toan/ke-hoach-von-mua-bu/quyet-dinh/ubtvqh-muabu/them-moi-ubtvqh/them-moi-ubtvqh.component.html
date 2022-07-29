@@ -119,10 +119,10 @@
           <a (click)="themKeHoach(data, idx,true)">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="true" (click)="themKeHoach(data, idx,false)">
+          <a *ngIf="formData.value.trangThai == '00' || !isView" (click)="themKeHoach(data, idx,false)">
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="!false" (click)="xoaItem(data.id)">
+          <a *ngIf="formData.value.trangThai == '00' || !isView" (click)="xoaItem(idx)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

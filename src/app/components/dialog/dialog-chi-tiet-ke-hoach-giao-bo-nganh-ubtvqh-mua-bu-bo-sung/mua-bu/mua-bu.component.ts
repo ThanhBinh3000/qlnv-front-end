@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {MESSAGE} from "../../../../constants/message";
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-mua-bu',
@@ -27,9 +29,9 @@ export class MuaBuComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
-  dsKeHoachNam = [];
-
-  constructor() {
+  constructor(
+    private readonly modal: NzModalService,
+  ) {
   }
 
   ngOnInit(): void {
@@ -54,7 +56,18 @@ export class MuaBuComponent implements OnInit {
   }
 
   xoaItem(index: number) {
-    this.dataTable.splice(index,1);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.dataTable.splice(index,1);
+      },
+    });
   }
 
   themMoiItem() {
@@ -114,5 +127,18 @@ export class MuaBuComponent implements OnInit {
     if (cloaiVthh.length > 0) {
       this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
     }
+  }
+  onChangeLoaiVthh123(event, id) {
+    this.dsChungLoaiHangHoa = [];
+    this.dataEdit[id].data.dviTinh = null;
+    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    if (loaiVthh.length > 0) {
+      this.dataEdit[id].data.dviTinh = loaiVthh[0].maDviTinh;
+      this.dataEdit[id].data.tenVthh = loaiVthh[0].ten;
+      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+    }
+  }
+
+  validate() {
   }
 }

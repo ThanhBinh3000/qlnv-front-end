@@ -11,9 +11,8 @@
   <nz-form-item nz-col nzSpan="8" class="form-item">
     <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng)</nz-form-label>
     <nz-input-group id="gia-tri">
-      <input type="text" nz-input [(ngModel)]="keHoach.tongTien" />
+      <input type="text" nz-input id="tongTien" [(ngModel)]="keHoach.tongTien" [value]="keHoach.ttMuaBu + keHoach.ttMuaBsung" disabled />
     </nz-input-group>
-    <span class="error-text" *ngIf="errorTt">{{globals.prop.REQUIRED}}</span>
   </nz-form-item>
 </div>
 <div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">

@@ -71,9 +71,10 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="dataEdit[data.id].data.loaiVthh" [nzShowArrow]="false">
+            <nz-select [(ngModel)]="dataEdit[data.id].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
+                       (ngModelChange)="onChangeLoaiVthh123($event, data.id)">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenHangHoa}}" *ngFor="let item of dsHangHoa">
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
               </nz-option>
             </nz-select>
           </nz-input-group>
@@ -82,7 +83,7 @@
           <nz-input-group>
             <nz-select [(ngModel)]="dataEdit[data.id].data.cloaiVthh" [nzShowArrow]="false">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenChungLoaiHangHoa}}"
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}"
                          *ngFor="let item of dsChungLoaiHangHoa">
               </nz-option>
             </nz-select>
@@ -90,20 +91,16 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="dataEdit[data.id].data.dviTinh" [nzShowArrow]="false">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
-              </nz-option>
-            </nz-select>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[data.id].data.dviTinh" [readonly]="true" />
+            </nz-input-group>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="dataEdit[data.id].data.soLuong" [nzShowArrow]="false">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsKeHoachNam">
-              </nz-option>
-            </nz-select>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[data.id].data.soLuong" />
+            </nz-input-group>
           </nz-input-group>
         </td>
         <td>

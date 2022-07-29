@@ -149,6 +149,10 @@ export class UbtvqhMuabuComponent implements OnInit {
   }
 
   themMoi() {
+    this.idSelected = null;
+    if (this.isViewDetail == true) {
+      this.isViewDetail = !this.isViewDetail
+    }
     this.isAddNew = true;
   }
 

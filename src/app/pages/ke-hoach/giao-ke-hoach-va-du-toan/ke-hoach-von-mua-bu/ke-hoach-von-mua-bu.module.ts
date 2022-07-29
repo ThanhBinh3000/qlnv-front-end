@@ -10,6 +10,7 @@ import { TtcpMuabuComponent } from './quyet-dinh/ttcp-muabu/ttcp-muabu.component
 import { BtcMuaBuComponent } from './quyet-dinh/btc-mua-bu/btc-mua-bu.component';
 import { UbtvqhMuabuComponent } from './quyet-dinh/ubtvqh-muabu/ubtvqh-muabu.component';
 import { ThemMoiUbtvqhComponent } from './quyet-dinh/ubtvqh-muabu/them-moi-ubtvqh/them-moi-ubtvqh.component';
+import { ThemMoiTtcpComponent } from './quyet-dinh/ttcp-muabu/them-moi-ttcp/them-moi-ttcp.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ThemMoiUbtvqhComponent } from './quyet-dinh/ubtvqh-muabu/them-moi-ubtvq
     BtcMuaBuComponent,
     UbtvqhMuabuComponent,
     ThemMoiUbtvqhComponent,
+    ThemMoiTtcpComponent,
   ],
   imports: [
     CommonModule,

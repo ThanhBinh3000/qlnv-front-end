@@ -109,6 +109,8 @@ import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-
 import { DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
 import { MuaBuComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component';
 import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bo-sung/mua-bo-sung.component';
+import { DialogQdMuabubosungTtcpComponent } from './dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
+import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component';
 
 @NgModule({
   declarations: [
@@ -166,7 +168,9 @@ import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-ng
     DialogTTPhuLucQDDCBanDauGiaComponent,
     DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
     MuaBuComponent,
-    MuaBoSungComponent
+    MuaBoSungComponent,
+    DialogQdMuabubosungTtcpComponent,
+    MuabuBosungComponent
   ],
   imports: [
     CommonModule,
