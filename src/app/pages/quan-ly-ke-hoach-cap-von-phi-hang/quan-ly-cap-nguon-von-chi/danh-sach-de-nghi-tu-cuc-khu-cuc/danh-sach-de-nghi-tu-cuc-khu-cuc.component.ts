@@ -70,6 +70,10 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
+
+		await this.dataSource.currentData.subscribe(obj => {
+			this.searchFilter.qdChiTieu = obj?.qdChiTieu;
+		})
 		//lay danh sach danh muc
 		this.danhMuc.dMDonVi().toPromise().then(
 			data => {

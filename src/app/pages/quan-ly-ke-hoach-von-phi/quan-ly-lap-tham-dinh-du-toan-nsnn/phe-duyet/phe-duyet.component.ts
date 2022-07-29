@@ -213,7 +213,6 @@ export class PheDuyetComponent implements OnInit {
 		this.searchFilter.tuNgay = null
 		this.searchFilter.denNgay = null
 		this.searchFilter.maBaoCao = null
-		this.searchFilter.trangThai = null
 	}
 
 	xemChiTiet(id: string) {
