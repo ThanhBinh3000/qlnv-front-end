@@ -87,7 +87,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
   trangThai!: string;
   newDate = new Date();
   userRole: string;
-  status: boolean;
+  status = true;
 
   donVis: any[] = [];
   listIdDelete: string[] = [];

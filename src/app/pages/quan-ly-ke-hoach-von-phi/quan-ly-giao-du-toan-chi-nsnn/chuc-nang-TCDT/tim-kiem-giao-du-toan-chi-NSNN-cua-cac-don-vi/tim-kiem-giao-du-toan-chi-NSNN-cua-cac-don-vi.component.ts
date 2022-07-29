@@ -183,6 +183,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
             e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
             e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
             e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+            e.dViNhan = this.donVis.filter(s => s?.maDvi == e.maDviNhan).map(x => x.tenDvi);
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;

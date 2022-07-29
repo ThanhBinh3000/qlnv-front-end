@@ -236,7 +236,7 @@
 										<td *ngFor="let item of lstDvi">
 											<div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
 												<div *ngIf="e.maDviNhan == item.maDvi">
-													<ng-container *ngIf="e.trangThai == null">
+													<ng-container *ngIf="e.trangThai == null && e.soTranChi != null">
 														<a (click)="giaoSoTranChi(e.maDviNhan)">
 															Giao
 														</a>
