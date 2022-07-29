@@ -134,3 +134,10 @@ export class ThongTinQuyetDinh {
   dviTinh: string;
   soLuong: number;
 }
+
+export class KeHoachMuaXuat {
+  id: number;
+  idNoiDung: number;
+  noiDung: string;
+  sluongDtoan: number;
+}

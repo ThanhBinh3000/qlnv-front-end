@@ -40,6 +40,8 @@ export class BtcGiaoTcdtComponent implements OnInit {
     taiLieuDinhKem: '',
     trangThai: '',
   };
+  idSelected: number = 0;
+  isViewDetail: boolean = false;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -174,8 +176,9 @@ export class BtcGiaoTcdtComponent implements OnInit {
     this.refreshCheckedStatus();
   }
 
-  onClose() {
+  async onClose() {
     this.isAddNew = false;
+    await this.search()
   }
 
   async changePageIndex(event) {
@@ -206,7 +209,11 @@ export class BtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  viewDetail(id: number, isViewDetail: boolean) { }
+  viewDetail(id: number, isViewDetail: boolean) {
+    this.idSelected = id;
+    this.isViewDetail = isViewDetail;
+    this.isAddNew = true;
+  }
 
   xoaItem(item: any) {
     this.modal.confirm({
