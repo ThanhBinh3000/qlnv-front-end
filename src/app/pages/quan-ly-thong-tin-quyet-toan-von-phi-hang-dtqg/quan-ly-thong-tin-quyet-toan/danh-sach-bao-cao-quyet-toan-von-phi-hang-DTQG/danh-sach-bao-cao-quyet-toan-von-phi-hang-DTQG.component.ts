@@ -87,7 +87,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   trangThai!:string;
   newDate = new Date();
   userRole: string;
-  status: boolean;
+  status = false;
   statusBtnXoaDk: boolean;
   donVis: any[] = [];
   maDviTao: string;
@@ -118,7 +118,6 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
     const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
-    this.status = false;
     this.statusBtnXoaDk = false;
     if (this.userRole == roleUserCB[0]) {
       this.status = false;

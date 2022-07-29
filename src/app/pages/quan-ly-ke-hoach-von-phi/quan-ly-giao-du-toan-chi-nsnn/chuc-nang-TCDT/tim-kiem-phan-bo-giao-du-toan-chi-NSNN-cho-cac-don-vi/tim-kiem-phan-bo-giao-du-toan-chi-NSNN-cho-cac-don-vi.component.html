@@ -55,7 +55,7 @@
             <input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Loại dự án</label>
+            <label class="search__label">Loại phương án</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="searchFilter.maLoaiDan"
               [class]="statusCreate || searchFilter.maLoaiDan ?'' : 'input-error-validate'">
               <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
@@ -80,6 +80,7 @@
               <!-- <th width="150px">Số QĐ</th> -->
               <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
+              <th width="150px">Loại phương án</th>
               <th width="150px" style="text-align: center">Trạng thái</th>
               <th width="150px">Hành động</th>
               <th width="150px" [hidden]="!status">
@@ -109,6 +110,14 @@
               </td>
               <td>
                 {{item.namPa}}
+              </td>
+              <td>
+                <ng-template [ngIf]="item.maLoaiDan == '1'">
+                  Giao dự toán
+                </ng-template>
+                <ng-template [ngIf]="item.maLoaiDan == '2'">
+                  Giao điều chỉnh dự toán
+                </ng-template>
               </td>
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>

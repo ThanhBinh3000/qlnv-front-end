@@ -315,7 +315,7 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   giaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.105:8094/giao_du_toan/them-moi',
+      'http://192.168.1.107:8094/giao_du_toan/them-moi',
       request,
     );
   }
@@ -522,7 +522,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tao ma PA giao du toan chi NSNN
   maPhuongAnGiao1(maLoai: string): Observable<any> {
     return this.httpClient.get(
-      'http://192.168.1.105:8094/giao_du_toan/sinh-ma?maLoai=' + maLoai
+      'http://192.168.1.107:8094/giao_du_toan/sinh-ma?maLoai=' + maLoai
     );
   }
 
