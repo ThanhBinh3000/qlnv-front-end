@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="huy()">
+      <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
@@ -30,9 +30,9 @@
       <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd" [nzDisabled]="isView">
+              <nz-select formControlName="namQd" [nzDisabled]="isView" nzAllowClear>
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -41,34 +41,36 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
+
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <input type="text" nz-input formControlName="soQd" />
+                <input type="text" nz-input formControlName="soQd" [readOnly]="isView" />
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
+
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd" class="search__input">
+              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-
         </div>
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
-              <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input
+                [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -85,22 +87,12 @@
       </form>
     </div>
   </nz-card>
-
-  <!-- <div class="group-button">
-    <div class="buttons">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="xoaKeHoach()">
-        <i class="fa fa-times do"></i>
-        <span>Xoá</span>
-      </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
-        <i class="icon htvbdh_chuyen-xu-ly"></i>
-        <span>Xuất file</span>
-      </button>
-    </div>
-  </div> -->
-
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-tabset nzType="card" class="mt-16 tab-level-3">
+      <nz-tab [nzTitle]="'Mua tăng'">
+        <app-ke-hoach-nhap-xuat-lt></app-ke-hoach-nhap-xuat-lt>
+      </nz-tab>
+
       <nz-tab [nzTitle]="'Mua tăng'">
         <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
       </nz-tab>
@@ -110,13 +102,11 @@
       </nz-tab>
 
       <nz-tab [nzTitle]="'Xuất bán'">
-        <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList">
-        </app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
       </nz-tab>
 
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList">
-        </app-ke-hoach-mua-tang>
+        <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
       </nz-tab>
     </nz-tabset>
   </nz-card>

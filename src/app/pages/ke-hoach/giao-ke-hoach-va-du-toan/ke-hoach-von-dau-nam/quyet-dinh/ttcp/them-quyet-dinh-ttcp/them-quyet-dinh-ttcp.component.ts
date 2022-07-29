@@ -60,11 +60,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.isView);
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd = '/QĐ-TTg',
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();

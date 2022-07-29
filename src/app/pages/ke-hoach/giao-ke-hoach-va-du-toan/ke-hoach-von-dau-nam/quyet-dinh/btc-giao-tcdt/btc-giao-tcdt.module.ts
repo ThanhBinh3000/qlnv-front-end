@@ -5,19 +5,16 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { ThemQuyetDinhBtcGiaoTcdtComponent } from './them-quyet-dinh-btc-giao-tcdt/them-quyet-dinh-btc-giao-tcdt.component';
 import { KeHoachMuaTangComponent } from './them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/ke-hoach-mua-tang.component';
 import { NgModule } from '@angular/core';
+import { KeHoachNhapXuatLtComponent } from './them-quyet-dinh-btc-giao-tcdt/ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
 
 @NgModule({
   declarations: [
     BtcGiaoTcdtComponent,
     ThemQuyetDinhBtcGiaoTcdtComponent,
     KeHoachMuaTangComponent,
+    KeHoachNhapXuatLtComponent
   ],
-  imports: [
-    CommonModule,
-    ComponentsModule
-  ],
-  exports: [
-    BtcGiaoTcdtComponent
-  ],
+  imports: [CommonModule, ComponentsModule],
+  exports: [BtcGiaoTcdtComponent],
 })
 export class BtcGiaoTcdtModule { }

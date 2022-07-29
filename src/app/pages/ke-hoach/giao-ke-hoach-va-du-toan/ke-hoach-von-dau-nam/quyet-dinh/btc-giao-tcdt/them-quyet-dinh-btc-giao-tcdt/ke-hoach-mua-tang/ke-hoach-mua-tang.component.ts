@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -13,21 +16,12 @@ export class KeHoachMuaTangComponent implements OnInit {
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
-  rowItem: IMuaTang = {
-    id: null,
-    idLoaiHangHoa: null,
-    tenLoaiHangHoa: null,
-    idHangHoa: null,
-    tenHangHoa: null,
-    idDonViTinh: null,
-    donViTinh: null,
-    soLuong: null,
-    duToan: null,
-  };
-  dsLoaiHangHoa = [];
+  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
+
+  dsChungLoaiHangHoa = [];
   dsHangHoa = [];
   dsDonViTinh = [];
-  dataEdit: { [key: string]: { edit: boolean; data: IMuaTang } } = {};
+  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -35,46 +29,18 @@ export class KeHoachMuaTangComponent implements OnInit {
   indeterminate = false;
   setOfCheckedId = new Set<number>();
 
-  constructor(private modal: NzModalService,) { }
+  constructor(
+    private danhMucService: DanhMucService,
+    private modal: NzModalService
+  ) { }
 
   ngOnInit(): void {
-    this.dsLoaiHangHoa = [
-      {
-        id: 1,
-        giaTri: 'Thóc',
-      },
-      {
-        id: 2,
-        giaTri: 'Muối',
-      },
-    ];
-    this.dsHangHoa = [
-      {
-        id: 1,
-        giaTri: 'Thóc tẻ',
-      },
-      {
-        id: 2,
-        giaTri: 'Muối i-ốt',
-      },
-    ];
-
-    this.dsDonViTinh = [
-      {
-        id: 1,
-        giaTri: 'Chiếc',
-      },
-      {
-        id: 2,
-        giaTri: 'Tấn',
-      },
-    ];
-
-    this.emitDataTable();
-    this.updateEditCache();
+    this.initData();
+    this.loadDanhMucHang();
   }
 
   initData() {
+    this.updateEditCache();
   }
 
   editItem(id: number): void {
@@ -140,10 +106,6 @@ export class KeHoachMuaTangComponent implements OnInit {
     });
   }
 
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
-
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {
       prev += cur.duToan;
@@ -152,42 +114,30 @@ export class KeHoachMuaTangComponent implements OnInit {
     return sum;
   }
 
-  onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
+  async loadDanhMucHang() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
+        this.dsHangHoa = dataVatTu[0].child;
+      }
+    })
   }
 
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
+  onChangeLoaiVthh(event) {
+    this.dsChungLoaiHangHoa = [];
+    this.rowItem.dviTinh = null;
+    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    if (loaiVthh.length > 0) {
+      this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+      this.rowItem.tenVthh = loaiVthh[0].ten;
+      this.dsChungLoaiHangHoa = loaiVthh[0].child;
     }
   }
 
-  refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
-      this.setOfCheckedId.has(id),
-    );
-    this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
-      !this.allChecked;
+  onChangeCloaiVthh(event) {
+    const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+    if (cloaiVthh.length > 0) {
+      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+    }
   }
-
-  onItemChecked(id: number, checked) {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-}
-
-interface IMuaTang {
-  id: number;
-  idLoaiHangHoa: number;
-  tenLoaiHangHoa: string;
-  idHangHoa: number;
-  tenHangHoa: string;
-  idDonViTinh: number;
-  donViTinh: string;
-  soLuong: number;
-  duToan: number;
 }

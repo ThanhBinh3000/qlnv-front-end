@@ -1,0 +1,161 @@
+<nz-card class="mt16 flex-card p-lr16">
+    <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th style="width: 70%;">Chỉ tiêu</th>
+                <th style="width: 10%;">Số lượng(Tấn)</th>
+                <th style="width: 10%;">Đơn giá(Đồng/Kg)</th>
+                <th style="width: 10%;">Trị giá (Triệu đồng)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Vốn chỉ mua lương thực</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;1.2 Mua Gạo</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Nguồn vốn có</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.1 Tiền thu được từ xuất bán</td>
+                <td style="text-align: right;">
+                </td>
+                <td style="text-align: right;">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.3 Vốn NSNN bố trí từ nguồn chi DTQG</td>
+                <td></td>
+                <td></td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.4 Vốn bố trí từ nguồn thường xuyên để mua gạo xuất cấp hỗ trợ học sinh, dự án
+                    trồng rừng</td>
+                <td></td>
+                <td></td>
+                <td style="text-align: right;">
+                    <div>
+                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

@@ -62,7 +62,7 @@
             <a *ngIf="!isView" (click)="editItem(data.id)">
               <i class="table-icon fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a *ngIf="!isView" (click)="xoaItem(data.id)">
               <i class="table-icon fa fa-trash-o do"></i>
             </a>
           </td>

@@ -133,6 +133,7 @@ export class ThongTinQuyetDinh {
   tenCloaiVthh: string;
   dviTinh: string;
   soLuong: number;
+  donGia: number;
 }
 
 export class KeHoachMuaXuat {

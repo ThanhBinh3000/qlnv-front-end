@@ -3,13 +3,13 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import * as dayjs from 'dayjs';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
+import { Globals } from 'src/app/shared/globals';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { HelperService } from 'src/app/services/helper.service';
+import { UserService } from 'src/app/services/user.service';
+import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
 import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
@@ -21,20 +21,29 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
-  @Output('onClose') onClose = new EventEmitter<any>();
+  @Output('close') onClose = new EventEmitter<any>();
 
+  userInfo: UserLogin;
   formData: FormGroup;
-
+  maQd: string = '/QĐ-BTC'
+  // quyetDinh: IQuyetDinhBTC = {
+  //   id: null,
+  //   soQd: null,
+  //   namQd: null,
+  //   ngayQd: new Date(),
+  //   trichYeu: null,
+  //   taiLieuDinhKem: null,
+  //   keHoach: [],
+  // };
   taiLieuDinhKemList = [];
   dsNam: any[] = [];
-  maQd: string
-  userInfo: UserLogin;
-  dataTable: any[] = [];
 
   muaTangList: any[] = []
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
-  luanPhienList: any[] = []
+  luanPhienList: any = []
+
+  dataTable: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -130,7 +139,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   downloadFileKeHoach(event) { }
 
-  huy() {
+  quayLai() {
     this.onClose.emit();
   }
 
@@ -162,7 +171,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
-      this.huy();
+      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -170,10 +179,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   exportData() { }
-
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
 
   xoaKeHoach() { }
 
