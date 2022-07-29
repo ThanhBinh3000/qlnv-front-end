@@ -56,10 +56,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listPhuongThucThanhToan: any[] = [
     {
-      ma: 1,
+      ma: "1",
       giaTri: 'Tiền mặt'
     }, {
-      ma: 2,
+      ma: "2",
       giaTri: 'Chuyển khoản'
     },
   ];
@@ -377,8 +377,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
-          console.log(data);
-
           this.formData.patchValue({
             qdGiaoChiTieuId: data ? data.id : null,
             qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
@@ -451,11 +449,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const ddGiaoNhan = new DiaDiemGiaoNhan();
-              ddGiaoNhan.id = res.data.id;
-              ddGiaoNhan.tenChiCuc = res.data.tenDvi;
-              ddGiaoNhan.diaChi = res.data.diaChi;
+              ddGiaoNhan.id = res.data?.id;
+              ddGiaoNhan.tenChiCuc = res.data?.tenDvi;
+              ddGiaoNhan.diaChi = res.data?.diaChi;
               ddGiaoNhan.soLuong = phanLo.soLuong;
               this.diaDiemGiaoNhanList = [...this.diaDiemGiaoNhanList, ddGiaoNhan];
+              const tongSoLuong = this.diaDiemGiaoNhanList.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
+                0);
+              this.formData.patchValue({
+                soLuong: tongSoLuong ? Intl.NumberFormat('en-US').format(tongSoLuong) : '0'
+              })
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -522,8 +525,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         "qdGiaoChiTieuId": this.formData.get("qdGiaoChiTieuId").value,
         "soKeHoach": this.formData.get("soKeHoach").value,
         "soLuong": this.formData.get("soLuong").value,
-        "tgDkTcDenNgay": this.formData.get("thoiGianKyHd").value ? dayjs(this.formData.get("thoiGianKyHd").value[0]).format("YYYY-MM-DD") : null,
-        "tgDkTcTuNgay": this.formData.get("thoiGianKyHd").value ? dayjs(this.formData.get("thoiGianKyHd").value[1]).format("YYYY-MM-DD") : null,
+        "tgDkTcDenNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[0]).format("YYYY-MM-DD") : null,
+        "tgDkTcTuNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[1]).format("YYYY-MM-DD") : null,
         "thoiGianKyHd": this.formData.get("thoiGianKyHd").value,
         "thoiGianKyHopDongGhiChu": this.formData.get("thoiGianKyHdGhiChu").value,
         "thoiHanGiaoNhan": this.formData.get("thoiHanGiaoNhan").value,
@@ -577,9 +580,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.loaiVthhInput) {
         this.listHangHoa = res.data;
+        this.listHangHoa = this.listHangHoa.filter(hh => hh.ma != '02')
       }
       else {
-        this.listHangHoa = res.data.filter(x => x.ma == this.loaiVthhInput);
+        this.listHangHoa = res.data?.filter(x => x.ma == this.loaiVthhInput);
       };
     }
   }
@@ -589,10 +593,19 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async loadDeXuatKHBanDauGia(id: number) {
     await this.deXuatKeHoachBanDauGiaService
-      .getDetail(id)
+      .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           // this.detail = res.data;
+          this.khBanDauGia = res.data;
+          this.initForm();
+          let thoiGianDk = [];
+          thoiGianDk.push(this.khBanDauGia.tgDkTcTuNgay);
+          thoiGianDk.push(this.khBanDauGia.tgDkTcDenNgay);
+          this.formData.patchValue({
+            thoiGianDuKien: thoiGianDk
+          })
+
         }
       })
       .catch((e) => {
@@ -782,7 +795,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .getDetailByMaHh(this.formData.get("loaiHangHoa").value)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.khBanDauGia.tieuChuanChatLuong = res.data.tenQchuan;
+          this.khBanDauGia.tieuChuanChatLuong = res.data?.tenQchuan;
           this.formData.patchValue({
             tieuChuanChatLuong: this.khBanDauGia.tieuChuanChatLuong
           })

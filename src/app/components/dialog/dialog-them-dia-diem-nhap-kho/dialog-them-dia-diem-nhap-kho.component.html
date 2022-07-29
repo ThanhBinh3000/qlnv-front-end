@@ -1,5 +1,12 @@
 <form nz-form>
-  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+  <div class="area-error" *ngIf="slLonHonChiTieu">
+    <i class="icon htvbdh_tcdt_canh-bao icon-canh-bao"></i>
+    <div class="nd-canh-bao">
+      <span>Số lượng vượt quá số lượng được giao cho chi cục</span>
+      <span>Đề nghị nhập lại!</span>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
@@ -24,7 +31,7 @@
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng đã lên KH bán </nz-form-label>
-        <input nz-input readonly />
+        <input nz-input readonly [(ngModel)]="diaDiemNhapKho.slDaLenKHBan" name="slDaLenKHBan" />
       </nz-form-item>
     </div>
   </div>
@@ -95,10 +102,10 @@
           <td>
             <input nz-input [(ngModel)]="chiTietDiemNhapKhoCreate.maDonViTaiSan" class="w-150" />
           </td>
-          <td>1000</td>
+          <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
           <td>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
-              [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150">
+              [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho" class="w-150">
             </nz-input-number>
           </td>
           <td>
@@ -189,7 +196,7 @@
             <td>
               <input nz-input [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maDonViTaiSan" class="w-150" />
             </td>
-            <td>1000</td>
+            <td>{{dsChiTietDiemNhapKhoClone[i].tonKho}}</td>
             <td>
               <nz-input-number type="text" nz-input [nzSize]="'small'"
                 [(ngModel)]="dsChiTietDiemNhapKhoClone[i].soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
@@ -245,11 +252,12 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      <button nz-button (click)="handleCancel()" class="modal__btn-huy">
+        <i class="icon htvbdh_tcdt_delete"></i>
         Hủy
       </button>
-      <button nz-button (click)="handleOk()" class="modal__button--save">
+      <button nz-button (click)="handleOk()" class="modal__button--save"
+        [disabled]="slLonHonChiTieu || !diaDiemNhapKho.maDvi">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

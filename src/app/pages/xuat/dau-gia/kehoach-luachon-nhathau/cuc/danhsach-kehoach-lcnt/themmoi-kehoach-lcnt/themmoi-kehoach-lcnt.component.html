@@ -36,7 +36,7 @@
     </div>
   </div>
 </nz-affix>
-<div class="contentBor them-moi-nhap-xuat-hang__body">
+<div class="contentBor them-moi-nhap-xuat-hang__body tt-chung-dx-dau-gia">
   <div class="contentDetail">
     <div class="main-content">
       <div class="thong-tin-chi-tieu">
@@ -393,6 +393,12 @@
                     <td>{{ item.tenChiCuc }}</td>
                     <td>{{ item.diaChi }}</td>
                     <td>{{ item.soLuong }}</td>
+                  </tr>
+                  <tr *ngIf="diaDiemGiaoNhanList.length > 0">
+                    <td></td>
+                    <td>Cộng</td>
+                    <td></td>
+                    <td>{{formData.get("soLuong").value}}</td>
                   </tr>
                 </tbody>
               </nz-table>
