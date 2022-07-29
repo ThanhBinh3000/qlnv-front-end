@@ -204,7 +204,7 @@ export const NOI_DUNG = [
     //  C
     {
         id: 3000,
-        tenDm: "NHU CẦU CHI CÒN LẠI, SAU KHI TRỪ ĐI SỐ CHI TỪ NGUỒN THU ĐỂ LẠI CHO ĐƠN VỊ SỬ DỤNG (A-B)",
+        tenDm: "NHU CẦU CHI CÒN LẠI, SAU KHI TRỪ ĐI SỐ CHI TỪ NGUỒN THU ĐỂ LẠI CHO ĐƠN VỊ SỬ DỤNG",
         level: 0,
         idCha: 0,
     },

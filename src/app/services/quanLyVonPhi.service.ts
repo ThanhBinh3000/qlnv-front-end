@@ -11,7 +11,7 @@ import { OldResponseData } from '../interfaces/response';
 })
 export class QuanLyVonPhiService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'quanLyVonPhi','');
+    super(httpClient, 'quanLyVonPhi', '');
   }
 
   urlDefault = environment.SERVICE_API;
@@ -174,7 +174,7 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet(id: any, maLoai: string): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/chi-tiet/' + id +  '?maLoai=' + maLoai,
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/chi-tiet/' + id + '?maLoai=' + maLoai,
     );
   }
 
@@ -205,7 +205,7 @@ export class QuanLyVonPhiService extends BaseService {
   CtietBcaoQuyetToanNam1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
-      'http://192.168.1.107:8094/quyet-toan/tra-cuu' ,
+      'http://192.168.1.107:8094/quyet-toan/tra-cuu',
       request,
     );
   }
@@ -1091,7 +1091,7 @@ export class QuanLyVonPhiService extends BaseService {
   xoaDuToanDieuChinh(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa',
-       request
+      request
       // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
     );
   }
@@ -1230,104 +1230,109 @@ export class QuanLyVonPhiService extends BaseService {
   //   // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet',request);
   // }
 
-// trinh duyet bao cao thuc hien du toan chi 3.2.8
-trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
-  return this.httpClient.post(
-    this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
-    request,
-  );
-}
+  // trinh duyet bao cao thuc hien du toan chi 3.2.8
+  trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
+      // 'http://192.168.1.109:8094/bao-cao/them-moi',
+      request,
+    );
+  }
 
-//tong hop bao cao ket qua thuc hien von phi hang DTQG
-tongHopBaoCaoKetQua(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
-}
+  //tong hop bao cao ket qua thuc hien von phi hang DTQG
+  tongHopBaoCaoKetQua(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+  }
 
-// call api chi tiết báo cáo
-baoCaoChiTiet(id: any): Observable<any> {
-  return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,);
-}
+  // call api chi tiết báo cáo
+  baoCaoChiTiet(id: any): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,);
+  }
 
-// call api nút chức năng
-approveBaoCao(request: any): Observable<any> {
-  return this.httpClient.put(
-    this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
-    request,
-  );
-}
+  // call api nút chức năng
+  approveBaoCao(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
+      request,
+    );
+  }
 
-// upload bao cao thuc hien du toan chi
-updateBaoCaoThucHienDTC(request: any): Observable<any> {
-  return this.httpClient.put(
-    this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
-    request,
-  );
-}
+  // upload bao cao thuc hien du toan chi
+  updateBaoCaoThucHienDTC(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+      request,
+    );
+  }
 
-//search list bao cao
-timBaoCao(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
-}
+  //search list bao cao
+  timBaoCao(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
+  }
 
-// tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)
-timKiemDuyetBaoCao(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tim-kiem-thong-tin-phe-duyet', request);
-}
+  // tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)
+  timKiemDuyetBaoCao(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tim-kiem-thong-tin-phe-duyet', request);
+  }
 
-//sinh ma bao cao (3.2.9)
-taoMaBaoCao(): Observable<any> {
-  return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma');
-}
+  //sinh ma bao cao (3.2.9)
+  taoMaBaoCao(): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma');
+  }
 
-//xóa báo cáo nút xóa Báo cáo
-xoaBaoCao(request: any): Observable<any> {
-  return this.httpClient.post(
-    this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa',
-    request
-  );
-}
+  //xóa báo cáo nút xóa Báo cáo
+  xoaBaoCao(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa',
+      request
+    );
+  }
 
-// call api chi tiết báo cáo
-baoCaoCapNhatChiTiet(request: any): Observable<any> {
-  return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
-}
+  // call api chi tiết báo cáo
+  baoCaoCapNhatChiTiet(request: any): Observable<any> {
+    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
+  }
 
-// call api chức năng duyet bieu mau
-approveBieuMau(request: any): Observable<any> {
-  return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
-}
+  // call api chức năng duyet bieu mau
+  approveBieuMau(request: any): Observable<any> {
+    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
+  }
 
-// exprot excel
-exportBaoCao(bcaoCtietId: string, bcaoId: string): Observable<any> {
-  return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId, { responseType: 'blob' });
-}
- 
-//get user theo dvql
-getListUserByManage(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-system/user/findList',request);
-}
+  // exprot excel
+  exportBaoCao(bcaoCtietId: string, bcaoId: string): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId, { responseType: 'blob' });
+  }
 
-getListUser(): Observable<any> {
-  return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/chung/can-bo');
-}
+  //get user theo dvql
+  getListUserByManage(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-system/user/findList', request);
+  }
 
-//lay thong tin luy ke
-getLuyKe(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/luy-ke',request);
-}
+  getListUser(): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/chung/can-bo');
+  }
 
-getDinhMucNhapXuat(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc/muc-chi-dvi',request);
-}
+  //lay thong tin luy ke
+  getLuyKe(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
+      // 'http://192.168.1.109:8094/bao-cao/get-luy-ke'
+      , request
+    );
+  }
 
-getDinhMucNhapXuat1(request: any): Observable<any> {
-  return this.httpClient.post(
-    'http://192.168.1.105:8094/chung/dinh-muc/muc-chi-dvi',
-    request,
-  );
-}
+  getDinhMucNhapXuat(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc/muc-chi-dvi', request);
+  }
 
-getDinhMucBaoQuan(request: any): Observable<any> {
-  return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-dmuc-phi/danh-sach',request);
-}
+  getDinhMucNhapXuat1(request: any): Observable<any> {
+    return this.httpClient.post(
+      'http://192.168.1.105:8094/chung/dinh-muc/muc-chi-dvi',
+      request,
+    );
+  }
+
+  getDinhMucBaoQuan(request: any): Observable<any> {
+    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-dmuc-phi/danh-sach', request);
+  }
 }

@@ -1,5 +1,6 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -83,8 +84,10 @@ export class PhuLucIComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     luyKeDetail: any[] = [];
+    maLoaiBcao: string;
 
     //thong tin chung
+    idBcao: string;
     id: string;
     namHienHanh: number;
     maPhuLuc: string;
@@ -120,7 +123,9 @@ export class PhuLucIComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.id = this.data?.id;
+        this.idBcao = this.data?.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
+        this.maLoaiBcao = this.data?.maLoaiBcao;
         this.maDviTien = this.data?.maDviTien;
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
@@ -511,7 +516,14 @@ export class PhuLucIComponent implements OnInit {
                 luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
                 luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
+            item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
+            item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
+            item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
+            item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
+            item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
+            item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(ind + 1, 0, item);
+            this.sum(item.stt);
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -559,10 +571,7 @@ export class PhuLucIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                this.sum(stt);
-                this.updateEditCache();
-            }
+
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
@@ -581,7 +590,10 @@ export class PhuLucIComponent implements OnInit {
             item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
             item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(index + 1, 0, item);
-
+            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+                this.sum(stt);
+                this.updateEditCache();
+            }
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -725,8 +737,14 @@ export class PhuLucIComponent implements OnInit {
                 luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
                 luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
+            item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
+            item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
+            item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
+            item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
+            item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
+            item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.push(item);
-
+            this.getTotal();
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -1017,6 +1035,18 @@ export class PhuLucIComponent implements OnInit {
         this.editCache[id].data.luyKeGiaiNganNguonQuyTle = divNumber(this.editCache[id].data.luyKeGiaiNganNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
         this.editCache[id].data.luyKeGiaiNganNsttTle = divNumber(this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.kphiSdungNstt);
         this.editCache[id].data.luyKeGiaiNganCkTle = divNumber(this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.kphiSdungCk)
+    }
+
+    export() {
+        const baoCao = "phuLuc1.xlsx";
+        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+            (data) => {
+                fileSaver.saveAs(data, baoCao);
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
 }
