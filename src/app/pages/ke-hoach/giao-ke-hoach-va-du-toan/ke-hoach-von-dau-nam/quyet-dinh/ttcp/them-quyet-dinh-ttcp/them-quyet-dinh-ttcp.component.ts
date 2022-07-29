@@ -19,7 +19,7 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
-  @Input('isView') isView: boolean;
+  @Input('isView') isView: boolean = false;
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
@@ -60,11 +60,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.isView);
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd = '/QĐ-TTg',
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();

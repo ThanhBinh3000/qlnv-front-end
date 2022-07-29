@@ -1,111 +1,85 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
   templateUrl: './ke-hoach-mua-tang.component.html',
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
-export class KeHoachMuaTangComponent implements OnInit {
-  @Input('quyetDinh') quyetDinh: any;
+export class KeHoachMuaTangComponent implements OnInit, DoCheck {
+  @Input()
   dataTable = [];
-
-  rowItem: IMuaTang = {
-    id: null,
-    idLoaiHangHoa: null,
-    tenLoaiHangHoa: null,
-    idHangHoa: null,
-    tenHangHoa: null,
-    idDonViTinh: null,
-    donViTinh: null,
-    soLuong: null,
-    duToan: null,
-  };
-  dsLoaiHangHoa = [];
+  @Output()
+  dataTableChange = new EventEmitter<any[]>();
+  @Input()
   dsHangHoa = [];
+
+  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
+  iterableDiffer: any;
+  dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
-  dataEdit: { [key: string]: { edit: boolean; data: IMuaTang } } = {};
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
-  allChecked = false;
-  indeterminate = false;
-  setOfCheckedId = new Set<number>();
+  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.initData();
+  constructor(
+    private danhMucService: DanhMucService,
+    private modal: NzModalService,
+    private iterableDiffers: IterableDiffers,
+  ) {
+    this.iterableDiffer = iterableDiffers.find([]).create(null);
   }
 
-  initData() {
-    this.dataTable = [
-      {
-        id: 1,
-        idLoaiHangHoa: 1,
-        tenLoaiHangHoa: 'Thóc',
-        idHangHoa: 1,
-        tenHangHoa: 'Thóc tẻ',
-        idDonViTinh: 1,
-        donViTinh: 'Chiếc',
-        soLuong: 100,
-        duToan: 250,
-      },
-      {
-        id: 2,
-        idLoaiHangHoa: 2,
-        tenLoaiHangHoa: 'Thóc',
-        idHangHoa: 2,
-        tenHangHoa: 'Thóc tẻ',
-        idDonViTinh: 2,
-        donViTinh: 'Chiếc',
-        soLuong: 100,
-        duToan: 250,
-      },
-    ];
+  ngOnInit(): void {
+  }
 
-    this.dsLoaiHangHoa = [
-      {
-        id: 1,
-        giaTri: 'Thóc',
-      },
-      {
-        id: 2,
-        giaTri: 'Muối',
-      },
-    ];
-    this.dsHangHoa = [
-      {
-        id: 1,
-        giaTri: 'Thóc tẻ',
-      },
-      {
-        id: 2,
-        giaTri: 'Muối i-ốt',
-      },
-    ];
-
-    this.dsDonViTinh = [
-      {
-        id: 1,
-        giaTri: 'Chiếc',
-      },
-      {
-        id: 2,
-        giaTri: 'Tấn',
-      },
-    ];
-
-    this.updateEditCache();
+  ngDoCheck(): void {
+    const changes = this.iterableDiffer.diff(this.dataTable);
+    if (changes) {
+      this.updateEditCache();
+      this.emitDataTable();
+    }
   }
 
   editItem(id: number): void {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) {}
-  themMoiItem() {}
-  clearData() {}
+  xoaItem(index: number) {
+    console.log(index, this.dataTable);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+
+  themMoiItem() {
+    this.dataTable = [...this.dataTable, this.rowItem]
+  }
+
+
+  emitDataTable() {
+    console.log(this.dataTable);
+    this.dataTableChange.emit(this.dataTable);
+  }
+
+
+  clearData() { }
 
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.id === id);
@@ -113,6 +87,10 @@ export class KeHoachMuaTangComponent implements OnInit {
       data: { ...this.dataTable[index] },
       edit: false,
     };
+  }
+
+  calcularTongTien() {
+    this.rowItem.tongTien = +this.rowItem.soLuong * +this.rowItem.donGia;
   }
 
   luuEdit(id: number): void {
@@ -130,10 +108,6 @@ export class KeHoachMuaTangComponent implements OnInit {
     });
   }
 
-  changePageIndex(event) {}
-
-  changePageSize(event) {}
-
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {
       prev += cur.duToan;
@@ -142,42 +116,21 @@ export class KeHoachMuaTangComponent implements OnInit {
     return sum;
   }
 
-  onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
-  }
-
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
+  onChangeLoaiVthh(event) {
+    this.dsChungLoaiHangHoa = [];
+    this.rowItem.dviTinh = null;
+    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    if (loaiVthh.length > 0) {
+      this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+      this.rowItem.tenVthh = loaiVthh[0].ten;
+      this.dsChungLoaiHangHoa = loaiVthh[0].child;
     }
   }
 
-  refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
-      this.setOfCheckedId.has(id),
-    );
-    this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
-      !this.allChecked;
+  onChangeCloaiVthh(event) {
+    const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+    if (cloaiVthh.length > 0) {
+      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+    }
   }
-
-  onItemChecked(id: number, checked) {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-}
-
-interface IMuaTang {
-  id: number;
-  idLoaiHangHoa: number;
-  tenLoaiHangHoa: string;
-  idHangHoa: number;
-  tenHangHoa: string;
-  idDonViTinh: number;
-  donViTinh: string;
-  soLuong: number;
-  duToan: number;
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
@@ -16,6 +16,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./btc-giao-cac-bo-nganh.component.scss'],
 })
 export class BtcGiaoCacBoNganhComponent implements OnInit {
+  @Output()
+  getCount = new EventEmitter<any>();
   isAddNew = false;
   formData: FormGroup;
   toDay = new Date();
@@ -24,22 +26,23 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   );
   allChecked = false;
   indeterminate = false;
-  getCount = new EventEmitter<any>();
+
   dsNam: string[] = [];
   searchInTable: any = {
     soQd: null,
-    namQd: null,
+    namQd: dayjs().get('year'),
     ngayQd: new Date(),
     trichYeu: null,
   };
   filterTable: any = {
     soQd: '',
-    namKhoach: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
-    taiLieuDinhKem: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
+  idSelected: number = 0;
+  isViewDetail: boolean = false;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -85,6 +88,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
   }
+
   async search() {
     this.spinner.show();
     let body = this.formData.value;
@@ -116,7 +120,49 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.hide();
   }
 
-  xoa() { }
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhBtcNganhService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -142,7 +188,15 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   themMoi() {
+    this.idSelected = 0;
+    this.isViewDetail = false;
     this.isAddNew = true;
+  }
+
+  async onClose() {
+    this.isAddNew = false;
+    await this.search()
+
   }
 
   onAllChecked(checked) {
@@ -172,9 +226,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     this.refreshCheckedStatus();
   }
 
-  onClose() {
-    this.isAddNew = false;
-  }
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -203,8 +254,12 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  viewDetail(id: number, isViewDetail: boolean) {
+    this.idSelected = id;
+    this.isViewDetail = isViewDetail;
+    this.isAddNew = true;
+  }
 
-  viewDetail(id: number, isViewDetail: boolean) { }
 
   xoaItem(item: any) {
     this.modal.confirm({
@@ -261,22 +316,44 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
-      namKhoach: '',
+      namQd: '',
       ngayQd: '',
       trichYeu: '',
-      taiLieuDinhKem: '',
-      trangThai: '',
+      tenTrangThai: '',
     }
   }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
 }
 
 
-// interface IBTCGiaoCacBoNganh {
-//   id: number;
-//   soQd: string;
-//   namQd: string;
-//   ngayQd: Date;
-//   trichYeu: string;
-//   taiLieuDinhKem: any;
-//   trangThai: string;
-// }
