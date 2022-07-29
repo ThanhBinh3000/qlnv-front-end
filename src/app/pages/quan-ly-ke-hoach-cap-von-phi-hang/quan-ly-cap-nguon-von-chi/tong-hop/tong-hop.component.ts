@@ -229,11 +229,11 @@ export class TongHopComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
+		const obj = {
+			qdChiTieu: this.searchFilter.qdChiTieu,
+		}
+		this.dataSource.changeData(obj);
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
-			const obj = {
-				qdChiTieu: this.searchFilter.qdChiTieu,
-			}
-			this.dataSource.changeData(obj);
 			this.router.navigate([
 				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
 			])

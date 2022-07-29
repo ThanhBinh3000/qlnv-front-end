@@ -158,6 +158,7 @@ export class BaoCao04axComponent implements OnInit {
             }
         })
         await this.addListNoiDungChi(this.noiDungChiFull);
+        console.log(this.noiDungChiFull);
         const dataPL = new ItemDataMau0405();
         if (this.lstCtietBcao4axB.length == 0) {
             await this.noiDungChiFull.forEach(element => {

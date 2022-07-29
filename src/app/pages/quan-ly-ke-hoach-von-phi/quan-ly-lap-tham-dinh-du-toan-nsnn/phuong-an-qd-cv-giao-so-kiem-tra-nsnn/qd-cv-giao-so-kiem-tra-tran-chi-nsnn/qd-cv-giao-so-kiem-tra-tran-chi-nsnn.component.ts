@@ -225,7 +225,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     //luu
     async luu() {
-        if (this.namGiao >= 3000 || this.namGiao < 1000){
+        if (this.namGiao >= 3000 || this.namGiao < 1000) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.INVALIDFORMAT);
             return;
         }
@@ -237,11 +237,11 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            if (iterator.size > Utils.FILE_SIZE){
+            if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
         }
-        if (!checkFile){
+        if (!checkFile) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
@@ -265,15 +265,15 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {
-            if (file.size > Utils.FILE_SIZE){
+            if (file.size > Utils.FILE_SIZE) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-            return;
+                return;
             } else {
                 request.soQdCv = await this.uploadFile(file);
             }
         }
 
-        if (!request.soQdCv){
+        if (!request.soQdCv) {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
             return;
         }
@@ -282,7 +282,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    this.dong();
+                    this.getIdPan(this.maPa);
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -295,6 +295,36 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
     dong() {
         this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
+    }
+
+    async getIdPan(maPa){
+        const requestReport = {
+            loaiTimKiem: "0",
+            maDviTao: this.maDviTao,
+            maPa: maPa,
+            trangThais: [],
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            }
+        };
+        this.spinner.show();
+        await this.quanLyVonPhiService.timKiemPhuongAn(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    const phuongAn = data.data.content[0];
+                    this.router.navigate([
+                        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/'+phuongAn?.id
+                    ]);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+        this.spinner.hide();
     }
 
 }
