@@ -107,7 +107,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
   statusBtnGiao: boolean;
-  statusBtnGiaoToanBo = true ;
+  statusBtnGiaoToanBo = true;
   statusBtnTongHop = true;
   statusAn = true;
   allChecked = false;
@@ -293,14 +293,14 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     let checkGiao = 0;
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && this.soQd && this.trangThaiBanGhi == '6') { // == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') 
       this.statusBtnGiao = false;
-      for(const itm of this.lstCtietBcao[0].lstCtietDvis){
-        if(itm.trangThai != null){
+      for (const itm of this.lstCtietBcao[0].lstCtietDvis) {
+        if (itm.trangThai != null) {
           checkGiao += 1;
         }
-      } 
-      if(checkGiao == 0){
+      }
+      if (checkGiao == 0) {
         this.statusBtnGiaoToanBo = false;
-      }else{
+      } else {
         this.statusBtnGiaoToanBo = true;
       }
     } else {
@@ -426,6 +426,17 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           }
           if (this.soQd && this.trangThaiBanGhi == "6") {
             this.statusBtnTongHop = false;
+          }
+          let checkAfterGiao = 0;
+          for (const itm of this.lstCtietBcao[0].lstCtietDvis) {
+            if (itm.trangThai != null) {
+              checkAfterGiao += 1;
+            }
+          }
+          if (checkAfterGiao == 0) {
+            this.statusBtnGiaoToanBo = false;
+          } else {
+            this.statusBtnGiaoToanBo = true;
           }
           this.updateEditCache();
         } else {
