@@ -5,11 +5,11 @@
         <th class="text-center" style="width: 5%;">STT</th>
         <th style="width: 45%;">Tên hàng hoá</th>
         <th style="width: 25%;">Chủng loại hàng hoá</th>
-        <th style="width: 10%;">Đơn vị tính</th>
+        <th style="width: 5%;">Đơn vị tính</th>
         <th style="width: 10%;">Kế hoạch năm</th>
-        <th style="width: 5%;">Thao tác</th>
+        <th style="width: 10%;">Thao tác</th>
       </tr>
-      <tr>
+      <tr *ngIf="!isView">
         <th class="text-center" style="width: 5%;"></th>
         <th style="width: 45%;">
           <nz-input-group>
@@ -30,7 +30,7 @@
             </nz-select>
           </nz-input-group>
         </th>
-        <th style="width: 10%;">
+        <th style="width: 5%;">
           <nz-input-group>
             <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
           </nz-input-group>
@@ -40,7 +40,7 @@
             <input nz-input [(ngModel)]="rowItem.soLuong" />
           </nz-input-group>
         </th>
-        <th style="width: 5%;" style="text-align: center;">
+        <th style="width: 10%;" style="text-align: center;">
           <a (click)="themMoiItem()">
             <i class="table-icon icon htvbdh_dau-cong"></i>
           </a>
@@ -59,7 +59,7 @@
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(data.id)">
+            <a *ngIf="!isView" (click)="editItem(data.id)">
               <i class="table-icon fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(data.id)">
@@ -116,8 +116,8 @@
     <tfoot>
       <tr *ngIf="tabName != 'LuanPhien'">
         <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-        <td><input [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;" type="number"
-            nz-input /></td>
+        <td><input [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
+            style="text-align: left;" type="number" nz-input /></td>
         <td></td>
       </tr>
     </tfoot>

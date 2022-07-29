@@ -19,7 +19,7 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
-  @Input('isView') isView: boolean;
+  @Input('isView') isView: boolean = false;
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();

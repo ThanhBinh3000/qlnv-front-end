@@ -23,6 +23,9 @@ export class KeHoachXuatGiamComponent implements OnInit {
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
+  @Input()
+  isView: boolean = false;
+
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
@@ -95,6 +98,8 @@ export class KeHoachXuatGiamComponent implements OnInit {
         };
       });
     }
+    console.log(this.dataEdit);
+
   }
 
   onChangeLoaiVthh(event) {
