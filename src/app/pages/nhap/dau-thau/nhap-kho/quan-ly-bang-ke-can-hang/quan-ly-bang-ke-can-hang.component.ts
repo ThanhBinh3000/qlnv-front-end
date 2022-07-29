@@ -24,7 +24,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   searchFilter = {
     soQuyetDinh: '',
     soBangKe: '',
-    ngayNhapXuat: '',
+    ngayNhap: '',
     soHopDong: '',
   };
 
@@ -54,6 +54,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -117,14 +118,14 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   async search() {
     let param = {
-      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+      "denNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
       "maHang": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,
-      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
     }
     let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -148,7 +149,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     this.searchFilter = {
       soQuyetDinh: '',
       soBangKe: '',
-      ngayNhapXuat: '',
+      ngayNhap: '',
       soHopDong: '',
     };
   }
@@ -285,7 +286,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+          "denNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
           "maDvi": this.userInfo.MA_DVI,
           "orderBy": null,
           "orderDirection": null,
@@ -294,7 +295,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
           "soQdNhap": this.searchFilter.soQuyetDinh,
           "str": null,
           "trangThai": null,
-          "tuNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+          "tuNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
         }
         this.quanLyBangKeCanHangService
           .exportList(body)
@@ -380,6 +381,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
+      tenTrangThai: '',
     }
   }
 

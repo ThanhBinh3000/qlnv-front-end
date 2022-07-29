@@ -1,26 +1,40 @@
-.tab__luong-thuc {
-  position: relative;
+.action-top {
+  padding-right: 50px;
+}
 
-  .action {
-    position: absolute;
-    top: 0;
-    right: 0;
+.chi-tieu__body {
+  .flex-card.ant-card {
+    background: transparent;
+    box-shadow: unset;
+    margin-bottom: 0px !important;
+    margin-top: 11px !important;
+    border-radius: 0px;
   }
 }
 
-.filter-in-table {
-  margin-bottom: 8px;
-  height: 28px;
+.trai {
+  display: flex;
+  align-items: center;
+}
 
-  nz-select-top-control {
-    height: 28px !important;
-  }
+.last-breadcrumb {
+  color: #4e5484 !important;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 ::ng-deep {
-  #table-quan-ly-phieu-kncl {
-    .ant-tabs-content-holder {
-      overflow-y: auto !important;
+  .tab-giao-chi-tieu {
+    position: relative;
+
+    .tab-menu.tab-content {
+      margin: 0px 16px;
     }
+  }
+
+  .action-giao-chi-tieu {
+    position: absolute;
+    top: 0px;
+    right: 22px;
   }
 }

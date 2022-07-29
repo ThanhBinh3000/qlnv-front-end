@@ -46,10 +46,9 @@
     <div class="contentDetail">
       <div class="main-content">
         <div class="title-chi-tieu">
-          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
-            Dự Thảo
+          <span *ngIf="detail.trangThai === '04'" class="du-thao-va-lanh-dao-duyet">
+            Bản Thảo
           </span>
-          <!-- <span *ngIf="id > 0">{{thongTinChiTieuKeHoachNam.tenTrangThai}}</span> -->
           <span>Tạo hồ sơ kỹ thuật nhập vật tư</span>
         </div>
         <nz-card nzTitle="" class="flex-card p-lr16">
@@ -100,7 +99,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBienBan" disabled />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBienBan"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -108,7 +108,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hàng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.loaiVthh" disabled />
+                <input nz-input [(ngModel)]="detail.loaiVthh"
+                  [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">

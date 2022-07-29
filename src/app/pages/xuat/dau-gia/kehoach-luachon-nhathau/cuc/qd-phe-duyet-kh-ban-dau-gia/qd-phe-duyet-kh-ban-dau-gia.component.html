@@ -56,8 +56,8 @@
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                          (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soKeHoach"
+                          (input)="filterInTable('soKeHoach',filterTable.soKeHoach)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -84,8 +84,8 @@
 
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
-                          (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
+                          (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -93,8 +93,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
-                          (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiHangHoa"
+                          (input)="filterInTable('tenLoaiHangHoa',filterTable.tenLoaiHangHoa)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -106,11 +106,11 @@
 
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.soQd }}</td>
+                    <td>{{ data.soKeHoach }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
-                    <td>{{data.namKhoach}}</td>
-                    <td>{{data.tenVthh}}</td>
+                    <td>{{data.namKeHoach}}</td>
+                    <td>{{data.tenLoaiHangHoa}}</td>
                     <td class="text-left">
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>
@@ -146,7 +146,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -154,7 +154,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="insert()">
+            <button type="button" class="btn btn-main" (click)="insert()" *ngIf="userService.isTongCuc()">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
               <span>Tạo quyết định</span>
             </button>

@@ -64,6 +64,7 @@ export class HoSoKyThuatComponent implements OnInit {
     tenVatTuCha: '',
     tenVatTu: '',
     ketLuan: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -379,6 +380,7 @@ export class HoSoKyThuatComponent implements OnInit {
       tenVatTuCha: '',
       tenVatTu: '',
       ketLuan: '',
+      tenTrangThai: '',
     }
   }
 

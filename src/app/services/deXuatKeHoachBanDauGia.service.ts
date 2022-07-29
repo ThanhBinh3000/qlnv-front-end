@@ -11,7 +11,7 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DeXuatKeHoachBanDauGia', '');
+    super(httpClient, 'ke-hoach-ban-dau-gia', '/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {
@@ -32,6 +32,8 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
       url_ += 'ngayKyDenNgay=' + encodeURIComponent('' + body.ngayKyDenNgay) + '&';
     if (body.loaiVatTuHangHoa)
       url_ += 'loaiVatTuHangHoa=' + encodeURIComponent('' + body.loaiVatTuHangHoa) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'pageable.pageNumber=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
@@ -41,7 +43,10 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/${id}`;
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/search?`
+    if (id)
+      url_ += 'id=' + encodeURIComponent('' + id) + '&';
+    url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
 
