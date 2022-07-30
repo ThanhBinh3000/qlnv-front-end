@@ -83,8 +83,7 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Loại hàng
                                 </nz-form-label>
-                                <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="detail.loaiVthh"
-                                    nzAllowClear>
+                                <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="detail.loaiVthh" nzAllowClear>
                                     <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                     </nz-option>
                                 </nz-select>
@@ -96,7 +95,7 @@
                                     Mã thông báo bán đấu giá
                                 </nz-form-label>
                                 <input nz-input placeholder="Nhập họ tên người giao hàng"
-                                    [(ngModel)]="detail.nguoiGiaoHang"
+                                    [(ngModel)]="detail.maThongBaoBDG"
                                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                             </nz-form-item>
                         </div>
