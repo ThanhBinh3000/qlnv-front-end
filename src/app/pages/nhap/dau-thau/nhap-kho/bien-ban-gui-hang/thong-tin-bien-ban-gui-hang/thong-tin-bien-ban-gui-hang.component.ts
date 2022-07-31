@@ -59,6 +59,8 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
 
       this.userInfo = this.userService.getUserLogin();
       this.bienBanGuiHang.maDvi = this.userInfo.MA_DVI;
+      this.bienBanGuiHang.trangThai = this.globals.prop.NHAP_DU_THAO;
+      this.bienBanGuiHang.tenTrangThai = 'Dự thảo';
       await Promise.all([
         this.loadPhieuNhapKhoTamGui(),
         this.loadSoQuyetDinh(),
@@ -69,6 +71,12 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  isDisableField() {
+    if (this.bienBanGuiHang && (this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      return true;
     }
   }
 

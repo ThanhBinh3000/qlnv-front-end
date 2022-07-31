@@ -14,6 +14,7 @@ import { QuanLyBienBanGiaoNhanService } from 'src/app/services/quanLyBienBanGiao
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-bien-ban-giao-nhan',
   templateUrl: './bien-ban-giao-nhan.component.html',
@@ -75,6 +76,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -98,7 +100,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
