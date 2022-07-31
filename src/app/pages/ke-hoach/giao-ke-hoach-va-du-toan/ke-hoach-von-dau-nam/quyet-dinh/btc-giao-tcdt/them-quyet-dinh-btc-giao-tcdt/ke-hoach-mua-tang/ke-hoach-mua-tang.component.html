@@ -40,20 +40,22 @@
         <th>
           <nz-input-group>
             <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"
-              (ngModelChange)="calcularTongTien()" [nzMin]="0">
+              (ngModelChange)="calcularTongTien()" [nzMin]="0" [nzFormatter]="globals.formatter"
+              [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
             <nz-input-number [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
-              [(ngModel)]="rowItem.donGia" [nzMin]="0">
+              [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="true" [(ngModel)]="rowItem.tongTien" [nzMin]="0">
+            <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+              [nzDisabled]="true" [(ngModel)]="rowItem.tongTien" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </th>
@@ -75,9 +77,9 @@
           <td>{{ data.tenVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.donViTinh }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td>{{ data.donGia }}</td>
-          <td>{{ data.tongTien }}</td>
+          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
           <td style="text-align: center;">
             <a (click)="editItem(data.id)">
               <i class="table-icon fa fa-pencil"></i>

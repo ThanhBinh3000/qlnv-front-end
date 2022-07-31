@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
   templateUrl: './ke-hoach-mua-tang.component.html',
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
-export class KeHoachMuaTangComponent implements OnInit, DoCheck {
+export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
   @Output()
@@ -19,28 +20,23 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
   dsHangHoa = [];
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  iterableDiffer: any;
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
 
   constructor(
-    private danhMucService: DanhMucService,
     private modal: NzModalService,
-    private iterableDiffers: IterableDiffers,
+    public globals: Globals
   ) {
-    this.iterableDiffer = iterableDiffers.find([]).create(null);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateEditCache();
+    this.emitDataTable();
   }
 
   ngOnInit(): void {
-  }
 
-  ngDoCheck(): void {
-    const changes = this.iterableDiffer.diff(this.dataTable);
-    if (changes) {
-      this.updateEditCache();
-      this.emitDataTable();
-    }
   }
 
   editItem(id: number): void {
@@ -60,6 +56,8 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
+          this.updateEditCache();
+          this.emitDataTable();
         } catch (e) {
           console.log('error', e);
         }
@@ -70,14 +68,15 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItem = new ThongTinQuyetDinh();
+    this.updateEditCache();
+    this.emitDataTable();
   }
 
 
   emitDataTable() {
-    console.log(this.dataTable);
     this.dataTableChange.emit(this.dataTable);
   }
-
 
   clearData() { }
 
