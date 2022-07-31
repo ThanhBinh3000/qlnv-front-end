@@ -89,6 +89,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
     this.userInfo = this.userService.getUserLogin();
     this.routerUrl = this.router.url;
+    this.quyetDinhNhapXuat.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.quyetDinhNhapXuat.tenTrangThai = 'Dự thảo';
     this.initForm();
     if (this.id > 0) {
       this.loadThongTinQdNhapXuatHang(this.id);
@@ -508,6 +510,128 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
+  }
+
+  guiDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          await this.save(true);
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT,
+          };
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectQdNhapXuat();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  pheDuyet() {
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
+    if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
+      trangThai = this.globals.prop.NHAP_BAN_HANH;
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: trangThai,
+          };
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectQdNhapXuat();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  tuChoi() {
+    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP_KH_QLHDT;
+    if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
+      trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
+    }
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: text,
+            trangThai: trangThai,
+          };
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectQdNhapXuat();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
   }
 
   banHanh() {

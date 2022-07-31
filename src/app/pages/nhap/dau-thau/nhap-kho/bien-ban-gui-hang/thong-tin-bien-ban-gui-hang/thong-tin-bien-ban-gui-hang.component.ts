@@ -14,6 +14,7 @@ import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.s
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { PhieuNhapKhoTamGui } from './../../../../../../models/PhieuNhapKhoTamGui';
 @Component({
@@ -99,7 +100,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -145,7 +146,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       ngayNhapKho: null,
       pageSize: 1000,
       pageNumber: 1,
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
     };
     let res = await this.phieuNhapKhoTamGuiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -184,7 +185,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
           let res =
             await this.bienBanGuiHangService.updateStatus(
@@ -207,9 +208,9 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = '02';
-    if (this.bienBanGuiHang.trangThai == '04') {
-      trangThai = '01';
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
+    if (this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+      trangThai = this.globals.prop.NHAP_DA_DUYET;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -226,43 +227,6 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
             id: this.id,
             lyDoTuChoi: null,
             trangThai: trangThai,
-          };
-          let res =
-            await this.bienBanGuiHangService.updateStatus(
-              body,
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  hoanThanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành biên bản?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: '02',
           };
           let res =
             await this.bienBanGuiHangService.updateStatus(
@@ -301,7 +265,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           let res =
             await this.bienBanGuiHangService.updateStatus(
@@ -410,17 +374,9 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
-      return 'da-ban-hanh';
-    }
+    return thongTinTrangThaiNhap(trangThai);
   }
+
   addDaiDien(bienBan: ChiTiet, type: string) {
     if ((type == '00' && (!this.chiTietBienBanGuiHangBenNhan.daiDien || !this.chiTietBienBanGuiHangBenNhan.chucVu))
       || (type == '01' && (!this.chiTietBienBanGuiHangBenGiao.daiDien || !this.chiTietBienBanGuiHangBenGiao.chucVu))) {

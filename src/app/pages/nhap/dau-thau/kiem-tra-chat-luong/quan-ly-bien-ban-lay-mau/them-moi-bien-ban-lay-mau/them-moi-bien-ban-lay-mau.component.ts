@@ -299,7 +299,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
             let body = {
               id: res.data.id,
               lyDo: null,
-              trangThai: this.globals.prop.NHAP_CHO_DUYET_TP,
+              trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
             };
             this.bienBanLayMauService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {

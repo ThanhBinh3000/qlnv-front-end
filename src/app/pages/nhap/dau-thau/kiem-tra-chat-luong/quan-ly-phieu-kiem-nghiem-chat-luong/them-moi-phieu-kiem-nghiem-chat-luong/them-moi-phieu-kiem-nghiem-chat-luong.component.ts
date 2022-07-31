@@ -113,7 +113,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
   isDisableField() {
     if (this.phieuKiemNghiemChatLuongHang &&
-      (this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP
+      (this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ
         || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
       return true;
     }
@@ -172,7 +172,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     try {
       let res;
       if (isGuiDuyet) {
-        body.trangThai = this.globals.prop.NHAP_CHO_DUYET_TP;
+        body.trangThai = this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ;
       }
       if (this.id > 0) {
         res = await this.phieuKiemNghiemChatLuongHangService.sua(body);
@@ -296,7 +296,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ ? this.globals.prop.NHAP_TU_CHOI_TP_KTBQ : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res =
             await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
