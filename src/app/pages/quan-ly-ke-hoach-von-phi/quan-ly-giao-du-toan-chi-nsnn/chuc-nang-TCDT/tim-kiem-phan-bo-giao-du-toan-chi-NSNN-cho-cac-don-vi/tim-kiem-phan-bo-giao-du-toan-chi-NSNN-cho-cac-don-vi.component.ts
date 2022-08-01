@@ -97,7 +97,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   ];
   trangThaiGiaos: any[] = [
     {
-      id: '1',
+      id: '0',
       tenDm: 'Chưa giao'
     },
     {
@@ -105,7 +105,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
       tenDm: 'Đang giao'
     },
     {
-      id: '3',
+      id: '1',
       tenDm: 'Đã giao hết'
     }
   ];
@@ -235,9 +235,9 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     if (this.trangThaiGiao) {
       searchFilterTemp.trangThaiGiaos.push(this.trangThaiGiao)
     } else {
-      searchFilterTemp.trangThaiGiaos = ['1','2','3']
+      searchFilterTemp.trangThaiGiaos = ['0','1','2']
     }
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -336,6 +336,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.searchFilter.maPa = null;
     this.searchFilter.maLoaiDan = null;
     this.trangThai = null;
+    this.trangThaiGiao = null;
   }
 
   xoaBaoCao(id: string) {

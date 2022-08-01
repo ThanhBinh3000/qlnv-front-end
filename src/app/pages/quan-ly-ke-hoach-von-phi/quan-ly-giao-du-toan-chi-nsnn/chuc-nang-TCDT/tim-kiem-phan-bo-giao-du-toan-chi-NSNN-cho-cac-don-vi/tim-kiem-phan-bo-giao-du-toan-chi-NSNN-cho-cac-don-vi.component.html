@@ -127,9 +127,9 @@
                 </ng-template>
               </td>
               <td>
-                <ng-template [ngIf]="item.trangThaiGiao == '1'"><br>Chưa giao</ng-template>
+                <ng-template [ngIf]="item.trangThaiGiao == '0'"><br>Chưa giao</ng-template>
                 <ng-template [ngIf]="item.trangThaiGiao == '2'"><br>Đang giao</ng-template>
-                <ng-template [ngIf]="item.trangThaiGiao == '3'"><br>Đã giao hết</ng-template>
+                <ng-template [ngIf]="item.trangThaiGiao == '1'"><br>Đã giao hết</ng-template>
               </td>
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
