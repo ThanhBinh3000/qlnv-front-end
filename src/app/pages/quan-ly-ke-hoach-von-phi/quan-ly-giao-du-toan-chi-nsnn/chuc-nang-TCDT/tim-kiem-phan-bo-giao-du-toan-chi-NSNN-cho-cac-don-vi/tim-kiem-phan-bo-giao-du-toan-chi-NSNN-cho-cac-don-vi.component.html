@@ -62,6 +62,12 @@
               </nz-option>
             </nz-select>
           </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Trạng thái giao</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThaiGiao">
+              <nz-option *ngFor="let item of trangThaiGiaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+          </div>
         </div>
 
       </nz-card>
@@ -81,6 +87,7 @@
               <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
               <th width="150px">Loại phương án</th>
+              <th width="150px">Trạng thái giao</th>
               <th width="150px" style="text-align: center">Trạng thái</th>
               <th width="150px">Hành động</th>
               <th width="150px" [hidden]="!status">
@@ -118,6 +125,11 @@
                 <ng-template [ngIf]="item.maLoaiDan == '2'">
                   Giao điều chỉnh dự toán
                 </ng-template>
+              </td>
+              <td>
+                <ng-template [ngIf]="item.trangThaiGiao == '0'"><br>Chưa giao</ng-template>
+                <ng-template [ngIf]="item.trangThaiGiao == '2'"><br>Đang giao</ng-template>
+                <ng-template [ngIf]="item.trangThaiGiao == '1'"><br>Đã giao hết</ng-template>
               </td>
               <td class="text-center">{{getStatusName(item.trangThai)}}
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>

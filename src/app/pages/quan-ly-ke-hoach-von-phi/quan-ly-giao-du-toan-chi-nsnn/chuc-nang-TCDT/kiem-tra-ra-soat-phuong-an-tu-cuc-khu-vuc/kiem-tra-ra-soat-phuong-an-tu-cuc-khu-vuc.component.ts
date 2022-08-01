@@ -95,6 +95,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
       }
     );
     this.listBcaoKqua = []
+    this.onSubmit();
     this.spinner.hide();
   }
 

@@ -124,7 +124,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
     }
     this.onSubmit();
-
+    this.spinner.hide();
   }
 
   //get user info
