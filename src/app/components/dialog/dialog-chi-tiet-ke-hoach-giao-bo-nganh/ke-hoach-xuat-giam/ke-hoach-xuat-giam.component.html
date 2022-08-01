@@ -9,9 +9,11 @@
         <th style="width: 10%;">Kế hoạch năm</th>
         <th style="width: 10%;">Thao tác</th>
       </tr>
+    </thead>
+    <tbody>
       <tr *ngIf="!isView">
-        <th class="text-center" style="width: 5%;"></th>
-        <th style="width: 45%;">
+        <td class="text-center" style="width: 5%;"></td>
+        <td style="width: 45%;">
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
               (ngModelChange)="onChangeLoaiVthh($event)">
@@ -19,8 +21,8 @@
               </nz-option>
             </nz-select>
           </nz-input-group>
-        </th>
-        <th style="width: 25%;">
+        </td>
+        <td style="width: 25%;">
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
               (ngModelChange)="onChangeCloaiVthh($event)">
@@ -29,28 +31,27 @@
               </nz-option>
             </nz-select>
           </nz-input-group>
-        </th>
-        <th style="width: 5%;">
+        </td>
+        <td style="width: 5%;">
           <nz-input-group>
             <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
           </nz-input-group>
-        </th>
-        <th style="width: 10%;">
+        </td>
+        <td style="width: 10%;">
           <nz-input-group>
             <input nz-input [(ngModel)]="rowItem.soLuong" />
           </nz-input-group>
-        </th>
-        <th style="width: 10%;" style="text-align: center;">
+        </td>
+        <td style="text-align: center;">
           <a (click)="themMoiItem()">
-            <i class="table-icon icon htvbdh_dau-cong"></i>
+            <i class="fa fa-plus"></i>
           </a>
           <a (click)="clearData()">
-            <i class="table-icon fa fa-trash-o do"></i>
+            <i class="fa fa-trash-o do"></i>
           </a>
-        </th>
+        </td>
       </tr>
-    </thead>
-    <tbody>
+
       <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
@@ -59,11 +60,11 @@
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
-            <a *ngIf="!isView" (click)="editItem(data.id)">
-              <i class="table-icon fa fa-pencil"></i>
+            <a (click)="editItem(data.id)">
+              <i class=" fa fa-pencil"></i>
             </a>
-            <a *ngIf="!isView" (click)="xoaItem(data.id)">
-              <i class="table-icon fa fa-trash-o do"></i>
+            <a (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do"></i>
             </a>
           </td>
         </ng-container>
@@ -106,9 +107,12 @@
               </nz-select>
             </nz-input-group>
           </td>
-          <td>
-            <a (click)="luuEdit(data.id)" class="save">Lưu</a>
-            <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+          <td class="text-center">
+            <a (click)="luuEdit(data.id)" class="save">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="huyEdit(data.id)">
+              <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
       </tr>

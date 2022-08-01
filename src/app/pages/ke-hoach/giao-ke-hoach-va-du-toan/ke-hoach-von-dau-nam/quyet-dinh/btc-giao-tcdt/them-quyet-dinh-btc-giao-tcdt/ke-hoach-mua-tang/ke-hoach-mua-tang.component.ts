@@ -88,6 +88,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     };
   }
 
+
   calcularTongTien() {
     this.rowItem.tongTien = +this.rowItem.soLuong * +this.rowItem.donGia;
   }
@@ -132,4 +133,5 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
     }
   }
+
 }
