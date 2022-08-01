@@ -17,6 +17,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { DataService } from '../../data.service';
 
 
 export class ItemData {
@@ -118,6 +119,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
@@ -935,7 +937,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
         this.lstBcao.forEach(item => {
             listCtietDvi.push({
-                id: null,
+                id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
                 maBcao: item.maBcao,
@@ -951,23 +953,17 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSo: mulMoney(item.tongSo, this.maDviTien),
-                nguonNsnn: mulMoney(item.nguonNsnn, this.maDviTien),
-                nguonKhac: mulMoney(item.nguonKhac, this.maDviTien),
+                tongSo: item.tongSo,
+                nguonNsnn: item.nguonNsnn,
+                nguonKhac: item.nguonKhac,
                 listCtietDvi: listCtietDvi,
-                id: null,
+                id: uuid.v4() + 'FE',
             })
         })
-
-        lstCtietBcaoTemp.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
-        });
-
         // gui du lieu trinh duyet len server
         const request = {
             id: null,
+            idSoTranChi: this.id,
             fileDinhKems: [],
             listIdDeleteFiles: [],
             listCtiet: lstCtietBcaoTemp,
@@ -981,23 +977,10 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             trangThai: "1",
             thuyetMinh: "",
         };
-        this.spinner.show();
-        this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    this.router.navigate([
-                        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
-                    ])
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
-        this.spinner.hide();
+        this.dataSource.changeData(request);
+        this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
+		])
     }
 
     sua() {

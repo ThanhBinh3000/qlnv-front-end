@@ -1,3 +1,4 @@
+import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,7 +12,8 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-
+import { DataService } from '../../data.service';
+import * as uuid from 'uuid';
 export class ItemData {
     id: string;
     stt: string;
@@ -73,6 +75,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private danhMucService: DanhMucHDVService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
@@ -309,7 +312,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
 
         this.lstBcao.forEach(item => {
             listCtietDvi.push({
-                id: null,
+                id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
                 maBcao: item.maBcao,
@@ -326,23 +329,16 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             lstCtietBcaoTemp.push({
                 ...item,
                 maNhom: item.maNoiDung,
-                tongSo: mulMoney(item.soTien, this.maDviTien),
+                tongSo: item.soTien,
                 listCtietDvi: listCtietDvi,
-                id: null,
+                id: uuid.v4() + 'FE',
             })
         })
-
-        lstCtietBcaoTemp.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
-        });
 
         // gui du lieu trinh duyet len server
         const request = {
             id: null,
-            fileDinhKems: [],
-            listIdDeleteFiles: [],
+            idSoTranChi: this.id,
             listCtiet: lstCtietBcaoTemp,
             listTtCtiet: listTtCtiet,
             maDvi: this.maDviNhan,
@@ -354,23 +350,10 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             trangThai: "1",
             thuyetMinh: "",
         };
-        this.spinner.show();
-        this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    this.router.navigate([
-                        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
-                    ])
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
-        this.spinner.hide();
+        this.dataSource.changeData(request);
+        this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
+		])
     }
 
     sua() {

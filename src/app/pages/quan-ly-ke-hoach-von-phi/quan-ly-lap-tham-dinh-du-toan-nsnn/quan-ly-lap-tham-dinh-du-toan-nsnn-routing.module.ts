@@ -41,6 +41,13 @@ const routes: Routes = [
   },
   //xay dung phuong an giao so kiem tra chi nsnn
   {
+    path: 'xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
+    loadChildren: () =>
+      import(
+        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn.module'
+      ).then((m) => m.XayDungPhuongAnGiaoSoKiemTraChiNsnnModule),
+  },
+  {
     path: 'xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/:id',
     loadChildren: () =>
       import(
