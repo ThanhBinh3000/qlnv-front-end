@@ -78,6 +78,15 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
   khoanTienDatTruoc: number;
   userInfo: UserLogin;
   slLonHonChiTieu: boolean;
+  bodyGetTonKho = {
+    maChiCuc: '',
+    maDiemKho: '',
+    maNhaKho: '',
+    maNganKho: '',
+    maLokho: '',
+    chungLoaiHH: '',
+    loaiHH: ''
+  }
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -106,6 +115,9 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     this.loadKeHoachBanDauGia();
   }
   handleOk() {
+    if (this.slLonHonChiTieu || !this.diaDiemNhapKho.maDvi) {
+      return;
+    }
     this._modalRef.close(this.diaDiemNhapKho);
   }
   handleCancel() {
@@ -155,6 +167,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNhaKho = diemKho.children;
       }
       this.listNhaKhoEdit = diemKho.children;
+      this.bodyGetTonKho.maDiemKho = diemKho.key;
+      if (diemKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho);
+      }
     }
   }
 
@@ -168,6 +184,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNganKho = nhaKho.children;
       }
       this.listNganKhoEdit = nhaKho.children;
+      this.bodyGetTonKho.maNhaKho = nhaKho.key
+      if (nhaKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho, this.bodyGetTonKho.maNhaKho);
+      }
     }
   }
 
@@ -181,6 +201,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNganLo = nganKho.children;
       }
       this.listNganLoEdit = nganKho.children;
+      this.bodyGetTonKho.maNganKho = nganKho.key
+      if (nganKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho, this.bodyGetTonKho.maNhaKho, this.bodyGetTonKho.maNganKho);
+      }
     }
   }
   changeNganLo(maNganLo: any, index?: number, isEdit?: boolean) {
@@ -190,6 +214,14 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.dsChiTietDiemNhapKhoClone[index].tenNganLo = nganLo.title;
       } else {
         this.chiTietDiemNhapKhoCreate.tenNganLo = nganLo.title;
+      }
+      this.bodyGetTonKho.maLokho = nganLo.key
+      if (this.bodyGetTonKho.chungLoaiHH) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
+          this.bodyGetTonKho.maDiemKho,
+          this.bodyGetTonKho.maNhaKho,
+          this.bodyGetTonKho.maNganKho,
+          this.bodyGetTonKho.maLokho);
       }
     }
   }
@@ -203,6 +235,13 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.chiTietDiemNhapKhoCreate.donViTinh = chungLoaiHang.maDviTinh;
         this.chiTietDiemNhapKhoCreate.tenChungLoaiHh = chungLoaiHang.ten;
       }
+      this.bodyGetTonKho.chungLoaiHH = chungLoaiHang.id;
+      this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
+        this.bodyGetTonKho.maDiemKho,
+        this.bodyGetTonKho.maNhaKho,
+        this.bodyGetTonKho.maNganKho,
+        this.bodyGetTonKho.maLokho,
+        this.bodyGetTonKho.chungLoaiHH);
     }
   }
   changeChiCuc() {
@@ -383,6 +422,42 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
           const tong = res.data.content.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
             0);
           this.diaDiemNhapKho.slDaLenKHBan = tong;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      });
+  }
+
+  loadTonKho(
+    index?: number,
+    isEdit?: boolean,
+    maChiCuc?: string,
+    maDiemKho?: string,
+    maNhaKho?: string,
+    maNganKho?: string,
+    maLokho?: string,
+    chungLoaiHH?: string,
+  ) {
+    let body = {
+      maChiCuc: maChiCuc,
+      maDiemKho: maDiemKho,
+      maNhaKho: maNhaKho,
+      maNganKho: maNganKho,
+      maLokho: maLokho,
+      chungLoaiHH: chungLoaiHH,
+      loaiHH: this.loaiHangHoa,
+      pageNumber: 1,
+      pageSize: 1000
+    };
+    this.donViService
+      .getTonKho(body)
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (isEdit) {
+            this.dsChiTietDiemNhapKhoClone[index].tonKho = res.data.total;
+          } else {
+            this.chiTietDiemNhapKhoCreate.tonKho = res.data.total;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }

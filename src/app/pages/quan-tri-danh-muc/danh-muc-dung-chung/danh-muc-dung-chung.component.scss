@@ -1,0 +1,32 @@
+::ng-deep {
+    .display-tab {
+        width: 100%;
+    }
+
+    .ant-menu-submenu-title {
+        padding: 0 !important;
+    }
+
+    .left-0 {
+        left: 0 !important;
+    }
+
+    .dau-thau-tab .ant-popover-content {
+        position: absolute;
+        width: 100vw;
+        left: 0;
+        top: 0;
+    }
+
+    .dm-dung-chung-container {
+        padding: 0px 10px;
+
+        .ant-tabs-tab-active {
+            background: #fff !important;
+        }
+
+        .ant-tabs-tab-btn {
+            color: #444 !important;
+        }
+    }
+}
