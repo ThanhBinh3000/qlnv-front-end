@@ -54,6 +54,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -379,6 +380,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
+      tenTrangThai: '',
     }
   }
 

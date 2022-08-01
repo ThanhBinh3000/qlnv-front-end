@@ -38,7 +38,7 @@
                 [nzData]="dataTable">
                 <thead>
                   <tr>
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
@@ -46,16 +46,16 @@
                     <th width="161px">Số biên bản</th>
                     <th width="161px">Số quyết định nhập</th>
                     <th width="161px">Năm nhập</th>
-                    <th>Ngày gửi</th>
-                    <th width="295px">Bên nhận</th>
-                    <th width="295px">Bên giao</th>
-                    <th width="295px">Trạng thái</th>
+                    <th width="161px">Ngày gửi</th>
+                    <th width="350px">Bên nhận</th>
+                    <th width="350px">Bên giao</th>
+                    <th width="161px">Trạng thái</th>
                     <th width="140px">Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="search-table">
-                    <th></th>
+                    <th *ngIf="userService.isChiCuc()"></th>
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -124,7 +124,7 @@
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>

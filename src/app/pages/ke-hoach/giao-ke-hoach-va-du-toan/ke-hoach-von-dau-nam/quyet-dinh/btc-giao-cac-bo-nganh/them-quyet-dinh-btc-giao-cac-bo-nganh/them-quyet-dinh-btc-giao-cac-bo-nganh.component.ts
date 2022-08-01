@@ -11,6 +11,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -25,23 +26,18 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
 
   formData: FormGroup;
 
-  // quyetDinh: IQuyetDinhBTC = {
-  //   id: null,
-  //   soQd: null,
-  //   namQd: null,
-  //   ngayQd: new Date(),
-  //   trichYeu: null,
-  //   taiLieuDinhKem: null,
-  //   keHoach: [],
-  // };
 
-  quyetDinh: any;
   taiLieuDinhKemList = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
 
   userInfo: UserLogin;
   maQd: string;
+
+  muaTangList: any[] = []
+  xuatGiamList: any[] = []
+  xuatBanList: any[] = []
+  luanPhienList: any[] = []
 
   dataTable: any[] = [];
   constructor(
@@ -53,6 +49,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     private helperService: HelperService,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
+    private notification: NzNotificationService,
 
   ) {
     this.formData = this.fb.group(
@@ -63,11 +60,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        muaTangList: [[],],
-        xuatGiamList: [[]],
-        xuatBanList: [[]],
-        luanPhienList: [[]],
-        idBoNganh: [, [Validators.required]]
+        idTtcpBoNganh: [, [Validators.required]]
       }
     );
   }
@@ -77,24 +70,32 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
-      // this.getDataDetail(this.idInput),
-      this.quyetDinh = [
-        {
-          id: 1,
-          idNoiDung: 1,
-          noiDung: 'Chi thường xuyên',
-          duToan: 250,
-        },
-        {
-          id: 2,
-          idNoiDung: 2,
-          noiDung: 'Khác',
-          duToan: 350,
-        },
-      ],
+      this.maQd = '/QĐ-BTC',
+      this.getDataDetail(this.idInput),
+      this.onChangeNamQd(this.formData.get('namQd').value),
     ])
     this.spinner.hide();
+  }
+
+  async getDataDetail(id) {
+    if (id > 0) {
+      let res = await this.quyetDinhBtcNganhService.getDetail(id);
+      const data = res.data;
+      console.log(data);
+      this.formData.patchValue({
+        id: data.id,
+        namQd: data.namQd,
+        ngayQd: data.ngayQd,
+        soQd: data.soQd.split('/')[0],
+        trangThai: data.trangThai,
+        trichYeu: data.trichYeu,
+        idTtcpBoNganh: data.idTtcpBoNganh
+      })
+      this.muaTangList = data.muaTangList;
+      this.xuatGiamList = data.xuatGiamList;
+      this.xuatBanList = data.xuatBanList;
+      this.luanPhienList = data.luanPhienList;
+    }
   }
 
   async onChangeNamQd(namQd) {
@@ -164,19 +165,74 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() { }
+  banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: '11',
+          };
+          let res =
+            await this.quyetDinhBtcNganhService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 
-  save() {
-    // this.spinner.show();
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   console.log(this.formData.value)
-    //   this.spinner.hide();
-    //   return;
-    // }
+  async save() {
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      console.log(this.formData.value)
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
-    console.log(body);
+    body.muaTangList = this.muaTangList;
+    body.xuatGiamList = this.xuatGiamList;
+    body.xuatBanList = this.xuatBanList;
+    body.luanPhienList = this.luanPhienList;
+    let res
+    if (this.idInput > 0) {
+      res = await this.quyetDinhBtcNganhService.update(body);
+    } else {
+      res = await this.quyetDinhBtcNganhService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.idInput > 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.quayLai();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 
   xoaKeHoach() { }
@@ -184,12 +240,4 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   themKeHoach() { }
 }
 
-interface IQuyetDinhBTC {
-  id: number;
-  soQd: string;
-  namQd: string;
-  ngayQd: Date;
-  trichYeu: string;
-  taiLieuDinhKem: any;
-  keHoach: any;
-}
+

@@ -858,7 +858,6 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     ];
     this.newObjectChiTietChuanBiKho();
     this.dsChiTietChuanBiKhoClone = cloneDeep(this.bienBanChuanBiKho.chiTiets);
-    console.log(this.dsChiTietChuanBiKhoClone);
   }
   deleteData(id: number) {
     this.modal.confirm({

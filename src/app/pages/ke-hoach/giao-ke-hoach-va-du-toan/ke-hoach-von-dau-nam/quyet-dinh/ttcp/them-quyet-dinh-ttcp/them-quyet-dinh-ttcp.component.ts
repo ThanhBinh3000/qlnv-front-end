@@ -22,7 +22,7 @@ import {
   styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
-  @Input('isView') isView: boolean;
+  @Input('isView') isView: boolean = false;
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
@@ -63,11 +63,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.isView);
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd = '/QĐ-TTg',
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();
@@ -179,7 +178,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         }
       },
     });
-
   }
 
   async save() {
@@ -244,5 +242,22 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
   }
 
-  xoaKeHoach() { }
+  xoaKeHoach(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error: ', e);
+        }
+      },
+    });
+  }
 }

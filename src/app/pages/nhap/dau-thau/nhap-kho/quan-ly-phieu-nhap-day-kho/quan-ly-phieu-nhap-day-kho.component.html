@@ -39,13 +39,14 @@
                 [nzData]="dataTable" nzBordered>
                 <thead>
                   <tr>
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px">STT</th>
-                    <th width="161px">Số biên bản</th>
+                    <th width="161px" *ngIf="userService.isChiCuc()">Số biên bản</th>
                     <th width="161px">Số quyết định</th>
+                    <th width="161px" *ngIf="userService.isCuc()">Số phiếu</th>
                     <th width="161px">Ngày nhập đầy kho</th>
                     <th>Điểm kho</th>
                     <th width="161px">Nhà kho</th>
@@ -56,9 +57,9 @@
                 </thead>
                 <tbody>
                   <tr class="search-table">
+                    <td *ngIf="userService.isChiCuc()"></td>
                     <td></td>
-                    <td></td>
-                    <td>
+                    <td *ngIf="userService.isChiCuc()">
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
                           (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
@@ -71,6 +72,15 @@
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhNhap"
                           (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td *ngIf="userService.isCuc()">
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
+                          (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -112,17 +122,26 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </td>
-                    <td></td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
                     <td></td>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
-                    <th width="45px">
+                    <th width="45px" *ngIf="userService.isChiCuc()">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.soBienBan }}</td>
+                    <td *ngIf="userService.isChiCuc()">{{ data.soBienBan }}</td>
                     <td>{{ data.soQuyetDinhNhap }}</td>
+                    <td *ngIf="userService.isCuc()">{{ data.soBienBan }}</td>
                     <td>{{ data.ngayNhapDayKho }}</td>
                     <td>{{ data.tenDiemKho }}</td>
                     <td>{{ data.tenNhaKho }}</td>
@@ -162,7 +181,7 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -170,11 +189,12 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <!-- <button type="button" class="btn btn-sub" (click)="print()">
+            <button type="button" class="btn btn-sub" (click)="print()" *ngIf="userService.isCuc()">
               <i class="icon htvbdh_tcdt_print"></i>
               <span>In</span>
-            </button> -->
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
+            </button>
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+              *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

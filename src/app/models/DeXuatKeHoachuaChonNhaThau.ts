@@ -133,4 +133,13 @@ export class ThongTinQuyetDinh {
   tenCloaiVthh: string;
   dviTinh: string;
   soLuong: number;
+  donGia: number;
+  tongTien: number;
+}
+
+export class KeHoachMuaXuat {
+  id: number;
+  idNoiDung: number;
+  noiDung: string;
+  sluongDtoan: number;
 }

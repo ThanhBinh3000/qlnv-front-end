@@ -27,6 +27,9 @@ export class KeHoachLuongThucComponent implements OnInit {
   @Output()
   ltThocMuaChange = new EventEmitter<number>();
 
+  @Input()
+  isView: boolean = false;
+
   dataTable = [];
   namHienTai: number = 2022;
 

@@ -59,6 +59,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -395,6 +396,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
+      tenTrangThai: '',
     }
   }
 

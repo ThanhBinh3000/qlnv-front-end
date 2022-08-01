@@ -1,0 +1,203 @@
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+
+        <nz-card class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="4">
+              <label class="search__label">Số quyết định xuất</label>
+              <input class="search__input" placeholder="Số quyết định nhập" nz-input  />
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Số bảng kê</label>
+              <input class="search__input" placeholder="Số bảng kê" nz-input  />
+            </div>
+            <div nz-col nzSpan="4">
+              <label class="search__label">Ngày xuất kho</label>
+              <nz-range-picker   nzFormat="dd/MM/yyyy"></nz-range-picker>
+            </div>
+
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--clear" >
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" >
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+          </div>
+        </nz-card>
+
+        <div class="tab-giao-chi-tieu mt-16">
+          <nz-tabset nzType="card" class="tab-level-3">
+            <nz-tab nzTitle="Danh sách biên bản kết thúc nhập kho">
+              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                 nzBordered>
+                <thead>
+                  <tr>
+                    <th width="32px"></th>
+                    <th width="32px">STT</th>
+                    <th width="230px">Số bảng kê</th>
+                    <th width="137px">Số quyết định xuất</th>
+                    <th width="105px">Số phiếu xuất</th>
+                    <th width="114px">Ngày nhập kho</th>
+                    <th width="229px">Điểm kho</th>
+                    <th width="229px">Nhà kho</th>
+                    <th width="229px">Ngăn kho</th>
+                    <th >Lô kho</th>
+                    <th width="156px">Trạng thái</th>
+                    <th width="118px">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="search-table">
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group >
+                        <nz-date-picker></nz-date-picker>
+
+                      </nz-input-group>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm"  size="small" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr *ngFor="let statu of status">
+                    <th width="32px">
+                      <label nz-checkbox ></label>
+                    </th>
+                    <td class="text-center">1</td>
+                    <td>111/QĐ-CDTVP</td>
+                    <td>111/QĐ-CDTVP</td>
+                    <td>546</td>
+                    <td>00/00/2022</td>
+                    <td>Điểm kho 1</td>
+                    <td>Nhà kho 1</td>
+                    <td>Ngăn kho 1</td>
+                    <td>Lô kho 1</td>
+                    <td>{{statu.name}}</td>
+                    <td class="text-right">
+                      <a><i class="fa fa-pencil"></i></a>
+                      <a (click)="redirectToChiTiet(statu.id)"><i class="fa fa-eye"></i></a>
+                      <a><i class="fa fa-trash-o do"></i></a>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </nz-table>
+              <div class="tab-content tab-menu">
+                <div class="tab-pane fade show active justify-content-between">
+                  <div class="trai"></div>
+                  <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="4" [nzTotal]="40"
+                      nzShowSizeChanger [nzPageSize]="10" [nzShowTotal]="rangeTemplate"
+                      >
+
+                      <ng-template #rangeTemplate let-range="range" let-total>
+                        1-10 trên tổng số 73 bản ghi
+                      </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                  </div>
+                </div>
+              </div>
+
+            </nz-tab>
+          </nz-tabset>
+
+          <div class="action-giao-chi-tieu">
+            <button type="button" class="btn btn-do" >
+              <i class="fa fa-trash-o do"></i>
+              <span>Xóa</span>
+            </button>
+            <button type="button" class="btn btn-sub" >
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
+            <button type="button" class="btn btn-main">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-bang-ke-can-bang [statusId]="statusId" (showListEvent)="showList()"></app-thong-tin-bang-ke-can-bang>
+</div>
