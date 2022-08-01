@@ -15,7 +15,7 @@
       </button>
       <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && !isView" type="button" class="btn btn-sub"
         (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_print"></i>
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Ban hành</span>
       </button>
       <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh"
@@ -30,7 +30,7 @@
       <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
@@ -42,7 +42,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
                 <input type="text" nz-input formControlName="soQd" [readOnly]="isView" />
@@ -53,7 +53,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
