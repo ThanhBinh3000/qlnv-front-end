@@ -386,7 +386,7 @@ export class QuanLyVonPhiService extends BaseService {
   // update list giao du toan
   updateLapThamDinhGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.put(
-      'http://192.168.1.105:8094/giao_du_toan/cap-nhat',
+      'http://192.168.1.107:8094/giao_du_toan/cap-nhat',
       request,
     );
   }
@@ -625,7 +625,7 @@ export class QuanLyVonPhiService extends BaseService {
   //giao so tran chi trong Giao du toan NSNN
   giaoSoTranChiGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.105:8094/giao_du_toan/giao-so'
+      'http://192.168.1.107:8094/giao_du_toan/giao-so'
       , request);
   }
 

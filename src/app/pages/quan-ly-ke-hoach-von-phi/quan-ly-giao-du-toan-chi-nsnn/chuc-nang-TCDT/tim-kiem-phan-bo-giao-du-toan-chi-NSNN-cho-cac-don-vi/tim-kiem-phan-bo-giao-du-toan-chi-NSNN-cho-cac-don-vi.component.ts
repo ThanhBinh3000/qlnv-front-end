@@ -77,6 +77,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     maPa: "",
     maLoaiDan: null,
     soQd: "",
+    trangThaiGiaos : [],
     paggingReq: {
       limit: 10,
       page: 1
@@ -94,10 +95,25 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
       tenDm: 'Giao, diều chỉnh dự toán'
     }
   ];
+  trangThaiGiaos: any[] = [
+    {
+      id: '0',
+      tenDm: 'Chưa giao'
+    },
+    {
+      id: '2',
+      tenDm: 'Đang giao'
+    },
+    {
+      id: '1',
+      tenDm: 'Đã giao hết'
+    }
+  ];
   donViTaos: any[] = [];
   donVis: any[] = [];
   trangThais: any = TRANG_THAI_TIM_KIEM;
   trangThai!: string;
+  trangThaiGiao!: string;
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -161,7 +177,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    // this.onSubmit()@
+    this.onSubmit()
     this.spinner.hide()
   }
 
@@ -208,6 +224,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.spinner.show();
     const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
+    searchFilterTemp.trangThaiGiaos = [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {
@@ -215,7 +232,12 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    if (this.trangThaiGiao) {
+      searchFilterTemp.trangThaiGiaos.push(this.trangThaiGiao)
+    } else {
+      searchFilterTemp.trangThaiGiaos = ['0','1','2']
+    }
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -314,6 +336,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     this.searchFilter.maPa = null;
     this.searchFilter.maLoaiDan = null;
     this.trangThai = null;
+    this.trangThaiGiao = null;
   }
 
   xoaBaoCao(id: string) {
