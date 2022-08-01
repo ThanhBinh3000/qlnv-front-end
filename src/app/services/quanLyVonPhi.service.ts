@@ -565,7 +565,7 @@ export class QuanLyVonPhiService extends BaseService {
   ctietPhuongAn(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/pa-giao-so/chi-tiet/' + id
-      // 'http://192.168.1.104:8094/pa-giao-so/chi-tiet/' + id
+      // 'http://192.168.1.10?9:8094/pa-giao-so/chi-tiet/' + id
     );
   }
 
@@ -633,7 +633,7 @@ export class QuanLyVonPhiService extends BaseService {
   themMoiPhuongAn(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/pa-giao-so/them-moi',
-      // 'http://192.168.1.104:8094/pa-giao-so/them-moi',
+      // 'http://192.168.1.109:8094/pa-giao-so/them-moi',
       request);
   }
 

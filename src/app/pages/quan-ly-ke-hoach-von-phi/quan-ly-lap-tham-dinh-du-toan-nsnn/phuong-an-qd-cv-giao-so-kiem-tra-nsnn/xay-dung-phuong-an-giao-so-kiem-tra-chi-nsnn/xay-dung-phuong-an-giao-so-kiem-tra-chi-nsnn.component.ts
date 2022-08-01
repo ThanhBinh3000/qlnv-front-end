@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { DataService } from '../../data.service';
 
 
 export class ItemData {
@@ -44,6 +45,7 @@ export class ItemDvi {
 export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin dang nhap
     id: string;
+    idSoTranChi: string;
     userInfo: any;
     //thong tin chung bao cao
     maBaoCao: string;
@@ -121,6 +123,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         private notification: NzNotificationService,
         private location: Location,
         private modal: NzModalService,
+        private dataSource: DataService,
     ) { }
 
     async ngOnInit() {
@@ -152,21 +155,37 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            
-            this.quanLyVonPhiService.maPhuongAn().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.maPa = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
+
+            // this.quanLyVonPhiService.maPhuongAn().toPromise().then(
+            //     (res) => {
+            //         if (res.statusCode == 0) {
+            //             this.maPa = res.data;
+            //         } else {
+            //             this.notification.error(MESSAGE.ERROR, res?.msg);
+            //         }
+            //     },
+            //     (err) => {
+            //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            //     },
+            // );
 
             this.namPa = this.newDate.getFullYear();
+
+            await this.dataSource.currentData.subscribe(obj => {
+                this.maPa = obj?.maPa;
+                this.idSoTranChi = obj?.idSoTranChi;
+                this.maPaBtc = obj?.maPaBtc;
+                this.namPa = obj?.namPa;
+                this.maBaoCao = obj?.maBcao;
+                this.maDviTien = obj?.maDviTien;
+                this.trangThaiBanGhi = obj?.trangThai;
+                this.lstCtietBcao = obj?.listCtiet;
+                this.lstTtCtiet = obj?.listTtCtiet;
+                this.updateEditCache();
+            })
+            if (!this.maPa) {
+                this.location.back;
+            }
         }
 
         //lay danh sach bao cao duoc tong hop tu
@@ -320,6 +339,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;
+                    this.idSoTranChi = data.data.idSoTranChi;
                     this.lstCtietBcao = data.data.listCtiet;
                     this.maDviTien = data.data.maDviTien;
                     this.sortByIndex();
@@ -481,6 +501,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         // gui du lieu trinh duyet len server
         const request = {
             id: this.id,
+            idSoTranChi: this.idSoTranChi,
             fileDinhKems: this.lstFiles,
             listIdDeleteFiles: this.listIdFilesDelete,
             listCtiet: lstCtietBcaoTemp,
@@ -497,21 +518,39 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             maGiao: this.maGiao,
         };
         this.spinner.show();
+        if (!this.id) {
+            this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                        this.router.navigate([
+                            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
+                        ])
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        await this.getDetailReport();
+                        this.getStatusButton();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        }
 
-        this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    await this.getDetailReport();
-                    this.getStatusButton();
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
         this.spinner.hide();
     }
 
@@ -1204,6 +1243,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listIdDeleteFiles: [],
             listCtiet: lstCtietBcaoTemp,
             listTtCtiet: lstTtCtietTemp,
+            idSoTranChi: this.idSoTranChi,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
             maPa: maPaNew,
@@ -1237,6 +1277,17 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    xemCtietSoTranChi(){
+        const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
+        let url: string;
+        if (capDvi == Utils.TONG_CUC){
+            url = '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/' + this.idSoTranChi;
+        } else {
+            url = '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn/' + this.idSoTranChi;
+        }
+        window.open(url, '_blank');
     }
 
 
