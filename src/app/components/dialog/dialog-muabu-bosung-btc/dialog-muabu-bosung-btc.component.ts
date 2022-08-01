@@ -1,44 +1,34 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { sortBy } from 'lodash';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from './../../../services/danhmuc.service';
-import { KeHoachLuongThucComponent } from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
-import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MuabuBosungComponent} from "../dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component";
+import {NzModalRef} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {Globals} from "../../../shared/globals";
+import {MESSAGE} from "../../../constants/message";
+import {MuaBuBoSungComponent} from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
 
 @Component({
-  selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
-  templateUrl: './dialog-chi-tiet-ke-hoach-giao-bo-nganh.component.html',
-  styleUrls: ['./dialog-chi-tiet-ke-hoach-giao-bo-nganh.component.scss'],
+  selector: 'app-dialog-muabu-bosung-btc',
+  templateUrl: './dialog-muabu-bosung-btc.component.html',
+  styleUrls: ['./dialog-muabu-bosung-btc.component.scss']
 })
-export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
+export class DialogMuabuBosungBtcComponent implements OnInit {
 
-  @ViewChild('keHoachLuongThuc') keHoachLuongThucComponent: KeHoachLuongThucComponent;
-
+  @ViewChild('keHoachMuaBu') kehoachmuaBuBoSung: MuaBuBoSungComponent
+  ;
 
   isView: boolean = false;
   errorBn: boolean = false;
-  errorTt: boolean = false;
   keHoach: any = {
     id: null,
     maBoNganh: null,
     tenBoNganh: null,
     tongTien: null,
-    ltGaoMua: null,
-    ltThocMua: null,
-    ltGaoXuat: null,
-    ltThocXuat: null,
-    ttMuaTang: null,
-    ttXuatBan: null,
-    ttXuatGiam: null,
-    muaTangList: [],
-    xuatGiamList: [],
-    xuatBanList: [],
-    luanPhienList: [],
-  };
+    idMuaQdBtc: null,
+    ttMuaBu: null,
+    ttMuaBsung: null,
+    muaBuList: [],
+    muaBsungList: []
+  }
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
@@ -83,15 +73,13 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
         this.dsHangHoa = dataVatTu[0].child;
-        console.log(this.dsHangHoa);
       }
     })
   }
 
   luu() {
-    this.keHoachLuongThucComponent.onChangeInput();
-    console.log(this.keHoach);
     if (this.validateData()) {
+      this.keHoach.tongTien = this.keHoach.ttMuaBsung + this.keHoach.ttMuaBu;
       this._modalRef.close(this.keHoach);
     }
   }
@@ -103,19 +91,10 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     } else {
       this.errorBn = false;
     }
-
-    if (!this.keHoach.tongTien) {
-      this.errorTt = true;
-      return false;
-    } else {
-      this.errorTt = false;
-    }
     return true;
   }
 
   onCancel() {
     this._modalRef.close();
   }
-
 }
-

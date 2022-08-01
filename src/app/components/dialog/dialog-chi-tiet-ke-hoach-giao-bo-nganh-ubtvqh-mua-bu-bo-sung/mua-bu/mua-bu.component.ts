@@ -1,22 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
-  selector: 'app-ke-hoach-xuat-giam',
-  templateUrl: './ke-hoach-xuat-giam.component.html',
-  styleUrls: ['./ke-hoach-xuat-giam.component.scss'],
+  selector: 'app-mua-bu',
+  templateUrl: './mua-bu.component.html',
+  styleUrls: ['./mua-bu.component.scss']
 })
-export class KeHoachXuatGiamComponent implements OnInit {
+export class MuaBuComponent implements OnInit {
+
   @Input()
   dsHangHoa = [];
   @Input()
   dataTable = [];
   @Input()
   tabName: String;
+  @Input()
+  isView: boolean = false;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
@@ -26,18 +26,13 @@ export class KeHoachXuatGiamComponent implements OnInit {
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
-  @Input()
-  isView: boolean = false;
-
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
-  dsDonViTinh = [];
-  dsKeHoachNam = [];
-
   constructor(
-    private modal: NzModalService,
-  ) { }
+    private readonly modal: NzModalService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.updateEditCache()
@@ -61,7 +56,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
   }
 
   xoaItem(index: number) {
-    console.log(index, this.dataTable);
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -69,21 +63,18 @@ export class KeHoachXuatGiamComponent implements OnInit {
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-        } catch (e) {
-          console.log('error', e);
-        }
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.dataTable.splice(index,1);
       },
     });
   }
+
   themMoiItem() {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    console.log(this.rowItem);
+    // this.dataTable.push(this.rowItem);
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
@@ -98,7 +89,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.id === id);
     this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false,
     };
   }
@@ -114,12 +105,10 @@ export class KeHoachXuatGiamComponent implements OnInit {
       this.dataTable.forEach((item) => {
         this.dataEdit[item.id] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
-    console.log(this.dataEdit);
-
   }
 
   onChangeLoaiVthh(event) {
@@ -139,6 +128,17 @@ export class KeHoachXuatGiamComponent implements OnInit {
       this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
     }
   }
+  onChangeLoaiVthh123(event, id) {
+    this.dsChungLoaiHangHoa = [];
+    this.dataEdit[id].data.dviTinh = null;
+    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    if (loaiVthh.length > 0) {
+      this.dataEdit[id].data.dviTinh = loaiVthh[0].maDviTinh;
+      this.dataEdit[id].data.tenVthh = loaiVthh[0].ten;
+      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+    }
+  }
 
+  validate() {
+  }
 }
-

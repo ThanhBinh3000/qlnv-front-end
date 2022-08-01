@@ -112,6 +112,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
           this.dsBoNganh = detail.data.listBoNganh;
         }
       }
+      console.log(this.dsBoNganh)
     }
   }
 

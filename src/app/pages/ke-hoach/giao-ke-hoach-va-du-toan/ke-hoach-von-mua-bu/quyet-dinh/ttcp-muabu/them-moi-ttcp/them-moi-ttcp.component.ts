@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
@@ -11,15 +12,26 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
+import {
+  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent
+} from "../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component";
+import {
+  QuyetDinhUbtvqhMuaBuBoSungService
+} from "../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+import {
+  DialogQdMuabubosungTtcpComponent
+} from "../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component";
+import {MuaBuBoSungTtcpServiceService} from "../../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
 
 
 @Component({
-  selector: 'app-them-quyet-dinh-ttcp',
-  templateUrl: './them-quyet-dinh-ttcp.component.html',
-  styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
+  selector: 'app-them-moi-ttcp',
+  templateUrl: './them-moi-ttcp.component.html',
+  styleUrls: ['./them-moi-ttcp.component.scss']
 })
-export class ThemQuyetDinhTtcpComponent implements OnInit {
-  @Input('isView') isView: boolean = false;
+export class ThemMoiTtcpComponent implements OnInit {
+
+  @Input('isView') isView: boolean;
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
@@ -31,12 +43,14 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
+  listUbtvqh: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
-    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    private qdTccp : MuaBuBoSungTtcpServiceService,
+    private  quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -45,15 +59,13 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
+        namQd: [, [Validators.required]],
         soQd: [, [Validators.required]],
+        soQdUbtvqh:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
-        namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        muaTangList: [],
-        xuatGiamList: [],
-        xuatBanList: [],
-        luanPhienList: [],
+        listBoNganh: []
       }
     );
   }
@@ -63,7 +75,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/QĐ-TTg',
+      this.maQd ="/VPCP-KTTH",
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();
@@ -71,12 +83,13 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.quyetDinhTtcpService.getDetail(id);
+      let res = await this.qdTccp.getDetail(id);
       const data = res.data;
       console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
+        soQdUbtvqh: data.soQdUbtvqh,
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
@@ -133,7 +146,18 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
 
   xoaItem(id: number) {
-
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.dataTable.splice(id, 1);
+      },
+    });
   }
 
   quayLai() {
@@ -158,7 +182,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
             trangThai: '11',
           };
           let res =
-            await this.quyetDinhTtcpService.approve(
+            await this.qdTccp.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -175,6 +199,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         }
       },
     });
+
   }
 
   async save() {
@@ -195,9 +220,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-      res = await this.quyetDinhTtcpService.update(body);
+      res = await this.qdTccp.update(body);
     } else {
-      res = await this.quyetDinhTtcpService.create(body);
+      res = await this.qdTccp.create(body);
+      console.log(body)
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -217,7 +243,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
       nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
-      nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
+      nzContent: DialogQdMuabubosungTtcpComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
@@ -237,24 +263,18 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         }
       }
     });
+    this.formData.get('listBoNganh').setValue(this.dataTable);
+  }
+  async onChangeNamQd(namQd) {
+    let body = {
+      namQd: namQd,
+      trangThai: "11"
+    }
+    let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.content;
+      this.listUbtvqh = data
+    }
   }
 
-  xoaKeHoach(index: number) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-        } catch (e) {
-          console.log('error: ', e);
-        }
-      },
-    });
-  }
 }

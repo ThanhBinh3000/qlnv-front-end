@@ -106,6 +106,13 @@ import { DialogChiTietKeHoachGiaoBoNganhComponent } from './dialog/dialog-chi-ti
 import { KeHoachLuongThucComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import { KeHoachXuatGiamComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
+import { DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
+import { MuaBuComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component';
+import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bo-sung/mua-bo-sung.component';
+import { DialogQdMuabubosungTtcpComponent } from './dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
+import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component';
+import { DialogMuabuBosungBtcComponent } from './dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component';
+import { MuaBuBoSungComponent } from './dialog/dialog-muabu-bosung-btc/mua-bu-bo-sung/mua-bu-bo-sung.component';
 import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
 
 @NgModule({
@@ -162,7 +169,14 @@ import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem
     DialogChiTietKeHoachGiaoBoNganhComponent,
     KeHoachLuongThucComponent,
     KeHoachXuatGiamComponent,
-    DialogTTPhuLucQDDCBanDauGiaComponent
+    DialogTTPhuLucQDDCBanDauGiaComponent,
+    DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+    MuaBuComponent,
+    MuaBoSungComponent,
+    DialogQdMuabubosungTtcpComponent,
+    MuabuBosungComponent,
+    DialogMuabuBosungBtcComponent,
+    MuaBuBoSungComponent
   ],
   imports: [
     CommonModule,
