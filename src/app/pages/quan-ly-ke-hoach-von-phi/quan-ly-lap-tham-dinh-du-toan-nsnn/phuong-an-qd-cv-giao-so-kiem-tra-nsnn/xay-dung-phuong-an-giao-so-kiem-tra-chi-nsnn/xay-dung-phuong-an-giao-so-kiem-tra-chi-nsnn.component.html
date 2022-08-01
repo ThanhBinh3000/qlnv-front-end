@@ -81,7 +81,11 @@
 									<span>{{soQdCv?.fileName}}</span>
 								</div>
 							</td>
-							<td>{{maPaBtc}}</td>
+							<td>
+								<a (click)="xemCtietSoTranChi()" style="color: #1890ff;">
+									{{ maPaBtc}}
+								</a>
+							</td>
 							<td>{{maPa}}</td>
 							<td>{{namPa}}</td>
 							<td>{{ngayTao}}</td>
@@ -120,8 +124,8 @@
 							<nz-table nzBordered class="table__body">
 								<thead>
 									<tr>
-										<th rowspan="2" nzWidth="75px">STT</th>
-										<th rowspan="2" nzWidth="300px">Nội dung</th>
+										<th rowspan="2" nzWidth="100px">STT</th>
+										<th rowspan="2">Nội dung</th>
 										<th rowspan="2">Tổng số</th>
 										<th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
 										<th rowspan="2" colspan="3" [hidden]="status"></th>
