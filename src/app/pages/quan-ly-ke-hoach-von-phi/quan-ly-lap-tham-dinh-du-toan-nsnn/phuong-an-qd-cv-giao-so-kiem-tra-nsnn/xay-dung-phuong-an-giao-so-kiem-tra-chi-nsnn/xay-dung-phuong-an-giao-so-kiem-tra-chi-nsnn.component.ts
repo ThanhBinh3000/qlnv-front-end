@@ -1280,6 +1280,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     xemCtietSoTranChi(){
+        if (!this.idSoTranChi){
+            return;
+        }
         const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
         let url: string;
         if (capDvi == Utils.TONG_CUC){
