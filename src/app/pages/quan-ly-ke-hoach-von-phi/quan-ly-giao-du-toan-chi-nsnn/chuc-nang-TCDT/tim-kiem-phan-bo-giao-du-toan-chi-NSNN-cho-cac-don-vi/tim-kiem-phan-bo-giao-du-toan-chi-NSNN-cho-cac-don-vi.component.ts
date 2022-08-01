@@ -237,7 +237,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     } else {
       searchFilterTemp.trangThaiGiaos = ['0','1','2']
     }
-    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
