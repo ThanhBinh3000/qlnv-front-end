@@ -80,7 +80,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let item of lstCtietBcao4axB; let i = index">
+			<tr *ngFor="let item of lstCtietBcao4ax; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axB">
 					<td>{{getChiMuc(item.stt,'0',null)}}</td>
 					<td>
@@ -121,23 +121,23 @@
 					<td>{{item.ghiChu}}</td>
 					<td [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
-							<i class="fa fa-trash-o do" (click)="deleteLine(item.id,'4ax-B')"></i>
+							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
 					<td [hidden]="status">
-						<ng-container *ngIf="!getLowStatus(item.stt,'4ax-B')">
+						<ng-container *ngIf="!getLowStatus(item.stt)">
 							<ng-container *ngIf="item.stt != '0.1.2'">
 								<i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
 							</ng-container>
 						</ng-container>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'4ax-B')"></i>
+						<i class="fa fa-plus" (click)="addLine(item.id)"></i>
 					</td>
 					<td [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-								(ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
+								(ngModelChange)="updateChecked(item.id)"></label>
 						</ng-container>
 					</td>
 				</ng-container>
@@ -177,21 +177,21 @@
 					</td>
 					<td [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
-							<i class="fa fa-trash-o do" (click)="deleteLine(item.id,'4ax-B')"></i>
+							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
 					<td>
-						<a (click)="saveEdit(item.id,'4ax-B')" class="save" style="margin-right:15px">Lưu</a>
+						<a (click)="saveEdit(item.id)" class="save" style="margin-right:15px">Lưu</a>
 						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-							(nzOnConfirm)="cancelEdit(item.id,'4ax-B')" class="save">Hủy</a>
+							(nzOnConfirm)="cancelEdit(item.id)" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'4ax-B')"></i>
+						<i class="fa fa-plus" (click)="addLine(item.id)"></i>
 					</td>
 					<td [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-								(ngModelChange)="updateChecked(item.id,'4ax-B')"></label>
+								(ngModelChange)="updateChecked(item.id)"></label>
 						</ng-container>
 					</td>
 				</ng-template>
