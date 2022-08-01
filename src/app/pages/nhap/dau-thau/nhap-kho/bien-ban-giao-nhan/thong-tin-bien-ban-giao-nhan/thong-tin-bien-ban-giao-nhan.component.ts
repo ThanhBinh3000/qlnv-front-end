@@ -18,7 +18,7 @@ import { QuanLyBienBanGiaoNhanService } from 'src/app/services/quanLyBienBanGiao
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { BienBanGiaoNhan, ChiTietBienBanGiaoNhan } from './../../../../../../models/BienBanGiaoNhan';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -40,7 +40,6 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   visibleTab: boolean = false;
 
   userInfo: UserLogin;
-  detail: any = {};
 
   listThuKho: any[] = [];
   listNganLo: any[] = [];
@@ -87,6 +86,8 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       this.bienBanGiaoNhan.maDvi = this.userInfo.MA_DVI;
       this.bienBanGiaoNhan.tenDvi = this.userInfo.TEN_DVI;
       this.bienBanGiaoNhan.ngayKy = dayjs().format("YYYY-MM-DD");
+      this.bienBanGiaoNhan.trangThai = this.globals.prop.NHAP_DU_THAO;
+      this.bienBanGiaoNhan.tenTrangThai = 'Dự thảo';
       this.initForm();
       await Promise.all([
         this.loadSoQuyetDinh(),
@@ -102,6 +103,13 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  isDisableField() {
+    if (this.bienBanGiaoNhan && (this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      return true;
+    }
+  }
+
   initForm() {
     this.formData = this.fb.group({
       soQD: [
@@ -305,6 +313,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       ],
     });
   }
+
   async loadSoQuyetDinh() {
     let body = {
       "denNgayQd": null,
@@ -324,7 +333,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -355,95 +364,10 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
         }
       }
     }
-    this.updateEditCache();
-  }
-
-  caculatorThanhTienTN() {
-    if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienTn).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
-  }
-
-  changeNganLo() {
-    let nganLo = this.listNganLo.filter(x => x.maNganlo == this.detail.maNganlo);
-    if (nganLo && nganLo.length > 0) {
-      this.detail.tichLuong = nganLo[0].tichLuongChua ?? 0;
-    }
-  }
-
-  caculatorThanhTienQT() {
-    if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienQt).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
   }
 
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
-  }
-
-  deleteRow(data: any) {
-    this.detail.detail = this.detail?.detail.filter(x => x.stt != data.stt);
-    this.sortTableId();
-    this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
-  }
-
-  sortTableId() {
-    this.detail?.detail.forEach((lt, i) => {
-      lt.stt = i + 1;
-    });
-  }
-
-  addRow() {
-    if (!this.detail?.detail) {
-      this.detail.detail = [];
-    }
-    this.sortTableId();
-    let item = cloneDeep(this.create);
-    item.stt = this.detail?.detail.length + 1;
-    this.detail.detail = [
-      ...this.detail?.detail,
-      item,
-    ]
-    this.updateEditCache();
-    this.clearItemRow();
-  }
-
-  clearItemRow() {
-    this.create = {};
-    this.create.dvt = "Tấn";
-  }
-
-  cancelEdit(stt: number): void {
-    const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    this.editDataCache[stt] = {
-      data: { ...this.detail?.detail[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(stt: number): void {
-    const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    Object.assign(this.detail?.detail[index], this.editDataCache[stt].data);
-    this.editDataCache[stt].edit = false;
-  }
-
-  updateEditCache(): void {
-    if (this.detail?.detail && this.detail?.detail.length > 0) {
-      this.detail?.detail.forEach((item) => {
-        this.editDataCache[item.stt] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-    }
   }
 
   caculatorSoLuong(item: any) {
@@ -470,7 +394,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
           let res =
             await this.quanLyBienBanBanGiaoNhanService.updateStatus(
@@ -493,9 +417,9 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = '02';
-    if (this.bienBanGiaoNhan.trangThai == '04') {
-      trangThai = '01';
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
+    if (this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+      trangThai = this.globals.prop.NHAP_DA_DUYET;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -512,43 +436,6 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
             id: this.id,
             lyDoTuChoi: null,
             trangThai: trangThai,
-          };
-          let res =
-            await this.quanLyBienBanBanGiaoNhanService.updateStatus(
-              body,
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  hoanThanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành biên bản?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: '02',
           };
           let res =
             await this.quanLyBienBanBanGiaoNhanService.updateStatus(
@@ -587,7 +474,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           let res =
             await this.quanLyBienBanBanGiaoNhanService.updateStatus(
@@ -690,16 +577,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
-      return 'da-ban-hanh';
-    }
+    return thongTinTrangThaiNhap(trangThai);
   }
 
   async loadBienBanKetThucNhapKho() {
@@ -708,7 +586,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
     }
     let res = await this.quanLyPhieuKetThucNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -724,7 +602,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
     }
     let res = await this.bienBanGuiHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -786,13 +664,6 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
     let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.detailHopDong = res.data;
-      // this.formData.patchValue({
-      //   tenHang: this.detailHopDong.tenVthh,
-      //   tenChungLoaiHang: this.detailHopDong.tenCloaiVthh,
-      //   hopDongId: this.detailHopDong.id,
-      //   ngayHopDong: this.detailHopDong.ngayKy,
-      //   soHd: this.detailHopDong.soHd,
-      // })
       this.bienBanGiaoNhan.soHd = this.detailHopDong.soHd;
       this.bienBanGiaoNhan.tenHang = this.detailHopDong.tenVthh;
       this.bienBanGiaoNhan.chungLoaiHangHoa = this.detailHopDong.tenCloaiVthh;

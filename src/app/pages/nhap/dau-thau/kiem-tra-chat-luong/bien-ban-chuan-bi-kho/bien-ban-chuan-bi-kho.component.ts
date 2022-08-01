@@ -14,6 +14,7 @@ import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanCh
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-bien-ban-chuan-bi-kho',
@@ -71,6 +72,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -97,7 +99,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

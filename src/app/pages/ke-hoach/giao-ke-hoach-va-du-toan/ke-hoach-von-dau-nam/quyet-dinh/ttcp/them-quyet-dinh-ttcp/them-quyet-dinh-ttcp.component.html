@@ -13,12 +13,13 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
+      <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && !isView" type="button" class="btn btn-sub"
         (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+      <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh"
+        (click)="save()">
         <i class="icon htvbdh_luu"></i>
         <span>Lưu</span>
       </button>
@@ -88,7 +89,7 @@
     <h3>Kế hoạch giao Bộ ngành</h3>
     <div class="buttons" *ngIf="!isView">
       <button type="button" class="btn btn-sub xanh" (click)="themKeHoach()">
-        <i class="fa fa-floppy-o"></i>
+        <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
     </div>
@@ -100,7 +101,7 @@
           <th class="text-center" style="width: 5%;">STT</th>
           <th style="width: 75%;">Bộ</th>
           <th style="width: 15%;">Tổng giá trị</th>
-          <th style="width: 5%;">Thao tác</th>
+          <th class="text-center" style="width: 5%;">Thao tác</th>
         </tr>
       </thead>
       <tbody>
@@ -109,10 +110,10 @@
           <td>{{ data.tenBoNganh }}</td>
           <td>{{ data.tongTien }}</td>
           <td style="text-align: left; white-space: nowrap;">
-            <a (click)="themKeHoach(data, idx)">
+            <a (click)="themKeHoach(data, idx,true)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="!isView" (click)="themKeHoach(data, idx)">
+            <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="!isView" (click)="xoaKeHoach(idx)">

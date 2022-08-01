@@ -92,7 +92,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.getTitleVthh();
     this.spinner.show();
     try {
       this.yearNow = dayjs().get('year');
@@ -106,7 +105,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.ngayQuyetDinhDefault = [];
       this.ngayQuyetDinhDefault.push(dayjs().subtract(30, 'day').toDate());
       this.ngayQuyetDinhDefault.push(dayjs().toDate());
-      // this.searchFilter.ngayQuyetDinh = this.ngayQuyetDinhDefault;
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -114,25 +112,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  getTitleVthh() {
-    // console.log(this.typeVthh);
-
-    // this.loaiVthh = convertTenVthh(this.typeVthh);
-    // if (this.typeVthh == 'thoc') {
-    //   this.maVthh = "0101";
-    //   this.routerVthh = 'thoc';
-    // } else if (this.typeVthh == 'gao') {
-    //   this.maVthh = "0102";
-    //   this.routerVthh = 'gao';
-    // } else if (this.typeVthh == 'muoi') {
-    //   this.maVthh = "04";
-    //   this.routerVthh = 'muoi';
-    // } else if (this.typeVthh == 'vat-tu') {
-    //   this.maVthh = null;
-    //   this.routerVthh = 'vat-tu';
-    // }
   }
 
   openDialogHopDong() {
@@ -176,12 +155,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   clearFilter() {
-    // this.searchFilter = {
-    //   soQd: '',
-    //   ngayQuyetDinh: this.ngayQuyetDinhDefault,
-    //   namNhap: this.yearNow,
-    //   trichYeu: ''
-    // }
     this.searchFilter = {
       soQd: '',
       ngayQuyetDinh: null,
@@ -365,7 +338,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           let body = {
             id: item.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res = await this.quyetDinhGiaoNhapHangService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -432,7 +405,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

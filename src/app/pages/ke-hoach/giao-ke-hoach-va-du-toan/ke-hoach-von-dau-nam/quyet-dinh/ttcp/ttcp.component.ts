@@ -147,9 +147,7 @@ export class TtcpComponent implements OnInit {
     }
   }
 
-  themMoi() {
-    this.isAddNew = true;
-  }
+
 
   async onClose() {
     this.isAddNew = false;
@@ -210,6 +208,12 @@ export class TtcpComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  themMoi() {
+    this.idSelected = 0;
+    this.isViewDetail = false;
+    this.isAddNew = true;
   }
 
   viewDetail(id: number, isViewDetail: boolean) {

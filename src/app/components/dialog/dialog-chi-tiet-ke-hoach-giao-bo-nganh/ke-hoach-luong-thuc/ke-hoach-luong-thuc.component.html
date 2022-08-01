@@ -41,7 +41,8 @@
         <td>Thóc</td>
         <td style="text-align: right;">
           <div>
-            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocXuat" type="number" />
+            <input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocXuat"
+              type="number" />
           </div>
         </td>
       </tr>
@@ -50,7 +51,8 @@
         <td>Gạo</td>
         <td style="text-align: right;">
           <div>
-            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoXuat" type="number" />
+            <input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoXuat"
+              type="number" />
           </div>
         </td>
       </tr>
@@ -66,7 +68,8 @@
         <td>Thóc</td>
         <td style="text-align: right;">
           <div>
-            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocMua" type="number" />
+            <input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocMua"
+              type="number" />
           </div>
         </td>
       </tr>
@@ -75,7 +78,8 @@
         <td>Gạo</td>
         <td style="text-align: right;">
           <div>
-            <input style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoMua" type="number" />
+            <input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoMua"
+              type="number" />
           </div>
         </td>
       </tr>

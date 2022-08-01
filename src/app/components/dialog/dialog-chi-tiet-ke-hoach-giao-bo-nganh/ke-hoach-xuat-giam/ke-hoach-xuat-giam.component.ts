@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
@@ -23,6 +24,9 @@ export class KeHoachXuatGiamComponent implements OnInit {
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
+  @Input()
+  isView: boolean = false;
+
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
@@ -30,6 +34,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
   dsKeHoachNam = [];
 
   constructor(
+    private modal: NzModalService,
   ) { }
 
   ngOnInit(): void {
@@ -53,15 +58,30 @@ export class KeHoachXuatGiamComponent implements OnInit {
     this.dataEdit[id].edit = true;
   }
 
-  xoaItem(id: number) {
-
+  xoaItem(index: number) {
+    console.log(index, this.dataTable);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
-
   themMoiItem() {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    // this.dataTable.push(this.rowItem);
+    console.log(this.rowItem);
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
@@ -95,6 +115,8 @@ export class KeHoachXuatGiamComponent implements OnInit {
         };
       });
     }
+    console.log(this.dataEdit);
+
   }
 
   onChangeLoaiVthh(event) {

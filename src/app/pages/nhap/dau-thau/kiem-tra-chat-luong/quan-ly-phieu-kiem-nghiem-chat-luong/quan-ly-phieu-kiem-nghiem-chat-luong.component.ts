@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -89,7 +90,8 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
-  ) {}
+    public globals: Globals,
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -112,7 +114,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -297,32 +299,6 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
         MESSAGE.ERROR,
         'Không có dữ liệu phù hợp để xóa.',
       );
-    }
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf('/thoc/')) {
-      this.loaiStr = 'Thóc';
-      this.loaiVthh = '01';
-      this.maVthh = '0101';
-      this.idVthh = 2;
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf('/gao/')) {
-      this.loaiStr = 'Gạo';
-      this.loaiVthh = '00';
-      this.maVthh = '0102';
-      this.idVthh = 6;
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf('/muoi/')) {
-      this.loaiStr = 'Muối';
-      this.loaiVthh = '02';
-      this.maVthh = '04';
-      this.idVthh = 78;
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf('/vat-tu/')) {
-      this.loaiStr = 'Vật tư';
-      this.loaiVthh = '03';
-      this.routerVthh = 'vat-tu';
     }
   }
 

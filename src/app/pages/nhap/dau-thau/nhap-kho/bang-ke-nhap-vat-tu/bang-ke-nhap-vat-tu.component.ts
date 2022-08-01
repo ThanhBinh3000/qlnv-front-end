@@ -12,6 +12,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-bang-ke-nhap-vat-tu',
@@ -65,6 +66,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -93,7 +95,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
