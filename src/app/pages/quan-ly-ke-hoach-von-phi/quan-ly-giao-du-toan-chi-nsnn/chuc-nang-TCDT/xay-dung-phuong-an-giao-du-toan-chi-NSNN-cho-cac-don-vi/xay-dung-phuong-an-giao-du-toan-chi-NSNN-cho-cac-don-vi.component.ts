@@ -127,6 +127,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
   userRole: string;
+  checkTrangThaiGiao: string;
+
   // before uploaf file
   beforeUploadQdGiaoDuToan = (file: NzUploadFile): boolean => {
     this.fileDetail = file;
@@ -290,17 +292,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     // this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
-    let checkGiao = 0;
     if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && this.soQd && this.trangThaiBanGhi == '6') { // == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') 
       this.statusBtnGiao = false;
-      for (const itm of this.lstCtietBcao[0].lstCtietDvis) {
-        if (itm.trangThai != null) {
-          checkGiao += 1;
-        }
-      }
-      if (checkGiao == 0) {
+      if(this.checkTrangThaiGiao == '0' || this.checkTrangThaiGiao == '2'){
         this.statusBtnGiaoToanBo = false;
-      } else {
+      }else{
         this.statusBtnGiaoToanBo = true;
       }
     } else {
@@ -386,6 +382,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.id = data.data.id;
           this.lstCtietBcao = data.data.lstCtiets[0];
           this.maDviTien = data.data.maDviTien;
+          this.checkTrangThaiGiao = data.data.trangThaiGiao;
           this.lstDvi = [];
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
             this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan));
@@ -427,13 +424,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           if (this.soQd && this.trangThaiBanGhi == "6") {
             this.statusBtnTongHop = false;
           }
-          let checkAfterGiao = 0;
-          for (const itm of this.lstCtietBcao[0].lstCtietDvis) {
-            if (itm.trangThai != null) {
-              checkAfterGiao += 1;
-            }
-          }
-          if (checkAfterGiao == 0) {
+          if (data.data.trangThaiGiao == "0" || data.data.trangThaiGiao == "2") {
             this.statusBtnGiaoToanBo = false;
           } else {
             this.statusBtnGiaoToanBo = true;
