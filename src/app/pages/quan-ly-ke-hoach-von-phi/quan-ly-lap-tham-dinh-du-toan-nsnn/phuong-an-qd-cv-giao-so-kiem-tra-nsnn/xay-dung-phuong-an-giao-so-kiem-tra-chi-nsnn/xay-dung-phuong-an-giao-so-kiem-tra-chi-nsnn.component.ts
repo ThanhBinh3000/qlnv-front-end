@@ -187,20 +187,22 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 this.location.back;
             }
         }
-
         //lay danh sach bao cao duoc tong hop tu
-        await this.quanLyVonPhiService.danhSachBaoCaoTongHop(this.maBaoCao).toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.lstDvi = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        if (this.maBaoCao){
+            await this.quanLyVonPhiService.danhSachBaoCaoTongHop(this.maBaoCao).toPromise().then(
+                data => {
+                    if (data.statusCode == 0) {
+                        this.lstDvi = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    }
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+            );
+        }
+        
         this.getStatusButton();
         this.spinner.hide();
 
@@ -556,6 +558,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     giaoSoTranChi(maBcao: string) {
         const lstGiao: any[] = [];
+        const namGiao = new Date().getFullYear();
         if (maBcao) {
             const lstCtiet: any[] = [];
             this.lstCtietBcao.forEach(item => {
@@ -570,7 +573,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 maGiao: this.maGiao,
                 maDviGui: this.maDonViTao,
                 maBcao: maBcao,
-                namGiao: this.namGiao,
+                namGiao: namGiao,
                 maDviNhan: this.lstDvi.find(e => e.maBcao == maBcao)?.maDvi,
                 namPa: this.namPa,
                 trangThai: '1',
@@ -593,7 +596,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                         maPa: this.maPa,
                         maGiao: this.maGiao,
                         maDviGui: this.maDonViTao,
-                        namGiao: this.namGiao,
+                        namGiao: namGiao,
                         maBcao: item.maBcao,
                         maDviNhan: this.lstDvi.find(e => e.maBcao == item.maBcao)?.maDvi,
                         namPa: this.namPa,

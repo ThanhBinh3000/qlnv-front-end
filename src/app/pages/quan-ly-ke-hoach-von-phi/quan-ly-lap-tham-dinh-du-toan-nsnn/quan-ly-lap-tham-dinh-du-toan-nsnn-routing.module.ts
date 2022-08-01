@@ -56,7 +56,7 @@ const routes: Routes = [
   },
   //nhan so kiem tra tran chi tu bo tai chinh
   {
-    path: 'so-kiem-tra-tran-chi-tu-btc/0/:maBcao',
+    path: 'so-kiem-tra-tran-chi-tu-btc',
     loadChildren: () =>
       import(
         './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/so-kiem-tra-tran-chi-tu-btc/so-kiem-tra-tran-chi-tu-btc.module'
