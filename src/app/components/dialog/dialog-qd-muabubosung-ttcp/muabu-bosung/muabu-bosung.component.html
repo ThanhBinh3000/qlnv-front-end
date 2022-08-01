@@ -22,7 +22,7 @@
       </th>
       <th style="width: 25%;">
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
                      (ngModelChange)="onChangeCloaiVthh($event)">
             <nz-option nzValue="null" nzDisabled nzHide></nz-option>
             <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
@@ -32,19 +32,19 @@
       </th>
       <th style="width: 10%;">
         <nz-input-group>
-          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
+          <input  nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="isView" />
         </nz-input-group>
       </th>
       <th style="width: 10%;">
         <nz-input-group>
-          <input nz-input [(ngModel)]="rowItem.soLuong" />
+          <input [readonly]="isView" nz-input [(ngModel)]="rowItem.soLuong" />
         </nz-input-group>
       </th>
       <th style="width: 5%;" style="text-align: center;">
-        <a (click)="themMoiItem()">
+        <a *ngIf="!isView" (click)="themMoiItem()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
-        <a (click)="clearData()">
+        <a  *ngIf="!isView" (click)="clearData()">
           <i class="table-icon fa fa-trash-o do"></i>
         </a>
       </th>
@@ -59,10 +59,10 @@
         <td>{{ data.dviTinh }}</td>
         <td>{{ data.soLuong }}</td>
         <td style="text-align: center;">
-          <a (click)="editItem(data.id)">
+          <a *ngIf="!isView" (click)="editItem(data.id)">
             <i class="table-icon fa fa-pencil"></i>
           </a>
-          <a (click)="xoaItem(idx)">
+          <a *ngIf="!isView"(click)="xoaItem(idx)">
             <i class="table-icon fa fa-trash-o do"></i>
           </a>
         </td>
@@ -104,10 +104,10 @@
           </nz-input-group>
         </td>
         <td>
-          <a (click)="luuEdit(data.id)" class="save">
+          <a  (click)="luuEdit(data.id)" class="save">
             <i class="fa fa-save"></i>
           </a>
-          <a (click)="huyEdit(data.id)">
+          <a  (click)="huyEdit(data.id)">
             <i class="fa fa-times do"></i>
           </a>
         </td>
@@ -117,7 +117,7 @@
     <tfoot>
     <tr *ngIf="tabName != 'LuanPhien'">
       <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-      <td><input [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;" type="number"
+      <td><input [readOnly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;" type="number"
                  nz-input /></td>
       <td></td>
     </tr>

@@ -13,7 +13,7 @@
       <th class="text-center" style="width: 5%;"></th>
       <th style="width: 45%;">
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
                      (ngModelChange)="onChangeLoaiVthh($event)">
             <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
             </nz-option>
@@ -22,7 +22,7 @@
       </th>
       <th style="width: 25%;">
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
                      (ngModelChange)="onChangeCloaiVthh($event)">
             <nz-option nzValue="null" nzDisabled nzHide></nz-option>
             <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
@@ -32,19 +32,19 @@
       </th>
       <th style="width: 10%;">
         <nz-input-group>
-          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
+          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="isView" />
         </nz-input-group>
       </th>
       <th style="width: 10%;">
         <nz-input-group>
-          <input nz-input [(ngModel)]="rowItem.soLuong" />
+          <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="isView" />
         </nz-input-group>
       </th>
       <th style="width: 5%;" style="text-align: center;">
-        <a (click)="themMoiItem()">
+        <a *ngIf="!isView" (click)="themMoiItem()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
-        <a (click)="clearData()">
+        <a *ngIf="!isView" (click)="clearData()">
           <i class="table-icon fa fa-trash-o do"></i>
         </a>
       </th>
@@ -59,10 +59,10 @@
         <td>{{ data.dviTinh }}</td>
         <td>{{ data.soLuong }}</td>
         <td style="text-align: center;">
-          <a (click)="editItem(idx)">
+          <a *ngIf="!isView" (click)="editItem(idx)">
             <i class="table-icon fa fa-pencil"></i>
           </a>
-          <a (click)="xoaItem(idx)">
+          <a  *ngIf="!isView" (click)="xoaItem(idx)">
             <i class="table-icon fa fa-trash-o do"></i>
           </a>
         </td>

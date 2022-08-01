@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {
   KeHoachLuongThucComponent
 } from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component";
@@ -16,7 +16,6 @@ import {MuaBuComponent} from "./mua-bu/mua-bu.component";
 export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implements OnInit {
 
   @ViewChild('keHoachMuaBu') kehoachmuaBu: MuaBuComponent;
-
   isView: boolean = false;
   errorBn: boolean = false;
   keHoach: any = {

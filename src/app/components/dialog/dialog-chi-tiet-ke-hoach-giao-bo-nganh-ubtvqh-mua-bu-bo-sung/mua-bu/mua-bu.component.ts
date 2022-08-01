@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "../../../../constants/message";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
@@ -16,6 +15,8 @@ export class MuaBuComponent implements OnInit {
   dataTable = [];
   @Input()
   tabName: String;
+  @Input()
+  isView: boolean = false;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
@@ -28,7 +29,6 @@ export class MuaBuComponent implements OnInit {
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
-  dsDonViTinh = [];
   constructor(
     private readonly modal: NzModalService,
   ) {

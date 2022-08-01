@@ -1,7 +1,7 @@
 <div class="input-group-search" nz-row [nzGutter]="24">
   <nz-form-item nz-col nzSpan="16" class="form-item" style="padding-right: 15px;">
-    <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
-    <nz-select [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
+    <nz-form-label  [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
+    <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
       <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsBoNganh">
       </nz-option>
     </nz-select>
@@ -18,11 +18,11 @@
 <div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">
   <nz-tabset nzType="card" class="mt-16 tab-level-3">
     <nz-tab [nzTitle]="'Mua bù'">
-      <app-mua-bu  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [(dataTable)]="keHoach.muaBuList" ></app-mua-bu>
+      <app-mua-bu  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-mua-bu>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua bổ sung'" >
-      <app-mua-bu [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung" [(dataTable)]="keHoach.muaBsungList"></app-mua-bu>
+      <app-mua-bu [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung"  [isView]="isView" [(dataTable)]="keHoach.muaBsungList"></app-mua-bu>
     </nz-tab>
   </nz-tabset>
 </div>
