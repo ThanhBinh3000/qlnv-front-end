@@ -125,7 +125,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBcao');
         this.spinner.show();
         //lay thong tin user
         const userName = this.userService.getUserName();
@@ -151,6 +150,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            await this.dataSource.currentData.subscribe(obj => {
+                this.maBaoCao = obj?.maBcao;
+                this.namPa = obj?.namBcao;
+            })
+            if (!this.maBaoCao){
+                this.location.back();
+            }
 
             this.quanLyVonPhiService.maPhuongAn().toPromise().then(
                 (res) => {
@@ -167,7 +173,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 },
             );
 
-            this.namPa = this.newDate.getFullYear();
         }
         //lay danh sach bao cao duoc tong hop tu
         await this.quanLyVonPhiService.danhSachBaoCaoTongHop(this.maBaoCao).toPromise().then(

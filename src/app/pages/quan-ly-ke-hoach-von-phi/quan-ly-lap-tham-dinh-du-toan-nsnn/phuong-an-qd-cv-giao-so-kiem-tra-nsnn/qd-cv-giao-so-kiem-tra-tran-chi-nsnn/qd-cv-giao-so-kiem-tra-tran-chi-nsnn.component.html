@@ -6,7 +6,7 @@
 					<thead>
 						<tr>
 							<th nzWidth="20%">Ngày tạo QĐ/CV</th>
-							<th nzWidth="20%">Năm giao</th>
+							<!-- <th nzWidth="20%">Năm giao</th> -->
 							<th nzWidth="30%">Số QĐ/CV</th>
 							<th nzWidth="30%">Mã PA</th>
 						</tr>
@@ -14,10 +14,10 @@
 					<tbody>
 						<tr>
 							<td>{{ngayTao}}</td>
-							<td>
+							<!-- <td>
 								<input nz-input class="search__input" [(ngModel)]="namGiao"
 								[class]="namGiao >= 1000 &&  namGiao <= 2999 ?'' : 'input-error-validate'"/>
-							</td>
+							</td> -->
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
