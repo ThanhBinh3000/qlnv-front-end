@@ -18,7 +18,7 @@
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+      <button *ngIf="formData.value.trangThai == '00'  && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
         <i class="icon htvbdh_luu"></i>
         <span>Lưu</span>
       </button>

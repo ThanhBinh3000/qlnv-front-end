@@ -13,8 +13,4 @@ export class QuyetDinhUbtvqhMuaBuBoSungService extends BaseService{
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'giao-ke-hoach-mua-bu-bo-sung/quyet-dinh/ub-tv-qh', '/qlnv-khoach');
   }
-  deleteAll(body): Promise<any> {
-    const url = `${environment.SERVICE_API}/qlnv-khoach/giao-ke-hoach-mua-bu-bo-sung/quyet-dinh/ub-tv-qh/xoa/multi`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
 }

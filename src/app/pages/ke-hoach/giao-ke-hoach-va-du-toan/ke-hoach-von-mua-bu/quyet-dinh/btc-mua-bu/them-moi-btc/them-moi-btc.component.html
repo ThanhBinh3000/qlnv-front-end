@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
           {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
         </span>
-        <span>QUYẾT ĐỊNH CỦA BỘ TÀI XỈU</span>
+        <span>QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH</span>
       </div>
     </div>
     <div class="btn-group">
@@ -18,7 +18,7 @@
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+      <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
         <i class="icon htvbdh_luu"></i>
         <span>Lưu</span>
       </button>
