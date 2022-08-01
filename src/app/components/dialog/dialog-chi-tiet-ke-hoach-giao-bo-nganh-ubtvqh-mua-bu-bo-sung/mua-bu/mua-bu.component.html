@@ -104,8 +104,12 @@
           </nz-input-group>
         </td>
         <td>
-          <a (click)="luuEdit(data.id)" class="save">Lưu</a>
-          <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+          <a (click)="luuEdit(data.id)" class="save">
+            <i class="fa fa-save"></i>
+          </a>
+          <a (click)="huyEdit(data.id)">
+            <i class="fa fa-times do"></i>
+          </a>
         </td>
       </ng-template>
     </tr>

@@ -75,7 +75,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd ="/VPCP-KTTH",
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();

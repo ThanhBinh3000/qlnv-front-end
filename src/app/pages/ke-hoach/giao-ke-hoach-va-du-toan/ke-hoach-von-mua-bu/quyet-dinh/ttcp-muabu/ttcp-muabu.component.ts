@@ -122,7 +122,21 @@ export class TtcpMuabuComponent implements OnInit {
   }
 
 
-  xoa() { }
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        this.qdTtcp.deleteAll(this.setOfCheckedId);
+      },
+    });
+  }
 
   exportData() {
     if (this.totalRecord > 0) {

@@ -23,6 +23,9 @@ import {
 } from "../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component";
 import {MuaBuBoSungTtcpServiceService} from "../../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
 import {MuaBuBoSungBtcService} from "../../../../../../../services/mua-bu-bo-sung-btc.service";
+import {
+  DialogMuabuBosungBtcComponent
+} from "../../../../../../../components/dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component";
 @Component({
   selector: 'app-them-moi-btc',
   templateUrl: './them-moi-btc.component.html',
@@ -42,14 +45,14 @@ export class ThemMoiBtcComponent implements OnInit {
   maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
-  listUbtvqh: any[] = [];
+  listTtcp: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
     private qdBtcService : MuaBuBoSungBtcService,
-    private  quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
+    private  quyetDinhTtcpMuBuBoSung : MuaBuBoSungTtcpServiceService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -60,7 +63,7 @@ export class ThemMoiBtcComponent implements OnInit {
         id: [],
         namQd: [, [Validators.required]],
         soQd: [, [Validators.required]],
-        soQdUbtvqh:  [, [Validators.required]],
+        soQdTtcp:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
@@ -74,7 +77,7 @@ export class ThemMoiBtcComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      this.maQd = "/QĐ-BTC",
       this.getDataDetail(this.idInput),
     ])
     this.spinner.hide();
@@ -88,7 +91,7 @@ export class ThemMoiBtcComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
-        soQdUbtvqh: data.soQdUbtvqh,
+        soQdTtcp: data.soQdTtcp,
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
@@ -242,7 +245,7 @@ export class ThemMoiBtcComponent implements OnInit {
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
       nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
-      nzContent: DialogQdMuabubosungTtcpComponent,
+      nzContent: DialogMuabuBosungBtcComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
@@ -269,11 +272,12 @@ export class ThemMoiBtcComponent implements OnInit {
       namQd: namQd,
       trangThai: "11"
     }
-    let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
+    let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
-      this.listUbtvqh = data
+      this.listTtcp = data
     }
+    console.log(this.listTtcp)
   }
 
 }

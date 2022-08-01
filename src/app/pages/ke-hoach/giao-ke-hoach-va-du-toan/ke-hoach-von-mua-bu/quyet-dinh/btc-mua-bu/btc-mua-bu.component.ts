@@ -9,7 +9,6 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {MuaBuBoSungTtcpServiceService} from "../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
 import {MuaBuBoSungBtcService} from "../../../../../../services/mua-bu-bo-sung-btc.service";
 
 @Component({
@@ -122,7 +121,21 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
 
-  xoa() { }
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        this.qdBtcService.deleteAll(this.setOfCheckedId);
+      },
+    });
+  }
 
   exportData() {
     if (this.totalRecord > 0) {

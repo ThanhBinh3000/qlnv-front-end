@@ -123,7 +123,21 @@ export class UbtvqhMuabuComponent implements OnInit {
   }
 
 
-  xoa() { }
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        this.quyetDinhUbtvqhMuBuBoSung.deleteAll(this.setOfCheckedId);
+      },
+    });
+  }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -165,6 +179,7 @@ export class UbtvqhMuabuComponent implements OnInit {
   onAllChecked(checked) {
     this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
+    console.log(this.setOfCheckedId)
   }
 
   updateCheckedSet(id: number, checked: boolean): void {

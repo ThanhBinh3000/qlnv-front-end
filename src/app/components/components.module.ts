@@ -111,6 +111,8 @@ import { MuaBuComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-
 import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bo-sung/mua-bo-sung.component';
 import { DialogQdMuabubosungTtcpComponent } from './dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
 import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component';
+import { DialogMuabuBosungBtcComponent } from './dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component';
+import { MuaBuBoSungComponent } from './dialog/dialog-muabu-bosung-btc/mua-bu-bo-sung/mua-bu-bo-sung.component';
 
 @NgModule({
   declarations: [
@@ -170,7 +172,9 @@ import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-
     MuaBuComponent,
     MuaBoSungComponent,
     DialogQdMuabubosungTtcpComponent,
-    MuabuBosungComponent
+    MuabuBosungComponent,
+    DialogMuabuBosungBtcComponent,
+    MuaBuBoSungComponent
   ],
   imports: [
     CommonModule,

@@ -16,7 +16,6 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
 
   isView: boolean = false;
   errorBn: boolean = false;
-  errorTt: boolean = false;
   keHoach: any = {
     id: null,
     maBoNganh: null,
