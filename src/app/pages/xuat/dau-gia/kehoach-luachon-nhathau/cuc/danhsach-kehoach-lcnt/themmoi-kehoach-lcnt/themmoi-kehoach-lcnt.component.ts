@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -26,7 +27,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
-import { DialogThemDiaDiemNhapKhoComponent } from './../../../../../../../components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
+import { ChiTietDiaDiemNhapKho, DiaDiemNhapKho, DialogThemDiaDiemNhapKhoComponent } from './../../../../../../../components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
 
 @Component({
   selector: 'app-themmoi-kehoach-lcnt',
@@ -56,10 +57,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listPhuongThucThanhToan: any[] = [
     {
-      ma: 1,
+      ma: "1",
       giaTri: 'Tiền mặt'
     }, {
-      ma: 2,
+      ma: "2",
       giaTri: 'Chuyển khoản'
     },
   ];
@@ -85,6 +86,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
   async ngOnInit() {
@@ -187,7 +189,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       qdGiaoChiTieuNam: [
         {
           value: this.khBanDauGia
-            ? this.khBanDauGia.qdGiaoChiTieuNam
+            ? this.khBanDauGia.soQuyetDinhGiaoChiTieu
             : null,
           disabled: this.isView ? true : false
         },
@@ -351,7 +353,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         [],
       ],
     });
-    // this.setTitle();
+    this.setTitle();
   }
 
   async loaiHopDongGetAll() {
@@ -377,8 +379,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
-          console.log(data);
-
           this.formData.patchValue({
             qdGiaoChiTieuId: data ? data.id : null,
             qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
@@ -451,11 +451,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const ddGiaoNhan = new DiaDiemGiaoNhan();
-              ddGiaoNhan.id = res.data.id;
-              ddGiaoNhan.tenChiCuc = res.data.tenDvi;
-              ddGiaoNhan.diaChi = res.data.diaChi;
+              ddGiaoNhan.id = res.data?.id;
+              ddGiaoNhan.tenChiCuc = res.data?.tenDvi;
+              ddGiaoNhan.diaChi = res.data?.diaChi;
               ddGiaoNhan.soLuong = phanLo.soLuong;
               this.diaDiemGiaoNhanList = [...this.diaDiemGiaoNhanList, ddGiaoNhan];
+              const tongSoLuong = this.diaDiemGiaoNhanList.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
+                0);
+              this.formData.patchValue({
+                soLuong: tongSoLuong ? Intl.NumberFormat('en-US').format(tongSoLuong) : '0'
+              })
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -478,25 +483,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       ...this.bangPhanBoList,
       data,
     ];
+
   }
-
-
-
   async save(isOther?: boolean) {
     this.spinner.show();
     try {
       this.bangPhanBoList.forEach(phanBo => {
         const phanLoTaiSan = new PhanLoTaiSan();
-        phanLoTaiSan.chiCuc = phanBo.tenDonVi;
+        phanLoTaiSan.maChiCuc = phanBo.maDvi;
         phanBo.chiTietDiaDiems.forEach(chiTiet => {
           phanLoTaiSan.chungLoaiHh = chiTiet.tenChungLoaiHh;
-          phanLoTaiSan.diemKho = chiTiet.maDiemKho;
+          phanLoTaiSan.maDiemKho = chiTiet.maDiemKho;
           phanLoTaiSan.donGia = chiTiet.donGiaChuaVAT;
           phanLoTaiSan.donViTinh = chiTiet.donViTinh;
           phanLoTaiSan.giaKhoiDiem = chiTiet.giaKhoiDiem;
-          phanLoTaiSan.loKho = chiTiet.maNganLo;
+          phanLoTaiSan.maLoKho = chiTiet.maNganLo;
           phanLoTaiSan.maDvTaiSan = chiTiet.maDonViTaiSan;
-          phanLoTaiSan.nganKho = chiTiet.maNganKho;
+          phanLoTaiSan.maNganKho = chiTiet.maNganKho;
+          phanLoTaiSan.maNhaKho = chiTiet.maNhaKho;
           phanLoTaiSan.soLuong = chiTiet.soLuong;
           phanLoTaiSan.soTienDatTruoc = chiTiet.soTienDatTruoc;
           phanLoTaiSan.tonKho = null;
@@ -522,8 +526,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         "qdGiaoChiTieuId": this.formData.get("qdGiaoChiTieuId").value,
         "soKeHoach": this.formData.get("soKeHoach").value,
         "soLuong": this.formData.get("soLuong").value,
-        "tgDkTcDenNgay": this.formData.get("thoiGianKyHd").value ? dayjs(this.formData.get("thoiGianKyHd").value[0]).format("YYYY-MM-DD") : null,
-        "tgDkTcTuNgay": this.formData.get("thoiGianKyHd").value ? dayjs(this.formData.get("thoiGianKyHd").value[1]).format("YYYY-MM-DD") : null,
+        "tgDkTcDenNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[0]).format("YYYY-MM-DD") : null,
+        "tgDkTcTuNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[1]).format("YYYY-MM-DD") : null,
         "thoiGianKyHd": this.formData.get("thoiGianKyHd").value,
         "thoiGianKyHopDongGhiChu": this.formData.get("thoiGianKyHdGhiChu").value,
         "thoiHanGiaoNhan": this.formData.get("thoiHanGiaoNhan").value,
@@ -533,11 +537,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         "thongBaoKhBdg": this.formData.get("thongBaoKhBdg").value,
         "tieuChuanChatLuong": this.formData.get("tieuChuanChatLuong").value,
         "trangThai": null,
-        "trichYeu": null
+        "trichYeu": this.formData.get("trichYeu").value,
+        "ghiChu": this.formData.get("ghiChu").value
       };
-      console.log("body: ", body);
-
-      if (this.id > 0) {
+      if (this.idInput > 0) {
         let res = await this.deXuatKeHoachBanDauGiaService.sua(
           body,
         );
@@ -547,6 +550,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               MESSAGE.SUCCESS,
               MESSAGE.UPDATE_SUCCESS,
             );
+            this.back();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -558,6 +562,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -571,15 +576,19 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
+  back() {
+    this.showListEvent.emit();
+  }
 
   async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.loaiVthhInput) {
         this.listHangHoa = res.data;
+        this.listHangHoa = this.listHangHoa.filter(hh => hh.ma != '02')
       }
       else {
-        this.listHangHoa = res.data.filter(x => x.ma == this.loaiVthhInput);
+        this.listHangHoa = res.data?.filter(x => x.ma == this.loaiVthhInput);
       };
     }
   }
@@ -589,10 +598,61 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async loadDeXuatKHBanDauGia(id: number) {
     await this.deXuatKeHoachBanDauGiaService
-      .getDetail(id)
+      .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          // this.detail = res.data;
+          this.khBanDauGia = res.data;
+          this.initForm();
+          const ddGiaoNhans = res.data?.diaDiemGiaoNhanList;
+          ddGiaoNhans.forEach(ddgn => {
+            const ddGiaoNhan = new DiaDiemGiaoNhan();
+            ddGiaoNhan.id = ddgn.id;
+            ddGiaoNhan.tenChiCuc = ddgn.tenChiCuc;
+            ddGiaoNhan.diaChi = ddgn.diaChi;
+            ddGiaoNhan.soLuong = ddgn.soLuong;
+            this.diaDiemGiaoNhanList.push(ddGiaoNhan);
+          });
+          const phanLoTaiSans = res.data?.phanLoTaiSanList;
+
+          for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
+            for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
+              if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc) {
+                const diaDiemNhapKho = new DiaDiemNhapKho();
+                diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
+                diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
+                diaDiemNhapKho.slDaLenKHBan = phanLoTaiSans[i].slDaLenKHBan;
+                diaDiemNhapKho.soLuong = phanLoTaiSans[i].soLuong;
+                const chiTietDiaDiem = new ChiTietDiaDiemNhapKho();
+                chiTietDiaDiem.tonKho = phanLoTaiSans[i].tonKho;
+                chiTietDiaDiem.giaKhoiDiem = phanLoTaiSans[i].giaKhoiDiem;
+                chiTietDiaDiem.soTienDatTruoc = phanLoTaiSans[i].soTienDatTruoc;
+                chiTietDiaDiem.maDiemKho = phanLoTaiSans[i].maDiemKho;
+                chiTietDiaDiem.tenDiemKho = phanLoTaiSans[i].tenDiemKho;
+                chiTietDiaDiem.maNhaKho = phanLoTaiSans[i].maNhaKho;
+                chiTietDiaDiem.tenNhaKho = phanLoTaiSans[i].tenNhaKho;
+                chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
+                chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
+                chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
+                chiTietDiaDiem.tenNganLo = phanLoTaiSans[i].tenLoKho;
+                chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
+                chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
+                chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
+                chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
+                chiTietDiaDiem.idVirtual = phanLoTaiSans[i].id;
+                diaDiemNhapKho.chiTietDiaDiems.push(chiTietDiaDiem);
+                this.bangPhanBoList.push(diaDiemNhapKho);
+              }
+            }
+          }
+
+          let thoiGianDk = [];
+          thoiGianDk.push(this.khBanDauGia.tgDkTcTuNgay);
+          thoiGianDk.push(this.khBanDauGia.tgDkTcDenNgay);
+          this.formData.patchValue({
+            thoiGianDuKien: thoiGianDk
+          })
         }
       })
       .catch((e) => {
@@ -623,23 +683,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          await this.save(true);
           let body = {
             id: this.formData.get('id').value,
-            trangThai: '',
+            trangThaiId: '',
           };
-          switch (this.formData.get('trangThai').value) {
+          switch (this.khBanDauGia.trangThai) {
             case '00':
             case '03':
             case '00': {
-              body.trangThai = '01';
+              body.trangThaiId = '01';
               break;
             }
             case '01': {
-              body.trangThai = '09';
+              body.trangThaiId = '09';
               break;
             }
             case '09': {
-              body.trangThai = '02';
+              body.trangThaiId = '02';
             }
           }
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
@@ -681,7 +742,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             lyDo: text,
             trangThai: '',
           };
-          switch (this.formData.get('trangThai').value) {
+          switch (this.khBanDauGia.trangThai) {
             case '01': {
               body.trangThai = '03';
               break;
@@ -709,7 +770,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   setTitle() {
-    let trangThai = this.formData.get('trangThai').value;
+    let trangThai = this.khBanDauGia.trangThai;
     switch (trangThai) {
       case '00': {
         this.titleStatus = 'Dự thảo';
@@ -782,7 +843,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .getDetailByMaHh(this.formData.get("loaiHangHoa").value)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.khBanDauGia.tieuChuanChatLuong = res.data.tenQchuan;
+          this.khBanDauGia.tieuChuanChatLuong = res.data?.tenQchuan;
           this.formData.patchValue({
             tieuChuanChatLuong: this.khBanDauGia.tieuChuanChatLuong
           })

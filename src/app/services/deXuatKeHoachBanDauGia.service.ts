@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
@@ -43,10 +43,7 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   loadChiTiet(id: number): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/search?`
-    if (id)
-      url_ += 'id=' + encodeURIComponent('' + id) + '&';
-    url_ = url_.replace(/[?&]$/, '');
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/${id}`
     return this.httpClient.get<any>(url_).toPromise();
   }
 
@@ -66,13 +63,17 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/delete/multiple`;
-    return this.httpClient.post(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: body
+    }
+    return this.httpClient.delete(url, httpOptions).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/trang-thai`;
-    return this.httpClient.put<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/trang-thai?id=${body.id}&trangThaiId=${body.trangThaiId}`;
+    return this.httpClient.put<any>(url, null).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {

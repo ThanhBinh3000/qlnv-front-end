@@ -1,4 +1,10 @@
 ::ng-deep {
+    .tt-chung-dx-dau-gia {
+        .tab-menu-new .tab-level-2 .ant-tabs-content-holder {
+            overflow-y: none !important;
+        }
+    }
+
     .them-moi-nhap-xuat-hang__body {
 
         .table__body,

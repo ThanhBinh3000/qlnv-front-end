@@ -127,4 +127,29 @@ export class DonviService extends BaseService {
 
     return result;
   }
+
+  getTonKho(body: any): Promise<any> {
+    let url_ = `${environment.SERVICE_API}/qlnv-luukho/lk-hang-trong-kho?`;
+    if (body.maChiCuc)
+      url_ += 'maChiCuc=' + encodeURIComponent('' + body.maChiCuc) + '&';
+    if (body.maDiemKho)
+      url_ += 'maDiemKho=' + encodeURIComponent('' + body.maDiemKho) + '&';
+    if (body.maNhaKho)
+      url_ += 'maNhaKho=' + encodeURIComponent('' + body.maNhaKho) + '&';
+    if (body.maNganKho)
+      url_ += 'maNganKho=' + encodeURIComponent('' + body.maNganKho) + '&';
+    if (body.maLokho)
+      url_ += 'maLokho=' + encodeURIComponent('' + body.maLokho) + '&';
+    if (body.chungLoaiHH)
+      url_ += 'chungLoaiHH=' + encodeURIComponent('' + body.chungLoaiHH) + '&';
+    if (body.loaiHH)
+      url_ += 'loaiHH=' + encodeURIComponent('' + body.loaiHH) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+    if (body.pageSize)
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+
+    url_ = url_.replace(/[?&]$/, '');
+    return this.httpClient.get<any>(url_).toPromise();
+  }
 }

@@ -24,42 +24,37 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
   styleUrls: ['./quan-ly-phieu-xuat-kho.component.scss']
 })
 export class QuanLyPhieuXuatKhoComponent implements OnInit {
-
-
-
-
-
-
-
  @Input() typeVthh: string;
 
+ // các input search
   searchFilter = {
+    soQuyetDinh: '',
     soPhieu: '',
     ngayXuatKho: '',
-    soQuyetDinh: '',
     soHopDong:''
   };
-
+// lấy data vào bảng
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listLoKho:any[]=[];
-
+// user : quyền và một số data
   userInfo: UserLogin;
-
+// phân trang trong table
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
+// check view
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-
+  isTatCa : boolean =false;
+// check all trong table
   allChecked = false;
   indeterminate = false;
-
+// chức năng search trong table
   filterTable: any = {
     soPhieu: '',
     soQuyetDinhXuat: '',
@@ -67,9 +62,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
     ngayXuatKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
-    tenNganLo: '',
+    tenNganKho: '',
     tenLoKho:'',
-    trangThaiDuyet:''
+    trangThai:''
   };
 
   constructor(
@@ -87,6 +82,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+       if (!this.typeVthh || this.typeVthh == '') {
+         this.isTatCa = true;
+       }
       await Promise.all([
         // this.loadDiemKho(),
         // this.loadNganLo(),
@@ -108,37 +106,6 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    }
-  }
-
-  updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {
-      this.indeterminate = true;
     }
   }
 
@@ -185,6 +152,37 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 
@@ -273,9 +271,11 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   }
 
   async search() {
+    // cần thay đổi cái key-name đúng nếu có services
     let body = {
       "denNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 1 ? dayjs(this.searchFilter.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
       "maDvi": this.userInfo.MA_DVI,
+      "loaiVthh": this.typeVthh,
       "orderBy": null,
       "orderDirection": null,
       "pageNumber": this.page,

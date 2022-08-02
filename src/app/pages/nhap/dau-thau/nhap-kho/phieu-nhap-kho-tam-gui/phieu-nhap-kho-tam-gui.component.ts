@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-phieu-nhap-kho-tam-gui',
   templateUrl: './phieu-nhap-kho-tam-gui.component.html',
@@ -67,6 +68,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -90,7 +92,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

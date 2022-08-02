@@ -11,6 +11,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-bien-ban-gui-hang',
   templateUrl: './bien-ban-gui-hang.component.html',
@@ -66,6 +67,7 @@ export class BienBanGuiHangComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -89,7 +91,7 @@ export class BienBanGuiHangComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

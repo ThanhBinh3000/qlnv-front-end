@@ -44,10 +44,6 @@
                   [nzShowPagination]="false">
                   <thead>
                     <tr>
-                      <th width="45px">
-                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                          [nzIndeterminate]="indeterminate"></label>
-                      </th>
                       <th class="text-center" width="60px">STT</th>
                       <th>Số quyết định</th>
                       <th>Ngày quyết định</th>
@@ -59,7 +55,6 @@
                   </thead>
                   <tbody>
                     <tr class="search-table">
-                      <td></td>
                       <td></td>
                       <td>
                         <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -109,25 +104,22 @@
                       <td></td>
                     </tr>
                     <tr *ngFor="let data of basicTable.data; let i = index">
-                      <th width="45px">
-                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                          [nzDisabled]="data.trangThai != '00'"></label>
-                      </th>
-                      <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                      <td>{{ data.soQd }}</td>
-                      <td>{{ data.ngayQdinh ? data.ngayQdinh.split(' ')[0] : ''}}</td>
-                      <td>{{ data.namNhap }}</td>
-                      <td>{{ data.trichYeu }}</td>
-                      <td>{{ data.tenTrangThai }}</td>
-                      <td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH" class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH">{{ data.soQd }}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH">{{ data.ngayQdinh ? data.ngayQdinh.split(' ')[0] : ''}}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH">{{ data.namNhap }}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH">{{ data.trichYeu }}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH">{{ data.tenTrangThai }}</td>
+                      <td *ngIf="data.trangThai === globals.prop.BAN_HANH" class="text-right">
                         <a (click)="redirectToThongTin(data.id, true)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
                         <a (click)="redirectToThongTin(data.id, false)"
-                          *ngIf="userService.isCuc() && data.trangThai == '00'">
+                          *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == '00'">
+                        <a (click)="xoaItem(data)"
+                          *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -137,7 +129,6 @@
                 <div class="tab-content tab-menu" id="myTabContent">
                   <div class="tab-pane fade show active justify-content-between">
                     <div class="trai">
-
                     </div>
                     <div class="canphai">
                       <!-- begin phân trang  -->

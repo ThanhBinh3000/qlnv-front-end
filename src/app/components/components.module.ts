@@ -114,6 +114,7 @@ import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-
 import { DialogMuabuBosungBtcComponent } from './dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component';
 import { MuaBuBoSungComponent } from './dialog/dialog-muabu-bosung-btc/mua-bu-bo-sung/mua-bu-bo-sung.component';
 import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
+import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 
 @NgModule({
   declarations: [
@@ -163,6 +164,7 @@ import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem
     DialogDiaDiemKhoComponent,
     DanhSachQuyetDinhPhanBoComponent,
     DialogThemDiaDiemNhapKhoComponent,
+    DialogThemDanhMucDungChungComponent,
     FileListComponent,
     //pipes
     FilterPipe,

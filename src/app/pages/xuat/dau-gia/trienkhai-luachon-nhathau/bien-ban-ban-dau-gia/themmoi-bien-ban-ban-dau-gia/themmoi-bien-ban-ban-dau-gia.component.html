@@ -6,30 +6,22 @@
                 <div class="trai">
                 </div>
                 <div class="canphai phai">
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+                        <i class="fa fa-arrow-left"></i>
+                        <span>Quay lại</span>
+                    </a>
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
                         *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
                         (click)="guiDuyet()">
-                        <i class="icon htvbdh_trinh"></i>
-                        <span>Lưu và gửi duyệt</span>
+                        <i class="icon htvbdh_checkfile2"></i>
+                        <span>Hoàn thành cập nhật</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                        *ngIf="detail.trangThai == '04' && !isView" (click)="pheDuyet()">
-                        <i class="icon htvbdh_dakyduyet"></i>
-                        <span>Duyệt</span>
-                    </button>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-                        *ngIf="detail.trangThai == '04'">
-                        <i class="icon htvbdh_tcdt_tuchoi"></i>
-                        <span>Từ chối</span>
-                    </a>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-                        *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView">
+                    <button class="btn btn-main btn-sm waves-effect waves-light"
+                        *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
+                        (click)="save(false)">
                         <i class="icon  htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-                        <span>Quay về</span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -51,7 +43,11 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Năm kế hoạch
                                 </nz-form-label>
-                                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
+                                <nz-select [(ngModel)]="detail.nam"
+                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
+                                </nz-select>
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="4">
@@ -59,7 +55,7 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Số biên bản
                                 </nz-form-label>
-                                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                                <input nz-input [(ngModel)]="detail.soBienBan" disabled />
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="15">
@@ -67,7 +63,8 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Trích yếu
                                 </nz-form-label>
-                                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                                <input nz-input [(ngModel)]="detail.trichYeu"
+                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="3">
@@ -77,18 +74,19 @@
                                 </nz-form-label>
                                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
                                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView"
-                                    nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayNhapKho">
+                                    nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy">
                                 </nz-date-picker>
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="4">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
-                                    Loại hàng hàng
+                                    Loại hàng
                                 </nz-form-label>
-                                <input nz-input placeholder="Nhập họ tên người giao hàng"
-                                    [(ngModel)]="detail.nguoiGiaoHang"
-                                    [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="detail.loaiVthh" nzAllowClear>
+                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                    </nz-option>
+                                </nz-select>
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="4">
@@ -97,7 +95,7 @@
                                     Mã thông báo bán đấu giá
                                 </nz-form-label>
                                 <input nz-input placeholder="Nhập họ tên người giao hàng"
-                                    [(ngModel)]="detail.nguoiGiaoHang"
+                                    [(ngModel)]="detail.maThongBaoBDG"
                                     [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
                             </nz-form-item>
                         </div>

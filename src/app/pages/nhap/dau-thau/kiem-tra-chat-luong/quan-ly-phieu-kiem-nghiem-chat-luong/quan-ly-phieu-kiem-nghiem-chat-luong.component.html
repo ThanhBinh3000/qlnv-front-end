@@ -123,11 +123,12 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(false, data.id)"
-                        *ngIf="userService.isChiCuc() && data.trangThai == '00'">
+                      <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_TP_KTBQ || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
+                        (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data.id)" *ngIf="userService.isChiCuc() && data.trangThai == '00'">
+                      <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()"
+                        (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

@@ -17,7 +17,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhap
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -79,7 +79,8 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.bienBanChuanBiKho.maDvi = this.userInfo.MA_DVI;
       this.bienBanChuanBiKho.tenDvi = this.userInfo.TEN_DVI;
-      this.detail.trangThai = "00";
+      this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
+      this.detail.tenTrangThai = 'Dự thảo';
 
       this.initForm();
       await Promise.all([
@@ -97,6 +98,12 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  isDisableField() {
+    if (this.bienBanChuanBiKho && (this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      return true;
     }
   }
 
@@ -371,7 +378,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -712,7 +719,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
           let res =
             await this.bienBanChuanBiKhoService.updateStatus(
@@ -735,9 +742,9 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = '02';
-    if (this.bienBanChuanBiKho.trangThai == '04') {
-      trangThai = '01';
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
+    if (this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+      trangThai = this.globals.prop.NHAP_DA_DUYET;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -792,7 +799,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           let res =
             await this.bienBanChuanBiKhoService.updateStatus(
@@ -818,18 +825,8 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
-      return 'da-ban-hanh';
-    }
+    return thongTinTrangThaiNhap(trangThai);
   }
 
   print() {
@@ -911,13 +908,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.tongGiaTri)
       : '0';
   }
-  // calcChiPhiDaQuyetToan(): string {
-  //   this.chiTietChuanBiKhoCreate.thanhTienQt = +this.chiTietChuanBiKhoCreate.soLuongQt
-  //     + +this.chiTietChuanBiKhoCreate.soLuongQt;
-  //   return this.chiTietChuanBiKhoCreate.thanhTienQt
-  //     ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.thanhTienQt)
-  //     : '0';
-  // }
+
   calcTongCong(): string {
     const tong = this.dsChiTietChuanBiKhoClone.length > 0 ?
       this.dsChiTietChuanBiKhoClone.reduce((total, currentValue) =>
