@@ -649,7 +649,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           let res =
             await this.quanLyBangKeVatTuService.updateStatus(
