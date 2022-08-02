@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
+import { DataService } from '../../data.service';
 
 export class ItemCongVan {
     fileName: string;
@@ -98,6 +99,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private userService: UserService,
         private location: Location,
+        private dataSource: DataService,
     ) {
     }
 
@@ -124,7 +126,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                     this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-                    this.donViTaos = this.donVis.filter(e => e?.maDviCHa === this.userInfo?.dvql);
+                    this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -276,6 +278,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        const obj = {
+            maBcao: null,
+            namBcao: null,
+        }
         if (this.loai == "0") {
             let checkBcao = false;
             const requestReport = {
@@ -295,8 +301,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
                 (data) => {
                     if (data.statusCode == 0) {
-                        if (data.data.content.length > 0) {
+                        const danhSach = data.data.content;
+                        if (danhSach.length > 0) {
                             checkBcao = true;
+                            obj.maBcao = danhSach[0].maBcao;
+                            obj.namBcao = danhSach[0].namBcao;
                         }
                     } else {
                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -313,8 +322,9 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             }
         }
         if (this.loai == "0") {
+            this.dataSource.changeData(obj);
             this.router.navigate([
-                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/0/' + this.searchFilter.maBaoCao,
+                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc',
             ]);
         } else {
             this.router.navigate([
