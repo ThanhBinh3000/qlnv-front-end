@@ -136,7 +136,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "capDvis": this.userService.isCuc() ? '2,3' : null,
+      "capDvis": '3',
       "maDvis": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap ?? null,

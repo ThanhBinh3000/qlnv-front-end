@@ -20,6 +20,9 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
       url_ += 'denNgayNhapKho=' + encodeURIComponent('' + body.denNgayNhapKho) + '&';
     if (body.maDvi)
       url_ += 'maDvis=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.loaiVthh)
       url_ += 'loaiVthh=' + encodeURIComponent('' + body.loaiVthh) + '&';
     if (body.soQdNhap)

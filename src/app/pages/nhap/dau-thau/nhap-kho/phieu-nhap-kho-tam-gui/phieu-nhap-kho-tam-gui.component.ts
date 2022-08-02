@@ -120,6 +120,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": '3',
       soPhieu: this.searchFilter.soPhieu,
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       ngayNhapKho: this.searchFilter.ngayNhapKho,

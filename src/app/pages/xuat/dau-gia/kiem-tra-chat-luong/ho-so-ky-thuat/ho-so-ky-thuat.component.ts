@@ -128,6 +128,7 @@ export class HoSoKyThuatComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": '3',
       "maDvi": this.userInfo.MA_DVI,
       "maVatTu": this.searchFilter.maVatTu,
       "maVatTuCha": this.searchFilter.maVatTuCha,

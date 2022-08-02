@@ -119,6 +119,7 @@ export class BienBanGuiHangComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": '3',
       soBienBan: this.searchFilter.soBienBan,
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       ngayGuiHang: this.searchFilter.ngayGuiHang,

@@ -27,6 +27,9 @@ export class QuanLyBienBanGiaoNhanService extends BaseService {
     if (body.ngayHopDongTu) {
       url_ += 'ngayHopDongTu=' + encodeURIComponent('' + body.ngayHopDongTu) + '&';
     }
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.ngayHopDongDen) {
       url_ += 'ngayHopDongDen=' + encodeURIComponent('' + body.ngayHopDongDen) + '&';
     }

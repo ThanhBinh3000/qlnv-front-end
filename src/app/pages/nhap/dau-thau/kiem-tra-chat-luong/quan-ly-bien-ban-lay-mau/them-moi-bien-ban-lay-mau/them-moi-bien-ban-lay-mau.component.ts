@@ -152,6 +152,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async loadBienBanDayKho() {
     let param = {
+      "capDvis": '3',
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,

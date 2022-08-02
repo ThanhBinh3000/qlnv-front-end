@@ -18,6 +18,9 @@ export class HoSoKyThuatService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ho-so-ky-thuat?`;
     if (body.maDvi)
       url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.maVatTu)
       url_ += 'maVatTu=' + encodeURIComponent('' + body.maVatTu) + '&';
     if (body.maVatTuCha)

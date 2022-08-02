@@ -129,6 +129,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
   async search() {
     let param =
     {
+      "capDvis": '3',
       "ngayHopDongTu": this.searchFilter.ngayHopDong && this.searchFilter.ngayHopDong.length > 1
         ? dayjs(this.searchFilter.ngayHopDong[0]).format('YYYY-MM-DD')
         : null,

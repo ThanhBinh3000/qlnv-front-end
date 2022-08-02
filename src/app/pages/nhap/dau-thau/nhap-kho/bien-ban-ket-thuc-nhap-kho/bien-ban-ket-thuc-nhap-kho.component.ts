@@ -124,6 +124,7 @@ export class BienBanKetThucNhapKhoComponent implements OnInit {
   async search() {
     let param =
     {
+      "capDvis": '3',
       "ngayKetThucTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1
         ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD')
         : null,

@@ -121,6 +121,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,

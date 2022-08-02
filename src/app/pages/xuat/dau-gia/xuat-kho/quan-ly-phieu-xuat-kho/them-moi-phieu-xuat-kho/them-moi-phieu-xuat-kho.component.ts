@@ -28,7 +28,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
-   @Input() id: number;
+  @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Output()
@@ -137,6 +137,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,

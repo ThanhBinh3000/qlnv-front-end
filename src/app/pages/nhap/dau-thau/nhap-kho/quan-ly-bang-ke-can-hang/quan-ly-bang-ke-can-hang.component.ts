@@ -120,6 +120,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   async search() {
     let param = {
+      "capDvis": '3',
       "denNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
