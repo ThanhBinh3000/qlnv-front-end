@@ -58,6 +58,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       page: 1
     },
     trangThais: [],
+    trangThaiGiaos : [],
   };
   //danh muc
   danhSachBaoCao: any = [];
@@ -176,8 +177,9 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9,Utils.TT_BC_KT]
     }
+    searchFilterTemp.trangThaiGiaos = ['0','1','2']
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
