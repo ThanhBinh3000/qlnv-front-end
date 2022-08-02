@@ -97,18 +97,16 @@
     <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
       <tr>
-        <th style="width: 3%"></th>
         <th class="text-center" style="width: 3%;">STT</th>
         <th style="width: 45%;">Bộ</th>
         <th style="width: 10%;">Tổng</th>
         <th style="width: 12%;">Kế hoạch mua bù</th>
         <th style="width: 12%;">Kế hoạch mua bổ sung</th>
-        <th style="width: 8%;"></th>
+        <th style="width: 8%;">Hành động</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
-        <td style="width: 3%"></td>
         <td class="text-center">{{ idx + 1 }}</td>
         <td>{{ data.tenBoNganh }}</td>
         <td>{{ data.tongTien }}</td>

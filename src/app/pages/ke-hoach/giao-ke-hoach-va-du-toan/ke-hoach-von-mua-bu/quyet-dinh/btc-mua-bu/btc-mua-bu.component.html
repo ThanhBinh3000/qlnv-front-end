@@ -4,7 +4,7 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="ds-ttcp">
         <div class="search__body" nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-label nzFor="nam-qd">Năm Quyết Định</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="namQd" id="nam-qd">
                 <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
@@ -14,16 +14,16 @@
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
+            <nz-form-label nzFor="so-qd">Số Quyết Định</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="so-qd">
+              <nz-input-number [nzSize]="'small'" id="so-qd">
                 <input type="text" nz-input formControlName="soQd" />
-              </nz-input-group>
+              </nz-input-number>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+            <nz-form-label nzFor="ngay-qd">Ngày Quyết Định</nz-form-label>
             <nz-form-control>
               <nz-form-control>
                 <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
@@ -77,16 +77,16 @@
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <tbody>
         <tr class="header-row">
-          <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+          <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
-          <th class="text-center" style="width: 1%;">STT</th>
+          <th class="text-center" style="width: 2%;">STT</th>
           <th style="width: 10%;">Số QĐ</th>
-          <th style="width: 5%;">Năm QĐ</th>
-          <th style="width: 7%;">Ngày QĐ</th>
-          <th style="width: 20%;">Trích yếu</th>
+          <th style="width: 10%;">Năm QĐ</th>
+          <th style="width: 10%;">Ngày QĐ</th>
+          <th style="width: 25%;">Trích yếu</th>
           <th style="width: 10%;">Trạng thái</th>
-          <th width="width: 5%;">Thao tác</th>
-          <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+          <th class="text-center" width="width: 5%;">Hành động</th>
+          <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
             <div class="container">
               <div class="header">
                 <h3 class="first">Bộ</h3>
