@@ -77,16 +77,16 @@
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <tbody>
         <tr class="header-row">
-          <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+          <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
-          <th class="text-center" style="width: 1%;">STT</th>
+          <th class="text-center" style="width: 2%;">STT</th>
           <th style="width: 10%;">Số nghị quyết</th>
-          <th style="width: 5%;">Năm nghị quyết</th>
-          <th style="width: 7%;">Ngày nghị quyết</th>
-          <th style="width: 20%;">Trích yếu</th>
+          <th style="width: 10%;">Năm nghị quyết</th>
+          <th style="width: 10%;">Ngày nghị quyết</th>
+          <th style="width: 25%;">Trích yếu</th>
           <th style="width: 10%;">Trạng thái</th>
-          <th width="width: 5%;">Thao tác</th>
-          <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+          <th class="text-center" width="width: 5%;">Hành động</th>
+          <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
             <div class="container">
               <div class="header">
                 <h3 class="first">Bộ</h3>

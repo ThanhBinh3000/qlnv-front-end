@@ -274,7 +274,9 @@ export class ThemMoiTtcpComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
       this.listUbtvqh = data
+      console.log(data)
     }
+    console.log(this.listUbtvqh)
   }
 
 }
