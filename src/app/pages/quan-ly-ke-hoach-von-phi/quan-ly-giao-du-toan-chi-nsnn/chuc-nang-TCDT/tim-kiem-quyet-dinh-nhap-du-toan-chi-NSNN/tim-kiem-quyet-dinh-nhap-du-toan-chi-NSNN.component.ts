@@ -29,6 +29,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     ngayTaoDen: "",
     maPa: "",
     trangThais: ["1"],
+    trangThaiGiaos : [],
     paggingReq: {
       limit: 10,
       page: 1
@@ -118,6 +119,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    searchFilterTemp.trangThaiGiaos = ['0','1','2']
     this.spinner.show();
     await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
