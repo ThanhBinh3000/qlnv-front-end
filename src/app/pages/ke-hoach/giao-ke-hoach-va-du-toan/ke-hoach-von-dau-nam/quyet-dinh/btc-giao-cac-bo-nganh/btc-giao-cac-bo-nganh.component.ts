@@ -21,18 +21,15 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   isAddNew = false;
   formData: FormGroup;
   toDay = new Date();
-  last30Day = new Date(
-    new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
-  );
   allChecked = false;
   indeterminate = false;
 
   dsNam: string[] = [];
-  searchInTable: any = {
-    soQd: null,
+  searchInTable = {
+    soQd: '',
     namQd: dayjs().get('year'),
-    ngayQd: new Date(),
-    trichYeu: null,
+    ngayQd: '',
+    trichYeu: '',
   };
   filterTable: any = {
     soQd: '',
@@ -87,13 +84,17 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search();
+    console.log(this.searchInTable);
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    body.tuNgay = body.ngayQd[0];
-    body.denNgay = body.ngayQd[1];
+    if (body.ngayQd != null) {
+      body.tuNgay = body.ngayQd[0];
+      body.denNgay = body.ngayQd[1];
+    }
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
@@ -329,7 +330,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           if (item.trangThai == '00') {
-            item.checked = true;
+            item.checked = false;
           }
         });
       }

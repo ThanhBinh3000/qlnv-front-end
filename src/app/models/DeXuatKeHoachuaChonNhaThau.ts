@@ -139,6 +139,7 @@ export class ThongTinQuyetDinh {
 
 export class KeHoachMuaXuat {
   id: number;
+  idDanhMuc: number;
   idNoiDung: number;
   noiDung: string;
   sluongDtoan: number;

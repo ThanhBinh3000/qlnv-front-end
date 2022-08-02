@@ -45,7 +45,9 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <input type="text" nz-input formControlName="soQd" [readOnly]="isView" />
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                  [nzSize]="'small'">
+                </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>

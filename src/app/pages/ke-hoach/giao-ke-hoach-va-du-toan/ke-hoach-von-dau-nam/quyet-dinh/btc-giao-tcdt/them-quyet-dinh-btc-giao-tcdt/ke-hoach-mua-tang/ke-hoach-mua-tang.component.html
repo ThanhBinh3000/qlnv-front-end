@@ -18,7 +18,7 @@
         <td>
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
-              (ngModelChange)="onChangeLoaiVthh($event)">
+              (ngModelChange)="onChangeLoaiVthh($event,'add')">
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
               </nz-option>
             </nz-select>
@@ -28,7 +28,6 @@
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
               (ngModelChange)="onChangeCloaiVthh($event)">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
               </nz-option>
             </nz-select>
@@ -72,7 +71,7 @@
       </tr>
 
       <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td class="text-center">{{ idx + 1 }}</td>
           <td>{{ data.tenVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
@@ -81,7 +80,7 @@
           <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(data.id)">
+            <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(idx)">
@@ -93,25 +92,24 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.loaiVthh" [nzShowArrow]="false">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsHangHoa">
+              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event,'edit')"
+                [nzShowArrow]="false">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.tenCloaiVthh">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.idx}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsChungLoaiHangHoa">
+              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoaTable">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.dviTinh">
+              <nz-select [(ngModel)]="dataEdit[idx].data.dviTinh">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option nzValue="{{item.ma }}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
                 </nz-option>
@@ -120,27 +118,27 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.soLuong" [nzMin]="0">
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.donGia" [nzMin]="0">
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.tongTien" [nzMin]="0">
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.tongTien" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td class="text-center">
-            <a (click)="luuEdit(data.id)" class="save">
+            <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(data.id)">
+            <a (click)="huyEdit(idx)">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
