@@ -109,8 +109,8 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
-		title: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN tại các đơn vị',
-		description: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN tại các đơn vị',
+		title: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN tại đơn vị',
+		description: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN các đơn vị',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1`,
 		Role: [
 			NHAN_VIEN_CKV,
@@ -124,8 +124,8 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
-		title: 'Danh sách số kiểm tra chi NSNN tại các đơn vị',
-		description: 'Danh sách số kiểm tra chi NSNN tại các đơn vị',
+		title: 'Danh sách số kiểm tra chi NSNN cho các đơn vị cấp dưới',
+		description: 'Danh sách số kiểm tra chi NSNN cho các đơn vị cấp dưới',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-so-kiem-tra-chi-nsnn`,
 		Role: [
 			NHAN_VIEN_CKV,
@@ -139,8 +139,8 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
-		title: 'Danh sách nhận số kiểm tra chi NSNN tại các đơn vị',
-		description: 'Danh sách nhận số kiểm tra chi NSNN tại các đơn vị',
+		title: 'Danh sách nhận số kiểm tra chi NSNN nhận từ đơn vị cấp trên',
+		description: 'Danh sách nhận số kiểm tra chi NSNN nhận từ đơn vị cấp trên',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/nhan-so-kiem-tra-chi-nsnn`,
 		Role: [
 			NHAN_VIEN_CC,

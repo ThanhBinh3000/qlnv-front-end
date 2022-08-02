@@ -1253,6 +1253,7 @@ export class QuanLyVonPhiService extends BaseService {
   approveBaoCao(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
+      // 'http://192.168.1.109:8094/bao-cao/trang-thai',
       request,
     );
   }
