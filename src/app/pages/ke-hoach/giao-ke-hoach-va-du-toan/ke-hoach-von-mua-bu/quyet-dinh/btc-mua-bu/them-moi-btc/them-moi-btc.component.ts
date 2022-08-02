@@ -61,7 +61,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namQd: [, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
         soQd: [, [Validators.required]],
         soQdTtcp:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
@@ -79,6 +79,7 @@ export class ThemMoiBtcComponent implements OnInit {
       this.loadDsNam(),
       this.maQd = "/QĐ-BTC",
       this.getDataDetail(this.idInput),
+      this.onChangeNamQd(this.formData.get("namQd").value)
     ])
     this.spinner.hide();
   }
@@ -205,6 +206,7 @@ export class ThemMoiBtcComponent implements OnInit {
   }
 
   async save() {
+    console.log(this.findSoTtcpByNam(this.formData.value.namQd))
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -218,25 +220,31 @@ export class ThemMoiBtcComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    let list = this.findSoTtcpByNam(body.namQd);
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-      res = await this.qdBtcService.update(body);
+      if (list == null) {
+        this.notification.error(MESSAGE.ERROR, "fail");
+        return;
+      } else  {
+        res = await this.qdBtcService.update(body);
+      }
     } else {
       res = await this.qdBtcService.create(body);
-      console.log(body)
     }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
     this.spinner.hide();
   }
 
@@ -277,7 +285,18 @@ export class ThemMoiBtcComponent implements OnInit {
       const data = res.data.content;
       this.listTtcp = data
     }
-    console.log(this.listTtcp)
+    console.log(this.formData.value)
+  }
+
+  async findSoTtcpByNam(nam) {
+    let body = {
+      namQd: nam,
+      trangThai: "11"
+    }
+    let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.content;
+    }
   }
 
 }
