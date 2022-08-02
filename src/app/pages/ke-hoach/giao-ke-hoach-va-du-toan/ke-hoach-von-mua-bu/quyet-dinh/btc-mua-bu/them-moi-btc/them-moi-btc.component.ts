@@ -206,7 +206,6 @@ export class ThemMoiBtcComponent implements OnInit {
   }
 
   async save() {
-    console.log(this.findSoTtcpByNam(this.formData.value.namQd))
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -220,17 +219,11 @@ export class ThemMoiBtcComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    let list = this.findSoTtcpByNam(body.namQd);
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-      if (list == null) {
-        this.notification.error(MESSAGE.ERROR, "fail");
-        return;
-      } else  {
         res = await this.qdBtcService.update(body);
-      }
     } else {
       res = await this.qdBtcService.create(body);
     }
@@ -276,6 +269,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
   async onChangeNamQd(namQd) {
+    this.formData.get('soQdTtcp').setValue(null);
     let body = {
       namQd: namQd,
       trangThai: "11"
@@ -286,17 +280,6 @@ export class ThemMoiBtcComponent implements OnInit {
       this.listTtcp = data
     }
     console.log(this.formData.value)
-  }
-
-  async findSoTtcpByNam(nam) {
-    let body = {
-      namQd: nam,
-      trangThai: "11"
-    }
-    let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-    }
   }
 
 }

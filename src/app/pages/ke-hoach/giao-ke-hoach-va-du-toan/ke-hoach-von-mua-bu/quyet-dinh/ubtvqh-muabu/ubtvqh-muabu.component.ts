@@ -178,7 +178,7 @@ export class UbtvqhMuabuComponent implements OnInit {
         this.quyetDinhUbtvqhMuBuBoSung
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-cua- bo-tai-chinh.xlsx'),
+            saveAs(blob, 'quyet-dinh-cua-ubtvqh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

@@ -265,6 +265,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
   async onChangeNamQd(namQd) {
+    this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
       trangThai: "11"
