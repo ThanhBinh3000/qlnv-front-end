@@ -1379,6 +1379,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.soQd = data.data.paDtoan.soQd;
           this.thuyetMinh = data.data.paDtoan.thuyetMinh;
           this.lstFiles = data.data.paDtoan.lstFiles;
+          this.checkSumUp = !data.data.paDtoan.checkSumUp;
           this.listFile = [];
           this.lstDvi = [];
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
