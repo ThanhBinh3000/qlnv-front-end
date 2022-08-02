@@ -170,6 +170,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,

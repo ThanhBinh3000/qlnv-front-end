@@ -127,6 +127,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": '3',
       "ngayBienBanTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
         ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
         : null,

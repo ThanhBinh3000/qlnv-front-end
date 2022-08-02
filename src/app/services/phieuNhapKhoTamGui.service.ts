@@ -25,6 +25,9 @@ export class PhieuNhapKhoTamGuiService extends BaseService {
       url_ += 'ngayNhapKhoTu=' + encodeURIComponent('' + dayjs(body.ngayNhapKho[0]).format('YYYY-MM-DD')) + '&';
       url_ += 'ngayNhapKhoDen=' + encodeURIComponent('' + dayjs(body.ngayNhapKho[1]).format('YYYY-MM-DD')) + '&';
     }
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.soPhieu)
       url_ +=
         'soPhieu=' + encodeURIComponent('' + body.soPhieu) + '&';

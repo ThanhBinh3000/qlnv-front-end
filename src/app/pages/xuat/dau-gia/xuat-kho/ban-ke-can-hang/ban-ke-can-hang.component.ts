@@ -117,6 +117,7 @@ export class BanKeCanHangComponent implements OnInit {
 
   async search() {
     let param = {
+      "capDvis": '3',
       "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,

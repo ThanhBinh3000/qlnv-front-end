@@ -141,6 +141,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   }
   async loadPhieuNhapKhoTamGui() {
     let body = {
+      "capDvis": '3',
       soPhieu: null,
       soQuyetDinh: null,
       ngayNhapKho: null,
