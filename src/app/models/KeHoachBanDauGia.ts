@@ -18,6 +18,7 @@ export class KeHoachBanDauGia {
     phuongThucThanhToan: string;
     qdGiaoChiTieuId: number;
     qdGiaoChiTieuNam: string;
+    soQuyetDinhGiaoChiTieu: string;
     soKeHoach: string;
     soLuong: number;
     tgDkTcDenNgay: string;
@@ -48,20 +49,26 @@ export class KeHoachBanDauGia {
 
 export class PhanLoTaiSan {
     bhDgKehoachId: number;
-    chiCuc: string;
     chungLoaiHh: string;
-    diemKho: string;
     donGia: number;
     donViTinh: string;
     giaKhoiDiem: number;
     id: number;
-    loKho: string;
+    maChiCuc: string;
+    maDiemKho: string;
     maDvTaiSan: string;
-    nganKho: string;
+    maLoKho: string;
+    maNganKho: string;
+    maNhaKho: string;
     soLuong: number;
     soTienDatTruoc: number;
     stt: number;
-    tonKho: number;
+    tenChiCuc: string;
+    tenDiemKho: string;
+    tenLoKho: string;
+    tenNganKho: string;
+    tenNhaKho: string;
+    tonKho: string;
 }
 export class DiaDiemGiaoNhan {
     bhDgKehoachId: number;

@@ -72,8 +72,8 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/trang-thai`;
-    return this.httpClient.put<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ke-hoach-ban-dau-gia/trang-thai?id=${body.id}&trangThaiId=${body.trangThaiId}`;
+    return this.httpClient.put<any>(url, null).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {

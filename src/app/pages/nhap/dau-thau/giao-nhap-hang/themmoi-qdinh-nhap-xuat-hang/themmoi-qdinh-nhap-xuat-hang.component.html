@@ -28,7 +28,7 @@
           <span>Từ chối</span>
         </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && typeVthh != '02'"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() &&  typeVthh != '02'"
           [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
