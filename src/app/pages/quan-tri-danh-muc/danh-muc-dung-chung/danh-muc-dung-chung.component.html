@@ -5,7 +5,7 @@
         <div class="tab-giao-chi-tieu">
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="action">
             <nz-tab nzTitle="Danh mục dùng chung">
-              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <nz-table #rowSelectionTable [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th width="45px" *ngIf="userService.isChiCuc()">
@@ -103,19 +103,18 @@
                     </th>
                     <th></th>
                   </tr>
-                  <tr>
+                  <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
                     <th width="45px" *ngIf="userService.isChiCuc()">
-                      <label nz-checkbox (ngModelChange)="updateSingleChecked()"></label>
+                      <label nz-checkbox></label>
                     </th>
-                    <td class="text-center">1</td>
-                    <td>NHOM_HANG_DTQG</td>
-                    <td>123</td>
+                    <td class="text-center">{{idx + 1}}</td>
+                    <td>{{data.giaTri}}</td>
+                    <td>{{data.ma}}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>17/02/2022</td>
-                    <td></td>
-                    <td>17/02/2022</td>
+                    <td>{{data.trangThai}}</td>
+                    <td>{{data.nguoiTao}}</td>
+                    <td>{{data.nguoiSua}}</td>
+                    <td>{{data.ngaySua}}</td>
                     <td>
                       <a (click)="redirectToChiTiet(true, 0)">
                         <i class="fa fa-eye"></i>

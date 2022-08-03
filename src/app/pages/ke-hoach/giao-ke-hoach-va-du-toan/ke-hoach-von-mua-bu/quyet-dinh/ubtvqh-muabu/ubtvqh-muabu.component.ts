@@ -207,9 +207,12 @@ export class UbtvqhMuabuComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach((item) => {
+      if (item.trangThai == '00') {
+        this.updateCheckedSet(item.id, checked);
+      }
+    })
     this.refreshCheckedStatus();
-    console.log(this.setOfCheckedId)
   }
 
   updateCheckedSet(id: number, checked: boolean): void {

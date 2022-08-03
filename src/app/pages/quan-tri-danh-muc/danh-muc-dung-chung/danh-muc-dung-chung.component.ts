@@ -12,6 +12,8 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-danh-muc-dung-chung',
@@ -23,10 +25,14 @@ export class DanhMucDungChungComponent implements OnInit {
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
+  formData: FormGroup;
+
   searchFilter = {
-    soBienBan: '',
-    soQuyetDinh: '',
-    ngayGuiHang: '',
+   ma: '',
+    maCha: '',
+    giaTri:'',
+    ghiChu: '',
+    loai: ''
   };
 
   optionsDonVi: any[] = [];
@@ -63,24 +69,30 @@ export class DanhMucDungChungComponent implements OnInit {
 
 
   constructor(
+    private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private bienBanGuiHangService: BienBanGuiHangService,
+    private dmDungCungService: DanhMucDungChungService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-  ) { }
+  ) {
+    this.formData = this.fb.group({
+      ma: [null],
+      maCha:  [null],
+      giaTri: [null],
+      ghiChu:  [null],
+      loai:  [null]
+    });
+  }
 
   async ngOnInit() {
-    this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
-      this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -118,27 +130,30 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   async search() {
-    let body = {
-      soBienBan: this.searchFilter.soBienBan,
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      ngayGuiHang: this.searchFilter.ngayGuiHang,
-      pageSize: this.pageSize,
-      pageNumber: this.page
-    };
-    let res = await this.bienBanGuiHangService.timKiem(body);
+    this.spinner.show();
+    let body = this.formData.value;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.dmDungCungService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
+
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -168,11 +183,7 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soBienBan: '',
-      soQuyetDinh: '',
-      ngayGuiHang: '',
-    };
+    this.formData.reset()
     this.search();
   }
 
@@ -192,7 +203,7 @@ export class DanhMucDungChungComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanGuiHangService.deleteData(item.id).then((res) => {
+          this.dmDungCungService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -227,40 +238,6 @@ export class DanhMucDungChungComponent implements OnInit {
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
-      try {
-        let body = {
-          "loaiVthh": this.typeVthh,
-          "maDvi": this.userInfo.MA_DVI,
-          "ngayGuiHangDen": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayGuiHangTu": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[0]).format('YYYY-MM-DD')
-            : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": null,
-            "orderType": null,
-            "page": 0
-          },
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null
-        };
-        this.bienBanGuiHangService
-          .exportList(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-gui-hang.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
@@ -287,7 +264,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanGuiHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

@@ -227,7 +227,11 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   onItemChecked(id: number, checked) {
-    this.updateCheckedSet(id, checked);
+    this.dataTable.forEach((item) => {
+      if (item.trangThai == '00') {
+        this.updateCheckedSet(item.id, checked);
+      }
+    })
     this.refreshCheckedStatus();
   }
 
