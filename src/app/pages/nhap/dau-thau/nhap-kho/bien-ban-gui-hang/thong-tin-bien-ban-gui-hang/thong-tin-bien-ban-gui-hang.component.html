@@ -10,24 +10,24 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
           </a>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="(bienBanGuiHang.trangThai == '00' || bienBanGuiHang.trangThai == '03' || id == 0) && !isView"
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="!isDisableField() && !isView"
             (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
           <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="bienBanGuiHang.trangThai == '04' || bienBanGuiHang.trangThai == '01'" (click)="pheDuyet()">
+            *ngIf="bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
+            (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-            *ngIf="bienBanGuiHang.trangThai == '04' || bienBanGuiHang.trangThai == '01'" (click)="tuChoi()">
+            *ngIf="bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
+            (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </a>
-          <button class="btn btn-main btn-sm waves-effect waves-light"
-            *ngIf="(bienBanGuiHang.trangThai == '00' || bienBanGuiHang.trangThai == '03' || id == 0) && !isView"
+          <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="!isDisableField() && !isView"
             (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -55,7 +55,7 @@
                   Số quyết định nhập
                 </nz-form-label>
                 <nz-select [(ngModel)]="bienBanGuiHang.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                  [disabled]="isDisableField() || isView">
                   <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
                   </nz-option>
                 </nz-select>
@@ -82,8 +82,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Phiếu nhập kho tạm gửi
                 </nz-form-label>
-                <nz-select [(ngModel)]="bienBanGuiHang.phieuNkTgId"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                <nz-select [(ngModel)]="bienBanGuiHang.phieuNkTgId" [disabled]="isDisableField() || isView">
                   <nz-option *ngFor="let item of phieuNhapKhoTamGuis" [nzValue]="item.id" [nzLabel]="item.soPhieu">
                   </nz-option>
                 </nz-select>
@@ -103,7 +102,7 @@
                   Theo hợp đồng số
                 </nz-form-label>
                 <nz-select [(ngModel)]="bienBanGuiHang.hopDongId" (ngModelChange)="changeHopDong()"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView">
+                  [disabled]="isDisableField() || isView">
                   <nz-option *ngFor="let item of listHopDong" [nzValue]="item.hopDong.id" [nzLabel]="item.hopDong.soHd">
                   </nz-option>
                 </nz-select>
@@ -189,8 +188,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Tình trạng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="bienBanGuiHang.tinhTrang"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="bienBanGuiHang.tinhTrang" [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="16">
@@ -198,8 +196,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Chất lượng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="bienBanGuiHang.chatLuong"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                <input nz-input [(ngModel)]="bienBanGuiHang.chatLuong" [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
           </div>
@@ -228,7 +225,7 @@
                   Đại diện bên nhận
                 </nz-form-label>
                 <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenNhan.daiDien"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                  [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -237,7 +234,7 @@
                   Chức vụ
                 </nz-form-label>
                 <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenNhan.chucVu"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                  [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -298,7 +295,7 @@
                   Đại diện bên giao
                 </nz-form-label>
                 <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenGiao.daiDien"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                  [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -307,7 +304,7 @@
                   Chức vụ
                 </nz-form-label>
                 <input nz-input [(ngModel)]="chiTietBienBanGuiHangBenGiao.chucVu"
-                  [disabled]="bienBanGuiHang.trangThai == '01' || bienBanGuiHang.trangThai == '02' || bienBanGuiHang.trangThai == '04' || isView" />
+                  [disabled]="isDisableField() || isView" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">

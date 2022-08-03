@@ -1,25 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Globals } from 'src/app/shared/globals';
-import { UserLogin } from 'src/app/models/userlogin';
-import dayjs from 'dayjs';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
-import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
+import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -89,7 +86,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.bienBanLayMau.maDvi = this.userInfo.MA_DVI;
     this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
     this.bienBanLayMau.maVatTuCha = this.typeVthh;
-    this.bienBanLayMau.trangThai = this.globals.prop.DU_THAO;
+    this.bienBanLayMau.trangThai = this.globals.prop.NHAP_DU_THAO;
     this.bienBanLayMau.tenTrangThai = 'Dự thảo';
     await Promise.all([
       this.loadPhuongPhapLayMau(),
@@ -102,6 +99,12 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     }
     else {
       this.loadDaiDien();
+    }
+  }
+
+  isDisableField() {
+    if (this.bienBanLayMau && (this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      return true;
     }
   }
 
@@ -153,7 +156,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,
       "pageSize": 1000,
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
     }
     let res = await this.quanLyPhieuNhapDayKhoService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -183,7 +186,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_DA_DUYET,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -260,7 +263,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   isAction(): boolean {
     return (
-      this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
+      this.bienBanLayMau.trangThai === this.globals.prop.NHAP_DU_THAO ||
       !this.isView
     );
   }
@@ -296,7 +299,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
             let body = {
               id: res.data.id,
               lyDo: null,
-              trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+              trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
             };
             this.bienBanLayMauService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
@@ -333,7 +336,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
             let body = {
               id: res.data.id,
               lyDo: null,
-              trangThai: this.globals.prop.LANH_DAO_DUYET,
+              trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
             };
             this.bienBanLayMauService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
@@ -386,9 +389,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = '02';
-    if (this.bienBanLayMau.trangThai == '04') {
-      trangThai = '01';
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
+    if (this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+      trangThai = this.globals.prop.NHAP_DA_DUYET;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -405,40 +408,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
             id: this.id,
             lyDo: null,
             trangThai: trangThai,
-          };
-          const res = await this.bienBanLayMauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.redirectBienBanLayMau();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  banHanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.BAN_HANH,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -474,7 +443,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -570,16 +539,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === this.globals.prop.DU_THAO ||
-      trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      trangThai === this.globals.prop.TU_CHOI ||
-      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
-      || !trangThai
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === this.globals.prop.BAN_HANH) {
-      return 'da-ban-hanh';
-    }
+    return thongTinTrangThaiNhap(trangThai);
   }
 }

@@ -18,6 +18,7 @@ export const MAIN_ROUTES = {
   quantrihethong: 'quan-tri-he-thong',
   dieuChuyen: 'dieu-chuyen',
   suaChua: 'sua-chua',
+  quanTriDanhMuc: 'quan-tri-danh-muc',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -72,6 +73,10 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
+  },
+  {
+    title: 'Quản trị danh mục',
+    route: MAIN_ROUTES.quanTriDanhMuc,
   },
   // {
   //   title: 'QTDM',

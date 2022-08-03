@@ -9,7 +9,6 @@ import { GiaoNhapHangModule } from './giao-nhap-hang/giao-nhap-hang.module';
 import { HopDongModule } from './hop-dong/hop-dong.module';
 import { KehoachLuachonNhathauModule } from './kehoach-luachon-nhathau/kehoach-luachon-nhathau.module';
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
-import { NhapKhoModule } from './nhap-kho/nhap-kho.module';
 import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
 import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
 @NgModule({
@@ -23,7 +22,6 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
     DirectivesModule,
     KiemTraChatLuongModule,
     GiaoNhapHangModule,
-    NhapKhoModule,
     DieuChinhModule,
     HopDongModule,
     KehoachLuachonNhathauModule,
