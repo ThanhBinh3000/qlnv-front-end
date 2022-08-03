@@ -1171,60 +1171,60 @@ export const KHOAN_MUC = [
 		level: 3,
 	},
 
-	{
-		id: 20000,
-		tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
-		idCha: 0,
-		level: 0,
-	},
-	{
-		id: 21000,
-		tenDm: "Kinh phí thực hiện tự chủ",
-		idCha: 20000,
-		level: 1,
-	},
-	{
-		id: 21100,
-		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
-		idCha: 21000,
-		level: 2,
-	},
-	{
-		id: 21110,
-		tenDm: "Thanh toán cá nhân và quản lý hành chính",
-		idCha: 21100,
-		level: 3,
-	},
-	{
-		id: 21111,
-		tenDm: "Quỹ lương",
-		idCha: 21110,
-		level: 4,
-	},
-	{
-		id: 21112,
-		tenDm: "Chi quản lý hành chính theo định mức",
-		idCha: 21110,
-		level: 4,
-	},
-	{
-		id: 21113,
-		tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
-		idCha: 21110,
-		level: 4,
-	},
-	{
-		id: 21114,
-		tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
-		idCha: 21110,
-		level: 4,
-	},
-	{
-		id: 22000,
-		tenDm: "Kinh phí không thực hiện tự chủ",
-		idCha: 20000,
-		level: 1,
-	},
+	// {
+	// 	id: 20000,
+	// 	tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
+	// 	idCha: 0,
+	// 	level: 0,
+	// },
+	// {
+	// 	id: 21000,
+	// 	tenDm: "Kinh phí thực hiện tự chủ",
+	// 	idCha: 20000,
+	// 	level: 1,
+	// },
+	// {
+	// 	id: 21100,
+	// 	tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+	// 	idCha: 21000,
+	// 	level: 2,
+	// },
+	// {
+	// 	id: 21110,
+	// 	tenDm: "Thanh toán cá nhân và quản lý hành chính",
+	// 	idCha: 21100,
+	// 	level: 3,
+	// },
+	// {
+	// 	id: 21111,
+	// 	tenDm: "Quỹ lương",
+	// 	idCha: 21110,
+	// 	level: 4,
+	// },
+	// {
+	// 	id: 21112,
+	// 	tenDm: "Chi quản lý hành chính theo định mức",
+	// 	idCha: 21110,
+	// 	level: 4,
+	// },
+	// {
+	// 	id: 21113,
+	// 	tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
+	// 	idCha: 21110,
+	// 	level: 4,
+	// },
+	// {
+	// 	id: 21114,
+	// 	tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
+	// 	idCha: 21110,
+	// 	level: 4,
+	// },
+	// {
+	// 	id: 22000,
+	// 	tenDm: "Kinh phí không thực hiện tự chủ",
+	// 	idCha: 20000,
+	// 	level: 1,
+	// },
 	{
 		id: 30000,
 		tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
@@ -1259,7 +1259,7 @@ export const KHOAN_MUC = [
 	},
 	{
 		id: 40000,
-		tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 331)",
+		tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 398)",
 		idCha: 0,
 		level: 0,
 
@@ -1274,6 +1274,44 @@ export const KHOAN_MUC = [
 		id: 42000,
 		tenDm: "Kinh phí không thực hiện tự chủ",
 		idCha: 40000,
+		level: 1,
+	},
+    {
+		id: 50000,
+		tenDm: "QUẢN LÝ HÀNH CHÍNH (Khoản 341)",
+		idCha: 0,
+		level: 0,
+
+	},
+	{
+		id: 51000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 50000,
+		level: 1,
+	},
+	{
+		id: 52000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 50000,
+		level: 1,
+	},
+    {
+		id: 60000,
+		tenDm: "SỰ NGHIỆP KHOA HỌC VÀ CÔNG NGHỆ (Khoản 102)",
+		idCha: 0,
+		level: 0,
+
+	},
+	{
+		id: 61000,
+		tenDm: "Kinh phí thực hiện tự chủ",
+		idCha: 60000,
+		level: 1,
+	},
+	{
+		id: 62000,
+		tenDm: "Kinh phí không thực hiện tự chủ",
+		idCha: 60000,
 		level: 1,
 	},
 ];

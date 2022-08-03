@@ -198,15 +198,15 @@
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
 												[(ngModel)]="data.nguoiBcao"
 												[class]="data.nguoiBcao ?'' : 'input-error-validate'">
-												<nz-option *ngFor="let item of canBos" [nzValue]="item.tenDm"
-													[nzLabel]="item.tenDm">
+												<nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+													[nzLabel]="item.username">
 												</nz-option>
 											</nz-select>
 										</ng-container>
 										<ng-template #templateNguoiBcao>
 											<div *ngFor="let item of canBos">
-												<div *ngIf="item.tenDm == data.nguoiBcao">
-													{{item.tenDm}}
+												<div *ngIf="item.username == data.nguoiBcao">
+													{{item.username}}
 												</div>
 											</div>
 										</ng-template>
