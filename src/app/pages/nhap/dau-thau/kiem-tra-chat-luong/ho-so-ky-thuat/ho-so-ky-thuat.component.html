@@ -17,11 +17,17 @@
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Loại hàng hóa</label>
-                <input class="search__input"nz-input [(ngModel)]="searchFilter.tenVatTuCha"               />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTuCha"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Chủng loại hàng hóa</label>
-                <input class="search__input"  nz-input [(ngModel)]="searchFilter.tenVatTu" />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTu"
+                  readonly="true" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày</label>
@@ -46,10 +52,10 @@
                 [nzData]="dataTable">
                 <thead>
                   <tr>
-                    <!-- <th width="45px">
+                    <th width="45px">
                       <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                         [nzIndeterminate]="indeterminate"></label>
-                    </th> -->
+                    </th>
                     <th width="60px">STT</th>
                     <th width="161px">Số biên bản</th>
                     <th width="161px">Số QĐ</th>
@@ -63,7 +69,7 @@
                 </thead>
                 <tbody>
                   <tr class="search-table">
-                    <!-- <th></th> -->
+                    <th></th>
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -131,10 +137,10 @@
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
-                    <!-- <th width="45px">
+                    <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
-                    </th> -->
+                    </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{data.soBienBan}}</td>
                     <td>{{data.soQuyetDinhNhap}}</td>
@@ -144,17 +150,17 @@
                     <td>{{data.ketLuan}}</td>
                     <td>{{data.tenTrangThai}}</td>
                     <td>
-                      <a (click)="redirectToChiTiet(true, data.id)" class="text-center">
+                      <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <!-- <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
                       <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()"
                         (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
-                      </a> -->
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -178,19 +184,19 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <!-- <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
-            </button> -->
+            </button>
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <!-- <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
               *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
-            </button> -->
+            </button>
           </div>
         </div>
       </div>
