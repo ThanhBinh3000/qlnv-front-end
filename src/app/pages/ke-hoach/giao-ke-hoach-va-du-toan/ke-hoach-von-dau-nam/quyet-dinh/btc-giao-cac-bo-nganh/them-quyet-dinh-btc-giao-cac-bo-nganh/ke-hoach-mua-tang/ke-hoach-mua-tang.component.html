@@ -2,8 +2,8 @@
   <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
-        <th class="text-center" style="width: 5%;">STT</th>
-        <th style="width: 70%;">Nội dung</th>
+        <th class="text-center" style="width: 2%;">STT</th>
+        <th style="width: 73%;">Nội dung</th>
         <th style="width: 20%;">Dự toán</th>
         <th style="width: 5%;">Thao tác</th>
       </tr>
@@ -13,7 +13,7 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.idNoiDung" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
+            <nz-select [(ngModel)]="rowItem.idDanhMuc" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
               </nz-option>
             </nz-select>
@@ -35,12 +35,12 @@
         </td>
       </tr>
       <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.noiDung }}</td>
           <td>{{ data.sluongDtoan }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(data.id)">
+            <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(idx)">
@@ -52,25 +52,24 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.idNoiDung">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
+              <nz-select [(ngModel)]="dataEdit[idx].data.idDanhMuc">
+                <nz-option [nzValue]="item.id" [nzLabel]="item.noiDung" *ngFor="let item of dsNoiDung">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[data.id].data.sluongDtoan" [nzMin]="0">
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.sluongDtoan" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
 
           <td class="text-center">
-            <a (click)="luuEdit(data.id)" class="save">
+            <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(data.id)">
+            <a (click)="huyEdit(idx)">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>

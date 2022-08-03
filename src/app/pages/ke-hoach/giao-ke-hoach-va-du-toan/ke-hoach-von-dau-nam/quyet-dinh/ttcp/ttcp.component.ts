@@ -89,13 +89,17 @@ export class TtcpComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search();
+    console.log(this.searchInTable);
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    body.tuNgay = body.ngayQd[0];
-    body.denNgay = body.ngayQd[1];
+    if (body.ngayQd != null) {
+      body.tuNgay = body.ngayQd[0];
+      body.denNgay = body.ngayQd[1];
+    }
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,

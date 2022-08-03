@@ -43,20 +43,22 @@
 
         </div>
       </form>
-      <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
-          <i class="icon  htvbdh_nhap-lai1"></i>
-          Xóa điều kiện
-        </button>
-        <button nz-button class="search__button--search" (click)="search()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
+      <div nz-col class="cangiua group-button-search-center">
+        <div>
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i class="icon  htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
       </div>
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách quyết định của Thủ tướng</h3>
+      <h3>Danh sách quyết định của Bộ Tài Chính giao các Bộ ngành</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
@@ -81,14 +83,14 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th class="text-center" style="width: 5%;">STT</th>
-            <th style="width: 5%;">Số quyết định</th>
-            <th required style="width: 5%;">Năm QĐ</th>
-            <th style="width: 5%;">Ngày QĐ</th>
-            <th style="width: 20%;">Trích yếu</th>
+            <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 10%;">Số quyết định</th>
+            <th class="text-center" style="width: 10%;">Năm QĐ</th>
+            <th class="text-center" style="width: 10%;">Ngày QĐ</th>
+            <th class="text-center" style="width: 25%;">Trích yếu</th>
             <!-- <th style="width: 10%;">Tài liệu đính kèm</th> -->
-            <th style="width: 10%;">Trạng thái</th>
-            <th width="width: 10%;">Hành động</th>
+            <th class="text-center" style="width: 10%;">Trạng thái</th>
+            <th class="text-center" width="width: 5%;">Hành động</th>
             <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">

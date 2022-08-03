@@ -16,7 +16,7 @@
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label nzFor="so-qd">Số Quyết Định</nz-form-label>
             <nz-form-control>
-              <nz-input-group  id="so-qd">
+              <nz-input-group id="so-qd">
                 <input type="text" nz-input formControlName="soQd" />
               </nz-input-group>
             </nz-form-control>
@@ -36,7 +36,7 @@
             <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
             <nz-form-control>
               <nz-input-group id="trich-yeu">
-                <input type="text" nz-input formControlName="trichYeu" placeholder="Tiêu đề văn bản"/>
+                <input type="text" nz-input formControlName="trichYeu" placeholder="Tiêu đề văn bản" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -76,123 +76,123 @@
     <nz-card class="mt-16 flex-card data-table card-border-content">
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <tbody>
-        <tr class="header-row">
-          <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+          <tr class="header-row">
+            <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th style="width: 10%;">Số QĐ</th>
-          <th style="width: 10%;">Năm QĐ</th>
-          <th style="width: 10%;">Ngày QĐ</th>
-          <th style="width: 25%;">Trích yếu</th>
-          <th style="width: 10%;">Trạng thái</th>
-          <th class="text-center" width="width: 5%;">Hành động</th>
-          <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
-            <div class="container">
-              <div class="header">
-                <h3 class="first">Bộ</h3>
-                <h3 class="second">Kế hoạch năm 2016</h3>
+            <th class="text-center" style="width: 2%;">STT</th>
+            <th style="width: 10%;">Số QĐ</th>
+            <th style="width: 10%;">Năm QĐ</th>
+            <th style="width: 10%;">Ngày QĐ</th>
+            <th style="width: 25%;">Trích yếu</th>
+            <th style="width: 10%;">Trạng thái</th>
+            <th class="text-center" width="width: 5%;">Hành động</th>
+            <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+              <div class="container">
+                <div class="header">
+                  <h3 class="first">Bộ</h3>
+                  <h3 class="second">Kế hoạch năm 2016</h3>
+                </div>
+                <div class="content">
+                  <div class="content-item">
+                    <div class="first">Bộ tài chính</div>
+                    <div class="second">80.000</div>
+                  </div>
+                  <div class="content-item">
+                    <div class="first">Bộ quốc phòng</div>
+                    <div class="second">80.000</div>
+                  </div>
+                  <div class="content-item">
+                    <div class="first">Bộ công an</div>
+                    <div class="second">80.000</div>
+                  </div>
+                  <div class="content-item">
+                    <div class="first">Bộ Nông nghiệp và phát triển nông thôn </div>
+                    <div class="second">80.000</div>
+                  </div>
+                </div>
+                <div class="footer">
+                  <div class="first">Tổng</div>
+                  <div class="second">320.000</div>
+                </div>
               </div>
-              <div class="content">
-                <div class="content-item">
-                  <div class="first">Bộ tài chính</div>
-                  <div class="second">80.000</div>
-                </div>
-                <div class="content-item">
-                  <div class="first">Bộ quốc phòng</div>
-                  <div class="second">80.000</div>
-                </div>
-                <div class="content-item">
-                  <div class="first">Bộ công an</div>
-                  <div class="second">80.000</div>
-                </div>
-                <div class="content-item">
-                  <div class="first">Bộ Nông nghiệp và phát triển nông thôn </div>
-                  <div class="second">80.000</div>
-                </div>
-              </div>
-              <div class="footer">
-                <div class="first">Tổng</div>
-                <div class="second">320.000</div>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="header-row">
-          <th></th>
-          <th></th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
+            </td>
+          </tr>
+          <tr class="header-row">
+            <th></th>
+            <th></th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
 
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                     (input)="filterInTable('nam',filterTable.nam)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
+                  (input)="filterInTable('nam',filterTable.nam)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
 
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                     (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
+                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                  (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th></th>
+            <ng-template #suffixIconSearch>
               <i nz-icon nzType="search"></i>
             </ng-template>
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                     (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </th>
-          <th></th>
-          <ng-template #suffixIconSearch>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-        </tr>
-        <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-          <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+          </tr>
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-          <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-          <td>{{ data.soQd }}</td>
-          <td>{{ data.namQd }}</td>
-          <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td style="text-align: left; white-space: nowrap;">
-            <a (click)="viewDetail(data.id, true)">
-              <i class="fa fa-eye"></i>
-            </a>
-            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </tr>
+            <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
+            <td>{{ data.soQd }}</td>
+            <td>{{ data.namQd }}</td>
+            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.tenTrangThai }}</td>
+            <td style="text-align: left; white-space: nowrap;">
+              <a (click)="viewDetail(data.id, true)">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
@@ -202,8 +202,8 @@
           </div>
           <div class="canphai">
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                           (nzPageSizeChange)="changePageSize($event)">
+              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+              (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
               </ng-template>
@@ -216,5 +216,5 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-moi-btc  [isView]="isViewDetail" (onClose)="onClose()" [idInput]="idSelected"></app-them-moi-btc>
+  <app-them-moi-btc [isView]="isViewDetail" (onClose)="onClose()" [idInput]="idSelected"></app-them-moi-btc>
 </ng-template>
