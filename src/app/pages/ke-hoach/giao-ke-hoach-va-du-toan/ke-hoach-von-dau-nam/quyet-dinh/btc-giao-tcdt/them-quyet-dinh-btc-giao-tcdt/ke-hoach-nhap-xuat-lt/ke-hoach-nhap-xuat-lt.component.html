@@ -1,5 +1,5 @@
-<nz-card class="mt16 flex-card p-lr16">
-    <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+<div>
+    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
             <tr>
                 <th style="width: 70%;">Chỉ tiêu</th>
@@ -11,137 +11,204 @@
         <tbody>
             <tr>
                 <td>Vốn chỉ mua lương thực</td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht ) * 2 +
+                    keHoachNhapXuat.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
+                </td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ ( keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
+                    (keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
+                    (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht) | number : '1.0-1' :
+                    'vi_VN'}}
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td></td>
+                <td>{{ keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc | number : '1.0-1' :
+                    'vi_VN'}}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;1.2 Mua Gạo</td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
+                <td>
+                    {{ keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht | number : '1.0-1' :
+                    'vi_VN'}}
                 </td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
+                <td>
                 </td>
-                <td></td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
+                    (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht) | number : '1.0-1' :
+                    'vi_VN'}}
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td></td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td></td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
             </tr>
             <tr>
                 <td>Nguồn vốn có</td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
+                <td>
+
                 </td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
+                <td>
+
                 </td>
-                <td></td>
+                <td>
+
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;2.1 Tiền thu được từ xuất bán</td>
-                <td style="text-align: right;">
+                <td>
+                    {{ keHoachNhapXuat.soLuongBanThoc +
+                    (keHoachNhapXuat.soLuongBanGao + keHoachNhapXuat.soLuongGaoCtro) * 2 | number : '1.0-1' :
+                    'vi_VN' }}
                 </td>
-                <td style="text-align: right;">
+                <td>
                 </td>
-                <td></td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) +
+                    (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao) | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
+                <td>
+                    {{ keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc | number : '1.0-1' :
+                    'vi_VN' }}
                 </td>
-                <td style="text-align: right;">
-                    <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
-                    </div>
-                </td>
-                <td></td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
-                <td></td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;2.3 Vốn NSNN bố trí từ nguồn chi DTQG</td>
                 <td></td>
                 <td></td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
             </tr>
@@ -150,12 +217,15 @@
                     trồng rừng</td>
                 <td></td>
                 <td></td>
-                <td style="text-align: right;">
+                <td>
                     <div>
-                        <input [readonly]="isView" style="text-align: right;" type="text" nz-input type="number" />
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
                     </div>
                 </td>
             </tr>
         </tbody>
     </nz-table>
-</nz-card>
+</div>

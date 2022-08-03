@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, IterableDiffers, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-nhap-xuat-lt',
@@ -7,11 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KeHoachNhapXuatLtComponent implements OnInit {
 
+  @Input()
+  keHoachNhapXuat: any;
+
+  @Output()
+  keHoachNhapXuatChange = new EventEmitter<any>();
+
+  @Input()
   isView: boolean = false;
-  dataTable: any
-  constructor() { }
+
+  constructor(
+    public globals: Globals,
+  ) {
+  }
+
+  emitData() {
+    this.keHoachNhapXuatChange.emit(this.keHoachNhapXuat);
+  }
 
   ngOnInit(): void {
+
   }
 
 }

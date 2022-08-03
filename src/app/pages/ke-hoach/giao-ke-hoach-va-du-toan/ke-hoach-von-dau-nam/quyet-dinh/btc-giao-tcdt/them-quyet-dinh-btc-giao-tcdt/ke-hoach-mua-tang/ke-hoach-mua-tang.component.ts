@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, IterableDiffers, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
   templateUrl: './ke-hoach-mua-tang.component.html',
   styleUrls: ['./ke-hoach-mua-tang.component.scss'],
 })
-export class KeHoachMuaTangComponent implements OnInit, DoCheck {
+export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
   @Output()
@@ -19,33 +20,30 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
   dsHangHoa = [];
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  iterableDiffer: any;
   dsChungLoaiHangHoa = [];
+  dsChungLoaiHangHoaTable = [];
   dsDonViTinh = [];
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
 
   constructor(
-    private danhMucService: DanhMucService,
     private modal: NzModalService,
-    private iterableDiffers: IterableDiffers,
+    public globals: Globals
   ) {
-    this.iterableDiffer = iterableDiffers.find([]).create(null);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateEditCache();
+    this.emitDataTable();
   }
 
   ngOnInit(): void {
+
   }
 
-  ngDoCheck(): void {
-    const changes = this.iterableDiffer.diff(this.dataTable);
-    if (changes) {
-      this.updateEditCache();
-      this.emitDataTable();
-    }
+  editItem(index: number): void {
+    this.dataEdit[index].edit = true;
   }
 
-  editItem(id: number): void {
-    this.dataEdit[id].edit = true;
-  }
 
   xoaItem(index: number) {
     console.log(index, this.dataTable);
@@ -60,6 +58,8 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
+          this.updateEditCache();
+          this.emitDataTable();
         } catch (e) {
           console.log('error', e);
         }
@@ -70,14 +70,15 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
 
   themMoiItem() {
     this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItem = new ThongTinQuyetDinh();
+    this.updateEditCache();
+    this.emitDataTable();
   }
 
 
   emitDataTable() {
-    console.log(this.dataTable);
     this.dataTableChange.emit(this.dataTable);
   }
-
 
   clearData() { }
 
@@ -89,24 +90,37 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
     };
   }
 
+
   calcularTongTien() {
     this.rowItem.tongTien = +this.rowItem.soLuong * +this.rowItem.donGia;
   }
 
-  luuEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    Object.assign(this.dataTable[index], this.dataEdit[id].data);
-    this.dataEdit[id].edit = false;
+  luuEdit(index: number): void {
+    let dataSaved = this.dataEdit[index].data;
+    const dataNd = this.dsHangHoa.filter(d => d.id == dataSaved.loaiVthh);
+    dataSaved.tenVthh = dataNd[0].ten;
+    Object.assign(this.dataTable[index], dataSaved);
+    this.dataEdit[index].edit = false;
+    this.emitDataTable();
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach((item) => {
-      this.dataEdit[item.id] = {
-        edit: false,
-        data: { ...item },
-      };
-    });
+    if (this.dataTable) {
+      let i = 0;
+      this.dataTable.forEach((item) => {
+        const dataNd = this.dsHangHoa.filter(d => d.id == item.loaiVthh)
+        if (dataNd.length > 0) {
+          item.ten = dataNd[0].ten;
+        }
+        this.dataEdit[i] = {
+          edit: false,
+          data: { ...item },
+        };
+        i++
+      });
+    }
   }
+
 
   calcTong() {
     const sum = this.dataTable.reduce((prev, cur) => {
@@ -116,14 +130,27 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
     return sum;
   }
 
-  onChangeLoaiVthh(event) {
-    this.dsChungLoaiHangHoa = [];
-    this.rowItem.dviTinh = null;
-    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    if (loaiVthh.length > 0) {
-      this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-      this.rowItem.tenVthh = loaiVthh[0].ten;
-      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+  onChangeLoaiVthh(event, typeChange) {
+    console.log(event, typeChange);
+    if (typeChange === 'add') {
+      this.dsChungLoaiHangHoa = [];
+      this.rowItem.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+        this.rowItem.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      }
+    }
+    if (typeChange === 'edit') {
+      this.dsChungLoaiHangHoaTable = [];
+      this.rowItem.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        // this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+        // this.rowItem.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoaTable = loaiVthh[0].child;
+      }
     }
   }
 
@@ -133,4 +160,5 @@ export class KeHoachMuaTangComponent implements OnInit, DoCheck {
       this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
     }
   }
+
 }
