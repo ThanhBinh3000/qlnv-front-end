@@ -90,6 +90,7 @@ export class UbtvqhMuabuComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search();
   }
 
   async search() {

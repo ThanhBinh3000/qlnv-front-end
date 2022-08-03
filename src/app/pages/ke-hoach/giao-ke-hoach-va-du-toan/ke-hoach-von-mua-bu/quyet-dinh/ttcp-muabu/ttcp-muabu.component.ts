@@ -90,6 +90,7 @@ export class TtcpMuabuComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search();
   }
 
   async search() {
