@@ -209,7 +209,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
     } else {
       res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);

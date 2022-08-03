@@ -18,11 +18,11 @@
 <div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">
   <nz-tabset nzType="card" class="mt-16 tab-level-3">
     <nz-tab [nzTitle]="'Mua bù'">
-      <app-muabu-bosung  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-muabu-bosung>
+      <app-mua-bu  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-mua-bu>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua bổ sung'" >
-      <app-muabu-bosung [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung" [isView]="isView"  [(dataTable)]="keHoach.muaBsungList"></app-muabu-bosung>
+      <app-mua-bu [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung" [isView]="isView"  [(dataTable)]="keHoach.muaBSungList"></app-mua-bu>
     </nz-tab>
   </nz-tabset>
 </div>
