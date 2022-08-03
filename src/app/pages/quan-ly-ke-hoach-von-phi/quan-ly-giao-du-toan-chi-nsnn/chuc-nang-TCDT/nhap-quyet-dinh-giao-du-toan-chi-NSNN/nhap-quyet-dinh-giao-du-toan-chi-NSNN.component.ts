@@ -196,8 +196,15 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.namPa = this.newDate.getFullYear();
     }
     this.getStatusButton();
+    const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+    if (capDvi != Utils.TONG_CUC) {
+      this.statusBtnSave = true;
+      this.statusBtnNew = true;
+      this.statusBtnCopy = true;
+      this.statusBtnPrint = true;
+      this.status = true;
+    }
     this.spinner.hide();
-
   }
 
   redirectkehoachvonphi() {
