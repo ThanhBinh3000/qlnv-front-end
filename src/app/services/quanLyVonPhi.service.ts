@@ -1317,7 +1317,7 @@ export class QuanLyVonPhiService extends BaseService {
   getLuyKe(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
-      // 'http://192.168.1.109:8094/bao-cao/get-luy-ke'
+      // 'http://192.168.1.102:8094/bao-cao/get-luy-ke'
       , request
     );
   }

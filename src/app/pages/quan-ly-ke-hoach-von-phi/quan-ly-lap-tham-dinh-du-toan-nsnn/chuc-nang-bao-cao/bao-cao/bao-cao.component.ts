@@ -106,7 +106,7 @@ export class BaoCaoComponent implements OnInit {
 		},
 	];
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
-	canBos: any[] = LISTCANBO;
+	canBos: any[];
 	lstFiles: any[] = []; //show file ra man hinh
 	//file
 	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -187,6 +187,7 @@ export class BaoCaoComponent implements OnInit {
 		const userName = this.userService.getUserName();
 		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
+		await this.getListUser();
 		if (this.id) {
 			await this.getDetailReport();
 		} else {
@@ -338,6 +339,16 @@ export class BaoCaoComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		);
+	}
+
+	getListUser() {
+		this.quanLyVonPhiService.getListUser().toPromise().then(res => {
+			if (res.statusCode == 0) {
+				this.canBos = res.data;
+			}
+		}, (err) => {
+			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		})
 	}
 
 	//upload file
