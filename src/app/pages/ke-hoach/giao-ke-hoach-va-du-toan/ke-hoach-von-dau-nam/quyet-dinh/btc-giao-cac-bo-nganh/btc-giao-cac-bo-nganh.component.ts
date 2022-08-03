@@ -330,7 +330,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           if (item.trangThai == '00') {
-            item.checked = false;
+            item.checked = true;
           }
         });
       }
