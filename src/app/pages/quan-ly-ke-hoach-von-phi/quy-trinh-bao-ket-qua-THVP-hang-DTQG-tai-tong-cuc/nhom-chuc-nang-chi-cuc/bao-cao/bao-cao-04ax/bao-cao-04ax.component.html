@@ -142,7 +142,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate4axB>
-					<td></td>
+					<td>{{getChiMuc(editCache[item.id].data.stt,'0',null)}}</td>
 					<td>
 						<div *ngFor="let vtu of noiDungChiFull">
 							<div *ngIf="vtu.id == item.maNdungChi">
