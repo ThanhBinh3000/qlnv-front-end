@@ -107,6 +107,7 @@ import { KeHoachLuongThucComponent } from './dialog/dialog-chi-tiet-ke-hoach-gia
 import { KeHoachXuatGiamComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
 import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
+import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 
 @NgModule({
   declarations: [
@@ -156,6 +157,7 @@ import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem
     DialogDiaDiemKhoComponent,
     DanhSachQuyetDinhPhanBoComponent,
     DialogThemDiaDiemNhapKhoComponent,
+    DialogThemDanhMucDungChungComponent,
     FileListComponent,
     //pipes
     FilterPipe,

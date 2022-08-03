@@ -119,6 +119,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
 
   async search() {
     let param = {
+      "capDvis": '3',
       "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDvis": [this.userInfo.MA_DVI],

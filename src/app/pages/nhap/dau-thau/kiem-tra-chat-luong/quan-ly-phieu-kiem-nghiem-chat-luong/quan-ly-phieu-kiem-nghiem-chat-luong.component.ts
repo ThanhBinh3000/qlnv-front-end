@@ -143,6 +143,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
+      "capDvis": '3',
       maDvi: this.userInfo.MA_DVI,
       maVatTuCha: this.isTatCa ? null : this.typeVthh,
       ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau

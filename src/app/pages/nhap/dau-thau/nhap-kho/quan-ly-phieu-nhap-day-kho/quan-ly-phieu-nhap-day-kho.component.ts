@@ -14,6 +14,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'quan-ly-phieu-nhap-day-kho',
@@ -78,6 +79,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -104,7 +106,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -132,6 +134,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
 
   async search() {
     let param = {
+      "capDvis": '3',
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.maVthh,
       "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,

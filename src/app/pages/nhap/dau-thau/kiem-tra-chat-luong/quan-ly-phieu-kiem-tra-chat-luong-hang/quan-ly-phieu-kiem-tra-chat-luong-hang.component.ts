@@ -129,6 +129,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": ['3'],
       "kqDanhGia": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,

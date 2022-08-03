@@ -21,6 +21,9 @@ export class BienBanGuiHangService extends BaseService {
       url_ += 'ngayGuiHangTu=' + encodeURIComponent('' + dayjs(body.ngayNhapKho[0]).format('YYYY-MM-DD')) + '&';
       url_ += 'ngayGuiHangDen=' + encodeURIComponent('' + dayjs(body.ngayNhapKho[1]).format('YYYY-MM-DD')) + '&';
     }
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.soBienBan)
       url_ +=
         'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
