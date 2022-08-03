@@ -89,16 +89,13 @@ export class BtcMuaBuComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
-    this.search();
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
-    }
+    body.tuNgay = body.ngayQd[0];
+    body.denNgay = body.ngayQd[1];
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
@@ -145,7 +142,7 @@ export class BtcMuaBuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.qdBtcService.deleteMuti({idList: dataDelete});
+            let res = await this.qdBtcService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -162,11 +159,11 @@ export class BtcMuaBuComponent implements OnInit {
           }
         },
       });
-    } else {
+    }
+    else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -205,7 +202,7 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -218,11 +215,11 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({id}) =>
+    this.allChecked = this.dataTable.every(({ id }) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -278,7 +275,7 @@ export class BtcMuaBuComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.qdBtcService.delete({id: item.id}).then((res) => {
+          this.qdBtcService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -312,10 +309,12 @@ export class BtcMuaBuComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    } else {
+    }
+    else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
@@ -326,4 +325,4 @@ export class BtcMuaBuComponent implements OnInit {
       trangThai: '',
     }
   }
-};
+}

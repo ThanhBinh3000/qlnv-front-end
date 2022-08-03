@@ -90,16 +90,13 @@ export class TtcpMuabuComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
-    this.search();
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    if (body.ngayQd != null ) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
-    }
+    body.tuNgay = body.ngayQd[0];
+    body.denNgay = body.ngayQd[1];
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,

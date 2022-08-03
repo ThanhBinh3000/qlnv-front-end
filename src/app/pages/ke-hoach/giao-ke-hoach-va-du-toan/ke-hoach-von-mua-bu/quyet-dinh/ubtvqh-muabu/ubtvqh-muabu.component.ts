@@ -90,16 +90,13 @@ export class UbtvqhMuabuComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
-    this.search();
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
-    }
+    body.tuNgay = body.ngayQd[0];
+    body.denNgay = body.ngayQd[1];
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
@@ -179,7 +176,7 @@ export class UbtvqhMuabuComponent implements OnInit {
         this.quyetDinhUbtvqhMuBuBoSung
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-cua-ubtvqh.xlsx'),
+            saveAs(blob, 'quyet-dinh-cua- bo-tai-chinh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

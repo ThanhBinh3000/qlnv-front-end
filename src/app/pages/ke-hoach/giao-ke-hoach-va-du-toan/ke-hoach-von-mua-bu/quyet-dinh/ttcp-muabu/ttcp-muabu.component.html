@@ -16,9 +16,9 @@
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label nzFor="so-qd">Số Quyết Định</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="so-qd">
+              <nz-input-number [nzSize]="'small'" id="so-qd">
                 <input type="text" nz-input formControlName="soQd" />
-              </nz-input-group>
+              </nz-input-number>
             </nz-form-control>
           </nz-form-item>
 
@@ -180,7 +180,7 @@
           <td>{{ data.namQd }}</td>
           <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tenTrangThai }}</td>
+          <td>{{ data.trangThai }}</td>
           <td style="text-align: left; white-space: nowrap;">
             <a (click)="viewDetail(data.id, true)">
               <i class="fa fa-eye"></i>
