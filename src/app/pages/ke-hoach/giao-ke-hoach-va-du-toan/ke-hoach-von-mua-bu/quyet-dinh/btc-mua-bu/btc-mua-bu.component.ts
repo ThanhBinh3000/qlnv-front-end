@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {MuaBuBoSungBtcService} from "../../../../../../services/mua-bu-bo-sung-btc.service";
+import { MuaBuBoSungBtcService } from "../../../../../../services/mua-bu-bo-sung-btc.service";
 
 @Component({
   selector: 'app-btc-mua-bu',
@@ -145,7 +145,7 @@ export class BtcMuaBuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.qdBtcService.deleteMuti({idList: dataDelete});
+            let res = await this.qdBtcService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -205,7 +205,11 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach((item) => {
+      if (item.trangThai == '00') {
+        this.updateCheckedSet(item.id, checked);
+      }
+    })
     this.refreshCheckedStatus();
   }
 
@@ -218,11 +222,11 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({id}) =>
+    this.allChecked = this.dataTable.every(({ id }) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -278,7 +282,7 @@ export class BtcMuaBuComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.qdBtcService.delete({id: item.id}).then((res) => {
+          this.qdBtcService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
