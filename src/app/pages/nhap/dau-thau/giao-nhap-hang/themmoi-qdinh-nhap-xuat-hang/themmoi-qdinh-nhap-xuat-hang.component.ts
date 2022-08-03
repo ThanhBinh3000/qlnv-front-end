@@ -89,6 +89,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
     this.userInfo = this.userService.getUserLogin();
     this.routerUrl = this.router.url;
+    this.quyetDinhNhapXuat.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.quyetDinhNhapXuat.tenTrangThai = 'Dự thảo';
     this.initForm();
     if (this.id > 0) {
       this.loadThongTinQdNhapXuatHang(this.id);
@@ -375,20 +377,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
     this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
 
-
     if (this.quyetDinhNhapXuat.id > 0) {
-      // this.hopDongList.forEach(hd => {
-      //   let detailQuyetDinhNhapXuat = new DetailQuyetDinhNhapXuat();
-      //   detailQuyetDinhNhapXuat.denNgayThien = hd.denNgayThien;
-      //   detailQuyetDinhNhapXuat.donViTinh = hd.donViTinh;
-      //   detailQuyetDinhNhapXuat.loaiNx = hd.loaiNx;
-      //   detailQuyetDinhNhapXuat.maDvi = hd.maDvi;
-      //   detailQuyetDinhNhapXuat.maVthh = hd.maVthh;
-      //   detailQuyetDinhNhapXuat.soLuong = hd.soLuong;
-      //   detailQuyetDinhNhapXuat.tenVthh = hd.tenVthh;
-      //   detailQuyetDinhNhapXuat.tuNgayThien = hd.tuNgayThien;
-      //   this.dsQuyetDinhNhapXuatDetailClone.push(detailQuyetDinhNhapXuat);
-      // })
       this.quyetDinhNhapXuat.detail = this.dsQuyetDinhNhapXuatDetailClone;
       const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();
       quyetDinhNhapXuatInput.detail = this.quyetDinhNhapXuat.detail;
@@ -410,21 +399,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              let body = {
-                id: res.data.id,
-                lyDoTuChoi: null,
-                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
-              };
-              this.quyetDinhNhapXuatService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.UPDATE_SUCCESS,
-                );
-                this.redirectQdNhapXuat();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
+
             } else {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -464,18 +439,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              let body = {
-                id: res.data.id,
-                lyDoTuChoi: null,
-                trangThai: this.globals.prop.LANH_DAO_DUYET,
-              };
-              this.quyetDinhNhapXuatService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                this.redirectQdNhapXuat();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
+
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectQdNhapXuat();
@@ -496,9 +460,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         });
     }
   }
+
   redirectQdNhapXuat() {
     this.showListEvent.emit();
   }
+
   loadThongTinQdNhapXuatHang(id: number) {
     this.quyetDinhNhapXuatService
       .chiTiet(id)
@@ -545,17 +511,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         }
       })
   }
-  disableBanHanh(): boolean {
-    return (
-      this.quyetDinhNhapXuat.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0 ||
-      this.quyetDinhNhapXuat.trangThai === this.globals.prop.TU_CHOI
-    );
-  }
+
   guiDuyet() {
-    if (!this.formData.valid) {
-      return;
-    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -567,36 +524,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          this.save(true);
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-  pheDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
+          await this.save(true);
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT,
           };
-          const res = await this.quyetDinhNhapXuatService.updateStatus(body);
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.redirectQdNhapXuat();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -610,11 +549,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       },
     });
   }
-  banHanh() {
+
+  pheDuyet() {
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
+    if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
+      trangThai = this.globals.prop.NHAP_BAN_HANH;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -625,11 +569,14 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: trangThai,
           };
-          const res = await this.quyetDinhNhapXuatService.updateStatus(body);
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.redirectQdNhapXuat();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -645,6 +592,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   tuChoi() {
+    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP_KH_QLHDT;
+    if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
+      trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -661,17 +612,21 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: trangThai,
           };
-          const res = await this.quyetDinhNhapXuatService.updateStatus(body);
+          let res =
+            await this.quyetDinhNhapXuatService.updateStatus(
+              body,
+            );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.redirectQdNhapXuat();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
           this.spinner.hide();
         } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -679,11 +634,46 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
+  banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          await this.save(true);
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
+          };
+          const res = await this.quyetDinhNhapXuatService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.redirectQdNhapXuat();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   huyBo() {
     this.showListEvent.emit();
   }
-  disabledDate = (current: Date): boolean =>
-    differenceInCalendarDays(current, this.today) > 0;
+
+  disabledDate = (current: Date): boolean => differenceInCalendarDays(current, this.today) > 0;
 
   disabledDateTime: DisabledTimeFn = () => ({
     nzDisabledHours: () => this.range(0, 24).splice(4, 20),
@@ -698,11 +688,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
     return result;
   }
+
   isDetail(): boolean {
     return (
       this.isViewDetail
     );
   }
+
   thongTinTrangThai(trangThai: string): string {
     if (
       trangThai === this.globals.prop.DU_THAO ||

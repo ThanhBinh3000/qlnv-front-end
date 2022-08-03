@@ -21,7 +21,7 @@
         </button>
         <button
           *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || khBanDauGia.trangThai == '12')"
-          type="button" class="btn btn-sub" (click)="save()">
+          type="button" class="btn btn-sub" (click)="guiDuyet()">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
@@ -36,7 +36,7 @@
     </div>
   </div>
 </nz-affix>
-<div class="contentBor them-moi-nhap-xuat-hang__body">
+<div class="contentBor them-moi-nhap-xuat-hang__body tt-chung-dx-dau-gia">
   <div class="contentDetail">
     <div class="main-content">
       <div class="thong-tin-chi-tieu">
@@ -376,26 +376,32 @@
               </form>
               <div nz-col nzSpan="24" class="ml-10">
                 <span class="sub-title">Địa điểm giao nhận hàng</span>
+                <nz-table id="table-phieu-kncl" #ttChungDDGiaoNhan class="nowrap" [nzFrontPagination]="false"
+                  [nzShowPagination]="false" [nzData]="diaDiemGiaoNhanList" nzBordered>
+                  <thead>
+                    <tr>
+                      <th style="width: 10%">STT</th>
+                      <th style="width: 40%">Tên chi cục</th>
+                      <th style="width: 40%">Địa chỉ</th>
+                      <th style="width: 10%">Số lượng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of diaDiemGiaoNhanList; let i = index">
+                      <td>{{i + 1}}</td>
+                      <td>{{ item.tenChiCuc }}</td>
+                      <td>{{ item.diaChi }}</td>
+                      <td>{{ item.soLuong }}</td>
+                    </tr>
+                    <tr *ngIf="diaDiemGiaoNhanList.length > 0">
+                      <td></td>
+                      <td>Cộng</td>
+                      <td></td>
+                      <td>{{formData.get("soLuong").value}}</td>
+                    </tr>
+                  </tbody>
+                </nz-table>
               </div>
-              <nz-table id="table-phieu-kncl" #ttChungDDGiaoNhan class="nowrap" [nzFrontPagination]="false"
-                [nzShowPagination]="false" [nzData]="diaDiemGiaoNhanList" nzBordered>
-                <thead>
-                  <tr>
-                    <th style="width: 10%">STT</th>
-                    <th style="width: 40%">Tên chi cục</th>
-                    <th style="width: 40%">Địa chỉ</th>
-                    <th style="width: 10%">Số lượng</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of ttChungDDGiaoNhan.data; let i = index">
-                    <td>{{i + 1}}</td>
-                    <td>{{ item.tenChiCuc }}</td>
-                    <td>{{ item.diaChi }}</td>
-                    <td>{{ item.soLuong }}</td>
-                  </tr>
-                </tbody>
-              </nz-table>
               <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16 mb-16">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">
@@ -434,7 +440,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let item of phanBo.data, let i = index">
+                  <ng-container *ngFor="let item of bangPhanBoList, let i = index">
                     <tr>
                       <td [nzExpand]="expandSet.has(item.idVirtual)"
                         (nzExpandChange)="onExpandChange(item.idVirtual, $event)" style="width: 35px"></td>
@@ -474,11 +480,10 @@
                 </tbody>
               </nz-table>
             </nz-tab>
-            <!-- *ngIf="(khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || khBanDauGia.trangThai == '') && tabSelected == 'dsGoiThau' && userService.isCuc()" -->
             <ng-template #tableCardNhaThau>
               <button type="button" class="btn btn-main" (click)="themMoiBangPhanLoTaiSan()"
-                [disabled]="!formData.get('loaiHangHoa').value || !formData.get('qdGiaoChiTieuNam').value || !formData.get('khoanTienDatTruoc').value"
-                *ngIf="(khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || !khBanDauGia.trangThai) && tabSelected == 'dsGoiThau' && userService.isCuc()">
+                *ngIf="(khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || !khBanDauGia.trangThai) && tabSelected == 'dsGoiThau' && userService.isCuc()"
+                [disabled]="!formData.get('loaiHangHoa').value || !formData.get('qdGiaoChiTieuNam').value || !formData.get('khoanTienDatTruoc').value">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
               </button>

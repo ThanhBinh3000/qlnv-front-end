@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-lap-bien-ban-nghiem-thu-bao-quan',
@@ -80,6 +81,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -103,9 +105,6 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNhaKho(null),
-        // this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -121,7 +120,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

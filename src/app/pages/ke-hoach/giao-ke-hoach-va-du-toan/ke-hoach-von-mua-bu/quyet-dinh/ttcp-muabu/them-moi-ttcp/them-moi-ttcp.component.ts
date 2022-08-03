@@ -219,11 +219,11 @@ export class ThemMoiTtcpComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     let res
+    console.log(body)
     if (this.idInput > 0) {
       res = await this.qdTccp.update(body);
     } else {
       res = await this.qdTccp.create(body);
-      console.log(body)
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -237,7 +237,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
   exportData() { }
 
   themKeHoach(data?: any, index?, isView?: boolean) {
@@ -266,6 +265,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
   async onChangeNamQd(namQd) {
+    this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
       trangThai: "11"
@@ -274,6 +274,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
       this.listUbtvqh = data
+      console.log(data)
     }
   }
 

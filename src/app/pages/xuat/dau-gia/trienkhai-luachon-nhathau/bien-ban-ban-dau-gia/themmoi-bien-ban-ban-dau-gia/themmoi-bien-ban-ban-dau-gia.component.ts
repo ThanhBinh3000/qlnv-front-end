@@ -21,6 +21,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
 
 @Component({
   selector: 'app-themmoi-bien-ban-ban-dau-gia',
@@ -46,6 +47,10 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
   listPhieuKiemTraChatLuong: any[] = [];
   listDanhMucHang: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listVthh: any[] = [];
+
+  listNam: any[] = [];
+  yearNow: number = 0;
 
   taiLieuDinhKemList: any[] = [];
 
@@ -95,7 +100,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
@@ -110,11 +115,21 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
+
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      };
+
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
+        this.getListVthh(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -122,6 +137,18 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async getListVthh() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(element => {
+          element.count = 0;
+          this.listVthh.push(element);
+        });
+      }
     }
   }
 
@@ -224,7 +251,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyPhieuNhapKhoService.loadChiTiet(id);
+      let res = await this.quanLyBienBanBanDauGiaService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -420,7 +447,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyBienBanBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -457,7 +484,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyBienBanBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -494,7 +521,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyBienBanBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -533,7 +560,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyBienBanBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -603,7 +630,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         "qdgnvnxId": this.detail.qdgnvnxId,
       };
       if (this.id > 0) {
-        let res = await this.quanLyPhieuNhapKhoService.sua(
+        let res = await this.quanLyBienBanBanDauGiaService.sua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -618,7 +645,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyPhieuNhapKhoService.them(
+        let res = await this.quanLyBienBanBanDauGiaService.them(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

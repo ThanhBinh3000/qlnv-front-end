@@ -18,11 +18,11 @@
 <div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">
   <nz-tabset nzType="card" class="mt-16 tab-level-3">
     <nz-tab [nzTitle]="'Mua bù'">
-      <app-mua-bu  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-mua-bu>
+      <app-muabu-bosung  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-muabu-bosung>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua bổ sung'" >
-      <app-mua-bu [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung" [isView]="isView"  [(dataTable)]="keHoach.muaBSungList"></app-mua-bu>
+      <app-muabu-bosung [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung" [isView]="isView"  [(dataTable)]="keHoach.muaBsungList"></app-muabu-bosung>
     </nz-tab>
   </nz-tabset>
 </div>
@@ -36,7 +36,7 @@
         Huỷ
       </a>
       <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
-        <i nz-icon nzType="close" class="icon-close"></i>
+        <i class="icon htvbdh_luu"></i>
         Lưu
       </a>
     </div>

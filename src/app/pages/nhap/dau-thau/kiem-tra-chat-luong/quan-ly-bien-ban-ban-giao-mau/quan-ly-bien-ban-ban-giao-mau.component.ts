@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanBanGiaoService } from 'src/app/services/quanLyBienBanBanGiao.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 
 @Component({
@@ -80,7 +81,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
-
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -105,7 +106,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });

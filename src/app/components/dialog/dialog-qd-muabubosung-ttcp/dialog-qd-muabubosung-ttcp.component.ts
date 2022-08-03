@@ -25,7 +25,7 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
     ttMuaBu: null,
     ttMuaBsung: null,
     muaBuList: [],
-    muaBSungList: []
+    muaBsungList: []
   }
   dsBoNganh: any[];
   dsHangHoa: any[];

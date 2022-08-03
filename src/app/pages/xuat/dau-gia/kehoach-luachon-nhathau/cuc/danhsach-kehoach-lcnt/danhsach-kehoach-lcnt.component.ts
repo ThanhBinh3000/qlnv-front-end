@@ -35,11 +35,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
-    soKeHoach: '',
+    soKeHoach: null,
     namKh: dayjs().get('year'),
-    ngayKy: '',
-    loaiVthh: '',
-    trichYeu: '',
+    ngayKy: null,
+    loaiVthh: null,
+    trichYeu: null,
   };
   filterTable: any = {
     soKeHoach: '',
@@ -132,8 +132,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
       maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.pageSize,
-      pageSize: this.page,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -200,16 +200,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.search();
   }
 
-  detail(data?, isView?) {
+  detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
     this.isView = isView;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
+    // if (data.loaiVthh.startsWith('02')) {
+    //   this.isVatTu = true;
+    // } else {
+    //   this.isVatTu = false;
+    // }
   }
 
   clearFilter() {
@@ -232,10 +232,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          let body = {
-            id: item.id,
-          };
-          this.deXuatKeHoachBanDauGiaService.delete(body).then((res) => {
+          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -289,10 +286,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         let body = {
           ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
           ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-          soKeHoach: this.searchFilter.soKeHoach,
-          loaiVatTuHangHoa: this.searchFilter.loaiVthh,
+          soKeHoach: this.searchFilter.soKeHoach ?? null,
           namKeHoach: this.searchFilter.namKh,
-          trichYeu: this.searchFilter.trichYeu,
+          trichYeu: this.searchFilter.trichYeu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
         };
@@ -333,7 +329,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple({ ids: dataDelete });
+            const body = {
+              ids: dataDelete
+            }
+            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

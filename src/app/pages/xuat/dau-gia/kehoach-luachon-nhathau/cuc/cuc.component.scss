@@ -37,4 +37,21 @@
         top: 0px;
         right: 22px;
     }
+
+    .dau-gia-container {
+        .tab-level-3 .ant-tabs-content-holder .ant-tabs-tabpane {
+            overflow: none !important;
+            max-height: none !important;
+        }
+
+        .ant-tabs-content-holder {
+            overflow-y: none !important;
+            max-height: none !important;
+
+            .ant-tabs-tabpane {
+                overflow-y: none !important;
+                max-height: none !important;
+            }
+        }
+    }
 }

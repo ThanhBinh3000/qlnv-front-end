@@ -1,3 +1,5 @@
+import { UserLogin } from './../../../models/userlogin';
+import { DeXuatKeHoachBanDauGiaService } from './../../../services/deXuatKeHoachBanDauGia.service';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -8,6 +10,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import dayjs from 'dayjs';
+import { UserService } from 'src/app/services/user.service';
 
 export class DiaDiemNhapKho {
   idVirtual: number;
@@ -34,13 +38,16 @@ export class ChiTietDiaDiemNhapKho {
   tenChungLoaiHh: string;
   donViTinh: string;
   maDonViTaiSan: string;
-  tonKho: string;
+  tonKho: number;
   soLuong: number;
   donGiaChuaVAT: number;
   giaKhoiDiem: number;
   soTienDatTruoc: number;
   idVirtual: number;
   isEdit: boolean;
+  constructor(tonKho: number = 0) {
+    this.tonKho = tonKho;
+  }
 }
 
 @Component({
@@ -69,6 +76,17 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
   chiTieu: any;
   phanLoTaiSanEdit: DiaDiemNhapKho | any;
   khoanTienDatTruoc: number;
+  userInfo: UserLogin;
+  slLonHonChiTieu: boolean;
+  bodyGetTonKho = {
+    maChiCuc: '',
+    maDiemKho: '',
+    maNhaKho: '',
+    maNganKho: '',
+    maLokho: '',
+    chungLoaiHH: '',
+    loaiHH: ''
+  }
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -78,12 +96,14 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     private danhMucService: DanhMucService,
     private modal: NzModalService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-    private cdr: ChangeDetectorRef
-
+    private cdr: ChangeDetectorRef,
+    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
+    public userService: UserService,
   ) {
     this.diaDiemNhapKho.chiTietDiaDiems = [];
   }
   ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     if (this.phanLoTaiSanEdit) {
       this.diaDiemNhapKho = this.phanLoTaiSanEdit;
       this.dsChiTietDiemNhapKhoClone = this.phanLoTaiSanEdit.chiTietDiaDiems;
@@ -92,11 +112,12 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
 
     this.loadChiCuc();
     this.loadDanhMucHang();
-    if (this.idChiTieu) {
-      this.loadChiTieu();
-    }
+    this.loadKeHoachBanDauGia();
   }
   handleOk() {
+    if (this.slLonHonChiTieu || !this.diaDiemNhapKho.maDvi) {
+      return;
+    }
     this._modalRef.close(this.diaDiemNhapKho);
   }
   handleCancel() {
@@ -104,11 +125,6 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
   }
 
   async loadChiCuc() {
-    let body = {
-      pageSize: 1000,
-      pageNumber: 0,
-      trangThai: "02",
-    };
     let res = await this.donViService.layDonViChiCuc();
     if (res.msg == MESSAGE.SUCCESS) {
       this.chiCucList = res.data;
@@ -151,6 +167,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNhaKho = diemKho.children;
       }
       this.listNhaKhoEdit = diemKho.children;
+      this.bodyGetTonKho.maDiemKho = diemKho.key;
+      if (diemKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho);
+      }
     }
   }
 
@@ -164,6 +184,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNganKho = nhaKho.children;
       }
       this.listNganKhoEdit = nhaKho.children;
+      this.bodyGetTonKho.maNhaKho = nhaKho.key
+      if (nhaKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho, this.bodyGetTonKho.maNhaKho);
+      }
     }
   }
 
@@ -177,6 +201,10 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.listNganLo = nganKho.children;
       }
       this.listNganLoEdit = nganKho.children;
+      this.bodyGetTonKho.maNganKho = nganKho.key
+      if (nganKho?.children.length === 0) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maDiemKho, this.bodyGetTonKho.maNhaKho, this.bodyGetTonKho.maNganKho);
+      }
     }
   }
   changeNganLo(maNganLo: any, index?: number, isEdit?: boolean) {
@@ -186,6 +214,14 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.dsChiTietDiemNhapKhoClone[index].tenNganLo = nganLo.title;
       } else {
         this.chiTietDiemNhapKhoCreate.tenNganLo = nganLo.title;
+      }
+      this.bodyGetTonKho.maLokho = nganLo.key
+      if (this.bodyGetTonKho.chungLoaiHH) {
+        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
+          this.bodyGetTonKho.maDiemKho,
+          this.bodyGetTonKho.maNhaKho,
+          this.bodyGetTonKho.maNganKho,
+          this.bodyGetTonKho.maLokho);
       }
     }
   }
@@ -199,6 +235,13 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.chiTietDiemNhapKhoCreate.donViTinh = chungLoaiHang.maDviTinh;
         this.chiTietDiemNhapKhoCreate.tenChungLoaiHh = chungLoaiHang.ten;
       }
+      this.bodyGetTonKho.chungLoaiHH = chungLoaiHang.id;
+      this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
+        this.bodyGetTonKho.maDiemKho,
+        this.bodyGetTonKho.maNhaKho,
+        this.bodyGetTonKho.maNganKho,
+        this.bodyGetTonKho.maLokho,
+        this.bodyGetTonKho.chungLoaiHH);
     }
   }
   changeChiCuc() {
@@ -207,6 +250,7 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maDvi);
     if (donVi) {
       this.diaDiemNhapKho.tenDonVi = donVi.tenDvi;
+      this.loadChiTieu();
     }
 
   }
@@ -227,10 +271,7 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
 
   addDiaDiem() {
     if (!this.chiTietDiemNhapKhoCreate.maDiemKho
-      || !this.chiTietDiemNhapKhoCreate.chungLoaiHh
-      || !this.chiTietDiemNhapKhoCreate.maDonViTaiSan
-      || !this.chiTietDiemNhapKhoCreate.soLuong
-      || !this.chiTietDiemNhapKhoCreate.donGiaChuaVAT) {
+      || !this.chiTietDiemNhapKhoCreate.chungLoaiHh) {
       return;
     }
     this.chiTietDiemNhapKhoCreate.idVirtual = new Date().getTime();
@@ -238,6 +279,17 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
     this.newObjectDiaDiem();
     this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
+    this.calcSoLuong();
+    this.checkSoLuong();
+
+  }
+  checkSoLuong() {
+    const tongSoLuong = this.diaDiemNhapKho.soLuong;
+    if (tongSoLuong > this.diaDiemNhapKho.soLuongTheoChiTieu - this.diaDiemNhapKho.slDaLenKHBan) {
+      this.slLonHonChiTieu = true;
+    } else {
+      this.slLonHonChiTieu = false;
+    }
   }
   newObjectDiaDiem() {
     this.chiTietDiemNhapKhoCreate = new ChiTietDiaDiemNhapKho();
@@ -254,6 +306,7 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
       this.diaDiemNhapKho.chiTietDiaDiems[i],
       this.dsChiTietDiemNhapKhoClone[i],
     );
+    this.checkSoLuong();
   }
   cancelEdit(index: number) {
     this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
@@ -276,6 +329,9 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
         this.dsChiTietDiemNhapKhoClone = cloneDeep(
           this.diaDiemNhapKho.chiTietDiaDiems,
         );
+        if (this.dsChiTietDiemNhapKhoClone.length == 0) {
+          this.slLonHonChiTieu = false;
+        }
       },
     });
   }
@@ -318,6 +374,31 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.chiTieu = res.data;
+          switch (this.loaiHangHoa) {
+            //gao
+            case "0102":
+              const gao = this.chiTieu?.khLuongThuc.find(x => x.maDonVi = this.diaDiemNhapKho.maDvi);
+              if (gao) {
+                this.diaDiemNhapKho.soLuongTheoChiTieu = gao.xtnTongGao;
+              }
+              break;
+            //thoc
+            case "0101":
+              const thoc = this.chiTieu?.khLuongThuc.find(x => x.maDonVi = this.diaDiemNhapKho.maDvi);
+              if (thoc) {
+                this.diaDiemNhapKho.soLuongTheoChiTieu = thoc.xtnTongThoc;
+              }
+              break;
+            //muoi
+            case "02":
+              const muoi = this.chiTieu?.khMuoiDuTru.find(x => x.maDonVi = this.diaDiemNhapKho.maDvi);
+              if (muoi) {
+                this.diaDiemNhapKho.soLuongTheoChiTieu = muoi.xtnTongSoMuoi;
+              }
+              break;
+            default:
+              break;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -326,5 +407,60 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
   ngAfterViewChecked() {
     this.cdr.detectChanges();
   }
+  loadKeHoachBanDauGia() {
+    let body = {
+      namKeHoach: dayjs().year(),
+      maDvis: this.userInfo.MA_DVI,
+      pageNumber: 0,
+      pageSize: 1000,
+      trangThai: "02",
+    };
+    this.deXuatKeHoachBanDauGiaService
+      .timKiem(body)
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          const tong = res.data.content.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
+            0);
+          this.diaDiemNhapKho.slDaLenKHBan = tong;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      });
+  }
 
+  loadTonKho(
+    index?: number,
+    isEdit?: boolean,
+    maChiCuc?: string,
+    maDiemKho?: string,
+    maNhaKho?: string,
+    maNganKho?: string,
+    maLokho?: string,
+    chungLoaiHH?: string,
+  ) {
+    let body = {
+      maChiCuc: maChiCuc,
+      maDiemKho: maDiemKho,
+      maNhaKho: maNhaKho,
+      maNganKho: maNganKho,
+      maLokho: maLokho,
+      chungLoaiHH: chungLoaiHH,
+      loaiHH: this.loaiHangHoa,
+      pageNumber: 1,
+      pageSize: 1000
+    };
+    this.donViService
+      .getTonKho(body)
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (isEdit) {
+            this.dsChiTietDiemNhapKhoClone[index].tonKho = res.data.total;
+          } else {
+            this.chiTietDiemNhapKhoCreate.tonKho = res.data.total;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      });
+  }
 }
