@@ -5,23 +5,19 @@
         <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="3">
-              <label class="search__label">Số quyết định nhập</label>
+              <label class="search__label">Số QĐ nhập</label>
               <input class="search__input" placeholder="Số Quyết định" nz-input
                 [(ngModel)]="searchFilter.soQuyetDinhNhap" />
             </div>
             <div nz-col nzSpan="3">
-              <label class="search__label">Số biên bản bàn giao mẫu</label>
-              <input class="search__input" placeholder="Số biên bản bàn giao mẫu" nz-input
+              <label class="search__label">Số biên bản </label>
+              <input class="search__input" placeholder="Số biên bản " nz-input
                 [(ngModel)]="searchFilter.soBienBan" />
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Ngày bàn giao mẫu</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayBanGiaoMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
-            </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số hợp đồng</label>
-              <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -174,18 +170,9 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc() || userService.isCuc() ">
-              <i class="fa fa-trash-o do"></i>
-              <span>Xóa</span>
-            </button>
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
-            </button>
-            <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc() || userService.isCuc() "
-              (click)="redirectToChiTiet(false, 0)">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
             </button>
           </div>
         </div>

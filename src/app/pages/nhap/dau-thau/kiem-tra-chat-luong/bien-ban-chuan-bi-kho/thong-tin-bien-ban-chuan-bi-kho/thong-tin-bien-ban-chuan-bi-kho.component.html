@@ -96,7 +96,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Số biên bản
                   </nz-form-label>
-                  <input nz-input placeholder="Nhập số phiếu" formControlName="soBienBan" readonly />
+                  <input nz-input placeholder="tự động sinh số biên bản" formControlName="soBienBan" readonly />
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="6">
@@ -150,7 +150,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Tên hàng
                   </nz-form-label>
-                  <input nz-input formControlName="tenVatTuCha" [disabled]="isDisableField() || isView" />
+                  <input nz-input formControlName="vật tư" [disabled]="isDisableField() || isView" />
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="6">
@@ -171,14 +171,6 @@
                       [nzLabel]="thuKho.tenLhKho">
                     </nz-option>
                   </nz-select>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="6">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">
-                    Tích lượng
-                  </nz-form-label>
-                  <input nz-input formControlName="tichLuong" />
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="3">
@@ -226,6 +218,14 @@
                     <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="6">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Tích lượng
+                  </nz-form-label>
+                  <input nz-input formControlName="tichLuong" />
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="6">

@@ -1,4 +1,4 @@
-import { LOAI_HANG_DTQG, TEN_HANG_DTQG } from "../constants/config";
+import { LOAI_HANG_DTQG, STATUS_DA_DUYET, TEN_HANG_DTQG } from "../constants/config";
 import VNnum2words from 'vn-num2words';
 
 export function convertTrangThai(status: string): string {
@@ -115,7 +115,7 @@ export function convertTienTobangChu(tien: number): string {
 }
 
 export function thongTinTrangThaiNhap(trangThai: string): string {
-  if (trangThai === this.globals.prop.NHAP_DA_DUYET) {
+  if (trangThai === STATUS_DA_DUYET) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';
