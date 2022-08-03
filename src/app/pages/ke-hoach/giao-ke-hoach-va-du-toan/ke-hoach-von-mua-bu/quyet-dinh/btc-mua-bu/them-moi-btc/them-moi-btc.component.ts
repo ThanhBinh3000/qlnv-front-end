@@ -61,7 +61,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namQd: [, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
         soQd: [, [Validators.required]],
         soQdTtcp:  [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
@@ -79,6 +79,7 @@ export class ThemMoiBtcComponent implements OnInit {
       this.loadDsNam(),
       this.maQd = "/QĐ-BTC",
       this.getDataDetail(this.idInput),
+      this.onChangeNamQd(this.formData.get("namQd").value)
     ])
     this.spinner.hide();
   }
@@ -222,21 +223,21 @@ export class ThemMoiBtcComponent implements OnInit {
     body.listBoNganh = this.dataTable;
     let res
     if (this.idInput > 0) {
-      res = await this.qdBtcService.update(body);
+        res = await this.qdBtcService.update(body);
     } else {
       res = await this.qdBtcService.create(body);
-      console.log(body)
     }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
     this.spinner.hide();
   }
 
@@ -268,6 +269,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
   async onChangeNamQd(namQd) {
+    this.formData.get('soQdTtcp').setValue(null);
     let body = {
       namQd: namQd,
       trangThai: "11"
@@ -277,7 +279,7 @@ export class ThemMoiBtcComponent implements OnInit {
       const data = res.data.content;
       this.listTtcp = data
     }
-    console.log(this.listTtcp)
+    console.log(this.formData.value)
   }
 
 }

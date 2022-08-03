@@ -30,7 +30,6 @@ export class MuaBuBoSungComponent implements OnInit {
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
-  dsDonViTinh = [];
   constructor(
     private readonly modal: NzModalService,
   ) {
