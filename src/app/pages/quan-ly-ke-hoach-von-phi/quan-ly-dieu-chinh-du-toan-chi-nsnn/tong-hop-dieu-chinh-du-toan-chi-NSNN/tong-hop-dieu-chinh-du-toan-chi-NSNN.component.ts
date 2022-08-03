@@ -211,5 +211,6 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	xoaDieuKien() {
 		this.namHienTai = null
 		this.dotBcao = null
+		this.trangThai = null
 	}
 }

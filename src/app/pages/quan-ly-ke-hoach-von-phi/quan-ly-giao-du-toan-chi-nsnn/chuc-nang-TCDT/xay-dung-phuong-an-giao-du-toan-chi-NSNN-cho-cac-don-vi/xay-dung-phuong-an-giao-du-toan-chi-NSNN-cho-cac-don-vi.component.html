@@ -91,7 +91,9 @@
 								</div>
 							</td>
 							<td>
-								{{maPaCha}}
+								<a (click)="xemCtietPaBTC()" style="color: #1890ff;">
+									{{maPaCha}}
+								</a>
 							</td>
 							<td>{{maPa}}</td>
 							<td>{{namPa}}</td>
@@ -151,7 +153,7 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let data of lstCtietBcao; let i = index">
-									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+									<ng-container *ngIf="!editCache[data.id]?.edit; else editTemplate">
 										<td [nzIndentSize]="data.level! * 8">
 											{{getChiMuc(data.stt)}}
 										</td>
@@ -205,7 +207,8 @@
 												<div *ngIf="e.maDviNhan == item.maDvi">
 													<nz-input-number class="search__input" nzSize="small"
 														[(ngModel)]="e.soTranChi"
-														[class]="e.soTranChi >= 0 ?'' : 'input-error-validate'">
+														[class]="e.soTranChi >= 0 ?'' : 'input-error-validate'"
+														(ngModelChange)="changeModel(data.id)">
 													</nz-input-number>
 												</div>
 											</div>
