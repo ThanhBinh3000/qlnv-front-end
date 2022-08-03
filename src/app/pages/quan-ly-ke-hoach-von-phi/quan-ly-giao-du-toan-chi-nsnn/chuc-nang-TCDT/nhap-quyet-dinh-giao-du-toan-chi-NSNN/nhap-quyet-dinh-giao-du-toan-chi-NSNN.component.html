@@ -256,11 +256,11 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteAllChecked()">
+          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
