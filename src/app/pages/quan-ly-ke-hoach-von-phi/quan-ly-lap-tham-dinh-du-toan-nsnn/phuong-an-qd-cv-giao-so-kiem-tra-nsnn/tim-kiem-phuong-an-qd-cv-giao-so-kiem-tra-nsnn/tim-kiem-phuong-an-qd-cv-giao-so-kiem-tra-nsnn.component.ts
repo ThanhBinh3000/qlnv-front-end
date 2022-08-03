@@ -29,6 +29,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     userInfo: any;
     userRole: string;
     loai: string;
+    title: string;
     //thong tin tim kiem
     searchFilter = {
         loaiTimKiem: "",
@@ -108,9 +109,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         if (this.loai == "0") {
             this.status = true;
             this.searchFilter.loaiTimKiem = "1";
+            this.title = "DANH SÁCH SỐ KIỂM TRA TRẦN CHI NHẬN TỪ BỘ TÀI CHÍNH";
         } else {
             this.status = false;
             this.searchFilter.loaiTimKiem = "0";
+            this.title = "DANH SÁCH PHƯƠNG ÁN/QĐ/CV GIAO SỐ KIỂM TRA NSNN TẠI ĐƠN VỊ"
         }
         this.spinner.show();
         const userName = this.userService.getUserName();

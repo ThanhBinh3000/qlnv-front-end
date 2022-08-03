@@ -28,11 +28,11 @@
 			</div>
 			<div nz-col nzSpan="3">
 				<label class="search__label">Từ ngày</label>
-				<nz-date-picker class="search__input" [(ngModel)]="tuNgay"></nz-date-picker>
+				<nz-date-picker class="search__input" [(ngModel)]="tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
 			</div>
 			<div nz-col nzSpan="3">
 				<label class="search__label">Đến ngày</label>
-				<nz-date-picker class="search__input" [(ngModel)]="denNgay"></nz-date-picker>
+				<nz-date-picker class="search__input" [(ngModel)]="denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
 			</div>
 		</ng-template>
 		<div nz-col class="gutter-row canphai phai" [nzSpan]="15" style="display:flex; justify-content: end;">
@@ -354,8 +354,7 @@
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.khTtien" disabled></nz-input-number>
+						{{editCache[item.id].data.khTtien}}
 					</td>
 					<td>
 						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
@@ -370,8 +369,7 @@
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.thTtien" disabled></nz-input-number>
+						{{editCache[item.id].data.thTtien}}
 					</td>
 					<td>
 						<input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />

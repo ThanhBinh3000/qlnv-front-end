@@ -685,6 +685,21 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                         maNdung: res.maKhoanMuc,
                         level: this.noiDungs.find(e => e.id == maNdung)?.level,
                     };
+                    if (res.maKhoanMuc == 300){
+                        let data1 = this.lstCtietBcao.find(e => e.maNdung == 100);
+                        let data2 = this.lstCtietBcao.find(e => e.maNdung == 200);
+                        if (!data1){
+                            data1 = new ItemData();
+                        }
+                        if (!data2){
+                            data2 = new ItemData();
+                        }
+                        data.thNamHienHanhN1 = data1.thNamHienHanhN1 - data2.thNamHienHanhN1;
+                        data.ncauNamDtoanN = data1.ncauNamDtoanN - data2.ncauNamDtoanN;
+                        data.ncauNamN1 = data1.ncauNamN1 - data2.ncauNamN1;
+                        data.ncauNamN2 = data1.ncauNamN2 - data2.ncauNamN2;
+                    }
+                    
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
                     } else {
