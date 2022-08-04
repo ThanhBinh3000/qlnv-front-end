@@ -77,10 +77,8 @@ export class QuyetDinhPheDuyetKQBanDauGiaService extends BaseService {
     return this.httpClient.put(url, body).toPromise();
   }
 
-  exportList(body: any): Promise<Blob> {
+  exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-kqbdg/export/list`;
-    return this.httpClient
-      .post(url, body, { responseType: 'blob' })
-      .toPromise();
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

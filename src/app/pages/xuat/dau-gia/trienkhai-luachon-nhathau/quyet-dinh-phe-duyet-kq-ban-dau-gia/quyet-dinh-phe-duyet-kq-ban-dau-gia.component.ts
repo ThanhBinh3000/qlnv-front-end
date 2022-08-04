@@ -275,7 +275,7 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           trichYeu: this.searchFilter.trichYeu,
           nam: this.searchFilter.namKh
         };
-        this.tongHopDeXuatKHLCNTService
+        this.quyetDinhPheDuyetKQBanDauGiaService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
