@@ -205,7 +205,11 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach((item) => {
+      if (item.trangThai == '00') {
+        this.updateCheckedSet(item.id, checked);
+      }
+    })
     this.refreshCheckedStatus();
   }
 
@@ -218,20 +222,16 @@ export class BtcMuaBuComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({id}) =>
+    this.allChecked = this.dataTable.every(({ id }) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
   onItemChecked(id: number, checked) {
-    this.dataTable.forEach((item) => {
-      if (item.trangThai == '00') {
-        this.updateCheckedSet(item.id, checked);
-      }
-    })
+    this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
   }
 

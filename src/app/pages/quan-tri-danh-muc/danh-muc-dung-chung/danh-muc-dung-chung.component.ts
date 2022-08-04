@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-danh-muc-dung-chung',
   templateUrl: './danh-muc-dung-chung.component.html',
@@ -27,10 +27,15 @@ export class DanhMucDungChungComponent implements OnInit {
 
   formData: FormGroup;
 
+  danhMucList: any[];
+
+  setOfCheckedId = new Set<number>();
+
+
   searchFilter = {
-   ma: '',
+    ma: '',
     maCha: '',
-    giaTri:'',
+    giaTri: '',
     ghiChu: '',
     loai: ''
   };
@@ -58,13 +63,14 @@ export class DanhMucDungChungComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    soQuyetDinh: '',
-    ngayNhapKho: '',
-    diemKho: '',
-    nhaKho: '',
-    nganLo: '',
+    loai: '',
+    ma: '',
+    giaTri: '',
     trangThai: '',
+    nguoiTao: '',
+    ngayTao: '',
+    nguoiSua: '',
+    ngaySua: '',
   };
 
 
@@ -75,13 +81,14 @@ export class DanhMucDungChungComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
+    private router: Router
   ) {
     this.formData = this.fb.group({
       ma: [null],
-      maCha:  [null],
+      maCha: [null],
       giaTri: [null],
-      ghiChu:  [null],
-      loai:  [null]
+      ghiChu: [null],
+      loai: [null]
     });
   }
 
@@ -98,14 +105,43 @@ export class DanhMucDungChungComponent implements OnInit {
     }
   }
 
+  onAllChecked(checked) {
+    this.dataTable.forEach((item) => {
+        this.updateCheckedSet(item.id, checked);
+    })
+    this.refreshCheckedStatus();
+  }
+
+  updateCheckedSet(id: number, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(id);
+    } else {
+      this.setOfCheckedId.delete(id);
+    }
+  }
+
+  refreshCheckedStatus(): void {
+    this.allChecked = this.dataTable.every(({ id }) =>
+      this.setOfCheckedId.has(id),
+    );
+    this.indeterminate =
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.allChecked;
+  }
+
+  onItemChecked(id: number, checked) {
+    this.updateCheckedSet(id, checked);
+    this.refreshCheckedStatus();
+    console.log(this.setOfCheckedId
+    )
+  }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
             item.checked = true;
-          }
         });
       }
     } else {
@@ -203,7 +239,7 @@ export class DanhMucDungChungComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.dmDungCungService.delete(item.id).then((res) => {
+          this.dmDungCungService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -264,7 +300,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ ids: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -279,8 +315,7 @@ export class DanhMucDungChungComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -297,8 +332,7 @@ export class DanhMucDungChungComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -318,20 +352,119 @@ export class DanhMucDungChungComponent implements OnInit {
   print() {
 
   }
-  them() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Thêm danh mục dùng chung',
-      nzContent: DialogThemDanhMucDungChungComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (text) => {
-      if (text) {
 
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        this.dmDungCungService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-danh-muc-dung-chung.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  them(data?: any, isView?: boolean) {
+    let modalTuChoi;
+    if (data == null && isView == false) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Thêm danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+    if (data != null && isView == true) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Chi tiết danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+
+    if (data != null && isView == false) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Chỉnh sửa danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+
+    modalTuChoi.afterClose.subscribe((data) => {
+      this.search();
+    })
+  }
+
+  xoaNhieu() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.setOfCheckedId.forEach((item) => {
+          dataDelete.push(item);
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 }
+
+
+
