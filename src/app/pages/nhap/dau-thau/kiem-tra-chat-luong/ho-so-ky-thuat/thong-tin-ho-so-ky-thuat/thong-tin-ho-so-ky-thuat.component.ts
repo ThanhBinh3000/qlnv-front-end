@@ -221,6 +221,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
 
   async loadBanGiaoMau() {
     let body = {
+      "capDvis": '3',
       "maDvi": this.detail.maDvi,
       "maVatTuCha": this.typeVthh,
       "paggingReq": {

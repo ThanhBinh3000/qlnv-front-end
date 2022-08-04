@@ -225,6 +225,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": ['3'],
       "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
         ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,

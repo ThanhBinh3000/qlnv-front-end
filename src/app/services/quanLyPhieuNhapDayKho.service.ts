@@ -18,6 +18,9 @@ export class QuanLyPhieuNhapDayKhoService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt?`;
     if (body.maDvi)
       url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.ngayKetThucNhapTu)
       url_ += 'ngayKetThucNhapTu=' + encodeURIComponent('' + body.ngayKetThucNhapTu) + '&';
     if (body.ngayKetThucNhapDen)

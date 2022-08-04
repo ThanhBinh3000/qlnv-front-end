@@ -23,6 +23,9 @@ export class QuanLyBienBanKetThucNhapKhoService extends BaseService {
     if (body.ngayNhapDayKhoTu) {
       url_ += 'ngayNhapDayKhoTu=' + encodeURIComponent('' + body.ngayNhapDayKhoTu) + '&';
     }
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.ngayNhapDayKhoDen) {
       url_ += 'ngayNhapDayKhoDen=' + encodeURIComponent('' + body.ngayNhapDayKhoDen) + '&';
     }

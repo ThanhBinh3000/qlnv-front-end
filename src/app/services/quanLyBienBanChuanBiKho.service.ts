@@ -29,6 +29,9 @@ export class QuanLyBienBanChuanBiKhoService extends BaseService {
     if (body.trangThai) {
       url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     }
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)

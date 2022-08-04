@@ -244,6 +244,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
 
   async loadNghiemThuBaoQuan() {
     let body = {
+      "capDvis": ['3'],
       "maVatTuCha": this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
       "paggingReq": {
@@ -766,8 +767,11 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
 
   async loadBienBanNghiemThuBaoQuan() {
     let body = {
-      pageSize: 1000,
-      pageNumber: 0,
+      "capDvis": ['3'],
+      "paggingReq": {
+        "limit": 1000,
+        "page": 0
+      },
       "trangThai": this.globals.prop.NHAP_DA_DUYET
     };
     let res = await this.quanLyNghiemThuKeLotService.timKiem(body);

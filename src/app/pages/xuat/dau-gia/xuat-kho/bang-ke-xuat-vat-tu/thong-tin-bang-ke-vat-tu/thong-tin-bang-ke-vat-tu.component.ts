@@ -206,6 +206,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
 
   async loadSoPhieuNhapKho() {
     let body = {
+      "capDvis": '3',
       "denNgay": null,
       "maDonVi": this.userInfo.MA_DVI,
       "ngayGiaoNhanHang": null,
@@ -213,12 +214,8 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
       "ngayTaoPhieu": null,
       "orderBy": null,
       "orderDirection": null,
-      "paggingReq": {
-        "limit": 1000,
-        "orderBy": null,
-        "orderType": null,
-        "page": 0
-      },
+      "pageNumber": 1,
+      "pageSize": 1000,
       "soPhieu": null,
       "str": null,
       "trangThai": "02",
@@ -415,6 +412,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,
