@@ -537,7 +537,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (this.statusTrinhDuyet != true) {
+    if (this.statusTrinhDuyet != true && mcn < '2') {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
       return;
     }

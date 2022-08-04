@@ -34,7 +34,7 @@
 					</div>
 
 					<div nz-col nzSpan="6">
-						<label class="search__label">Quyết toán năm(cần điều chỉnh):</label>
+						<label class="search__label">Quyết toán năm:</label>
 						<nz-input-number [nzSize]="'small'"
 							[class]="statusBtnValidate || (searchFilter.namQtoan && searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999)?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.namQtoan"></nz-input-number>
@@ -101,7 +101,7 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
-							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+							<td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
 							<td>
 								{{ item.maBcao}}
 							</td>

@@ -169,6 +169,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	data: any;
 	selectedIndex = 1;
 	allChecked = false;                         // check all checkbox
+	loaiMH: number;
 
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
@@ -227,8 +228,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 		} else {
 			await this.dataSource.currentData.subscribe(obj => {
 				this.dotBcao = obj?.dotBcao;
+				this.loaiMH = obj?.loaiMH;
 			})
-			if (this.dotBcao && nam) {
+			if (this.dotBcao && nam && this.loaiMH == 1) {
 				this.loai = "1";
 				this.namHienHanh = parseInt(nam, 10);
 				await this.tongHop();
@@ -467,7 +469,11 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_EMPTY_DOTBC)
 			return
 		}
-
+		
+		if (this.congVan.fileName == null) {
+			this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
+			return;
+		}
 		// replace nhung ban ghi dc them moi id thanh null
 		this.lstDieuChinhs.forEach(item => {
 			if (item.id?.length == 38) {
@@ -496,6 +502,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
+		
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.id,
@@ -511,10 +518,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 			thuyetMinh: this.thuyetMinh,
 			tongHopTuIds: tongHopTuIds,
 		}));
-		if (request.congVan.fileName == null) {
-			this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
-			return;
-		}
 		//get file cong van url
 		const file: any = this.fileDetail;
 		if (file) {

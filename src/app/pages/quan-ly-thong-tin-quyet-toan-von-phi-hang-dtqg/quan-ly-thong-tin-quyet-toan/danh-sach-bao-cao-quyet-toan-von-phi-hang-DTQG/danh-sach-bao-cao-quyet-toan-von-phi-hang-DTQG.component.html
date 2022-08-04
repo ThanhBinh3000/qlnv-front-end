@@ -96,7 +96,7 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
-							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+							<td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
 							<!-- <td>
 									{{ item.maDchinh}}
 							</td> -->
@@ -110,7 +110,7 @@
 							<td>{{item.ngayPheDuyet}}</td>
 							<td class="text-center">
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.lyDoTuChoi">
+								<ng-container *ngIf="item.lyDoTuChoi && item.trangThai != '1' && item.trangThai != '2' && item.trangThai != '4' && item.trangThai != '6' && item.trangThai != '9'">
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
