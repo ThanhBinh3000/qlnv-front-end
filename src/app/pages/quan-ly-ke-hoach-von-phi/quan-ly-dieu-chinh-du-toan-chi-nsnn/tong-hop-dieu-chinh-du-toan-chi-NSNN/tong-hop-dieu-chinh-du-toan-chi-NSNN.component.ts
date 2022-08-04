@@ -171,8 +171,14 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
+		if (!this.dotBcao) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK);
+			return;
+		}
+		const loaiTongHop = '1';
 		const obj = {
-			dotBcao : this.dotBcao,
+			dotBcao: this.dotBcao,
+			loaiMH : loaiTongHop,
 		}
 		this.dataSource.changeData(obj);
 		this.router.navigate([

@@ -377,7 +377,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;

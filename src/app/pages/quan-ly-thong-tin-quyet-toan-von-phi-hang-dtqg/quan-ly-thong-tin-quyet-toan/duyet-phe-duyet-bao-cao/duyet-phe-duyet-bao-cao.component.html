@@ -34,7 +34,7 @@
 					</div>
 
 					<div nz-col nzSpan="6">
-						<label class="search__label">Quyết toán năm(cần điều chỉnh):</label>
+						<label class="search__label">Quyết toán năm:</label>
 						<nz-input-number [nzSize]="'small'"
 							[class]="searchFilter.namQtoan >= 1000 &&  searchFilter.namQtoan <= 2999 || !searchFilter.namQtoan && this.searchFilter.namQtoan !== 0 ?'' : 'input-error-validate'"
 							[(ngModel)]="searchFilter.namQtoan"></nz-input-number>
@@ -65,7 +65,7 @@
 				</div>
 			</nz-card>
 
-			<nz-card nzTitle="'Danh sách phê duyệt" class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="Duyệt và phê duyệt báo cáo quyết toán" class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>

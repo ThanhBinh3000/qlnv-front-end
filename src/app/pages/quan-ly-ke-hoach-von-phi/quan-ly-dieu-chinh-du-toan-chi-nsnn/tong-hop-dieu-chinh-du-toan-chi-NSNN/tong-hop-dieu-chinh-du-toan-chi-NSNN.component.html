@@ -11,10 +11,10 @@
         <button nz-button class="search__button--search" (click)="dong()">
           Đóng
         </button>
-        <button nz-button class="search__button--clear" (click)="xoaDieuKien()" >
-					<i nz-icon nzType="close"></i>
-					Xóa điều kiện
-				</button>
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+          <i nz-icon nzType="close"></i>
+          Xóa điều kiện
+        </button>
       </div>
     </div>
   </div>
@@ -31,7 +31,8 @@
                 [(ngModel)]="namHienTai"></nz-input-number>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Đợt báo cáo" [nzSpan]="1">
-              <nz-input-number class="input__search" nzSize="small" [(ngModel)]="dotBcao"></nz-input-number>
+              <nz-input-number class="input__search" nzSize="small" [(ngModel)]="dotBcao"
+                [class]="statusBtnValidate || dotBcao?'' : 'input-error-validate' "></nz-input-number>
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
@@ -78,22 +79,22 @@
               <td>{{item.ngayDuyet}}</td>
               <td>{{getStatusName(item.trangThai)}}</td>
               <td>
-								<ng-container *ngIf="item.trangThai == '-1'">
-									<button type="button" class="btn btn-main">
-										<span>Thông báo đến đơn vị cấp dưới</span>
-									</button>
-								</ng-container>
-								<ng-container *ngIf="item.trangThai == '7'">
-									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-										<span>Phê duyệt</span>
-									</button>
-								</ng-container>
-								<ng-container *ngIf="item.trangThai == '9'">
-									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-										<span>Xem</span>
-									</button>
-								</ng-container>
-							</td>
+                <ng-container *ngIf="item.trangThai == '-1'">
+                  <button type="button" class="btn btn-main">
+                    <span>Thông báo đến đơn vị cấp dưới</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '7'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Phê duyệt</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '9'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Xem</span>
+                  </button>
+                </ng-container>
+              </td>
             </tr>
           </tbody>
         </nz-table>
