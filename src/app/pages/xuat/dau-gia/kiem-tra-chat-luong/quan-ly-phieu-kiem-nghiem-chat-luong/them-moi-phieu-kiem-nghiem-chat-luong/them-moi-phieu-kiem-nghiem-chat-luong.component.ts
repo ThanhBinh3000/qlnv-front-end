@@ -378,7 +378,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       soHd: '',
       soQd: null,
       str: '',
-      trangThai: '02', // Ban hành
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       tuNgayQd: null,
       veViec: null,
     };
