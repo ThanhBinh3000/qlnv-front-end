@@ -335,18 +335,7 @@ export class DanhMucDungChungComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
-  }
-
-  clearFilterTable() {
-    this.filterTable = {
-      soBienBan: '',
-      soQuyetDinh: '',
-      namNhap: '',
-      ngayGui: '',
-      benNhan: '',
-      benGiao: '',
-      trangThai: '',
-    }
+    console.log(this.dataTableAll)
   }
 
   print() {
