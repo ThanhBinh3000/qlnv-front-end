@@ -259,12 +259,12 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 
   taoMoi() {
     this.statusBtnValidate = false;
-    if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-      if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-        return;
-      }
-    }
+    // if (this.searchFilter.nam || this.searchFilter.nam === 0) {
+    //   if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
+    //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+    //     return;
+    //   }
+    // }
     if (!this.searchFilter.nam) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
@@ -272,8 +272,14 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
+    if(!this.searchFilter.dotBcao){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK);
+        return;
+    }
+    const loaiDieuChinh = '0';
     const obj = {
 			dotBcao : this.searchFilter.dotBcao,
+      loaiMH : loaiDieuChinh,
 		}
 		this.dataSource.changeData(obj);
     this.router.navigate([

@@ -10,6 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { DataService } from '../../quan-ly-dieu-chinh-du-toan-chi-nsnn/data.service';
 // loai trang thai kiem tra
 export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
 	{
@@ -64,6 +65,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
+		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
@@ -169,6 +171,16 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
+		if (!this.dotBcao) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK);
+			return;
+		}
+		const loaiTongHop = '1';
+		const obj = {
+			dotBcao: this.dotBcao,
+			loaiMH : loaiTongHop,
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu-/' + this.dotBcao + '/' + this.namHienTai + '/' + this.maDviTao,
 		])

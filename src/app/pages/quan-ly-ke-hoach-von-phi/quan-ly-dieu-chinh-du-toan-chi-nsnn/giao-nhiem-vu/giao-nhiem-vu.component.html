@@ -96,7 +96,7 @@
 							</td>
 							<td>
 								<!-- {{dotBcao}} -->
-								<ng-container *ngIf="dotBcao && id ; else chonDot">
+								<!-- <ng-container *ngIf="dotBcao && id ; else chonDot">
 									<div *ngFor="let item of dotBcaos">
 										<div *ngIf="item.id == dotBcao">
 											{{item.id}}
@@ -111,7 +111,8 @@
 											[nzLabel]="item.id">
 										</nz-option>
 									</nz-select>
-								</ng-template>
+								</ng-template> -->
+								{{dotBcao}}
 							</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>
