@@ -15,10 +15,6 @@
                     <th width="161px">Mã</th>
                     <th width="161px">Giá trị</th>
                     <th width="161px">Trạng thái</th>
-                    <th width="350px">Người tạo</th>
-                    <th width="350px">Ngày tạo</th>
-                    <th width="161px">Người sửa</th>
-                    <th width="161px">Ngày sửa</th>
                     <th width="140px">Hành động</th>
                   </tr>
                 </thead>
@@ -63,42 +59,6 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nguoiTao"
-                          (input)="filterInTable('nguoiTao',filterTable.nguoiTao)" name="nguoiTao" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                          (input)="filterInTable('ngayTao',filterTable.nguoiTao)" name="nguoiTao" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngaySua"
-                          (input)="filterInTable('ngaySua',filterTable.ngaySua)" name="nguoiSua" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
-                    <th>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nguoiSua"
-                          (input)="filterInTable('nguoiSua',filterTable.nguoiSua)" name="nguoiSua" />
-                      </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
-                    </th>
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
@@ -109,11 +69,7 @@
                     <td>{{data.loai}}</td>
                     <td>{{data.ma}}</td>
                     <td>{{data.giaTri}}</td>
-                    <td>{{data.trangThai}}</td>
-                    <td>{{data.nguoiTao}}</td>
-                    <td>{{data.ngayTao}}</td>
-                    <td>{{data.nguoiSua}}</td>
-                    <td>{{data.ngaySua}}</td>
+                    <td>{{data.tenTrangThai}}</td>
                     <td>
                       <a (click)="them(data, true)">
                         <i class="fa fa-eye"></i>
