@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { DataService } from '../data.service';
 
 @Component({
 	selector: 'app-tim-kiem',
@@ -24,7 +25,7 @@ export class TimKiemComponent implements OnInit {
 	searchFilter = {
 		nam: null,
 		tuNgay: null,
-		denNgay:null,
+		denNgay: null,
 		maBaoCao: "",
 		donViTao: "",
 		trangThai: Utils.TT_BC_1,
@@ -70,7 +71,7 @@ export class TimKiemComponent implements OnInit {
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                           
+	pages = {
 		size: 10,
 		page: 1,
 	}
@@ -87,24 +88,25 @@ export class TimKiemComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
 		private location: Location,
+		private dataSource: DataService,
 	) {
 	}
 
 	async ngOnInit() {
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
-		newDate.setMonth(newDate.getMonth() -1);
+		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)){
+		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
 			this.statusTaoMoi = false;
 		}
-		
-		this.searchFilter.donViTao = this.userInfo?.dvql;	
-		this.onSubmit();	
+
+		this.searchFilter.donViTao = this.userInfo?.dvql;
+		this.onSubmit();
 	}
 
 	//get user info
@@ -148,7 +150,7 @@ export class TimKiemComponent implements OnInit {
 			}
 		}
 		let trangThais = [];
-		if (this.searchFilter.trangThai){
+		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		const requestReport = {
@@ -171,14 +173,14 @@ export class TimKiemComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = [];
 					data.data.content.forEach(item => {
-						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1) {
 							this.danhSachBaoCao.push({
 								...item,
 								checked: false,
 							})
 						} else {
 							this.danhSachBaoCao.push({
-								...item, 
+								...item,
 								checked: true,
 							})
 						}
@@ -229,15 +231,16 @@ export class TimKiemComponent implements OnInit {
 				return;
 			}
 		}
-		if (!this.searchFilter.nam){
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-			]);
-		} else {
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-			]);
+		const obj = {
+			namHienTai: new Date().getFullYear() + 1,
 		}
+		if (this.searchFilter.nam) {
+			obj.namHienTai = this.searchFilter.nam;
+		}
+		this.dataSource.changeData(obj);
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
+		]);
 	}
 
 	xemChiTiet(id: string) {
@@ -246,13 +249,13 @@ export class TimKiemComponent implements OnInit {
 		])
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 
-	xoaBaoCao(id: string){
+	xoaBaoCao(id: string) {
 		let request = [];
-		if (!id){
+		if (!id) {
 			request = this.listIdDelete;
 		} else {
 			request = [id];
@@ -260,7 +263,7 @@ export class TimKiemComponent implements OnInit {
 		this.spinner.show();
 		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(request).toPromise().then(
 			data => {
-				if (data.statusCode == 0){
+				if (data.statusCode == 0) {
 					this.listIdDelete = [];
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.onSubmit();
@@ -275,10 +278,10 @@ export class TimKiemComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	checkDeleteReport(item: any): boolean{
+	checkDeleteReport(item: any): boolean {
 		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;
@@ -286,28 +289,28 @@ export class TimKiemComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: string){
-		if (this.listIdDelete.findIndex(e => e == id) == -1){
-			this.listIdDelete.push(id); 
+	changeListIdDelete(id: string) {
+		if (this.listIdDelete.findIndex(e => e == id) == -1) {
+			this.listIdDelete.push(id);
 		} else {
 			this.listIdDelete = this.listIdDelete.filter(e => e != id);
 		}
 	}
 
-	checkAll(){
+	checkAll() {
 		let check = true;
 		this.danhSachBaoCao.forEach(item => {
-			if (item.checked){
+			if (item.checked) {
 				check = false;
 			}
 		})
 		return check;
 	}
 
-	updateAllCheck(){
+	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
 			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-			&& ROLE_CAN_BO.includes(this.userRole)){
+				&& ROLE_CAN_BO.includes(this.userRole)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}
