@@ -28,7 +28,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
-   @Input() id: number;
+  @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Output()
@@ -111,7 +111,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -137,6 +137,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,

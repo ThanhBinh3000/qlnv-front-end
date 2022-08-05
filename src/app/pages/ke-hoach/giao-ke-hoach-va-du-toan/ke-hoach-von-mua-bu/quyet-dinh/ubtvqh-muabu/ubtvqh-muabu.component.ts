@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {QuyetDinhUbtvqhMuaBuBoSungService} from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
 
 
 @Component({
@@ -54,7 +54,7 @@ export class UbtvqhMuabuComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
+    private quyetDinhUbtvqhMuBuBoSung: QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -132,8 +132,8 @@ export class UbtvqhMuabuComponent implements OnInit {
       this.dataTable.forEach((item) => {
         if (item.trangThai == "00") {
           dataDelete.push(item.id);
-          }
-        });
+        }
+      });
     }
     if (dataDelete && dataDelete.length > 0) {
       this.modal.confirm({

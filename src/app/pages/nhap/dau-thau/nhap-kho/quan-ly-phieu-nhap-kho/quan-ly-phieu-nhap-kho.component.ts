@@ -17,6 +17,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'quan-ly-phieu-nhap-kho',
@@ -71,6 +72,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private modal: NzModalService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -109,7 +111,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -266,6 +268,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": '3',
       "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
       "maDvi": this.userInfo.MA_DVI,
       "loaiVthh": this.typeVthh,

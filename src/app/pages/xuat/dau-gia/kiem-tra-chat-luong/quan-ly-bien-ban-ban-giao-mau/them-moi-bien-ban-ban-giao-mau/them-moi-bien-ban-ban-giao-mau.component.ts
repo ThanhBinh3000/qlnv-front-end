@@ -26,7 +26,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
 
-date:null
+  date: null
 
 
   @Input() id: number;
@@ -109,7 +109,7 @@ date:null
 
   async loadBienbanLayMau() {
     let param = {
-      "capDvis": this.userService.isCuc() ? '2,3' : null,
+      "capDvis": '3',
       "maDvi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,
@@ -119,7 +119,7 @@ date:null
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBienBanLayMau = data.content;
-    console.log(this.bienBanLayMau);
+      console.log(this.bienBanLayMau);
 
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -201,7 +201,7 @@ date:null
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -513,7 +513,7 @@ date:null
   }
 
   thongTinTrangThai(trangThai: string): string {
-    trangThai =this.globals.prop.BAN_HANH
+    trangThai = this.globals.prop.BAN_HANH
     if (
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.LANH_DAO_DUYET ||

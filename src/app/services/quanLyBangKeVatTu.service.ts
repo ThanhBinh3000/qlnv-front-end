@@ -18,6 +18,9 @@ export class QuanLyBangKeVatTuService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bang-ke-vt?`
     if (body.denNgay)
       url_ += 'denNgayNhap=' + encodeURIComponent('' + body.denNgay) + '&';
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.maDonVi)
       url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
     if (body.maVatTuCha)

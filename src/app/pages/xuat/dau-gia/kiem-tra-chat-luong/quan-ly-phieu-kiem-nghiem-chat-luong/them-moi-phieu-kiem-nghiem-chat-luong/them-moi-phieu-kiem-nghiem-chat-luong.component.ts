@@ -79,7 +79,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -116,7 +116,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.phieuKiemNghiemChatLuongHang.trangThai ===
-        this.globals.prop.DU_THAO ||
+      this.globals.prop.DU_THAO ||
       this.id === 0 ||
       this.phieuKiemNghiemChatLuongHang.trangThai === this.globals.prop.TU_CHOI
     );
@@ -138,18 +138,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       nganLoId: this.phieuKiemNghiemChatLuongHang.nganLoId ?? null,
       ngayKnghiem: this.phieuKiemNghiemChatLuongHang.ngayKnghiem
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayKnghiem).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayLayMau: this.phieuKiemNghiemChatLuongHang.ngayLayMau
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayLayMau).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       ngayNhapDay: this.phieuKiemNghiemChatLuongHang.ngayNhapDay
         ? dayjs(this.phieuKiemNghiemChatLuongHang.ngayNhapDay).format(
-            'YYYY-MM-DD',
-          )
+          'YYYY-MM-DD',
+        )
         : null,
       nhaKhoId: this.phieuKiemNghiemChatLuongHang.nhaKhoId ?? null,
       sluongBquan: this.phieuKiemNghiemChatLuongHang.sluongBquan ?? null,
@@ -378,7 +378,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       soHd: '',
       soQd: null,
       str: '',
-      trangThai: '02', // Ban hành
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       tuNgayQd: null,
       veViec: null,
     };
@@ -393,7 +393,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
   async loadBBBanGiaoMau(soQd?: string) {
     const body = {
-      // maDvi: this.userInfo.MA_DVI,
       capDvis: '3',
       maVatTuCha: this.phieuKiemNghiemChatLuongHang.maVatTuCha,
       soQuyetDinhNhap: soQd || null,
@@ -401,7 +400,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       orderDirection: '',
       pageNumber: 1,
       pageSize: 1000,
-      trangThai: '', // Đã duyệt ??
+      trangThai: '',
     };
 
     const res = await this.quanLyBienBanBanGiaoService.timKiem(body);

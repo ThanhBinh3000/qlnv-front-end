@@ -10,8 +10,8 @@ import { cloneDeep } from 'lodash';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {QuyetDinhUbtvqhMuaBuBoSungService} from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
-import {MuaBuBoSungTtcpServiceService} from "../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
+import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+import { MuaBuBoSungTtcpServiceService } from "../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
 @Component({
   selector: 'app-ttcp-muabu',
   templateUrl: './ttcp-muabu.component.html',
@@ -96,7 +96,7 @@ export class TtcpMuabuComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    if (body.ngayQd != null ) {
+    if (body.ngayQd != null) {
       body.tuNgay = body.ngayQd[0];
       body.denNgay = body.ngayQd[1];
     }

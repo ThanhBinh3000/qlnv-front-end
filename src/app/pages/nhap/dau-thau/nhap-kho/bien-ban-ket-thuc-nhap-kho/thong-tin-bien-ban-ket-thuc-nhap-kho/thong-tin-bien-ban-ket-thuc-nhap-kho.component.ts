@@ -129,7 +129,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -143,6 +143,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
   }
   async loadPhieuNhapKho() {
     let body = {
+      "capDvis": '3',
       "denNgayNhapKho": null,
       "maDvi": this.userInfo.MA_DVI,
       "loaiVthh": this.typeVthh,
@@ -271,6 +272,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.maVthh,
       "maNganKho": null,
@@ -757,6 +759,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
 
   async loadBienBanChuanBiKho() {
     let body = {
+      "capDvis": '3',
       "ngayBienBanTu": null,
       "ngayBienBanDen": null,
       "pageSize": 1000,

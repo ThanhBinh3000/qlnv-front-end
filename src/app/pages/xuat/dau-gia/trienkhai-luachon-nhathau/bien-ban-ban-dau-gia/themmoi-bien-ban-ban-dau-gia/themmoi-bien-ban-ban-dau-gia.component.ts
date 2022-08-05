@@ -171,7 +171,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -197,6 +197,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
   async loadPhieuKiemTraChatLuong() {
     let body = {
+      "capDvis": ['3'],
       "maDonVi": this.userInfo.MA_DVI,
       "maHangHoa": this.typeVthh,
       "maNganKho": null,

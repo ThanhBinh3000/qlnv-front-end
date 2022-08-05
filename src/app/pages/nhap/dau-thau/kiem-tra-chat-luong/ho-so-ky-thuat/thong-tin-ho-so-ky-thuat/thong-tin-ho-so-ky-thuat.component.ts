@@ -221,6 +221,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
 
   async loadBanGiaoMau() {
     let body = {
+      "capDvis": '3',
       "maDvi": this.detail.maDvi,
       "maVatTuCha": this.typeVthh,
       "paggingReq": {
@@ -253,7 +254,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

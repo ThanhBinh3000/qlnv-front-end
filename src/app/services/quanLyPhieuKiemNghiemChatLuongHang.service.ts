@@ -19,7 +19,9 @@ export class QuanLyPhieuKiemNghiemChatLuongHangService extends BaseService {
     if (body.maDvi) {
       url_ += 'maDvi=' + encodeURIComponent(body.maDvi) + '&';
     }
-
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.maVatTuCha) {
       url_ += 'maVatTuCha=' + encodeURIComponent(body.maVatTuCha) + '&';
     }

@@ -45,7 +45,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
   }
 
   initData() {
-
   }
 
   onChangeTongGtri() {
@@ -79,6 +78,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
       },
     });
   }
+
   themMoiItem() {
     if (!this.dataTable) {
       this.dataTable = [];
