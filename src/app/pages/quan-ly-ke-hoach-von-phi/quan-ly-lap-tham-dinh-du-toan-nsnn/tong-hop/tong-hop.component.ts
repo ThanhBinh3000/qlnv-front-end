@@ -10,7 +10,8 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
-
+import * as uuid from "uuid";
+import { DataService } from '../data.service';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class TongHopComponent implements OnInit {
 		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
+		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
@@ -159,7 +161,7 @@ export class TongHopComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	tongHop() {
+	async tongHop() {
 		this.statusBtnValidate = false;
 		if (!this.namHienTai) {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
@@ -169,8 +171,45 @@ export class TongHopComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
+		const request = {
+			maDvi: this.maDviTao,
+			namHienTai: this.namHienTai,
+			lstLapThamDinhs: [],
+			lstDviTrucThuoc: [],
+		}
+		this.spinner.show();
+		await this.quanLyVonPhiService.tongHop(request).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					request.lstLapThamDinhs = data.data.lstLapThamDinhs;
+					request.lstDviTrucThuoc = data.data.lstBcaoDviTrucThuocs;
+					request.lstLapThamDinhs.forEach(item => {
+						if (!item.id) {
+							item.id = uuid.v4() + 'FE';
+						}
+						item.nguoiBcao = this.userInfo?.username;
+						item.maDviTien = '1';
+					})
+					request.lstDviTrucThuoc.forEach(item => {
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					})
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
+		this.spinner.hide();
+		if (request.lstDviTrucThuoc?.length == 0){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_EXIST_REPORT);
+			return;
+		}
+		this.dataSource.changeData(request);
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.maDviTao + '/' + this.namHienTai,
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/',
 		])
 	}
 
