@@ -19,8 +19,10 @@ export class KeHoachXuatGiamComponent implements OnInit {
   tabName: String;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
+
   @Input()
   tongGtri: number
+
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
@@ -43,7 +45,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
   }
 
   initData() {
-
   }
 
   onChangeTongGtri() {
@@ -77,6 +78,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
       },
     });
   }
+
   themMoiItem() {
     if (!this.dataTable) {
       this.dataTable = [];
@@ -86,6 +88,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
     this.emitDataTable()
+    console.log(this.dataTable)
   }
 
   clearData() {

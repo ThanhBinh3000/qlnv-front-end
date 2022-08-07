@@ -15,7 +15,7 @@
       </button>
       <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
         (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_print"></i>
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Ban hành</span>
       </button>
       <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
@@ -30,7 +30,7 @@
       <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" [nzDisabled]="isView" nzAllowClear>
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
@@ -43,10 +43,12 @@
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <input type="text" nz-input formControlName="soQd" [readOnly]="isView" />
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                  [nzSize]="'small'">
+                </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -55,7 +57,7 @@
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
@@ -89,8 +91,8 @@
   </nz-card>
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-tabset nzType="card" class="mt-16 tab-level-3">
-      <nz-tab [nzTitle]="'Mua tăng'">
-        <app-ke-hoach-nhap-xuat-lt></app-ke-hoach-nhap-xuat-lt>
+      <nz-tab [nzTitle]="'Nhập/ xuất lương thực'">
+        <app-ke-hoach-nhap-xuat-lt #nhapXuatLt [(keHoachNhapXuat)]="keHoachNhapXuat"></app-ke-hoach-nhap-xuat-lt>
       </nz-tab>
 
       <nz-tab [nzTitle]="'Mua tăng'">

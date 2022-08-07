@@ -1,7 +1,7 @@
-import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -14,9 +14,8 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { QuyetDinhPheDuyetKQBanDauGiaService } from 'src/app/services/quyetDinhPheDuyetKQBanDauGia.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -36,7 +35,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
-  idNhapHang: number = 0;
+  idBienBanBDG: number = 0;
   detailGiaoNhap: any = {};
 
   listDiemKho: any[] = [];
@@ -46,8 +45,12 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   listPhieuKiemTraChatLuong: any[] = [];
   listDanhMucHang: any[] = [];
   listSoQuyetDinh: any[] = [];
+  listVatTuHangHoa: any[] = [];
+  listBienBanBDG: any[] = [];
+  listThongBaoBDG: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
+  maQd: string;
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -59,32 +62,8 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       this.expandSet.delete(id);
     }
   }
-  listOfData = [
-    {
-      id: 1,
-      name: 'John Brown',
-      age: 32,
-      expand: false,
-      address: 'New York No. 1 Lake Park',
-      description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.'
-    },
-    {
-      id: 2,
-      name: 'Jim Green',
-      age: 42,
-      expand: false,
-      address: 'London No. 1 Lake Park',
-      description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.'
-    },
-    {
-      id: 3,
-      name: 'Joe Black',
-      age: 32,
-      expand: false,
-      address: 'Sidney No. 1 Lake Park',
-      description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.'
-    }
-  ];
+  listOfData = [];
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -94,13 +73,12 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     private routerActive: ActivatedRoute,
     private modal: NzModalService,
     private userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
   ) { }
 
   async ngOnInit() {
@@ -110,11 +88,14 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.nam = dayjs().get('year');
+      this.maQd = this.userInfo.MA_QD;
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
+        this.loaiHangDTQGGetAll(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -123,6 +104,43 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  isDisableField() {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC
+      || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET || this.detail.trangThai == this.globals.prop.NHAP_BAN_HANH)) {
+      return true;
+    }
+  }
+
+  async loaiHangDTQGGetAll() {
+    this.listVatTuHangHoa = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVatTuHangHoa = res.data;
+    }
+  }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.detail.ngayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.detail.ngayKy.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.detail.ngayHieuLuc) {
+      return false;
+    }
+    return endValue.getTime() <= this.detail.ngayHieuLuc.getTime();
+  };
+
+  onChangeThongBaoBanDauGia(id) {
+
+  }
+
+  onChangeBienBan(id) {
+
   }
 
   async loadSoQuyetDinh() {
@@ -144,7 +162,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -225,7 +243,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyPhieuNhapKhoService.loadChiTiet(id);
+      let res = await this.quyetDinhPheDuyetKQBanDauGiaService.chiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -421,7 +439,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -458,7 +476,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -495,7 +513,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -534,7 +552,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -604,7 +622,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         "qdgnvnxId": this.detail.qdgnvnxId,
       };
       if (this.id > 0) {
-        let res = await this.quanLyPhieuNhapKhoService.sua(
+        let res = await this.quyetDinhPheDuyetKQBanDauGiaService.sua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -619,7 +637,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyPhieuNhapKhoService.them(
+        let res = await this.quyetDinhPheDuyetKQBanDauGiaService.them(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

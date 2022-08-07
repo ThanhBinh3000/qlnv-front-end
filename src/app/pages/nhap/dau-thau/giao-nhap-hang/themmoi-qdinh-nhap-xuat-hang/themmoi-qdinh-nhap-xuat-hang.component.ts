@@ -375,7 +375,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
-    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
+    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh != null ? this.typeVthh : '0101';
 
     if (this.quyetDinhNhapXuat.id > 0) {
       this.quyetDinhNhapXuat.detail = this.dsQuyetDinhNhapXuatDetailClone;

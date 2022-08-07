@@ -47,6 +47,10 @@
                 [nzData]="dataTable">
                 <thead>
                   <tr>
+                    <th width="45px">
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                        [nzIndeterminate]="indeterminate"></label>
+                    </th>
                     <th width="60px">STT</th>
                     <th width="161px">Số biên bản</th>
                     <th width="161px">Số QĐ</th>
@@ -60,6 +64,7 @@
                 </thead>
                 <tbody>
                   <tr class="search-table">
+                    <th></th>
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -174,18 +179,18 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <!-- <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
-            </button> -->
+            </button>
             <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <!-- <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
-            </button> -->
+            </button>
           </div>
         </div>
       </div>

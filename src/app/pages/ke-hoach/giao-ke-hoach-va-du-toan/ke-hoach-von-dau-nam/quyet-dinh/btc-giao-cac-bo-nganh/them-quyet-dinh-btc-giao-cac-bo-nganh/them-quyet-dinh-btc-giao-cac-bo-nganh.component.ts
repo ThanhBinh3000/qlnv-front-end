@@ -91,10 +91,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         trichYeu: data.trichYeu,
         idTtcpBoNganh: data.idTtcpBoNganh
       })
-      this.muaTangList = data.muaTangList;
-      this.xuatGiamList = data.xuatGiamList;
-      this.xuatBanList = data.xuatBanList;
-      this.luanPhienList = data.luanPhienList;
+      this.muaTangList = data.muaTangList ? data.muaTangList : [];
+      this.xuatGiamList = data.xuatGiamList ? data.xuatGiamList : [];
+      this.xuatBanList = data.xuatBanList ? data.xuatBanList : [];
+      this.luanPhienList = data.luanPhienList ? data.luanPhienList : [];
     }
   }
 
@@ -112,6 +112,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
           this.dsBoNganh = detail.data.listBoNganh;
         }
       }
+      console.log(this.dsBoNganh)
     }
   }
 

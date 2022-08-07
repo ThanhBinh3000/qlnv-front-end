@@ -239,7 +239,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": "02",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

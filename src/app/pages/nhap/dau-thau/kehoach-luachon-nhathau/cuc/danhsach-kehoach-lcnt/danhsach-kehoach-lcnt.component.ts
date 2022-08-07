@@ -228,6 +228,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
     this.search();
+    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
