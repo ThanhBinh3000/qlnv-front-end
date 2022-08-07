@@ -112,7 +112,8 @@
                                 </nz-form-label>
                                 <nz-select [(ngModel)]="detail.thongBaoBdgId" [disabled]="isDisableField() || isView"
                                     (ngModelChange)="onChangeThongBaoBanDauGia($event)">
-                                    <nz-option *ngFor="let p of listThongBaoBDG" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                    <nz-option *ngFor="let p of listThongBaoBDG" [nzValue]="p.id"
+                                        [nzLabel]="p.maThongBao">
                                     </nz-option>
                                 </nz-select>
                             </nz-form-item>
