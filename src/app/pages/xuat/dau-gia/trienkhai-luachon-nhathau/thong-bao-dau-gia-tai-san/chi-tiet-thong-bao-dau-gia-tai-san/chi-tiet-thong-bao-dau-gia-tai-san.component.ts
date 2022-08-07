@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongBaoBanDauGia } from 'src/app/models/ThongBaoBanDauGia';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
-import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan';
+import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
@@ -28,13 +28,9 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
-  detailGiaoNhap: any = {};
   detailHopDong: any = {};
   listNam: any[] = [];
   yearNow: number = 0;
-
-  create: any = {};
-  editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -355,7 +351,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         // this.loadPTBaoQuan(),
         // this.loadDonViTinh(),
       ]);
-      // await this.loadChiTiet(this.id);
+      await this.loadChiTiet(this.id);
       this.initForm();
       this.spinner.hide();
     } catch (e) {
@@ -364,7 +360,17 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  async loadChiTiet(id) {
+    if (id > 0) {
+      let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.thongBaoBanDauGia = res.data;
+          // this.changeSoQuyetDinh();
+        }
+      }
+    }
+  }
   async save(isOther?: boolean) {
     this.spinner.show();
     try {
