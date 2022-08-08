@@ -32,7 +32,7 @@
             height: 100vh !important;
             // max-width: 420px !important;
             min-width: 0px !important;
-            width: 420px !important;
+            width: 300px !important;
         }
 
         .text-menu {
@@ -42,7 +42,7 @@
 
         .sidebar {
             height: 100%;
-            width: 420px;
+            width: 300px;
             position: fixed;
             z-index: 1;
             top: 30px;
@@ -57,7 +57,7 @@
             padding: 8px 0px 8px 12px;
             text-decoration: none;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 14px;
             color: #444444;
             display: block;
             transition: 0.3s;
@@ -98,8 +98,8 @@
 
         #main {
             transition: margin-left .5s;
-            padding: 16px;
-            margin-left: 420px;
+            //padding: 16px;
+            margin-left: 300px;
         }
 
         .img-collapse-open {

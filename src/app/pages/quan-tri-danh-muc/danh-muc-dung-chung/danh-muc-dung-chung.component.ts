@@ -48,7 +48,7 @@ export class DanhMucDungChungComponent implements OnInit {
   endValue: Date | null = null;
 
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 20;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
@@ -371,8 +371,9 @@ export class DanhMucDungChungComponent implements OnInit {
         nzContent: DialogThemDanhMucDungChungComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '700px',
         nzFooter: null,
+        nzClassName:'themdmdungchung',
         nzComponentParams: {
           dataEdit: data,
           isView: isView,
@@ -385,7 +386,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzContent: DialogThemDanhMucDungChungComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '600px',
         nzFooter: null,
         nzComponentParams: {
           dataEdit: data,
@@ -400,7 +401,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzContent: DialogThemDanhMucDungChungComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '600px',
         nzFooter: null,
         nzComponentParams: {
           dataEdit: data,

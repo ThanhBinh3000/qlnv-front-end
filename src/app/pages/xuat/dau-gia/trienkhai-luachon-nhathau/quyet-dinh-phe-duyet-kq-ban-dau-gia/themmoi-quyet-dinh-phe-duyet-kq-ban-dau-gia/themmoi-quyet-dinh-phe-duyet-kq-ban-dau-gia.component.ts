@@ -16,6 +16,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { QuyetDinhPheDuyetKQBanDauGiaService } from 'src/app/services/quyetDinhPheDuyetKQBanDauGia.service';
+import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -79,6 +80,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
+    private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
   ) { }
 
   async ngOnInit() {
@@ -96,6 +98,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         this.loadDanhMucHang(),
         this.loadSoQuyetDinh(),
         this.loaiHangDTQGGetAll(),
+        this.loadThongBaoBanDauGia(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -135,8 +138,36 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     return endValue.getTime() <= this.detail.ngayHieuLuc.getTime();
   };
 
-  onChangeThongBaoBanDauGia(id) {
+  async loadThongBaoBanDauGia() {
+    let body = {
+      "maVatTuCha": this.typeVthh,
+      "maDvis": this.detail.maDvi,
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": null,
+        "orderType": null,
+        "page": 0
+      },
+      "trangThai": null
+    };
+    let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listThongBaoBDG = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 
+  async onChangeThongBaoBanDauGia(id) {
+    if (id) {
+      let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          console.log(res.data);
+        }
+      }
+    }
   }
 
   onChangeBienBan(id) {

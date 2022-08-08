@@ -76,11 +76,11 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
+        this._modalRef.close(this.formData);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-      this._modalRef.close(this.formData);
     }
  }
 

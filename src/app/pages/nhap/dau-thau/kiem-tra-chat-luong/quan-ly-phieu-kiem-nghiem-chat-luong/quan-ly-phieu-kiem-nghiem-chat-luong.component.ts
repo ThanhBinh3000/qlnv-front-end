@@ -206,7 +206,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soQdNhap: '',
-      ngayBanGiaoMau: [this.last30Day, this.toDay],
+      ngayBanGiaoMau: null,
       soHopDong: '',
       diemkho: '',
       nhaKho: '',
