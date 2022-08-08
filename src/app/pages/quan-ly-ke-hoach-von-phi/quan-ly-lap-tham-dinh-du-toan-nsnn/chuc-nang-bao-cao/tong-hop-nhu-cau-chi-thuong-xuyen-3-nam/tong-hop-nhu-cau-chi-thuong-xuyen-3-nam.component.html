@@ -78,16 +78,16 @@
             <tr>
                 <th></th>
                 <th>TỔNG NHU CẦU</th>
-                <th>{{total.thNamHienHanhN1}}</th>
-                <th>{{total.tranChiN}}</th>
-                <th>{{total.ncauChiN}}</th>
-                <th>{{total.clechTranChiVsNcauChiN}}</th>
-                <th>{{total.tranChiN1}}</th>
-                <th>{{total.ncauChiN1}}</th>
-                <th>{{total.clechTranChiVsNcauChiN1}}</th>
-                <th>{{total.tranChiN2}}</th>
-                <th>{{total.ncauChiN2}}</th>
-                <th>{{total.clechTranChiVsNcauChiN2}}</th>
+                <th>{{displayValue(total.thNamHienHanhN1)}}</th>
+                <th>{{displayValue(total.tranChiN)}}</th>
+                <th>{{displayValue(total.ncauChiN)}}</th>
+                <th>{{displayValue(total.clechTranChiVsNcauChiN)}}</th>
+                <th>{{displayValue(total.tranChiN1)}}</th>
+                <th>{{displayValue(total.ncauChiN1)}}</th>
+                <th>{{displayValue(total.clechTranChiVsNcauChiN1)}}</th>
+                <th>{{displayValue(total.tranChiN2)}}</th>
+                <th>{{displayValue(total.ncauChiN2)}}</th>
+                <th>{{displayValue(total.clechTranChiVsNcauChiN2)}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -96,16 +96,16 @@
             <tr>
                 <th></th>
                 <th>Trong đó - Chi thường xuyên cơ sở</th>
-                <th>{{chiTx.thNamHienHanhN1}}</th>
-                <th>{{chiTx.tranChiN}}</th>
-                <th>{{chiTx.ncauChiN}}</th>
-                <th>{{chiTx.clechTranChiVsNcauChiN}}</th>
-                <th>{{chiTx.tranChiN1}}</th>
-                <th>{{chiTx.ncauChiN1}}</th>
-                <th>{{chiTx.clechTranChiVsNcauChiN1}}</th>
-                <th>{{chiTx.tranChiN2}}</th>
-                <th>{{chiTx.ncauChiN2}}</th>
-                <th>{{chiTx.clechTranChiVsNcauChiN2}}</th>
+                <th>{{displayValue(chiTx.thNamHienHanhN1)}}</th>
+                <th>{{displayValue(chiTx.tranChiN)}}</th>
+                <th>{{displayValue(chiTx.ncauChiN)}}</th>
+                <th>{{displayValue(chiTx.clechTranChiVsNcauChiN)}}</th>
+                <th>{{displayValue(chiTx.tranChiN1)}}</th>
+                <th>{{displayValue(chiTx.ncauChiN1)}}</th>
+                <th>{{displayValue(chiTx.clechTranChiVsNcauChiN1)}}</th>
+                <th>{{displayValue(chiTx.tranChiN2)}}</th>
+                <th>{{displayValue(chiTx.ncauChiN2)}}</th>
+                <th>{{displayValue(chiTx.clechTranChiVsNcauChiN2)}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -114,16 +114,16 @@
             <tr>
                 <th></th>
                 <th>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
-                <th>{{chiMoi.thNamHienHanhN1}}</th>
-                <th>{{chiMoi.tranChiN}}</th>
-                <th>{{chiMoi.ncauChiN}}</th>
-                <th>{{chiMoi.clechTranChiVsNcauChiN}}</th>
-                <th>{{chiMoi.tranChiN1}}</th>
-                <th>{{chiMoi.ncauChiN1}}</th>
-                <th>{{chiMoi.clechTranChiVsNcauChiN1}}</th>
-                <th>{{chiMoi.tranChiN2}}</th>
-                <th>{{chiMoi.ncauChiN2}}</th>
-                <th>{{chiMoi.clechTranChiVsNcauChiN2}}</th>
+                <th>{{displayValue(chiMoi.thNamHienHanhN1)}}</th>
+                <th>{{displayValue(chiMoi.tranChiN)}}</th>
+                <th>{{displayValue(chiMoi.ncauChiN)}}</th>
+                <th>{{displayValue(chiMoi.clechTranChiVsNcauChiN)}}</th>
+                <th>{{displayValue(chiMoi.tranChiN1)}}</th>
+                <th>{{displayValue(chiMoi.ncauChiN1)}}</th>
+                <th>{{displayValue(chiMoi.clechTranChiVsNcauChiN1)}}</th>
+                <th>{{displayValue(chiMoi.tranChiN2)}}</th>
+                <th>{{displayValue(chiMoi.ncauChiN2)}}</th>
+                <th>{{displayValue(chiMoi.clechTranChiVsNcauChiN2)}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -143,16 +143,16 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{data.thNamHienHanhN1}}</td>
-                    <td>{{data.tranChiN}}</td>
-                    <td>{{data.ncauChiN}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN}}</td>
-                    <td>{{data.tranChiN1}}</td>
-                    <td>{{data.ncauChiN1}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN1}}</td>
-                    <td>{{data.tranChiN2}}</td>
-                    <td>{{data.ncauChiN2}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN2}}</td>
+                    <td>{{displayValue(data.thNamHienHanhN1)}}</td>
+                    <td>{{displayValue(data.tranChiN)}}</td>
+                    <td>{{displayValue(data.ncauChiN)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN)}}</td>
+                    <td>{{displayValue(data.tranChiN1)}}</td>
+                    <td>{{displayValue(data.ncauChiN1)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN1)}}</td>
+                    <td>{{displayValue(data.tranChiN2)}}</td>
+                    <td>{{displayValue(data.ncauChiN2)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN2)}}</td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
@@ -182,54 +182,54 @@
                         </div>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.thNamHienHanhN1 >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"></nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.tranChiN >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.tranChiN" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiN >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiN" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.tranChiN1 >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.tranChiN1" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiN1 >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiN1" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN1}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN1)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.tranChiN2 >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.tranChiN2" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiN2 >= 0?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiN2" (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN2}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN2)}}
                     </td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import { DataService } from '../../data.service';
 import * as uuid from 'uuid';
 export class ItemData {
@@ -63,6 +63,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     statusBtnEdit: boolean;
     statusBtnNew: boolean;
     statusBtnEx: boolean;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(
         private userService: UserService,
@@ -405,5 +406,9 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 }
