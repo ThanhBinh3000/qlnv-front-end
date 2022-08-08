@@ -183,13 +183,13 @@
 												{{data.maDviTinh}}
 											</td>
 											<td>
-												{{data.soLuong}}
+												{{displayValue(data.soLuong)}}
 											</td>
 											<td>
-												{{data.donGiaMua}}
+												{{displayValue(data.donGiaMua)}}
 											</td>
 											<td>
-												{{data.thanhTien}}
+												{{displayValue(data.thanhTien)}}
 											</td>
 
 											<td [hidden]="status">
@@ -227,6 +227,7 @@
 												<nz-input-number class="search__input"
 													[class]="(editCache[data.id].data.soLuong || editCache[data.id].data.soLuong === 0) && editCache[data.id].data.soLuong >= 0?'' : 'input-error-validate' "
 													nzSize="small" [(ngModel)]="editCache[data.id].data.soLuong"
+													[nzFormatter]="formatter" [nzPrecision]="4"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
@@ -234,11 +235,12 @@
 												<nz-input-number class="search__input"
 													[class]="(editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua === 0) && editCache[data.id].data.donGiaMua >= 0 ?'' : 'input-error-validate' "
 													nzSize="small" [(ngModel)]="editCache[data.id].data.donGiaMua"
+													[nzFormatter]="formatter" [nzPrecision]="4"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												{{editCache[data.id].data.thanhTien}}
+												{{displayValue(editCache[data.id].data.thanhTien)}}
 											</td>
 											<td [hidden]="status">
 												<i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -268,17 +270,18 @@
 												Tổng tiền:
 											</td>
 											<td>
-												{{tongTien}}
+												{{displayValue(tongTien)}}
 											</td>
 											<td>
 												Kinh phí đã cấp:
 											</td>
 											<td>
 												<ng-container *ngIf="status; else edit">
-													{{kphiDaCap}}
+													{{displayValue(kphiDaCap)}}
 												</ng-container>
 												<ng-template #edit>
 													<nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiDaCap"
+													[nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap > 0)?'' : 'input-error-validate' "></nz-input-number>
 												</ng-template>
 											</td>
@@ -286,7 +289,7 @@
 												Yêu cầu cấp thêm:
 											</td>
 											<td>
-												{{tongTien-kphiDaCap}}
+												{{displayValue(tongTien-kphiDaCap)}}
 											</td>
 										</tr>
 									</tbody>

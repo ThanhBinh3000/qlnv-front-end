@@ -146,19 +146,19 @@
 											</div>
 										</td>
 										<td>
-											{{data.soLuong}}
+											{{displayValue(data.soLuong)}}
 										</td>
 										<td>
 											{{data.maDviTinh}}
 										</td>
 										<td>
-											{{data.donGiaMua}}
+											{{displayValue(data.donGiaMua)}}
 										</td>
 										<td>
 											{{data.dviDonGia}}
 										</td>
 										<td>
-											{{data.thanhTien}}
+											{{displayValue(data.thanhTien)}}
 										</td>
 										<td>
 											<div *ngFor="let item of dviTiens">
@@ -180,7 +180,7 @@
 												Tổng tiền:
 											</td>
 											<td>
-												{{tongTien}}
+												{{displayValue(tongTien)}}
 											</td>
 											<td>
 												Đồng
@@ -190,19 +190,19 @@
 											</td>
 											<td>
 												<ng-container *ngIf="status; else edit">
-													{{kphiDaCap}}
+													{{displayValue(kphiDaCap)}}
 												</ng-container>
 												<ng-template #edit>
-													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap" 
-													[nzFormatter]="formatter"  [nzParser]="parser"
-													[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap >= 0) ?'' : 'input-error-validate' "></nz-input-number>
+													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap" [nzFormatter]="formatter" [nzPrecision]="4"
+														[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap >= 0) ?'' : 'input-error-validate' ">
+													</nz-input-number>
 												</ng-template>
 											</td>
 											<td>
 												Yêu cầu cấp thêm:
 											</td>
 											<td>
-													{{tongTien-kphiDaCap}}
+												{{displayValue(tongTien-kphiDaCap)}}
 											</td>
 										</tr>
 									</tbody>

@@ -171,33 +171,33 @@
                                         <td></td>
                                         <td>Tổng số</td>
                                         <td>
-											{{tongSo.kphiDaCapThoc}}
+											{{displayValue(tongSo.kphiDaCapThoc)}}
 										</td>
                                         <td>
-											{{tongSo.ycauCapThemThoc}}
+											{{displayValue(tongSo.ycauCapThemThoc)}}
 										</td>
                                         <td>
-											{{tongSo.tongTienThoc}}
-										</td>
-                                        <td></td>
-                                        <td>
-											{{tongSo.kphiDaCapGao}}
-										</td>
-                                        <td>
-											{{tongSo.ycauCapThemGao}}
-										</td>
-                                        <td>
-											{{tongSo.tongTienGao}}
+											{{displayValue(tongSo.tongTienThoc)}}
 										</td>
                                         <td></td>
                                         <td>
-											{{tongSo.kphiDaCapMuoi}}
+											{{displayValue(tongSo.kphiDaCapGao)}}
 										</td>
                                         <td>
-											{{tongSo.ycauCapThemMuoi}}
+											{{displayValue(tongSo.ycauCapThemGao)}}
 										</td>
                                         <td>
-											{{tongSo.tongTienMuoi}}
+											{{displayValue(tongSo.tongTienGao)}}
+										</td>
+                                        <td></td>
+                                        <td>
+											{{displayValue(tongSo.kphiDaCapMuoi)}}
+										</td>
+                                        <td>
+											{{displayValue(tongSo.ycauCapThemMuoi)}}
+										</td>
+                                        <td>
+											{{displayValue(tongSo.tongTienMuoi)}}
 										</td>
                                         <td></td>
                                     </tr>
@@ -213,13 +213,13 @@
 											</ng-container>
 										</td>
 										<td>
-											{{data.kphiDaCapThoc}}
+											{{displayValue(data.kphiDaCapThoc)}}
 										</td>
 										<td>
-											{{data.ycauCapThemThoc}}
+											{{displayValue(data.ycauCapThemThoc)}}
 										</td>
                                         <td>
-                                            {{data.tongTienThoc}}
+                                            {{displayValue(data.tongTienThoc)}}
                                         </td>
                                         <td>
 											<ng-container *ngIf="data.idThoc">
@@ -229,13 +229,13 @@
 											</ng-container>
                                         </td>
 										<td>
-											{{data.kphiDaCapGao}}
+											{{displayValue(data.kphiDaCapGao)}}
 										</td>
 										<td>
-											{{data.ycauCapThemGao}}
+											{{displayValue(data.ycauCapThemGao)}}
 										</td>
                                         <td>
-                                            {{data.tongTienGao}}
+                                            {{displayValue(data.tongTienGao)}}
                                         </td>
                                         <td>
                                             <ng-container *ngIf="data.idGao">
@@ -245,13 +245,13 @@
 											</ng-container>
                                         </td>
                                         <td>
-											{{data.kphiDaCapMuoi}}
+											{{displayValue(data.kphiDaCapMuoi)}}
 										</td>
 										<td>
-											{{data.ycauCapThemMuoi}}
+											{{displayValue(data.ycauCapThemMuoi)}}
 										</td>
                                         <td>
-                                            {{data.tongTienMuoi}}
+                                            {{displayValue(data.tongTienMuoi)}}
                                         </td>
                                         <td>
                                             <ng-container *ngIf="data.idMuoi">
