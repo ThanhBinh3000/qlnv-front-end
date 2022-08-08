@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { ComponentsModule } from 'src/app/components/components.module';
-import { QuanLyCapNguonVonChiNSNNComponent } from './quan-ly-cap-nguon-von-chi.component';
 import { QuanLyCapNguonVonChiNSNNRoutingModule } from './quan-ly-cap-nguon-von-chi-routing.module';
+import { QuanLyCapNguonVonChiNSNNComponent } from './quan-ly-cap-nguon-von-chi.component';
 @NgModule({
   declarations: [
-    QuanLyCapNguonVonChiNSNNComponent,  
+    QuanLyCapNguonVonChiNSNNComponent
   ],
   imports: [CommonModule, QuanLyCapNguonVonChiNSNNRoutingModule, ComponentsModule],
 })
