@@ -86,11 +86,13 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
   openNav() {
     this.isCollapsed = !this.isCollapsed;
     if (this.isCollapsed) {
-      document.getElementById("mySidebar").style.width = "420px";
-      document.getElementById("main").style.marginLeft = "420px";
+      document.getElementById("mySidebar").classList.add('show');
+      document.getElementById("mySidebar").style.width = "300px";
+      document.getElementById("main").style.marginLeft = "300px";
     } else {
+      document.getElementById("mySidebar").classList.remove('show');
       document.getElementById("mySidebar").style.width = "0";
-      document.getElementById("main").style.marginLeft = "0";
+      document.getElementById("main").style.marginLeft = "16px";
     }
   }
 
