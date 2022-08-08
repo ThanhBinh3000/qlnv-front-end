@@ -94,18 +94,18 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{data.namHienHanhDtoan}}</td>
-                    <td>{{data.namHienHanhUocThien}}</td>
-                    <td>{{data.tranChiN}}</td>
-                    <td>{{data.ncauChiN}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN}}</td>
-                    <td>{{data.ssanhNcauNVoiN1}}</td>
-                    <td>{{data.tranChiN1}}</td>
-                    <td>{{data.ncauChiN1}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN1}}</td>
-                    <td>{{data.tranChiN2}}</td>
-                    <td>{{data.ncauChiN2}}</td>
-                    <td>{{data.clechTranChiVsNcauChiN2}}</td>
+                    <td>{{displayValue(data.namHienHanhDtoan)}}</td>
+                    <td>{{displayValue(data.namHienHanhUocThien)}}</td>
+                    <td>{{displayValue(data.tranChiN)}}</td>
+                    <td>{{displayValue(data.ncauChiN)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN)}}</td>
+                    <td>{{displayValue(data.ssanhNcauNVoiN1)}}</td>
+                    <td>{{displayValue(data.tranChiN1)}}</td>
+                    <td>{{displayValue(data.ncauChiN1)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN1)}}</td>
+                    <td>{{displayValue(data.tranChiN2)}}</td>
+                    <td>{{displayValue(data.ncauChiN2)}}</td>
+                    <td>{{displayValue(data.clechTranChiVsNcauChiN2)}}</td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
@@ -135,66 +135,66 @@
                         </div>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
                             (ngModelChange)="changeModel(data.id)"
                             [class]="(editCache[data.id].data.namHienHanhDtoan || editCache[data.id].data.namHienHanhDtoan ===0) && editCache[data.id].data.namHienHanhDtoan >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.namHienHanhUocThien"
                             (ngModelChange)="changeModel(data.id)"
                             [class]="(editCache[data.id].data.namHienHanhUocThien || editCache[data.id].data.namHienHanhUocThien ===0) && editCache[data.id].data.namHienHanhUocThien >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.tranChiN" (ngModelChange)="changeModel(data.id)"
                             [class]="editCache[data.id].data.tranChiN >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.ncauChiN" (ngModelChange)="changeModel(data.id)"
                             [class]="(editCache[data.id].data.ncauChiN || editCache[data.id].data.ncauChiN ===0) && editCache[data.id].data.ncauChiN >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN)}}
                     </td>
                     <td>
-                        {{editCache[data.id].data.ssanhNcauNVoiN1}}
+                        {{displayValue(editCache[data.id].data.ssanhNcauNVoiN1)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.tranChiN1" (ngModelChange)="changeModel(data.id)"
                             [class]="editCache[data.id].data.ncauChiN1 >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.ncauChiN1" (ngModelChange)="changeModel(data.id)"
                             [class]="(editCache[data.id].data.ncauChiN1 || editCache[data.id].data.ncauChiN1 ===0) && editCache[data.id].data.ncauChiN1 >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN1}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN1)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.tranChiN2" (ngModelChange)="changeModel(data.id)"
                             [class]="editCache[data.id].data.tranChiN2 >= 0?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [(ngModel)]="editCache[data.id].data.ncauChiN2"
                             [class]="editCache[data.id].data.ncauChiN2 >= 0?'' : 'input-error-validate'"
                             (ngModelChange)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.clechTranChiVsNcauChiN2}}
+                        {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN2)}}
                     </td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

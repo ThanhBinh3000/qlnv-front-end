@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-nsnn-3-nam.constant';
 
 export class ItemData {
@@ -85,6 +85,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     allChecked = false;                         // check all checkbox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(private router: Router,
         private routerActive: ActivatedRoute,
@@ -837,5 +838,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         WindowPrt.focus();
         WindowPrt.print();
         WindowPrt.close();
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 }
