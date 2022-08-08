@@ -126,9 +126,8 @@
           </nz-select>
         </td>
         <td>
-          <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu"
-            [class]="(editCache[data.id].data.khoachQdGiaoNvu || editCache[data.id].data.khoachQdGiaoNvu ===0) &&  editCache[data.id].data.khoachQdGiaoNvu >= 0?'' : 'input-error-validate'">
-          </nz-input-number>
+          <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu"
+            [class]="editCache[data.id].data.khoachQdGiaoNvu?'' : 'input-error-validate'"/>
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachLuong"
@@ -164,6 +163,7 @@
         </td>
         <td>
           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanThieuNtruoc"
+          (ngModelChange)="changeModel(data.id)"
             [class]="(editCache[data.id].data.dtoanThieuNtruoc || editCache[data.id].data.dtoanThieuNtruoc ===0) &&  editCache[data.id].data.dtoanThieuNtruoc >= 0?'' : 'input-error-validate'">
           </nz-input-number>
         </td>
