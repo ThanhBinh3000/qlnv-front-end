@@ -107,20 +107,20 @@ const routes: Routes = [
         './chuc-nang-bao-cao/bao-cao/bao-cao.module'
       ).then((m) => m.BaoCaoModule),
   },
-  {
-    path: 'bao-cao-/:maDvi/:namHienHanh',
-    loadChildren: () =>
-      import(
-        './chuc-nang-bao-cao/bao-cao/bao-cao.module'
-      ).then((m) => m.BaoCaoModule),
-  },
-  {
-    path: 'bao-cao-/:namHienHanh',
-    loadChildren: () =>
-      import(
-        './chuc-nang-bao-cao/bao-cao/bao-cao.module'
-      ).then((m) => m.BaoCaoModule),
-  },
+  // {
+  //   path: 'bao-cao-/:maDvi/:namHienHanh',
+  //   loadChildren: () =>
+  //     import(
+  //       './chuc-nang-bao-cao/bao-cao/bao-cao.module'
+  //     ).then((m) => m.BaoCaoModule),
+  // },
+  // {
+  //   path: 'bao-cao-/:namHienHanh',
+  //   loadChildren: () =>
+  //     import(
+  //       './chuc-nang-bao-cao/bao-cao/bao-cao.module'
+  //     ).then((m) => m.BaoCaoModule),
+  // },
   {
     path: 'bao-cao/:loai/:id',
     loadChildren: () =>

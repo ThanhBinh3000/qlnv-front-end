@@ -19,6 +19,7 @@ import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from "../../../../../Utility/utils";
 import { LISTCANBO } from '../../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
+import { DataService } from '../../data.service';
 import { PHU_LUC } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -175,6 +176,7 @@ export class BaoCaoComponent implements OnInit {
 		private notification: NzNotificationService,
 		private location: Location,
 		private modal: NzModalService,
+		private dataSource: DataService,
 	) {
 		this.ngayNhap = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR,)
 	}
@@ -182,8 +184,6 @@ export class BaoCaoComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
-		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
-		const nam: string = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		const userName = this.userService.getUserName();
 		this.spinner.show();
 		await this.getUserInfo(userName); //get user info
@@ -191,25 +191,31 @@ export class BaoCaoComponent implements OnInit {
 		if (this.id) {
 			await this.getDetailReport();
 		} else {
-			if (this.maDviTao && nam) {
-				this.loai = "1";
-				this.namHienHanh = parseInt(nam, 10);
-				await this.tongHop();
-				this.trangThaiBaoCao = "1";
-				this.nguoiNhap = this.userInfo?.username;
-				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
-					(data) => {
-						if (data.statusCode == 0) {
-							this.maBaoCao = data.data;
-						} else {
-							this.notification.error(MESSAGE.ERROR, data?.msg);
-						}
-					},
-					(err) => {
-						this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			await this.dataSource.currentData.subscribe(obj => {
+                this.namHienHanh = obj?.namHienTai;
+				this.maDviTao = obj?.maDvi ? obj?.maDvi : this.userInfo?.dvql;
+				this.lstLapThamDinhs = obj?.lstLapThamDinhs ? obj?.lstLapThamDinhs : [];
+				this.lstDviTrucThuoc = obj?.lstDviTrucThuoc ? obj?.lstDviTrucThuoc : [];
+            })
+			if (!this.namHienHanh){
+				this.close();
+			}
+			this.trangThaiBaoCao = "1";
+			this.nguoiNhap = this.userInfo?.username;
+			await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+				(data) => {
+					if (data.statusCode == 0) {
+						this.maBaoCao = data.data;
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
-				);
-				this.maBaoCao = '';
+				},
+				(err) => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			);
+			if (this.lstDviTrucThuoc?.length > 0){
+				this.loai = "1";
 			} else {
 				this.loai = "0";
 				this.phuLucs.forEach(item => {
@@ -225,30 +231,7 @@ export class BaoCaoComponent implements OnInit {
 						checked: false,
 					})
 				})
-				this.trangThaiBaoCao = "1";
-				this.nguoiNhap = this.userInfo?.username;
-				this.maDviTao = this.userInfo?.dvql;
-				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
-					(data) => {
-						if (data.statusCode == 0) {
-							this.maBaoCao = data.data;
-						} else {
-							this.notification.error(MESSAGE.ERROR, data?.msg);
-						}
-					},
-					(err) => {
-						this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-					}
-				);
-				this.maBaoCao = '';
-				if (nam) {
-					this.namHienHanh = parseInt(nam, 10);
-				} else {
-					this.namHienHanh = new Date().getFullYear() + 1;
-				}
 			}
-
-
 		}
 		
 		//lay danh sach danh muc don vi
