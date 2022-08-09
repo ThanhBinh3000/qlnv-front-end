@@ -147,7 +147,7 @@
                   Căn cứ
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list></file-list>
+                  <file-list [data]="fileDinhKem"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -205,8 +205,8 @@
                       <nz-form-control [nzErrorTip]="tongMucDtError">
                         <nz-input-group>
                           <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="formatter"
-                            [nzParser]="parser" nzDisabled>
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                           </nz-input-number>
                         </nz-input-group>
                         <ng-template #tongMucDtError let-control>
