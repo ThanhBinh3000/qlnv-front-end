@@ -56,7 +56,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách nghị quyết của Thủ tướng Chính phủ</h3>
+      <h3>Danh sách quyết định của Thủ tướng Chính phủ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
@@ -132,8 +132,8 @@
 
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                  (input)="filterInTable('nam',filterTable.nam)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"
+                  (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -160,8 +160,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -174,7 +174,7 @@
           </tr>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
-              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.namQd }}</td>
