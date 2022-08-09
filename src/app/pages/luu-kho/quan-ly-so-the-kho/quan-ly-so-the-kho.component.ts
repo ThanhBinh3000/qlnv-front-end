@@ -10,15 +10,13 @@ import { Subscription } from 'rxjs';
 export class QuanLySoTheKhoComponent implements OnInit, OnDestroy {
   $routerChange: Subscription;
   currentUrl: string;
-  constructor(private readonly router: Router) { }
+
+  constructor(private readonly router: Router) {}
 
   ngOnDestroy(): void {
     this.$routerChange.unsubscribe();
   }
-  tabSelected = 'sokhothekho';
-  selectTab(tab) {
-    this.tabSelected = tab;
-  }
+
   ngOnInit(): void {
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
