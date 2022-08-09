@@ -62,13 +62,13 @@
                         </div>
                     </td>
 
-                    <td>{{ data.thNamHienHanhN1 }}</td>
+                    <td>{{ displayValue(data.thNamHienHanhN1) }}</td>
 
-                    <td>{{ data.ncauNamDtoanN }}</td>
+                    <td>{{ displayValue(data.ncauNamDtoanN) }}</td>
 
-                    <td>{{ data.ncauNamN1 }}</td>
+                    <td>{{ displayValue(data.ncauNamN1) }}</td>
 
-                    <td>{{ data.ncauNamN2 }}</td>
+                    <td>{{ displayValue(data.ncauNamN2) }}</td>
 
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -101,25 +101,25 @@
                     </td>
 
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.thNamHienHanhN1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.thNamHienHanhN1">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauNamDtoanN >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauNamDtoanN">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauNamN1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauNamN1">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauNamN2 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauNamN2">
                         </nz-input-number>

@@ -17,7 +17,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from 'uuid';
-import { DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
     id: string;
@@ -148,6 +148,8 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
+
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -741,6 +743,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.spinner.hide();
     }
 
+    displayValue(num: number): string{
+        return displayNumber(num);
+    }
 
 
 }

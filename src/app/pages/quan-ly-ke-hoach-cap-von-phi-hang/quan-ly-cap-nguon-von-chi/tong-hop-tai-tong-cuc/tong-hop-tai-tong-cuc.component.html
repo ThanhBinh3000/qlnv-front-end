@@ -179,19 +179,19 @@
 									<tr>
 										<td></td>
 										<td>Tổng số</td>
-										<td>{{tongSo.vonCapThoc}}</td>
-										<td>{{tongSo.vonUngThoc}}</td>
-										<td>{{tongSo.tongSoThoc}}</td>
-										<td>{{tongSo.giaoDuToanGao}}</td>
-										<td>{{tongSo.vonCapGao}}</td>
-										<td>{{tongSo.vonUngGao}}</td>
-										<td>{{tongSo.tongSoGao}}</td>
-										<td>{{tongSo.giaoDuToanMuoi}}</td>
-										<td>{{tongSo.vonCapMuoi}}</td>
-										<td>{{tongSo.vonUngMuoi}}</td>
-										<td>{{tongSo.tongSoMuoi}}</td>
-										<td>{{tongSo.capVonVttb}}</td>
-										<td>{{tongSo.tcGiaoVonHoanUngNam}}</td>
+										<td>{{displayValue(tongSo.vonCapThoc)}}</td>
+										<td>{{displayValue(tongSo.vonUngThoc)}}</td>
+										<td>{{displayValue(tongSo.tongSoThoc)}}</td>
+										<td>{{displayValue(tongSo.giaoDuToanGao)}}</td>
+										<td>{{displayValue(tongSo.vonCapGao)}}</td>
+										<td>{{displayValue(tongSo.vonUngGao)}}</td>
+										<td>{{displayValue(tongSo.tongSoGao)}}</td>
+										<td>{{displayValue(tongSo.giaoDuToanMuoi)}}</td>
+										<td>{{displayValue(tongSo.vonCapMuoi)}}</td>
+										<td>{{displayValue(tongSo.vonUngMuoi)}}</td>
+										<td>{{displayValue(tongSo.tongSoMuoi)}}</td>
+										<td>{{displayValue(tongSo.capVonVttb)}}</td>
+										<td>{{displayValue(tongSo.tcGiaoVonHoanUngNam)}}</td>
 										<td width="2.25%" [hidden]="status"></td>
 									</tr>
 									<tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -205,43 +205,43 @@
 												</div>
 											</td>
 											<td>
-												{{data.vonCapThoc}}
+												{{displayValue(data.vonCapThoc)}}
 											</td>
 											<td>
-												{{data.vonUngThoc}}
+												{{displayValue(data.vonUngThoc)}}
 											</td>
 											<td>
-												{{data.tongSoThoc}}
+												{{displayValue(data.tongSoThoc)}}
 											</td>
 											<td>
-												{{data.giaoDuToanGao}}
+												{{displayValue(data.giaoDuToanGao)}}
 											</td>
 											<td>
-												{{data.vonCapGao}}
+												{{displayValue(data.vonCapGao)}}
 											</td>
 											<td>
-												{{data.vonUngGao}}
+												{{displayValue(data.vonUngGao)}}
 											</td>
 											<td>
-												{{data.tongSoGao}}
+												{{displayValue(data.tongSoGao)}}
 											</td>
 											<td>
-												{{data.giaoDuToanMuoi}}
+												{{displayValue(data.giaoDuToanMuoi)}}
 											</td>
 											<td>
-												{{data.vonCapMuoi}}
+												{{displayValue(data.vonCapMuoi)}}
 											</td>
 											<td>
-												{{data.vonUngMuoi}}
+												{{displayValue(data.vonUngMuoi)}}
 											</td>
 											<td>
-												{{data.tongSoMuoi}}
+												{{displayValue(data.tongSoMuoi)}}
 											</td>
 											<td>
-												{{data.capVonVttb}}
+												{{displayValue(data.capVonVttb)}}
 											</td>
 											<td>
-												{{data.tcGiaoVonHoanUngNam}}
+												{{displayValue(data.tcGiaoVonHoanUngNam)}}
 											</td>
 											<td [hidden]="status">
 												<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -257,78 +257,78 @@
 												</div>
 											</td>
 											<td>
-												<nz-input-number class="search__input"
+												<nz-input-number class="search__input" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonCapThoc >= 0?'' : 'input-error-validate' "
 													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapThoc"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonUngThoc >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.vonUngThoc"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												{{editCache[data.id].data.tongSoThoc}}
+												{{displayValue(editCache[data.id].data.tongSoThoc)}}
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.giaoDuToanGao >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.giaoDuToanGao"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonCapGao >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.vonCapGao"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonUngGao >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.vonUngGao"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												{{editCache[data.id].data.tongSoGao}}
+												{{displayValue(editCache[data.id].data.tongSoGao)}}
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.giaoDuToanMuoi >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.giaoDuToanMuoi"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonCapMuoi >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.vonCapMuoi"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.vonUngMuoi >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.vonUngMuoi"
 													(ngModelChange)="changeModel(data.id)">
 												</nz-input-number>
 											</td>
 											<td>
-												{{editCache[data.id].data.tongSoMuoi}}
+												{{displayValue(editCache[data.id].data.tongSoMuoi)}}
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.capVonVttb >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.capVonVttb">
 												</nz-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input" nzSize="small"
+												<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 													[class]="editCache[data.id].data.tcGiaoVonHoanUngNam >= 0?'' : 'input-error-validate' "
 													[(ngModel)]="editCache[data.id].data.tcGiaoVonHoanUngNam">
 												</nz-input-number>

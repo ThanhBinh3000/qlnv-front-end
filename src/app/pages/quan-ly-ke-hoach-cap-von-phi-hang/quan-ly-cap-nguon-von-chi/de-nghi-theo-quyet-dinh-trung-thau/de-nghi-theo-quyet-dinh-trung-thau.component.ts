@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DataService } from '../data.service';
 
 export class ItemCongVan {
@@ -90,9 +90,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: any = [];
-
-    formatter = value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    parser = value => value.replace(/\$\s?|(,*)/g, '');
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -138,6 +136,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+        console.log(Math.floor(12466/1000));
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
@@ -215,7 +214,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         }
         this.getStatusButton();
         this.spinner.hide();
-
     }
 
     addListVtu(lstVtu: any) {
@@ -660,6 +658,8 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.spinner.hide();
     }
 
-
+    displayValue(num: number): string{
+        return displayNumber(num);
+    }
 
 }

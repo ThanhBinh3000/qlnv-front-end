@@ -156,13 +156,13 @@
                                             {{ttGui.nienDoNs}}
                                         </td>
                                         <td>
-                                            {{ttGui.soTien}}
+                                            {{displayValue(ttGui.soTien)}}
                                         </td>
                                         <td>
-                                            {{ttGui.nopThue}}
+                                            {{displayValue(ttGui.nopThue)}}
                                         </td>
                                         <td>
-                                            {{ttGui.ttChoDviHuong}}
+                                            {{displayValue(ttGui.ttChoDviHuong)}}
                                         </td>
                                         <td>
                                             {{ttGui.soTienBangChu}}
@@ -185,17 +185,17 @@
                                                 [(ngModel)]="ttGuiCache.nienDoNs" />
                                         </td>
                                         <td>
-                                            {{ttGuiCache.soTien}}
+                                            {{displayValue(ttGuiCache.soTien)}}
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input"
+                                            <nz-input-number class="search__input" [nzFormatter]="formatter" [nzPrecision]="4"
                                                 [class]="ttGuiCache.nopThue >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.nopThue"
                                                 (ngModelChange)="changeModel()">
                                             </nz-input-number>
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input"
+                                            <nz-input-number class="search__input" [nzFormatter]="formatter" [nzPrecision]="4"
                                                 [class]="(ttGuiCache.ttChoDviHuong || ttGuiCache.ttChoDviHuong === 0) && ttGuiCache.ttChoDviHuong >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.ttChoDviHuong"
                                                 (ngModelChange)="changeModel()">

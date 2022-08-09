@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, displayNumber, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from '../data.service';
 
@@ -102,7 +102,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
-
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -825,5 +825,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         );
         this.spinner.hide();
     }
-
+    displayValue(num: number): string{
+        return displayNumber(num);
+    }
 }

@@ -153,11 +153,11 @@
 													</div>
 												</div>
 											</td>
-											<td>{{data.tongSo}}</td>
+											<td>{{displayValue(data.tongSo)}}</td>
 											<td *ngFor="let item of lstDvi">
 												<div *ngFor="let e of data.listCtietDvi;">
 													<div *ngIf="e.maBcao == item.maBcao">
-														{{e.soTranChi}}
+														{{displayValue(e.soTranChi)}}
 													</div>
 												</div>
 											</td>
@@ -189,12 +189,12 @@
 												</div>
 											</td>
 											<td>
-												{{data.tongSo}}
+												{{displayValue(data.tongSo)}}
 											</td>
 											<td *ngFor="let item of lstDvi">
 												<div *ngFor="let e of editCache[data.id].data.listCtietDvi">
 													<div *ngIf="e.maBcao == item.maBcao">
-														<nz-input-number class="search__input" nzSize="small"
+														<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 															[(ngModel)]="e.soTranChi"
 															[class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
 															(ngModelChange)="changeModel(data.id)">

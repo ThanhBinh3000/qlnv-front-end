@@ -16,7 +16,7 @@ import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
@@ -135,6 +135,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -220,21 +221,22 @@ export class TongHopTaiTongCucComponent implements OnInit {
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.cucKhuVucs.forEach(item => {
                 this.lstCtietBcao.push({
+                    ...new ItemData(),
                     id: uuid.v4() + "FE",
                     maCucKv: item.maDvi,
-                    vonCapThoc: null,
-                    vonUngThoc: null,
-                    tongSoThoc: null,
-                    giaoDuToanGao: null,
-                    vonCapGao: null,
-                    vonUngGao: null,
-                    tongSoGao: null,
-                    giaoDuToanMuoi: null,
-                    vonCapMuoi: null,
-                    vonUngMuoi: null,
-                    tongSoMuoi: null,
-                    capVonVttb: null,
-                    tcGiaoVonHoanUngNam: null,
+                    // vonCapThoc: null,
+                    // vonUngThoc: null,
+                    // tongSoThoc: null,
+                    // giaoDuToanGao: null,
+                    // vonCapGao: null,
+                    // vonUngGao: null,
+                    // tongSoGao: null,
+                    // giaoDuToanMuoi: null,
+                    // vonCapMuoi: null,
+                    // vonUngMuoi: null,
+                    // tongSoMuoi: null,
+                    // capVonVttb: null,
+                    // tcGiaoVonHoanUngNam: null,
                     checked: false,
                 })
             })
@@ -781,6 +783,8 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.spinner.hide();
     }
 
-
+    displayValue(num: number): string{
+        return displayNumber(num);
+    }
 
 }
