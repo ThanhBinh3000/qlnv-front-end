@@ -634,7 +634,7 @@ app-danh-sach-file.hidecard,
   }
 
   .cxl-2 .nowrap.ant-table-wrapper {
-    max-height: calc(100vh - 300px);
+    // max-height: calc(100vh - 300px);
     min-height: 232px;
 
     .ant-empty-normal {
@@ -1632,7 +1632,7 @@ td .date-picker-custom dp-date-picker.dp-material {
   margin-bottom: -16px;
 
   .contentDetail {
-    max-height: calc(80vh - 72px);
+    // max-height: calc(80vh - 72px);
     overflow: auto;
     margin-bottom: 0 !important;
     border: none;

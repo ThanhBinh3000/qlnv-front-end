@@ -9,7 +9,6 @@ import { UserService } from 'src/app/services/user.service';
 export class DauThauComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
-
   constructor(
     public userService: UserService,
   ) { }
@@ -18,5 +17,9 @@ export class DauThauComponent implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+  }
+  tabSelected = 'khlcnt';
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 }

@@ -9,19 +9,19 @@ import { Subject } from 'rxjs';
 export class DauGiaBanHangComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
-
+  tabSelected = 'kehoachbandaugia';
   constructor(
     private route: ActivatedRoute,
     private router: Router
 
   ) {
   }
-
   ngOnInit(): void {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
   }
-
-
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
 }
