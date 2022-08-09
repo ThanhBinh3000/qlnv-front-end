@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isAddNew; else templateThemmoi">
-  <div>
+  <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="ds-ttcp">
         <div class="search__body" nz-row [nzGutter]="24">
@@ -123,7 +123,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                       (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -133,7 +133,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"
-                       (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
+                  (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -143,7 +143,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                       (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -152,7 +152,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                       (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -161,7 +161,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                       (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>

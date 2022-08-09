@@ -1,4 +1,34 @@
+<nz-affix [nzOffsetTop]="43" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('sokhothekho')">
+      Số kho/thẻ kho
+    </li>
+    <li nz-menu-item (click)="selectTab('hangtrongkho')">
+      Hàng trong kho
+    </li>
+    <li nz-menu-item (click)="selectTab('htdtheodoidacthu')">
+      Hàng thuộc diện theo dõi đặc thù
+    </li>
+  </ul>
+</nz-affix>
+
+
 <div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'sokhothekho'">
+      <app-so-kho-the-kho></app-so-kho-the-kho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'hangtrongkho'">
+      <app-hang-trong-kho></app-hang-trong-kho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'htdtheodoidacthu'">
+      <app-hang-theo-doi-dac-thu></app-hang-theo-doi-dac-thu>
+    </ng-container>
+  </div>
+</div>
+
+<!-- <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <div class="main-content tab-menu-new">
       <nz-tabset nzType="card" class="tab-level-0" nzLinkRouter nzLinkExact="false">
@@ -19,13 +49,12 @@
         <nz-tab>
           <a class="tab-link" *nzTabLink nz-tab-link [routerLink]="['./hang-theo-doi-dac-thu']">Hàng thuộc diện
             theo dõi đặc thù</a>
-          <!-- <ng-template nz-tab>
+          <ng-template nz-tab>
             <app-hang-theo-doi-dac-thu></app-hang-theo-doi-dac-thu>
-          </ng-template> -->
+          </ng-template>
           <router-outlet></router-outlet>
         </nz-tab>
       </nz-tabset>
-      <!-- <router-outlet></router-outlet> -->
     </div>
   </div>
-</div>
+</div> -->
