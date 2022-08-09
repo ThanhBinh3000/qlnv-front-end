@@ -127,11 +127,9 @@ export class TtcpMuabuComponent implements OnInit {
 
   xoa() {
     let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.trangThai == "00") {
-          dataDelete.push(item.id);
-        }
+    if (this.setOfCheckedId && this.setOfCheckedId.size > 0) {
+      this.setOfCheckedId.forEach((id) => {
+          dataDelete.push(id);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -221,6 +219,7 @@ export class TtcpMuabuComponent implements OnInit {
     } else {
       this.setOfCheckedId.delete(id);
     }
+    console.log(this.setOfCheckedId)
   }
 
   refreshCheckedStatus(): void {

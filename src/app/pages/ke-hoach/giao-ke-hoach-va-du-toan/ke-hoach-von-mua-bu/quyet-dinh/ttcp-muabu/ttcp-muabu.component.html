@@ -174,7 +174,7 @@
           </tr>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
-              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.namQd }}</td>

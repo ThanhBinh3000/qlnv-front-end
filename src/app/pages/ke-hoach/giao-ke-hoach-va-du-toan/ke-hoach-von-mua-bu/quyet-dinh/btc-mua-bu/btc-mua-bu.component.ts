@@ -126,11 +126,9 @@ export class BtcMuaBuComponent implements OnInit {
 
   xoa() {
     let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.trangThai == "00") {
-          dataDelete.push(item.id);
-        }
+    if (this.setOfCheckedId && this.setOfCheckedId.size > 0) {
+      this.setOfCheckedId.forEach((id) => {
+        dataDelete.push(id);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -162,7 +160,8 @@ export class BtcMuaBuComponent implements OnInit {
           }
         },
       });
-    } else {
+    }
+    else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
