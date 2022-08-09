@@ -15,7 +15,7 @@ export class KeHoachVonDauNamComponent implements OnInit {
   countChiTieu: number = 0;
   countDieuChinh: number = 0;
   countDuToan: number = 0;
-  tabSelected = 'quyetdinh';
+
   constructor(
     private spinner: NgxSpinnerService,
     private giaoKeHoachVonDauNamService: GiaoKeHoachVonDauNamService,
@@ -45,8 +45,5 @@ export class KeHoachVonDauNamComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-  selectTab(tab) {
-    this.tabSelected = tab;
   }
 }

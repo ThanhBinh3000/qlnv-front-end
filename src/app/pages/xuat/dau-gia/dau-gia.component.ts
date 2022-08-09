@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 export class DauGiaComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
+
   constructor(
     public userService: UserService,
   ) { }
@@ -17,9 +18,5 @@ export class DauGiaComponent implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-  }
-  tabSelected = 'kehoachbandaugia';
-  selectTab(tab) {
-    this.tabSelected = tab;
   }
 }

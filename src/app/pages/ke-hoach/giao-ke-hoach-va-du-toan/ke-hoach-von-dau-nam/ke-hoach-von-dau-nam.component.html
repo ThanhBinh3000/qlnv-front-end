@@ -1,34 +1,4 @@
-<nz-affix [nzOffsetTop]="69" class="level1">
-  <!-- (nzChange)="onChange($event)" -->
-  <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('quyetdinh')">
-      Quyết định
-    </li>
-    <li nz-menu-item (click)="selectTab('chiteukehoach')">
-      Chỉ tiêu kế hoạch
-    </li>
-    <li nz-menu-item (click)="selectTab('dieuchinhchitieukh')">
-      Điều chỉnh chỉ tiêu KH
-    </li>
-    <li nz-menu-item (click)="selectTab('dutoannsnn')">
-      Dự toán NSNN
-    </li>
-  </ul>
-</nz-affix>
-<ng-container *ngIf="tabSelected == 'quyetdinh'">
-  <app-quyet-dinh></app-quyet-dinh>
-</ng-container>
-<ng-container *ngIf="tabSelected == 'chiteukehoach'">
-  <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
-</ng-container>
-<ng-container *ngIf="tabSelected == 'dieuchinhchitieukh'">
-  <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
-</ng-container>
-<ng-container *ngIf="tabSelected == 'dutoannsnn'">
-  <app-du-toan-nsnn></app-du-toan-nsnn>
-</ng-container>
-
-<!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
   <nz-tab [nzTitle]="title_QD">
     <ng-template #title_QD>
       Quyết định
@@ -61,4 +31,4 @@
       <app-du-toan-nsnn></app-du-toan-nsnn>
     </ng-template>
   </nz-tab>
-</nz-tabset> -->
+</nz-tabset>

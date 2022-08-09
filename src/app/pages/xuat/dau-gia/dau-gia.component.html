@@ -1,58 +1,4 @@
-<nz-affix [nzOffsetTop]="43" class="level0">
-  <!-- (nzChange)="onChange($event)" -->
-  <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('kehoachbandaugia')">
-      Kế hoạch bán đấu giá
-    </li>
-    <li nz-menu-item (click)="selectTab('trienkhailuachonnhathau')">
-      Tổ chức triển khai KH bán đấu giá
-    </li>
-    <li nz-menu-item (click)="selectTab('dckhlcnt')">
-      Điều chỉnh KH bán đấu giá
-    </li>
-    <li nz-menu-item (click)="selectTab('hopdong')">
-      Hợp đồng
-    </li>
-    <li nz-menu-item (click)="selectTab('qdgiaonhiemvuxuathang')">
-      Quyết định giao nhiệm vụ xuất hàng
-    </li>
-    <li nz-menu-item (click)="selectTab('kiemtrachatluong')">
-      Kiểm tra chất lượng
-    </li>
-    <li nz-menu-item (click)="selectTab('xuatkho')">
-      Xuất kho
-    </li>
-  </ul>
-</nz-affix>
-
-
 <div class="contentBor chi-tieu__body giao-ke-hoach">
-  <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 'kehoachbandaugia'">
-      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'trienkhailuachonnhathau'">
-      <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'dieuchinhkhbandaugia'">
-      <app-dieu-chinh></app-dieu-chinh>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'hopdong'">
-      <app-hop-dong></app-hop-dong>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'qdgiaonhiemvuxuathang'">
-      <app-giao-nhap-hang></app-giao-nhap-hang>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'kiemtrachatluong'">
-      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'xuatkho'">
-      <app-xuat-kho></app-xuat-kho>
-    </ng-container>
-  </div>
-</div>
-
-<!-- <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <div class="main-content tab-menu-new">
       <nz-tabset nzType="card" class="tab-level-0">
@@ -94,4 +40,4 @@
       </nz-tabset>
     </div>
   </div>
-</div> -->
+</div>
