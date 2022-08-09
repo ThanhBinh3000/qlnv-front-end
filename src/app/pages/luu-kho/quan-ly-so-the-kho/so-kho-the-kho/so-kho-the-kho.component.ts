@@ -15,6 +15,7 @@ import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kh
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -59,7 +60,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   dataTableAll: any[] = []
 
   idSelected: number = 0
-  idStatus: string = ''
+  isCheck: boolean = false
   getCount = new EventEmitter<any>();
 
   constructor(
@@ -68,7 +69,8 @@ export class SoKhoTheKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private modal: NzModalService,
-    public userService: UserService
+    public userService: UserService,
+    public globals: Globals,
   ) {
     this.formData = this.fb.group({
       "denNgay": "",
@@ -283,10 +285,10 @@ export class SoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  viewDetail(id: number, status: string) {
+  viewDetail(id: number, check: boolean) {
     this.isAddNew = true;
     this.idSelected = id;
-    this.idStatus = status
+    this.isCheck = check
   }
   xoaItem(item: any) {
     this.modal.confirm({

@@ -14,6 +14,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service'
 import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-them-so-kho-the-kho',
   templateUrl: './them-so-kho-the-kho.component.html',
@@ -26,7 +28,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   @Output('close') onClose = new EventEmitter<any>();
 
   @Input() idInput: number;
-  @Input() status: string;
+  @Input() isCheck: boolean;
   dataTable: INhapXuat[];
   formData: FormGroup;
   page: number = 1;
@@ -66,13 +68,24 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
+    public globals: Globals,
   ) { }
 
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.getDataDetail(this.idInput)
+      console.log(this.idInput, this.isCheck);
+      if (this.idInput) {
+        if (this.isCheck) {
+          console.log('trường hợp đã lấy được id và đang luồng edit' + this.isCheck);
+        } else {
+          console.log('trường hợp đã lấy được id và đang luồng view' + this.isCheck);
+        }
+      } else {
+        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới' + this.idInput);
+      }
+      // this.getDataDetail(this.idInput)
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.tenDvi = this.userInfo.TEN_DVI;
@@ -101,6 +114,10 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    return thongTinTrangThaiNhap(trangThai);
   }
 
   initForm() {

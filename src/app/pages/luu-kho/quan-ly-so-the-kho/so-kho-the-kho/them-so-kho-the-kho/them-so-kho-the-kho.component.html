@@ -2,11 +2,11 @@
   <div class="header">
     <div class="header-text">
       <div class="text-container">
-        <h2 [ngClass]="status =='00' || status =='' ?'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh' ">
-          {{status!=''?convertTrangThai(status) : 'DỰ THẢO' }}</h2>
-      </div>
-      <div class="text-container">
-        <h2>Tạo thẻ kho</h2>
+        <div class="title-chi-tieu">
+          <span class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo</span>
+          <span>Tạo thẻ kho</span>
+        </div>
       </div>
     </div>
     <div class="btn-group" *ngIf="isTaoTheKho">
