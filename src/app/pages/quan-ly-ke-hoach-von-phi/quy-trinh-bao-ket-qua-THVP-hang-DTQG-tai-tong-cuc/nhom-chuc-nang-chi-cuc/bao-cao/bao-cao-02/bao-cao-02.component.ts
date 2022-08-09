@@ -10,7 +10,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
+import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 
 export class ItemDataMau02 {
@@ -86,6 +86,8 @@ export class BaoCao02Component implements OnInit {
     thGiaMuaTdTc = 0;
     thTtienTc = 0;
     tongDvTc = 0;
+
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -956,5 +958,9 @@ export class BaoCao02Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 }

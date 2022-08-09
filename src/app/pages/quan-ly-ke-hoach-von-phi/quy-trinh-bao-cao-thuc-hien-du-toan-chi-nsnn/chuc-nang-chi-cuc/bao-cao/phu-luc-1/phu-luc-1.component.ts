@@ -15,7 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
 
 
 export class ItemData {
@@ -104,6 +104,7 @@ export class PhuLucIComponent implements OnInit {
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(private router: Router,
         private routerActive: ActivatedRoute,
@@ -182,15 +183,6 @@ export class PhuLucIComponent implements OnInit {
                 checked: false,
             })
         })
-        if (this.lstCtietBcao.length > 0) {
-            if (!this.lstCtietBcao[0].stt) {
-                this.sortWithoutIndex();
-            } else {
-                this.sortByIndex();
-            }
-        }
-        this.getTotal();
-        this.updateEditCache();
 
         await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
             (data) => {
@@ -217,7 +209,17 @@ export class PhuLucIComponent implements OnInit {
             }
         })
 
-        this.addListNoiDung(this.noiDungFull);
+        await this.addListNoiDung(this.noiDungFull);
+        
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
+        }
+        this.getTotal();
+        this.updateEditCache();
 
         this.getStatusButton();
         this.spinner.hide();
@@ -1047,6 +1049,10 @@ export class PhuLucIComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 
 }

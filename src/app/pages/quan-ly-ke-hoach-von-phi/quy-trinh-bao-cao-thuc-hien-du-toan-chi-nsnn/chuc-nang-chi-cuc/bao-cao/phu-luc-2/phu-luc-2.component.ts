@@ -15,7 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
 import { NOI_DUNG_PL2 } from '../bao-cao.constant';
 
 
@@ -80,6 +80,7 @@ export class PhuLucIIComponent implements OnInit {
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(private router: Router,
         private routerActive: ActivatedRoute,
@@ -111,18 +112,18 @@ export class PhuLucIIComponent implements OnInit {
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                dtoanSdungNamTcong: mulMoney(item.dtoanSdungNamTcong, this.maDviTien),
-                dtoanSdungNamNguonNsnn: mulMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien),
-                dtoanSdungNamNguonSn: mulMoney(item.dtoanSdungNamNguonSn, this.maDviTien),
-                dtoanSdungNamNguonQuy: mulMoney(item.dtoanSdungNamNguonQuy, this.maDviTien),
-                giaiNganThangTcong: mulMoney(item.giaiNganThangTcong, this.maDviTien),
-                giaiNganThangNguonNsnn: mulMoney(item.giaiNganThangNguonNsnn, this.maDviTien),
-                giaiNganThangNguonSn: mulMoney(item.giaiNganThangNguonSn, this.maDviTien),
-                giaiNganThangNguonQuy: mulMoney(item.giaiNganThangNguonQuy, this.maDviTien),
-                luyKeGiaiNganTcong: mulMoney(item.luyKeGiaiNganTcong, this.maDviTien),
-                luyKeGiaiNganNguonNsnn: mulMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien),
-                luyKeGiaiNganNguonSn: mulMoney(item.luyKeGiaiNganNguonSn, this.maDviTien),
-                luyKeGiaiNganNguonQuy: mulMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien),
+                dtoanSdungNamTcong: divMoney(item.dtoanSdungNamTcong, this.maDviTien),
+                dtoanSdungNamNguonNsnn: divMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien),
+                dtoanSdungNamNguonSn: divMoney(item.dtoanSdungNamNguonSn, this.maDviTien),
+                dtoanSdungNamNguonQuy: divMoney(item.dtoanSdungNamNguonQuy, this.maDviTien),
+                giaiNganThangTcong: divMoney(item.giaiNganThangTcong, this.maDviTien),
+                giaiNganThangNguonNsnn: divMoney(item.giaiNganThangNguonNsnn, this.maDviTien),
+                giaiNganThangNguonSn: divMoney(item.giaiNganThangNguonSn, this.maDviTien),
+                giaiNganThangNguonQuy: divMoney(item.giaiNganThangNguonQuy, this.maDviTien),
+                luyKeGiaiNganTcong: divMoney(item.luyKeGiaiNganTcong, this.maDviTien),
+                luyKeGiaiNganNguonNsnn: divMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien),
+                luyKeGiaiNganNguonSn: divMoney(item.luyKeGiaiNganNguonSn, this.maDviTien),
+                luyKeGiaiNganNguonQuy: divMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien),
 
                 //chua co tinh ty le
                 checked: false,
@@ -806,6 +807,10 @@ export class PhuLucIIComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 
 }
