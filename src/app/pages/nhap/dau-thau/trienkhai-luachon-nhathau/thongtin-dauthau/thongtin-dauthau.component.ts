@@ -48,7 +48,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   searchFilter = {
     namKhoach: dayjs().get('year'),
-    soQdPd: '',
+    soQd: '',
     ngayQd: '',
     loaiVthh: '',
     maDvi: '',
@@ -129,7 +129,7 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      soQdPd: this.searchFilter.soQdPd,
+      soQd: this.searchFilter.soQd,
       maDvi: this.searchFilter.maDvi
     }
     let res = await this.dauThauService.search(body);
@@ -205,7 +205,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKhoach = dayjs().get('year');
-    this.searchFilter.soQdPd = null;
+    this.searchFilter.soQd = null;
     this.searchFilter.ngayQd = null;
     this.searchFilter.maDvi = null;
     this.searchFilter.trichYeu = null;
@@ -268,7 +268,7 @@ export class ThongtinDauthauComponent implements OnInit {
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
-          soQdPd: this.searchFilter.soQdPd,
+          soQd: this.searchFilter.soQd,
           maDvi: this.searchFilter.maDvi
         };
         this.dauThauService

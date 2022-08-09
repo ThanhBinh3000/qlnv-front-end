@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -114,11 +115,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   styleStatus: string
   titleStatus: string;
 
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
-  lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
 
@@ -183,25 +179,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
           tgianDthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianDthau,
           tgianMthau: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tgianMthau,
           diaDiemNhap: dataDetail.children,
-          trangThai: dataDetail.trangThai
+          trangThai: dataDetail.trangThai,
+          ghiChu: dataDetail.ghiChu
         });
-        if (isVatTu) {
-          dataDetail.children.forEach(item => {
-            this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-              tenDvi: item.tenDvi,
-              noiDung: item.soLuong
-            }]
-          });
-        } else {
-          let stringConcat = ''
-          dataDetail.children.forEach(item => {
-            stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
-          });
-          this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-            tenDvi: dataDetail.tenDvi,
-            noiDung: stringConcat.substring(0, stringConcat.length - 2)
-          }]
-        }
       } else {
         const res = await this.dauThauGoiThauService.chiTietByGoiThauId(this.idInput);
         const dataThongTinGt = res.data;
@@ -236,26 +216,28 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
           vat: dataThongTinGt.vat,
           donGiaTrcVat: dataThongTinGt.donGiaTrcVat,
           idNhaThau: dataThongTinGt.idNhaThau,
+          diaDiemNhap: dataThongTinGt.diaDiemNhapList,
+          ghiChu: dataThongTinGt.ghiChu
         });
-        if (isVatTu) {
-          dataDetail.children.forEach(item => {
-            this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-              tenDvi: item.tenDvi,
-              noiDung: item.soLuong
-            }]
-          });
-        } else {
-          let stringConcat = ''
-          dataDetail.children.forEach(item => {
-            stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
-          });
-          this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
-            tenDvi: dataDetail.tenDvi,
-            noiDung: stringConcat.substring(0, stringConcat.length - 2)
-          }];
-          this.calendarGia();
-        }
       }
+      if (isVatTu) {
+        dataDetail.children.forEach(item => {
+          this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+            tenDvi: item.tenDvi,
+            noiDung: item.soLuong
+          }]
+        });
+      } else {
+        let stringConcat = ''
+        dataDetail.children.forEach(item => {
+          stringConcat = stringConcat + item.tenDiemKho + "(" + item.soLuong + "), "
+        });
+        this.listDiaDiemNhapHang = [...this.listDiaDiemNhapHang, {
+          tenDvi: dataDetail.tenDvi,
+          noiDung: stringConcat.substring(0, stringConcat.length - 2)
+        }]
+      }
+      this.calendarGia();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -375,6 +357,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     );
     this.editCache[index].edit = false;
   }
+  pipe = new DatePipe('en-US');
 
   async save(trangThaiLuu) {
     if (trangThaiLuu == '02') {
@@ -385,6 +368,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       }
     }
     let body = this.formGoiThau.value;
+    body.tgianDthau = this.pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+    body.tgianMthau = this.pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
     body.nthauDuThauList = this.listNthauNopHs;
     body.trangThaiLuu = trangThaiLuu
     let res = await this.dauThauGoiThauService.create(body);
