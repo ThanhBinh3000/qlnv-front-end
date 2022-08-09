@@ -85,7 +85,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     if (id > 0) {
       let res = await this.qdTccp.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -207,7 +206,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.spinner.hide();
       return;
     }
@@ -221,7 +219,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res
-    console.log(body)
     if (this.idInput > 0) {
       res = await this.qdTccp.update(body);
     } else {
@@ -256,7 +253,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        console.log(data);
         if (index >= 0) {
           this.dataTable[index] = data;
         } else {
@@ -276,7 +272,6 @@ export class ThemMoiTtcpComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
       this.listUbtvqh = data
-      console.log(data)
     }
   }
 

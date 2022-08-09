@@ -61,7 +61,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.isView);
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
@@ -75,7 +74,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -171,7 +169,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.spinner.hide();
       return;
     }
@@ -188,10 +185,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     if (this.idInput > 0) {
 
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
-      console.log(body)
     } else {
       res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);
-      console.log(body)
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -223,7 +218,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        console.log(data);
         if (index >= 0) {
           this.dataTable[index] = data;
         } else {

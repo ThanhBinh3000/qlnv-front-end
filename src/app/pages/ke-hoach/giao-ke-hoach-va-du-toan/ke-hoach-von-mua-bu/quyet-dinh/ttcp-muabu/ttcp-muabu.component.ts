@@ -219,7 +219,6 @@ export class TtcpMuabuComponent implements OnInit {
     } else {
       this.setOfCheckedId.delete(id);
     }
-    console.log(this.setOfCheckedId)
   }
 
   refreshCheckedStatus(): void {
@@ -268,7 +267,6 @@ export class TtcpMuabuComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    console.log(this.idSelected)
   }
 
   xoaItem(item: any) {
