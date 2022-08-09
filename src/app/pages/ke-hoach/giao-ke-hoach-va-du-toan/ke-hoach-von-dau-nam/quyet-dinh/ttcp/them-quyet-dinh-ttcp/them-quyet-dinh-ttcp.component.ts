@@ -179,6 +179,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
