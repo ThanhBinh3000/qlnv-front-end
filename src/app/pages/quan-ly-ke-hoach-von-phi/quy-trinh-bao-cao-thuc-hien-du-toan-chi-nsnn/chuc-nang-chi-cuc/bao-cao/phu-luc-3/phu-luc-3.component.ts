@@ -15,7 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
 import { DIADIEM } from '../bao-cao.constant';
 
 
@@ -109,6 +109,7 @@ export class PhuLucIIIComponent implements OnInit {
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(private router: Router,
         private routerActive: ActivatedRoute,
@@ -183,16 +184,6 @@ export class PhuLucIIIComponent implements OnInit {
                 checked: false,
             })
         })
-        if (this.lstCtietBcao.length > 0) {
-            if (!this.lstCtietBcao[0].stt) {
-                this.sortWithoutIndex();
-            } else {
-                this.sortByIndex();
-            }
-        }
-        this.getTotal();
-        this.updateEditCache();
-
         await this.danhMucService.dMMaDuAnPhuLuc3().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -218,7 +209,16 @@ export class PhuLucIIIComponent implements OnInit {
             }
         })
 
-        this.addListMaDuAn(this.maDanFull);
+        await this.addListMaDuAn(this.maDanFull);
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
+        }
+        this.getTotal();
+        this.updateEditCache();
 
         this.getStatusButton();
         this.spinner.hide();
@@ -1055,6 +1055,10 @@ export class PhuLucIIIComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 
 }

@@ -31,23 +31,25 @@
 						<label class="search__label">Năm báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
 							[(ngModel)]="searchFilter.namBcao"
-							[class]="searchFilter.namBcao && searchFilter.namBcao < 3000 && searchFilter.namBcao > 999 ?'' : 'input-error-validate' ">
+							[class]="statusBtnNew || (searchFilter.namBcao && searchFilter.namBcao < 3000 && searchFilter.namBcao > 999) ?'' : 'input-error-validate' ">
 						</nz-input-number>
 					</div>
 					<div nz-col nzSpan="3">
 						<label class="search__label">Đợt báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1"
 							[(ngModel)]="searchFilter.dotBcao"
-							[class]="(!searchFilter.dotBcao && searchFilter.maLoaiBcao == '1') ?'input-error-validate' : '' ">
+							[class]="!statusBtnNew && (!searchFilter.dotBcao && searchFilter.maLoaiBcao == '1') ?'input-error-validate' : '' ">
 						</nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
@@ -61,7 +63,7 @@
 						<label class="search__label">Loại báo cáo</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
 							[(ngModel)]="searchFilter.maLoaiBcao"
-							[class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
+							[class]="statusBtnNew || searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
 							<nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
 						</nz-select>
 					</div>
@@ -115,29 +117,35 @@
 							<td class="text-center">{{getStatusName(item.trangThai)}}
 								<ng-template
 									[ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-									<br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+									<br>Lý do: {{item.lyDoTuChoi}}
+								</ng-template>
 							</td>
 							<td>
-								<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}"
-									*ngIf="(item.trangThai == '2' && roleUser == 'truongBoPhan') || (item.trangThai == '4' && roleUser == 'lanhDao')">
-									<span>Phê duyệt</span>
-								</button>
-								<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}"
-									*ngIf="(item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8') && roleUser == 'canBo'">
-									<span>Nhập/Sửa dữ liệu</span>
-								</button>
-								<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}">
-									<span>Xem</span>
-								</button>
-								<button type="button" class="btn btn-main" (click)="deleteReport(item.id)"
-									*ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-									<span>Xóa</span>
-								</button>
+								<ng-container *ngIf="checkDeleteReport(item); else duyet">
+									<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}">
+										<span>Nhập/Sửa dữ liệu</span>
+									</button>
+									<button type="button" class="btn btn-main" (click)="deleteReport(item.id)">
+										<span>Xóa</span>
+									</button>
+								</ng-container>
+								<ng-template #duyet>
+									<ng-container *ngIf="checkApprove(item); else xem">
+										<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}">
+											<span>Duyệt</span>
+										</button>
+									</ng-container>
+									<ng-template #xem>
+										<button type="button" class="btn btn-main" routerLink="./bao-cao/{{ item.id }}">
+											<span>Xem</span>
+										</button>
+									</ng-template>
+								</ng-template>
 							</td>
 							<td>
-								<ng-container *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+								<ng-container *ngIf="checkDeleteReport(item)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>

@@ -11,7 +11,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK, sumNumber } from "../../../../../../Utility/utils";
+import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK, sumNumber } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 
 export class ItemDataMau0405 {
@@ -78,7 +78,7 @@ export class BaoCao04anComponent implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau0405 } } = {};
-
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -1125,5 +1125,9 @@ export class BaoCao04anComponent implements OnInit {
 
             }
         }
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 }

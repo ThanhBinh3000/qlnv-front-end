@@ -46,6 +46,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	roleUser: string;
 
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
+	statusBtnNew = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -119,6 +120,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	}
 
 	async onSubmit() {
+		this.statusBtnNew = true;
 		this.spinner.show();
 		const searchFilterTemp = Object.assign({}, this.searchFilter);
 		searchFilterTemp.trangThais = [];
@@ -166,6 +168,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 
 	async themMoi() {
+		this.statusBtnNew = false;
 		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.dotBcao && this.searchFilter.maLoaiBcao == '1')) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
@@ -202,7 +205,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 		})
 
-		if (check){
+		if (check) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
 			return;
 		}
@@ -275,7 +278,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	updateAllCheck() {
 		this.listBcaoKqua.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)) {
+			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
+				&& ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}
@@ -286,6 +290,30 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	getStatusName(id) {
 		const utils = new Utils();
 		return utils.getStatusName(id);
+	}
+
+	checkDeleteReport(item: any): boolean {
+		let check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+			ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
+	}
+
+	checkApprove(item: any): boolean {
+		let check = false;
+		if ((this.trangThai == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) ||
+			(this.trangThai == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code))) {
+			check = true;
+		}
+		const DviCha = this.donViTaos.find(e => e.maDvi == item.maDvi)?.maDviCha;
+		if (this.trangThai == Utils.TT_BC_7 && ROLE_CAN_BO.includes(this.userInfo?.roles[0].code) && DviCha == this.userInfo?.dvql) {
+			check = true;
+		}
+		return check;
 	}
 
 }
