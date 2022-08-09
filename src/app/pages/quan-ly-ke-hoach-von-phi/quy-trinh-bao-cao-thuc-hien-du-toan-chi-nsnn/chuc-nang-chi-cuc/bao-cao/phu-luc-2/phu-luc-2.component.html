@@ -194,26 +194,26 @@
                         </div>
                     </div>
                 </td>
-                <td>{{ data.dtoanSdungNamTcong }}</td>
-                <td>{{ data.dtoanSdungNamNguonNsnn }}</td>
-                <td>{{ data.dtoanSdungNamNguonSn }}</td>
-                <td>{{ data.dtoanSdungNamNguonQuy }}</td>
-                <td>{{ data.giaiNganThangTcong }}</td>
-                <td>{{ data.giaiNganThangTcongTle }}</td>
-                <td>{{ data.giaiNganThangNguonNsnn }}</td>
-                <td>{{ data.giaiNganThangNguonNsnnTle }}</td>
-                <td>{{ data.giaiNganThangNguonSn }}</td>
-                <td>{{ data.giaiNganThangNguonSnTle }}</td>
-                <td>{{ data.giaiNganThangNguonQuy }}</td>
-                <td>{{ data.giaiNganThangNguonQuyTle }}</td>
-                <td>{{ data.luyKeGiaiNganTcong }}</td>
-                <td>{{ data.luyKeGiaiNganTcongTle }}</td>
-                <td>{{ data.luyKeGiaiNganNguonNsnn }}</td>
-                <td>{{ data.luyKeGiaiNganNguonNsnnTle }}</td>
-                <td>{{ data.luyKeGiaiNganNguonSn }}</td>
-                <td>{{ data.luyKeGiaiNganNguonSnTle }}</td>
-                <td>{{ data.luyKeGiaiNganNguonQuy }}</td>
-                <td>{{ data.luyKeGiaiNganNguonQuyTle }}</td>
+                <td>{{ displayValue(data.dtoanSdungNamTcong) }}</td>
+                <td>{{ displayValue(data.dtoanSdungNamNguonNsnn) }}</td>
+                <td>{{ displayValue(data.dtoanSdungNamNguonSn) }}</td>
+                <td>{{ displayValue(data.dtoanSdungNamNguonQuy) }}</td>
+                <td>{{ displayValue(data.giaiNganThangTcong) }}</td>
+                <td>{{ displayValue(data.giaiNganThangTcongTle) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonNsnn) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonNsnnTle) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonSn) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonSnTle) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonQuy) }}</td>
+                <td>{{ displayValue(data.giaiNganThangNguonQuyTle) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganTcong) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganTcongTle) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonNsnn) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonNsnnTle) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonSn) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonSnTle) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonQuy) }}</td>
+                <td>{{ displayValue(data.luyKeGiaiNganNguonQuyTle) }}</td>
 
                 <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -244,100 +244,100 @@
                 </td>
 
                 <td>
-                    {{editCache[data.id].data.dtoanSdungNamTcong}}
+                    {{displayValue(editCache[data.id].data.dtoanSdungNamTcong)}}
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonNsnn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonSn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonQuy"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    {{editCache[data.id].data.giaiNganThangTcong}}
+                    {{displayValue(editCache[data.id].data.giaiNganThangTcong)}}
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangTcongTle">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnnTle">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSnTle">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuy"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'"
+                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
                         [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuyTle">
                     </nz-input-number>
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganTcong}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganTcong)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganTcongTle}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganTcongTle)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonNsnn}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonNsnn)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonNsnnTle}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonNsnnTle)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonSn}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonSn)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonSnTle}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonSnTle)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonQuy}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonQuy)}}
                 </td>
                 <td>
-                    {{editCache[data.id].data.luyKeGiaiNganNguonQuyTle}}
+                    {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonQuyTle)}}
                 </td>
                 <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

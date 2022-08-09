@@ -159,14 +159,14 @@
               </div>
             </div> -->
 					</td>
-					<td>{{item.soLuongKhoach}}</td>
-					<td>{{item.soLuongTte}}</td>
-					<td>{{item.dgGiaKhoach}}</td>
-					<td>{{item.dgGiaBanTthieu}}</td>
-					<td>{{item.dgGiaBanTte}}</td>
-					<td>{{item.ttGiaHtoan}}</td>
-					<td>{{item.ttGiaBanTte}}</td>
-					<td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
+					<td>{{displayValue(item.soLuongKhoach)}}</td>
+					<td>{{displayValue(item.soLuongTte)}}</td>
+					<td>{{displayValue(item.dgGiaKhoach)}}</td>
+					<td>{{displayValue(item.dgGiaBanTthieu)}}</td>
+					<td>{{displayValue(item.dgGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttGiaHtoan)}}</td>
+					<td>{{displayValue(item.ttGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttClechGiaTteVaGiaHtoan)}}</td>
 					<td>{{item.ghiChu}}</td>
 					<td [hidden]="status">
 						<i class="fa fa-trash-o do" (click)="deleteLine(item.id,'31')"></i>
@@ -210,36 +210,36 @@
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.soLuongTte"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.soLuongTte"
 							(ngModelChange)="changeModel03(item.id,'31')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaKhoach"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaKhoach"
 							(ngModelChange)="changeModel03(item.id,'31')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaBanTthieu">
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaBanTthieu">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaBanTte"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaBanTte"
 							(ngModelChange)="changeModel03(item.id,'31')">
 						</nz-input-number>
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttGiaHtoan)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaBanTte}}
+						{{displayValue(editCache[item.id].data.ttGiaBanTte)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttClechGiaTteVaGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttClechGiaTteVaGiaHtoan)}}
 					</td>
 					<td>
 						<input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
@@ -265,14 +265,14 @@
 				<td> <b>II</b> </td>
 				<td> <b>Xuất CTVT</b></td>
 				<td></td>
-				<td>{{soLuongKhoachXCTVT}}</td>
-				<td>{{soLuongTteXCTVT}}</td>
+				<td>{{displayValue(soLuongKhoachXCTVT)}}</td>
+				<td>{{displayValue(soLuongTteXCTVT)}}</td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td>{{ttGiaHtoanXCTVT}}</td>
-				<td>{{ttGiaBanTteXCTVT}}</td>
-				<td>{{ttClechGiaTteVaGiaHtoanXCTVT}}</td>
+				<td>{{displayValue(ttGiaHtoanXCTVT)}}</td>
+				<td>{{displayValue(ttGiaBanTteXCTVT)}}</td>
+				<td>{{displayValue(ttClechGiaTteVaGiaHtoanXCTVT)}}</td>
 				<td></td>
 				<td [hidden]="status"></td>
 				<td [hidden]="status"></td>
@@ -303,14 +303,14 @@
               </div>
             </div> -->
 					</td>
-					<td>{{item.soLuongKhoach}}</td>
-					<td>{{item.soLuongTte}}</td>
-					<td>{{item.dgGiaKhoach}}</td>
-					<td>{{item.dgGiaBanTthieu}}</td>
-					<td>{{item.dgGiaBanTte}}</td>
-					<td>{{item.ttGiaHtoan}}</td>
-					<td>{{item.ttGiaBanTte}}</td>
-					<td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
+					<td>{{displayValue(item.soLuongKhoach)}}</td>
+					<td>{{displayValue(item.soLuongTte)}}</td>
+					<td>{{displayValue(item.dgGiaKhoach)}}</td>
+					<td>{{displayValue(item.dgGiaBanTthieu)}}</td>
+					<td>{{displayValue(item.dgGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttGiaHtoan)}}</td>
+					<td>{{displayValue(item.ttGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttClechGiaTteVaGiaHtoan)}}</td>
 					<td>{{item.ghiChu}}</td>
 					<td [hidden]="status">
 						<i class="fa fa-trash-o do" (click)="deleteLine(item.id,'32')"></i>
@@ -349,41 +349,41 @@
             </nz-select> -->
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.soLuongKhoach">
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.soLuongKhoach">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.soLuongTte"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.soLuongTte"
 							(ngModelChange)="changeModel03(item.id,'32')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaKhoach"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaKhoach"
 							(ngModelChange)="changeModel03(item.id,'32')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaBanTthieu">
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaBanTthieu">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.dgGiaBanTte"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.dgGiaBanTte"
 							(ngModelChange)="changeModel03(item.id,'32')">
 						</nz-input-number>
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttGiaHtoan)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaBanTte}}
+						{{displayValue(editCache[item.id].data.ttGiaBanTte)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttClechGiaTteVaGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttClechGiaTteVaGiaHtoan)}}
 					</td>
 					<td>
 						<input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
@@ -409,14 +409,14 @@
 				<td><b>III</b></td>
 				<td><b>Xuất khác</b></td>
 				<td></td>
-				<td>{{soLuongKhoachXk}}</td>
-				<td>{{soLuongTteXk}}</td>
+				<td>{{displayValue(soLuongKhoachXk)}}</td>
+				<td>{{displayValue(soLuongTteXk)}}</td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td>{{ttGiaHtoanXk}}</td>
-				<td>{{ttGiaBanTteXk}}</td>
-				<td>{{ttClechGiaTteVaGiaHtoanXk}}</td>
+				<td>{{displayValue(ttGiaHtoanXk)}}</td>
+				<td>{{displayValue(ttGiaBanTteXk)}}</td>
+				<td>{{displayValue(ttClechGiaTteVaGiaHtoanXk)}}</td>
 				<td></td>
 				<td [hidden]="status"></td>
 				<td [hidden]="status"></td>
@@ -447,14 +447,14 @@
               </div>
             </div> -->
 					</td>
-					<td>{{item.soLuongKhoach}}</td>
-					<td>{{item.soLuongTte}}</td>
-					<td>{{item.dgGiaKhoach}}</td>
-					<td>{{item.dgGiaBanTthieu}}</td>
-					<td>{{item.dgGiaBanTte}}</td>
-					<td>{{item.ttGiaHtoan}}</td>
-					<td>{{item.ttGiaBanTte}}</td>
-					<td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
+					<td>{{displayValue(item.soLuongKhoach)}}</td>
+					<td>{{displayValue(item.soLuongTte)}}</td>
+					<td>{{displayValue(item.dgGiaKhoach)}}</td>
+					<td>{{displayValue(item.dgGiaBanTthieu)}}</td>
+					<td>{{displayValue(item.dgGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttGiaHtoan)}}</td>
+					<td>{{displayValue(item.ttGiaBanTte)}}</td>
+					<td>{{displayValue(item.ttClechGiaTteVaGiaHtoan)}}</td>
 					<td>{{item.ghiChu}}</td>
 					<td [hidden]="status">
 						<i class="fa fa-trash-o do" (click)="deleteLine(item.id,'33')"></i>
@@ -493,41 +493,41 @@
             </nz-select> -->
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 							[(ngModel)]="editCache[item.id].data.soLuongKhoach">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 							[(ngModel)]="editCache[item.id].data.soLuongTte"
 							(ngModelChange)="changeModel03(item.id,'33')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 							[(ngModel)]="editCache[item.id].data.dgGiaKhoach"
 							(ngModelChange)="changeModel03(item.id,'33')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 							[(ngModel)]="editCache[item.id].data.dgGiaBanTthieu">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 							[(ngModel)]="editCache[item.id].data.dgGiaBanTte"
 							(ngModelChange)="changeModel03(item.id,'33')">
 						</nz-input-number>
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttGiaHtoan)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttGiaBanTte}}
+						{{displayValue(editCache[item.id].data.ttGiaBanTte)}}
 					</td>
 					<td>
-						{{editCache[item.id].data.ttClechGiaTteVaGiaHtoan}}
+						{{displayValue(editCache[item.id].data.ttClechGiaTteVaGiaHtoan)}}
 					</td>
 					<td>
 						<input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
