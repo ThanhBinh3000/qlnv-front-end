@@ -37,11 +37,11 @@ export class TtcpMuabuComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    nam: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
     taiLieuDinhKem: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
   idSelected: number = 0;
   isViewDetail: boolean = false;
@@ -97,8 +97,8 @@ export class TtcpMuabuComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
+      body.ngayQdTu = body.ngayQd[0];
+      body.ngayQdDen = body.ngayQd[1];
     }
     body.paggingReq = {
       limit: this.pageSize,
