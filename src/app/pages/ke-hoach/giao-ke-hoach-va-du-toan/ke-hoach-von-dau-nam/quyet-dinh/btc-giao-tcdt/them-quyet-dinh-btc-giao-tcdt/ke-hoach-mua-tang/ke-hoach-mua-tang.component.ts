@@ -18,11 +18,9 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   dataTableChange = new EventEmitter<any[]>();
   @Input()
   dsHangHoa = [];
-
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dsChungLoaiHangHoa = [];
   dsChungLoaiHangHoaTable = [];
-  dsDonViTinh = [];
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
 
   constructor(
@@ -42,6 +40,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
+    console.log(this.dataEdit[index].data);
+    this.onChangeLoaiVthh(this.dataEdit[index].data.loaiVthh, 'edit', index);
   }
 
 
@@ -83,7 +83,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   clearData() { }
 
   huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
+    const index = this.dataTable.findIndex((item) => item.id == id);
     this.dataEdit[id] = {
       data: { ...this.dataTable[index] },
       edit: false,
@@ -97,8 +97,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   luuEdit(index: number): void {
     let dataSaved = this.dataEdit[index].data;
-    const dataNd = this.dsHangHoa.filter(d => d.id == dataSaved.loaiVthh);
-    dataSaved.tenVthh = dataNd[0].ten;
     Object.assign(this.dataTable[index], dataSaved);
     this.dataEdit[index].edit = false;
     this.emitDataTable();
@@ -108,9 +106,9 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     if (this.dataTable) {
       let i = 0;
       this.dataTable.forEach((item) => {
-        const dataNd = this.dsHangHoa.filter(d => d.id == item.loaiVthh)
+        const dataNd = this.dsChungLoaiHangHoaTable.filter(d => d.ma == item.cloaiVthh)
         if (dataNd.length > 0) {
-          item.ten = dataNd[0].ten;
+          item.tenCloaiVthh = dataNd[0].tenCloaiVthh;
         }
         this.dataEdit[i] = {
           edit: false,
@@ -130,8 +128,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     return sum;
   }
 
-  onChangeLoaiVthh(event, typeChange) {
-    console.log(event, typeChange);
+  onChangeLoaiVthh(event, typeChange, index?) {
     if (typeChange === 'add') {
       this.dsChungLoaiHangHoa = [];
       this.rowItem.dviTinh = null;
@@ -146,9 +143,10 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       this.dsChungLoaiHangHoaTable = [];
       this.rowItem.dviTinh = null;
       const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      console.log(loaiVthh);
       if (loaiVthh.length > 0) {
-        // this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-        // this.rowItem.tenVthh = loaiVthh[0].ten;
+        this.dataEdit[index].data.dviTinh = loaiVthh[0].maDviTinh;
+        this.dataEdit[index].data.tenVthh = loaiVthh[0].ten;
         this.dsChungLoaiHangHoaTable = loaiVthh[0].child;
       }
     }
