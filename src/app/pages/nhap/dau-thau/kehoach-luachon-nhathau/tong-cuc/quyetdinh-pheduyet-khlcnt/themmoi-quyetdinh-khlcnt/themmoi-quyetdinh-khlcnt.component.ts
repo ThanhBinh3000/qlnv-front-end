@@ -48,8 +48,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  // isVisibleChangeTab$ = new Subject();
-  // visibleTab: boolean = false;
+
   formData: FormGroup;
   formThongTinDX: FormGroup;
   formThongTinChung: FormGroup;
@@ -166,21 +165,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         maDvi: [null]
       }
     );
-    // this.formData.controls['tenVthh'].valueChanges.subscribe(value => {
-    //   if (value) {
-    //     this.danhSachTongHopGetAll();
-    //   }
-    // });
-    // this.formData.controls['tenCloaiVthh'].valueChanges.subscribe(value => {
-    //   if (value) {
-    //     this.danhSachTongHopGetAll();
-    //   }
-    // });
-    // this.formData.controls['namKhoach'].valueChanges.subscribe(value => {
-    //   if (value) {
-    //     this.danhSachTongHopGetAll();
-    //   }
-    // });
   }
 
   setValidator() {
@@ -833,21 +817,21 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async bindingDataHangHoa(data) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
       this.formData.patchValue({
-        maVtu: null,
-        tenVtu: null,
+        loaiVthh: data.parent.ma,
+        tenVthh: data.parent.ten,
         cloaiVthh: data.ma,
         tenCloaiVthh: data.ten,
-        loaiVthh: data.parent.ma,
-        tenVthh: data.parent.ten
       })
       this.isVatTu = false;
     }
     if (data.loaiHang == "VT") {
-      this.isVatTu = true;
       this.formData.patchValue({
         loaiVthh: data.ma,
         tenVthh: data.ten,
+        cloaiVthh: data.ma,
+        tenCloaiVthh: data.ten,
       })
+      this.isVatTu = true;
     }
     this.danhSachTongHopGetAll();
   }

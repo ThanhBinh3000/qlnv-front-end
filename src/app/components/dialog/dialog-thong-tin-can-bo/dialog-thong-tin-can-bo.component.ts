@@ -5,16 +5,16 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { Globals } from 'src/app/shared/globals';
-import {HelperService} from "../../../services/helper.service";
-import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
-import {Router} from "@angular/router";
+import { HelperService } from "../../../services/helper.service";
+import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'dialog-them-danh-muc-dung-chung',
-  templateUrl: './dialog-them-danh-muc-dung-chung.component.html',
-  styleUrls: ['./dialog-them-danh-muc-dung-chung.component.scss'],
+  selector: 'dialog-thong-tin-can-bo',
+  templateUrl: './dialog-thong-tin-can-bo.component.html',
+  styleUrls: ['./dialog-thong-tin-can-bo.component.scss'],
 })
-export class DialogThemDanhMucDungChungComponent implements OnInit {
+export class DialogThongTinCanBoComponent implements OnInit {
   dataEdit: any;
   isView: boolean;
   formData: FormGroup;
@@ -23,7 +23,7 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
   submited: boolean = false;
 
   constructor(
-    private router : Router,
+    private router: Router,
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -35,10 +35,10 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       loai: [null, [Validators.required]],
-      ma:  [null, [Validators.required]],
-      maCha:  [null],
-      trangThai:  ['01'],
-      giaTri:  [null, [Validators.required]],
+      ma: [null, [Validators.required]],
+      maCha: [null],
+      trangThai: ['01'],
+      giaTri: [null, [Validators.required]],
       ghiChu: [null]
     });
   }
@@ -53,7 +53,7 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     console.log(this.formData.value)
   }
 
-  async  save() {
+  async save() {
     this.submited = true;
     if (this.formData.valid) {
       this.spinner.show();
@@ -76,15 +76,15 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this._modalRef.close(this.formData);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
+      this._modalRef.close(this.formData);
     }
- }
+  }
 
-  async  getDmList() {
+  async getDmList() {
     let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
     this.danhMucList = data.data;
   }

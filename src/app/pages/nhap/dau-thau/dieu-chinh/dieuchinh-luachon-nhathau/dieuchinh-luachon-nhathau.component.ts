@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
@@ -25,60 +25,43 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  visibleTab: boolean = false;
   listNam: any[] = [];
-  yearNow: number = 0;
-  loaiVthh: string = ''
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
-    ngayTongHop: '',
-    loaiVthh: ''
+    ngayQd: '',
+    loaiVthh: '',
+    trichYeu: ''
   };
 
   dataTable: any[] = [];
-  page: number = 0;
+  page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
-  lastBreadcrumb: string;
   userInfo: UserLogin;
-  datePickerConfig = DATEPICKER_CONFIG;
 
   constructor(
-    private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private helperService: HelperService
+    public userService: UserService,
+    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-
-      this.getTitleVthh();
-      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
         });
       }
-      // await this.search();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -88,37 +71,23 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
-    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
-  }
-
   async search() {
     let body = {
-      tuNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+      tuNgayTao: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      denNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+      denNgayTao: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
-      },
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh
+      namKhoach: this.searchFilter.namKh,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
     };
-    let res = null;
-    if (this.tabSelected == 'phuong-an-tong-hop') {
-      res = await this.tongHopDeXuatKHLCNTService.search(body);
-    } else if (this.tabSelected == 'danh-sach-tong-hop') {
-      // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body, "05")
-    } else {
-      // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body, "10")
-    }
+    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -135,19 +104,6 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     return this.danhSachDauThauService.search(body);
   }
 
-  async selectTabData(tab: string) {
-    this.spinner.show();
-    try {
-      this.tabSelected = tab;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -182,10 +138,12 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
+
   async showList() {
     this.isDetail = false;
     await this.search()
   }
+
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;
@@ -223,14 +181,6 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     });
   }
 
-  convertDay(day: string) {
-    if (day && day.length > 0) {
-      return dayjs(day).format('DD/MM/YYYY');
-    }
-    return '';
-  }
-
-
   exportData() {
     // if (this.totalRecord > 0) {
     //   this.spinner.show();
@@ -264,7 +214,4 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     // }
   }
 
-  dateChange() {
-    this.helperService.formatDate()
-  }
 }

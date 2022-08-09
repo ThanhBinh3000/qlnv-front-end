@@ -1,26 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
 import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
+import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import { Router } from "@angular/router";
+import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
 @Component({
-  selector: 'app-danh-muc-dung-chung',
-  templateUrl: './danh-muc-dung-chung.component.html',
-  styleUrls: ['./danh-muc-dung-chung.component.scss'],
+  selector: 'app-quan-ly-can-bo',
+  templateUrl: './quan-ly-can-bo.component.html',
+  styleUrls: ['./quan-ly-can-bo.component.scss'],
 })
-export class DanhMucDungChungComponent implements OnInit {
+export class QuanLyCanBoComponent implements OnInit {
   @Input() typeVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -48,7 +48,7 @@ export class DanhMucDungChungComponent implements OnInit {
   endValue: Date | null = null;
 
   page: number = 1;
-  pageSize: number = 20;
+  pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
@@ -107,7 +107,7 @@ export class DanhMucDungChungComponent implements OnInit {
 
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
-        this.updateCheckedSet(item.id, checked);
+      this.updateCheckedSet(item.id, checked);
     })
     this.refreshCheckedStatus();
   }
@@ -141,7 +141,7 @@ export class DanhMucDungChungComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-            item.checked = true;
+          item.checked = true;
         });
       }
     } else {
@@ -300,7 +300,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
+            let res = await this.dmDungCungService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -365,61 +365,75 @@ export class DanhMucDungChungComponent implements OnInit {
 
   them(data?: any, isView?: boolean) {
     let modalTuChoi;
-    if (data == null && isView == false) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Thêm danh mục dùng chung',
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzClassName:'themdmdungchung',
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
-      });
-    }
-    if (data != null && isView == true) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Chi tiết danh mục dùng chung',
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '600px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
-      });
-    }
+    // if (data == null && isView == false) {
+    modalTuChoi = this.modal.create({
+      nzTitle: 'Sửa thông tin cán bộ',
+      nzContent: DialogThongTinCanBoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        isView: isView,
+      },
+    });
+    // }
+    // if (data != null && isView == true) {
+    //   modalTuChoi = this.modal.create({
+    //     nzTitle: 'Chi tiết danh mục dùng chung',
+    //     nzContent: DialogThemDanhMucDungChungComponent,
+    //     nzMaskClosable: false,
+    //     nzClosable: false,
+    //     nzWidth: '900px',
+    //     nzFooter: null,
+    //     nzComponentParams: {
+    //       dataEdit: data,
+    //       isView: isView,
+    //     },
+    //   });
+    // }
 
-    if (data != null && isView == false) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Chỉnh sửa danh mục dùng chung',
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '600px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
-      });
-    }
+    // if (data != null && isView == false) {
+    //   modalTuChoi = this.modal.create({
+    //     nzTitle: 'Chỉnh sửa danh mục dùng chung',
+    //     nzContent: DialogThemDanhMucDungChungComponent,
+    //     nzMaskClosable: false,
+    //     nzClosable: false,
+    //     nzWidth: '900px',
+    //     nzFooter: null,
+    //     nzComponentParams: {
+    //       dataEdit: data,
+    //       isView: isView,
+    //     },
+    //   });
+    // }
 
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
     })
   }
 
+  openPhanQuyen() {
+    let modalPhanQuyen;
+    // if (data == null && isView == false) {
+    modalPhanQuyen = this.modal.create({
+      nzTitle: 'Phân quyền',
+      nzContent: DialogPhanQuyenComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1300px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+  }
+
   xoaNhieu() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.setOfCheckedId.forEach((item) => {
-          dataDelete.push(item);
+        dataDelete.push(item);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -434,7 +448,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
+            let res = await this.dmDungCungService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

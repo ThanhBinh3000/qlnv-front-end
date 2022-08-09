@@ -4,18 +4,23 @@
       <div class="main-content">
         <div class="tab-giao-chi-tieu">
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="action">
-            <nz-tab nzTitle="Danh mục dùng chung">
-              <nz-table #rowSelectionTable [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <nz-tab nzTitle="Danh sách cán bộ">
+              <nz-table #rowSelectionTable [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
-                        (nzCheckedChange)="onAllChecked($event)"></th>
+                      (nzCheckedChange)="onAllChecked($event)"></th>
                     <th width="60px">STT</th>
-                    <th width="161px">Vùng dữ liệu/ Loại danh mục dùng chung</th>
-                    <th width="161px">Mã</th>
-                    <th width="161px">Giá trị</th>
-                    <th width="161px">Trạng thái</th>
-                    <th width="140px">Hành động</th>
+                    <th width="161px">Tên cán bộ</th>
+                    <th width="161px">Tài khoản</th>
+                    <th width="161px">Email</th>
+                    <th width="161px">Chức vụ</th>
+                    <th width="350px">SĐT cơ quan</th>
+                    <th width="350px">SĐT di động</th>
+                    <th width="161px">Nhóm quyền</th>
+                    <th width="161px">Vai trò</th>
+                    <th width="140px"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -34,8 +39,7 @@
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ma"
-                          (input)="filterInTable('ma',filterTable.ma)"
-                          name="ma  " />
+                          (input)="filterInTable('ma',filterTable.ma)" name="ma  " />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -59,17 +63,57 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nguoiTao"
+                          (input)="filterInTable('nguoiTao',filterTable.nguoiTao)" name="nguoiTao" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
+                          (input)="filterInTable('ngayTao',filterTable.nguoiTao)" name="nguoiTao" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngaySua"
+                          (input)="filterInTable('ngaySua',filterTable.ngaySua)" name="nguoiSua" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nguoiSua"
+                          (input)="filterInTable('nguoiSua',filterTable.nguoiSua)" name="nguoiSua" />
+                      </nz-input-group>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </th>
                     <th></th>
                   </tr>
                   <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
 
-                    <td  [nzChecked]="setOfCheckedId.has(data.id)"
-                         (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                    <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)">
+                    </td>
                     <td class="text-center">{{idx + 1}}</td>
                     <td>{{data.loai}}</td>
                     <td>{{data.ma}}</td>
                     <td>{{data.giaTri}}</td>
-                    <td>{{data.tenTrangThai}}</td>
+                    <td>{{data.trangThai}}</td>
+                    <td>{{data.nguoiTao}}</td>
+                    <td>{{data.ngayTao}}</td>
+                    <td>{{data.nguoiSua}}</td>
+                    <td>{{data.ngaySua}}</td>
                     <td>
                       <a (click)="them(data, true)">
                         <i class="fa fa-eye"></i>
@@ -77,7 +121,7 @@
                       <a (click)="them(data, false)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data)">
+                      <a (click)="openPhanQuyen()">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -104,18 +148,18 @@
           </nz-tabset>
           <ng-template #action>
             <div class="action-giao-chi-tieu">
-              <button type="button" class="btn btn-do" (click)="xoaNhieu()">
+              <!-- <button type="button" class="btn btn-do" (click)="xoaNhieu()">
                 <i class="fa fa-trash-o do"></i>
                 <span>Xóa</span>
-              </button>
+              </button> -->
               <button type="button" class="btn btn-sub" (click)="exportData()">
-                <i class="icon htvbdh_chuyen-xu-ly"></i>
-                <span>Xuất file</span>
+                <i class="icon htvbdh_tcdt_import"></i>
+                <span>Tải về</span>
               </button>
-              <button type="button" class="btn btn-main" (click)="them(null, false)">
+              <!-- <button type="button" class="btn btn-main" (click)="them(null, false)">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
-              </button>
+              </button> -->
             </div>
           </ng-template>
         </div>

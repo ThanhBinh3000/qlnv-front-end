@@ -6,13 +6,13 @@ import {
   ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NHAP_ROUTE_LIST } from './quantridanhmuc.constant';
+import { NHAP_ROUTE_LIST } from './quan-tri-he-thong.constant';
 @Component({
-  selector: 'app-quantridanhmuc',
-  templateUrl: './quantridanhmuc.component.html',
-  styleUrls: ['./quantridanhmuc.component.scss'],
+  selector: 'app-quan-tri-he-thong',
+  templateUrl: './quan-tri-he-thong.component.html',
+  styleUrls: ['./quan-tri-he-thong.component.scss'],
 })
-export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
+export class QuanTriHeThongNewComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
@@ -22,6 +22,7 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
@@ -39,10 +40,17 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
     // }
   }
 
-  routerNavigate(url) {
-    this.routerUrl = url;
+  routerNavigate(route) {
+    this.routes.forEach(item => {
+      if (item.id === route.id) {
+        item.isSelected = true;
+      } else {
+        item.isSelected = false;
+      }
+    })
+    this.routerUrl = route.url;
 
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl(route.url);
   }
   updateCssOverlay() {
     setTimeout(() => {
@@ -86,13 +94,11 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
   openNav() {
     this.isCollapsed = !this.isCollapsed;
     if (this.isCollapsed) {
-      document.getElementById("mySidebar").classList.add('show');
-      document.getElementById("mySidebar").style.width = "300px";
-      document.getElementById("main").style.marginLeft = "300px";
+      document.getElementById("mySidebar").style.width = "420px";
+      document.getElementById("main").style.marginLeft = "420px";
     } else {
-      document.getElementById("mySidebar").classList.remove('show');
       document.getElementById("mySidebar").style.width = "0";
-      document.getElementById("main").style.marginLeft = "16px";
+      document.getElementById("main").style.marginLeft = "0";
     }
   }
 
