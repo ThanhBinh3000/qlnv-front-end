@@ -49,7 +49,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     tongTienVonTx: 0,
   }
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
 
   muaTangList: any[] = []
@@ -117,6 +117,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
+      this.taiLieuDinhKemList = data.fileDinhkems;
       this.keHoachNhapXuat = data.keHoachNhapXuat;
       this.muaTangList = data.muaTangList;
       this.xuatGiamList = data.xuatGiamList;
@@ -221,6 +222,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     body.soQd = body.soQd + this.maQd;
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;

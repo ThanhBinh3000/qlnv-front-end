@@ -3,7 +3,7 @@
         <input type="text" [(ngModel)]="fileAdd.noiDung" placeholder="Nhập tên file" nz-input
             [disabled]="isViewDetail || disabled" />
         <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-            <input placeholder="Nhập tên file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
+            <input placeholder="Chọn file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
         </nz-input-group>
         <ng-template #suffixIcon>
             <i class="icon htvbdh_tcdt_tep"></i>
@@ -40,7 +40,7 @@
         <ng-container *ngIf="item.isEdit">
             <input type="text" [(ngModel)]="item.noiDung" placeholder="Nhập tên file" nz-input />
             <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-                <input placeholder="Nhập tên file" nz-input [(ngModel)]="item.fileName" nz-input disabled />
+                <input placeholder="Chọn file" nz-input [(ngModel)]="item.fileName" nz-input disabled />
             </nz-input-group>
             <ng-template #suffixIcon>
                 <i class="icon htvbdh_tcdt_tep"></i>

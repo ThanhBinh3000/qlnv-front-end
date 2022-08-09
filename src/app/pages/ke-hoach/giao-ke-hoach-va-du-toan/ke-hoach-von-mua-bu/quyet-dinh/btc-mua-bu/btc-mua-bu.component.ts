@@ -153,7 +153,6 @@ export class BtcMuaBuComponent implements OnInit {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
           } catch (e) {
-            console.log('error: ', e);
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           } finally {
             this.spinner.hide();
@@ -266,7 +265,6 @@ export class BtcMuaBuComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    console.log(this.idSelected)
   }
 
   xoaItem(item: any) {

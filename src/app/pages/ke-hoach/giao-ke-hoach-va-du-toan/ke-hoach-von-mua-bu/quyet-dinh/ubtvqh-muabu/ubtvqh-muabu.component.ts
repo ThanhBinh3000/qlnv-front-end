@@ -269,7 +269,6 @@ export class UbtvqhMuabuComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    console.log(this.idSelected)
   }
 
   xoaItem(item: any) {

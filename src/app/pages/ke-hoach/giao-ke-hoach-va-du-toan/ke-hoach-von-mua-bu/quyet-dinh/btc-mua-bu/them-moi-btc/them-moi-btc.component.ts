@@ -40,7 +40,7 @@ export class ThemMoiBtcComponent implements OnInit {
 
   formData: FormGroup;
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string
   userInfo: UserLogin;
@@ -88,7 +88,6 @@ export class ThemMoiBtcComponent implements OnInit {
     if (id > 0) {
       let res = await this.qdBtcService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -99,6 +98,7 @@ export class ThemMoiBtcComponent implements OnInit {
         trichYeu: data.trichYeu
       })
       this.dataTable = data.listBoNganh
+      this.taiLieuDinhKemList = data.fileDinhkems
     }
   }
 
@@ -196,7 +196,6 @@ export class ThemMoiBtcComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -209,7 +208,6 @@ export class ThemMoiBtcComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.spinner.hide();
       return;
     }
@@ -221,6 +219,7 @@ export class ThemMoiBtcComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res
     if (this.idInput > 0) {
         res = await this.qdBtcService.update(body);
@@ -258,7 +257,6 @@ export class ThemMoiBtcComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        console.log(data);
         if (index >= 0) {
           this.dataTable[index] = data;
         } else {
@@ -279,7 +277,6 @@ export class ThemMoiBtcComponent implements OnInit {
       const data = res.data.content;
       this.listTtcp = data
     }
-    console.log(this.formData.value)
   }
 
 }
