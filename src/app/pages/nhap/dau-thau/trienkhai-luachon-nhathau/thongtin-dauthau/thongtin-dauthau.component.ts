@@ -32,10 +32,15 @@ export class ThongtinDauthauComponent implements OnInit {
     private dauThauService: DauThauService,
     private modal: NzModalService,
     public userService: UserService,
+    private route: ActivatedRoute,
     private helperService: HelperService,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
   ) {
-
+    router.events.subscribe((val) => {
+      this.getTitleVthh();
+    })
   }
+  tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
@@ -147,6 +152,20 @@ export class ThongtinDauthauComponent implements OnInit {
   searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
     return this.danhSachDauThauService.search(body);
+  }
+
+  async selectTabData(tab: string) {
+    this.spinner.show();
+    try {
+      this.tabSelected = tab;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async changePageIndex(event) {

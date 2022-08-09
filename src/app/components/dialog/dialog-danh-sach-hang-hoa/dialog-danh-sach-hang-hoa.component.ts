@@ -16,8 +16,6 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   isCaseSpecial: boolean = false;
-  onlyLuongThuc: boolean = false;
-  onlyVatTu: boolean = false;
   options = {
     luongThuc: false,
     muoi: false,
@@ -47,13 +45,7 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
         if (this.data) {
           this.listOfMapData = hangHoa.data.filter(item => item.ma == this.data.slice(0, 2));
         } else {
-          if (this.onlyLuongThuc) {
-            this.listOfMapData = hangHoa.data.filter(item => item.ma != "02");
-          } else if (this.onlyVatTu) {
-            this.listOfMapData = hangHoa.data.filter(item => item.ma == "02");
-          } else {
-            this.listOfMapData = hangHoa.data;
-          }
+          this.listOfMapData = hangHoa.data;
         }
         this.listOfMapDataClone = [...this.listOfMapData];
         this.listOfMapData.forEach((item) => {
