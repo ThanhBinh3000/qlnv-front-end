@@ -40,7 +40,7 @@ export class ThemMoiBtcComponent implements OnInit {
 
   formData: FormGroup;
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string
   userInfo: UserLogin;
@@ -99,6 +99,7 @@ export class ThemMoiBtcComponent implements OnInit {
         trichYeu: data.trichYeu
       })
       this.dataTable = data.listBoNganh
+      this.taiLieuDinhKemList = data.fileDinhkems
     }
   }
 
@@ -221,6 +222,7 @@ export class ThemMoiBtcComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res
     if (this.idInput > 0) {
         res = await this.qdBtcService.update(body);

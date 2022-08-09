@@ -86,13 +86,11 @@
         </div>
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
-            <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                          [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-                          (removeDataEvent)="deleteTaiLieuDinhKemTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
-                          typeFile="tai-lieu-dinh-kem">
-            </multiple-tag>
-          </nz-form-item>
+          <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+          <div class="list-file">
+            <file-list [data]="taiLieuDinhKemList"></file-list>
+          </div>
+        </nz-form-item>
         </div>
       </form>
     </div>

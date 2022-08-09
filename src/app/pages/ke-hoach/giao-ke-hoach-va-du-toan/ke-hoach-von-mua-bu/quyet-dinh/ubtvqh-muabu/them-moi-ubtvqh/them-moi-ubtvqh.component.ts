@@ -30,7 +30,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
 
   formData: FormGroup;
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string
   userInfo: UserLogin;
@@ -85,6 +85,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         trichYeu: data.trichYeu
       })
       this.dataTable = data.listBoNganh
+      this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 
@@ -96,31 +97,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-  }
-
-  openFile(event) {
-    // if (!this.isView) {
-    //   let item = {
-    //     id: new Date().getTime(),
-    //     text: event.name,
-    //   };
-    //   if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-    //     this.uploadFileService
-    //       .uploadFile(event.file, event.name)
-    //       .then((resUpload) => {
-    //         if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-    //           this.deXuatDieuChinh.fileDinhKemReqs = [];
-    //         }
-    //         const fileDinhKem = new FileDinhKem();
-    //         fileDinhKem.fileName = resUpload.filename;
-    //         fileDinhKem.fileSize = resUpload.size;
-    //         fileDinhKem.fileUrl = resUpload.url;
-    //         fileDinhKem.idVirtual = item.id;
-    //         this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-    //         this.taiLieuDinhKemList.push(item);
-    //       });
-    //   }
-    // }
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
@@ -207,10 +183,12 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res
     if (this.idInput > 0) {
 
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
+      console.log(body)
     } else {
       res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);
       console.log(body)
