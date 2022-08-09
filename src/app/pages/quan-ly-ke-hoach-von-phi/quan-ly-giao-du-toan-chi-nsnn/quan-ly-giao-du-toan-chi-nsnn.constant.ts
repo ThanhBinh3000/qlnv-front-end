@@ -69,8 +69,8 @@ export const TT_CHAP_NHAN = '8';
 export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Nhập quyết định giao dự toán chi NSNN',
-    description: 'Nhập quyết định giao dự toán chi NSNN',
+    title: 'Nhập quyết định giao dự toán chi NSNN từ BTC',
+    description: 'Nhập quyết định giao dự toán chi NSNN từ BTC',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
       NHAN_VIEN_TC,
@@ -81,8 +81,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
-    description: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
+    title: 'Danh sách Phương án phân bổ giao dự toán chi NSNN tại đơn vị',
+    description: 'Danh sách Phương án phân bổ giao dự toán chi NSNN tại đơn vị',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -96,8 +96,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm giao dự toán chi NSNN của các đơn vị',
-    description: 'Tìm kiếm giao dự toán chi NSNN của các đơn vị',
+    title: 'Danh sách giao dự toán chi NSNN cho các đơn vị cấp dưới',
+    description: 'Danh sách giao dự toán chi NSNN cho các đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-giao-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -122,8 +122,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
-    description: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
+    title: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán từ các đơn vị cấp dưới',
+    description: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán từ các đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan`,
     Role: [
       NHAN_VIEN_TC
@@ -132,8 +132,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Kiểm tra rà soát báo cáo',
-    description: 'Kiểm tra rà soát báo cáo',
+    title: 'Kiểm tra tình trạng nhận dự toán chi của đơn vị cấp dưới',
+    description: 'Kiểm tra tình trạng nhận dự toán chi của đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
     Role: [
 
