@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -23,6 +24,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class SoKhoTheKhoComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
+  isDetail: false;
 
   formData: FormGroup;
 
@@ -56,6 +58,8 @@ export class SoKhoTheKhoComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = []
 
+  idSelected: number = 0
+  idStatus: string = ''
   getCount = new EventEmitter<any>();
 
   constructor(
@@ -63,7 +67,8 @@ export class SoKhoTheKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    public userService: UserService
   ) {
     this.formData = this.fb.group({
       "denNgay": "",
@@ -172,12 +177,14 @@ export class SoKhoTheKhoComponent implements OnInit {
   xoa() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach(item => {
+      this.dataTable.forEach((item) => {
         if (item.checked) {
           dataDelete.push(item.id)
         }
       })
     }
+    console.log(dataDelete);
+
     if (dataDelete && dataDelete.length > 0) {
       this.modal.confirm({
         nzClosable: false,
@@ -190,7 +197,7 @@ export class SoKhoTheKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLySoKhoTheKhoService.deleteMuti({ idList: dataDelete });
+            let res = await this.quanLySoKhoTheKhoService.deleteMultiple({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -229,27 +236,91 @@ export class SoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  exportData() { }
-
-
-  inDanhSach() { }
-
-  themMoi() {
-    this.isAddNew = true;
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show()
+      try {
+        let body = this.formData.value;
+        this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'danh-sach-the-kho.xlsx')
+        });
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+    }
   }
 
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
-  onChangeFilterDate(event) { }
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
-
-  viewDetail(id: number, isUpdate: boolean) { }
-
-  xoaItem(id: number) { }
-
-
+  viewDetail(id: number, status: string) {
+    this.isAddNew = true;
+    this.idSelected = id;
+    this.idStatus = status
+  }
+  xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.quanLySoKhoTheKhoService.deleteData(item).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+              this.getCount.emit();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
   onClose() {
     this.isAddNew = false;
   }
