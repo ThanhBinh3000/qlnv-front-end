@@ -20,7 +20,7 @@ export class CommonInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler,

@@ -26,6 +26,14 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
+    icon: 'htvbdh_tcdt_kehoachvonphi',
+    title: 'Tình hình cấp vốn, phí hàng ',
+    url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
+    dropdown: 'de-xuat-dieu-chinh-chi-tieu',
+    idHover: 'giao-chi-tieu',
+    hasTab: false,
+  },
+  {
     icon: 'htvbdh_tcdt_quanlychitieu',
     title: 'Phương án giá',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,

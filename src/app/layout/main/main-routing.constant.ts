@@ -16,6 +16,9 @@ export const MAIN_ROUTES = {
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   quantrihethong: 'quan-tri-he-thong',
+  qlkhVonPhi: 'qlkh-von-phi',
+  qlcapVonPhi: 'qlcap-von-phi-hang',
+  qlthongTinQuyetToanVonPhi: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
   dieuChuyen: 'dieu-chuyen',
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
@@ -73,6 +76,26 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
+  },
+  {
+    title: 'Quản trị hệ thống',
+    route: MAIN_ROUTES.quantrihethong,
+  },
+  {
+    title: 'Quản trị danh mục',
+    route: MAIN_ROUTES.danhMuc,
+  },
+  {
+    title: 'Quản lý kế hoạch vốn phí',
+    route: MAIN_ROUTES.qlkhVonPhi,
+  },
+  {
+    title: 'Quản lý cấp vốn phí hàng',
+    route: MAIN_ROUTES.qlcapVonPhi,
+  },
+  {
+    title: 'Quản lý thông tin quyết toán vốn phí hàng DTQG',
+    route: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
   },
   {
     title: 'Quản trị danh mục',

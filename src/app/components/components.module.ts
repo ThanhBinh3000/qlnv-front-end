@@ -1,3 +1,7 @@
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
+import { DialogCopyGiaoDuToanComponent } from './dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
+import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
+import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -97,6 +101,19 @@ import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
 import { DialogPhieuNhapKhoComponent } from './dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
 import { DialogGuiDuyetComponent } from './dialog/dialog-gui-duyet/dialog-gui-duyet.component';
 import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
+import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
+
+import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
+import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from './dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component'
+import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from './dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
+import { DialogChonThemBieuMauComponent } from './dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogThemKhoanMucComponent } from './dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { DialogLuaChonThemDonViComponent } from './dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
+import { DialogBaoCaoCopyComponent } from './dialog/dialog-bao-cao-copy/dialog-bao-cao-copy.component';
+import { DialogDoCopyComponent } from './dialog/dialog-do-copy/dialog-do-copy.component';
+import { DialogThemVatTuComponent } from './dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { DialogThongTinPhuLucBangGiaHopDongComponent } from './dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
 import { DialogCanCuKQLCNTComponent } from './dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
@@ -162,6 +179,28 @@ import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-m
     DialogCanCuKQLCNTComponent,
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
+    DialogChonPhuLucDieuChinhComponent,
+    //pipes
+    FilterPipe,
+
+    DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
+
+
+    //
+    DialogLuaChonThemPhuLucComponent,
+    DialogChonThemBieuMauBaoCaoComponent,
+    DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
+    //
+    DialogCopyComponent,
+    DialogChonThemBieuMauComponent,
+    DialogThemKhoanMucComponent,
+    DialogLuaChonThemDonViComponent,
+    DialogBaoCaoCopyComponent,
+    DialogDoCopyComponent,
+    DialogDieuChinhCopyComponent,
+    DialogCopyGiaoDuToanComponent,
+    DialogCopyQuyetToanVonPhiHangDtqgComponent,
+    DialogThemVatTuComponent,
     DanhSachQuyetDinhPhanBoComponent,
     DialogThemDiaDiemNhapKhoComponent,
     DialogThemDanhMucDungChungComponent,
