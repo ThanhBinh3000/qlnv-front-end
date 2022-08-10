@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-quan-ly-so-the-kho',
@@ -10,7 +11,10 @@ import { Subscription } from 'rxjs';
 export class QuanLySoTheKhoComponent implements OnInit, OnDestroy {
   $routerChange: Subscription;
   currentUrl: string;
-  constructor(private readonly router: Router) { }
+  constructor(
+    private readonly router: Router,
+    public globals: Globals
+  ) { }
 
   ngOnDestroy(): void {
     this.$routerChange.unsubscribe();

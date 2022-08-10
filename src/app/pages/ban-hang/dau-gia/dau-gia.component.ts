@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-dau-gia',
   templateUrl: './dau-gia.component.html',
@@ -12,7 +13,8 @@ export class DauGiaBanHangComponent implements OnInit {
   tabSelected = 'kehoachbandaugia';
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public globals: Globals
 
   ) {
   }

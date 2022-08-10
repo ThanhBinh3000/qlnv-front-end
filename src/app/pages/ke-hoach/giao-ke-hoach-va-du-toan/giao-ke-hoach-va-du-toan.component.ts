@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'giao-ke-hoach-va-du-toan',
   templateUrl: './giao-ke-hoach-va-du-toan.component.html',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GiaoKeHoachVaDuToanComponent implements OnInit {
   // tabH = 0;
-  constructor() { }
+  constructor(
+    public globals: Globals
+  ) { }
   tabSelected = 'kehoachvondaunam';
   ngOnInit() {
     // this.tabH = window.innerHeight - document.querySelector('.tab-level-0').getBoundingClientRect().top - 28;

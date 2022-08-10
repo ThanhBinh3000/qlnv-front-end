@@ -1,3 +1,21 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && !isView" type="button" class="btn btn-sub"
+      (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Ban hành</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
+      <i class="icon htvbdh_luu"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+
 <div class="them-quyet-dinh-ttcp bg-trang">
   <div class="header">
     <div class="header-text">
@@ -8,7 +26,7 @@
         <span>Quyết định thủ tướng chính phủ</span>
       </div>
     </div>
-    <div class="btn-group">
+    <!-- <div class="btn-group">
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
@@ -23,7 +41,7 @@
         <i class="icon htvbdh_luu"></i>
         <span>Lưu</span>
       </button>
-    </div>
+    </div> -->
   </div>
   <nz-card class="mt16 flex-card p-lr16">
     <div class="hang-theo-doi-dac-thu">

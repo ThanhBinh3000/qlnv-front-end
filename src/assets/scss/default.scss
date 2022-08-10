@@ -114,7 +114,7 @@ $inputLabel-h: (
   $input-h - 4px
 );
 $label-padding: (
-  $input-h / 6
+  0 // $input-h / 6
 );
 $textarea-h: (
   $input-h * 2

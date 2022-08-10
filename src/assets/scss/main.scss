@@ -292,7 +292,7 @@ input.form-control {
 }
 
 .ant-form-vertical {
-  padding: 0px;
+  padding: 10px 0px;
 }
 
 .ant-select {
@@ -313,7 +313,7 @@ input.form-control {
 }
 
 .ant-form-vertical .ant-form-item {
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .ant-col {
@@ -1221,10 +1221,6 @@ td .antext {
 }
 
 body {
-  .ant-form-vertical {
-    padding-top: 0;
-  }
-
   .ant-dropdown>.dropdown-menu-right {
     padding-left: 40px;
     padding-right: 40px;
@@ -3196,8 +3192,8 @@ td {
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active {
   // background-color: darken($bg-nhat, 2%) $i; //$bg-nhat;
-  background-color: #4e5484;
-  border-color: #f3f3f3;
+  // background-color: #4e5484;
+  border-bottom-color: #fff !important;
 
   &:before {
     background: $bg-nhat;
@@ -3211,6 +3207,15 @@ td {
     color: #444;
   }
 
+}
+
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab:not(.ant-tabs-tab-active) {
+  border: none;
+  background: transparent;
+
+  .ant-tabs-tab-btn {
+    color: #828282;
+  }
 }
 
 .ant-modal .ant-tabs-content-holder,
@@ -4434,6 +4439,11 @@ td nz-upload .upload-content .card-content {
 
 th .ant-input-affix-wrapper {
   margin-bottom: 1px;
+  height: $input-h;
+
+  &>input.ant-input {
+    height: ($input-h - 2) !important;
+  }
 }
 
 .mt-2px {
@@ -4582,4 +4592,50 @@ th .ant-input-affix-wrapper {
   padding: 10px;
 }
 
+.btn-affix>div {
+  justify-content: end;
+  display: flex;
+  margin-top: -27px;
+  padding-bottom: 4px;
+
+  &.ant-affix {
+    margin-top: 0;
+  }
+
+  .btn.btn-sub {
+    margin-right: 10px;
+
+    &.xanh {
+      background-color: #4E5484;
+      color: #fff;
+    }
+
+    &.do,
+    &.btn-xoa {
+      background-color: rgba(224, 6, 6, 0.2);
+      color: #e00606;
+      border: 1px solid #e00606 !important;
+    }
+  }
+}
+
+
+
 // fix new menu....................................................
+.ant-table table .ant-table-tbody>tr {
+
+  &>td,
+  &>th {
+    .ant-checkbox-wrapper {
+      margin-right: 0 !important;
+    }
+
+    &.ant-table-cell {
+      text-align: center;
+    }
+  }
+}
+
+.mt12 {
+  margin-top: 12px !important;
+}
