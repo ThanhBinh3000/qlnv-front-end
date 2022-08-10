@@ -6,9 +6,10 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogNhomQuyenComponent } from 'src/app/components/dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
 import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogQuyenComponent } from 'src/app/components/dialog/dialog-quyen/dialog-quyen.component';
 import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
+import { DialogThemQuyenComponent } from 'src/app/components/dialog/dialog-them-quyen/dialog-them-quyen.component';
 import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
@@ -28,11 +29,11 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 @Component({
-  selector: 'app-quan-ly-quyen',
-  templateUrl: './quan-ly-quyen.component.html',
-  styleUrls: ['./quan-ly-quyen.component.scss'],
+  selector: 'app-quan-ly-nhom-quyen',
+  templateUrl: './quan-ly-nhom-quyen.component.html',
+  styleUrls: ['./quan-ly-nhom-quyen.component.scss'],
 })
-export class QuanLyQuyenComponent implements OnInit {
+export class QuanLyNhomQuyenComponent implements OnInit {
   @Input() typeVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -461,7 +462,6 @@ export class QuanLyQuyenComponent implements OnInit {
 
   them(data?: any, isView?: boolean) {
     let modalTuChoi;
-    // if (data == null && isView == false) {
     modalTuChoi = this.modal.create({
       nzTitle: 'Sửa thông tin cán bộ',
       nzContent: DialogThongTinCanBoComponent,
@@ -474,45 +474,34 @@ export class QuanLyQuyenComponent implements OnInit {
         isView: isView,
       },
     });
-    // }
-    // if (data != null && isView == true) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chi tiết danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
-    // if (data != null && isView == false) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chỉnh sửa danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
     })
   }
-  themQuyen(data?: any, isView?: boolean) {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Quyền',
-      nzContent: DialogQuyenComponent,
+
+  themNhomQuyen(data?: any, isView?: boolean) {
+    let modalTuChoi;
+    modalTuChoi = this.modal.create({
+      nzTitle: 'Thêm nhóm quyền',
+      nzContent: DialogNhomQuyenComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        isView: isView,
+      },
+    });
+    modalTuChoi.afterClose.subscribe((data) => {
+      this.search();
+    })
+  }
+  themDanhSachQuyen(data?: any, isView?: boolean) {
+    let modalTuChoi;
+    modalTuChoi = this.modal.create({
+      nzTitle: 'Thêm quyền',
+      nzContent: DialogThemQuyenComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -529,7 +518,6 @@ export class QuanLyQuyenComponent implements OnInit {
 
   openPhanQuyen() {
     let modalPhanQuyen;
-    // if (data == null && isView == false) {
     modalPhanQuyen = this.modal.create({
       nzTitle: 'Phân quyền',
       nzContent: DialogPhanQuyenComponent,
