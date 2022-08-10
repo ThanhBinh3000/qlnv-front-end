@@ -48,14 +48,14 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     namKh: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    ndTongHop: '',
+    noiDungTongHop: '',
   };
   filterTable: any = {
     maTongHop: '',
     ngayTongHop: '',
-    ndTongHop: '',
+    noiDungTongHop: '',
     soQd: '',
-    namKhoach: '',
+    namKeHoach: '',
     tenVthh: '',
     soQdPheDuyet: '',
     statusConvert: '',
@@ -146,7 +146,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
         : null,
       maVatTuCha: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
-      noiDungTongHop: this.searchFilter.ndTongHop,
+      noiDungTongHop: this.searchFilter.noiDungTongHop,
       pageSize: this.pageSize,
       pageNumber: this.page,
     };
@@ -157,6 +157,9 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
+          item.soQdPheDuyet = item.qdPheDuyetKhbdg.soQuyetDinh;
+          item.statusConvert = item.trangThai.name;
+          item.tenVthh = item.vatTuCha.name;
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -228,7 +231,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
-    this.searchFilter.ndTongHop = null;
+    this.searchFilter.noiDungTongHop = null;
     this.search();
   }
 
@@ -283,7 +286,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
             : null,
           maVatTuCha: this.searchFilter.loaiVthh,
           namKeHoach: this.searchFilter.namKh,
-          noiDungTongHop: this.searchFilter.ndTongHop,
+          noiDungTongHop: this.searchFilter.noiDungTongHop,
         };
         this.tongHopDeXuatKHBanDauGiaService
           .exportList(body)
@@ -372,9 +375,9 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.filterTable = {
       maTongHop: '',
       ngayTongHop: '',
-      ndTongHop: '',
+      noiDungTongHop: '',
       soQd: '',
-      namKhoach: '',
+      namKeHoach: '',
       tenVthh: '',
       soQdPheDuyet: '',
       statusConvert: '',
