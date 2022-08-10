@@ -1180,8 +1180,9 @@ td .antext {
 /*fix all content padding.................................*/
 
 .tab-menu.tab-content {
-  background-color: $tab-menu;
-  border-bottom: solid 1px $tab-menu-border $i;
+  background-color: #f1f1f1; //$tab-menu;
+  // border-bottom: solid 1px $tab-menu-border $i;
+  border-bottom: none !important;
 }
 
 .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.active>a,
@@ -4433,6 +4434,10 @@ td nz-upload .upload-content .card-content {
 
 th .ant-input-affix-wrapper {
   margin-bottom: 1px;
+}
+
+.mt-2px {
+  margin-top: 2px !important;
 }
 
 // fix new menu....................................................
