@@ -1,0 +1,36 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class QuanLySoKhoTheKhoService extends BaseService {
+  GATEWAY = '/qlnv-luukho';
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'QuanLySoKhoTheKho', '');
+  }
+  timKiem(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/tra-cuu`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+  chiTiet(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/${id}`
+    return this.httpClient.get<any>(url).toPromise()
+  }
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/${id}`;
+    return this.httpClient.delete(url).toPromise();
+  }
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
+
+}

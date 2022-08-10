@@ -2,16 +2,17 @@
   <div class="header">
     <div class="header-text">
       <div class="text-container">
-        <h2 class="du-thao">Dự thảo</h2>
-      </div>
-      <div class="text-container">
-        <h2>Tạo thẻ kho</h2>
+        <div class="title-chi-tieu">
+          <span class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo</span>
+          <span>Tạo thẻ kho</span>
+        </div>
       </div>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="huy()">
-        <i class="fa fa-times do"></i>
-        <span>Huỷ bỏ</span>
+    <div class="btn-group" *ngIf="isTaoTheKho">
+      <button type="button" class="btn btn-sub" (click)="huy()">
+        <i class="fa fa-arrow-left"></i>
+        <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -22,112 +23,180 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh" (click)="luu()">
-        <i class="icon htvbdh_luu"></i>
+        <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
     </div>
   </div>
 
-  <nz-card class="mt16 flex-card p-lr16">
-    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
-      <div nz-row [nzGutter]="24">
-        <nz-form-item nz-col nzSpan="4" class="form-item">
-          <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="idDonVi" id="don-vi" (ngModelChange)="onChangeDonVi($event)">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card class="flex-card p-lr16">
+          <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
 
-        <nz-form-item nz-col nzSpan="2" class="form-item">
-          <nz-form-label nzFor="nam">Năm</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="nam" id="nam">
-              <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+            <div class="search__body" nz-row [nzGutter]="[0, 6]">
+              <div nz-col nzSpan="6">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Tên đơn vị
+                  </nz-form-label>
+                  <nz-select formControlName="idDonVi">
+                    <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="3" class="form-item">
-          <nz-form-label nzFor="tu-ngay">Từ ngày</nz-form-label>
-          <nz-form-control>
-            <nz-date-picker formControlName="tuNgay" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
-            </nz-date-picker>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="2">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Năm
+                  </nz-form-label>
+                  <nz-select formControlName="nam">
+                    <nz-option *ngFor="let item of dsNam" nzValue="{{item}}" nzLabel="{{item}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="3" class="form-item">
-          <nz-form-label nzFor="den-ngay">Đến ngày</nz-form-label>
-          <nz-form-control>
-            <nz-date-picker formControlName="denNgay" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
-            </nz-date-picker>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Từ ngày
+                  </nz-form-label>
+                  <nz-date-picker formControlName="tuNgay" class="search__input" nzFormat="yyyy-MM-dd">
+                  </nz-date-picker>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="3" class="form-item">
-          <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="idLoaiHangHoa" id="loai-hang-hoa">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Đến ngày
+                  </nz-form-label>
+                  <nz-date-picker formControlName="denNgay" class="search__input" nzFormat="yyyy-MM-dd">
+                  </nz-date-picker>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="3" class="form-item">
-          <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="idChungLoaiHangHoa" id="chung-loai-hang-hoa">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsChungLoaiHangHoa">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Loại hàng hóa
+                  </nz-form-label>
+                  <nz-select formControlName="idLoaiHangHoa" [(ngModel)]="detail.maLoaiHangHoa"
+                    (ngModelChange)="changeLoaiHangHoa($event)">
+                    <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="2" class="form-item">
-          <nz-form-label nzFor="ngan-lo">Lô kho</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="idNganLo" id="ngan-lo">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganLo">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Chủng loại hàng hóa
+                  </nz-form-label>
+                  <nz-select formControlName="idChungLoaiHangHoa">
+                    <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="2" class="form-item">
-          <nz-form-label nzFor="ton-dau-ky">Tồn đầu kỳ</nz-form-label>
-          <nz-form-control>
-            <nz-input-group id="ton-dau-ky">
-              <input [disabled]="true" type="number" nz-input formControlName="tonDauKy" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="8">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Điểm kho
+                  </nz-form-label>
+                  <nz-select formControlName="idDiemKho" [(ngModel)]="detail.maDiemKho"
+                    (ngModelChange)="changeDiemKho(false)">
+                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
 
-        <nz-form-item nz-col nzSpan="2" class="form-item">
-          <nz-form-label nzFor="don-vi">ĐVT</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="donViTinh" id="don-vi">
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Nhà kho
+                  </nz-form-label>
+                  <nz-select formControlName="idNhaKho" [(ngModel)]="detail.maNhaKho"
+                    (ngModelChange)="changeNhaKho(false)">
+                    <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Ngăn kho
+                  </nz-form-label>
+                  <nz-select formControlName="idNganKho" [(ngModel)]="detail.maNganKho"
+                    (ngModelChange)="changeNganKho()">
+                    <nz-option *ngFor="let item of listNganKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Lô kho
+                  </nz-form-label>
+                  <nz-select formControlName="idNganLo" [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()">
+                    <nz-option *ngFor="let item of listNganLo" [nzValue]="item.title" [nzLabel]="item.title">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+
+              <div nz-col nzSpan="3">
+                <nz-form-item class="form-item">
+                  <nz-form-label nzFor="ton-dau-ky">Tồn đầu kỳ</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-group id="ton-dau-ky">
+                      <input formControlName="tonDauKy" type="number" nz-input [disabled]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <div nz-col nzSpan="1">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    ĐVT
+                  </nz-form-label>
+                  <nz-select formControlName="donViTinh" [(ngModel)]="donViTinh" nzDisabled>
+                    <nz-option [nzValue]="donViTinh" [nzLabel]="donViTinh">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+
+            </div>
+
+          </form>
+        </nz-card>
       </div>
-    </form>
-  </nz-card>
+    </div>
+  </div>
 
-  <div class="tao-the-kho">
+  <div class="tao-the-kho" *ngIf="!isTaoTheKho">
     <button type="button" class="btn btn-sub xanh" (click)="taoTheKho()">
       <i class="icon htvbdh_luu-them-moi"></i>
       <span>Tạo thẻ kho</span>
     </button>
   </div>
 
-  <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+  <nz-card class="mt-16 flex-card data-table card-border-content" *ngIf="isTaoTheKho">
+    <nz-table nzTitle="Danh sách giao dịch Nhập/xuất" #basicTable class="nowrap" [nzData]="dataTable"
+      [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
         <tr>
           <th class="text-center" style="width: 5%;">STT</th>
@@ -145,22 +214,19 @@
           <th></th>
           <th></th>
           <th></th>
-          <th class="text-center">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input />
             </nz-input-group>
           </th>
           <th></th>
           <th></th>
           <th></th>
           <th>
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" />
+            <nz-input-group>
+              <input type="text" nz-input />
             </nz-input-group>
           </th>
-          <ng-template #suffixIconSearch>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </tr>
       </thead>
       <tbody>
