@@ -1262,7 +1262,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maPa: maBcaoNew,
-      namPa: this.namPa,
+      namPa: response.namBcao,
       maPhanGiao: '1',
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,

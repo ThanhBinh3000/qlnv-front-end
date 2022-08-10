@@ -48,7 +48,7 @@ export const LINH_VUC = [
     level: 2,
   },
   {
-    id: 2200,
+    id: 2300,
     tenDm: "Xuồng cao tốc( xuồng cứu nạn)",
     idCha: 1002,
     level: 2,
