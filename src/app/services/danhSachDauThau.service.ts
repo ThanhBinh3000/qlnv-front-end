@@ -13,15 +13,11 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class DanhSachDauThauService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/lcnt', '/qlnv-gateway/qlnv-hang');
+    super(httpClient, 'dx-kh/lcnt', '/qlnv-hang');
   }
 
-  timKiem(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/tra-cuu`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
   getChiTietDeXuatKeHoachLuaChonNhaThau(
     id: number,
   ): Promise<ResponseData<ThongTinDeXuatKeHoachLuaChonNhaThau>> {
@@ -64,8 +60,8 @@ export class DanhSachDauThauService extends BaseService {
   //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
   //   return this.httpClient.post<any>(url, body).toPromise();
   // }
-  export(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
+  // export(body: any): Observable<Blob> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/ket-xuat`;
+  //   return this.httpClient.post(url, body, { responseType: 'blob' });
+  // }
 }

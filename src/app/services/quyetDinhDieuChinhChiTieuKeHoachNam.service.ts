@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoach';
+  GATEWAY = '/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam', '');

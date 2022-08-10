@@ -52,7 +52,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   listLoaiHopDong: any[] = [];
   listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
+<<<<<<< HEAD
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+=======
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
+>>>>>>> 0f702949ba257390bc1fed28ee1d22d5383c626b
 
   lastBreadcrumb: string;
   userInfo: UserLogin;
@@ -347,7 +351,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
 
   async loadChiTiet(id: number) {
     if (id > 0) {
+<<<<<<< HEAD
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.chiTiet(id);
+=======
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
+>>>>>>> 0f702949ba257390bc1fed28ee1d22d5383c626b
       if (res.msg == MESSAGE.SUCCESS) {
         this.chiTiet = res.data;
         if (this.id > 0) {
@@ -485,7 +493,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
             "lyDo": null,
             "trangThai": "01"
           }
+<<<<<<< HEAD
           await this.quyetDinhPheDuyetKeHoachLCNTService.updateStatus(body);
+=======
+          await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
+>>>>>>> 0f702949ba257390bc1fed28ee1d22d5383c626b
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
           this.spinner.hide();
         } catch (e) {

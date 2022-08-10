@@ -136,7 +136,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
-        console.log(Math.floor(12466/1000));
+        console.log(Math.floor(12466 / 1000));
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
@@ -144,18 +144,18 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    this.donVis = res.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            },
-        );
+        // await this.danhMuc.dMDonVi().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             this.donVis = res.data;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //     },
+        // );
 
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
@@ -210,7 +210,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-            
+
         }
         this.getStatusButton();
         this.spinner.hide();
@@ -258,8 +258,8 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         }
 
         let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
+        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        if (this.maDviTao == this.userInfo.dvql) {
             checkChirld = true;
         }
         const utils = new Utils();
@@ -542,9 +542,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     }
 
     //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
-    }
+    // getUnitName() {
+    //     return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
+    // }
 
     getStatusName() {
         return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
@@ -658,7 +658,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.spinner.hide();
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

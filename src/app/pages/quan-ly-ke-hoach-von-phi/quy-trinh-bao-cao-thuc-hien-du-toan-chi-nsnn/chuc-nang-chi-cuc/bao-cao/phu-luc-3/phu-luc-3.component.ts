@@ -128,6 +128,33 @@ export class PhuLucIIIComponent implements OnInit {
 
     async ngOnInit() {
         this.spinner.show();
+        await this.danhMucService.dMMaDuAnPhuLuc3().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.maDans = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+
+        await this.maDans.forEach(item => {
+            if (!item.maCha) {
+                this.maDanFull.push({
+                    ...item,
+                    tenDm: item.giaTri,
+                    ten: item.giaTri,
+                    level: 0,
+                    idCha: 0,
+                })
+            }
+        })
+
+        await this.addListMaDuAn(this.maDanFull);
+
         this.id = this.data?.id;
         this.idBcao = this.data?.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
@@ -142,6 +169,7 @@ export class PhuLucIIIComponent implements OnInit {
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
+                level: this.maDanFull.find(e => e.id == item.maDan)?.level,
                 qddtTmdtTso: divMoney(item.qddtTmdtTso, this.maDviTien),
                 qddtTmdtNsnn: divMoney(item.qddtTmdtNsnn, this.maDviTien),
                 luyKeVonTso: divMoney(item.luyKeVonTso, this.maDviTien),
@@ -184,32 +212,7 @@ export class PhuLucIIIComponent implements OnInit {
                 checked: false,
             })
         })
-        await this.danhMucService.dMMaDuAnPhuLuc3().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    this.maDans = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
 
-        await this.maDans.forEach(item => {
-            if (!item.maCha) {
-                this.maDanFull.push({
-                    ...item,
-                    tenDm: item.giaTri,
-                    ten: item.giaTri,
-                    level: 0,
-                    idCha: 0,
-                })
-            }
-        })
-
-        await this.addListMaDuAn(this.maDanFull);
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
                 this.sortWithoutIndex();
@@ -217,6 +220,7 @@ export class PhuLucIIIComponent implements OnInit {
                 this.sortByIndex();
             }
         }
+
         this.getTotal();
         this.updateEditCache();
 
@@ -599,7 +603,7 @@ export class PhuLucIIIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            
+
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
@@ -1020,29 +1024,29 @@ export class PhuLucIIIComponent implements OnInit {
     changeModel(id: string) {
         const data = this.lstCtietBcao.find(e => e.id === id);
         this.editCache[id].data.luyKeVonTso = sumNumber([this.editCache[id].data.luyKeVonNsnn, this.editCache[id].data.luyKeVonDt, this.editCache[id].data.luyKeVonThue, this.editCache[id].data.luyKeVonScl]);
-		this.editCache[id].data.khoachVonNamTruocKeoDaiTso = sumNumber([this.editCache[id].data.khoachVonNamTruocKeoDaiDtpt, this.editCache[id].data.khoachVonNamTruocKeoDaiVonKhac]);
-		this.editCache[id].data.khoachNamVonTso = sumNumber([this.editCache[id].data.khoachNamVonNsnn, this.editCache[id].data.khoachNamVonDt, this.editCache[id].data.khoachNamVonThue, this.editCache[id].data.khoachNamVonScl]);
-		this.editCache[id].data.giaiNganTso = sumNumber([this.editCache[id].data.giaiNganNsnn, this.editCache[id].data.giaiNganNsnnVonDt, this.editCache[id].data.giaiNganNsnnVonThue, this.editCache[id].data.giaiNganNsnnVonScl]);
-		this.editCache[id].data.luyKeGiaiNganDauNamTso = sumNumber([this.editCache[id].data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl]);
+        this.editCache[id].data.khoachVonNamTruocKeoDaiTso = sumNumber([this.editCache[id].data.khoachVonNamTruocKeoDaiDtpt, this.editCache[id].data.khoachVonNamTruocKeoDaiVonKhac]);
+        this.editCache[id].data.khoachNamVonTso = sumNumber([this.editCache[id].data.khoachNamVonNsnn, this.editCache[id].data.khoachNamVonDt, this.editCache[id].data.khoachNamVonThue, this.editCache[id].data.khoachNamVonScl]);
+        this.editCache[id].data.giaiNganTso = sumNumber([this.editCache[id].data.giaiNganNsnn, this.editCache[id].data.giaiNganNsnnVonDt, this.editCache[id].data.giaiNganNsnnVonThue, this.editCache[id].data.giaiNganNsnnVonScl]);
+        this.editCache[id].data.luyKeGiaiNganDauNamTso = sumNumber([this.editCache[id].data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl]);
 
         // cong luy ke
         this.editCache[id].data.luyKeGiaiNganDauNamTso = sumNumber([data.luyKeGiaiNganDauNamTso, this.editCache[id].data.giaiNganTso, - data.giaiNganTso]);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnn = sumNumber([data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.giaiNganNsnn, - data.giaiNganNsnn]);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt = sumNumber([data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.giaiNganNsnnVonDt, - data.giaiNganNsnnVonDt]);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue = sumNumber([data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.giaiNganNsnnVonThue, - data.giaiNganNsnnVonThue]);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl = sumNumber([data.luyKeGiaiNganDauNamNsnnVonScl, this.editCache[id].data.giaiNganNsnnVonScl, - data.giaiNganNsnnVonScl]);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnn = sumNumber([data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.giaiNganNsnn, - data.giaiNganNsnn]);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt = sumNumber([data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.giaiNganNsnnVonDt, - data.giaiNganNsnnVonDt]);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue = sumNumber([data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.giaiNganNsnnVonThue, - data.giaiNganNsnnVonThue]);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl = sumNumber([data.luyKeGiaiNganDauNamNsnnVonScl, this.editCache[id].data.giaiNganNsnnVonScl, - data.giaiNganNsnnVonScl]);
 
         //tinh ty le
         this.editCache[id].data.giaiNganTsoTle = divNumber(this.editCache[id].data.giaiNganTso, this.editCache[id].data.khoachNamVonTso);
-		this.editCache[id].data.giaiNganNsnnTle = divNumber(this.editCache[id].data.giaiNganNsnn, this.editCache[id].data.khoachNamVonNsnn);
-		this.editCache[id].data.giaiNganNsnnTleVonDt = divNumber(this.editCache[id].data.giaiNganNsnnVonDt, this.editCache[id].data.khoachNamVonDt);
-		this.editCache[id].data.giaiNganNsnnTleVonThue = divNumber(this.editCache[id].data.giaiNganNsnnVonThue, this.editCache[id].data.khoachNamVonThue);
-		this.editCache[id].data.giaiNganNsnnTleVonScl = divNumber(this.editCache[id].data.giaiNganNsnnVonScl, this.editCache[id].data.khoachNamVonScl);
-		this.editCache[id].data.luyKeGiaiNganDauNamTsoTle = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamTso, this.editCache[id].data.khoachNamVonTso);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTle = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.khoachNamVonNsnn);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonDt = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.khoachNamVonDt);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.khoachNamVonThue);
-		this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl, this.editCache[id].data.khoachNamVonScl);
+        this.editCache[id].data.giaiNganNsnnTle = divNumber(this.editCache[id].data.giaiNganNsnn, this.editCache[id].data.khoachNamVonNsnn);
+        this.editCache[id].data.giaiNganNsnnTleVonDt = divNumber(this.editCache[id].data.giaiNganNsnnVonDt, this.editCache[id].data.khoachNamVonDt);
+        this.editCache[id].data.giaiNganNsnnTleVonThue = divNumber(this.editCache[id].data.giaiNganNsnnVonThue, this.editCache[id].data.khoachNamVonThue);
+        this.editCache[id].data.giaiNganNsnnTleVonScl = divNumber(this.editCache[id].data.giaiNganNsnnVonScl, this.editCache[id].data.khoachNamVonScl);
+        this.editCache[id].data.luyKeGiaiNganDauNamTsoTle = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamTso, this.editCache[id].data.khoachNamVonTso);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnTle = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnn, this.editCache[id].data.khoachNamVonNsnn);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonDt = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonDt, this.editCache[id].data.khoachNamVonDt);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonThue = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonThue, this.editCache[id].data.khoachNamVonThue);
+        this.editCache[id].data.luyKeGiaiNganDauNamNsnnTleVonScl = divNumber(this.editCache[id].data.luyKeGiaiNganDauNamNsnnVonScl, this.editCache[id].data.khoachNamVonScl);
     }
 
     export() {
@@ -1057,7 +1061,7 @@ export class PhuLucIIIComponent implements OnInit {
         );
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

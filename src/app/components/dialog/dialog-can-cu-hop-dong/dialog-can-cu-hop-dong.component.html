@@ -22,8 +22,9 @@
         <td>{{ data.ngayKy }}</td>
         <td>{{ data.tuNgayHluc }} - {{data.denNgayHluc}}</td>
         <td class="text-center">
-          <a (click)="handleOk(data)">
-            <i class="icon htvbdh_dau-cong"></i>
+          <a>
+            <!-- <i class="icon htvbdh_dau-cong"></i> -->
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="handleOk(data)"></label>
           </a>
         </td>
       </tr>

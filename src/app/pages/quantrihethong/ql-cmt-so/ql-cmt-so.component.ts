@@ -151,7 +151,7 @@ export class QlCMTSOComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

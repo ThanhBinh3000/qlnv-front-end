@@ -1,0 +1,31 @@
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <div class="main-content tab-menu-new">
+      <nz-tabset nzType="card" class="tab-level-0" nzLinkRouter nzLinkExact="false">
+        <nz-tab>
+          <a class="tab-link" *nzTabLink nz-tab-link [routerLink]="['./so-kho-the-kho']">Số
+            kho/thẻ kho</a>
+          <ng-template nz-tab>
+            <app-so-kho-the-kho></app-so-kho-the-kho>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a class="tab-link" *nzTabLink nz-tab-link [routerLink]="['./hang-trong-kho']">Hàng
+            trong kho</a>
+          <ng-template nz-tab>
+            <app-hang-trong-kho></app-hang-trong-kho>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a class="tab-link" *nzTabLink nz-tab-link [routerLink]="['./hang-theo-doi-dac-thu']">Hàng thuộc diện
+            theo dõi đặc thù</a>
+          <!-- <ng-template nz-tab>
+            <app-hang-theo-doi-dac-thu></app-hang-theo-doi-dac-thu>
+          </ng-template> -->
+          <router-outlet></router-outlet>
+        </nz-tab>
+      </nz-tabset>
+      <!-- <router-outlet></router-outlet> -->
+    </div>
+  </div>
+</div>

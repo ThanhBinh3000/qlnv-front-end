@@ -9,9 +9,9 @@ import { OldResponseData } from 'src/app/interfaces/response';
   providedIn: 'root',
 })
 export class QlQuyenNSDService extends BaseService {
-  gateway: string = '/qlnv-gateway/qlnv-system'
+  gateway: string = '/qlnv-system'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'user','');
+    super(httpClient, 'user', '');
   }
 
   active(body) {

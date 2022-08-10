@@ -10,7 +10,7 @@ import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
   providedIn: 'root',
 })
 export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoach';
+  GATEWAY = '/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'ChiTieuKeHoachNamCapTongCuc', '');
@@ -89,7 +89,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   }
 
   tonKhoDauNam(body: any): Promise<ResponseData<Array<TonKhoDauNamLuongThuc>>> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
+    const url = `${environment.SERVICE_API}/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
     return this.httpClient.post(url, body).toPromise();
   }
   downloadFile(): Observable<Blob> {
@@ -97,7 +97,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.post(url, null, { responseType: 'blob' });
   }
   downloadFileKeHoach(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/download`;
+    const url = `${environment.SERVICE_API}/qlnv-core/file/download`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
   deleteMultiple(body: any): Promise<any> {
