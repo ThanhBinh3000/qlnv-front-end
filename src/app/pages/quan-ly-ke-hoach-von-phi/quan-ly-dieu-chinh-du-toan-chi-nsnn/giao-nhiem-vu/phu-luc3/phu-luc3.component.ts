@@ -302,11 +302,17 @@ export class PhuLuc3Component implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
+    let count = 0;
     for(let itm of this.lstDchinh){
-      if(itm.maDvi == this.editCache[id].data.maDvi){
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.LOCAL_EXIST);
-        return;
+      if(this.lstDchinh.length > 1 && this.lstDchinh.find(i => !i.maDvi)){
+        if(itm.maDvi == this.editCache[id].data.maDvi){
+          count ++;
+        }
       }
+    }
+    if(count >= 1){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.LOCAL_EXIST);
+      return;
     }
     if (
       (!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
@@ -326,7 +332,7 @@ export class PhuLuc3Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
-    if(
+    if (
       this.editCache[id].data.dkienThienDtoan < 0 ||
       this.editCache[id].data.dkienThienLuong < 0 ||
       // this.editCache[id].data.dtoanDchinh < 0 ||
@@ -337,7 +343,7 @@ export class PhuLuc3Component implements OnInit {
       this.editCache[id].data.tdiemBcaoDtoan < 0 ||
       this.editCache[id].data.tdiemBcaoLuong < 0 ||
       this.editCache[id].data.tongNcauDtoanN < 0
-    ){
+    ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
       return;
     }
@@ -393,7 +399,7 @@ export class PhuLuc3Component implements OnInit {
       const tdiemBcaoDtoan = mulMoney(item.tdiemBcaoDtoan, this.maDviTien)
       const dkienThienDtoan = mulMoney(item.dkienThienDtoan, this.maDviTien)
       const dtoanThieuNtruoc = mulMoney(item.dtoanThieuNtruoc, this.maDviTien)
-      const tongNcauDtoanN = mulMoney(item.tongNcauDtoanN, this.maDviTien)
+      const tongNcauDtoanN = item.tongNcauDtoanN
       const dtoanLke = mulMoney(item.dtoanLke, this.maDviTien)
       const dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien)
       if (khoachQdGiaoNvu > MONEY_LIMIT || tdiemBcaoDtoan > MONEY_LIMIT ||
