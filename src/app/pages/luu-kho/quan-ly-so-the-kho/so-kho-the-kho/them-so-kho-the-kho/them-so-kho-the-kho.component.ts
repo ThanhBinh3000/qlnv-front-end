@@ -10,13 +10,14 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service'
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service'
 import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -51,6 +52,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   listChungLoaiHangHoa: any[] = [];
   donViTinh = '';
 
+  maDonVi = '';
+  maLoaiVTHH = '';
   maNganKho = '';
   maNganLo = '';
 
@@ -66,11 +69,12 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     private readonly fb: FormBuilder,
     private notification: NzNotificationService,
     public userService: UserService,
-    private donViService: DonviService,
+    private donviService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
+    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals: Globals,
   ) { }
 
@@ -110,6 +114,19 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     }
   }
 
+  isDetail(): boolean {
+    if (this.isStatus === this.globals.prop.BAN_HANH) {
+      return (
+        !this.isCheck
+      );
+    }
+
+    return (
+      this.isCheck
+    );
+
+  }
+
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quanLySoKhoTheKhoService.chiTiet(id);
@@ -128,18 +145,18 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      nam: [null],
-      tuNgay: [new Date()],
-      denNgay: [new Date()],
-      idLoaiHangHoa: [null],
-      idChungLoaiHangHoa: [null],
-      idDiemKho: [null],
-      idNhaKho: [null],
-      idNganKho: [null],
-      idNganLo: [null],
-      tonDauKy: [null],
-      donViTinh: [null],
+      idDonVi: [null, [Validators.required]],
+      nam: [null, [Validators.required]],
+      tuNgay: [null, [Validators.required]],
+      denNgay: [null, [Validators.required]],
+      idLoaiHangHoa: [null, [Validators.required]],
+      idChungLoaiHangHoa: [null, [Validators.required]],
+      idDiemKho: [null, [Validators.required]],
+      idNhaKho: [null, [Validators.required]],
+      idNganKho: [null, [Validators.required]],
+      idNganLo: [null, [Validators.required]],
+      tonDauKy: [1, [Validators.required]],
+      donViTinh: [null, [Validators.required]],
     });
   }
 
@@ -157,9 +174,16 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  loadDsTong() {
-    if (!isEmpty(this.dsTong)) {
-      this.dsDonVi = this.dsTong[DANH_MUC_LEVEL.CHI_CUC];
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     }
   }
 
@@ -168,7 +192,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       maDviCha: this.detail.maDvi,
       trangThai: '01',
     }
-    const res = await this.donViService.getTreeAll(body);
+    const res = await this.donviService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
         res.data.forEach(element => {
@@ -225,12 +249,21 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.listLoaiHangHoa = dataVatTu[0].child;
-      }
-    })
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        console.log(hangHoa)
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          // const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
+          // this.listLoaiHangHoa = dataVatTu[0].child;
+
+          // const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
+          this.listLoaiHangHoa = hangHoa.data;
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async changeLoaiHangHoa(event) {
@@ -239,9 +272,11 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
 
-    const loaihanghoaDVT = this.listLoaiHangHoa.filter(loaihanghoa => loaihanghoa.ten === event);
-    this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
+  }
 
+  changeChungLoaiHangHoa(event) {
+    const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ten === event);
+    this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
   }
 
 
@@ -291,6 +326,62 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   taoTheKho() {
     this.isTaoTheKho = true;
+    this.loadSoPhieuNhapXuat();
+
+  }
+
+  async loadSoPhieuNhapXuat() {
+    this.listLoaiHangHoa.forEach(hangHoa => {
+      if (this.detail.maLoaiHangHoa === hangHoa.ten) {
+        this.maLoaiVTHH = hangHoa.ma;
+      }
+    })
+
+    this.dsDonVi.forEach(donVi => {
+      if (this.detail.maDonVi === donVi.tenDvi) {
+        this.maDonVi = donVi.maDvi;
+      }
+    })
+
+    const bodyNhapNho = {
+      'maDvis': this.maDonVi,
+      'loaiVthh': this.maLoaiVTHH,
+      'paggingReq.limit': 20,
+      'paggingReq.page': 0
+    }
+
+    let body = {
+      "paggingReq.limit": 20,
+      "paggingReq.page": 0
+    }
+
+    try {
+      const resNhapKho = await this.quanLyPhieuNhapKhoService.timKiem(bodyNhapNho);
+      // const resSoHang = await this.quanLyHangTrongKhoService.timkiem(body);
+
+      let listNhapXuat = [];
+
+      resNhapKho.data.content.forEach(nhapKho => {
+        listNhapXuat = [
+          ...listNhapXuat,
+          {
+            soPhieu: nhapKho.soPhieu,
+            type: 'nhap',
+            ngayTao: nhapKho.thoiGianGiaoNhan,
+            dienGiai: '',
+            soLuong: 0,
+            soLuongTon: 0,
+            ghiChu: '',
+          }
+        ]
+      })
+      this.dataTable = listNhapXuat;
+
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+
   }
 
   changePageIndex(event) { }

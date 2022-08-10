@@ -36,7 +36,7 @@
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub xanh" (click)="luu()"
+      <button type="button" class="btn btn-sub xanh" (click)="luu()" [disabled]="!formData.valid"
         *ngIf="idInput ===null&& userService.isChiCuc() || idInput !==null &&  isStatus == globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
@@ -56,7 +56,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Tên đơn vị
                   </nz-form-label>
-                  <nz-select formControlName="idDonVi">
+                  <nz-select formControlName="idDonVi" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
@@ -68,7 +68,7 @@
                   <nz-form-label [nzNoColon]="true">
                     Năm
                   </nz-form-label>
-                  <nz-select formControlName="nam">
+                  <nz-select formControlName="nam" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of dsNam" nzValue="{{item}}" nzLabel="{{item}}">
                     </nz-option>
                   </nz-select>
@@ -80,7 +80,8 @@
                   <nz-form-label [nzNoColon]="true">
                     Từ ngày
                   </nz-form-label>
-                  <nz-date-picker formControlName="tuNgay" class="search__input" nzFormat="yyyy-MM-dd">
+                  <nz-date-picker formControlName="tuNgay" class="search__input" nzFormat="yyyy-MM-dd"
+                    [nzDisabled]="isDetail()">
                   </nz-date-picker>
                 </nz-form-item>
               </div>
@@ -90,7 +91,8 @@
                   <nz-form-label [nzNoColon]="true">
                     Đến ngày
                   </nz-form-label>
-                  <nz-date-picker formControlName="denNgay" class="search__input" nzFormat="yyyy-MM-dd">
+                  <nz-date-picker formControlName="denNgay" class="search__input" nzFormat="yyyy-MM-dd"
+                    [nzDisabled]="isDetail()">
                   </nz-date-picker>
                 </nz-form-item>
               </div>
@@ -101,7 +103,7 @@
                     Loại hàng hóa
                   </nz-form-label>
                   <nz-select formControlName="idLoaiHangHoa" [(ngModel)]="detail.maLoaiHangHoa"
-                    (ngModelChange)="changeLoaiHangHoa($event)">
+                    (ngModelChange)="changeLoaiHangHoa($event)" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
                     </nz-option>
                   </nz-select>
@@ -113,7 +115,8 @@
                   <nz-form-label [nzNoColon]="true">
                     Chủng loại hàng hóa
                   </nz-form-label>
-                  <nz-select formControlName="idChungLoaiHangHoa">
+                  <nz-select formControlName="idChungLoaiHangHoa" [(ngModel)]="detail.maChungLoaiHangHoa"
+                    (ngModelChange)="changeChungLoaiHangHoa($event)" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
                     </nz-option>
                   </nz-select>
@@ -126,7 +129,7 @@
                     Điểm kho
                   </nz-form-label>
                   <nz-select formControlName="idDiemKho" [(ngModel)]="detail.maDiemKho"
-                    (ngModelChange)="changeDiemKho(false)">
+                    (ngModelChange)="changeDiemKho(false)" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.title" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -139,7 +142,7 @@
                     Nhà kho
                   </nz-form-label>
                   <nz-select formControlName="idNhaKho" [(ngModel)]="detail.maNhaKho"
-                    (ngModelChange)="changeNhaKho(false)">
+                    (ngModelChange)="changeNhaKho(false)" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.title" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -152,7 +155,7 @@
                     Ngăn kho
                   </nz-form-label>
                   <nz-select formControlName="idNganKho" [(ngModel)]="detail.maNganKho"
-                    (ngModelChange)="changeNganKho()">
+                    (ngModelChange)="changeNganKho()" [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listNganKho" [nzValue]="item.title" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -164,7 +167,8 @@
                   <nz-form-label [nzNoColon]="true">
                     Lô kho
                   </nz-form-label>
-                  <nz-select formControlName="idNganLo" [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()">
+                  <nz-select formControlName="idNganLo" [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()"
+                    [nzDisabled]="isDetail()">
                     <nz-option *ngFor="let item of listNganLo" [nzValue]="item.title" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -176,11 +180,16 @@
                   <nz-form-label nzFor="ton-dau-ky">Tồn đầu kỳ</nz-form-label>
                   <nz-form-control>
                     <nz-input-group id="ton-dau-ky">
-                      <input formControlName="tonDauKy" type="number" nz-input [disabled]="true" />
+                      <!-- <input formControlName="tonDauKy" type="number" nz-input /> -->
+                      <nz-input-number formControlName="tonDauKy" value="1" [nzMin]="1" [nzSize]="'small'"
+                        [nzDisabled]="true">
+                      </nz-input-number>
+
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
+
 
               <div nz-col nzSpan="1">
                 <nz-form-item class="form-item">
