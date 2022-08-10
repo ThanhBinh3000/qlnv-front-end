@@ -76,10 +76,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  searchValue = '';
-  searchFilter = {
-    soDeXuat: '',
-  };
+
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
 
@@ -87,11 +84,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   // formThongTinChung: FormGroup;
   listOfData: DanhSachGoiThau[] = [];
   cacheData: DanhSachGoiThau[] = [];
-  fileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKem: any[] = [];
   userLogin: UserLogin
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
-  listTieuChuan: any[] = [];
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
@@ -99,11 +95,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   danhMucDonVi: any;
   ktDiemKho: any;
 
-  formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0;
-  parser = value => value ? value.replace(/\$\s?|(,*)/g, '') : 0;
-
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
   i = 0;
   editId: string | null = null;
   tabSelected: string = 'thongTinChung';
@@ -124,8 +115,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
@@ -305,23 +294,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  // getNameDanhSachDvi(maDvi: string) {
-  //   let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-  //   this.formThongTinChung.patchValue({
-  //     tenDvi: donVi.length > 0 ? donVi[0].tenDvi : null
-  //   })
-  // }
-
-  getTenDviTable(maDvi: string) {
-    let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi.length > 0 ? donVi[0].tenDvi : null
-  }
-
-  getTenDiemKhoTable(maDiemKho: string) {
-    let diemKho = this.ktDiemKho?.filter(item => item.maDiemkho == maDiemKho);
-    return diemKho.length > 0 ? diemKho[0].tenDiemkho : null
-  }
-
   async changeChiCuc(event, index?) {
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
@@ -370,7 +342,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: { data },
+      nzComponentParams: {
+        data,
+        onlyLuongThuc: true
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -528,8 +503,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      console.log("Invalid");
+    console.log(this.fileDinhKem);
+    if (this.formData) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       console.log(this.formData.value);
       return;
     }
