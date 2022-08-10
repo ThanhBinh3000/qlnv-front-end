@@ -12,7 +12,10 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Loại hàng hoá</label>
-              <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.loaiVthh" />
+              <nz-select [(ngModel)]="searchFilter.loaiVthh" placeholder="Chọn loại hàng hoá">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+                </nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Nội dung tổng hợp</label>
@@ -141,7 +144,7 @@
                     <td>{{ data.namKhoach }}</td>
                     <td>{{ data.soQdPheDuyet }}</td>
                     <td>{{ data.tenVthh }}</td>
-                    <td>{{ data.statusConvert }}</td>
+                    <td>{{ data.tenTrangThai }}</td>
                     <td class="text-left">
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>
@@ -181,7 +184,7 @@
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
-            <button type="button" class="btn btn-sub">
+            <button type="button" class="btn btn-sub" (click)="exportData()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
