@@ -15,10 +15,11 @@ export const MAIN_ROUTES = {
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
-  quantrihethong: 'quan-tri-he-thong',
+  // quantrihethong: 'quan-tri-he-thong',
   dieuChuyen: 'dieu-chuyen',
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
+  quanTriHeThong: 'quan-tri-he-thong',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -75,15 +76,11 @@ export const LIST_PAGES: RouteInfo[] = [
     route: MAIN_ROUTES.quanLyKhoTang,
   },
   {
-    title: 'Quản trị danh mục',
+    title: 'QTDM',
     route: MAIN_ROUTES.quanTriDanhMuc,
   },
-  // {
-  //   title: 'QTDM',
-  //   route: MAIN_ROUTES.danhMuc,
-  // },
-  // {
-  //   title: 'QTHT',
-  //   route: MAIN_ROUTES.quantrihethong,
-  // },
+  {
+    title: 'QTHT',
+    route: MAIN_ROUTES.quanTriHeThong,
+  },
 ];
