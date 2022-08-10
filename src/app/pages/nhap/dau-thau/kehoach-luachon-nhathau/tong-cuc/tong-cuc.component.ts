@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LEVEL, LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertIdToLoaiVthh, convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
 
 
 @Component({
@@ -12,6 +9,7 @@ import { convertIdToLoaiVthh, convertTenVthh, convertTrangThai } from 'src/app/s
   styleUrls: ['./tong-cuc.component.scss']
 })
 export class TongCucComponent implements OnInit {
+  loaiVthhSelected: string
   constructor(
     private danhMucService: DanhMucService
   ) {
@@ -33,6 +31,10 @@ export class TongCucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.tabs = [...this.tabs, ...res.data];
     }
+  }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 
 }

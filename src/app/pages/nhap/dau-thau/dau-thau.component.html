@@ -10,7 +10,6 @@
         <li nz-menu-item (click)="selectTab('dckhlcnt')" *ngIf="!userService.isChiCuc()">
             Điều chỉnh KH lựa chọn nhà thầu
         </li>
-
         <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="!userService.isChiCuc()">
             Hợp đồng
         </li>
@@ -23,11 +22,8 @@
         <li nz-menu-item (click)="selectTab('nhapkho')" *ngIf="!userService.isChiCuc()">
             Nhập kho
         </li>
-
     </ul>
 </nz-affix>
-
-
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 'khlcnt'">

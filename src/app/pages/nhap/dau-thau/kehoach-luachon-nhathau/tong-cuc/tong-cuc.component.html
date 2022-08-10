@@ -1,11 +1,20 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-1">
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
+      {{tab.giaTri}}
+    </li>
+  </ul>
+</nz-affix>
+<ng-container>
+  <app-main-tong-cuc [loaiVthh]="loaiVthhSelected"></app-main-tong-cuc>
+</ng-container>
+<!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">
   <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_tongHop">
     <ng-template #title_tongHop>
       {{tab.giaTri}}
-      (<span class="number-title-tab">10</span>)
     </ng-template>
     <ng-template nz-tab>
       <app-main-tong-cuc loaiVthh="{{tab.ma}}"></app-main-tong-cuc>
     </ng-template>
   </nz-tab>
-</nz-tabset>
+</nz-tabset> -->
