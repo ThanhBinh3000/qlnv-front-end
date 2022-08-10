@@ -16,6 +16,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	@ViewChild('nzTreeComponent', { static: false })
 	//thong tin chung
 	userInfo: any;
+	user: any;
 	capDvi: string;
 	donVis: any[] = [];
 	danhSach: any[] = [];
@@ -32,24 +33,25 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		this.user = this.userService.getUserLogin();
 		//lay danh sach danh muc
-		await this.danhMuc.dMDonVi().toPromise().then(
-			data => {
-				if (data.statusCode == 0) {
-					this.donVis = data.data;
-					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
+		// await this.danhMuc.dMDonVi().toPromise().then(
+		// 	data => {
+		// 		if (data.statusCode == 0) {
+		// 			this.donVis = data.data;
+		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+		// 		} else {
+		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+		// 		}
+		// 	},
+		// 	err => {
+		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// 	}
+		// );
 
 		QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST.forEach(data => {
 			data.Role.forEach(item => {
-				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.capDvi == item.unit) {
+				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.user.CAP_DVI == item.unit) {
 					this.danhSach.push(data);
 					return;
 				}

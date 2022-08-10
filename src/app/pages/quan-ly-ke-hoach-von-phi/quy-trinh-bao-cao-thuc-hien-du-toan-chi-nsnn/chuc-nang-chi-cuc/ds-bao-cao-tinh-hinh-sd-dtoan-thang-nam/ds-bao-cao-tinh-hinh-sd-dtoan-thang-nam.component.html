@@ -44,11 +44,13 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
-						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
-						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
@@ -117,7 +119,8 @@
 								<ng-template
 									[ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
 									<br>Lý do:
-									{{item.lyDoTuChoi}}</ng-template>
+									{{item.lyDoTuChoi}}
+								</ng-template>
 							</td>
 							<td>
 								<ng-container *ngIf="checkDeleteReport(item); else duyet">
@@ -144,7 +147,7 @@
 							<td>
 								<ng-container *ngIf="checkDeleteReport(item)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>
@@ -171,7 +174,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="themMoi()">
+				<button type="button" class="btn btn-main" [hidden]="statusThemMoi" (click)="themMoi()">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>

@@ -20,10 +20,11 @@ export class QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucComponent implements OnIn
 	statusSearch = true;
 	statusApprove = false;
 	statusCheck = false;
-	statusSynthetic = false; 
+	statusSynthetic = false;
 	statusExploit = false;
 
 	userInfo: any;
+	user: any;
 	donVis: any[] = [];
 	capDvi: string;
 
@@ -39,26 +40,27 @@ export class QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucComponent implements OnIn
 		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		this.user = this.userService.getUserLogin();
 		//lay danh sach danh muc
-		await this.danhMuc.dMDonVi().toPromise().then(
-			data => {
-				if (data.statusCode == 0) {
-					this.donVis = data.data;
-					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && (this.capDvi != Utils.CHI_CUC)){
+		// await this.danhMuc.dMDonVi().toPromise().then(
+		// 	data => {
+		// 		if (data.statusCode == 0) {
+		// 			this.donVis = data.data;
+		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+		// 		} else {
+		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+		// 		}
+		// 	},
+		// 	err => {
+		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// 	}
+		// );
+		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && (this.user.CAP_DVI != Utils.CHI_CUC)) {
 			this.statusApprove = true;
 			this.statusCheck = true;
 			this.statusSynthetic = true;
 		}
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && (this.capDvi == Utils.TONG_CUC)){
+		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && (this.user.CAP_DVI == Utils.TONG_CUC)) {
 			this.statusExploit = true;
 		}
 		this.spinner.hide();

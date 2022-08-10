@@ -456,10 +456,10 @@ export class Utils {
                 statusName = "Lãnh đạo từ chối"
                 break;
             case Utils.TT_BC_6:
-                statusName = "Lãnh đạo phê duyệt"
+                statusName = "Mới"
                 break;
             case Utils.TT_BC_7:
-                statusName = "Gửi ĐV cấp trên"
+                statusName = "Mới"
                 break;
             case Utils.TT_BC_8:
                 statusName = "Từ chối"
@@ -1072,7 +1072,7 @@ export function divNumber(num1, num2): number {
     if (getNumberValue(num2) == 0) {
         return 0 / 0;
     } else {
-        return Number((getNumberValue(num1) / getNumberValue(num2)).toFixed(Utils.ROUND));
+        return getNumberValue(num1) / getNumberValue(num2);
     }
 }
 
@@ -1428,10 +1428,13 @@ export const LOAI_VON = [
 ]
 
 export function displayNumber(num: number): string {
-    if (!num){
+    if (Number.isNaN(num)) {
+        return 'NaN';
+    }
+    if (!num && num !== 0) {
         return '';
     }
-    const nho = num < 0 ? '-' : '' ;
+    const nho = num < 0 ? '-' : '';
     num = Math.abs(num);
     let str: string = num.toString();
     let real!: number;
@@ -1457,6 +1460,9 @@ export function displayNumber(num: number): string {
 
 export function separateNumber(num: number): string {
     let displayValue!: string;
+    if (num == 0) {
+        displayValue = '0';
+    }
     while (num > 0) {
         let val = (num % 1000).toString();
         num = Math.floor(num / 1000);

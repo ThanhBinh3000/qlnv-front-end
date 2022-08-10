@@ -172,7 +172,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="themMoi()">
+				<button type="button" class="btn btn-main" [hidden]="statusThemMoi" (click)="themMoi()">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>
