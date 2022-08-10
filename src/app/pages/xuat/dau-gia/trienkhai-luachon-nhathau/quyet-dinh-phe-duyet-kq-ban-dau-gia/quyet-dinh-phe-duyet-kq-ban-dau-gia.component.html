@@ -45,7 +45,7 @@
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
             <nz-tab nzTitle="Danh sách quyết định phê duyệt kết quả bán đấu giá">
               <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
+                [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
                 <thead>
                   <tr>
                     <th width="45px">
@@ -53,20 +53,20 @@
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px">STT</th>
-                    <th width="130px">Số QĐ phê duyệt KQ BĐG</th>
-                    <th width="130px">Ngày ký</th>
-                    <th width="">Trích yếu</th>
-                    <th width="175px">Ngày tổ chức BĐG</th>
-                    <th width="175px">Số QĐ phê duyệt KH BĐG</th>
-                    <th width="175px">Mã thông báo BĐG</th>
-                    <th width="175px">Hình thức đấu giá</th>
-                    <th width="175px">Phương thức đấu giá</th>
-                    <th width="175px">Loại hàng hóa</th>
-                    <th width="175px">Năm kế hoạch</th>
-                    <th width="175px">Số TB đấu giá không thành</th>
-                    <th width="175px">Số biên bản đấu giá </th>
-                    <th width="175px">Trạng thái </th>
-                    <th width="130px">Hành động</th>
+                    <th width="200px">Số QĐ phê duyệt KQ BĐG</th>
+                    <th width="140px">Ngày ký</th>
+                    <th width="300px">Trích yếu</th>
+                    <th width="300px">Ngày tổ chức BĐG</th>
+                    <th width="300px">Số QĐ phê duyệt KH BĐG</th>
+                    <th width="300px">Mã thông báo BĐG</th>
+                    <th width="300px">Hình thức đấu giá</th>
+                    <th width="300px">Phương thức đấu giá</th>
+                    <th width="300px">Loại hàng hóa</th>
+                    <th width="300px">Năm kế hoạch</th>
+                    <th width="300px">Số TB đấu giá không thành</th>
+                    <th width="300px">Số biên bản đấu giá </th>
+                    <th width="300px">Trạng thái </th>
+                    <th width="130px" nzRight>Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -190,7 +190,7 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                    <th></th>
+                    <th nzRight></th>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
@@ -210,7 +210,7 @@
                     <td>2022</td>
                     <td>123/TB</td>
                     <td>789/BB</td>
-                    <td class="text-center">
+                    <td nzRight>
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>

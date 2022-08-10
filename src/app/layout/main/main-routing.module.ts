@@ -80,10 +80,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: MAIN_ROUTES.quantrihethong,
+        path: MAIN_ROUTES.quanTriHeThong,
         loadChildren: () =>
-          import('../../pages/quantrihethong/quantrihethong.module').then(
-            (m) => m.QuanTriHeThongModule,
+          import('../../pages/quan-tri-he-thong/quan-tri-he-thong.module').then(
+            (m) => m.QuanTriHeThongNewModule,
           ),
       },
       {

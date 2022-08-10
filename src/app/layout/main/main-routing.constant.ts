@@ -15,13 +15,14 @@ export const MAIN_ROUTES = {
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
-  quantrihethong: 'quan-tri-he-thong',
-  qlkhVonPhi: 'qlkh-von-phi',
-  qlcapVonPhi: 'qlcap-von-phi-hang',
-  qlthongTinQuyetToanVonPhi: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
+  // quantrihethong: 'quan-tri-he-thong',
   dieuChuyen: 'dieu-chuyen',
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
+  quanTriHeThong: 'quan-tri-he-thong',
+  qlkhVonPhi: 'qlkh-von-phi',
+  qlcapVonPhi: 'qlcap-von-phi-hang',
+  qlthongTinQuyetToanVonPhi: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -78,14 +79,6 @@ export const LIST_PAGES: RouteInfo[] = [
     route: MAIN_ROUTES.quanLyKhoTang,
   },
   {
-    title: 'Quản trị hệ thống',
-    route: MAIN_ROUTES.quantrihethong,
-  },
-  {
-    title: 'Quản trị danh mục',
-    route: MAIN_ROUTES.danhMuc,
-  },
-  {
     title: 'Quản lý kế hoạch vốn phí',
     route: MAIN_ROUTES.qlkhVonPhi,
   },
@@ -98,15 +91,11 @@ export const LIST_PAGES: RouteInfo[] = [
     route: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
   },
   {
-    title: 'Quản trị danh mục',
+    title: 'QTDM',
     route: MAIN_ROUTES.quanTriDanhMuc,
   },
-  // {
-  //   title: 'QTDM',
-  //   route: MAIN_ROUTES.danhMuc,
-  // },
-  // {
-  //   title: 'QTHT',
-  //   route: MAIN_ROUTES.quantrihethong,
-  // },
+  {
+    title: 'QTHT',
+    route: MAIN_ROUTES.quanTriHeThong,
+  },
 ];

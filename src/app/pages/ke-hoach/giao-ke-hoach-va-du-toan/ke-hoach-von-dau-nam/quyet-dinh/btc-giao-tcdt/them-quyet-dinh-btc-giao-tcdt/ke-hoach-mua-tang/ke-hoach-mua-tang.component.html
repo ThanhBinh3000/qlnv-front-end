@@ -92,9 +92,10 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event,'edit')"
+              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event,'edit',idx)"
                 [nzShowArrow]="false">
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option [nzValue]="item.ma" [nzLabel]="item.ten" *ngFor="let item of dsHangHoa">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -108,12 +109,11 @@
             </nz-input-group>
           </td>
           <td>
+            <!-- <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
+            </nz-input-group> -->
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.dviTinh">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma }}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDonViTinh">
-                </nz-option>
-              </nz-select>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
             </nz-input-group>
           </td>
           <td>
@@ -131,7 +131,8 @@
           <td>
             <nz-input-group>
               <nz-input-number [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
-                [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                [(ngModel)]="rowItem.tongTien" [nzMin]="0" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </td>
