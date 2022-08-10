@@ -75,31 +75,4 @@ export class UserService {
     return user.CAP_DVI == "3"
   }
 
-  //get user info
-  getUserInfo(username: string) {
-    return this.httpClient.post<any>(environment.SERVICE_API + '/qlnv-system/user/userInfo',
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": username,
-        "trangThai": ""
-      }
-    );
-  }
-
-  //get user name
-  getUserName() {
-    var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
-    var decoded = jwt_decode(token);
-    if (decoded && decoded["sub"]) {
-      var userName = decoded["sub"];
-      return userName;
-    }
-    return null;
-  }
-
-
-
 }

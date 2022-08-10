@@ -49,7 +49,7 @@
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--clear" (click)="clearFilter()">
-            <i class="fa fa-trash-o do"></i>
+            <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
           <button nz-button class="search__button--search" (click)="search()">
@@ -185,7 +185,7 @@
                   <td>{{ data.soVbDeXuat }}</td>
                   <td>{{ data.loaiHangHoa }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
@@ -341,7 +341,7 @@
                   <td>{{ data.soVbDeXuat }}</td>
                   <td>{{ data.loaiHangHoa }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td class="text-right">
+                  <td>
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
@@ -375,19 +375,19 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+          <button type="button" class="btn btn-sub" (click)="deleteSelect()"
             *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="deleteSelect()"
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
             *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())">
-            <i class="fa fa-trash-o do"></i>
-            <span>Xóa</span>
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
           </button>
         </div>
       </div>

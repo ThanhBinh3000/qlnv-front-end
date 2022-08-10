@@ -1,27 +1,27 @@
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const BAN_HANG_MAIN_ROUTE = 'nhap';
+export const BAN_HANG_MAIN_ROUTE = 'ban-hang';
 export const BAN_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dauthau',
-        title: 'Theo phương thức bán đấu thầu',
-        url: `/dau-thau`,
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
+        title: 'Theo phương thức bán đấu giá',
+        url: `/theo-phuong-thuc-ban-dau-gia`,
+        dropdown: 'dau-gia',
+        idHover: 'daugia',
         hasTab: true,
     },
     {
         icon: 'htvbdh_tcdt_muatructiep',
         title: 'Theo phương thức bán trực tiếp',
-        url: `/mua-truc-tiep`,
-        dropdown: 'mua-truc-tiep',
-        idHover: 'muatructiep',
+        url: `/theo-phuong-thuc-ban-truc-tiep`,
+        dropdown: 'ban-truc-tiep',
+        idHover: 'bantructiep',
         hasTab: true,
     },
     {
         icon: 'htvbdh_tcdt_kynhay',
         title: 'Quản lý hợp đồng',
-        url: `/hop-dong`,
+        url: `/quan-ly-hop-dong`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,

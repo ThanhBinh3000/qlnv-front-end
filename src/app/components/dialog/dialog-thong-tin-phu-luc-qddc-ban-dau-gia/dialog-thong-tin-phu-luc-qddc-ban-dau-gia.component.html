@@ -1,0 +1,214 @@
+<form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Chi cục </nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+          <input class="search__input" nz-input />
+          <ng-template #soQDError let-control>
+            <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-form-control>
+          <nz-select [nzDisabled]='selectedChiCuc'>
+            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+          <nz-input-number [nzDisabled]="true" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
+            [nzSize]="'small'">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">SL theo chỉ tiêu </nz-form-label>
+        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="3">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">SL đã lên KH bán</nz-form-label>
+        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="3">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">Khoản tiền đặt trước (%)</nz-form-label>
+        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+  </div>
+  <br />
+</form>
+<nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
+  [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">
+  <thead>
+    <tr>
+      <th width="200px" class="text-center">STT</th>
+      <th width="200px" class="text-center">Điểm kho</th>
+      <th width="200px" class="text-center">Ngăn kho</th>
+      <th width="200px" class="text-center">Lô kho</th>
+      <th width="200px" class="text-center">Chủng loại hàng hóa</th>
+      <th width="200px" class="text-center">Mã đơn vị tài sản</th>
+      <th width="200px" class="text-center">Tồn kho</th>
+      <th width="200px" class="text-center">Số lượng</th>
+      <th width="200px" class="text-center">Đơn giá chưa VAT(đồng)</th>
+      <th width="200px" class="text-center">Giá khởi điểm (đồng)</th>
+      <th width="200px" class="text-center">Số tiền đặt trước (đồng)</th>
+      <th width="80px" class="text-center">Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>
+        <nz-select>
+          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </td>
+      <td>
+        <nz-select>
+          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </td>
+      <td>
+        <nz-select>
+          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </td>
+      <td>
+        <input class="search__input" nz-input />
+      </td>
+      <td>
+        <input class="search__input" nz-input />
+      </td>
+      <td>
+        1.000.000
+      </td>
+      <td>
+        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
+      </td>
+      <td>
+        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        </nz-input-number>
+      </td>
+      <td>
+
+      </td>
+      <td>
+
+      </td>
+      <td class="text-center">
+        <a>
+          <i class="icon htvbdh_dau-cong xanhla"></i>
+        </a>
+        <a>
+          <i class="fa fa-refresh"></i>
+        </a>
+      </td>
+    </tr>
+    <tr *ngIf="listOfData.length > 0">
+      <td></td>
+      <td>Cộng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>6.000</td>
+      <td>6.000</td>
+      <td></td>
+      <td>6.000</td>
+      <td>6.000.000</td>
+      <td></td>
+    </tr>
+  </tbody>
+</nz-table>
+<nz-table #nzTable [nzData]="listOfData" class="mt-16">
+  <thead>
+    <tr>
+      <th nzWidth="60px">STT</th>
+      <th>Chi cục</th>
+      <th>Điểm kho</th>
+      <th>Ngăn kho</th>
+      <th>Lô kho</th>
+      <th>Chủng loại hàng hóa</th>
+      <th>Mã đơn vị tài sản</th>
+      <th>Số lượng</th>
+      <th>Đơn vị tính</th>
+      <th>Đơn giá chưa VAT(đồng)</th>
+      <th>Giá khởi điểm (đồng)</th>
+      <th>Số tiền đặt trước (đồng)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of nzTable.data">
+      <tr>
+        <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.address }}</td>
+      </tr>
+      <ng-container>
+        <tr *ngIf="expandSet.has(data.id)">
+          <td nzWidtd="60px">STT</td>
+          <td>Chi cục</td>
+          <td>Điểm kho</td>
+          <td>Ngăn kho</td>
+          <td>Lô kho</td>
+          <td>Chủng loại hàng hóa</td>
+          <td>Mã đơn vị tài sản</td>
+          <td>Số lượng</td>
+          <td>Đơn vị tính</td>
+          <td>Đơn giá chưa VAT(đồng)</td>
+          <td>Giá khởi điểm (đồng)</td>
+          <td>Số tiền đặt trước (đồng)</td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>
+<br />
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light btn-do" (click)="onCancel()">
+        <!-- <i aria-hidden="true" class="fa fa-sign-out"></i> -->
+        Hủy bỏ
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active">
+        <i class="icon htvbdh_checkfile2"></i>
+        Áp dụng chỉnh sửa
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

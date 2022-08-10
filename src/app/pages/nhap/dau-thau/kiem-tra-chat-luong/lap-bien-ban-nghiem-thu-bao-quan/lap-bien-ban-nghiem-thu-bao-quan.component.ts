@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-lap-bien-ban-nghiem-thu-bao-quan',
@@ -53,17 +54,18 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinh: '',
+    soQuyetDinhNhap: '',
     soBb: '',
     ngayNghiemThuShow: '',
-    tenDiemkho: '',
-    tenNhakho: '',
-    tenNganlo: '',
+    tenDiemKho: '',
+    tenNhaKho: '',
+    tenNganLo: '',
     chiPhiThucHienTrongNam: '',
     chiPhiThucHienNamTruoc: '',
     tongGiaTri: '',
@@ -79,11 +81,15 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
@@ -99,9 +105,6 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNhaKho(null),
-        // this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -117,7 +120,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -221,10 +224,11 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async search() {
     let body = {
+      "capDvis": ['3'],
       "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
         ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maDvi": this.userInfo.MA_DVI,
       "maNganKho": this.nganLo,
       "maNganlo": this.nganLo,
@@ -400,8 +404,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search();
   }
 
   deleteSelect() {
@@ -425,9 +430,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple(dataDelete);
+            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -465,12 +471,12 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinh: '',
+      soQuyetDinhNhap: '',
       soBb: '',
       ngayNghiemThuShow: '',
-      tenDiemkho: '',
-      tenNhakho: '',
-      tenNganlo: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganLo: '',
       chiPhiThucHienTrongNam: '',
       chiPhiThucHienNamTruoc: '',
       tongGiaTri: '',

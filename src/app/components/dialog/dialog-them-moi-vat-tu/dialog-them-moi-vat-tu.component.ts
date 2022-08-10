@@ -10,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { HelperService } from 'src/app/services/helper.service';
+import { UserLogin } from 'src/app/models/userlogin';
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -21,12 +22,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   thongtinDauThau: DanhSachGoiThau
   loaiVthh: any;
   dataChiTieu: any;
-  donGia: any;
+  dataEdit: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listOfData: any[] = [];
   tableExist: boolean = false;
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
+  userInfo: UserLogin;
+
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -42,11 +45,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       tenDvi: [null],
       goiThau: [null, [Validators.required]],
       tenCcuc: [null],
-      donGia: [null, [Validators.required]],
+      donGia: [0, [Validators.required]],
       soLuong: [null, [Validators.required]],
       thanhTien: [null],
       bangChu: [null],
-      children: [null]
+      children: [null],
+      diaDiemNhap: [null]
     });
   }
 
@@ -60,8 +64,13 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   save() {
+    let dataDiemNhap = '';
+    this.listOfData.forEach(item => {
+      dataDiemNhap += item.tenDiemKho + "(" + item.soLuong + "), "
+    })
     this.formData.patchValue({
-      children: this.listOfData
+      children: this.listOfData,
+      diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
     })
     this._modalRef.close(this.formData);
   }
@@ -69,20 +78,44 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   onCancel() {
     this._modalRef.destroy();
   }
+
   initForm() {
-    this.formData.get('donGia').setValue(this.donGia);
+    this.userInfo = this.userService.getUserLogin();
     this.thongtinDauThau = new DanhSachGoiThau();
     this.loadDonVi();
+    if (this.dataEdit) {
+      console.log(this.dataEdit);
+      this.formData.patchValue({
+        maDvi: this.dataEdit.maDvi,
+        tenDvi: this.dataEdit.tenDvi,
+        goiThau: this.dataEdit.goiThau,
+        tenCcuc: this.dataEdit.tenCcuc,
+        soLuong: this.dataEdit.soLuong,
+        donGia: this.dataEdit.donGia,
+        thanhTien: this.dataEdit.thanhTien
+      })
+      this.changeChiCuc(this.dataEdit.maDvi);
+      this.listOfData = this.dataEdit.children
+    }
+    this.checkDisabledSave();
   }
 
   async loadDonVi() {
     this.listChiCuc = [];
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-      this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+    let body = {
+      trangThai: "01",
+      maDviCha: this.userInfo.MA_DVI
+    };
+    let res = await this.donViService.getAll(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listChiCuc = res.data;
     }
-    if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-      this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-    }
+    // if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    //   this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+    // }
+    // if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+    //   this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+    // }
 
   }
 
@@ -92,10 +125,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   async changeChiCuc(event) {
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
-    let data = this.listChiCuc.filter(item => item.maDvi === event);
-    this.formData.get('tenDvi').setValue(data[0].tenDonVi);
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
+      this.formData.get('tenDvi').setValue(res.data.tenTongKho);
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
           'value': res.data.child[i].maDiemkho,
@@ -103,15 +135,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           'diaDiemNhap': res.data.child[i].diaChi,
         };
         this.listDiemKho.push(item);
-        this.filterData();
       }
     }
-  }
-
-  filterData() {
-    this.listOfData.forEach(data => {
-      this.listDiemKho = this.listDiemKho.filter(item => item.value !== data.maDiemKho);
-    })
   }
 
   changeDiemKho(index?) {
@@ -126,7 +151,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       if (diemKho.length > 0) {
         this.thongtinDauThau.tenDiemKho = diemKho[0].text;
         this.thongtinDauThau.diaDiemNhap = diemKho[0].diaDiemNhap;
-        console.log(this.thongtinDauThau);
       }
     }
   }
@@ -141,7 +165,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.updateEditCache;
       this.thongtinDauThau = new DanhSachGoiThau();
       this.disableChiCuc();
-      this.filterData();
+      // this.filterData();
       this.checkDisabledSave();
     }
   }
@@ -172,6 +196,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
             sumVal +
             parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
           this.formData.get('soLuong').setValue(sumVal);
+          this.calculatorThanhTien();
         }
       }
     }
@@ -182,7 +207,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        1000 *
         +this.formData.get('donGia').value,
     });
     this.formData.patchValue({

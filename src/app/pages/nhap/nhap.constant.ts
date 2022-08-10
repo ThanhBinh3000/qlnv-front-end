@@ -35,7 +35,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_dieu_chuyen',
-    title: 'Nhập điều chuyển nội bộ',
+    title: 'Nhập khác',
     url: `/${NHAP_MAIN_ROUTE}/khac`,
     dropdown: 'khac',
     idHover: 'khac',
@@ -43,8 +43,8 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
-    title: 'Nhập khác',
-    url: `/${NHAP_MAIN_ROUTE}/khac`,
+    title: 'Hợp đồng/Bảng kê, phiếu mua hàng(mua lẻ)',
+    url: `/${NHAP_MAIN_ROUTE}/hop-dong`,
     dropdown: 'khac',
     idHover: 'khac',
     hasTab: true,

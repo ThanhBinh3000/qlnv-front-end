@@ -1,4 +1,4 @@
-import { ItemDetail } from './itemDetail';
+import { ItemDetail } from './ItemDetail';
 
 export class KeHoachLuongThuc {
   id: number;

@@ -1579,6 +1579,10 @@ input.form-control,
   align-items: center;
 }
 
+.filter-in-table .ant-select-selector {
+  height: ($input-h + 4) $i;
+}
+
 .ant-input-group-addon .ant-btn,
 .ant-input {
   min-width: $input-h $i;
@@ -2812,24 +2816,24 @@ h3 {
 }
 
 %nuttron {
-  border: solid 1px $border-btn;
+  // border: solid 1px $border-btn;
   width: $input-h;
   height: $input-h;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #fefefe !important;
+  // background: #fefefe !important;
   margin: 0 2px;
 
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1);
     display: inline-flex;
     text-shadow: 1px 1px 2px rgb(0 0 0 / 20%);
     opacity: 1;
-    background: $maincolor $i;
-    color: #fff $i;
-    border-color: $maincolor $i;
+    // background: $maincolor $i;
+    // color: #fff $i;
+    // border-color: $maincolor $i;
   }
 }
 
@@ -3197,6 +3201,15 @@ td {
   &:before {
     background: $bg-nhat;
   }
+
+  .tab-link {
+    color: #fff;
+  }
+
+  .tab-link-2 {
+    color: #444;
+  }
+
 }
 
 .ant-modal .ant-tabs-content-holder,
@@ -4416,14 +4429,4 @@ td nz-upload .upload-content .card-content {
 .ant-input[readonly] {
   color: #444;
   font-weight: 400;
-}
-
-.input-error-validate:not(.ant-select-disabled) .ant-select-selector 
-{
-  border-color: #ff4d4f $i; 
-}
-
-.input-error-validate
-{
-  border-color: #ff4d4f $i; 
 }

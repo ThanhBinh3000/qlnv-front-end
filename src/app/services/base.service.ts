@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { OldResponseData } from '../interfaces/response';
+import { Observable } from 'rxjs';
 
 export abstract class BaseService {
   table = '';
@@ -12,9 +13,15 @@ export abstract class BaseService {
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
+  // local = 'http://localhost:9898'
 
   getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getTreeAll(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca-tree`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -25,6 +32,11 @@ export abstract class BaseService {
 
   update(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  approve(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/phe-duyet`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -46,5 +58,15 @@ export abstract class BaseService {
   timTheoMa(ma): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/TimTheoMa?ma=${ma}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
+
+  export(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
+
+  deleteMuti(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/multi`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

@@ -214,4 +214,4 @@ export const LIST_VAT_TU_HANG_HOA = [
     title: 'Vật tư'
   }
 ]
-
+export const STATUS_DA_DUYET = "19";

@@ -382,9 +382,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.chiTieuKeHoachNamService.deleteMultiple(dataDelete);
+            let res = await this.chiTieuKeHoachNamService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

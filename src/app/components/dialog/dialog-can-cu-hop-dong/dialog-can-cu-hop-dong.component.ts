@@ -19,7 +19,8 @@ export class DialogCanCuHopDongComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   text: string = "";
-
+  hopDongList: any[] = [];
+  data: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -30,6 +31,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.hopDongList = this.data;
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -40,18 +42,25 @@ export class DialogCanCuHopDongComponent implements OnInit {
   }
 
   handleOk(item: any) {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-    this._modalRef.close(item);
+    if (item.checked) {
+      if (this.hopDongList.findIndex(hd => hd.id == item.id) == -1) {
+        this.hopDongList.push(item);
+      }
+    } else {
+      this.hopDongList = this.hopDongList.filter(hd => hd.id !== item.id);
+    }
   }
 
-  handleCancel() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-  }
 
   onCancel() {
-    this._modalRef.close();
+    this.hopDongList.forEach(hd => {
+      this.dataTable.forEach(dt => {
+        if (hd.id === dt.id) {
+          hd.hhDdiemNhapKhoList = dt.hhDdiemNhapKhoList
+        }
+      })
+    })
+    this._modalRef.close(this.hopDongList);
   }
 
   async search() {
@@ -60,7 +69,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
 
     let body = {
       "denNgayKy": "",
-      "loaiVthh": "00",
+      "loaiVthh": "",
       "maDvi": "",
       "maDviB": "",
       "orderBy": "",
@@ -69,11 +78,11 @@ export class DialogCanCuHopDongComponent implements OnInit {
         "limit": this.pageSize,
         "orderBy": "",
         "orderType": "",
-        "page": this.page
+        "page": this.page - 1
       },
       "soHd": this.text,
       "str": "",
-      "trangThai": "",
+      "trangThai": "02",
       "tuNgayKy": ""
     }
     let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
@@ -81,6 +90,13 @@ export class DialogCanCuHopDongComponent implements OnInit {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+        this.dataTable.forEach(hd => {
+          this.data.forEach(dt => {
+            if (dt.id == hd.id) {
+              hd.checked = true;
+            }
+          });
+        })
       }
       this.totalRecord = data.totalElements;
     } else {

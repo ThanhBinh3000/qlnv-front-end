@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuanLyBangKeCanHangService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-hang';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyBangKeCanHang', '');
@@ -17,15 +17,20 @@ export class QuanLyBangKeCanHangService extends BaseService {
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt?`
     if (body.denNgay)
-      url_ += 'denNgay=' + encodeURIComponent('' + body.denNgay) + '&';
+      url_ += 'denNgayNhap=' + encodeURIComponent('' + body.denNgay) + '&';
+    if (body.capDvis) {
+      url_ += 'capDvis=' + encodeURIComponent('' + body.capDvis) + '&';
+    }
     if (body.maDonVi)
       url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.maHang)
-      url_ += 'maHang=' + encodeURIComponent('' + body.maHang) + '&';
+    if (body.maVatTuCha)
+      url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
+    if (body.soQdNhap)
+      url_ += 'soQdNhap=' + encodeURIComponent('' + body.soQdNhap) + '&';
     if (body.soBangKe)
       url_ += 'soBangKe=' + encodeURIComponent('' + body.soBangKe) + '&';
     if (body.tuNgay)
-      url_ += 'tuNgay=' + encodeURIComponent('' + body.tuNgay) + '&';
+      url_ += 'tuNgayNhap=' + encodeURIComponent('' + body.tuNgay) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
@@ -40,7 +45,7 @@ export class QuanLyBangKeCanHangService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
@@ -54,8 +59,18 @@ export class QuanLyBangKeCanHangService extends BaseService {
     return this.httpClient.delete<any>(url).toPromise();
   }
 
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/status`;
     return this.httpClient.put<any>(url, body).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

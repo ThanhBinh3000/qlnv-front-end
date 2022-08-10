@@ -1,20 +1,19 @@
 <nz-card class="pd-10 mb-16 mt-16">
   <div class="specical-title">
-    Thông tin Phụ lục QĐ phê duyệt KHLCNT
+    Thông tin phụ lục phê duyệt kế hoạch lựa chọn nhà thầu
   </div>
   <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
     <thead>
       <tr>
         <th [width]="218">Chi cục</th>
         <th>Tên gói thầu</th>
-        <th>Điểm kho</th>
+        <th>Địa điểm nhập kho</th>
         <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
         <th>Đã lên kế hoạch mua</th>
         <th>Số lượng tấn</th>
         <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
         <th>Thành tiền</th>
         <th>Bằng chữ</th>
-        <th>Giá trị bảo đảm dự thầu (%)</th>
       </tr>
     </thead>
     <tbody>
@@ -25,22 +24,21 @@
               (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">
               {{ item.tenDvi }}
             </td>
-            <td>{{ item.goiThau }}</td>
+            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>
             <td>{{ item.tenDiemKho }}</td>
             <td>{{ item.soLuongTheoChiTieu }}</td>
             <td>{{ item.soLuongTheoChiTieu }}</td>
             <td>{{ item.soLuong }}</td>
             <td>{{ item.donGia }}</td>
-            <td>{{ item.soLuong * 1000 * item.donGia | number: '1.0-1'}}</td>
-            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * 1000 * item.donGia) : '' }}</td>
-            <td></td>
+            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
           </tr>
         </ng-container>
       </ng-container>
     </tbody>
   </nz-table>
 </nz-card>
-<nz-card class="pd-10 mb-16">
+<nz-card *ngIf="isEdit" class="pd-10 mb-16">
   <div class="specical-title">
     Chỉnh sửa thông tin phụ lục QĐ phê duyệt khlcnt
   </div>
@@ -48,48 +46,42 @@
     <div nz-col [nzSpan]="18">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
-        <input nz-input [(ngModel)]="data.tenDvi" />
+        <input nz-input [(ngModel)]="dataEdit.tenGthau" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Chi Cục </nz-form-label>
-        <input nz-input [(ngModel)]="data.tenDvi" />
+        <input nz-input [(ngModel)]="dataEdit.tenDvi" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
-        <input nz-input [(ngModel)]="data.tenDuAn" />
+        <input nz-input [(ngModel)]="dataEdit.soLuong" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
-        <input nz-input [(ngModel)]="data.donGia" />
+        <input nz-input [(ngModel)]="dataEdit.donGia" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
-        <input nz-input [(ngModel)]="data.donGia" />
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="4">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Giá trị đảm bảo dự thầu (%) </nz-form-label>
-        <input nz-input [(ngModel)]="data.donGia" />
+        <input nz-input [(ngModel)]="dataEdit.tongTien" />
       </nz-form-item>
     </div>
   </div>
   <nz-table #groupingTable #editRowTable nzBordered class="nowrap mt-16 flex-card p-lr16 pd-10"
-    [nzData]="data?.children" [nzFrontPagination]="false" [nzShowPagination]="false">
+    [nzData]="dataEdit?.children" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
-        <th> Điểm kho </th>
+        <th [width]="300"> Điểm kho </th>
         <th> Địa điểm kho </th>
-        <th> Số lượng </th>
-        <th> Hành động </th>
+        <th [width]="150"> Số lượng </th>
+        <th [width]="60"> Hành động </th>
       </tr>
     </thead>
     <tbody>
@@ -104,7 +96,7 @@
           <nz-input-number nz-input [(ngModel)]="addGoiThau.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
           </nz-input-number>
         </td>
-        <td class="text-right">
+        <td>
           <a (click)="addNew()" class="save">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
@@ -118,7 +110,7 @@
           <td>{{ data.maDiemKho }}</td>
           <td>{{ data.diaDiemNhap }}</td>
           <td>{{ data.soLuong | number: '1.0-1' }}</td>
-          <td class="text-right">
+          <td>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
             </a>
@@ -139,7 +131,7 @@
               [nzSize]="'small'">
             </nz-input-number>
           </td>
-          <td class="text-right">
+          <td>
             <a (click)="saveEdit(i)" class="save">
               <i class="icon htvbdh_tcdt_save"></i>
             </a>
@@ -164,13 +156,17 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="onCancel()" class="modal__button--save">
-        <i nz-icon nzType="save"></i>
-        Lưu
-      </button>
       <button nz-button (click)="onCancel()" class="modal__button--cancel">
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-        Đóng
+        Hủy bỏ
+      </button>
+      <button *ngIf="isEdit" nz-button (click)="onApplyEdit()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Áp dụng chỉnh sửa
+      </button>
+      <button *ngIf="isEdit" nz-button (click)="onCancel()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
       </button>
     </div>
   </div>

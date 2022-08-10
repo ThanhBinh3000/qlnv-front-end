@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -11,6 +12,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'quan-ly-bang-ke-can-hang',
@@ -23,7 +25,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   searchFilter = {
     soQuyetDinh: '',
     soBangKe: '',
-    ngayNhapXuat: '',
+    ngayNhap: '',
     soHopDong: '',
   };
 
@@ -47,12 +49,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinh: '',
-    soPhieu: '',
+    soQuyetDinhNhap: '',
+    soPhieuNhapKho: '',
     ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganLo: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -63,6 +66,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -88,7 +92,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -116,13 +120,15 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   async search() {
     let param = {
-      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+      "capDvis": '3',
+      "denNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
+      "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
       "maHang": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,
-      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
     }
     let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -146,7 +152,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     this.searchFilter = {
       soQuyetDinh: '',
       soBangKe: '',
-      ngayNhapXuat: '',
+      ngayNhap: '',
       soHopDong: '',
     };
   }
@@ -245,14 +251,6 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  // async changeDiemKho() {
-  //   let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
-  //   this.searchFilter.maNhaKho = null;
-  //   if (diemKho && diemKho.length > 0) {
-  //     await this.loadNhaKho(diemKho[0].id);
-  //   }
-  // }
-
   async loadNganLo() {
     let body = {
       "maNganLo": null,
@@ -281,12 +279,41 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     this.isView = isView;
   }
 
-  showList() {
+  async showList() {
     this.isDetail = false;
+    await this.search()
   }
 
   export() {
-
+    if (this.totalRecord && this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "denNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
+          "maDvi": this.userInfo.MA_DVI,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soBangKe": this.searchFilter.soBangKe,
+          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "str": null,
+          "trangThai": null,
+          "tuNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
+        }
+        this.quanLyBangKeCanHangService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-bang-ke-can-hang.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
@@ -310,12 +337,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple(dataDelete);
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quanLyBangKeCanHangService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -350,12 +378,18 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinh: '',
-      soPhieu: '',
+      soQuyetDinhNhap: '',
+      soPhieuNhapKho: '',
       ngayNhapKho: '',
       tenDiemKho: '',
       tenNhaKho: '',
       tenNganLo: '',
+      tenTrangThai: '',
     }
   }
+
+  print() {
+
+  }
 }
+

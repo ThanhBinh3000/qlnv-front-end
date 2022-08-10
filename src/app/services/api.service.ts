@@ -9,12 +9,12 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   login(body) {
-    const url = `${environment.AUTHEN_API}/qlnv-gateway/qlnv-security/login`;
+    const url = `${environment.AUTHEN_API}/qlnv-security/login`;
     return this.httpClient.post(url, body);
   }
 
   refreshToken(body) {
-    const url = `${environment.AUTHEN_API}/qlnv-gateway/TokenRefresh`;
+    const url = `${environment.AUTHEN_API}/TokenRefresh`;
     return this.httpClient.post(url, body);
   }
 }

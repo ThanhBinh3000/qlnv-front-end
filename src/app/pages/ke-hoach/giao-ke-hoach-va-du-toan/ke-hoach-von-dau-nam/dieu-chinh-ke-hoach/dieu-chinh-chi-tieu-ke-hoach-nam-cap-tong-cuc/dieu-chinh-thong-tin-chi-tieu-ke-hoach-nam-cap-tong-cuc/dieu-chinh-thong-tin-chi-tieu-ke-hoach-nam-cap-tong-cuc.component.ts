@@ -17,7 +17,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { ItemDetail } from 'src/app/models/itemDetail';
+import { ItemDetail } from 'src/app/models/ItemDetail';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { KeHoachVatTu } from 'src/app/models/KeHoachVatTu';
@@ -84,7 +84,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
 
   taiLieuDinhKemList: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   dataTag: any[] = [];
 

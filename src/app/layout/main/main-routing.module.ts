@@ -40,21 +40,21 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
       },
-      {
-        path: MAIN_ROUTES.muaHang,
-        loadChildren: () =>
-          import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
-      },
+      // {
+      //   path: MAIN_ROUTES.muaHang,
+      //   loadChildren: () =>
+      //     import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
+      // },
       {
         path: MAIN_ROUTES.luuKho,
         loadChildren: () =>
           import('../../pages/luu-kho/luu-kho.module').then((m) => m.LuuKhoModule),
       },
-      {
-        path: MAIN_ROUTES.banHang,
-        loadChildren: () =>
-          import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
-      },
+      // {
+      //   path: MAIN_ROUTES.banHang,
+      //   loadChildren: () =>
+      //     import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
+      // },
       {
         path: MAIN_ROUTES.khknBaoQuan,
         loadChildren: () =>
@@ -87,24 +87,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: MAIN_ROUTES.qlkhVonPhi,
+        path: MAIN_ROUTES.quanTriDanhMuc,
         loadChildren: () =>
-          import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(
-            (m) => m.QuanLyKeHoachVonPhiModule,
-          ),
-      },
-      {
-        path: MAIN_ROUTES.qlcapVonPhi,
-        loadChildren: () => 
-          import('../../pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.module').then(
-            (m) => m.QuanLyKeHoachVonPhiHangModule,
-          ),
-      },
-      {
-        path: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
-        loadChildren: () =>
-          import('../../pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.module').then(
-            (m) => m.QuanLyThongTinQuyetToanVonPhiHangDtqgModule,
+          import('../../pages/quan-tri-danh-muc/quantridanhmuc.module').then(
+            (m) => m.QuanTriDanhMucModule,
           ),
       },
     ],

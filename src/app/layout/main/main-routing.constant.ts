@@ -2,6 +2,8 @@ import { RouteInfo } from './main-routing.type';
 
 export const MAIN_ROUTES = {
   kehoach: 'kehoach',
+  capVon: 'cap-von',
+  quyetToan: 'quyet-toan',
   muaHang: 'mua-hang',
   nhap: 'nhap',
   nhapKhac: 'nhap-khac',
@@ -14,44 +16,52 @@ export const MAIN_ROUTES = {
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   quantrihethong: 'quan-tri-he-thong',
-  qlkhVonPhi: 'qlkh-von-phi',
-  qlcapVonPhi: 'qlcap-von-phi-hang',
-  qlthongTinQuyetToanVonPhi: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
+  dieuChuyen: 'dieu-chuyen',
+  suaChua: 'sua-chua',
+  quanTriDanhMuc: 'quan-tri-danh-muc',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
   {
-    title: 'Kế hoạch và vốn DTQG',
+    title: 'Kế hoạch, vốn và dự toán NSNN',
     route: `${MAIN_ROUTES.kehoach}`,
   },
   {
-    title: 'Lựa chọn nhà cung cấp & ký hợp đồng',
-    route: `${MAIN_ROUTES.muaHang}`,
+    title: 'Tình hình cấp vốn, phí hàng',
+    route: `${MAIN_ROUTES.capVon}`,
   },
+  {
+    title: 'Quyết toán vốn, phí hàng',
+    route: `${MAIN_ROUTES.quyetToan}`,
+  },
+  // {
+  //   title: 'Mua hàng DTQG',
+  //   route: `${MAIN_ROUTES.muaHang}`,
+  // },
   {
     title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
   },
   // {
-  //   title: 'Nhập khác',
-  //   route: `${MAIN_ROUTES.nhapKhac}`,
+  //   title: 'Bán hàng DTQG',
+  //   route: MAIN_ROUTES.banHang,
   // },
-  {
-    title: 'Lưu kho & QL chất lượng',
-    route: MAIN_ROUTES.luuKho,
-  },
-  {
-    title: 'Bán hàng DTQG',
-    route: MAIN_ROUTES.banHang,
-  },
   {
     title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
   },
-  // {
-  //   title: 'Xuất khác',
-  //   route: MAIN_ROUTES.xuatKhac,
-  // },
+  {
+    title: 'Điều chuyển nội bộ',
+    route: MAIN_ROUTES.dieuChuyen,
+  },
+  {
+    title: 'Sửa chữa hàng DTQG',
+    route: MAIN_ROUTES.suaChua,
+  },
+  {
+    title: 'Lưu kho & QL chất lượng',
+    route: MAIN_ROUTES.luuKho,
+  },
   {
     title: 'QL Định mức nhập, xuất, bảo quản',
     route: MAIN_ROUTES.dinhMucNhapXuat,
@@ -65,23 +75,15 @@ export const LIST_PAGES: RouteInfo[] = [
     route: MAIN_ROUTES.quanLyKhoTang,
   },
   {
-    title: 'Quản trị hệ thống',
-    route: MAIN_ROUTES.quantrihethong,
-  },
-  {
     title: 'Quản trị danh mục',
-    route: MAIN_ROUTES.danhMuc,
+    route: MAIN_ROUTES.quanTriDanhMuc,
   },
-  {
-    title: 'Quản lý kế hoạch vốn phí',
-    route: MAIN_ROUTES.qlkhVonPhi,
-  },
-  {
-    title:'Quản lý cấp vốn phí hàng',
-    route: MAIN_ROUTES.qlcapVonPhi,
-  },
-  {
-    title:'Quản lý thông tin quyết toán vốn phí hàng DTQG',
-    route: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
-  },
+  // {
+  //   title: 'QTDM',
+  //   route: MAIN_ROUTES.danhMuc,
+  // },
+  // {
+  //   title: 'QTHT',
+  //   route: MAIN_ROUTES.quantrihethong,
+  // },
 ];

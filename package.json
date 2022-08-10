@@ -2,8 +2,8 @@
   "name": "qlnv",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --port 2022 --disable-host-check",
+    "ng": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng",
+    "start": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -33,6 +33,7 @@
     "ng2-pdf-viewer": "^7.0.2",
     "ngx-print": "^1.2.1",
     "ngx-spinner": "^12.0.0",
+    "react-facebook-login": "^4.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "vn-num2words": "^1.0.4",

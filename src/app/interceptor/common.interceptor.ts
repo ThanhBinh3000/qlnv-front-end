@@ -34,8 +34,7 @@ export class CommonInterceptor implements HttpInterceptor {
       if (
         !request.url.includes('UploadFile') &&
         !request.url.includes('import') &&
-        !request.url.includes('upload-attachment')&&
-        !request.url.includes('upload')
+        !request.url.includes('upload-attachment')
       ) {
         headers = headers.append('content-type', 'application/json');
       }
