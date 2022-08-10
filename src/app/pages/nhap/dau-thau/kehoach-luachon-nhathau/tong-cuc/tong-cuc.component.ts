@@ -9,7 +9,6 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./tong-cuc.component.scss']
 })
 export class TongCucComponent implements OnInit {
-  loaiVthhSelected: string
   constructor(
     private danhMucService: DanhMucService
   ) {
@@ -33,6 +32,7 @@ export class TongCucComponent implements OnInit {
     }
   }
 
+  loaiVthhSelected: string
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }

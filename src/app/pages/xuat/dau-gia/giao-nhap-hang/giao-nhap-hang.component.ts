@@ -26,7 +26,13 @@ export class GiaoNhapHangComponent implements OnInit {
     this.getCount();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        value: null,
+        ma: ""
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -53,6 +59,11 @@ export class GiaoNhapHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 
 }
