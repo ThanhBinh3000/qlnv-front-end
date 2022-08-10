@@ -26,6 +26,13 @@ export class QuanTriHeThongNewComponent implements OnInit, AfterViewInit {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+    this.routes.forEach(route => {
+      if (this.routerUrl.includes(route.idHover)) {
+        route.isSelected = true;
+      } else {
+        route.isSelected = false;
+      }
+    })
   }
 
   ngAfterViewInit() {
