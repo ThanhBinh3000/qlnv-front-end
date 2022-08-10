@@ -21,6 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
+import { DataService } from '../../data.service';
 export class ItemData {
   id!: any;
   stt: any;
@@ -169,6 +170,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     private notification: NzNotificationService,
     private location: Location,
     private modal: NzModalService,
+    private dataSource: DataService,
   ) { }
 
   async ngOnInit() {
@@ -223,20 +225,16 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-      this.ngayTao = this.newDate;
-      this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.maPa = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
+      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+      await this.dataSource.currentData.subscribe(obj => {
+        this.lstCtietBcao = obj.lstCtiets;
+        this.maDviTien = obj.maDviTien;
+        this.maPa = obj.maPa;
+        this.maPaCha = obj.maPaCha;
+        this.trangThaiBanGhi = obj?.trangThai;
+        this.namPa = obj?.namPa;
+        this.updateEditCache();
+      })
       this.namPa = this.newDate.getFullYear();
     }
     this.getStatusButton();
@@ -1638,5 +1636,4 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     }
     window.open(url, '_blank');
   }
-
 }

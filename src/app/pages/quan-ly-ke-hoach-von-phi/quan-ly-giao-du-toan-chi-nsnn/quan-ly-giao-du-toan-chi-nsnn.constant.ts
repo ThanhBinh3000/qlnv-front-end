@@ -69,8 +69,8 @@ export const TT_CHAP_NHAN = '8';
 export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Nhập quyết định giao dự toán chi NSNN',
-    description: 'Nhập quyết định giao dự toán chi NSNN',
+    title: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
+    description: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
       NHAN_VIEN_TC,
@@ -81,8 +81,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
-    description: 'Tìm kiếm Phương án phân bổ giao dự toán chi NSNN cho các đơn vị',
+    title: 'DANH SÁCH PHƯƠNG ÁN PHÂN BỔ GIAO DỰ TOÁN CHI NSNN TẠI ĐƠN VỊ',
+    description: 'DANH SÁCH PHƯƠNG ÁN PHÂN BỔ GIAO DỰ TOÁN CHI NSNN TẠI ĐƠN VỊ',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -96,8 +96,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm giao dự toán chi NSNN của các đơn vị',
-    description: 'Tìm kiếm giao dự toán chi NSNN của các đơn vị',
+    title: 'DANH SÁCH GIAO DỰ TOÁN CHI NSNN CHO CÁC ĐƠN VỊ CẤP DƯỚI',
+    description: 'DANH SÁCH GIAO DỰ TOÁN CHI NSNN CHO CÁC ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-giao-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -111,8 +111,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm nhận dự toán chi NSNN của các đơn vị',
-    description: 'Tìm kiếm nhận dự toán chi NSNN của các đơn vị',
+    title: 'DANH SÁCH NHẬN DỰ TOÁN CHI NSNN CỦA CÁC ĐƠN VỊ',
+    description: 'DANH SÁCH NHẬN DỰ TOÁN CHI NSNN CỦA CÁC ĐƠN VỊ',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
       NHAN_VIEN_CC,
@@ -122,8 +122,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
-    description: 'Danh sách duyệt báo cáo phân bổ giao, điều chỉnh dự toán',
+    title: 'DANH SÁCH DUYỆT BÁO CÁO PHÂN BỔ GIAO, ĐIỀU CHỈNH DỰ TOÁN TỪ CÁC ĐƠN VỊ CẤP DƯỚI',
+    description: 'DANH SÁCH DUYỆT BÁO CÁO PHÂN BỔ GIAO, ĐIỀU CHỈNH DỰ TOÁN TỪ CÁC ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan`,
     Role: [
       NHAN_VIEN_TC
@@ -132,8 +132,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Kiểm tra rà soát báo cáo',
-    description: 'Kiểm tra rà soát báo cáo',
+    title: 'KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
+    description: 'KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
     Role: [
 
@@ -145,8 +145,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Phê duyệt phương án tại đơn vị',
-    description: 'Phê duyệt phương án tại đơn vị',
+    title: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
+    description: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/duyet-phuong-an-tai-don-vi`,
     Role: [
       TRUONG_BP_TC,
