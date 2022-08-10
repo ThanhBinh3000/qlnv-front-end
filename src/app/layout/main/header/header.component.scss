@@ -67,7 +67,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100px;
+      // max-width: 100px;
     }
   }
 
@@ -195,7 +195,13 @@ nz-header.ant-layout-header {
     height: 32px;
     display: flex;
     align-items: center;
+
+    &.prev,
+    &.next {
+      height: 30px;
+    }
   }
+
 
   .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a {
     height: 32px;
