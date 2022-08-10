@@ -3,26 +3,41 @@
     <div class="header-text">
       <div class="text-container">
         <div class="title-chi-tieu">
-          <span class="du-thao-va-lanh-dao-duyet">
-            Dự Thảo</span>
+          <span *ngIf="idInput"
+            [ngClass]="isStatus !== globals.prop.NHAP_DU_THAO ? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
+            {{convertTrangThai(isStatus)}}</span>
+          <span *ngIf="!idInput"></span>
           <span>Tạo thẻ kho</span>
         </div>
       </div>
     </div>
-    <div class="btn-group" *ngIf="isTaoTheKho">
+    <div class="btn-group" *ngIf="isTaoTheKho || !isTaoTheKho && idInput">
       <button type="button" class="btn btn-sub" (click)="huy()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData()"
+        *ngIf=" idInput !==null && isStatus !== globals.prop.NHAP_DU_THAO">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()">
+      <button type="button" class="btn btn-sub"
+        *ngIf="idInput && isStatus === globals.prop.NHAP_DU_THAO && userService.isCuc()">
+        <i class="icon htvbdh_dakyduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button type="button" class="btn btn-sub"
+        *ngIf="idInput && isStatus === globals.prop.NHAP_DU_THAO && userService.isCuc()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối</span>
+      </button>
+      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()"
+        *ngIf="idInput ===null && userService.isChiCuc() || idInput !==null && isStatus == globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub xanh" (click)="luu()">
+      <button type="button" class="btn btn-sub xanh" (click)="luu()"
+        *ngIf="idInput ===null&& userService.isChiCuc() || idInput !==null &&  isStatus == globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
@@ -187,14 +202,14 @@
     </div>
   </div>
 
-  <div class="tao-the-kho" *ngIf="!isTaoTheKho">
+  <div class="tao-the-kho" *ngIf=" idInput === null ">
     <button type="button" class="btn btn-sub xanh" (click)="taoTheKho()">
       <i class="icon htvbdh_luu-them-moi"></i>
       <span>Tạo thẻ kho</span>
     </button>
   </div>
 
-  <nz-card class="mt-16 flex-card data-table card-border-content" *ngIf="isTaoTheKho">
+  <nz-card class="mt-16 flex-card data-table card-border-content" *ngIf="isTaoTheKho || !isTaoTheKho && idInput ">
     <nz-table nzTitle="Danh sách giao dịch Nhập/xuất" #basicTable class="nowrap" [nzData]="dataTable"
       [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>

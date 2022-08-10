@@ -28,6 +28,11 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
   }
+
+  exportCT(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/listct`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });

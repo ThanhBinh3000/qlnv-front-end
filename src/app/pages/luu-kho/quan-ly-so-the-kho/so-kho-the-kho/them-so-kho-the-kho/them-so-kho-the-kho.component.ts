@@ -16,6 +16,8 @@ import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kh
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-them-so-kho-the-kho',
   templateUrl: './them-so-kho-the-kho.component.html',
@@ -29,6 +31,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   @Input() idInput: number;
   @Input() isCheck: boolean;
+  @Input() isStatus: any;
   dataTable: INhapXuat[];
   formData: FormGroup;
   page: number = 1;
@@ -62,7 +65,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private notification: NzNotificationService,
-    private userService: UserService,
+    public userService: UserService,
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
@@ -75,15 +78,18 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      console.log(this.idInput, this.isCheck);
+      console.log(this.idInput, this.isCheck, this.isStatus);
       if (this.idInput) {
+        let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
+        console.log(res);
+
         if (this.isCheck) {
-          console.log('trường hợp đã lấy được id và đang luồng edit' + this.isCheck);
+          console.log('trường hợp đã lấy được id và đang luồng edit ' + this.isCheck);
         } else {
-          console.log('trường hợp đã lấy được id và đang luồng view' + this.isCheck);
+          console.log('trường hợp đã lấy được id và đang luồng view ' + this.isCheck);
         }
       } else {
-        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới' + this.idInput);
+        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới ' + this.idInput);
       }
       // this.getDataDetail(this.idInput)
       this.userInfo = this.userService.getUserLogin();
@@ -254,8 +260,27 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   huy() {
     this.onClose.emit();
   }
+  // nút xuất file chi tiết thẻ kho
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show()
+      try {
+        let body = this.formData.value;
+        this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'chi-tiet-the-kho.xlsx')
+        });
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+    }
 
-  exportData() { }
+
+  }
 
   luuVaDuyet() { }
 

@@ -61,6 +61,7 @@ export class SoKhoTheKhoComponent implements OnInit {
 
   idSelected: number = 0
   isCheck: boolean = false
+  isStatus: any
   getCount = new EventEmitter<any>();
 
   constructor(
@@ -244,7 +245,7 @@ export class SoKhoTheKhoComponent implements OnInit {
       try {
         let body = this.formData.value;
         this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
-          saveAs(blob, 'danh-sach-the-kho.xlsx')
+          saveAs(blob, 'danh-sach-so-kho.xlsx')
         });
         this.spinner.hide();
       } catch (e) {
@@ -285,10 +286,11 @@ export class SoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  viewDetail(id: number, check: boolean) {
+  viewDetail(id: number, check: boolean, status: any) {
     this.isAddNew = true;
     this.idSelected = id;
     this.isCheck = check
+    this.isStatus = status
   }
   xoaItem(item: any) {
     this.modal.confirm({
