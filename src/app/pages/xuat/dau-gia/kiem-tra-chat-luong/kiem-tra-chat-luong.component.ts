@@ -19,7 +19,13 @@ export class KiemTraChatLuongComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        value: null,
+        ma: ""
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -29,5 +35,10 @@ export class KiemTraChatLuongComponent implements OnInit {
         });
       }
     }
+  }
+
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 }

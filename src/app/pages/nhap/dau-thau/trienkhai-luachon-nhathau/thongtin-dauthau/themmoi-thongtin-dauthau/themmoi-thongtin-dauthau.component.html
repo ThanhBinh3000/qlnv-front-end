@@ -1,7 +1,7 @@
 <div class="luong-thuc__danh-sach them-moi-thong-tin-dau-thau">
     <div class="contentBor chi-tieu__body">
         <div class="contentDetail">
-            <div class="main-content">
+            <div class="main-content bg-trang">
                 <div class="title-chi-tieu d-flex d-flex justify-content-between align-items-center">
                     <div class="title-chi-tieu">
                         <span [ngClass]="styleStatus">
@@ -251,7 +251,7 @@
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianDthau"
-                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
+                                                nzFormat="HH:mm dd/MM/yyyy" [nzShowTime]="true"
                                                 [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
                                             </nz-date-picker>
                                         </nz-input-group>
@@ -270,7 +270,7 @@
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianMthau"
-                                                nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
+                                                nzFormat="HH:mm dd/MM/yyyy" [nzShowTime]="true"
                                                 [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01' ">
                                             </nz-date-picker>
                                         </nz-input-group>

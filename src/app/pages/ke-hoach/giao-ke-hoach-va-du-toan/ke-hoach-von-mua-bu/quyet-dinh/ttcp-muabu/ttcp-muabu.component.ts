@@ -37,11 +37,11 @@ export class TtcpMuabuComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    nam: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
     taiLieuDinhKem: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
   idSelected: number = 0;
   isViewDetail: boolean = false;
@@ -97,8 +97,8 @@ export class TtcpMuabuComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
+      body.ngayQdTu = body.ngayQd[0];
+      body.ngayQdDen = body.ngayQd[1];
     }
     body.paggingReq = {
       limit: this.pageSize,
@@ -127,11 +127,9 @@ export class TtcpMuabuComponent implements OnInit {
 
   xoa() {
     let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.trangThai == "00") {
-          dataDelete.push(item.id);
-        }
+    if (this.setOfCheckedId && this.setOfCheckedId.size > 0) {
+      this.setOfCheckedId.forEach((id) => {
+          dataDelete.push(id);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -269,7 +267,6 @@ export class TtcpMuabuComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    console.log(this.idSelected)
   }
 
   xoaItem(item: any) {

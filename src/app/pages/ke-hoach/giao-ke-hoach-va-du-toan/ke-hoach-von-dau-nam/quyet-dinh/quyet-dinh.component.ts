@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./quyet-dinh.component.scss']
 })
 export class QuyetDinhComponent implements OnInit {
-
+  tabSelected = 'TTCP';
   constructor() { }
 
   ngOnInit() {
   }
-
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
 }

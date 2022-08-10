@@ -36,11 +36,11 @@ export class BtcMuaBuComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    nam: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
     taiLieuDinhKem: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
   idSelected: number = 0;
   isViewDetail: boolean = false;
@@ -96,8 +96,8 @@ export class BtcMuaBuComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
+      body.ngayQdTu = body.ngayQd[0];
+      body.ngayQdDen = body.ngayQd[1];
     }
     body.paggingReq = {
       limit: this.pageSize,
@@ -126,11 +126,9 @@ export class BtcMuaBuComponent implements OnInit {
 
   xoa() {
     let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.trangThai == "00") {
-          dataDelete.push(item.id);
-        }
+    if (this.setOfCheckedId && this.setOfCheckedId.size > 0) {
+      this.setOfCheckedId.forEach((id) => {
+        dataDelete.push(id);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -155,14 +153,14 @@ export class BtcMuaBuComponent implements OnInit {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
           } catch (e) {
-            console.log('error: ', e);
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           } finally {
             this.spinner.hide();
           }
         },
       });
-    } else {
+    }
+    else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -267,7 +265,6 @@ export class BtcMuaBuComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    console.log(this.idSelected)
   }
 
   xoaItem(item: any) {

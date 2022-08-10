@@ -8,6 +8,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./trienkhai-luachon-nhathau.component.scss']
 })
 export class TrienkhaiLuachonNhathauComponent implements OnInit {
+  loaiVthhSelected: string
   tabs: any[] = [];
   constructor(
     private danhMucService: DanhMucService,
@@ -32,5 +33,9 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
         });
       }
     }
+  }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 }
