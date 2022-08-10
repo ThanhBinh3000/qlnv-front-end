@@ -15,7 +15,10 @@ export class ChucNangKiemTraComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.typeVthh);
-
+  }
+  tabSelected = 0;
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 
 }
