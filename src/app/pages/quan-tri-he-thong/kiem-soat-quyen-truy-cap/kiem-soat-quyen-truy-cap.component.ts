@@ -7,7 +7,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogQuyenComponent } from 'src/app/components/dialog/dialog-quyen/dialog-quyen.component';
 import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -28,11 +27,11 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 @Component({
-  selector: 'app-quan-ly-quyen',
-  templateUrl: './quan-ly-quyen.component.html',
-  styleUrls: ['./quan-ly-quyen.component.scss'],
+  selector: 'app-kiem-soat-quyen-truy-cap',
+  templateUrl: './kiem-soat-quyen-truy-cap.component.html',
+  styleUrls: ['./kiem-soat-quyen-truy-cap.component.scss'],
 })
-export class QuanLyQuyenComponent implements OnInit {
+export class KiemSoatQuyenTruyCapComponent implements OnInit {
   @Input() typeVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -505,23 +504,6 @@ export class QuanLyQuyenComponent implements OnInit {
     //   });
     // }
 
-    modalTuChoi.afterClose.subscribe((data) => {
-      this.search();
-    })
-  }
-  themQuyen(data?: any, isView?: boolean) {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Quyền',
-      nzContent: DialogQuyenComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        isView: isView,
-      },
-    });
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
     })
