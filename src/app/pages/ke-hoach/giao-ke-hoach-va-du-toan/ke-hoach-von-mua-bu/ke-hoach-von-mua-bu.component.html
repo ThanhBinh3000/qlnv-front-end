@@ -1,26 +1,22 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-1">
-  <nz-tab [nzTitle]="title_QD">
-    <ng-template #title_QD>
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
       Quyết định
-    </ng-template>
-    <ng-template nz-tab>
-      <app-quyet-dinh></app-quyet-dinh>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_chi_tieu_kh">
-    <ng-template #title_chi_tieu_kh>
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
       Chỉ tiêu kế hoạch
-    </ng-template>
-    <ng-template nz-tab>
-      <app-chi-tieu-ke-hoach></app-chi-tieu-ke-hoach>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="title_dc_chi_tieu_kh" class="vat-tu__container">
-    <ng-template #title_dc_chi_tieu_kh>
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
       Điều chỉnh chỉ tiêu KH
-    </ng-template>
-    <ng-template nz-tab>
-      <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
-    </ng-template>
-  </nz-tab>
-</nz-tabset>
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-quyet-dinh></app-quyet-dinh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-chi-tieu-ke-hoach></app-chi-tieu-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
+</ng-container>

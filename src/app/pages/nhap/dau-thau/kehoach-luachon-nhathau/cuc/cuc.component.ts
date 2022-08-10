@@ -36,4 +36,9 @@ export class CucComponent implements OnInit {
     }
   }
 
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
+
 }

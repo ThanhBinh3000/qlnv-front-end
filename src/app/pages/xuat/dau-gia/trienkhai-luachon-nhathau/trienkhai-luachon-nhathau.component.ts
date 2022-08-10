@@ -34,4 +34,9 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
       }
     }
   }
+
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
 }

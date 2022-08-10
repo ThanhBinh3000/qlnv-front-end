@@ -1,4 +1,4 @@
-<div class="them-quyet-dinh-ttcp">
+<div class="them-quyet-dinh-ttcp bg-trang">
   <div class="header">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -89,11 +89,9 @@
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
-            <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-              [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-              (removeDataEvent)="deleteTaiLieuDinhKemTag($event)" (downloadFileEvent)="downloadFileKeHoach($event)"
-              typeFile="tai-lieu-dinh-kem">
-            </multiple-tag>
+            <div class="list-file">
+              <file-list [data]="taiLieuDinhKemList"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </form>
@@ -101,10 +99,10 @@
   </nz-card>
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-tabset nzType="card" class="mt-16 tab-level-3">
-      <nz-tab [nzTitle]="'Mua tăng'">
+      <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
         <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
       </nz-tab>
-      <nz-tab [nzTitle]="'Xuất giảm'">
+      <!-- <nz-tab [nzTitle]="'Xuất giảm'">
         <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất bán'">
@@ -112,7 +110,7 @@
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
         <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
-      </nz-tab>
+      </nz-tab> -->
     </nz-tabset>
   </nz-card>
 </div>

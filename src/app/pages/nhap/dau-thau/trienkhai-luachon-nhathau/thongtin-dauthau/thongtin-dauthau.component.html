@@ -1,7 +1,7 @@
 <div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
-      <div class="main-content">
+      <div class="main-content bg-trang">
         <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="2">
@@ -12,7 +12,7 @@
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số quyết định phê duyệt KHLCNT</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPd" />
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày quyết định</label>
@@ -153,7 +153,7 @@
 
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.goiThau }}</td>
+                    <td>{{ data.tenGthau }}</td>
                     <td>{{ data.tenDvi }}</td>
                     <td>{{ data.soQdPdKhlcnt }}</td>
                     <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>

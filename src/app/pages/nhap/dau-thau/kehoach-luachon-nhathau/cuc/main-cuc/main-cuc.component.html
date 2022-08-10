@@ -1,20 +1,16 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-2 chuc-nang-nhap-kho">
-    <nz-tab [nzTitle]="deXuat">
-        <ng-template #deXuat>
+<nz-affix [nzOffsetTop]="98" class="level2">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)">
             Đề xuất kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
-        </ng-template>
-        <ng-template nz-tab>
-            <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
-        </ng-template>
-    </nz-tab>
-    <nz-tab [nzTitle]="quyetDinh">
-        <ng-template #quyetDinh>
+        </li>
+        <li nz-menu-item (click)="selectTab(1)">
             Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
-        </ng-template>
-        <ng-template nz-tab>
-            <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
-        </ng-template>
-    </nz-tab>
-</nz-tabset>
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+    <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
+</ng-container>

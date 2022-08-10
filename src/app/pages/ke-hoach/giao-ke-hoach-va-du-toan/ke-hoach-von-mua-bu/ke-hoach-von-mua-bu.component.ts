@@ -12,4 +12,9 @@ export class KeHoachVonMuaBuComponent implements OnInit {
   ngOnInit() {
   }
 
+  tabSelected = 0;
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
+
 }

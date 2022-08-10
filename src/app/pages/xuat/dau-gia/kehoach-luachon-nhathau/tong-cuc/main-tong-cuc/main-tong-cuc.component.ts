@@ -15,4 +15,9 @@ export class MainTongCucComponent implements OnInit {
 
   }
 
+  tabSelected: number = 0;
+  selectTab(tab: number) {
+    this.tabSelected = tab;
+  }
+
 }

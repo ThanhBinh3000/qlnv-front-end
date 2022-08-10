@@ -1,34 +1,25 @@
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { ObservableService } from 'src/app/services/observable.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
-import VNnum2words from 'vn-num2words';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DauThauService } from 'src/app/services/dauThau.service';
 
@@ -140,16 +131,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         lyDoHuy: ['']
       }
     );
-    // this.formData.controls['soQdPdKhlcnt'].valueChanges.subscribe(value => {
-    //   if (value) {
-    //     this.onChangeSoQdKh(value);
-    //   }
-    // });
-    // this.formData.controls['idGoiThau'].valueChanges.subscribe(value => {
-    //   if (value) {
-    //     this.onChangeGoiThau(value);
-    //   }
-    // });
   }
 
   async getListPheDuyetLcnt() {
@@ -188,6 +169,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       await this.getDetail(this.idInput);
     }
     this.setTitle();
+    this.getListQdPdKhlcnt();
     this.spinner.hide();
   }
 
@@ -396,10 +378,15 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       namKhoach: this.formData.get('namKhoach').value,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
-      trangThai: "11"
+      trangThai: "11",
+      lastest: 1,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(body);
-    this.listQdPdKhlcnt = res.data;
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    this.listQdPdKhlcnt = res.data.content;
   }
 
   async onChangeSoQdKh(event) {
@@ -412,11 +399,16 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       maDvi: this.userInfo.MA_DVI
     };
     const data = this.listQdPdKhlcnt.filter(item => item.soQd == event);
-    if (data.length > 0) {
-      this.formData.patchValue({
-        ngayQdPdKhlcnt: data[0].ngayQd,
-        loaiVthh: data[0].loaiVthh
-      });
+    if (this.userService.isCuc()) {
+      if (data.length > 0) {
+        this.formData.patchValue({
+          ngayQdPdKhlcnt: data[0].ngayQd,
+          loaiVthh: data[0].loaiVthh,
+          tenVthh: data[0].tenVthh,
+          cloaiVthh: data[0].cloaiVthh,
+          tenCloaiVthh: data[0].tenCloaiVthh
+        });
+      }
     }
     let res = await this.ttinDauThauService.getAll(body);
     this.listGoiThau = res.data;

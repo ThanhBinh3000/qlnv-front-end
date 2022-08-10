@@ -32,15 +32,10 @@ export class ThongtinDauthauComponent implements OnInit {
     private dauThauService: DauThauService,
     private modal: NzModalService,
     public userService: UserService,
-    private route: ActivatedRoute,
     private helperService: HelperService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
+
   }
-  tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
@@ -48,7 +43,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   searchFilter = {
     namKhoach: dayjs().get('year'),
-    soQdPd: '',
+    soQd: '',
     ngayQd: '',
     loaiVthh: '',
     maDvi: '',
@@ -129,7 +124,7 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      soQdPd: this.searchFilter.soQdPd,
+      soQd: this.searchFilter.soQd,
       maDvi: this.searchFilter.maDvi
     }
     let res = await this.dauThauService.search(body);
@@ -152,20 +147,6 @@ export class ThongtinDauthauComponent implements OnInit {
   searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
     return this.danhSachDauThauService.search(body);
-  }
-
-  async selectTabData(tab: string) {
-    this.spinner.show();
-    try {
-      this.tabSelected = tab;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
   }
 
   async changePageIndex(event) {
@@ -205,7 +186,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKhoach = dayjs().get('year');
-    this.searchFilter.soQdPd = null;
+    this.searchFilter.soQd = null;
     this.searchFilter.ngayQd = null;
     this.searchFilter.maDvi = null;
     this.searchFilter.trichYeu = null;
@@ -268,7 +249,7 @@ export class ThongtinDauthauComponent implements OnInit {
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
-          soQdPd: this.searchFilter.soQdPd,
+          soQd: this.searchFilter.soQd,
           maDvi: this.searchFilter.maDvi
         };
         this.dauThauService
