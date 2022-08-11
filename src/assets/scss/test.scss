@@ -1685,13 +1685,13 @@ span.ant-descriptions-item-content {
 
   .ant-table-tbody {
     >tr {
-      &:nth-child(even) {
-        background: $color-fb;
-      }
+      // &:nth-child(even) {
+      //   background: $color-fb;
+      // }
 
-      &:nth-child(odd) {
-        background: #fff;
-      }
+      // &:nth-child(odd) {
+      //   background: #fff;
+      // }
 
       &>td {
 

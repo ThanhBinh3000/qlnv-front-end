@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-theo-phuong-thuc-dau-thau',
@@ -8,9 +9,16 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TheoPhuongThucDauThauComponent implements OnInit {
   @Input() typeVthh: string;
 
-  constructor() { }
+  constructor(
+    public globals: Globals
+  ) { }
 
   ngOnInit() {
+
+  }
+  tabSelected: number = 0;
+  selectTab(tab: number) {
+    this.tabSelected = tab;
   }
 
 }

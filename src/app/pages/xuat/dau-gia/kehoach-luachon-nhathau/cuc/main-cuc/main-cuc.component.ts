@@ -13,4 +13,9 @@ export class MainCucComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  tabSelected: number = 0;
+  selectTab(tab: number) {
+    this.tabSelected = tab;
+  }
+
 }
