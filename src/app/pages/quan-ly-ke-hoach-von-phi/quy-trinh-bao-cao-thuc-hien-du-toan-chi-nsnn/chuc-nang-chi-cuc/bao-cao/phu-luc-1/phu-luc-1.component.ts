@@ -123,6 +123,33 @@ export class PhuLucIComponent implements OnInit {
 
     async ngOnInit() {
         this.spinner.show();
+        await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.noiDungs = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+
+        this.noiDungs.forEach(item => {
+            if (!item.maCha) {
+                this.noiDungFull.push({
+                    ...item,
+                    tenDm: item.giaTri,
+                    ten: item.giaTri,
+                    level: 0,
+                    idCha: 0,
+                })
+            }
+        })
+
+        this.addListNoiDung(this.noiDungFull);
+        //debugger
         this.id = this.data?.id;
         this.idBcao = this.data?.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
@@ -182,33 +209,6 @@ export class PhuLucIComponent implements OnInit {
                 checked: false,
             })
         })
-
-        await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    this.noiDungs = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-
-        await this.noiDungs.forEach(item => {
-            if (!item.maCha) {
-                this.noiDungFull.push({
-                    ...item,
-                    tenDm: item.giaTri,
-                    ten: item.giaTri,
-                    level: 0,
-                    idCha: 0,
-                })
-            }
-        })
-
-        await this.addListNoiDung(this.noiDungFull);
 
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {

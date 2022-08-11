@@ -1057,12 +1057,12 @@ export class BaoCaoComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
-
 		//get file cong van url
 		const file: any = this.fileDetail;
 		if (file) {
 			baoCaoTemp.congVan = await this.uploadFile(file);
 		}
+		console.log(baoCaoTemp.congVan);
 		if (!baoCaoTemp.congVan) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
 			return;
@@ -1220,13 +1220,17 @@ export class BaoCaoComponent implements OnInit {
 		// day file len server
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
-		upfile.append('folder', this.baoCao?.maBcao + '/' + this.maDonViTao);
+		upfile.append('folder', this.maDonViTao + '/' + this.baoCao?.maBcao);
+		console.log(upfile);
 		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
 			(data) => {
 				const objfile = {
-					fileName: data.filename,
-					fileSize: data.size,
-					fileUrl: data.url,
+					// fileName: data.filename,
+					// fileSize: data.size,
+					// fileUrl: data.url,
+					fileName: file.name,
+					fileSize: file.size,
+					fileUrl: this.maDonViTao + '/' + this.baoCao?.maBcao,
 				}
 				return objfile;
 			},

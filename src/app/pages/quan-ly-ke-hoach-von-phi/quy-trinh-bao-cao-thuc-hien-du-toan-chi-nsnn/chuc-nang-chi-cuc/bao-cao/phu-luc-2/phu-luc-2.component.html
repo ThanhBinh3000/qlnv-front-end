@@ -45,8 +45,7 @@
             <th class="th" rowspan="4" [hidden]="status" nzRight></th>
             <th class="th" rowspan="4" [hidden]="status" nzRight></th>
             <th class="th" rowspan="4" [hidden]="status" nzRight>
-                <label nz-checkbox [(ngModel)]="allChecked"
-                    (ngModelChange)="updateAllChecked()">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                 </label>
             </th>
 
@@ -102,7 +101,7 @@
         </tr>
         <tr>
             <th>
-                Cộng
+                Số tiền
             </th>
             <th>
                 Tỷ lệ(%)
@@ -127,7 +126,7 @@
                 Tỷ lệ(%)
             </th>
             <th>
-                Cộng
+                Số tiền
             </th>
             <th>
                 Tỷ lệ(%)
@@ -181,7 +180,7 @@
             <td [hidden]="status" nzRight></td>
             <td [hidden]="status" nzRight></td>
         </tr>
-        
+
         <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.level! * 8">
@@ -247,23 +246,20 @@
                     {{displayValue(editCache[data.id].data.dtoanSdungNamTcong)}}
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonNsnn"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonNsnn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonSn"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonSn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonQuy"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonQuy"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
@@ -271,48 +267,41 @@
                     {{displayValue(editCache[data.id].data.giaiNganThangTcong)}}
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangTcongTle">
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangTcongTle">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnn"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnnTle">
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnnTle">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSn"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSn"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSnTle">
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSnTle">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuy"
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuy"
                         (ngModelChange)="changeModel(data.id)">
                     </nz-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input"
-                        [nzSize]="'small'" [nzFormatter]="formatter" [nzPrecision]="4"
-                        [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuyTle">
+                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
+                        [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuyTle">
                     </nz-input-number>
                 </td>
                 <td>
@@ -385,5 +374,5 @@
     <button type="button" class="btn btn-sub" (click)="export()" [hidden]="status">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Export</span>
-      </button>
+    </button>
 </div>
