@@ -8,6 +8,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./dieu-chinh.component.scss']
 })
 export class DieuChinhComponent implements OnInit {
+  loaiVthhSelected: string
   tabs: any[] = [];
   constructor(
     private danhMucService: DanhMucService,
@@ -17,7 +18,13 @@ export class DieuChinhComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        value: null,
+        ma: ""
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -27,5 +34,9 @@ export class DieuChinhComponent implements OnInit {
         });
       }
     }
+  }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 }

@@ -4,6 +4,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 @Component({
   selector: 'file-list',
   templateUrl: './file-list.component.html',
@@ -21,6 +23,8 @@ export class FileListComponent implements OnInit {
     public globals: Globals,
     public userService: UserService,
     private uploadFileService: UploadFileService,
+    private notification: NzNotificationService,
+
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +73,7 @@ export class FileListComponent implements OnInit {
 
   addFile() {
     if (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '') {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng nhập file");
       return;
     }
     if (!this.data) {

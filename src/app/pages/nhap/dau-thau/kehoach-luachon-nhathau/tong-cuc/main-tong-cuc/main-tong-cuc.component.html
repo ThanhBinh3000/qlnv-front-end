@@ -1,8 +1,29 @@
-<nz-tabset id="selectedTab" nzType="card" class="mt-16 tab-level-2 no-scroll">
+<nz-affix [nzOffsetTop]="98" class="level2">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)">
+            Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
+        </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Đề xuất kế hoạch lựa chọn nhà thầu
+        </li>
+        <li nz-menu-item (click)="selectTab(2)">
+            Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+    <app-tong-hop-khlcnt [loaiVthh]="loaiVthh"></app-tong-hop-khlcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+    <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
+</ng-container>
+<!-- <nz-tabset id="selectedTab" nzType="card" class="mt-16 tab-level-2 no-scroll">
     <nz-tab [nzTitle]="title_tongHop" *ngIf="loaiVthh != '02'">
         <ng-template #title_tongHop>
             Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
         </ng-template>
         <ng-template nz-tab>
             <app-tong-hop-khlcnt [loaiVthh]="loaiVthh"></app-tong-hop-khlcnt>
@@ -11,7 +32,6 @@
     <nz-tab [nzTitle]="title_keHoach">
         <ng-template #title_keHoach>
             Đề xuất kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
         </ng-template>
         <ng-template nz-tab>
             <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh"></app-danhsach-kehoach-lcnt>
@@ -20,10 +40,9 @@
     <nz-tab [nzTitle]="title_quyetDinh">
         <ng-template #title_quyetDinh>
             Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
-            (<span class="number-title-tab">10</span>)
         </ng-template>
         <ng-template nz-tab>
             <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="loaiVthh"></app-quyetdinh-pheduyet-khlcnt>
         </ng-template>
     </nz-tab>
-</nz-tabset>
+</nz-tabset> -->

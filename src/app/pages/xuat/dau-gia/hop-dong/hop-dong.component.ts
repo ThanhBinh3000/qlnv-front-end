@@ -34,4 +34,8 @@ export class HopDongComponent implements OnInit {
       }
     }
   }
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
 }

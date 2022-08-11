@@ -97,8 +97,8 @@ export class TtcpComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     if (body.ngayQd != null) {
-      body.tuNgay = body.ngayQd[0];
-      body.denNgay = body.ngayQd[1];
+      body.ngayQdTu = body.ngayQd[0];
+      body.ngayQdDen = body.ngayQd[1];
     }
     body.paggingReq = {
       limit: this.pageSize,

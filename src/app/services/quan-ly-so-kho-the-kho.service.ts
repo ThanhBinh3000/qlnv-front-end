@@ -13,6 +13,11 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     super(httpClient, 'QuanLySoKhoTheKho', '');
   }
 
+  pheDuyet(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/phe-duyet`
+    return this.httpClient.put<any>(url, body).toPromise();
+  }
+
   them(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho`
     return this.httpClient.post<any>(url, body).toPromise();

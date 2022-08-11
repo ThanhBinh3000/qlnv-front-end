@@ -1,4 +1,16 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-1">
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
+      {{tab.giaTri}}
+    </li>
+  </ul>
+</nz-affix>
+<ng-container>
+  <!-- <app-theo-phuong-thuc-dau-thau [typeVthh]="loaiVthhSelected"></app-theo-phuong-thuc-dau-thau> -->
+  <app-chuc-nang-nhap-kho [typeVthh]="loaiVthhSelected"></app-chuc-nang-nhap-kho>
+</ng-container>
+
+<!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">
   <nz-tab [nzTitle]="title_tat_ca">
     <ng-template #title_tat_ca>
       Tất cả
@@ -17,4 +29,4 @@
       <app-chuc-nang-nhap-kho typeVthh="{{tab.ma}}"></app-chuc-nang-nhap-kho>
     </ng-template>
   </nz-tab>
-</nz-tabset>
+</nz-tabset> -->

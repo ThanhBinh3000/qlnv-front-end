@@ -1,5 +1,5 @@
-<ng-container *ngIf="!isAddNew ; else templateThemmoi">
-  <div class="so-kho-the-kho">
+<ng-container *ngIf="!isAddNew; else templateThemmoi">
+  <div class="so-kho-the-kho bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
         <div class="search__body" nz-row [nzGutter]="24">
@@ -214,10 +214,10 @@
             <td>{{ data.loKho }}</td>
             <td>{{ convertTrangThai(data.trangThai) }}</td>
             <td style="text-align: left; white-space: nowrap;">
-              <a (click)="viewDetail(data.id, false,data.trangThai)">
+              <a (click)="viewDetail(data.id, true,data.trangThai)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true,data.trangThai)" *ngIf="data.trangThai === globals.prop.DU_THAO ">
+              <a (click)="viewDetail(data.id, false,data.trangThai)" *ngIf="data.trangThai === globals.prop.DU_THAO ">
                 <i class="fa fa-pencil"></i>
               </a>
               <a (click)="xoaItem(data.id)" *ngIf="data.trangThai === globals.prop.DU_THAO ">
@@ -247,6 +247,10 @@
   </div>
 </ng-container>
 <ng-template #templateThemmoi>
+
   <app-them-so-kho-the-kho [isStatus]="isStatus" [isCheck]="isCheck" [idInput]="idSelected" (close)="onClose()">
   </app-them-so-kho-the-kho>
 </ng-template>
+
+<!-- <app-them-so-kho-the-kho [isCheck]="isCheck" [idInput]="idSelected" (close)="onClose()"></app-them-so-kho-the-kho>
+</ng-template> -->

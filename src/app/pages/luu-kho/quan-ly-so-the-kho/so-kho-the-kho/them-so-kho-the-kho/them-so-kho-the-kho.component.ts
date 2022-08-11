@@ -11,13 +11,14 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service'
 import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -26,12 +27,10 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
 })
 export class ThemSoKhoTheKhoComponent implements OnInit {
   @Input('dsTong') dsTong: any;
-  @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
-  @Input('dsChungLoaiHangHoa') dsChungLoaiHangHoa: any[];
   @Output('close') onClose = new EventEmitter<any>();
 
-  @Input() idInput: number;
-  @Input() isCheck: boolean;
+  @Input() idInput: number; // id
+  @Input() isCheck: boolean;// check
   @Input() isStatus: any;
   dataTable: INhapXuat[];
   formData: FormGroup;
@@ -72,10 +71,11 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     private donviService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
-    private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals: Globals,
+    private modal: NzModalService,
+
   ) { }
 
 
@@ -115,11 +115,12 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   isDetail(): boolean {
-    if (this.isStatus === this.globals.prop.BAN_HANH) {
-      return (
-        !this.isCheck
-      );
-    }
+    // if (this.isStatus === this.globals.prop.BAN_HANH) {
+    //   return (
+    //     !this.isCheck
+    //   );
+    // }
+
 
     return (
       this.isCheck
@@ -156,7 +157,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       idNganKho: [null, [Validators.required]],
       idNganLo: [null, [Validators.required]],
       tonDauKy: [1, [Validators.required]],
-      donViTinh: [null],
+      donViTinh: ['bộ'],
     });
   }
 
@@ -275,7 +276,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   changeChungLoaiHangHoa(event) {
-    const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ten === event);
+    const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ma === event);
     this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
   }
 
@@ -304,45 +305,170 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   }
 
-  luuVaDuyet() { }
-
-  async luu() {
-    console.log(this.formData.value);
-
+  async luu(isDuyet: boolean) {
     const body = {
       "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
-      "denNgay": "2-2-2022",
+      "denNgay": this.formData.value.denNgay,
       "ds": [
         {
           "dienGiai": "t",
           "ghiChu": "t",
           "loaiPhieu": "t",
-          "ngay": "2-2-2022",
+          "ngay": "01-02-2020",
           "soLuong": 10,
           "soPhieu": "t",
           "ton": 10
         }
       ],
-      "id": 10,
       "maDvi": this.formData.value.idNganLo,
       "nam": this.formData.value.nam,
       "tenDvi": this.formData.value.idDonVi,
       "tonDauKy": 10,
-      "tuNgay": "2-2-2022"
+      "tuNgay": this.formData.value.tuNgay
     }
-    console.log(this.formData.value.tuNgay);
-    console.log(this.detail.ngayTao);
 
-    const res = await this.quanLySoKhoTheKhoService.them(body);
 
-    console.log(res);
+
+
+    try {
+      const res = await this.quanLySoKhoTheKhoService.them(body);
+
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+
+        if (isDuyet) {
+          return res.data.id;
+        }
+
+        this.huy();
+      }
+
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
 
   }
+
+  luuVaDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          const id = await this.luu(true);
+          let body = {
+            id: id,
+            lyDo: null,
+            trangThai: '01',
+          };
+
+          let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
+
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.GUI_DUYET_SUCCESS);
+            this.huy();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  pheDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDo: null,
+            trangThai: '02',
+          };
+          let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
+
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+            this.huy();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: text,
+            trangThai: '03',
+          };
+          let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
+
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.huy();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
+
 
   taoTheKho() {
     this.isTaoTheKho = true;
     this.loadSoPhieuNhapXuat();
+    this.isCheck = true;
 
+    this.formData.value.tuNgay = dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY");
+    this.formData.value.denNgay = dayjs(this.formData.value.denNgay).format("DD-MM-YYYY");
   }
 
   async loadSoPhieuNhapXuat() {
@@ -365,6 +491,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       'paggingReq.page': 0
     }
 
+    console.log(bodyNhapNho);
+
     let body = {
       "paggingReq.limit": 20,
       "paggingReq.page": 0
@@ -373,6 +501,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     try {
       const resNhapKho = await this.quanLyPhieuNhapKhoService.timKiem(bodyNhapNho);
       // const resSoHang = await this.quanLyHangTrongKhoService.timkiem(body);
+
+      console.log(resNhapKho);
 
       let listNhapXuat = [];
 
