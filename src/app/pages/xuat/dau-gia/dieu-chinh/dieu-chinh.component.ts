@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 
@@ -7,7 +7,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   templateUrl: './dieu-chinh.component.html',
   styleUrls: ['./dieu-chinh.component.scss']
 })
-export class DieuChinhComponent implements OnInit {
+export class DieuChinhComponent implements OnInit , OnChanges {
   tabs: any[] = [];
   constructor(
     private danhMucService: DanhMucService,
@@ -20,7 +20,7 @@ export class DieuChinhComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: ""
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -37,5 +37,9 @@ export class DieuChinhComponent implements OnInit {
   loaiVthhSelected: string
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.ngOnInit();
   }
 }
