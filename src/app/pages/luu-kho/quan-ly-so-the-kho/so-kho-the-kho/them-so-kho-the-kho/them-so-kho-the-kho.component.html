@@ -117,7 +117,7 @@
                   </nz-form-label>
                   <nz-select formControlName="idChungLoaiHangHoa" [(ngModel)]="detail.maChungLoaiHangHoa"
                     (ngModelChange)="changeChungLoaiHangHoa($event)" [nzDisabled]="isDetail()">
-                    <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                    <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -169,7 +169,7 @@
                   </nz-form-label>
                   <nz-select formControlName="idNganLo" [(ngModel)]="detail.maNganLo" (ngModelChange)="changeNganLo()"
                     [nzDisabled]="isDetail()">
-                    <nz-option *ngFor="let item of listNganLo" [nzValue]="item.title" [nzLabel]="item.title">
+                    <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>

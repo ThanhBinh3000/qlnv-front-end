@@ -156,7 +156,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       idNganKho: [null, [Validators.required]],
       idNganLo: [null, [Validators.required]],
       tonDauKy: [1, [Validators.required]],
-      donViTinh: [null, [Validators.required]],
+      donViTinh: [null],
     });
   }
 
@@ -279,19 +279,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
   }
 
-
-  // onChangeDonVi(id: string) {
-  //   const donVi = this.dsDonVi.find((item) => item.id === Number(id));
-  //   if (donVi) {
-  //     const result = {
-  //       ...this.donviService.layDsPhanTuCon(this.dsTong, donVi),
-  //     };
-  //     this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
-  //   } else {
-  //     this.dsNganLo = [];
-  //   }
-  // }
-
   huy() {
     this.onClose.emit();
   }
@@ -321,6 +308,34 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   async luu() {
     console.log(this.formData.value);
+
+    const body = {
+      "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
+      "denNgay": "2-2-2022",
+      "ds": [
+        {
+          "dienGiai": "t",
+          "ghiChu": "t",
+          "loaiPhieu": "t",
+          "ngay": "2-2-2022",
+          "soLuong": 10,
+          "soPhieu": "t",
+          "ton": 10
+        }
+      ],
+      "id": 10,
+      "maDvi": this.formData.value.idNganLo,
+      "nam": this.formData.value.nam,
+      "tenDvi": this.formData.value.idDonVi,
+      "tonDauKy": 10,
+      "tuNgay": "2-2-2022"
+    }
+    console.log(this.formData.value.tuNgay);
+    console.log(this.detail.ngayTao);
+
+    const res = await this.quanLySoKhoTheKhoService.them(body);
+
+    console.log(res);
 
   }
 
