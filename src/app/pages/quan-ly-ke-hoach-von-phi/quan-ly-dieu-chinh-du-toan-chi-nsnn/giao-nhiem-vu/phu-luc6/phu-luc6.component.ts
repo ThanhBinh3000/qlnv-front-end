@@ -608,14 +608,14 @@ export class PhuLuc6Component implements OnInit {
       return;
     }
     if(
-      this.editCache[id].data.cphiTcong <0 ||
+      // this.editCache[id].data.cphiTcong <0 ||
       this.editCache[id].data.cphiNtruoc <0 ||
       this.editCache[id].data.cphiNnay <0 ||
       this.editCache[id].data.kphiQtoan <0 ||
-      this.editCache[id].data.kphiChuaQtoanCong <0 ||
+      // this.editCache[id].data.kphiChuaQtoanCong <0 ||
       this.editCache[id].data.kphiChuaQtoanKpTchi <0 ||
       this.editCache[id].data.kphiChuaQtoanKpTkiem <0 ||
-      this.editCache[id].data.soChuaQtoan <0 ||
+      // this.editCache[id].data.soChuaQtoan <0 ||
       this.editCache[id].data.dtoan2021ThanhQtoan2020 <0
     ){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)

@@ -21,5 +21,6 @@ export const MESSAGEVALIDATE = {
     EXIST_REPORT: "Báo cáo đã tồn tại",
     WRONG_DAY:'"Đến ngày" cần lớn hơn "Ngày lập từ"',
     EXIST_CONTRACT: "Hợp đồng không tồn tại",
+    LOCAL_EXIST: "Địa phương nhận đã tồn tại",
     NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",
   };

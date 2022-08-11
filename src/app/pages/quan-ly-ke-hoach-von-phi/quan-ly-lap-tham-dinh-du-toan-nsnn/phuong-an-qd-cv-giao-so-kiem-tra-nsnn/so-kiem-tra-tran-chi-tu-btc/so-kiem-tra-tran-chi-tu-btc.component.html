@@ -135,9 +135,9 @@
 												</div>
 											</div>
 										</td>
-										<td>{{data.tongSo}}</td>
-										<td>{{data.nguonNsnn}}</td>
-										<td>{{data.nguonKhac}}</td>
+										<td>{{displayValue(data.tongSo)}}</td>
+										<td>{{displayValue(data.nguonNsnn)}}</td>
+										<td>{{displayValue(data.nguonKhac)}}</td>
 										<td [hidden]="status">
 											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
 										</td>
@@ -166,17 +166,17 @@
 											</div>
 										</td>
 										<td>
-											{{data.tongSo}}
+											{{displayValue(data.tongSo)}}
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
+											<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 												[(ngModel)]="editCache[data.id].data.nguonNsnn"
 												[class]="(editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0) && editCache[data.id].data.nguonNsnn >= 0?'' : 'input-error-validate'"
 												(ngModelChange)="changeModel(data.id)">
 											</nz-input-number>
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
+											<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
 												[(ngModel)]="editCache[data.id].data.nguonKhac"
 												[class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) && editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'"
 												(ngModelChange)="changeModel(data.id)">

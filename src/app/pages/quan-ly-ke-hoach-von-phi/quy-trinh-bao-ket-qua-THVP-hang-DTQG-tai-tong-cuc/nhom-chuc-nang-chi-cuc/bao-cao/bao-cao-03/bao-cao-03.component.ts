@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
+import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK } from "../../../../../../Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 
@@ -98,6 +98,7 @@ export class BaoCao03Component implements OnInit {
     ttGiaHtoanXk = null;
     ttGiaBanTteXk = null;
     ttClechGiaTteVaGiaHtoanXk = null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -1003,5 +1004,9 @@ export class BaoCao03Component implements OnInit {
                 this.ttClechGiaTteVaGiaHtoanXk += Number(element.ttClechGiaTteVaGiaHtoan);
             }
         })
+    }
+
+    displayValue(num: number): string{
+        return displayNumber(num);
     }
 }

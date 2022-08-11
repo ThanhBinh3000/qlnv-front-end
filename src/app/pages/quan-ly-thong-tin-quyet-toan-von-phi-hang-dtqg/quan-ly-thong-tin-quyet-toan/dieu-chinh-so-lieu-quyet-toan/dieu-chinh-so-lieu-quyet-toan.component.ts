@@ -1240,7 +1240,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
       trangThai: this.trangThaiBaoCao,
       congVan: this.congVan,
       maDvi: this.maDviTao,
-      namQtoan: this.namQtoan,
+      namQtoan: response.namBcao,
       maBcao: maBcaoNew,
       maDchinh: this.maDchinh,
       maPhanBcao: this.maPhanBcao,

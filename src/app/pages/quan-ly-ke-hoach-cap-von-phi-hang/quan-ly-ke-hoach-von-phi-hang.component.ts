@@ -16,7 +16,7 @@ import { ROUTE_LIST_KE_HOACH } from './quan-ly-ke-hoach-von-phi-hang.constant';
 })
 export class QuanLyKeHoachVonPhiHangComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
+  isSuperAdmin = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
   constructor(private userService: UserService) {}

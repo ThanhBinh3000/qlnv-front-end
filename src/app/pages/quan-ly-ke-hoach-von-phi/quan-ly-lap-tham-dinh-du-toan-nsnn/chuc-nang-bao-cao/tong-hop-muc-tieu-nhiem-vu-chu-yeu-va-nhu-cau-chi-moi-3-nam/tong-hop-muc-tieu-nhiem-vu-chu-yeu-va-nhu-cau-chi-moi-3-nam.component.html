@@ -94,15 +94,15 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th>{{total.ncauChiTongSo}}</th>
-                <th>{{total.ncauChiTrongDoChiCs}}</th>
-                <th>{{total.ncauChiTrongDoChiMoi}}</th>
-                <th>{{total.ncauChiChiaRaDtuPtrien}}</th>
-                <th>{{total.ncauChiChiaRaChiCs1}}</th>
-                <th>{{total.ncauChiChiaRaChiMoi1}}</th>
-                <th>{{total.ncauChiChiaRaChiTx}}</th>
-                <th>{{total.ncauChiChiaRaChiCs2}}</th>
-                <th>{{total.ncauChiChiaRaChiMoi2}}</th>
+                <th>{{displayValue(total.ncauChiTongSo)}}</th>
+                <th>{{displayValue(total.ncauChiTrongDoChiCs)}}</th>
+                <th>{{displayValue(total.ncauChiTrongDoChiMoi)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaDtuPtrien)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaChiCs1)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaChiMoi1)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaChiTx)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaChiCs2)}}</th>
+                <th>{{displayValue(total.ncauChiChiaRaChiMoi2)}}</th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
                 <th [hidden]="status"></th>
@@ -126,15 +126,15 @@
                     <td>{{data.csPhapLyThien}}</td>
                     <td>{{data.hdongChuYeu}}</td>
                     <td>{{data.nguonKphi}}</td>
-                    <td>{{data.ncauChiTongSo}}</td>
-                    <td>{{data.ncauChiTrongDoChiCs}}</td>
-                    <td>{{data.ncauChiTrongDoChiMoi}}</td>
-                    <td>{{data.ncauChiChiaRaDtuPtrien}}</td>
-                    <td>{{data.ncauChiChiaRaChiCs1}}</td>
-                    <td>{{data.ncauChiChiaRaChiMoi1}}</td>
-                    <td>{{data.ncauChiChiaRaChiTx}}</td>
-                    <td>{{data.ncauChiChiaRaChiCs2}}</td>
-                    <td>{{data.ncauChiChiaRaChiMoi2}}</td>
+                    <td>{{displayValue(data.ncauChiTongSo)}}</td>
+                    <td>{{displayValue(data.ncauChiTrongDoChiCs)}}</td>
+                    <td>{{displayValue(data.ncauChiTrongDoChiMoi)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaDtuPtrien)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaChiCs1)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaChiMoi1)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaChiTx)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaChiCs2)}}</td>
+                    <td>{{displayValue(data.ncauChiChiaRaChiMoi2)}}</td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
@@ -176,42 +176,42 @@
                         <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nguonKphi" />
                     </td>
                     <td>
-                        {{editCache[data.id].data.ncauChiTongSo}}
+                        {{displayValue(editCache[data.id].data.ncauChiTongSo)}}
                     </td>
                     <td>
-                        {{editCache[data.id].data.ncauChiTrongDoChiCs}}
+                        {{displayValue(editCache[data.id].data.ncauChiTrongDoChiCs)}}
                     </td>
                     <td>
-                        {{editCache[data.id].data.ncauChiTrongDoChiMoi}}
+                        {{displayValue(editCache[data.id].data.ncauChiTrongDoChiMoi)}}
                     </td>
                     <td>
-                        {{editCache[data.id].data.ncauChiChiaRaDtuPtrien}}
+                        {{displayValue(editCache[data.id].data.ncauChiChiaRaDtuPtrien)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiChiaRaChiCs1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs1"
                             (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiChiaRaChiMoi1 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
                             (ngModelChange)="changeModel(data.id)">
                         </nz-input-number>
                     </td>
                     <td>
-                        {{editCache[data.id].data.ncauChiChiaRaChiTx}}
+                        {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiChiaRaChiCs2 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs2"
                             (ngModelChange)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
                             [class]="editCache[data.id].data.ncauChiChiaRaChiMoi2 >= 0 ?'' : 'input-error-validate'"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi2"
                             (ngModelChange)="changeModel(data.id)">

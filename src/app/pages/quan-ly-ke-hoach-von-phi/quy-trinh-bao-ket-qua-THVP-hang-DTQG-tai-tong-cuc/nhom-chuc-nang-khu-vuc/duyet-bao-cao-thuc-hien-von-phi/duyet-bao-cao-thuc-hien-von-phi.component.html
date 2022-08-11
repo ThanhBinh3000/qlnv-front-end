@@ -21,11 +21,13 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
+						<nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+							[(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đơn vị tạo</label>

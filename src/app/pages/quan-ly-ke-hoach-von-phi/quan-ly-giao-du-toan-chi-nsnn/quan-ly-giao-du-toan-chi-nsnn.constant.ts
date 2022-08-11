@@ -69,8 +69,8 @@ export const TT_CHAP_NHAN = '8';
 export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
-    description: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
+    title: 'NH?P QUY?T �?NH GIAO D? TO�N CHI NSNN T? BTC',
+    description: 'NH?P QUY?T �?NH GIAO D? TO�N CHI NSNN T? BTC',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
       NHAN_VIEN_TC,
@@ -81,8 +81,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'DANH SÁCH PHƯƠNG ÁN PHÂN BỔ GIAO DỰ TOÁN CHI NSNN TẠI ĐƠN VỊ',
-    description: 'DANH SÁCH PHƯƠNG ÁN PHÂN BỔ GIAO DỰ TOÁN CHI NSNN TẠI ĐƠN VỊ',
+    title: 'DANH S�CH PHUONG �N PH�N B? GIAO D? TO�N CHI NSNN T?I �ON V?',
+    description: 'DANH S�CH PHUONG �N PH�N B? GIAO D? TO�N CHI NSNN T?I �ON V?',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -96,8 +96,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'DANH SÁCH GIAO DỰ TOÁN CHI NSNN CHO CÁC ĐƠN VỊ CẤP DƯỚI',
-    description: 'DANH SÁCH GIAO DỰ TOÁN CHI NSNN CHO CÁC ĐƠN VỊ CẤP DƯỚI',
+    title: 'DANH S�CH GIAO D? TO�N CHI NSNN CHO C�C �ON V? C?P DU?I',
+    description: 'DANH S�CH GIAO D? TO�N CHI NSNN CHO C�C �ON V? C?P DU?I',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-giao-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
       NHAN_VIEN_TC,
@@ -111,8 +111,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'DANH SÁCH NHẬN DỰ TOÁN CHI NSNN CỦA CÁC ĐƠN VỊ',
-    description: 'DANH SÁCH NHẬN DỰ TOÁN CHI NSNN CỦA CÁC ĐƠN VỊ',
+    title: 'DANH SA�CH NH�?N DU? TOA�N CHI NSNN CU?A CA�C �ON VI?',
+    description: 'DANH SA�CH NH�?N DU? TOA�N CHI NSNN CU?A CA�C �ON VI?',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
       NHAN_VIEN_CC,
@@ -122,8 +122,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'DANH SÁCH DUYỆT BÁO CÁO PHÂN BỔ GIAO, ĐIỀU CHỈNH DỰ TOÁN TỪ CÁC ĐƠN VỊ CẤP DƯỚI',
-    description: 'DANH SÁCH DUYỆT BÁO CÁO PHÂN BỔ GIAO, ĐIỀU CHỈNH DỰ TOÁN TỪ CÁC ĐƠN VỊ CẤP DƯỚI',
+    title: 'DANH S�CH DUY?T B�O C�O PH�N B? GIAO, �I?U CH?NH D? TO�N T? C�C �ON V? C?P DU?I',
+    description: 'DANH S�CH DUY?T B�O C�O PH�N B? GIAO, �I?U CH?NH D? TO�N T? C�C �ON V? C?P DU?I',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan`,
     Role: [
       NHAN_VIEN_TC
@@ -132,8 +132,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
-    description: 'KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
+    title: 'KI?M TRA T�NH TR?NG NH?N D? TO�N CHI C?A �ON V? C?P DU?I',
+    description: 'KI?M TRA T�NH TR?NG NH?N D? TO�N CHI C?A �ON V? C?P DU?I',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
     Role: [
 
@@ -145,8 +145,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
-    description: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
+    title: 'PH� DUY�?T PHUONG A�N TA?I �ON VI?',
+    description: 'PH� DUY�?T PHUONG A�N TA?I �ON VI?',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/duyet-phuong-an-tai-don-vi`,
     Role: [
       TRUONG_BP_TC,

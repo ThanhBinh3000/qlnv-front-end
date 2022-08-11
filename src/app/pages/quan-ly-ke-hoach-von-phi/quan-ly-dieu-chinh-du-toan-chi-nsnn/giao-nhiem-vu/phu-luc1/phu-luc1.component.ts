@@ -734,9 +734,11 @@ export class PhuLuc1Component implements OnInit {
     this.lstCtietBcao = [];
 
     const data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
-    this.addFirst(data);
+    if(data){
+      this.addFirst(data);
+    }
 
-    lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
+    lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e?.id != data?.id);
     let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {

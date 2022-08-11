@@ -116,7 +116,7 @@
                                             {{ttGui.noiDung}}
                                         </td>
                                         <td>
-                                            {{ttGui.soTien}}
+                                            {{displayValue(ttGui.soTien)}}
                                         </td>
                                         <td>
                                             {{ngayThanhToan}}
@@ -132,7 +132,7 @@
                                             [class]="ttGuiCache.noiDung ?'' : 'input-error-validate' "/>
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input"
+                                            <nz-input-number class="search__input" [nzFormatter]="formatter" [nzPrecision]="4"
                                                 [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.soTien">
                                             </nz-input-number>

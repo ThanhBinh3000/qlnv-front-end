@@ -92,28 +92,28 @@
 					</td>
 					<td>
 						<ng-container *ngIf="item.stt != '0.1'">
-							{{item.trongDotTcong}}
+							{{displayValue(item.trongDotTcong)}}
 						</ng-container>
 					</td>
 					<ng-container *ngFor="let e of item.listCtiet">
 						<ng-container *ngIf="e.loaiMatHang == 0">
 							<td>
 								<ng-container *ngIf="item.stt != '0.1'">
-									{{e.sl}}
+									{{displayValue(e.sl)}}
 								</ng-container>
 							</td>
 						</ng-container>
 					</ng-container>
 					<td>
 						<ng-container *ngIf="item.stt != '0.1'">
-							{{item.luyKeTcong}}
+							{{displayValue(item.luyKeTcong)}}
 						</ng-container>
 					</td>
 					<ng-container *ngFor="let e of item.listCtiet">
 						<ng-container *ngIf="e.loaiMatHang == 1">
 							<td>
 								<ng-container *ngIf="item.stt != '0.1'">
-									{{e.sl}}
+									{{displayValue(e.sl)}}
 								</ng-container>
 							</td>
 						</ng-container>
@@ -151,23 +151,24 @@
 						</div>
 					</td>
 					<td>
-						{{editCache[item.id].data.trongDotTcong}}
+						{{displayValue(editCache[item.id].data.trongDotTcong)}}
 					</td>
 					<ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
 						<ng-container *ngIf="kv.loaiMatHang == 0">
 							<td>
-								<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl"
-									type="number" (ngModelChange)="tinhTong(item.id)"></nz-input-number>
+								<nz-input-number [nzMin]="0" class="search__input" nzSize="small"
+									[nzFormatter]="formatter" [nzPrecision]="4" [(ngModel)]="kv.sl" type="number"
+									(ngModelChange)="tinhTong(item.id)"></nz-input-number>
 							</td>
 						</ng-container>
 					</ng-container>
 					<td>
-						{{editCache[item.id].data.luyKeTcong}}
+						{{displayValue(editCache[item.id].data.luyKeTcong)}}
 					</td>
 					<ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
 						<ng-container *ngIf="kv.loaiMatHang == 1">
 							<td>
-								{{kv.sl}}
+								{{displayValue(kv.sl)}}
 							</td>
 						</ng-container>
 					</ng-container>

@@ -137,7 +137,7 @@ export class PhuLuc2Component implements OnInit {
         thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
         thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
         kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
-        ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
+        ncauKphi: item.ncauKphi,
       })
     })
     if (this.lstCtietBcao.length > 0) {

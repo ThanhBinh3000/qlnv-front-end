@@ -123,7 +123,7 @@ export class PhuLuc3Component implements OnInit {
         tdiemBcaoDtoan: divMoney(item.tdiemBcaoDtoan, this.maDviTien),
         dkienThienDtoan: divMoney(item.dkienThienDtoan, this.maDviTien),
         dtoanThieuNtruoc: divMoney(item.dtoanThieuNtruoc, this.maDviTien),
-        tongNcauDtoanN: divMoney(item.tongNcauDtoanN, this.maDviTien),
+        tongNcauDtoanN: item.tongNcauDtoanN,
         dtoanLke: divMoney(item.dtoanLke, this.maDviTien),
         dtoanDchinh: divMoney(item.dtoanDchinh, this.maDviTien),
       })
@@ -302,6 +302,12 @@ export class PhuLuc3Component implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
+    for(let itm of this.lstDchinh){
+      if(itm.maDvi == this.editCache[id].data.maDvi){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.LOCAL_EXIST);
+        return;
+      }
+    }
     if (
       (!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
       (!this.editCache[id].data.dkienThienLuong && this.editCache[id].data.dkienThienLuong !== 0) ||
@@ -309,7 +315,7 @@ export class PhuLuc3Component implements OnInit {
       (!this.editCache[id].data.dtoanLke && this.editCache[id].data.dtoanLke !== 0) ||
       (!this.editCache[id].data.dtoanThieuNtruoc && this.editCache[id].data.dtoanThieuNtruoc !== 0) ||
       (!this.editCache[id].data.khoachLuong && this.editCache[id].data.khoachLuong !== 0) ||
-      (!this.editCache[id].data.khoachQdGiaoNvu && this.editCache[id].data.khoachQdGiaoNvu !== 0) ||
+      (!this.editCache[id].data.khoachQdGiaoNvu) ||
       (!this.editCache[id].data.tdiemBcaoCcu) ||
       (!this.editCache[id].data.maDvi) ||
       (!this.editCache[id].data.tdiemBcaoDtoan && this.editCache[id].data.tdiemBcaoDtoan !== 0) ||
@@ -323,11 +329,11 @@ export class PhuLuc3Component implements OnInit {
     if(
       this.editCache[id].data.dkienThienDtoan < 0 ||
       this.editCache[id].data.dkienThienLuong < 0 ||
-      this.editCache[id].data.dtoanDchinh < 0 ||
+      // this.editCache[id].data.dtoanDchinh < 0 ||
       this.editCache[id].data.dtoanLke < 0 ||
       this.editCache[id].data.dtoanThieuNtruoc < 0 ||
       this.editCache[id].data.khoachLuong < 0 ||
-      this.editCache[id].data.khoachQdGiaoNvu < 0 ||
+      // this.editCache[id].data.khoachQdGiaoNvu < 0 ||
       this.editCache[id].data.tdiemBcaoDtoan < 0 ||
       this.editCache[id].data.tdiemBcaoLuong < 0 ||
       this.editCache[id].data.tongNcauDtoanN < 0
@@ -355,7 +361,7 @@ export class PhuLuc3Component implements OnInit {
 
   // gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
-    this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan;
+    this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.dtoanThieuNtruoc;
     // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
     this.editCache[id].data.dtoanDchinh = this.editCache[id].data.tongNcauDtoanN - this.editCache[id].data.dtoanLke;
   }
