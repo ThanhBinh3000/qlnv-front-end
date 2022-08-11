@@ -4,25 +4,24 @@
       <div class="text-container">
         <div class="title-chi-tieu">
           <span *ngIf="idInput"
-            [ngClass]="isStatus !== globals.prop.NHAP_DU_THAO ? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
+            [ngClass]="isStatus === globals.prop.BAN_HANH ? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
             {{convertTrangThai(isStatus)}}</span>
           <span *ngIf="!idInput"></span>
           <span>Tạo thẻ kho</span>
         </div>
       </div>
     </div>
-    <div class="btn-group" *ngIf="isTaoTheKho || !isTaoTheKho && idInput">
-      <button type="button" class="btn btn-sub" (click)="huy()">
+    <div class="btn-group">
+      <button type=" button" class="btn btn-sub" (click)="huy()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()"
-        *ngIf=" idInput !==null && isStatus !== globals.prop.NHAP_DU_THAO">
+      <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="isStatus === globals.prop.NHAP_DU_THAO">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-sub"
-        *ngIf="idInput && isStatus === globals.prop.NHAP_DU_THAO && userService.isCuc()">
+        *ngIf="idInput && isStatus === globals.prop.NHAP_DU_THAO && userService.isCuc()" (click)="duyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -32,7 +31,7 @@
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub" (click)="luuVaDuyet()"
-        *ngIf="idInput ===null && userService.isChiCuc() || idInput !==null && isStatus == globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
+        *ngIf="(idInput ===null && userService.isChiCuc()) || (idInput !==null && isStatus == globals.prop.NHAP_DU_THAO && userService.isChiCuc())">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>

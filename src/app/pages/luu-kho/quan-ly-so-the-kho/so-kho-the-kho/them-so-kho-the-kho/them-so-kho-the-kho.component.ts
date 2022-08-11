@@ -18,6 +18,8 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -72,10 +74,10 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     private donviService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
-    private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals: Globals,
+    private modal: NzModalService,
   ) { }
 
 
@@ -279,19 +281,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
   }
 
-
-  // onChangeDonVi(id: string) {
-  //   const donVi = this.dsDonVi.find((item) => item.id === Number(id));
-  //   if (donVi) {
-  //     const result = {
-  //       ...this.donviService.layDsPhanTuCon(this.dsTong, donVi),
-  //     };
-  //     this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
-  //   } else {
-  //     this.dsNganLo = [];
-  //   }
-  // }
-
   huy() {
     this.onClose.emit();
   }
@@ -300,8 +289,10 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show()
       try {
-        let body = this.formData.value;
-        this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
+        let body = {
+          theKhoId: this.idInput
+        };
+        this.quanLySoKhoTheKhoService.exportCT(body).subscribe((blob) => {
           saveAs(blob, 'chi-tiet-the-kho.xlsx')
         });
         this.spinner.hide();
@@ -317,8 +308,14 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   }
 
-  luuVaDuyet() { }
+  async luuVaDuyet() {
 
+  }
+
+
+  async duyet() {
+
+  }
   async luu() {
     console.log(this.formData.value);
 

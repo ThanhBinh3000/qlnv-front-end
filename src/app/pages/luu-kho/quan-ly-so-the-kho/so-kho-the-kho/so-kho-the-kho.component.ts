@@ -16,6 +16,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -37,12 +38,22 @@ export class SoKhoTheKhoComponent implements OnInit {
   filterDate = new Date();
 
   dsNam: string[] = []
+
+  searchInTable: any = {
+    nam: dayjs().get('year'),
+    maDvi: "",
+    tenDVi: "",
+    loaiHH: "",
+    maChungLoaiHang: "",
+    ngayTao: ""
+  }
+
   filterTable: any = {
     nam: null,
     tuNgay: null,
     denNgay: null,
-    loaiHangHoa: null,
-    chungLoaiHangHoa: null,
+    loaiHH: null,
+    maChungLoaiHang: null,
     ngayTao: null,
     donVi: null,
     diemKho: null,
@@ -72,19 +83,17 @@ export class SoKhoTheKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    public datepipe: DatePipe
+
   ) {
     this.formData = this.fb.group({
-      "denNgay": "",
-      "limit": 20,
-      "loaiHH": "",
-      "maChungLoaiHang": "",
-      "maDvi": "",
-      "nam": "",
-      "orderBy": "",
-      "orderType": "",
-      "page": 0,
-      "tenDVi": "",
-      "tuNgay": ""
+      nam: [null],
+      maDvi: [null],
+      tenDVi: [null],
+      loaiHH: [null],
+      maChungLoaiHang: [null],
+      ngayTao: [[]]
+
     })
   }
 
@@ -104,26 +113,40 @@ export class SoKhoTheKhoComponent implements OnInit {
   async search() {
     this.spinner.show();
 
-    let body = this.formData.value
-    // set defaulue value ô ngày tạo
-    // if (body.ngayTao != null) {
-    //   body.tuNgay = body.ngayTao[0]
-    //   body.denNgay = body.ngayTao[1]
-    // }
+    let body = {
+      "denNgay": "",
+      "limit": 20,
+      "loaiHH": this.formData.value.loaiHH,
+      "maChungLoaiHang": this.formData.value.maChungLoaiHang,
+      "maDvi": this.formData.value.maDvi,
+      "nam": this.formData.value.nam,
+      "orderBy": "",
+      "orderType": "",
+      "page": 0,
+      "tenDVi": this.formData.value.tenDVi,
+      "tuNgay": ""
+    }
+    if (this.formData.value.ngayTao != null) {
+      body.tuNgay = this.formData.value.ngayTao[0]
+      body.denNgay = this.formData.value.ngayTao[1]
+    }
+    console.log(body);
 
     let res = await this.quanLySoKhoTheKhoService.timKiem(body);
     if (res.msg = MESSAGE.SUCCESS) {
       this.dataTable = res.data.content
+      this.totalRecord = res.data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
       console.log(this.dataTableAll);
-      this.totalRecord = res.data.totalElements;
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
-    this.spinner
+    this.spinner.hide()
   }
   // sử lý cột trạng thái trong bảng
   convertTrangThai(status: string) {
@@ -139,8 +162,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   // bắt dự kiện clear input search()
   clearFilter() {
     this.formData.reset()
-    // mạng lag nên tạm thời cmt lại
-    // this.search();
+    this.search()
   }
   //sự kiện click all check box
   updateAllChecked(): void {
@@ -186,8 +208,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         }
       })
     }
-    console.log(dataDelete);
-
     if (dataDelete && dataDelete.length > 0) {
       this.modal.confirm({
         nzClosable: false,
@@ -200,7 +220,7 @@ export class SoKhoTheKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLySoKhoTheKhoService.deleteMultiple({ idList: dataDelete });
+            let res = await this.quanLySoKhoTheKhoService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -238,12 +258,35 @@ export class SoKhoTheKhoComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+  filterDateInTable(key: string, value: string) {
+    if (value && value.length === 4) {
+      console.log(value);
 
+    }
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase() === this.datepipe.transform(value, 'yyyy-MM-dd').toString().toLowerCase()) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp]
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show()
       try {
         let body = this.formData.value;
+        if (body.ngayTao != null) {
+          body.tuNgay = body.ngayTao[0]
+          body.denNgay = body.ngayTao[1]
+        }
         this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-so-kho.xlsx')
         });

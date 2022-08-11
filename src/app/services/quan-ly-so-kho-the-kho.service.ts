@@ -37,5 +37,12 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
-
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/phe-duyet`
+    return this.httpClient.put(url, body).toPromise();
+  }
+  editData(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho`
+    return this.httpClient.put(url, body).toPromise();
+  }
 }
