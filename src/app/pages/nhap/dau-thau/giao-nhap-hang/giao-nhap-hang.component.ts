@@ -27,7 +27,12 @@ export class GiaoNhapHangComponent implements OnInit {
     this.getCount();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        ma: null,
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {

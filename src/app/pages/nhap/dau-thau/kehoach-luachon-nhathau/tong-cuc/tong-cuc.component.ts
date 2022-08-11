@@ -22,8 +22,7 @@ export class TongCucComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
-        ma: ""
+        ma: null
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -32,7 +31,7 @@ export class TongCucComponent implements OnInit {
     }
   }
 
-  loaiVthhSelected: string = ""
+  loaiVthhSelected: string
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
