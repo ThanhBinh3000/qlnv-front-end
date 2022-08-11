@@ -310,6 +310,7 @@ input.form-control {
 .ant-form-item-label.ant-col {
   margin-bottom: 0;
   padding-bottom: 0;
+  padding-top: 10px;
 }
 
 .ant-form-vertical .ant-form-item {
@@ -4593,7 +4594,7 @@ th .ant-input-affix-wrapper {
 .btn-affix>div {
   justify-content: end;
   display: flex;
-  margin-top: -27px;
+  margin-top: -32px;
   padding-bottom: 6px;
 
   &.ant-affix {
@@ -4843,6 +4844,10 @@ th .ant-input-affix-wrapper {
   background: #fff;
   color: #e00606;
   border-color: #e00606 !important;
+}
+
+.ant-card-body>.ant-row {
+  margin: 0px !important;
 }
 
 // button ..................................................

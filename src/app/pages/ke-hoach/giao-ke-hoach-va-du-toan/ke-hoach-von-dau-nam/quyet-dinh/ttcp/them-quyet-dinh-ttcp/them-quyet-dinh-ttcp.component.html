@@ -15,8 +15,7 @@
     </button>
   </div>
 </nz-affix>
-
-<div class="them-quyet-dinh-ttcp bg-trang">
+<div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
       <div class="header-text">
@@ -28,10 +27,10 @@
         </div>
       </div>
     </div>
-    <div class="hang-theo-doi-dac-thu">
-      <form nzLayout="vertical" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="3" class="form-item">
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" [nzDisabled]="isView">
@@ -43,7 +42,9 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nz-col nzSpan="4" class="form-item">
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
@@ -56,7 +57,9 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nz-col nzSpan="4" class="form-item">
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
@@ -67,8 +70,8 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="24" class="form-item">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input
@@ -76,7 +79,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
             <div class="list-file">
@@ -84,8 +87,8 @@
             </div>
           </nz-form-item>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </nz-card>
   <div class="group-button">
     <h3>Kế hoạch giao Bộ ngành</h3>
@@ -96,7 +99,6 @@
       </button>
     </div>
   </div>
-
   <nz-card class="mt-2px flex-card data-table card-border-content">
     <nz-table [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>

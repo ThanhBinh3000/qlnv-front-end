@@ -1,23 +1,23 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('TTCP')">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
       TTCP
     </li>
-    <li nz-menu-item (click)="selectTab('BTC')">
+    <li nz-menu-item (click)="selectTab(1)">
       BTC giao các bộ ngành
     </li>
-    <li nz-menu-item (click)="selectTab('TCDT')">
+    <li nz-menu-item (click)="selectTab(2)">
       BTC giao TCDT
     </li>
   </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 'TTCP'">
+<ng-container *ngIf="tabSelected == 0">
   <app-ttcp></app-ttcp>
 </ng-container>
-<ng-container *ngIf="tabSelected == 'BTC'">
+<ng-container *ngIf="tabSelected == 1">
   <app-btc-giao-cac-bo-nganh></app-btc-giao-cac-bo-nganh>
 </ng-container>
-<ng-container *ngIf="tabSelected == 'BTCgiaoTCDT'">
+<ng-container *ngIf="tabSelected == 2">
   <app-btc-giao-tcdt></app-btc-giao-tcdt>
 </ng-container>
 

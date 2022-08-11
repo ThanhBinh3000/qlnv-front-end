@@ -32,7 +32,7 @@ export class TongCucComponent implements OnInit {
     }
   }
 
-  loaiVthhSelected: string
+  loaiVthhSelected: string = ""
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
