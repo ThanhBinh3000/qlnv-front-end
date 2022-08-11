@@ -117,6 +117,9 @@ import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem
 import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 import { DialogThongTinCanBoComponent } from './dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
 import { DialogPhanQuyenComponent } from './dialog/dialog-phan-quyen/dialog-phan-quyen.component';
+import { DialogQuyenComponent } from './dialog/dialog-quyen/dialog-quyen.component';
+import { DialogNhomQuyenComponent } from './dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
+import { DialogThemQuyenComponent } from './dialog/dialog-them-quyen/dialog-them-quyen.component';
 
 @NgModule({
   declarations: [
@@ -168,7 +171,6 @@ import { DialogPhanQuyenComponent } from './dialog/dialog-phan-quyen/dialog-phan
     DialogThemDiaDiemNhapKhoComponent,
     DialogThemDanhMucDungChungComponent,
     FileListComponent,
-    //pipes
     FilterPipe,
     DialogChiTietKeHoachGiaoBoNganhComponent,
     KeHoachLuongThucComponent,
@@ -183,6 +185,9 @@ import { DialogPhanQuyenComponent } from './dialog/dialog-phan-quyen/dialog-phan
     MuaBuBoSungComponent,
     DialogThongTinCanBoComponent,
     DialogPhanQuyenComponent,
+    DialogQuyenComponent,
+    DialogNhomQuyenComponent,
+    DialogThemQuyenComponent
   ],
   imports: [
     CommonModule,

@@ -12,11 +12,11 @@
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-de-xuat-kh-ban-dau-gia>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
     <app-tong-hop-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh">
     </app-tong-hop-de-xuat-kh-ban-dau-gia>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-de-xuat-kh-ban-dau-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
     <app-quyet-dinh-phe-duyet-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-dau-gia>
