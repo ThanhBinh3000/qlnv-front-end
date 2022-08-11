@@ -1,0 +1,145 @@
+::ng-deep {
+    .thong-tin-phieu-nhap-kho-tam-gui {
+        .list-file {
+            .nowrap.ant-table-wrapper {
+                overflow: unset !important;
+            }
+
+            .ant-table table .ant-table-tbody>tr>td {
+                height: 30px !important;
+            }
+
+            .ant-table-content {
+                table {
+                    width: 50%;
+                    border: 0px !important;
+                }
+            }
+
+            .ant-table-cell {
+                border: 0px !important;
+            }
+        }
+
+        label.ant-form-item-no-colon {
+            margin-bottom: 0px !important;
+        }
+
+        .select-file {
+            position: relative;
+            border: 1px solid #C4C9CC;
+            height: 24px;
+            width: 155px;
+            padding: 0px 10px;
+        }
+
+        .file-layer-1 {
+            position: absolute;
+            z-index: 0;
+
+            &>span,
+            .htvbdh_tcdt_tep {
+                color: #2196F3;
+                font-weight: lighter;
+            }
+
+            .htvbdh_tcdt_tep {
+                margin-right: 10px;
+            }
+        }
+
+        .file-layer-2 {
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+
+            input {
+                width: 100%;
+            }
+        }
+
+        .download-file {
+            border: 1px solid #C4C9CC;
+            padding: 0px 5px;
+
+            .icon {
+                border: unset !important;
+                border-radius: unset !important;
+                background: unset !important;
+                margin: unset !important;
+            }
+        }
+
+        .action-file {
+            .btn.btn-do {
+                padding: 0px !important;
+            }
+        }
+    }
+
+    .hh__container {
+        .ant-card-body {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+
+    .title-form-chi-tiet {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        text-transform: uppercase;
+        color: #000000;
+    }
+
+    .bg-gray {
+        background: #d9d9d9 !important;
+    }
+
+    .last-row-sum {
+        margin-top: 0px !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        border-bottom: 1px solid #eaeaea;
+        border-left: 1px solid #eaeaea;
+    }
+
+    .boder-right-1 {
+        border-right: 1px solid #eaeaea;
+    }
+
+    .summary-table-data {
+        margin-top: 16px !important;
+
+        .text-money {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-specical-money {
+            justify-content: left;
+        }
+    }
+
+    .text-summary {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        color: #000000;
+    }
+
+    .text-money {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 13px;
+        color: #444444;
+    }
+
+    .comment-last {
+        margin-top: 16px !important;
+        margin-bottom: 60px !important;
+    }
+}

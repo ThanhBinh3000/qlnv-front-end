@@ -7,7 +7,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class GiaoKeHoachVonDauNamService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoach';
+  GATEWAY = '/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'GiaoKeHoachVonDauNam', '');

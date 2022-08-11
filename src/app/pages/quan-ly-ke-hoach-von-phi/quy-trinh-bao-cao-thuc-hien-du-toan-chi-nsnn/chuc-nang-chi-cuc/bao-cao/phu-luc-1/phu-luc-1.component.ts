@@ -132,7 +132,6 @@ export class PhuLucIComponent implements OnInit {
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
-        console.log(this.luyKeDetail);
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.data?.lstCtietBcaos.forEach(item => {
@@ -210,7 +209,7 @@ export class PhuLucIComponent implements OnInit {
         })
 
         await this.addListNoiDung(this.noiDungFull);
-        
+
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0].stt) {
                 this.sortWithoutIndex();
@@ -1051,7 +1050,7 @@ export class PhuLucIComponent implements OnInit {
         );
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

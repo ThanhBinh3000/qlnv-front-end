@@ -26,7 +26,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   type?: string;
   maDVi?: string;
   namKeHoach?: number;
-
+  capDonVi: number;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -80,7 +80,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       trichYeu: null,
       ngayKyTuNgay: null,
       trangThai: '02',
-      capDvi: this.isDexuat ? 1 : null,
+      capDvi: this.capDonVi,
     };
     if (this.type && this, this.type == 'de-xuat') {
       let res = await this.deXuatDieuChinhService.timKiem(body);

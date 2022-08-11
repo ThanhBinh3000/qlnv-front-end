@@ -1,0 +1,62 @@
+.action-top {
+    padding-right: 50px;
+}
+
+.chi-tieu__body {
+    .flex-card.ant-card {
+        background: transparent;
+        box-shadow: unset;
+        margin-bottom: 0px !important;
+        margin-top: 11px !important;
+        border-radius: 0px;
+    }
+}
+
+.trai {
+    display: flex;
+    align-items: center;
+}
+
+.last-breadcrumb {
+    color: #4e5484 !important;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+::ng-deep {
+    .tab-giao-chi-tieu {
+        position: relative;
+
+        .tab-menu.tab-content {
+            margin: 0px 16px;
+        }
+    }
+
+    .action-giao-chi-tieu {
+        position: absolute;
+        top: 0px;
+        right: 22px;
+    }
+}
+
+.search-table {
+    th {
+        border: 0.5px solid #D9D9D9;
+        padding: 7px 12px;
+    }
+}
+
+.table__content {
+
+    th,
+    td {
+        border: 0.5px solid #D9D9D9;
+        padding: 7px 12px;
+    }
+
+    td.ant-table-cell:nth-child(3),
+    td.ant-table-cell:nth-child(4) {
+        color: #2196F3 !important;
+
+    }
+}

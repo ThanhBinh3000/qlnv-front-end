@@ -1,3 +1,26 @@
-<p>
-  ke-hoach-von-mua-bu works!
-</p>
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <nz-tab [nzTitle]="title_QD">
+    <ng-template #title_QD>
+      Quyết định
+    </ng-template>
+    <ng-template nz-tab>
+      <app-quyet-dinh></app-quyet-dinh>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_chi_tieu_kh">
+    <ng-template #title_chi_tieu_kh>
+      Chỉ tiêu kế hoạch
+    </ng-template>
+    <ng-template nz-tab>
+      <app-chi-tieu-ke-hoach></app-chi-tieu-ke-hoach>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_dc_chi_tieu_kh" class="vat-tu__container">
+    <ng-template #title_dc_chi_tieu_kh>
+      Điều chỉnh chỉ tiêu KH
+    </ng-template>
+    <ng-template nz-tab>
+      <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

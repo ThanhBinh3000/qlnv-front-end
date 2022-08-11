@@ -119,7 +119,28 @@ export class CanCuXacDinh {
   idVirtual: number;
   loaiCanCu: string;
   tenTlieu: string;
+  taiLieu: any;
   moTa: string;
   fileDinhKems: Array<FileDinhKem>;
   children: Array<FileDinhKem>;
+}
+
+export class ThongTinQuyetDinh {
+  id: number;
+  loaiVthh: string;
+  tenVthh: string;
+  cloaiVthh: string;
+  tenCloaiVthh: string;
+  dviTinh: string;
+  soLuong: number;
+  donGia: number;
+  tongTien: number;
+}
+
+export class KeHoachMuaXuat {
+  id: number;
+  idDanhMuc: number;
+  idNoiDung: number;
+  noiDung: string;
+  sluongDtoan: number;
 }

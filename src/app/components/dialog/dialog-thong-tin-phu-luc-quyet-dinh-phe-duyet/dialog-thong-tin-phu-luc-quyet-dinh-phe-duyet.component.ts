@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
@@ -16,6 +17,8 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
   ghiChu: string = null;
   tableExist: boolean = false;
   data: any = {};
+  dataEdit: any = {};
+  isEdit: boolean;
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
 
@@ -27,7 +30,8 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
     private helperService: HelperService,
     private cdr: ChangeDetectorRef,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private donviService: DonviService
+    private donviService: DonviService,
+    private dauThauService: DanhSachDauThauService
   ) { }
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
@@ -35,14 +39,12 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
   addGoiThau: any = {};
 
   async ngOnInit() {
-    console.log(this.data);
-    this.data.children.forEach((value, index) => {
-      this.editCache[index] = {
-        edit: false,
-        data: { ...value }
-      };
-    })
-    this.loadDonVi();
+    if (this.data) {
+      this.listOfData = this.data.dsGoiThau;
+      this.listOfData.forEach(item => {
+        this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
+      });
+    }
   }
 
   collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
@@ -58,6 +60,31 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
       }
     }
   }
+
+  convertTreeToList2(root: DanhSachGoiThau): DanhSachGoiThau[] {
+    const stack: DanhSachGoiThau[] = [];
+    const array: DanhSachGoiThau[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+    while (stack.length !== 0) {
+      const node = stack.pop();
+      this.visitNode2(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+        }
+      }
+    }
+    return array;
+  }
+
+  visitNode2(node: DanhSachGoiThau, hashMap: { [maDvi: string]: boolean }, array: DanhSachGoiThau[]): void {
+    if (!hashMap[node.idVirtual]) {
+      hashMap[node.idVirtual] = true;
+      array.push(node);
+    }
+  }
+
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
@@ -82,25 +109,10 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
       this.editCache[index].data,
     );
     this.editCache[index].edit = false;
-    // this.dsGoiThauClone?.forEach((goiThau) => {
-    //   goiThau.thanhTien = (goiThau.donGia * goiThau.soLuong * 1000).toString();
-    //   this.tongGiaTriCacGoiThau += +goiThau.thanhTien;
-    // });
-    // if (this.tongGiaTriCacGoiThau > 10000000000) {
-    //   this.thongTinChungDXKHLCNT.blanhDthau = '3%';
-    // } else {
-    //   this.thongTinChungDXKHLCNT.blanhDthau = '1%';
-    // }
   }
 
   deleteRow(i: number): void {
     this.data.children = this.data.children.filter((d, index) => index !== i);
-    // this.listOfData = this.listOfData.filter(d => d.idVirtual !== idVirtual);
-    // this.chiTietThongTinDXKHLCNT.children2 =
-    //   this.chiTietThongTinDXKHLCNT.children2.filter(
-    //     (d) => d.idVirtual !== idVirtual,
-    //   );
-    // Object.assign(this.dsGoiThauClone, this.chiTietThongTinDXKHLCNT.children2);
   }
 
   cancelEdit(index: number): void {
@@ -191,5 +203,43 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
 
   onCancel() {
     this._modalRef.close();
+  }
+  editRow(idGoiThau) {
+    // console.log(idGoiThau);
+    const dataRow = this.listOfData.filter(item => item.id === idGoiThau);
+    console.log(dataRow);
+    this.dataEdit.tenGthau = dataRow[0].goiThau;
+    this.dataEdit.tenDvi = dataRow[0].tenDvi;
+    this.dataEdit.maDvi = dataRow[0].maDvi;
+    this.dataEdit.soLuong = dataRow[0].soLuong;
+    this.dataEdit.donGia = dataRow[0].donGia;
+    this.dataEdit.tongTien = dataRow[0].thanhTien;
+    this.dataEdit.children = dataRow[0].children;
+    this.changeChiCuc(dataRow[0].maDvi);
+
+  }
+
+
+
+  // async changeChiCuc(event) {
+  //   const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+  //   let data = this.listChiCuc.filter(item => item.maDvi === event);
+  //   this.formData.get('tenDvi').setValue(data[0].tenDonVi);
+  //   this.listDiemKho = [];
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     for (let i = 0; i < res.data?.child.length; i++) {
+  //       const item = {
+  //         'value': res.data.child[i].maDiemkho,
+  //         'text': res.data.child[i].tenDiemkho,
+  //         'diaDiemNhap': res.data.child[i].diaChi,
+  //       };
+  //       this.listDiemKho.push(item);
+  //       this.filterData();
+  //     }
+  //   }
+  // }
+
+  onApplyEdit() {
+
   }
 }

@@ -1,0 +1,37 @@
+<nz-tabset nzType="card" class="mt-16 chuc-nang-nhap-kho tab-level-2">
+  <nz-tab [nzTitle]="'Biên bản lấy mẫu'">
+    <ng-template nz-tab>
+      <quan-ly-bien-ban-lay-mau [typeVthh]="typeVthh"></quan-ly-bien-ban-lay-mau>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Phiếu kiểm nghiệm chất lượng'">
+    <ng-template nz-tab>
+      <app-quan-ly-phieu-kiem-nghiem-chat-luong [typeVthh]="typeVthh"></app-quan-ly-phieu-kiem-nghiem-chat-luong>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản bàn giao mẫu'">
+    <ng-template nz-tab>
+      <quan-ly-bien-ban-ban-giao-mau [typeVthh]="typeVthh"></quan-ly-bien-ban-ban-giao-mau>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Hồ sơ kỹ thuật'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <app-ho-so-ky-thuat [typeVthh]="typeVthh"></app-ho-so-ky-thuat>
+    </ng-template>
+  </nz-tab>
+  <!-- <nz-tab [nzTitle]="'Phiếu kiểm tra chất lượng'" *ngIf="typeVthh != '02'">
+    <ng-template nz-tab>
+      <quan-ly-phieu-kiem-tra-chat-luong-hang [typeVthh]="typeVthh"></quan-ly-phieu-kiem-tra-chat-luong-hang>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản nghiệm thu bảo quản lần đầu'" *ngIf="typeVthh != '02'">
+    <ng-template nz-tab>
+      <app-lap-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-lap-bien-ban-nghiem-thu-bao-quan>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản chuẩn bị kho'" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <ng-template nz-tab>
+      <app-bien-ban-chuan-bi-kho [typeVthh]="typeVthh"></app-bien-ban-chuan-bi-kho>
+    </ng-template>
+  </nz-tab> -->
+</nz-tabset>

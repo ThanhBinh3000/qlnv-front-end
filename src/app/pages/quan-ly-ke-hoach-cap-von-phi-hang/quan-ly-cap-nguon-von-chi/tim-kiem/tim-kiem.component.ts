@@ -92,6 +92,7 @@ export class TimKiemComponent implements OnInit {
 		this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		this.capDvi = this.userService.getUserLogin().CAP_DVI;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -99,19 +100,19 @@ export class TimKiemComponent implements OnInit {
 		this.searchFilter.tuNgay = newDate;
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
-		await this.danhMuc.dMDonVi().toPromise().then(
-			data => {
-				if (data.statusCode == 0) {
-					this.donVis = data.data;
-					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
+		// await this.danhMuc.dMDonVi().toPromise().then(
+		// 	data => {
+		// 		if (data.statusCode == 0) {
+		// 			this.donVis = data.data;
+		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+		// 		} else {
+		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+		// 		}
+		// 	},
+		// 	err => {
+		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// 	}
+		// );
 
 		if (this.loai == "0") {
 			if (ROLE_CAN_BO.includes(this.userRole)) {
@@ -251,44 +252,44 @@ export class TimKiemComponent implements OnInit {
 			hopDong: [],
 		}
 		let check = true; //kiem tra hop dong da ton tai chua
-		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU){
+		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
 			const request = {
-                soQD: this.searchFilter.qdChiTieu,
-                maDvi: this.searchFilter.maDviTao,
-                loaiVthh: "",
-            }
-            switch (this.searchFilter.loaiDn) {
-                case Utils.MUA_THOC:
-                    request.loaiVthh = "0101"
-                    break;
-                case Utils.MUA_GAO:
-                    request.loaiVthh = "0102"
-                    break;
-                case Utils.MUA_MUOI:
-                    request.loaiVthh = "04"
-                    break;
-                case Utils.MUA_VTU:
-                    request.loaiVthh = "02"
-                    break;
-            }
-            await this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
-                (data) => {
-                    if (data.statusCode == 0) {
-						if (data.data.length == 0){
+				soQD: this.searchFilter.qdChiTieu,
+				maDvi: this.searchFilter.maDviTao,
+				loaiVthh: "",
+			}
+			switch (this.searchFilter.loaiDn) {
+				case Utils.MUA_THOC:
+					request.loaiVthh = "0101"
+					break;
+				case Utils.MUA_GAO:
+					request.loaiVthh = "0102"
+					break;
+				case Utils.MUA_MUOI:
+					request.loaiVthh = "04"
+					break;
+				case Utils.MUA_VTU:
+					request.loaiVthh = "02"
+					break;
+			}
+			await this.quanLyVonPhiService.dsachHopDong(request).toPromise().then(
+				(data) => {
+					if (data.statusCode == 0) {
+						if (data.data.length == 0) {
 							check = false;
 						} else {
 							obj.hopDong = data.data;
 						}
-                    } else {
+					} else {
 						check = false;
-                    }
-                },
-                (err) => {
+					}
+				},
+				(err) => {
 					check = false
-                },
-            );
+				},
+			);
 		}
-		if (!check){
+		if (!check) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_CONTRACT);
 			return;
 		}

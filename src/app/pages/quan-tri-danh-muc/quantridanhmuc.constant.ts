@@ -1,0 +1,38 @@
+export const NHAP_MAIN_ROUTE = 'quan-tri-danh-muc';
+export const NHAP_ROUTE_LIST = [
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục dùng chung',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-dung-chung`,
+    dropdown: 'ql-danh-muc-dung-chung',
+    idHover: 'qldanh-muc-dung-chung',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục hàng DTQG',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-dtqg`,
+    dropdown: 'danh-muc-hang-dtqg',
+    idHover: 'danh-muc-hang-dtqg',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục đơn vị liên quan',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-don-vi-lien-quan`,
+    dropdown: 'danh-muc-don-vi-lien-quan',
+    idHover: 'danh-muc-don-vi-lien-quan',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục vật tư theo hàng',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-vat-tu-theo-hang`,
+    dropdown: 'danh-muc-vat-tu-theo-hang',
+    idHover: 'danh-muc-vat-tu-theo-hang',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục địa điểm kho theo chi cục',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-dia-diem-kho-theo-chi-cuc`,
+    dropdown: 'danh-muc-dia-diem-kho-theo-chi-cuc',
+    idHover: 'danh-muc-dia-diem-kho-theo-chi-cuc',
+  },
+];

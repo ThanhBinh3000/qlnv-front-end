@@ -84,7 +84,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
 
   taiLieuDinhKemList: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   dataTag: any[] = [];
 

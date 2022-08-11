@@ -1,18 +1,19 @@
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -48,6 +49,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
@@ -55,9 +57,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   filterTable: any = {
     soPhieu: '',
     ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinh: '',
+    kqDanhGia: '',
+    soQuyetDinhNhap: '',
     soBienBan: '',
+    tenDiemKho: '',
+    tenNganLo: '',
+    tenNhaKho: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -68,11 +74,15 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -91,7 +101,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -119,9 +129,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "ketLuan": this.searchFilter.ketLuan,
+      "capDvis": ['3'],
+      "kqDanhGia": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHangHoa": this.typeVthh,
+      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
@@ -139,7 +150,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "page": this.page - 1
       },
       "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh ? (this.searchFilter.soQuyetDinh + '/' + this.qdTCDT) : null,
+      "soQd": this.searchFilter.soQuyetDinh,
       "str": null,
       "tenNguoiGiao": null,
       "trangThai": null
@@ -249,7 +260,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ketLuan": this.searchFilter.ketLuan,
+          "kqDanhGia": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
           "maHangHoa": this.typeVthh,
           "maNganKho": null,
@@ -306,9 +317,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple(dataDelete);
+            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -332,7 +344,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
             temp.push(item)
           }
         });
@@ -348,9 +360,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.filterTable = {
       soPhieu: '',
       ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinh: '',
+      kqDanhGia: '',
+      soQuyetDinhNhap: '',
       soBienBan: '',
+      tenDiemKho: '',
+      tenNganLo: '',
+      tenNhaKho: '',
+      tenTrangThai: '',
     }
   }
 

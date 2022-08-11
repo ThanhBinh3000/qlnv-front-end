@@ -20,7 +20,7 @@
                     </div>
                     <div class="cangiua group-button-search">
                         <button nz-button class="search__button--clear" (click)="clearFilter()">
-                            <i class="fa fa-trash-o do"></i>
+                            <i class="icon  htvbdh_nhap-lai1"></i>
                             Xóa điều kiện
                         </button>
                         <button nz-button class="search__button--search" (click)="search()">
@@ -72,8 +72,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.soQuyetDinh"
-                                                    (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" />
+                                                    [(ngModel)]="filterTable.soQuyetDinhNhap"
+                                                    (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -92,8 +92,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenDiemkho"
-                                                    (input)="filterInTable('tenDiemkho',filterTable.tenDiemkho)" />
+                                                    [(ngModel)]="filterTable.tenDiemKho"
+                                                    (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -102,8 +102,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenNhakho"
-                                                    (input)="filterInTable('tenNhakho',filterTable.tenNhakho)" />
+                                                    [(ngModel)]="filterTable.tenNhaKho"
+                                                    (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -112,8 +112,8 @@
                                         <th>
                                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                                    [(ngModel)]="filterTable.tenNganlo"
-                                                    (input)="filterInTable('tenNganlo',filterTable.tenNganlo)" />
+                                                    [(ngModel)]="filterTable.tenNganLo"
+                                                    (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" />
                                             </nz-input-group>
                                             <ng-template #suffixTemplateInfo>
                                                 <i nz-icon nzType="search"></i>
@@ -165,15 +165,15 @@
                                         <th width="45px">
                                             <label nz-checkbox [(ngModel)]="data.checked"
                                                 (ngModelChange)="updateSingleChecked()"
-                                                [nzDisabled]="data.trangThai != '00'"></label>
+                                                [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                                         </th>
                                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                                         <td>{{ data.soBb }}</td>
-                                        <td>{{ data.soQuyetDinh }}</td>
+                                        <td>{{ data.soQuyetDinhNhap }}</td>
                                         <td>{{ data.ngayNghiemThuShow }}</td>
-                                        <td>{{ data.tenDiemkho }}</td>
-                                        <td>{{ data.tenNhakho }}</td>
-                                        <td>{{ data.tenNganlo }}</td>
+                                        <td>{{ data.tenDiemKho }}</td>
+                                        <td>{{ data.tenNhaKho }}</td>
+                                        <td>{{ data.tenNganLo }}</td>
                                         <td>{{ data.chiPhiThucHienTrongNam | number: '1.0-1' }}</td>
                                         <td>{{ data.chiPhiThucHienNamTruoc | number: '1.0-1' }}</td>
                                         <td>{{ data.tongGiaTri | number: '1.0-1' }}</td>
@@ -182,11 +182,11 @@
                                             <a (click)="redirectToChiTiet(true, data.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isChiCuc()"
+                                            <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_THU_KHO || data.trangThai == globals.prop.NHAP_TU_CHOI_KE_TOAN || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
                                                 (click)="redirectToChiTiet(false, data.id)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a *ngIf="data.trangThai=='00' && userService.isChiCuc()"
+                                            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()"
                                                 (click)="xoaItem(data)">
                                                 <i class="fa fa-trash-o do"></i>
                                             </a>
@@ -223,10 +223,10 @@
                             <i class="icon htvbdh_chuyen-xu-ly"></i>
                             <span>Xuất file</span>
                         </button>
-                        <button type="button" class="btn btn-sub" (click)="print()">
+                        <!-- <button type="button" class="btn btn-sub" (click)="print()">
                             <i class="icon htvbdh_tcdt_print"></i>
                             <span>In</span>
-                        </button>
+                        </button> -->
                         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
                             *ngIf="userService.isChiCuc()">
                             <i class="icon htvbdh_dau-cong"></i>

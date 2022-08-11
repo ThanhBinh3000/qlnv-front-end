@@ -107,7 +107,7 @@ export class TongHopComponent implements OnInit {
 		this.searchFilter.maDviTao = this.userInfo?.dvql;
 
 		if (this.loai == "0") {
-			if (ROLE_CAN_BO.includes(this.userRole)){
+			if (ROLE_CAN_BO.includes(this.userRole)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -115,25 +115,25 @@ export class TongHopComponent implements OnInit {
 		} else {
 			this.status = true;
 			this.disable = true;
-			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)){
+			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
 			}
 		}
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
-			data => {
-				if (data.statusCode == 0) {
-					this.donVis = data.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
+		// this.danhMuc.dMDonVi().toPromise().then(
+		// 	data => {
+		// 		if (data.statusCode == 0) {
+		// 			this.donVis = data.data;
+		// 		} else {
+		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+		// 		}
+		// 	},
+		// 	err => {
+		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// 	}
+		// );
 		this.spinner.hide();
 		this.onSubmit();
 	}
@@ -179,14 +179,14 @@ export class TongHopComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = [];
 					data.data.content.forEach(item => {
-						if (this.listIdDelete.findIndex(e => e == item.id) == -1){
+						if (this.listIdDelete.findIndex(e => e == item.id) == -1) {
 							this.danhSachBaoCao.push({
 								...item,
 								checked: false,
 							})
 						} else {
 							this.danhSachBaoCao.push({
-								...item, 
+								...item,
 								checked: true,
 							})
 						}
@@ -210,7 +210,7 @@ export class TongHopComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	xoaDieuKien(){
+	xoaDieuKien() {
 		this.searchFilter.maDeNghi = null
 		this.searchFilter.trangThai = null
 		this.searchFilter.tuNgay = null
@@ -283,13 +283,13 @@ export class TongHopComponent implements OnInit {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	getUnitName(maDvi: string) {
-		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-	}
+	// getUnitName(maDvi: string) {
+	// 	return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+	// }
 
 	xoaDeNghi(id: string) {
 		let request = [];
-		if (!id){
+		if (!id) {
 			request = this.listIdDelete;
 		} else {
 			request = [id];
@@ -323,28 +323,28 @@ export class TongHopComponent implements OnInit {
 		return check;
 	}
 
-	changeListIdDelete(id: string){
-		if (this.listIdDelete.findIndex(e => e == id) == -1){
-			this.listIdDelete.push(id); 
+	changeListIdDelete(id: string) {
+		if (this.listIdDelete.findIndex(e => e == id) == -1) {
+			this.listIdDelete.push(id);
 		} else {
 			this.listIdDelete = this.listIdDelete.filter(e => e != id);
 		}
 	}
 
-	checkAll(){
+	checkAll() {
 		let check = true;
 		this.danhSachBaoCao.forEach(item => {
-			if (item.checked){
+			if (item.checked) {
 				check = false;
 			}
 		})
 		return check;
 	}
 
-	updateAllCheck(){
+	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
 			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-			&& ROLE_CAN_BO.includes(this.userRole)){
+				&& ROLE_CAN_BO.includes(this.userRole)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

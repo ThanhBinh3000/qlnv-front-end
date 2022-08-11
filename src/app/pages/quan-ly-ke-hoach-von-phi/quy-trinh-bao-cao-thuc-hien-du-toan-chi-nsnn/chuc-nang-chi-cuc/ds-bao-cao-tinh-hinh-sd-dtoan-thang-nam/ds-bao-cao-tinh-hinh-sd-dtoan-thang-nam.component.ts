@@ -53,6 +53,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	donViTaos: any = [];
 	baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
 	statusBtnNew = true;
+	statusThemMoi = true;
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
@@ -72,6 +73,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
 			this.trangThai = '1';
 			this.roleUser = 'canbo';
+			this.statusThemMoi = false;
 		} else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
 			this.trangThai = '2';
 			this.roleUser = 'truongBoPhan';

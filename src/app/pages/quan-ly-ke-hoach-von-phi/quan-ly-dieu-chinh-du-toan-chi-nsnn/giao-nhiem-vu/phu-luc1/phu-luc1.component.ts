@@ -571,7 +571,7 @@ export class PhuLuc1Component implements OnInit {
   saveEdit(id: string): void {
     if (
       // (!this.editCache[id].data.maNdung && this.editCache[id].data.maNdung !== 0) ||
-      (!this.editCache[id].data.maLoaiKhoan) ||
+      // (!this.editCache[id].data.maLoaiKhoan) ||
       (!this.editCache[id].data.tongNcauDtoanKphi && this.editCache[id].data.tongNcauDtoanKphi !== 0) ||
       (!this.editCache[id].data.dtoanKphiNtruoc && this.editCache[id].data.dtoanKphiNtruoc !== 0) ||
       (!this.editCache[id].data.dtoanKphiDaGiao && this.editCache[id].data.dtoanKphiDaGiao !== 0) ||

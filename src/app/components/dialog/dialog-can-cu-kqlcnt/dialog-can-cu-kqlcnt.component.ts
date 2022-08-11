@@ -68,13 +68,13 @@ export class DialogCanCuKQLCNTComponent implements OnInit {
       "trangThai": null,
       "tuNgayQd": null
     };
-    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.timKiem(body);
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
+      if (data && data.length > 0) {
+        this.dataTable = data;
       }
-      this.totalRecord = data.totalElements;
+      this.totalRecord = data.length;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

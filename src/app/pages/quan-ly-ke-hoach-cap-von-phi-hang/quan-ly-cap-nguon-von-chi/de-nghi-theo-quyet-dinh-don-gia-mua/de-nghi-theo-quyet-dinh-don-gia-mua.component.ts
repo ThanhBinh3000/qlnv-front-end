@@ -159,18 +159,18 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    this.donVis = res.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            },
-        );
+        // await this.danhMuc.dMDonVi().toPromise().then(
+        //     (res) => {
+        //         if (res.statusCode == 0) {
+        //             this.donVis = res.data;
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res?.msg);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //     },
+        // );
         if (this.id) {
             await this.getDetailReport();
         } else {
@@ -184,7 +184,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                 this.close();
             }
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            
+
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -203,14 +203,14 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     this.vatTus = [];
-                    if (this.loaiDn == Utils.MUA_MUOI){
+                    if (this.loaiDn == Utils.MUA_MUOI) {
                         this.vatTus.push(res.data.find(e => e.ma == "04"));
                     } else {
                         const vatTuTemp = res.data.find(e => e.ma == "01").child;
-                        if (this.loaiDn == Utils.MUA_GAO){
+                        if (this.loaiDn == Utils.MUA_GAO) {
                             this.vatTus.push(vatTuTemp.find(e => e.ma == "0102"));
                         }
-                        if (this.loaiDn == Utils.MUA_THOC){
+                        if (this.loaiDn == Utils.MUA_THOC) {
                             this.vatTus.push(vatTuTemp.find(e => e.ma == "0101"));
                         }
                     }
@@ -266,8 +266,8 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.status = true;
         }
         let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
+        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+        if (this.maDviTao == this.userInfo.dvql) {
             checkChirld = true;
         }
         const utils = new Utils();
@@ -389,7 +389,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.congVan){
+        if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -449,7 +449,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (this.kphiDaCap < 0){
+        if (this.kphiDaCap < 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
@@ -696,9 +696,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
-    }
+    // getUnitName() {
+    //     return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
+    // }
 
     getStatusName(id: string) {
         return this.trangThais.find(e => e.id == id)?.tenDm;
@@ -744,12 +744,12 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     maDeNghiNew = res.data;
-                } 
+                }
             },
         );
-        if (!maDeNghiNew){
+        if (!maDeNghiNew) {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                return;
+            return;
         }
         if (!this.maDviTien ||
             (!this.kphiDaCap && this.kphiDaCap !== 0)) {
@@ -825,7 +825,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         );
         this.spinner.hide();
     }
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 }

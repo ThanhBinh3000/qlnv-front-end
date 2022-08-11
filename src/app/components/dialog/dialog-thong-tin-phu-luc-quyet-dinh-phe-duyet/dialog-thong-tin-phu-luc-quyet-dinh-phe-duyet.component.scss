@@ -2,7 +2,12 @@
   .ant-table-wrapper {
     margin-top: 0px !important;
   }
+
   .align-right {
     text-align: right;
   }
+}
+
+.ant-table thead.ant-table-thead tr th {
+  white-space: normal;
 }

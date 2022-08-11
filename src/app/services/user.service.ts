@@ -57,20 +57,20 @@ export class UserService {
     // }
     // return new UserLogin({})
     // var userInfo = decodeURIComponent(escape(window.atob(decoded.toString())));
-      return new UserLogin(decoded);
+    return new UserLogin(decoded);
   }
 
-  isTongCuc(){
+  isTongCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "1"
   }
 
-  isCuc(){
+  isCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "2"
   }
 
-  isChiCuc(){
+  isChiCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "3"
   }
@@ -99,7 +99,5 @@ export class UserService {
     }
     return null;
   }
-
-
 
 }

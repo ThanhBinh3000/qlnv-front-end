@@ -47,6 +47,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 	statusBtnNew = true;
+	statusThemMoi = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -66,6 +67,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
 			this.trangThai = '1';
 			this.roleUser = 'canbo';
+			this.statusThemMoi = false;
 		} else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
 			this.trangThai = '2';
 			this.roleUser = 'truongBoPhan';
