@@ -291,9 +291,9 @@ input.form-control {
   border-radius: 0px;
 }
 
-.ant-form-vertical {
-  padding: 10px 0px;
-}
+// .ant-form-vertical {
+//   padding: 10px 0px;
+// }
 
 .ant-select {
   width: 100%;
@@ -623,8 +623,6 @@ button.btn.btn-create {
 }
 
 .ant-tabs-extra-content {
-  padding-bottom: 6px;
-
   .btn.btn-create {
     @extend %btn-create;
     display: flex;
@@ -4596,10 +4594,10 @@ th .ant-input-affix-wrapper {
   justify-content: end;
   display: flex;
   margin-top: -27px;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
 
   &.ant-affix {
-    margin-top: 0;
+    margin-top: -5px;
   }
 
   .btn.btn-sub {
@@ -4650,6 +4648,10 @@ th .ant-input-affix-wrapper {
 
 .flex-card.ant-card {
   padding: 0 !important;
+}
+
+.ant-tabs-top>.ant-tabs-nav::before {
+  border-bottom: none;
 }
 
 // fix card & tabs............................
@@ -4813,3 +4815,38 @@ th .ant-input-affix-wrapper {
 }
 
 // end new menu ..................................................
+// button ..................................................
+
+.ant-btn:focus,
+.ant-btn:hover,
+.group-button .xanh:hover {
+  background: #363b65;
+  color: #fff;
+  border-color: #363b65 !important;
+}
+
+.group-button .btn-sub:hover {
+  background: #fff;
+  color: #363b65;
+  border-color: #363b65 !important;
+}
+
+.group-button .btn-sub.xanh:hover {
+  background: #363b65;
+  color: #fff;
+  border-color: #363b65 !important;
+}
+
+.group-button .btn-sub.xoa:hover,
+.group-button .btn-sub.btn-xoa:hover,
+.group-button .btn-sub.do:hover {
+  background: #fff;
+  color: #e00606;
+  border-color: #e00606 !important;
+}
+
+// button ..................................................
+.ant-form-vertical>.ant-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}

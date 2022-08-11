@@ -17,35 +17,19 @@
 </nz-affix>
 
 <div class="them-quyet-dinh-ttcp bg-trang">
-  <div class="header">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-          {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
-        </span>
-        <span>Quyết định thủ tướng chính phủ</span>
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          </span>
+          <span>Quyết định thủ tướng chính phủ</span>
+        </div>
       </div>
     </div>
-    <!-- <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="quayLai()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && !isView" type="button" class="btn btn-sub"
-        (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Ban hành</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh"
-        (click)="save()">
-        <i class="icon htvbdh_luu"></i>
-        <span>Lưu</span>
-      </button>
-    </div> -->
-  </div>
-  <nz-card class="mt16 flex-card p-lr16">
     <div class="hang-theo-doi-dac-thu">
-      <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
+      <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
@@ -112,8 +96,9 @@
       </button>
     </div>
   </div>
-  <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+
+  <nz-card class="mt-2px flex-card data-table card-border-content">
+    <nz-table [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
         <tr>
           <th class="text-center" style="width: 5%;">STT</th>
