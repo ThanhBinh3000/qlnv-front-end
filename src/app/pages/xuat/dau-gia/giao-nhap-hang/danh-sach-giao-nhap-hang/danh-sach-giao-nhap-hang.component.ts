@@ -196,7 +196,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "loaiQd": null,
       "maDvi": null,
       "maVthh": null,
-      "loaiVthh": this.typeVthh ?? null,
+      "loaiVthh": this.typeVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "ngayQd": null,
       "orderBy": null,

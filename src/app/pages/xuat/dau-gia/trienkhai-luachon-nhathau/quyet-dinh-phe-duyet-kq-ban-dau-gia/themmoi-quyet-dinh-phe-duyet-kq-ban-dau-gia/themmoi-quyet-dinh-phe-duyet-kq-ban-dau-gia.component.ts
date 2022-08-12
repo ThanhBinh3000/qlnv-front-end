@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
@@ -38,6 +39,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   detail: any = {};
   idBienBanBDG: number = 0;
   detailGiaoNhap: any = {};
+  yearNow: number = 0;
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -49,6 +51,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   listVatTuHangHoa: any[] = [];
   listBienBanBDG: any[] = [];
   listThongBaoBDG: any[] = [];
+  listNam: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   maQd: string;
@@ -64,6 +67,19 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     }
   }
   listOfData = [];
+  errorInputRequired: string = MESSAGE.ERROR_NOT_EMPTY;
+
+  formData: FormGroup = this.fb.group({
+    id: [null, []],
+    nam: [null, [],],
+    soQuyetDinh: [null, [],],
+    trichYeu: [null, [Validators.required],],
+    ngayHieuLuc: [null, [],],
+    ngayKy: [null, [],],
+    thongBaoBdgId: [null, [Validators.required],],
+    idBienBanBDG: [null, [Validators.required],],
+    ghiChu: [null, [],],
+  });;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -81,7 +97,22 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
+    private fb: FormBuilder,
   ) { }
+
+  initForm() {
+    this.formData = this.fb.group({
+      id: [this.detail ? this.detail.id : null, []],
+      nam: [this.detail ? this.detail.nam : null, [],],
+      soQuyetDinh: [this.detail ? this.detail.soQuyetDinh : null, [],],
+      trichYeu: [this.detail ? this.detail.trichYeu : null, [Validators.required],],
+      ngayHieuLuc: [this.detail ? this.detail.ngayHieuLuc : null, [],],
+      ngayKy: [this.detail ? this.detail.ngayKy : null, [],],
+      thongBaoBdgId: [this.detail ? this.detail.thongBaoBdgId : null, [Validators.required],],
+      idBienBanBDG: [this.detail ? this.detail.idBienBanBDG : null, [Validators.required],],
+      ghiChu: [this.detail ? this.detail.ghiChu : null, [],],
+    });
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -90,8 +121,15 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
-      this.detail.nam = dayjs().get('year');
+      this.yearNow = dayjs().get('year');
+      this.detail.nam = this.yearNow;
       this.maQd = this.userInfo.MA_QD;
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -101,6 +139,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         this.loadThongBaoBanDauGia(),
       ]);
       await this.loadChiTiet(this.id);
+      this.initForm();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

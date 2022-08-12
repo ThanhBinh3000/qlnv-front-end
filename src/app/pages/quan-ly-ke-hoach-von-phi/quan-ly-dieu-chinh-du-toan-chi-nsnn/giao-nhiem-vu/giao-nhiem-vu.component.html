@@ -215,15 +215,15 @@
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
 												[(ngModel)]="data.giaoCho"
 												[class]="data.giaoCho ?'' : 'input-error-validate'">
-												<nz-option *ngFor="let item of canBos" [nzValue]="item.fullName"
-													[nzLabel]="item.fullName">
+												<nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+													[nzLabel]="item.username">
 												</nz-option>
 											</nz-select>
 										</ng-container>
 										<ng-template #templategiaoCho>
 											<div *ngFor="let item of canBos">
-												<div *ngIf="item.fullName == data.giaoCho">
-													{{item.fullName}}
+												<div *ngIf="item.username == data.giaoCho">
+													{{item.username}}
 												</div>
 											</div>
 										</ng-template>

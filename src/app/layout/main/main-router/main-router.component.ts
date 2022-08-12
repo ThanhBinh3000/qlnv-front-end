@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+// import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { ObservableService } from 'src/app/services/observable.service';
@@ -10,6 +11,7 @@ import { LIST_PAGES } from '../main-routing.constant';
   styleUrls: ['./main-router.component.scss'],
 })
 export class MainRouterComponent implements OnInit {
+  @ViewChild('myTab2') myTab2: ElementRef;
   lstRouter = [];
   lstPage = [];
   constructor(
@@ -24,5 +26,29 @@ export class MainRouterComponent implements OnInit {
   }
 
   layTatCaChucNangUser() {
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.myTab2.nativeElement.scrollWidth > this.myTab2.nativeElement.clientWidth) {
+        this.myTab2.nativeElement.className = 'ant-menu ant-menu-root ant-menu-dark ant-menu-horizontal next-hien next-an';
+      } else {
+        this.myTab2.nativeElement.className = 'ant-menu ant-menu-root ant-menu-dark ant-menu-horizontal myTab2-an';
+
+      }
+    }, 500);
+  }
+
+  endSlide() {
+    if (this.myTab2.nativeElement.scrollWidth >= this.myTab2.nativeElement.clientWidth) {
+      this.myTab2.nativeElement.scrollTo({ left: this.myTab2.nativeElement.scrollWidth, top: 0, behavior: 'smooth' })
+      this.myTab2.nativeElement.className = 'ant-menu ant-menu-root ant-menu-dark ant-menu-horizontal prev-an';
+    }
+  }
+
+  startSlide() {
+    if (this.myTab2.nativeElement.scrollWidth >= this.myTab2.nativeElement.clientWidth) {
+      this.myTab2.nativeElement.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
+      this.myTab2.nativeElement.className = 'ant-menu ant-menu-root ant-menu-dark ant-menu-horizontal next-an';
+    }
   }
 }

@@ -16,4 +16,9 @@ export class ChucNangNhapKhoComponent implements OnInit {
   ngOnInit() {
   }
 
+  tabSelected = 0;
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
+
 }

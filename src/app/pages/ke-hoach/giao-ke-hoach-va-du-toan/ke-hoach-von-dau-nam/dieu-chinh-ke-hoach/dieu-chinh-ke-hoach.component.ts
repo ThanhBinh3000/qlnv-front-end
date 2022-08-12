@@ -12,6 +12,7 @@ export class DieuChinhKeHoachComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
   deXuatId: number = 0;
+  tabSelected = 'DXDC';
 
   constructor(
     public userService: UserService,
@@ -20,11 +21,15 @@ export class DieuChinhKeHoachComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectTabDieuChinh(item) {
-    this.tabSelect = 1;
-    this.isDetail = true;
-    this.isView = item.isView;
-    this.deXuatId = item.deXuatId;
+  // selectTabDieuChinh(item) {
+  //   this.tabSelect = 1;
+  //   this.isDetail = true;
+  //   this.isView = item.isView;
+  //   this.deXuatId = item.deXuatId;
+  // }
+
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 
 }

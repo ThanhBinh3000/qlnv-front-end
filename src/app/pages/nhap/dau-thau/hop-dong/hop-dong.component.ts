@@ -8,6 +8,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./hop-dong.component.scss'],
 })
 export class HopDongComponent implements OnInit {
+  loaiVthhSelected: string
   tabs: any[] = [];
 
   constructor(
@@ -21,7 +22,7 @@ export class HopDongComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: null,
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -34,4 +35,9 @@ export class HopDongComponent implements OnInit {
       }
     }
   }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
+
 }
