@@ -117,70 +117,70 @@
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                  (input)="filterInTable('nam',filterTable.nam)" size="smail" />
+                  (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
               </nz-input-group>
             </th>
             <th>
               <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.tuNgay"
-                (ngModelChange)="filterDateInTable('tuNgay',filterTable.tuNgay)">
+                (ngModelChange)="filterInTable('tuNgay',filterTable.tuNgay,true)">
               </nz-date-picker>
             </th>
             <th>
               <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.denNgay"
-                (ngModelChange)="filterDateInTable('denNgay',filterTable.denNgay)">
+                (ngModelChange)="filterInTable('denNgay',filterTable.denNgay,true)">
               </nz-date-picker>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                  (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa)" size="smail" />
+                  (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiHangHoa"
-                  (input)="filterInTable('chungLoaiHangHoa',filterTable.chungLoaiHangHoa)" size="smail" />
+                  (input)="filterInTable('chungLoaiHangHoa',filterTable.chungLoaiHangHoa, false)" size="smail" />
               </nz-input-group>
             </th>
             <th>
               <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayTao"
-                (ngModelChange)="filterDateInTable('ngayTao',filterTable.ngayTao)">
+                (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao,true)">
               </nz-date-picker>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donVi"
-                  (input)="filterInTable('donVi',filterTable.donVi)" size="smail" />
+                  (input)="filterInTable('donVi',filterTable.donVi, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"
-                  (input)="filterInTable('diemKho',filterTable.diemKho)" size="smail" />
+                  (input)="filterInTable('diemKho',filterTable.diemKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"
-                  (input)="filterInTable('nhaKho',filterTable.nhaKho)" size="smail" />
+                  (input)="filterInTable('nhaKho',filterTable.nhaKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nganKho"
-                  (input)="filterInTable('nganKho',filterTable.nganKho)" size="smail" />
+                  (input)="filterInTable('nganKho',filterTable.nganKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loKho"
-                  (input)="filterInTable('loKho',filterTable.loKho)" size="smail" />
+                  (input)="filterInTable('loKho',filterTable.loKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (input)="filterInTable('trangThai',filterTable.trangThai)" size="smail" />
+                  (input)="filterInTable('trangThai',filterTable.trangThai, false)" size="smail" />
               </nz-input-group>
             </th>
             <th></th>

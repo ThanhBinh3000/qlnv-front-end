@@ -16,7 +16,6 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -83,7 +82,6 @@ export class SoKhoTheKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    public datepipe: DatePipe
 
   ) {
     this.formData = this.fb.group({
@@ -112,17 +110,16 @@ export class SoKhoTheKhoComponent implements OnInit {
 
   async search() {
     this.spinner.show();
-
     let body = {
       "denNgay": "",
-      "limit": 20,
+      "limit": this.pageSize, // cái này bằng 10 : PAGE_SIZE_DEFAULT
       "loaiHH": this.formData.value.loaiHH,
       "maChungLoaiHang": this.formData.value.maChungLoaiHang,
       "maDvi": this.formData.value.maDvi,
       "nam": this.formData.value.nam,
       "orderBy": "",
       "orderType": "",
-      "page": 0,
+      "page": this.page - 1, // cái này  1 - 1 = 0
       "tenDVi": this.formData.value.tenDVi,
       "tuNgay": ""
     }
@@ -130,8 +127,6 @@ export class SoKhoTheKhoComponent implements OnInit {
       body.tuNgay = this.formData.value.ngayTao[0]
       body.denNgay = this.formData.value.ngayTao[1]
     }
-    console.log(body);
-
     let res = await this.quanLySoKhoTheKhoService.timKiem(body);
     if (res.msg = MESSAGE.SUCCESS) {
       this.dataTable = res.data.content
@@ -140,7 +135,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      console.log(this.dataTableAll);
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -172,7 +166,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         this.dataTable.forEach((item) => {
           if (item.trangThai == '00') {
             item.checked = true;
-            console.log(item.checked);
           }
         });
       }
@@ -242,36 +235,24 @@ export class SoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp]
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
-  filterDateInTable(key: string, value: string) {
-    if (value && value.length === 4) {
-      console.log(value);
-
-    }
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase() === this.datepipe.transform(value, 'yyyy-MM-dd').toString().toLowerCase()) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
       this.dataTable = [...this.dataTable, ...temp]
     } else {

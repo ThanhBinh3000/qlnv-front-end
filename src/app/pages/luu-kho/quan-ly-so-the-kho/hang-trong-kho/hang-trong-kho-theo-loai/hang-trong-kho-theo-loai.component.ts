@@ -18,27 +18,33 @@ import { isEmpty } from 'lodash';
 import { DANH_MUC_LEVEL } from '../../../luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-hang-trong-kho-theo-loai',
   templateUrl: './hang-trong-kho-theo-loai.component.html',
   styleUrls: ['./hang-trong-kho-theo-loai.component.scss'],
 })
-export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
+export class HangTrongKhoTheoLoaiComponent implements OnInit {
+
   @Input('idLoaiVthh') idLoaiVthh: string;
+
   userInfo: UserLogin;
   detail: any = {};
-  dsTong;
+
   dsLoaiHangHoa = [];
-  dsChungLoaiHangHoa = [];
+  dsChungLoaiHangHoa = []; ư
+  dsTong;
   dsCuc = [];
   dsChiCuc = [];
   dsChiCucDataSource = [];
+  dsDiemKho = [];
   dsNhaKho = [];
   dsNganKho = [];
-  dsNganLo = [];
+  dsLoKho = [];
+
   formData: FormGroup;
-  errorMessage = '';
   searchInTable: any = {
     donVi: null,
     chungLoaiHH: null,
@@ -49,559 +55,12 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     donViTinh: null,
   };
 
+  errorMessage = '';
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   dataTable: any[] = [];
-
-  dataExample: HangTrongKhoRowItem[] = [
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDonVi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDonVi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDonVi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDonVi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDonVi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDonVi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDonVi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
 
   mapOfExpandedData: { [key: string]: HangTrongKhoRowItem[] } = {};
 
@@ -614,18 +73,17 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     private readonly userService: UserService,
     private readonly notification: NzNotificationService,
     public treeTableService: TreeTableService<HangTrongKhoRowItem>,
-  ) {}
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    public globals: Globals,
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
+      this.loaiVTHHGetAll()
       await this.initData();
-      this.dataExample.forEach((item) => {
-        this.mapOfExpandedData[item.id] =
-          this.treeTableService.convertTreeToList(item);
-      });
-      this.dataTable = [...this.dataExample];
+      await this.search()
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -633,9 +91,16 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.idLoaiVthh.currentValue) {
-      // Get list
+  loaiVTHHGetAll() {
+    this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
+      this.dsLoaiHangHoa = [...hangHoa.data]
+    })
+  }
+
+  onChangeLoaiHH(id: number) {
+    let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.dsChungLoaiHangHoa = loaiHangHoa[0].child
     }
   }
 
@@ -643,12 +108,13 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     this.formData = this.fb.group({
       idLoaiHH: [null],
       idChungLoaiHH: [null],
+      ngay: [null],
       idCuc: [null],
+      idDiemKho: [null],
       idChiCuc: [null],
       idNhaKho: [null],
       idNganKho: [null],
       idLoKho: [null],
-      ngay: [null],
     });
   }
 
@@ -664,24 +130,19 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
       maDviCha: this.detail.maDvi,
       trangThai: '01',
     };
-
     const dsTong = await this.donviService.layDonViTheoCapDo(body);
     if (!isEmpty(dsTong)) {
       this.dsTong = dsTong;
       this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
-      // this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      // this.dsChiCucDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
-      //   (item) => item.tenDvi,
-      // );
-      // this.dsNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
-      // this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
-      // this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
+      this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     }
   }
 
   onChangeCuc(id) {
+    console.log(id);
     const cuc = this.dsCuc.find((item) => item.id === Number(id));
     this.formData.get('idChiCuc').setValue(null);
+    this.formData.get('idDiemKho').setValue(null);
     this.formData.get('idNhaKho').setValue(null);
     this.formData.get('idNganKho').setValue(null);
     this.formData.get('idLoKho').setValue(null);
@@ -698,12 +159,27 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
 
   onChangeChiCuc(id) {
     const chiCuc = this.dsChiCuc.find((item) => item.id === Number(id));
+    this.formData.get('idDiemKho').setValue(null);
     this.formData.get('idNhaKho').setValue(null);
     this.formData.get('idNganKho').setValue(null);
     this.formData.get('idLoKho').setValue(null);
     if (chiCuc) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+      };
+      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
+    } else {
+      this.dsDiemKho = [];
+    }
+  }
+  onChangeDiemKho(id) {
+    const dsDiemKho = this.dsDiemKho.find((item) => item.id === Number(id));
+    this.formData.get('idNhaKho').setValue(null);
+    this.formData.get('idNganKho').setValue(null);
+    this.formData.get('idLoKho').setValue(null);
+    if (dsDiemKho) {
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.dsTong, dsDiemKho),
       };
       this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
     } else {
@@ -732,9 +208,9 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, nganKho),
       };
-      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
+      this.dsLoKho = result[DANH_MUC_LEVEL.NGAN_LO];
     } else {
-      this.dsNganLo = [];
+      this.dsLoKho = [];
     }
   }
 
@@ -751,25 +227,39 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit, OnChanges {
     }
   }
 
-  search() {}
+  async search() {
+    let res = await this.quanLyHangTrongKhoService.search();
+    console.log(res);
+    if (res.msg === MESSAGE.SUCCESS) {
+      res.data.list.forEach((item) => {
+        this.mapOfExpandedData[item.id] =
+          this.treeTableService.convertTreeToList(item);
+      });
+      this.dataTable = [...res.data.list];
+      this.totalRecord = res.data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 
   clearFilter() {
     this.formData.reset();
   }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
-  viewDetail(data: HangTrongKhoRowItem) {}
+  viewDetail(data: HangTrongKhoRowItem) { }
 
-  exportData() {}
+  exportData() { }
 }
 
 interface IHangTrongKho {
   id: number;
   child?: IHangTrongKho[];
-  tenDonVi: string;
+  tenDVi: string;
+  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
@@ -790,7 +280,8 @@ class HangTrongKhoRowItem implements IHangTrongKho, ITreeTableItem {
   level?: number;
   id: number;
   child?: IHangTrongKho[];
-  tenDonVi: string;
+  tenDVi: string;
+  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
