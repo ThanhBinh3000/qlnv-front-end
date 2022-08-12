@@ -4638,9 +4638,9 @@ th .ant-input-affix-wrapper {
 .ant-tabs {
   padding-top: 8px;
 
-  .ant-tabs-content-holder {
-    padding: 0;
-  }
+  // .ant-tabs-content-holder {
+  //   padding: 0;
+  // }
 
   .ant-tabs-extra-content {
     margin-top: -12px;
@@ -4653,6 +4653,10 @@ th .ant-input-affix-wrapper {
 
 .ant-tabs-top>.ant-tabs-nav::before {
   border-bottom: none;
+}
+
+.tab-table .ant-tabs-content-holder {
+  padding: 0;
 }
 
 // fix card & tabs............................
