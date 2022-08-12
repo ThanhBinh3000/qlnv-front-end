@@ -48,7 +48,7 @@
     <div class="contentDetail">
       <div class="main-content">
         <nz-card class="flex-card p-lr16">
-          <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
+          <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu" *ngIf="formData">
 
             <div class="search__body" nz-row [nzGutter]="[0, 6]">
               <div nz-col nzSpan="6">
