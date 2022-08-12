@@ -81,7 +81,6 @@ export class DanhSachHopDongComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(this.typeVthh)
   }
 
   updateAllChecked(): void {
@@ -163,7 +162,7 @@ export class DanhSachHopDongComponent implements OnInit {
       }
     }
     let body = {
-      "loaiVthh": this.typeVthh,
+      "loaiVthh": '',
       "maDvi": maDonVi,
       "nhaCcap": this.nhaCungCap ?? '',
       "tenHd": this.tenHd ?? '',

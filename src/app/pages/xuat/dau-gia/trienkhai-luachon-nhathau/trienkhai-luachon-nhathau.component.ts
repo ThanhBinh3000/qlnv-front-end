@@ -20,7 +20,7 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        ma: ""
+        ma: null
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
