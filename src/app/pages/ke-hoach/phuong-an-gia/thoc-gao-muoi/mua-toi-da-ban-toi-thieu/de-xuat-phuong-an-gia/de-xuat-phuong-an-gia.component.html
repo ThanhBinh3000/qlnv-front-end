@@ -103,14 +103,14 @@
                         <th class="text-center" style="width: 10%;">Số đề xuất</th>
                         <th class="text-center" style="width: 9%;">Ngày ký</th>
                         <th class="text-center" style="width: 18%;">Trích yếu</th>
-                        <th class="text-center" style="width: 13%;">Quyết định giao chỉ tiêu kế hoạch</th>
+                        <th class="text-center" style="width: 15%;">Quyết định giao chỉ tiêu kế hoạch</th>
                         <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 9%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 9%;">Loại giá</th>
                         <th class="text-center" style="width: 9%;">Trạng thái</th>
                         <th class="text-center" width="width: 5%;">Hành động</th>
                     </tr>
-                    <tr class="header-row">
+                    <tr class="header-row search">
                         <th></th>
                         <th></th>
                         <th>
@@ -206,7 +206,7 @@
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.loaiHangHoa }}</td>
                         <td>{{ data.loaiGia }}</td>
-                        <td>{{ data.trangThai }}</td>
+                        <td>{{ data.tenTrangThai }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-eye"></i>

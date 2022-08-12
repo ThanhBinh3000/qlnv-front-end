@@ -15,6 +15,9 @@
         </button>
     </div>
 </nz-affix>
+
+
+
 <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
         <div class="header">
@@ -48,7 +51,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số đề xuất
+                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số công văn
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="{{maDx}}" id="so-qd">
@@ -130,4 +133,228 @@
             </div>
         </form>
     </nz-card>
+
+
+
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <div nz-col nzSpan="24">
+            <nz-tabset nzType="card" class="mt16 flex-card p-lr16" [nzTabBarExtraContent]="">
+                <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
+                    <form nzLayout="vertical" nz-form [formGroup]="">
+                        <div nz-row [nzGutter]="16">
+                            <div nz-col [nzSpan]="5">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired [nzNoColon]="true">
+                                        Chủng loại hành hóa
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="">
+                                        <nz-select formControlName=""
+                                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                                            <nz-option *ngFor="let p of " [nzValue]="p" [nzLabel]="p">
+                                            </nz-option>
+                                        </nz-select>
+                                        <ng-template #soQdCcErr let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="5">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired [nzNoColon]="true">
+                                        Tiêu chuẩn chất lượng
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="error">
+                                        <nz-input-group nzAddOnAfter="">
+                                            <nz-input-group id="so-dx">
+                                                <input type="text" nz-input formControlName="" />
+                                            </nz-input-group>
+                                        </nz-input-group>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="4">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired [nzNoColon]="true">
+                                        Số lượng
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="error">
+                                        <nz-input-group nzAddOnAfter="">
+                                            <nz-input-number formControlName="" [nzSize]="'small'"
+                                                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                                            </nz-input-number>
+                                        </nz-input-group>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="10">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired [nzNoColon]="true">
+                                        Địa điểm để hàng
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="">
+                                        <nz-input-group id="so-dx">
+                                            <input type="text" nz-input formControlName="" />
+                                        </nz-input-group>
+                                        <ng-template #nguonVonErr let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="6">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired [nzNoColon]="true">
+                                        Giá đề nghị đã bao gồm thuế (đồng/kg)
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="error">
+                                        <nz-input-group nzAddOnAfter="">
+                                            <nz-input-number formControlName="" [nzSize]="'small'"
+                                                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                                            </nz-input-number>
+                                        </nz-input-group>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                    </form>
+                </nz-tab>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <nz-tab [nzTitle]="'Căn cứ phương pháp xác định giá'" class="ds-goi-thau__container">
+                    <nz-card class="mt16 flex-card p-lr16 card-table">
+                        <nz-table #editRowTable nzBordered [nzData]="" [nzFrontPagination]="false"
+                            [nzShowPagination]="false">
+                            <thead>
+                                <tr>
+                                    <th [width]="30">STT</th>
+                                    <th></th>
+                                    <th [width]="30"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *>
+                                    <td class="text-center"> </td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <a>
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a>
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Thông tin khảo sát giá'" class="ds-goi-thau__container">
+                    <nz-card class="mt16 flex-card p-lr16 card-table">
+                        <nz-table #dataTable nzBordered [nzData]="" [nzFrontPagination]="false"
+                            [nzShowPagination]="false">
+                            <thead>
+                                <tr>
+                                    <th [width]="30">STT</th>
+                                    <th></th>
+                                    <th [width]="30"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"> </td>
+                                    <td></td>
+                                    <td class="text-left">
+                                        <a>
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Phân tích, dự báo biến động giá'" class="ds-goi-thau__container">
+                    <nz-card class="mt16 flex-card p-lr16 card-table">
+                        <nz-table #dataTable nzBordered [nzData]="" [nzFrontPagination]="false"
+                            [nzShowPagination]="false">
+                            <thead>
+                                <tr>
+                                    <th [width]="30">STT</th>
+                                    <th></th>
+                                    <th [width]="30"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"> </td>
+                                    <td></td>
+                                    <td class="text-left">
+                                        <a>
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </form>
+
+
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <div nz-col nzSpan="24">
+            <nz-form-item class="form-item">
+                <nz-form-label nzRequired [nzNoColon]="true">
+                    Ghi chú
+                </nz-form-label>
+                <nz-form-control>
+                    <textarea [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03'"
+                        nz-input [rows]="3" formControlName="ghiChu"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
 </div>
