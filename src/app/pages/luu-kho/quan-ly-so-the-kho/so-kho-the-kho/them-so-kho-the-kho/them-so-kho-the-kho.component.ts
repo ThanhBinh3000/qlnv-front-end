@@ -17,6 +17,7 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
@@ -64,6 +65,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   dsHangHoa: any[];
 
+  dsChiTiet: any;
+
   constructor(
     private readonly fb: FormBuilder,
     private notification: NzNotificationService,
@@ -72,7 +75,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
-    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     public globals: Globals,
     private modal: NzModalService,
 
@@ -82,19 +85,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      console.log(this.idInput, this.isCheck, this.isStatus);
-      if (this.idInput) {
-        let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
-        console.log(res);
-
-        if (this.isCheck) {
-          console.log('trường hợp đã lấy được id và đang luồng edit ' + this.isCheck);
-        } else {
-          console.log('trường hợp đã lấy được id và đang luồng view ' + this.isCheck);
-        }
-      } else {
-        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới ' + this.idInput);
-      }
+      // console.log(this.idInput, this.isCheck, this.isStatus);
       // this.getDataDetail(this.idInput)
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -106,6 +97,17 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         this.initData(),
         this.loaiVTHHGetAll(),
       ]);
+      if (this.idInput) {
+        this.loadChiTiet();
+
+        if (this.isCheck) {
+          console.log('trường hợp đã lấy được id và đang luồng edit ' + this.isCheck);
+        } else {
+          console.log('trường hợp đã lấy được id và đang luồng view ' + this.isCheck);
+        }
+      } else {
+        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới ' + this.idInput);
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -114,25 +116,67 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     }
   }
 
+  async loadChiTiet() {
+    let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
+    console.log(res);
+
+    this.dsChiTiet = res.data;
+
+    this.formData.patchValue({
+      nam: res.data.nam,
+      tuNgay: res.data.tuNgay,
+      denNgay: res.data.denNgay,
+      idLoaiHangHoa: res.data.loaiHang,
+      idChungLoaiHangHoa: res.data.chungLoaiHang,
+      idDiemKho: res.data.diemKho,
+      idNhaKho: res.data.nhaKho,
+      idNganKho: res.data.nganKho,
+      idNganLo: res.data.loKho,
+    });
+
+    this.changeLoaiHangHoa();
+    this.changeDiemKho(true);
+
+    let listNhapXuat = [];
+    res.data.ds.forEach(nhapXuatKho => {
+      if (nhapXuatKho.ngay) {
+        const ngay = nhapXuatKho.ngay.split("-");
+        nhapXuatKho.ngay = `${ngay[2]}-${ngay[1]}-${ngay[0]}`;
+      }
+
+      listNhapXuat = [
+        ...listNhapXuat,
+        {
+          dienGiai: nhapXuatKho.dienGiai,
+          ghiChu: nhapXuatKho.ghiChu,
+          loaiPhieu: nhapXuatKho.soPhieuNhap ? 'NHAP' : 'XUAT',
+          ngay: nhapXuatKho.ngay,
+          soLuong: nhapXuatKho.soPhieuNhap ? nhapXuatKho.soLuongNhap : nhapXuatKho.soLuongXuat,
+          soPhieu: nhapXuatKho.soPhieuNhap ? nhapXuatKho.soPhieuNhap : nhapXuatKho.soPhieuXuat,
+          ton: nhapXuatKho.ton,
+        }
+      ]
+    })
+
+    this.dataTable = listNhapXuat;
+
+
+    console.log(this.formData.value)
+
+  }
+
+
+
   isDetail(): boolean {
-    // if (this.isStatus === this.globals.prop.BAN_HANH) {
-    //   return (
-    //     !this.isCheck
-    //   );
-    // }
-
-
     return (
       this.isCheck
     );
-
   }
 
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quanLySoKhoTheKhoService.chiTiet(id);
       const data = res.data
-      console.log(data);
     }
   }
 
@@ -146,8 +190,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      idDonVi: [null, [Validators.required]],
-      nam: [null, [Validators.required]],
+      idDonVi: [this.detail.tenDvi, [Validators.required]],
+      nam: [2021, [Validators.required]],
       tuNgay: [null, [Validators.required]],
       denNgay: [null, [Validators.required]],
       idLoaiHangHoa: [null, [Validators.required]],
@@ -156,12 +200,10 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       idNhaKho: [null, [Validators.required]],
       idNganKho: [null, [Validators.required]],
       idNganLo: [null, [Validators.required]],
-      tonDauKy: [1, [Validators.required]],
-      donViTinh: ['bộ'],
+      tonDauKy: [100, [Validators.required]],
+      donViTinh: [null],
     });
   }
-
-
 
   initData() {
     this.loadDsTong();
@@ -211,37 +253,39 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   changeDiemKho(fromChiTiet: boolean) {
-
-    let diemKho = this.listDiemKho.filter(x => x.title == this.detail.maDiemKho);
+    let diemKho = this.listDiemKho.filter(x => x.title == this.formData.value.idDiemKho);
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
       }
-      else {
-        this.detail.maNhaKho = null;
-      }
     }
   }
 
   changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => x.title == this.detail.maNhaKho);
+    let nhaKho = this.listNhaKho.filter(x => x.title == this.formData.value.idNhaKho);
     if (nhaKho && nhaKho.length > 0) {
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
         this.changeNganKho();
       }
-      else {
-        this.detail.maNganKho = null;
-      }
     }
   }
 
   changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.title == this.detail.maNganKho);
+    let nganKho = this.listNganKho.filter(x => x.title == this.formData.value.idNganKho);
     if (nganKho && nganKho.length > 0) {
       this.listNganLo = nganKho[0].children;
       this.maNganKho = this.detail.maNganKho;
+    }
+
+    if (this.idInput) {
+      this.listNganLo.forEach(nganLo => {
+        if (nganLo.title === this.formData.value.idNganLo) {
+          this.formData.patchValue({ idNganLo: nganLo.maDvi });
+        }
+      })
+
     }
   }
 
@@ -254,11 +298,14 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         console.log(hangHoa)
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          // const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-          // this.listLoaiHangHoa = dataVatTu[0].child;
-
-          // const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-          this.listLoaiHangHoa = hangHoa.data;
+          const dataVatTu = hangHoa.data.forEach((item) => {
+            if (item => item.cap === "1") {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                ...item.child
+              ];
+            }
+          })
         }
       })
     } catch (error) {
@@ -267,17 +314,25 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  async changeLoaiHangHoa(event) {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ten == this.detail.maLoaiHangHoa);
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ten == this.formData.value.idLoaiHangHoa);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
 
+    if (this.idInput) {
+      this.listChungLoaiHangHoa.forEach(chungLoaiHangHoa => {
+        if (chungLoaiHangHoa.ten === this.formData.value.idChungLoaiHangHoa) {
+          this.formData.patchValue({ idChungLoaiHangHoa: chungLoaiHangHoa.ma });
+          this.formData.patchValue({ donViTinh: chungLoaiHangHoa.maDviTinh });
+        }
+      })
+    }
   }
 
-  changeChungLoaiHangHoa(event) {
-    const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ma === event);
-    this.donViTinh = loaihanghoaDVT[0]?.maDviTinh;
+  changeChungLoaiHangHoa() {
+    const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ma === this.formData.value.idChungLoaiHangHoa);
+    this.formData.patchValue({ donViTinh: loaihanghoaDVT[0]?.maDviTinh })
   }
 
   huy() {
@@ -306,40 +361,41 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async luu(isDuyet: boolean) {
-    const body = {
-      "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
-      "denNgay": this.formData.value.denNgay,
-      "ds": [
-        {
-          "dienGiai": "t",
-          "ghiChu": "t",
-          "loaiPhieu": "t",
-          "ngay": "01-02-2020",
-          "soLuong": 10,
-          "soPhieu": "t",
-          "ton": 10
-        }
-      ],
-      "maDvi": this.formData.value.idNganLo,
-      "nam": this.formData.value.nam,
-      "tenDvi": this.formData.value.idDonVi,
-      "tonDauKy": 10,
-      "tuNgay": this.formData.value.tuNgay
-    }
 
-
-
+    console.log(this.formData.value);
 
     try {
-      const res = await this.quanLySoKhoTheKhoService.them(body);
+      const body = {
+        "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
+        "denNgay": dayjs(this.formData.value.denNgay).format("DD-MM-YYYY"),
+        "ds": this.dataTable,
+        "maDvi": this.formData.value.idNganLo,
+        "nam": this.formData.value.nam,
+        "tenDvi": this.formData.value.idDonVi,
+        "tonDauKy": 10,
+        "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY")
+      }
+
+      console.log(body);
+
+      let res: any;
+      if (this.idInput) {
+        const bodyNew = {
+          ...body,
+          'id': this.idInput
+        }
+        console.log(bodyNew);
+        res = await this.quanLySoKhoTheKhoService.sua(bodyNew);
+      } else {
+        res = await this.quanLySoKhoTheKhoService.them(body);
+
+      }
 
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-
+        this.notification.success(MESSAGE.SUCCESS, this.idInput ? MESSAGE.UPDATE_SUCCESS : MESSAGE.ADD_SUCCESS);
         if (isDuyet) {
           return res.data.id;
         }
-
         this.huy();
       }
 
@@ -466,62 +522,57 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     this.isTaoTheKho = true;
     this.loadSoPhieuNhapXuat();
     this.isCheck = true;
+  }
 
-    this.formData.value.tuNgay = dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY");
-    this.formData.value.denNgay = dayjs(this.formData.value.denNgay).format("DD-MM-YYYY");
+  changeDienGiaiGhiChu(event, index, type) {
+    if (type === 'diengiai') {
+      this.dataTable[index].dienGiai = event.target.value;
+    } else if (type === 'ghichu') {
+      this.dataTable[index].ghiChu = event.target.value;
+    }
+    console.log(this.dataTable)
   }
 
   async loadSoPhieuNhapXuat() {
-    this.listLoaiHangHoa.forEach(hangHoa => {
-      if (this.detail.maLoaiHangHoa === hangHoa.ten) {
-        this.maLoaiVTHH = hangHoa.ma;
-      }
-    })
-
-    this.dsDonVi.forEach(donVi => {
-      if (this.detail.maDonVi === donVi.tenDvi) {
-        this.maDonVi = donVi.maDvi;
-      }
-    })
-
-    const bodyNhapNho = {
-      'maDvis': this.maDonVi,
-      'loaiVthh': this.maLoaiVTHH,
-      'paggingReq.limit': 20,
-      'paggingReq.page': 0
-    }
-
-    console.log(bodyNhapNho);
-
-    let body = {
-      "paggingReq.limit": 20,
-      "paggingReq.page": 0
-    }
-
     try {
-      const resNhapKho = await this.quanLyPhieuNhapKhoService.timKiem(bodyNhapNho);
-      // const resSoHang = await this.quanLyHangTrongKhoService.timkiem(body);
+      const bodyNhapXuatNho =
+      {
+        "denNgay": dayjs(this.formData.value.denNgay).format("DD-MMM-YYYY"),
+        "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MMM-YYYY"),
+        "maLokho": this.formData.value.idNganLo,
+        "maVatTu": this.formData.value.idChungLoaiHangHoa,
+        "paggingReq": {
+          "limit": 10,
+          "orderBy": "",
+          "orderType": "",
+          "page": 0
+        }
+      }
 
-      console.log(resNhapKho);
+      const resNhapXuatKho = await this.quanLyHangTrongKhoService.timKiemChiTiet(bodyNhapXuatNho);
 
       let listNhapXuat = [];
 
-      resNhapKho.data.content.forEach(nhapKho => {
+      resNhapXuatKho.data.content.forEach(nhapXuatKho => {
+        const ngay = nhapXuatKho.ngayPheDuyet.split("-");
+
+        nhapXuatKho.ngayPheDuyet = `${ngay[2]}-${ngay[1]}-${ngay[0]}`;
+
         listNhapXuat = [
           ...listNhapXuat,
           {
-            soPhieu: nhapKho.soPhieu,
-            type: 'nhap',
-            ngayTao: nhapKho.thoiGianGiaoNhan,
             dienGiai: '',
-            soLuong: 0,
-            soLuongTon: 0,
             ghiChu: '',
+            loaiPhieu: nhapXuatKho.loaiPhieu === 'NHAP' ? 'NHAP' : 'XUAT',
+            ngay: nhapXuatKho.ngayPheDuyet,
+            soLuong: nhapXuatKho.tongSoLuong,
+            soPhieu: nhapXuatKho.soPhieu,
+            ton: nhapXuatKho.loaiPhieu === 'NHAP' ? this.formData.value.tonDauKy + nhapXuatKho.tongSoLuong : this.formData.value.tonDauKy - nhapXuatKho.tongSoLuong,
           }
         ]
       })
-      this.dataTable = listNhapXuat;
 
+      this.dataTable = listNhapXuat;
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -552,11 +603,11 @@ interface ITheKho {
 }
 
 interface INhapXuat {
-  soPhieu: string;
-  type: 'nhap' | 'xuat';
-  ngayTao: Date;
   dienGiai: string;
-  soLuong: number;
-  soLuongTon: number;
   ghiChu: string;
+  loaiPhieu: 'NHAP' | 'XUAT';
+  ngay: Date;
+  soLuong: number;
+  soPhieu: string;
+  ton: number;
 }
