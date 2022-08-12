@@ -58,6 +58,10 @@
         [nzShowPagination]="false">
         <thead>
           <tr>
+            <th width="40px">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                [nzIndeterminate]="indeterminate"></label>
+            </th>
             <th width="60px">STT</th>
             <th>Số quyết định</th>
             <th>Ngày QĐ</th>
@@ -73,6 +77,7 @@
         </thead>
         <tbody>
           <tr class="search-table">
+            <th></th>
             <th></th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -141,9 +146,12 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
           </tr>
           <tr *ngFor="let data of basicTable.data; let i = index">
+            <td width="45px">
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                [nzDisabled]="data.trangThai != '00'"></label>
+            </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>

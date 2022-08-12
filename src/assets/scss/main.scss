@@ -3677,6 +3677,7 @@ td textarea:focus.ant-input {
 
 .ant-tabs-content-holder {
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 [align='right'] .ant-table-column-title {
@@ -4724,6 +4725,26 @@ th {
     color: #fff;
   }
 
+}
+
+.ant-card-body,
+.ant-tabs .ant-tabs-content-holder {
+  .ant-table-wrapper {
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    min-width: calc(100% + 20px) !important;
+    margin-top: - 1px;
+  }
+
+  .tab-content {
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    min-width: calc(100% + 20px) !important;
+  }
+}
+
+.table-card .ant-card-body {
+  padding-bottom: 0;
 }
 
 .data-table {

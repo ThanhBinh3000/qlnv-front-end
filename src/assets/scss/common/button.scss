@@ -127,144 +127,144 @@
 
 
 // tree tạm fix.....................................................
-.ant-table-row-indent:before {
-  border-bottom: solid 1px #f0f0f0;
-  content: "";
-  width: 30px; //20px;
-  display: block;
-  position: absolute;
-  left: calc(100% - 10px); //100%;
-}
+// .ant-table-row-indent:before {
+//   border-bottom: solid 1px #f0f0f0;
+//   content: "";
+//   width: 30px; //20px;
+//   display: block;
+//   position: absolute;
+//   left: calc(100% - 10px); //100%;
+// }
 
-.ant-table-tbody>tr>td {
-  border: none;
-}
+// .ant-table-tbody>tr>td {
+//   border: none;
+// }
 
-.ant-table-row-indent:after {
-  content: "";
-  display: block;
-  position: absolute;
-  height: 26px;
-  width: 0;
-  border-left: solid 1px #f0f0f0;
-  bottom: 0;
-  right: 10px; //0;
-}
+// .ant-table-row-indent:after {
+//   content: "";
+//   display: block;
+//   position: absolute;
+//   height: 26px;
+//   width: 0;
+//   border-left: solid 1px #f0f0f0;
+//   bottom: 0;
+//   right: 10px; //0;
+// }
 
-.ant-table-row-indent {
-  position: relative;
-  margin-top: 10px;
-}
+// .ant-table-row-indent {
+//   position: relative;
+//   margin-top: 10px;
+// }
 
-.ant-table-row-indent[style="padding-left: 40px;"]+.ant-table-row-expand-icon-spaced:before {
-  content: "";
-  border-left: solid 1px #f0f0f0 !important;
-  height: 26px;
-  display: block;
-  width: 0;
-  background: transparent !important;
-  top: auto;
-  left: -33px;
-  bottom: 8px;
-  box-shadow: unset;
-}
+// .ant-table-row-indent[style="padding-left: 40px;"]+.ant-table-row-expand-icon-spaced:before {
+//   content: "";
+//   border-left: solid 1px #f0f0f0 !important;
+//   height: 26px;
+//   display: block;
+//   width: 0;
+//   background: transparent !important;
+//   top: auto;
+//   left: -33px;
+//   bottom: 8px;
+//   box-shadow: unset;
+// }
 
-.ant-table-row-expand-icon-spaced {
-  overflow: visible;
-  visibility: visible;
-  border: none;
-  background: transparent;
-  box-shadow: unset;
-  transform: scale(1);
-}
+// .ant-table-row-expand-icon-spaced {
+//   overflow: visible;
+//   visibility: visible;
+//   border: none;
+//   background: transparent;
+//   box-shadow: unset;
+//   transform: scale(1);
+// }
 
-.ant-table-row-expand-icon-collapsed,
-.ant-table-row-expand-icon-expanded {
-  transform: scale(1);
-  position: relative;
-}
+// .ant-table-row-expand-icon-collapsed,
+// .ant-table-row-expand-icon-expanded {
+//   transform: scale(1);
+//   position: relative;
+// }
 
-.ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-collapsed:before,
-.ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-expanded:before {
-  border-left: solid 1px #f0f0f0;
-  left: -13px;
-  right: auto;
-  height: 25px;
-  top: -43px;
-  transform: rotate(0deg);
-}
+// .ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-collapsed:before,
+// .ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-expanded:before {
+//   border-left: solid 1px #f0f0f0;
+//   left: -13px;
+//   right: auto;
+//   height: 25px;
+//   top: -43px;
+//   transform: rotate(0deg);
+// }
 
-.ant-table-tbody tr:first-child td .ant-table-row-indent:after,
-// .ant-table-tbody tr:first-child td .ant-table-row-indent:before,
-.ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
-.ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before,
-.ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
-.ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before {
-  display: none;
-}
+// .ant-table-tbody tr:first-child td .ant-table-row-indent:after,
+// // .ant-table-tbody tr:first-child td .ant-table-row-indent:before,
+// .ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
+// .ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before,
+// .ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
+// .ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before {
+//   display: none;
+// }
 
 
-.ant-table-row-expand-icon:after,
-.ant-table-row-expand-icon:before {
-  background: transparent;
-}
+// .ant-table-row-expand-icon:after,
+// .ant-table-row-expand-icon:before {
+//   background: transparent;
+// }
 
-.ant-table-row-expand-icon-collapsed:after,
-.ant-table-row-expand-icon.ant-table-row-expand-icon-expanded:after {
-  content: "\f0da";
-  font-family: 'FontAwesome';
-  background: transparent;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  z-index: 9;
-}
+// .ant-table-row-expand-icon-collapsed:after,
+// .ant-table-row-expand-icon.ant-table-row-expand-icon-expanded:after {
+//   content: "\f0da";
+//   font-family: 'FontAwesome';
+//   background: transparent;
+//   text-align: center;
+//   align-items: center;
+//   justify-content: center;
+//   display: flex;
+//   z-index: 9;
+// }
 
-.ant-table-row-expand-icon-collapsed:after {
-  transform: rotate(0deg) !important;
-}
+// .ant-table-row-expand-icon-collapsed:after {
+//   transform: rotate(0deg) !important;
+// }
 
-.ant-table-row-indent+.ant-table-row-expand-icon {
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
-  background-color: #F1F1F1;
-  border: none;
-  border-radius: 8px;
-  z-index: 9;
-}
+// .ant-table-row-indent+.ant-table-row-expand-icon {
+//   width: 16px;
+//   height: 16px;
+//   margin-left: 2px;
+//   background-color: #F1F1F1;
+//   border: none;
+//   border-radius: 8px;
+//   z-index: 9;
+// }
 
-.ant-table-row-indent+.ant-table-row-expand-icon-spaced {
-  background: transparent;
-}
+// .ant-table-row-indent+.ant-table-row-expand-icon-spaced {
+//   background: transparent;
+// }
 
-.ant-table-row-expand-icon::after {
-  transform-origin: center;
-  left: 7px;
-  top: 0px;
-  bottom: auto;
-}
+// .ant-table-row-expand-icon::after {
+//   transform-origin: center;
+//   left: 7px;
+//   top: 0px;
+//   bottom: auto;
+// }
 
-.ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed::after {
-  transform-origin: center;
-  left: 8px;
-  top: -1px;
-  bottom: auto;
-}
+// .ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed::after {
+//   transform-origin: center;
+//   left: 8px;
+//   top: -1px;
+//   bottom: auto;
+// }
 
-.ant-table-row-expand-icon+div {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  line-height: 1;
-  padding-top: 3px;
-}
+// .ant-table-row-expand-icon+div {
+//   display: block;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   max-width: 100%;
+//   line-height: 1;
+//   padding-top: 3px;
+// }
 
-.ant-table .ant-table-tbody>tr>td>div i.anticon.anticon-plus {
-  cursor: pointer;
-}
+// .ant-table .ant-table-tbody>tr>td>div i.anticon.anticon-plus {
+//   cursor: pointer;
+// }
 
 // end tree tạm fix.....................................................
