@@ -966,7 +966,4 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 }
-function getUserLogin() {
-	throw new Error('Function not implemented.');
-}
 

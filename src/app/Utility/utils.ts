@@ -409,7 +409,7 @@ export class Utils {
                 statusName = "Lãnh đạo phê duyệt"
                 break;
             case Utils.TT_BC_7:
-                statusName = "Gửi ĐV cấp trên"
+                statusName = "Lãnh đạo phê duyệt"
                 break;
             case Utils.TT_BC_8:
                 statusName = "ĐV cấp trên từ chối"
@@ -1428,54 +1428,98 @@ export const LOAI_VON = [
 ]
 
 export function displayNumber(num: number): string {
+    let displayValue: string;
     if (Number.isNaN(num)) {
         return 'NaN';
     }
     if (!num && num !== 0) {
         return '';
     }
-    const nho = num < 0 ? '-' : '';
-    num = Math.abs(num);
-    let str: string = num.toString();
-    let real!: number;
-    let imaginary!: number;
-    let displayValue: string;
-    if (str.indexOf('.') >= 0) {
-        str = num.toFixed(4);
-        real = parseInt(str.split('.')[0], 10);
-        imaginary = parseInt(str.split('.')[1], 10);
-        while (imaginary % 10 == 0) {
-            imaginary = Math.floor(imaginary / 10);
-        }
+    const dau = num < 0 ? '-' : '';
+    let real!: string;
+    let imaginary!: string;
+    if (num == Math.floor(num)) {
+        real = num.toString();
     } else {
-        real = num;
+        const str = num.toFixed(4);
+        real = str.split('.')[0];
+        imaginary = str.split('.')[1];
+        while (imaginary[imaginary.length - 1] == '0') {
+            imaginary = imaginary.slice(0, -1);
+        }
     }
     if (!imaginary) {
-        displayValue = nho + separateNumber(real);
+        displayValue = dau + separateNumber(real);
     } else {
-        displayValue = nho + separateNumber(real) + '.' + separateNumber(imaginary);
+        displayValue = dau + separateNumber(real) + '.' + separateNumber(imaginary);
+    }
+    // let nho = '';
+    // num = Math.abs(num);
+    // let str: string = num.toString();
+    // let real!: number;
+    // let imaginary!: number;
+
+    // if (str.indexOf('.') >= 0) {
+    //     str = num.toFixed(4);
+    //     real = parseInt(str.split('.')[0], 10);
+    //     let imaTemp = str.split('.')[1];
+    //     while (imaTemp.startsWith('0')) {
+    //         nho = nho + 0;
+    //         imaTemp = imaTemp.slice(1);
+    //     }
+    //     imaginary = parseInt(imaTemp, 10);
+    //     while (imaginary % 10 == 0) {
+    //         imaginary = Math.floor(imaginary / 10);
+    //     }
+    // } else {
+    //     real = num;
+    // }
+    // if (!imaginary) {
+    //     displayValue = dau + separateNumber(real);
+    // } else {
+    //     displayValue = dau + separateNumber(real) + '.' + nho + separateNumber(imaginary);
+    // }
+    return displayValue;
+}
+
+export function separateNumber(str: string): string {
+    if (str.length < 4) {
+        return str;
+    }
+    let displayValue!: string;
+    let index = str.indexOf(',');
+    if (index == -1) {
+        displayValue = str.slice(0, -3) + ',' + str.slice(-3);
+        str = displayValue;
+        index = str.indexOf(',');
+    }
+    while (index - 3 > 0) {
+        displayValue = str.slice(0, index - 3) + ',' + str.slice(index - 3);
+        str = displayValue;
+        index = str.indexOf(',');
     }
     return displayValue;
 }
 
-export function separateNumber(num: number): string {
-    let displayValue!: string;
-    if (num == 0) {
-        displayValue = '0';
-    }
-    while (num > 0) {
-        let val = (num % 1000).toString();
-        num = Math.floor(num / 1000);
-        if (num > 0) {
-            while (val.length < 3) {
-                val = '0' + val;
-            }
-        }
-        if (!displayValue) {
-            displayValue = val;
-        } else {
-            displayValue = val + ',' + displayValue;
-        }
-    }
-    return displayValue;
-}
+// export function separateNumber(num: number): string {
+//     let displayValue!: string;
+//     if (num == 0) {
+//         displayValue = '0';
+//     }
+//     while (num > 0) {
+//         let val = (num % 1000).toString();
+//         num = Math.floor(num / 1000);
+//         if (num > 0) {
+//             while (val.length < 3) {
+//                 val = '0' + val;
+//             }
+//         }
+//         if (!displayValue) {
+//             displayValue = val;
+//         } else {
+//             displayValue = val + ',' + displayValue;
+//         }
+//     }
+//     return displayValue;
+// }
+
