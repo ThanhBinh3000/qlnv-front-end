@@ -412,10 +412,10 @@ export class Utils {
                 statusName = "Lãnh đạo phê duyệt"
                 break;
             case Utils.TT_BC_8:
-                statusName = "ĐV cấp trên từ chối"
+                statusName = "Từ chối"
                 break;
             case Utils.TT_BC_9:
-                statusName = "Đv cấp trên duyệt"
+                statusName = "Tiếp nhận"
                 break;
             case Utils.TT_BC_10:
                 statusName = "Điều chỉnh theo số kiểm tra"

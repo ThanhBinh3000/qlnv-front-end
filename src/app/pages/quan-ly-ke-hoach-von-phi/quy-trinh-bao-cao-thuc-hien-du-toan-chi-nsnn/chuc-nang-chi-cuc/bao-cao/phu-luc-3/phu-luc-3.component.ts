@@ -188,6 +188,8 @@ export class PhuLucIIIComponent implements OnInit {
                 khoachNamVonDt: divMoney(item.khoachNamVonDt, this.maDviTien),
                 khoachNamVonThue: divMoney(item.khoachNamVonThue, this.maDviTien),
                 khoachNamVonScl: divMoney(item.khoachNamVonScl, this.maDviTien),
+                kluongThienTso: divMoney(item.kluongThienTso, this.maDviTien),
+                kluongThienThangBcao: divMoney(item.kluongThienThangBcao, this.maDviTien),
                 giaiNganTso: divMoney(item.giaiNganTso, this.maDviTien),
                 giaiNganNsnn: divMoney(item.giaiNganNsnn, this.maDviTien),
                 giaiNganNsnnVonDt: divMoney(item.giaiNganNsnnVonDt, this.maDviTien),
@@ -302,6 +304,8 @@ export class PhuLucIIIComponent implements OnInit {
             const khoachNamVonDt = mulMoney(item.khoachNamVonDt, this.maDviTien);
             const khoachNamVonThue = mulMoney(item.khoachNamVonThue, this.maDviTien);
             const khoachNamVonScl = mulMoney(item.khoachNamVonScl, this.maDviTien);
+            const kluongThienTso = mulMoney(item.kluongThienTso, this.maDviTien);
+            const kluongThienThangBcao = mulMoney(item.kluongThienThangBcao, this.maDviTien);
             const giaiNganTso = mulMoney(item.giaiNganTso, this.maDviTien);
             const giaiNganNsnn = mulMoney(item.giaiNganNsnn, this.maDviTien);
             const giaiNganNsnnVonDt = mulMoney(item.giaiNganNsnnVonDt, this.maDviTien);
@@ -321,7 +325,7 @@ export class PhuLucIIIComponent implements OnInit {
                 giaiNganTso > MONEY_LIMIT || giaiNganNsnn > MONEY_LIMIT || giaiNganNsnnVonDt > MONEY_LIMIT ||
                 giaiNganNsnnVonThue > MONEY_LIMIT || giaiNganNsnnVonScl > MONEY_LIMIT || luyKeGiaiNganDauNamTso > MONEY_LIMIT ||
                 luyKeGiaiNganDauNamNsnn > MONEY_LIMIT || luyKeGiaiNganDauNamNsnnVonDt > MONEY_LIMIT || luyKeGiaiNganDauNamNsnnVonThue > MONEY_LIMIT ||
-                luyKeGiaiNganDauNamNsnnVonScl > MONEY_LIMIT) {
+                luyKeGiaiNganDauNamNsnnVonScl > MONEY_LIMIT || kluongThienTso > MONEY_LIMIT || kluongThienThangBcao > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -345,6 +349,8 @@ export class PhuLucIIIComponent implements OnInit {
                 khoachNamVonDt: khoachNamVonDt,
                 khoachNamVonThue: khoachNamVonThue,
                 khoachNamVonScl: khoachNamVonScl,
+                kluongThienTso: kluongThienTso,
+                kluongThienThangBcao: kluongThienThangBcao,
                 giaiNganTso: giaiNganTso,
                 giaiNganNsnn: giaiNganNsnn,
                 giaiNganNsnnVonDt: giaiNganNsnnVonDt,

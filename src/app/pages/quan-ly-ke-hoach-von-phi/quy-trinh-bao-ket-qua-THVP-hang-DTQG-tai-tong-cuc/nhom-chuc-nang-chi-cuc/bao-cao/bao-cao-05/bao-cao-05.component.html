@@ -59,11 +59,21 @@
     <nz-table nzBordered class="table__body">
         <thead>
             <tr>
-                <th rowspan="2">STT</th>
-                <th rowspan="2">Nội dung chi</th>
-                <th colspan="{{1 + listColTemp.length}}">Chi tiết theo từng mặt hàng trong đợt</th>
-                <th colspan="{{1 + listColTemp.length}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
-                <th rowspan="2">Ghi chú</th>
+                <th rowspan="2" nzWidth="100px">
+                    STT
+                </th>
+                <th rowspan="2" nzWidth="400px">
+                    Nội dung chi
+                </th>
+                <th colspan="{{1 + listColTemp.length}}">
+                    Chi tiết theo từng mặt hàng trong đợt
+                </th>
+                <th colspan="{{1 + listColTemp.length}}">
+                    Chi tiết theo từng mặt hàng lũy kế từ đầu năm
+                </th>
+                <th rowspan="2" nzWidth="100px">
+                    Ghi chú
+                </th>
                 <th rowspan="2" colspan="3" [hidden]="status"></th>
                 <th rowspan="2" [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
@@ -71,12 +81,22 @@
                 </th>
             </tr>
             <tr>
-                <th>Tổng Cộng</th>
-                <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
-                <th>Tổng Cộng</th>
-                <th *ngFor="let col of listColTemp"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}</a></th>
+                <th nzWidth="100px">
+                    Tổng Cộng
+                </th>
+                <th nzWidth="100px" *ngFor="let col of listColTemp">
+                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
+                    </a>
+                </th>
+                <th nzWidth="100px">
+                    Tổng Cộng
+                </th>
+                <th nzWidth="100px" *ngFor="let col of listColTemp">
+                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                        (nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
+                    </a>
+                </th>
             </tr>
         </thead>
         <tbody>

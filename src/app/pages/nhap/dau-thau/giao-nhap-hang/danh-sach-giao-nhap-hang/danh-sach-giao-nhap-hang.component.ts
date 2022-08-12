@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -20,7 +20,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './danh-sach-giao-nhap-hang.component.html',
   styleUrls: ['./danh-sach-giao-nhap-hang.component.scss']
 })
-export class DanhSachGiaoNhapHangComponent implements OnInit {
+export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   @Input()
   typeVthh: string;
   @Output()
@@ -40,8 +40,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
-  nhapIdDefault: string = LOAI_QUYET_DINH.NHAP;
-  xuatIdDefault: string = LOAI_QUYET_DINH.XUAT;
 
   loaiVTHH: string = null;
   soQD: string = null;
@@ -92,6 +90,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.typeVthh)
     this.spinner.show();
     try {
       this.yearNow = dayjs().get('year');
@@ -112,23 +111,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  openDialogHopDong() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin căn cứ trên hợp đồng',
-      nzContent: DialogCanCuHopDongComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.soHd = data.soHdong;
-      }
-    });
   }
 
   onInput(e: Event): void {
@@ -173,7 +155,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "loaiQd": null,
       "maDvi": null,
       "maVthh": null,
-      "loaiVthh": this.typeVthh ?? null,
+      "loaiVthh": this.typeVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "ngayQd": null,
       "orderBy": null,
@@ -460,5 +442,9 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.typeVthh);
+    this.ngOnInit();
   }
 }

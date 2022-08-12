@@ -132,7 +132,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
   async search() {
     let body = {
       "maDonVi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
+      "maVatTuCha": this.typeVthh,
       "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
         ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')

@@ -7,7 +7,7 @@
       <li class="nav-item next" (click)="startSlide()">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
-      <li class="nav-item menu-item" data-toggle="collapse" data-target="#collapsnav" *ngFor="let route of routes">
+      <li class="nav-item menu-item" *ngFor="let route of routes">
         <a class="nav-link" routerLinkActive="active" [routerLink]="route.url">
           <span class="icon" [ngClass]="route.icon"></span>
           <span class="text"> {{route.title}} </span>

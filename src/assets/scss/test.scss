@@ -1576,7 +1576,7 @@ span.ant-descriptions-item-content {
 
 .ant-modal-body {
   max-height: 80vh;
-  overflow: auto;
+  // overflow: auto;
   // padding-bottom: 38px;
   margin-bottom: 40px;
 
@@ -1685,13 +1685,13 @@ span.ant-descriptions-item-content {
 
   .ant-table-tbody {
     >tr {
-      &:nth-child(even) {
-        background: $color-fb;
-      }
+      // &:nth-child(even) {
+      //   background: $color-fb;
+      // }
 
-      &:nth-child(odd) {
-        background: #fff;
-      }
+      // &:nth-child(odd) {
+      //   background: #fff;
+      // }
 
       &>td {
 
@@ -1769,7 +1769,7 @@ table tr {
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   // color: $color-text;
-  color: #ffffff;
+  color: #444;
 }
 
 .dot {
@@ -1961,8 +1961,8 @@ i.icon.htvbdh_luu1 {
 }
 
 .group-button-search {
-  padding-bottom: 12px;
-  // padding-top: 12px;
+  // padding-bottom: 12px;
+  padding-top: 12px;
 }
 
 .group-button-search-center {

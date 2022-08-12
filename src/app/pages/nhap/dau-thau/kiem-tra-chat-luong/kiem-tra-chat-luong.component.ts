@@ -8,6 +8,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./kiem-tra-chat-luong.component.scss']
 })
 export class KiemTraChatLuongComponent implements OnInit {
+  loaiVthhSelected: string
   tabs: any[] = [];
 
   constructor(
@@ -19,7 +20,12 @@ export class KiemTraChatLuongComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        ma: null,
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -30,4 +36,9 @@ export class KiemTraChatLuongComponent implements OnInit {
       }
     }
   }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
+
 }

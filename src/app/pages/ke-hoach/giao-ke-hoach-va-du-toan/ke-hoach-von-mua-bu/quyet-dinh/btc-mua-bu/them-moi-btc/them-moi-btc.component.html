@@ -1,4 +1,4 @@
-<div class="them-quyet-dinh-ttcp">
+<div class="them-quyet-dinh-ttcp bg-trang">
   <div class="header">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -14,11 +14,12 @@
         <span>Quay lại</span>
       </button>
       <button *ngIf="formData.value.trangThai == '00' && !isView && idInput > 0 " type="button" class="btn btn-sub"
-              (click)="pheDuyet()">
+        (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
+      <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh"
+        (click)="save()">
         <i class="icon htvbdh_luu"></i>
         <span>Lưu</span>
       </button>
@@ -41,10 +42,11 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="so-qd" nzRequired >Số Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzFor="so-qd" nzRequired>Số Quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number [nzSize]="'small'" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" nz-input formControlName="soQd" [nzDisabled]="isView" ></nz-input-number>
+                <nz-input-number [nzSize]="'small'" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" nz-input
+                  formControlName="soQd" [nzDisabled]="isView"></nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -52,7 +54,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="5" class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd" nzRequired >Ngày Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd" nzRequired>Ngày Quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
@@ -62,7 +64,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="nam-qd" nzRequired >Quyết định của TTCP</nz-form-label>
+            <nz-form-label nzFor="nam-qd" nzRequired>Quyết định của TTCP</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="soQdTtcp" [nzDisabled]="isView" nzAllowClear="true">
                 <nz-option *ngFor="let data of listTtcp" [nzValue]="data.soQd" [nzLabel]="data.soQd">
@@ -80,7 +82,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input placeholder="Nhập text"
-                        [readonly]="isView"></textarea>
+                [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -107,35 +109,35 @@
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-      <tr>
-        <th class="text-center" style="width: 3%;">STT</th>
-        <th style="width: 45%;">Bộ</th>
-        <th style="width: 10%;">Tổng</th>
-        <th style="width: 12%;">Kế hoạch mua bù</th>
-        <th style="width: 12%;">Kế hoạch mua bổ sung</th>
-        <th style="width: 8%;">Hành động</th>
-      </tr>
+        <tr>
+          <th class="text-center" style="width: 3%;">STT</th>
+          <th style="width: 45%;">Bộ</th>
+          <th style="width: 10%;">Tổng</th>
+          <th style="width: 12%;">Kế hoạch mua bù</th>
+          <th style="width: 12%;">Kế hoạch mua bổ sung</th>
+          <th style="width: 8%;">Hành động</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <td class="text-center">{{ idx + 1 }}</td>
-        <td>{{ data.tenBoNganh }}</td>
-        <td>{{ data.tongTien }}</td>
-        <td>{{data.ttMuaBu}}</td>
-        <td>{{data.ttMuaBsung}}</td>
-        <td></td>
-        <td style="text-align: left; white-space: nowrap;">
-          <a (click)="themKeHoach(data, idx,true)">
-            <i class="fa fa-eye"></i>
-          </a>
-          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
-            <i class="fa fa-pencil"></i>
-          </a>
-          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
-            <i class="fa fa-trash-o do"></i>
-          </a>
-        </td>
-      </tr>
+        <tr *ngFor="let data of dataTable; let idx = index">
+          <td class="text-center">{{ idx + 1 }}</td>
+          <td>{{ data.tenBoNganh }}</td>
+          <td>{{ data.tongTien }}</td>
+          <td>{{data.ttMuaBu}}</td>
+          <td>{{data.ttMuaBsung}}</td>
+          <td></td>
+          <td style="text-align: left; white-space: nowrap;">
+            <a (click)="themKeHoach(data, idx,true)">
+              <i class="fa fa-eye"></i>
+            </a>
+            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
       </tbody>
     </nz-table>
   </nz-card>
