@@ -549,7 +549,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         }
       }
 
-      const resNhapXuatKho = await this.quanLyHangTrongKhoService.timKiemChiTiet(bodyNhapXuatNho);
+      const resNhapXuatKho = await this.quanLyHangTrongKhoService.search();
 
       let listNhapXuat = [];
 

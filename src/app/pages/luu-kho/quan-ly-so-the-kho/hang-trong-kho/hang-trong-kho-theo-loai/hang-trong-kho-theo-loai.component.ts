@@ -20,7 +20,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { Globals } from 'src/app/shared/globals';
-
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 @Component({
   selector: 'app-hang-trong-kho-theo-loai',
   templateUrl: './hang-trong-kho-theo-loai.component.html',
@@ -66,15 +67,16 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
-    private readonly userService: UserService,
+    public readonly userService: UserService,
     private readonly notification: NzNotificationService,
     public treeTableService: TreeTableService<HangTrongKhoRowItem>,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     public globals: Globals,
+    private readonly modal: NzModalService,
+
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -134,7 +136,9 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     if (!isEmpty(dsTong)) {
       this.dsTong = dsTong;
       this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
-      this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
+        this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      }
     }
   }
 
@@ -228,15 +232,33 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   }
 
   async search() {
+    // let body = {
+    //   "denNgay": "19-JUL-2022",
+    //   "tuNgay": "12-JUL-2022",
+    //   "maLokho": "0101020101010102",
+    //   "maVatTu": "010101",
+    //   "paggingReq": {
+    //     "limit": 20,
+    //     "orderBy": "",
+    //     "orderType": "",
+    //     "page": 0
+    //   }
+    // }
+    // let res = await this.quanLyHangTrongKhoService.searchDetail(body);
     let res = await this.quanLyHangTrongKhoService.search();
-    console.log(res);
     if (res.msg === MESSAGE.SUCCESS) {
-      res.data.list.forEach((item) => {
-        this.mapOfExpandedData[item.id] =
-          this.treeTableService.convertTreeToList(item);
-      });
       this.dataTable = [...res.data.list];
+      console.log(this.dataTable);
+      this.dataTable.forEach((item) => {
+        if (item.id) {
+          this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
+        } else {
+          this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
+          console.log('không có id');
+        }
+      });
       this.totalRecord = res.data.totalElements;
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -250,7 +272,26 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
   changePageSize(event) { }
 
-  viewDetail(data: HangTrongKhoRowItem) { }
+  viewDetail(data: HangTrongKhoRowItem) {
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Chi tiết giao dich',
+      nzContent: DialogChiTietGiaoDichHangTrongKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        isView: true,
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+
+      }
+    });
+  }
 
   exportData() { }
 }
@@ -258,7 +299,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 interface IHangTrongKho {
   id: number;
   child?: IHangTrongKho[];
-  tenDVi: string;
+  tenDvi: string;
   loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
@@ -280,7 +321,7 @@ class HangTrongKhoRowItem implements IHangTrongKho, ITreeTableItem {
   level?: number;
   id: number;
   child?: IHangTrongKho[];
-  tenDVi: string;
+  tenDvi: string;
   loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
