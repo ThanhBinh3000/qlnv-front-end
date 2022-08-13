@@ -35,5 +35,9 @@ export class CucComponent implements OnInit {
       this.tabs = [...this.tabs, ...res.data.filter(item => item.ma !== '02')];
     }
   }
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
 
 }

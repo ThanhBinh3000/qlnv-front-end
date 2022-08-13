@@ -68,7 +68,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   initForm(): void {
-
   }
 
   initData() {

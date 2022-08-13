@@ -1,5 +1,39 @@
-<nz-tabset nzType="card" class="mt-16 tab-level-2">
-  <!-- thêm class chuc-bang-xuat-kho  -->
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Phiếu xuất kho
+    </li>
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Bảng kê cân hàng
+    </li>
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Biên bản tịnh kho
+    </li>
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Biên bản hao dôi
+    </li>
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Bảng kê xuất vật tư
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-quan-ly-phieu-xuat-kho [typeVthh]="typeVthh"></app-quan-ly-phieu-xuat-kho>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-ban-ke-can-hang [typeVthh]="typeVthh"></app-ban-ke-can-hang>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-bien-ban-tinh-kho [typeVthh]="typeVthh"></app-bien-ban-tinh-kho>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-bien-ban-hao-doi></app-bien-ban-hao-doi>
+</ng-container>
+<ng-container *ngIf="tabSelected == 4">
+  <app-bang-ke-xuat-vat-tu></app-bang-ke-xuat-vat-tu>
+</ng-container>
+
+<!-- <nz-tabset nzType="card" class="mt-16 tab-level-2">
   <nz-tab [nzTitle]="'Phiếu xuất kho'">
     <ng-template nz-tab>
       <app-quan-ly-phieu-xuat-kho [typeVthh]="typeVthh"></app-quan-ly-phieu-xuat-kho>
@@ -25,4 +59,4 @@
       <app-bang-ke-xuat-vat-tu></app-bang-ke-xuat-vat-tu>
     </ng-template>
   </nz-tab>
-</nz-tabset>
+</nz-tabset> -->

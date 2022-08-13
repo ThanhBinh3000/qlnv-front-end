@@ -103,7 +103,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   isDisableField() {
     if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_THU_KHO || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN
-      || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -511,7 +511,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN) {
       trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     } else if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,

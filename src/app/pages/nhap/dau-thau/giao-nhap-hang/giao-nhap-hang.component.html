@@ -5,8 +5,9 @@
     </li>
   </ul>
 </nz-affix>
-<ng-container>
-  <app-danh-sach-giao-nhap-hang [typeVthh]="loaiVthhSelected" (getCount)="getCount()"></app-danh-sach-giao-nhap-hang>
+<ng-container *ngFor="let tab of tabs,let i = index">
+  <app-danh-sach-giao-nhap-hang *ngIf="tab.ma == loaiVthhSelected" [typeVthh]="tab.ma" (getCount)="getCount()">
+  </app-danh-sach-giao-nhap-hang>
 </ng-container>
 
 <!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">

@@ -22,7 +22,7 @@ export class HopDongComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: null,
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();

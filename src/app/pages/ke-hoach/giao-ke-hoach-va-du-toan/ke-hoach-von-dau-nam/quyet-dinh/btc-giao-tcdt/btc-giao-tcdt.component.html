@@ -1,46 +1,50 @@
 <ng-container *ngIf="!isAddNew; else templateThemmoi">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="ds-ttcp">
-        <div class="search__body" nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
-            <nz-form-control>
-              <nz-select formControlName="namQd" id="nam-qd">
-                <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
-                </nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="so-qd">
-                <input type="text" nz-input formControlName="soQd" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
-            <nz-form-control>
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="20">
+          <div nz-col [nzSpan]="3">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
               <nz-form-control>
-                <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
-                </nz-range-picker>
+                <nz-select formControlName="namQd" id="nam-qd">
+                  <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
+                  </nz-option>
+                </nz-select>
               </nz-form-control>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="11" class="form-item">
-            <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="trich-yeu">
-                <input type="text" nz-input formControlName="trichYeu" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
+              <nz-form-control>
+                <nz-input-group id="so-qd">
+                  <input type="text" nz-input formControlName="soQd" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+              <nz-form-control>
+                <nz-form-control>
+                  <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                  </nz-range-picker>
+                </nz-form-control>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="11">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
+              <nz-form-control>
+                <nz-input-group id="trich-yeu">
+                  <input type="text" nz-input formControlName="trichYeu" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
       </form>
       <div class="cangiua group-button-search">
@@ -73,8 +77,9 @@
       </div>
     </div>
 
-    <nz-card class="mt-16 flex-card data-table card-border-content">
-      <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <tbody>
           <tr class="header-row">
             <th width="45px">

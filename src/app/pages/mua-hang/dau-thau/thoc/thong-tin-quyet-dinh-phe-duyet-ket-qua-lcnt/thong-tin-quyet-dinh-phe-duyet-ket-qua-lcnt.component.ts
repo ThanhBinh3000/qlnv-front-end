@@ -1,6 +1,7 @@
 import { ChiTietDeXuatCuaCuc } from './../../../../../models/ChiTietDeXuatCuaCuc';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Globals } from 'src/app/shared/globals';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -62,6 +63,7 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private userService: UserService,
+    public globals: Globals,
   ) { }
 
   ngOnInit(): void {
