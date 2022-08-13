@@ -138,7 +138,7 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_TP_KTBQ || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>

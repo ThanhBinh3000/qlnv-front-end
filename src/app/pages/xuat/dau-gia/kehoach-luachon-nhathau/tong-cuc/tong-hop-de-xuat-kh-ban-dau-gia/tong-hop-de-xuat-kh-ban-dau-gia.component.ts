@@ -16,6 +16,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHBanDauGiaService } from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-tong-hop-de-xuat-kh-ban-dau-gia',
@@ -33,6 +34,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     private route: ActivatedRoute,
     private helperService: HelperService,
     private readonly danhMucService: DanhMucService,
+    public globals: Globals,
   ) { }
   @Input()
   loaiVthh: string;
@@ -74,6 +76,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+  isView: boolean = false;
 
   async ngOnInit() {
     try {
@@ -108,7 +111,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -207,7 +210,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     } else {
       this.isVatTu = false;
     }
-    this.selectedId = null;
+    this.selectedId = 0;
     this.loaiVthh = this.loaiVthhCache;
   }
 
@@ -216,10 +219,13 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.search();
   }
 
-  detail(data?) {
+  detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
+    if (isView) {
+      this.isView = isView;
+    }
     if (data.loaiVthh.startsWith('02')) {
       this.isVatTu = true;
     } else {
