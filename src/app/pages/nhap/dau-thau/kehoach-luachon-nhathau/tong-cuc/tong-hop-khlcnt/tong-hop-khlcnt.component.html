@@ -61,8 +61,9 @@
       </div>
     </div>
 
-    <nz-card class="mt-2px flex-card data-table card-border-content">
-      <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
             <th width="45px">
@@ -83,8 +84,6 @@
             <th>Trạng thái</th>
             <th width="90px" class="text-right">Hành động</th>
           </tr>
-        </thead>
-        <tbody>
           <tr class="search-table">
             <th></th>
             <th></th>
@@ -181,6 +180,8 @@
             <th></th>
             <th></th>
           </tr>
+        </thead>
+        <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
             <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"

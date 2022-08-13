@@ -69,8 +69,6 @@
             <th width="175px">Trạng thái</th>
             <th width="90px" class="text-right">Hành động</th>
           </tr>
-        </thead>
-        <tbody>
           <tr class="search-table">
             <th></th>
             <th></th>
@@ -149,6 +147,9 @@
             <th></th>
             <th></th>
           </tr>
+        </thead>
+        <tbody>
+
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
