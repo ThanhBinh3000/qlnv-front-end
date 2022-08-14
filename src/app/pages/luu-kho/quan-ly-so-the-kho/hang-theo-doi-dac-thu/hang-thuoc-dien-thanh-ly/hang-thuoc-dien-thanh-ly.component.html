@@ -53,13 +53,13 @@
             </form>
             <div class="cangiua group-button-search">
                 <button nz-button class="search__button--clear" (click)="clearFilter()">
-          <i class="icon  htvbdh_nhap-lai1"></i>
-          Xóa điều kiện
-        </button>
+                    <i class="icon  htvbdh_nhap-lai1"></i>
+                    Xóa điều kiện
+                </button>
                 <button nz-button class="search__button--search" (click)="traCuuDsHangThanhLy()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
+                    <i nz-icon nzType="search"></i>
+                    Tìm kiếm
+                </button>
             </div>
         </nz-card>
 
@@ -67,21 +67,21 @@
             <h3>Danh sách hàng thuộc diện thanh lý</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
-        </button>
+                    <i class="fa fa-trash-o do"></i>
+                    <span>Xoá</span>
+                </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Xuất file</span>
-        </button>
+                    <i class="icon htvbdh_chuyen-xu-ly"></i>
+                    <span>Xuất file</span>
+                </button>
                 <button type="button" class="btn btn-sub" (click)="inDanhSach()">
-          <i class="icon htvbdh_tcdt_print"></i>
-          <span>In</span>
-        </button>
+                    <i class="icon htvbdh_tcdt_print"></i>
+                    <span>In</span>
+                </button>
                 <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button>
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Thêm</span>
+                </button>
             </div>
         </div>
 
@@ -135,10 +135,10 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trangThaiXuLy }}</td>
                         <td style="text-align: center; white-space: nowrap;">
-                            <a (click)="viewDetail(data.id, false)">
+                            <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a (click)="viewDetail(data.id, true)">
+                            <a (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a (click)="xoaItem(data.id)">
@@ -156,11 +156,13 @@
 
                     </div>
                     <div class="canphai">
+                        <!-- begin phân trang  -->
                         <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
                                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
                             </ng-template>
                         </nz-pagination>
+                        <!-- end phân trang  -->
                     </div>
                 </div>
             </div>
@@ -169,6 +171,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa">
+    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa" [detail]="isUpdate" [editList]="editList" [dataEditList]="dataDetail">
     </app-them-hang-thuoc-dien-thanh-ly>
 </ng-template>
