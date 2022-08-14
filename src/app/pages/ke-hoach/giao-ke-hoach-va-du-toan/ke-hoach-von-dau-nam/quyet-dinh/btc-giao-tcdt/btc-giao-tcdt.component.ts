@@ -58,7 +58,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
     this.formData = this.fb.group({
       namQd: [null],
       soQd: [null],
-      ngayQd: [this.last30Day, this.toDay],
+      ngayQd: [[]],
       trichYeu: [null],
     });
   }
@@ -86,13 +86,16 @@ export class BtcGiaoTcdtComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search();
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    body.tuNgay = body.ngayQd[0];
-    body.denNgay = body.ngayQd[1];
+    if (body.ngayQd != null) {
+      body.ngayQdTu = body.ngayQd[0];
+      body.ngayQdDen = body.ngayQd[1];
+    }
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
@@ -120,7 +123,49 @@ export class BtcGiaoTcdtComponent implements OnInit {
   }
 
 
-  xoa() { }
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhBtcTcdtService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -279,14 +324,38 @@ export class BtcGiaoTcdtComponent implements OnInit {
       trangThai: '',
     }
   }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
 }
 
 
-// interface IBTCGiaoTCDT {
-//   id: number;
-//   soQd: string;
-//   ngayQd: Date;
-//   trichYeu: string;
-//   taiLieuDinhKem: any;
-//   trangThai: string;
-// }

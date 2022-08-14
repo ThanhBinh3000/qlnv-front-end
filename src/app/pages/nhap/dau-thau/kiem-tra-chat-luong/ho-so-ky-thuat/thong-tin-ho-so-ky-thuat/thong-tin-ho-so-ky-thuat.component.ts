@@ -138,7 +138,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -228,7 +228,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     }
     let res = await this.quanLyBienBanBanGiaoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -254,7 +254,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -385,7 +385,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,

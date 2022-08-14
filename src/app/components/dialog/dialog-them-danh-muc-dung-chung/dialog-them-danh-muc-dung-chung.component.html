@@ -1,74 +1,72 @@
-<form nz-form [formGroup]="formData" class="form__dm-dung-chung">
+<form nz-form [formGroup]="formData" (ngSubmit)="save()" class="form__dm-dung-chung">
   <div nz-row [nzGutter]="[16, 24]">
-    <div nz-col [nzSpan]="24">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Vùng dữ liệu </nz-form-label>
-        <nz-select>
-          <nz-option>
-            1
-          </nz-option>
+    <div nz-col [nzSpan]="24" >
+      <nz-form-item >
+        <nz-form-label [nzNoColon]="true" nzRequired > Vùng dữ liệu </nz-form-label>
+        <nz-select formControlName="loai" [nzDisabled]="isView">
+          <nz-option *ngFor="let p of danhMucList" [nzValue]="p.ma" [nzLabel]="p.giaTri" ></nz-option>
         </nz-select>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="16">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Người tạo </nz-form-label>
-        <input nz-input />
+        <span style="color: red" role="alert" *ngIf=" formData.controls.loai?.errors?.required && submited">Vui lòng không để trống</span>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Ngày tạo </nz-form-label>
-        <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="">
-        </nz-date-picker>
+        <nz-form-label [nzNoColon]="true" nzRequired > Mã </nz-form-label>
+        <input nz-input formControlName="ma" placeholder="Nhập mã"  [readOnly]="isView" >
+        <span style="color: red" role="alert" *ngIf=" formData.controls.ma?.errors?.required && submited">Vui lòng không để trống</span>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Mã </nz-form-label>
-        <input nz-input />
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Trạng thái </nz-form-label>
-        <nz-select>
-          <nz-option>
-            1
-          </nz-option>
+        <nz-form-label [nzNoColon]="true"  nzRequired> Trạng thái </nz-form-label>
+        <nz-select formControlName="trangThai" [nzDisabled]="isView"  >
+          <nz-option nzValue="01" nzLabel="Hoạt động" ></nz-option>
+          <nz-option nzValue="00" nzLabel="Không hoạt động" ></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Giá trị </nz-form-label>
-        <input nz-input />
+        <nz-form-label [nzNoColon]="true" nzRequired > Giá trị </nz-form-label>
+        <input nz-input formControlName="giaTri" placeholder="Nhập giá trị" [disabled]="isView" [readOnly]="isView">
+        <span style="color: red" role="alert" *ngIf=" formData.controls.giaTri?.errors?.required && submited">Vui lòng không để trống</span>
       </nz-form-item>
     </div>
+
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Mô tả </nz-form-label>
-        <textarea rows="3" class="search__input" nz-input></textarea>
+        <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
       </nz-form-item>
+      <ng-template #error let-control>
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+      </ng-template>
     </div>
 
   </div>
-</form>
 
+</form>
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
     </div>
-    <div class="canphai">
+    <div class="canphai" *ngIf="!isView" >
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
-        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        <i class="icon htvbdh_tcdt_delete"></i>
         Hủy
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk()"
-        [disabled]="!formData.valid">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>
     </div>
+    <div class="canphai" *ngIf="isView" >
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i class="icon htvbdh_tcdt_delete"></i>
+        Đóng
+      </button>
+    </div>
   </div>
 </div>
+
+

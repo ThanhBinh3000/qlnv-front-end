@@ -41,7 +41,6 @@ export class ThemDanhMucDungChungComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private helperService: HelperService,
-    private router: Router,
     // private userInfo: UserLogin,
     private qlNSDService: QlNguoiSuDungService,
     private spinner: NgxSpinnerService,

@@ -4,17 +4,17 @@ declare var $;
   selector: '[appScrollAffix]',
 })
 export class ScrollAffixDirective {
-  constructor() {}
+  constructor() { }
 
   @HostListener('wheel', ['$event'])
   public onScroll(event: WheelEvent) {
-    if ($('body').get(0).scrollHeight - $('body').height() <= 58) {
+    if ($('body').get(0).scrollHeight - $('body').height() <= 55) {
       $('nz-affix > div').addClass('fix');
     } else {
       $('nz-affix > div').removeClass('fix');
     }
     if (
-      50 < $('body').get(0).scrollHeight - $('body').height() &&
+      40 < $('body').get(0).scrollHeight - $('body').height() &&
       $('body').get(0).scrollHeight - $('body').height() < 100
     ) {
       $('body').addClass('affix-fix');

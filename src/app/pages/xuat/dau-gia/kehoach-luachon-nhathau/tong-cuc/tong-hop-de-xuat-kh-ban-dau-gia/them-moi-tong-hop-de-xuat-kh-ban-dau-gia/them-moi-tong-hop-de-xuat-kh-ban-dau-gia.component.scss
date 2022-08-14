@@ -13,22 +13,8 @@
       }
     }
 
-    .ant-form {
-      .ant-row {
-        .ant-col {
-          padding: 0px 9px !important;
-        }
-      }
-    }
-
     .header-table-nvnh {
       height: 163px;
-    }
-
-    .tab-level-3 {
-      .ant-tabs-content-holder {
-        max-height: calc(100vh - 200px) !important;
-      }
     }
 
     .list-file {
@@ -66,5 +52,22 @@
     background: #fff;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+  }
+
+  .tong-hop-button {
+    text-align: right;
+  }
+
+  .form-header-content {
+    border: 1px solid #EAEAEA;
+  }
+
+  .title-header {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #444444;
+    padding-bottom: 16px;
   }
 }

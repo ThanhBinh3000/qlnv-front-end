@@ -49,3 +49,5 @@ Thumbs.db
 *.wmv
 
 package-lock.json
+yarn.lock
+yarn.lock

@@ -106,8 +106,21 @@ import { DialogChiTietKeHoachGiaoBoNganhComponent } from './dialog/dialog-chi-ti
 import { KeHoachLuongThucComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import { KeHoachXuatGiamComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 import { DialogTTPhuLucQDDCBanDauGiaComponent } from './dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
+import { DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
+import { MuaBuComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component';
+import { MuaBoSungComponent } from './dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bo-sung/mua-bo-sung.component';
+import { DialogQdMuabubosungTtcpComponent } from './dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
+import { MuabuBosungComponent } from './dialog/dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component';
+import { DialogMuabuBosungBtcComponent } from './dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component';
+import { MuaBuBoSungComponent } from './dialog/dialog-muabu-bosung-btc/mua-bu-bo-sung/mua-bu-bo-sung.component';
 import { DialogThemDiaDiemNhapKhoComponent } from './dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
 import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
+import { DialogThongTinCanBoComponent } from './dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
+import { DialogPhanQuyenComponent } from './dialog/dialog-phan-quyen/dialog-phan-quyen.component';
+import { DialogQuyenComponent } from './dialog/dialog-quyen/dialog-quyen.component';
+import { DialogNhomQuyenComponent } from './dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
+import { DialogThemQuyenComponent } from './dialog/dialog-them-quyen/dialog-them-quyen.component';
+import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 
 @NgModule({
   declarations: [
@@ -159,12 +172,24 @@ import { DialogThemDanhMucDungChungComponent } from './dialog/dialog-them-danh-m
     DialogThemDiaDiemNhapKhoComponent,
     DialogThemDanhMucDungChungComponent,
     FileListComponent,
-    //pipes
     FilterPipe,
     DialogChiTietKeHoachGiaoBoNganhComponent,
     KeHoachLuongThucComponent,
     KeHoachXuatGiamComponent,
-    DialogTTPhuLucQDDCBanDauGiaComponent
+    DialogTTPhuLucQDDCBanDauGiaComponent,
+    DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+    MuaBuComponent,
+    MuaBoSungComponent,
+    DialogQdMuabubosungTtcpComponent,
+    MuabuBosungComponent,
+    DialogMuabuBosungBtcComponent,
+    MuaBuBoSungComponent,
+    DialogThongTinCanBoComponent,
+    DialogPhanQuyenComponent,
+    DialogQuyenComponent,
+    DialogNhomQuyenComponent,
+    DialogThemQuyenComponent,
+    DialogChiTietGiaoDichHangTrongKhoComponent
   ],
   imports: [
     CommonModule,

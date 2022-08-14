@@ -32,7 +32,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listHinhThucDauThau: any[] = [];
-  // isEmptyCl: boolean = false;
 
   constructor(
     private _modalRef: NzModalRef,

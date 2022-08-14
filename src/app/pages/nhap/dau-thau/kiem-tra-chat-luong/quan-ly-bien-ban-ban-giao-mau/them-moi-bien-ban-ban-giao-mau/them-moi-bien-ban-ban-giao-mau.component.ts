@@ -105,7 +105,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.bienBanLayMau && (this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.bienBanLayMau && (this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanLayMau.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -117,7 +117,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       "pageNumber": 1,
       "pageSize": 1000,
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     }
     let res = await this.bienBanLayMauService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -203,7 +203,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -299,7 +299,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
             let body = {
               id: res.data.id,
               lyDo: null,
-              trangThai: this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ,
+              trangThai: this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN,
             };
             this.quanLyBienBanBanGiaoService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
@@ -391,7 +391,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     if (this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -443,7 +443,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ ? this.globals.prop.NHAP_TU_CHOI_TP_KTBQ : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.bienBanLayMau.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN ? this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res = await this.quanLyBienBanBanGiaoService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

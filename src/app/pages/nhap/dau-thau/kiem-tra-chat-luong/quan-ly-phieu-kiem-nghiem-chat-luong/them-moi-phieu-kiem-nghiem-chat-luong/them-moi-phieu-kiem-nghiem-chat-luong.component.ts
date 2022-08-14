@@ -113,8 +113,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
 
   isDisableField() {
     if (this.phieuKiemNghiemChatLuongHang &&
-      (this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ
-        || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      (this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN
+        || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -172,7 +172,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     try {
       let res;
       if (isGuiDuyet) {
-        body.trangThai = this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ;
+        body.trangThai = this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN;
       }
       if (this.id > 0) {
         res = await this.phieuKiemNghiemChatLuongHangService.sua(body);
@@ -243,7 +243,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     if (this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -296,7 +296,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP_KTBQ ? this.globals.prop.NHAP_TU_CHOI_TP_KTBQ : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.phieuKiemNghiemChatLuongHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN ? this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res =
             await this.phieuKiemNghiemChatLuongHangService.updateStatus(body);
@@ -349,7 +349,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       soHd: '',
       soQd: null,
       str: '',
-      trangThai: this.globals.prop.NHAP_DA_DUYET, // Ban hành
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       tuNgayQd: null,
       veViec: null,
     };
@@ -371,7 +371,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
       orderDirection: '',
       pageNumber: 1,
       pageSize: 1000,
-      trangThai: this.globals.prop.NHAP_DA_DUYET,
+      trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     };
 
     const res = await this.quanLyBienBanBanGiaoService.timKiem(body);

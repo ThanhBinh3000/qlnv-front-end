@@ -111,7 +111,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -145,7 +145,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "pageNumber": 1,
       "soBienBan": null,
       "soQdNhap": null,
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     };
     let res = await this.hoSoKyThuatService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -198,7 +198,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -295,7 +295,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       "soPhieu": null,
       "str": null,
       "tenNguoiGiao": null,
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -554,7 +554,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,

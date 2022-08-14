@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, ViewChild } from '@angular/core';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { KeHoachNhapXuatLtComponent } from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -24,19 +25,31 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
 
+  @ViewChild('nhapXuatLt') keHoachNhapXuatLtComponent: KeHoachNhapXuatLtComponent;
+
+
   userInfo: UserLogin;
   formData: FormGroup;
   maQd: string = '/QĐ-BTC'
-  // quyetDinh: IQuyetDinhBTC = {
-  //   id: null,
-  //   soQd: null,
-  //   namQd: null,
-  //   ngayQd: new Date(),
-  //   trichYeu: null,
-  //   taiLieuDinhKem: null,
-  //   keHoach: [],
-  // };
-  taiLieuDinhKemList = [];
+
+  keHoachNhapXuat: any = {
+    soLuongMuaThoc: 0,
+    donGiaMuaThoc: 0,
+    soLuongMuaGaoLpdh: 0,
+    donGiaMuaGaoLqdh: 0,
+    soLuongMuaGaoXcht: 0,
+    donGiaMuaGaoXcht: 0,
+    soLuongBanThoc: 0,
+    donGiaBanThoc: 0,
+    soLuongBanGao: 0,
+    donGiaBanGao: 0,
+    soLuongGaoCtro: 0,
+    donGiaGaoCtro: 0,
+    tongTienVonNsnn: 0,
+    tongTienVonTx: 0,
+  }
+
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
 
   muaTangList: any[] = []
@@ -104,6 +117,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
+      this.taiLieuDinhKemList = data.fileDinhkems;
+      this.keHoachNhapXuat = data.keHoachNhapXuat;
       this.muaTangList = data.muaTangList;
       this.xuatGiamList = data.xuatGiamList;
       this.xuatBanList = data.xuatBanList;
@@ -197,6 +212,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   async save() {
+    this.keHoachNhapXuatLtComponent.emitData();
+
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -205,11 +222,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     body.soQd = body.soQd + this.maQd;
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;
     body.xuatBanList = this.xuatBanList;
     body.luanPhienList = this.luanPhienList;
+    body.keHoachNhapXuat = this.keHoachNhapXuat;
     let res
     if (this.idInput > 0) {
       res = await this.quyetDinhBtcTcdtService.update(body);

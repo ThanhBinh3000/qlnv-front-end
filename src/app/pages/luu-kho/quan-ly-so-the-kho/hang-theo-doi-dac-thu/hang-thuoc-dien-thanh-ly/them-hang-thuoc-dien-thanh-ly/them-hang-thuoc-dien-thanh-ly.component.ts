@@ -109,15 +109,13 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
 
     initData() {
         this.loadDsTong();
-        this.loadDanhMucHang();
     }
 
-    async loadDanhMucHang() {
-        let res = await this.danhMucService.loadDanhMucHangHoaAsync();
-        if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data) {
-                this.dsChungLoaiHangHoa = res.data;
-            }
+    onChangeLoaiVthh(event) {
+        this.dsChungLoaiHangHoa = [];
+        const loaiVthh = this.dsLoaiHangHoa.filter(item => item.ma == event);
+        if (loaiVthh.length > 0) {
+            this.dsChungLoaiHangHoa = loaiVthh[0].child;
         }
     }
 

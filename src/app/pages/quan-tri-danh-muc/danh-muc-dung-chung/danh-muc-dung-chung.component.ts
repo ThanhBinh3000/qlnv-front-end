@@ -12,7 +12,9 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-
+import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-danh-muc-dung-chung',
   templateUrl: './danh-muc-dung-chung.component.html',
@@ -23,10 +25,19 @@ export class DanhMucDungChungComponent implements OnInit {
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
+  formData: FormGroup;
+
+  danhMucList: any[];
+
+  setOfCheckedId = new Set<number>();
+
+
   searchFilter = {
-    soBienBan: '',
-    soQuyetDinh: '',
-    ngayGuiHang: '',
+    ma: '',
+    maCha: '',
+    giaTri: '',
+    ghiChu: '',
+    loai: ''
   };
 
   optionsDonVi: any[] = [];
@@ -37,7 +48,7 @@ export class DanhMucDungChungComponent implements OnInit {
   endValue: Date | null = null;
 
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 20;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
@@ -52,38 +63,77 @@ export class DanhMucDungChungComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    soQuyetDinh: '',
-    ngayNhapKho: '',
-    diemKho: '',
-    nhaKho: '',
-    nganLo: '',
+    loai: '',
+    ma: '',
+    giaTri: '',
     trangThai: '',
+    nguoiTao: '',
+    ngayTao: '',
+    nguoiSua: '',
+    ngaySua: '',
   };
 
 
   constructor(
+    private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private bienBanGuiHangService: BienBanGuiHangService,
+    private dmDungCungService: DanhMucDungChungService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-  ) { }
+    private router: Router
+  ) {
+    this.formData = this.fb.group({
+      ma: [null],
+      maCha: [null],
+      giaTri: [null],
+      ghiChu: [null],
+      loai: [null]
+    });
+  }
 
   async ngOnInit() {
-    this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
-      this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  onAllChecked(checked) {
+    this.dataTable.forEach((item) => {
+        this.updateCheckedSet(item.id, checked);
+    })
+    this.refreshCheckedStatus();
+  }
+
+  updateCheckedSet(id: number, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(id);
+    } else {
+      this.setOfCheckedId.delete(id);
+    }
+  }
+
+  refreshCheckedStatus(): void {
+    this.allChecked = this.dataTable.every(({ id }) =>
+      this.setOfCheckedId.has(id),
+    );
+    this.indeterminate =
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.allChecked;
+  }
+
+  onItemChecked(id: number, checked) {
+    this.updateCheckedSet(id, checked);
+    this.refreshCheckedStatus();
+    console.log(this.setOfCheckedId
+    )
   }
 
   updateAllChecked(): void {
@@ -91,9 +141,7 @@ export class DanhMucDungChungComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
             item.checked = true;
-          }
         });
       }
     } else {
@@ -118,27 +166,30 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   async search() {
-    let body = {
-      soBienBan: this.searchFilter.soBienBan,
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      ngayGuiHang: this.searchFilter.ngayGuiHang,
-      pageSize: this.pageSize,
-      pageNumber: this.page
-    };
-    let res = await this.bienBanGuiHangService.timKiem(body);
+    this.spinner.show();
+    let body = this.formData.value;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.dmDungCungService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
+
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -168,11 +219,7 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soBienBan: '',
-      soQuyetDinh: '',
-      ngayGuiHang: '',
-    };
+    this.formData.reset()
     this.search();
   }
 
@@ -192,7 +239,7 @@ export class DanhMucDungChungComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanGuiHangService.deleteData(item.id).then((res) => {
+          this.dmDungCungService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -227,40 +274,6 @@ export class DanhMucDungChungComponent implements OnInit {
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
-      try {
-        let body = {
-          "loaiVthh": this.typeVthh,
-          "maDvi": this.userInfo.MA_DVI,
-          "ngayGuiHangDen": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayGuiHangTu": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[0]).format('YYYY-MM-DD')
-            : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": null,
-            "orderType": null,
-            "page": 0
-          },
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null
-        };
-        this.bienBanGuiHangService
-          .exportList(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-gui-hang.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
@@ -287,7 +300,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanGuiHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -302,8 +315,7 @@ export class DanhMucDungChungComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -320,41 +332,129 @@ export class DanhMucDungChungComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
-  }
-
-  clearFilterTable() {
-    this.filterTable = {
-      soBienBan: '',
-      soQuyetDinh: '',
-      namNhap: '',
-      ngayGui: '',
-      benNhan: '',
-      benGiao: '',
-      trangThai: '',
-    }
+    console.log(this.dataTableAll)
   }
 
   print() {
 
   }
-  them() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Thêm danh mục dùng chung',
-      nzContent: DialogThemDanhMucDungChungComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (text) => {
-      if (text) {
 
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        this.dmDungCungService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-danh-muc-dung-chung.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  them(data?: any, isView?: boolean) {
+    let modalTuChoi;
+    if (data == null && isView == false) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Thêm danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzClassName:'themdmdungchung',
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+    if (data != null && isView == true) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Chi tiết danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '600px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+
+    if (data != null && isView == false) {
+      modalTuChoi = this.modal.create({
+        nzTitle: 'Chỉnh sửa danh mục dùng chung',
+        nzContent: DialogThemDanhMucDungChungComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '600px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          isView: isView,
+        },
+      });
+    }
+
+    modalTuChoi.afterClose.subscribe((data) => {
+      this.search();
+    })
+  }
+
+  xoaNhieu() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.setOfCheckedId.forEach((item) => {
+          dataDelete.push(item);
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 }
+
+
+

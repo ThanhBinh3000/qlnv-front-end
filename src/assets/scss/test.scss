@@ -187,10 +187,10 @@ $f14: $font-size14;
   background: $hoanthanh;
 }
 
+// .ant-table-thead>tr>th,
 body,
 .tree-modal2 .btn.btn-create.full,
 .ant-checkbox+span,
-.ant-table-thead>tr>th,
 .ant-table-tbody>tr>td {
   font-size: $font-size;
 }
@@ -241,9 +241,9 @@ th {
   padding-left: 15px;
 }
 
-.canphai {
-  padding-right: 6px;
-}
+// .canphai {
+//   padding-right: 6px;
+// }
 
 .nut .btn {
   border-radius: 0;
@@ -488,8 +488,8 @@ button.btn.btn-primary.collapsnav {
 }
 
 .ant-input-group-addon .anticon {
-  margin-left: -3px;
-  margin-right: 5px;
+  margin-left: 0px;
+  margin-right: 0px;
   padding: 0;
   // display: block;
   text-align: center;
@@ -546,8 +546,8 @@ button.btn.btn-primary.collapsnav {
 
   span.btn.btn-create.full {
     position: relative;
-    line-height: 26px;
-    height: 26px;
+    line-height: $bnt-h;
+    height: $bnt-h;
     display: flex;
     align-items: center;
     padding-right: 20px;
@@ -842,8 +842,8 @@ app-header {
 
 .tab-menu {
   &>div>div {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 2px;
+    // padding-bottom: 1px;
 
     &.trai {
       padding-left: 10px;
@@ -1204,6 +1204,8 @@ $cxl-h: 31px;
 
 .ant-pagination li {
   order: 1;
+  align-items: center;
+  display: inline-flex;
 }
 
 .pagination-card li:first-child {
@@ -1211,6 +1213,8 @@ $cxl-h: 31px;
   left: 2%;
   color: #000000;
   font-size: 13px;
+  display: flex;
+  align-items: center;
 }
 
 .ant-pagination-options {
@@ -1228,9 +1232,9 @@ $cxl-h: 31px;
 
 .ant-pagination-item:focus-visible,
 .ant-pagination-item:hover,
-.ant-pagination-item-active a,
-.ant-pagination-item:focus-visible a,
-.ant-pagination-item:hover a,
+// .ant-pagination-item-active a,
+// .ant-pagination-item:focus-visible a,
+// .ant-pagination-item:hover a,
 .ant-pagination-next:focus-visible .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link,
 .ant-pagination-prev:focus-visible .ant-pagination-item-link,
@@ -1293,12 +1297,12 @@ $cxl-h: 31px;
 .ant-pagination-item,
 .ant-pagination-total-text {
   margin-right: 8px;
-  line-height: ($input-h - 2px);
+  line-height: 1; //($input-h - 2px);
 }
 
 .ant-pagination-item {
-  min-width: $input-h;
-  height: $input-h;
+  min-width: $input-h - 2;
+  height: $input-h - 2;
   background-color: $color-f2;
   border: 1px solid $color-f2;
   border-radius: 0px;
@@ -1306,8 +1310,8 @@ $cxl-h: 31px;
 
 .ant-pagination-next,
 .ant-pagination-prev {
-  min-width: $input-h;
-  height: $input-h;
+  min-width: $input-h - 2;
+  height: $input-h - 2;
   line-height: 1px;
 }
 
@@ -1535,7 +1539,7 @@ span.ant-descriptions-item-content {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 8px;
+  bottom: 0px;
   margin-left: 0;
   margin-right: 0;
   padding: 0;
@@ -1550,6 +1554,14 @@ span.ant-descriptions-item-content {
   .nut {
     margin: 0;
     width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+    background: #EBEDFF;
+    z-index: 9999;
+
+    .cantrai {
+      padding-left: 0;
+    }
   }
 }
 
@@ -1576,7 +1588,7 @@ span.ant-descriptions-item-content {
 
 .ant-modal-body {
   max-height: 80vh;
-  overflow: auto;
+  // overflow: auto;
   // padding-bottom: 38px;
   margin-bottom: 40px;
 
@@ -1617,11 +1629,6 @@ span.ant-descriptions-item-content {
   right: 25px;
 }
 
-.ant-modal-content .nut {
-  z-index: 9999;
-  border-top: solid 1px $bg-nhat2;
-}
-
 /*modal...........................................................*/
 /*table.............................................................*/
 .table {
@@ -1657,6 +1664,7 @@ span.ant-descriptions-item-content {
 }
 
 .ant-table {
+  border-bottom: solid 1px;
 
   // border-top: solid 1px $color-f0;
   table {
@@ -1685,19 +1693,19 @@ span.ant-descriptions-item-content {
 
   .ant-table-tbody {
     >tr {
-      &:nth-child(even) {
-        background: $color-fb;
-      }
+      // &:nth-child(even) {
+      //   background: $color-fb;
+      // }
 
-      &:nth-child(odd) {
-        background: #fff;
-      }
+      // &:nth-child(odd) {
+      //   background: #fff;
+      // }
 
       &>td {
 
         i:not(.anticon):not(.ant-spin-dot-item),
         .icon {
-          font-size: $font-size12;
+          font-size: $font-size14;
           padding: 0 5px;
           cursor: pointer;
           opacity: 0.8;
@@ -1709,7 +1717,25 @@ span.ant-descriptions-item-content {
             opacity: 1;
           }
         }
+
+        i:not(.anticon):not(.ant-spin-dot-item):not(.fa-lock):not(.fa-unlock),
+        .fa:not(.fa-lock):not(.fa-unlock) {
+          width: $bnt-h;
+          height: $bnt-h;
+          margin: -1px 3px -1px 3px;
+          background: #f3f3f3;
+
+          &:hover {
+            text-shadow: 1px 1px 2px rgb(0 0 0 / 20%);
+            background-color: #fff;
+            border: solid 1px #ededed;
+            padding: 0;
+            box-shadow: 2px 2px 6px -2px #999;
+          }
+        }
       }
+
+
     }
   }
 }
@@ -1769,7 +1795,7 @@ table tr {
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   // color: $color-text;
-  color: #ffffff;
+  color: #444;
 }
 
 .dot {
@@ -1960,23 +1986,7 @@ i.icon.htvbdh_luu1 {
   align-items: center;
 }
 
-.group-button-search {
-  padding-bottom: 12px;
-  // padding-top: 12px;
-}
 
-.group-button-search-center {
-  align-items: flex-end;
-  padding: 5px 0px !important;
-
-  button.ant-btn {
-    margin-left: 10px;
-  }
-
-  &>div {
-    padding: 0;
-  }
-}
 
 .first-last-row-table {
   text-align: center;
@@ -2138,4 +2148,8 @@ a.disabled {
 
 .icon-lien-ket {
   color: #828282;
+}
+
+.mg-16 {
+  margin: 16px;
 }

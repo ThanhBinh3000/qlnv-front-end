@@ -86,7 +86,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -110,7 +110,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -137,7 +137,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
               }
             }
             else {
-              if (!element.hopDong.loaiVthh.startsWith(this.globals.prop.NHAP_DA_DUYET)) {
+              if (!element.hopDong.loaiVthh.startsWith(this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
                 this.listHopDong.push(element);
               }
             }
@@ -416,7 +416,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_DA_DUYET,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(

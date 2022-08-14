@@ -1,12 +1,16 @@
-<nz-tabset nzType="card" class="mt-16 chuc-nang-nhap-kho tab-level-2">
-  <nz-tab [nzTitle]="'Thông tin đấu thầu'">
-    <ng-template nz-tab>
-      <app-thongtin-dauthau></app-thongtin-dauthau>
-    </ng-template>
-  </nz-tab>
-  <nz-tab [nzTitle]="'Quyết định phê duyệt kết quả lựa chọn nhà thầu'">
-    <ng-template nz-tab>
-      <app-quyetdinh-ketqua-lcnt></app-quyetdinh-ketqua-lcnt>
-    </ng-template>
-  </nz-tab>
-</nz-tabset>
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Thông tin đấu thầu
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Quyết định phê duyệt kết quả lựa chọn nhà thầu
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-thongtin-dauthau></app-thongtin-dauthau>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-quyetdinh-ketqua-lcnt></app-quyetdinh-ketqua-lcnt>
+</ng-container>

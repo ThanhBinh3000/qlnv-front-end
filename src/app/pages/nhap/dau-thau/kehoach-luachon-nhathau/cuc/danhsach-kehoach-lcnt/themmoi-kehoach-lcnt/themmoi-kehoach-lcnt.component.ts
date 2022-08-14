@@ -1,36 +1,29 @@
-import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
-import * as XLSX from 'xlsx';
 import { Globals } from 'src/app/shared/globals';
 import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { ObservableService } from 'src/app/services/observable.service';
 import { environment } from 'src/environments/environment';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
@@ -83,10 +76,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  searchValue = '';
-  searchFilter = {
-    soDeXuat: '',
-  };
+
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
 
@@ -94,11 +84,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   // formThongTinChung: FormGroup;
   listOfData: DanhSachGoiThau[] = [];
   cacheData: DanhSachGoiThau[] = [];
-  fileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKem: any[] = [];
   userLogin: UserLogin
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
-  listTieuChuan: any[] = [];
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
@@ -106,11 +95,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   danhMucDonVi: any;
   ktDiemKho: any;
 
-  formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0;
-  parser = value => value ? value.replace(/\$\s?|(,*)/g, '') : 0;
-
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
   i = 0;
   editId: string | null = null;
   tabSelected: string = 'thongTinChung';
@@ -131,8 +115,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
@@ -312,23 +294,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  // getNameDanhSachDvi(maDvi: string) {
-  //   let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-  //   this.formThongTinChung.patchValue({
-  //     tenDvi: donVi.length > 0 ? donVi[0].tenDvi : null
-  //   })
-  // }
-
-  getTenDviTable(maDvi: string) {
-    let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi.length > 0 ? donVi[0].tenDvi : null
-  }
-
-  getTenDiemKhoTable(maDiemKho: string) {
-    let diemKho = this.ktDiemKho?.filter(item => item.maDiemkho == maDiemKho);
-    return diemKho.length > 0 ? diemKho[0].tenDiemkho : null
-  }
-
   async changeChiCuc(event, index?) {
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
@@ -377,7 +342,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: { data },
+      nzComponentParams: {
+        data,
+        onlyLuongThuc: true
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -535,8 +503,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      console.log("Invalid");
+    console.log(this.fileDinhKem);
+    if (this.formData) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       console.log(this.formData.value);
       return;
     }

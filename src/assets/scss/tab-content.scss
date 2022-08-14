@@ -5,7 +5,6 @@
 
     .giao-ke-hoach {
         padding: 0px 10px;
-        margin-top: 10px;
     }
 
     .chi-tieu__body {
@@ -65,8 +64,8 @@
 
             .ant-tabs-content-holder {
                 background: #f8f8f8;
-                overflow: hidden;
-                max-height: calc(100vh - 180px);
+                // overflow: hidden;
+                // max-height: calc(100vh - 180px);
 
                 .ant-card {
                     margin: 9px 10px;
@@ -87,8 +86,8 @@
                 padding-left: 0;
                 padding-bottom: 0;
                 padding-right: 0;
-                overflow: hidden;
-                max-height: calc(100vh - 230px);
+                // overflow: hidden;
+                // max-height: calc(100vh - 230px);
 
                 .contentBor {
                     .main-content {
@@ -167,7 +166,7 @@
                 background: #fff;
                 padding-left: 0;
                 overflow-y: auto;
-                max-height: calc(100vh - 280px);
+                // max-height: calc(100vh - 280px);
 
                 .ant-tabs {
                     margin: 0 10px 10px 10px;
@@ -213,7 +212,7 @@
 
             .ant-tabs-content-holder {
                 overflow-y: auto;
-                max-height: calc(100vh - 480px);
+                // max-height: calc(100vh - 480px);
                 background-color: #fff;
 
                 .ant-tabs {
@@ -223,8 +222,8 @@
                 .ant-tabs-tabpane {
                     border: 1px solid #f3f3f3;
                     padding: 10px;
-                    // overflow-y: auto;
-                    max-height: calc(70vh - 200px);
+                    overflow-y: auto;
+                    // max-height: calc(70vh - 200px);
 
                     .ant-table-container {
                         border: 0;
@@ -322,7 +321,7 @@
             padding-bottom: 10px;
             overflow-x: hidden;
             overflow-y: auto;
-            height: calc(100vh - 245px);
+            // height: calc(100vh - 245px);
 
             .ant-table {
                 .ant-table-container {

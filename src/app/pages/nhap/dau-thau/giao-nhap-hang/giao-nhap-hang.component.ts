@@ -11,6 +11,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhap
   styleUrls: ['./giao-nhap-hang.component.scss']
 })
 export class GiaoNhapHangComponent implements OnInit {
+  loaiVthhSelected: string
   tabs: any[] = [];
   count: Array<number> = [];
   constructor(
@@ -26,7 +27,12 @@ export class GiaoNhapHangComponent implements OnInit {
     this.getCount();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        ma: null,
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -53,6 +59,10 @@ export class GiaoNhapHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 
 }

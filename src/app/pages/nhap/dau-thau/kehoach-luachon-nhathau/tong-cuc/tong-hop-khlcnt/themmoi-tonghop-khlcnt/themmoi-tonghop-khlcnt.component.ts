@@ -24,6 +24,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -82,7 +83,8 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private userService: UserService,
     private fb: FormBuilder,
-    private helperService: HelperService
+    private helperService: HelperService,
+    public globals: Globals
   ) {
     this.formTraCuu = this.fb.group(
       {

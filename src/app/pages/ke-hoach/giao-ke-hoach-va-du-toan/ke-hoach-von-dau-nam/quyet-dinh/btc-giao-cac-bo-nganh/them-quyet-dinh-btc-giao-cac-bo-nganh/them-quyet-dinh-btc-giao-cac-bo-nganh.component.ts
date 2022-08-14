@@ -27,7 +27,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   formData: FormGroup;
 
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
 
@@ -91,10 +91,11 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         trichYeu: data.trichYeu,
         idTtcpBoNganh: data.idTtcpBoNganh
       })
-      this.muaTangList = data.muaTangList;
-      this.xuatGiamList = data.xuatGiamList;
-      this.xuatBanList = data.xuatBanList;
-      this.luanPhienList = data.luanPhienList;
+      this.taiLieuDinhKemList = data.fileDinhkems;
+      this.muaTangList = data.muaTangList ? data.muaTangList : [];
+      this.xuatGiamList = data.xuatGiamList ? data.xuatGiamList : [];
+      this.xuatBanList = data.xuatBanList ? data.xuatBanList : [];
+      this.luanPhienList = data.luanPhienList ? data.luanPhienList : [];
     }
   }
 
@@ -112,6 +113,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
           this.dsBoNganh = detail.data.listBoNganh;
         }
       }
+      console.log(this.dsBoNganh)
     }
   }
 
@@ -202,6 +204,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -211,6 +214,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;
     body.xuatBanList = this.xuatBanList;

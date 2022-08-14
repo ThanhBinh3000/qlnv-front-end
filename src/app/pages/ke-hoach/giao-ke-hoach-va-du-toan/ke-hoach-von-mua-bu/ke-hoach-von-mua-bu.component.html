@@ -1,3 +1,22 @@
-<p>
-  ke-hoach-von-mua-bu works!
-</p>
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Quyết định
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Chỉ tiêu kế hoạch
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Điều chỉnh chỉ tiêu KH
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-quyet-dinh></app-quyet-dinh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-chi-tieu-ke-hoach></app-chi-tieu-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
+</ng-container>

@@ -124,7 +124,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       "denNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
       "soQdNhap": this.searchFilter.soQuyetDinh,
       "maDonVi": this.userInfo.MA_DVI,
-      "maHang": this.typeVthh,
+      "maVatTuCha": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBangKe": this.searchFilter.soBangKe,

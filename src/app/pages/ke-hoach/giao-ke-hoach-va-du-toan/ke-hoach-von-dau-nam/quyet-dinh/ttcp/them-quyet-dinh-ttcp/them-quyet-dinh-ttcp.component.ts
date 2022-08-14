@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
@@ -12,6 +11,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
+
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -26,7 +26,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   formData: FormGroup;
 
-  taiLieuDinhKemList = [];
+  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string
   userInfo: UserLogin;
@@ -83,6 +83,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         trichYeu: data.trichYeu
       })
       this.dataTable = data.listBoNganh
+      this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 
@@ -131,6 +132,11 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   downloadFileKeHoach(event) { }
 
+
+  xoaItem(id: number) {
+
+  }
+
   quayLai() {
     this.onClose.emit();
   }
@@ -173,6 +179,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -188,6 +195,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);

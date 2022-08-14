@@ -17,18 +17,43 @@
       .text-container {
         padding: 0 10px;
 
-        h2 {
-          font-size: 16px;
-          font-weight: 700;
-          text-transform: uppercase;
-          padding: 6px 10px;
-          border-radius: 5px;
-          margin-bottom: 0;
-        }
 
-        .du-thao {
-          color: #FF4D4F;
-          border: 1px solid #EAEAEA;
+        .title-chi-tieu {
+          display: flex;
+          align-items: center;
+          padding-left: 0px !important;
+
+          .du-thao-va-lanh-dao-duyet {
+            color: #ff4d4f;
+            font-weight: 500;
+            font-size: 13px;
+            padding: 4px;
+            border-radius: 0px;
+            border: 1px solid #FF9393;
+            text-transform: uppercase;
+            margin-right: 8px;
+            background-color: #FFF1F1;
+          }
+
+          .da-ban-hanh {
+            color: #24e837;
+            font-weight: 500;
+            font-size: 13px;
+            padding: 4px;
+            border-radius: 0px;
+            border: 1px solid #24e837;
+            text-transform: uppercase;
+            margin-right: 8px;
+            background: #efffec;
+          }
+
+          &>span:nth-child(2) {
+            text-transform: uppercase;
+            color: #444444;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 4px;
+          }
         }
       }
     }

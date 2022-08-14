@@ -111,7 +111,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       "soHd": "",
       "soQd": null,
       "str": "",
-      "trangThai": "",
+      "trangThai": this.globals.prop.NHAP_BAN_HANH,
       "tuNgayQd": null,
       "veViec": null
     }
@@ -570,6 +570,8 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
         "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan,
         "qdgnvnxId": this.detail.qdgnvnxId,
       };
+
+      console.log(body);
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
           body,

@@ -265,6 +265,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
+      lastest: 0,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -424,6 +425,39 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       idThHdr: '',
       namKhoach: '',
       tenVthh: '',
+    }
+  }
+
+  allChecked = false;
+  indeterminate = false;
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 }

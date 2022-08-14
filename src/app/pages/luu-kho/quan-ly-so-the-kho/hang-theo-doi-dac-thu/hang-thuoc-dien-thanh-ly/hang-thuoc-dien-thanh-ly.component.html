@@ -16,7 +16,8 @@
                         <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
                         <nz-form-control>
                             <nz-input-group id="ten-don-vi">
-                                <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto" (input)="onChangeAutoComplete($event)" />
+                                <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto"
+                                    (input)="onChangeAutoComplete($event)" />
                                 <nz-autocomplete #donViAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
                             </nz-input-group>
                         </nz-form-control>
@@ -35,7 +36,8 @@
                         <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
                         <nz-form-control>
                             <nz-input-group id="ten-don-vi">
-                                <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto" (input)="onChangeLoaiHHAutoComplete($event)" />
+                                <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto"
+                                    (input)="onChangeLoaiHHAutoComplete($event)" />
                                 <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource"></nz-autocomplete>
                             </nz-input-group>
                         </nz-form-control>
@@ -45,7 +47,8 @@
                     <nz-form-item nz-col nzSpan="4" class="form-item">
                         <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
                         <nz-form-control>
-                            <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+                            <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao"
+                                class="search__input">
                             </nz-range-picker>
                         </nz-form-control>
                     </nz-form-item>
@@ -89,7 +92,8 @@
             <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                     <tr>
-                        <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                        <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+                            (nzCheckedChange)="onAllChecked($event)"></th>
                         <th class="text-center" style="width: 5%;">STT</th>
                         <th style="width: 10%;">Mã danh sách</th>
                         <th style="width: 40%;">Tên đơn vị</th>
@@ -102,21 +106,28 @@
                         <th></th>
                         <th class="text-center" width="350px">
                             <nz-input-group [nzSuffix]="suffixIconSearch">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
+                                <input type="text" nz-input placeholder="Tìm kiếm"
+                                    [(ngModel)]="searchInTable.maDanhSach"
+                                    (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
                             </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixIconSearch">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi" [nzAutocomplete]="donViSearchAuto" (ngModelChange)="filterInTable('tenDonvi',searchInTable.donVi)" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"
+                                    [nzAutocomplete]="donViSearchAuto"
+                                    (ngModelChange)="filterInTable('tenDonvi',searchInTable.donVi)" />
                                 <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao" (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao)"></nz-date-picker>
+                            <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"
+                                (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao)"></nz-date-picker>
                         </th>
                         <th>
-                            <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThai" (ngModelChange)="filterInTable('trangThaiXuLy',searchInTable.trangThai)">
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
+                            <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThai"
+                                (ngModelChange)="filterInTable('trangThaiXuLy',searchInTable.trangThai)">
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}"
+                                    *ngFor="let item of dsTrangThai">
                                 </nz-option>
                             </nz-select>
                         </th>
@@ -128,7 +139,8 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-                        <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                        <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+                            (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
                         <td>{{ idx + 1 }}</td>
                         <td>{{ data.maDanhSach }}</td>
                         <td>{{ data.tenDonvi }}</td>
@@ -146,8 +158,6 @@
                             </a>
                         </td>
                     </tr>
-
-
                 </tbody>
             </nz-table>
             <div class="tab-content tab-menu" id="myTabContent">
@@ -157,7 +167,9 @@
                     </div>
                     <div class="canphai">
                         <!-- begin phân trang  -->
-                        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                            nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                            (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
                                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
                             </ng-template>
@@ -171,6 +183,7 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa" [detail]="isUpdate" [editList]="editList" [dataEditList]="dataDetail">
+    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa"
+        [detail]="isUpdate" [editList]="editList" [dataEditList]="dataDetail">
     </app-them-hang-thuoc-dien-thanh-ly>
 </ng-template>

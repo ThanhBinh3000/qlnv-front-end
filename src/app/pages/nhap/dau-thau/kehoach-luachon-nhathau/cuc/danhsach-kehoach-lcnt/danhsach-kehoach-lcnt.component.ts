@@ -1,21 +1,14 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 
 
@@ -26,10 +19,8 @@ import { saveAs } from 'file-saver';
 })
 export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
-    private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
@@ -228,6 +219,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
     this.search();
+    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {

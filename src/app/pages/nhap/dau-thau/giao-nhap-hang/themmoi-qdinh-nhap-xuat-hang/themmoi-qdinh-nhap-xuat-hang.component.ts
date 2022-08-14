@@ -351,17 +351,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
-  onInputHangHoa(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsHangHoa = [];
-    } else {
-      this.optionsHangHoa = this.optionsFullHangHoa.filter(
-        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
   save(isGuiDuyet?: boolean) {
     if (!this.formData.valid) {
       return;
@@ -375,7 +364,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
-    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
+    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh != null ? this.typeVthh : '0101';
 
     if (this.quyetDinhNhapXuat.id > 0) {
       this.quyetDinhNhapXuat.detail = this.dsQuyetDinhNhapXuatDetailClone;
@@ -528,7 +517,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP,
           };
           let res =
             await this.quyetDinhNhapXuatService.updateStatus(
@@ -592,7 +581,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   tuChoi() {
-    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP_KH_QLHDT;
+    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP;
     if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
       trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
     }
