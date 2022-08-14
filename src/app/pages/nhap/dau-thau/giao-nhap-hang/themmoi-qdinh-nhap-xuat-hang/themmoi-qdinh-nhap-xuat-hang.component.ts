@@ -135,7 +135,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((hopDongs) => {
       if (hopDongs) {
-        console.log("hopDongs: ", hopDongs);
         let canCuHd = '';
         this.quyetDinhNhapXuat.hopDongIds = [];
         // if (!this.quyetDinhNhapXuat.id) {
