@@ -351,5 +351,6 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   onClose() {
     this.isAddNew = false;
+    this.search();
   }
 }

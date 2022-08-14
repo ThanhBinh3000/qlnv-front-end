@@ -80,7 +80,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null,false,null)">
+        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null,false,null)"
+          *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Thêm</span>
         </button>
@@ -212,10 +213,11 @@
               <a (click)="viewDetail(data.id, true,data.trangThai)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, false,data.trangThai)" *ngIf="data.trangThai === globals.prop.DU_THAO ">
+              <a (click)="viewDetail(data.id, false,data.trangThai)"
+                *ngIf="data.trangThai === globals.prop.DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)" *ngIf="data.trangThai === globals.prop.DU_THAO ">
+              <a (click)="xoaItem(data.id)" *ngIf="data.trangThai === globals.prop.DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

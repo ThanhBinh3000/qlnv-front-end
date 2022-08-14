@@ -16,7 +16,6 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -27,17 +26,30 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
   styleUrls: ['./them-so-kho-the-kho.component.scss'],
 })
 export class ThemSoKhoTheKhoComponent implements OnInit {
-  @Input('dsTong') dsTong: any;
+  // @Input('dsTong') dsTong: any;
   @Output('close') onClose = new EventEmitter<any>();
 
-  @Input() idInput: number; // id
-  @Input() isCheck: boolean;// check
+  @Input() idInput: number;
+  @Input() isCheck: boolean;
   @Input() isStatus: any;
+
+  dsTong: any;
+
   dataTable: INhapXuat[];
+  listTable: INhapXuat[];
+
+
   formData: FormGroup;
+  sizePage: number = PAGE_SIZE_DEFAULT;
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 10;
+
+
+  indexMax: number;
+  totalElements: number;
+  indexItemStart: number;
+  indexItemEnd: number;
+  pageSize: number = this.sizePage;
+  totalRecord: number = this.sizePage;
 
   userInfo: UserLogin;
   detail: any = {};
@@ -85,8 +97,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      // console.log(this.idInput, this.isCheck, this.isStatus);
-      // this.getDataDetail(this.idInput)
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.tenDvi = this.userInfo.TEN_DVI;
@@ -97,16 +107,11 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         this.initData(),
         this.loaiVTHHGetAll(),
       ]);
+
       if (this.idInput) {
         this.loadChiTiet();
-
-        if (this.isCheck) {
-          console.log('trường hợp đã lấy được id và đang luồng edit ' + this.isCheck);
-        } else {
-          console.log('trường hợp đã lấy được id và đang luồng view ' + this.isCheck);
-        }
       } else {
-        console.log('trường hợp đã lấy được id = null và đang luồng thêm mới ' + this.idInput);
+        this.isStatus = this.globals.prop.NHAP_DU_THAO;
       }
       this.spinner.hide();
     } catch (e) {
@@ -118,8 +123,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   async loadChiTiet() {
     let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
-    console.log(res);
-
     this.dsChiTiet = res.data;
 
     this.formData.patchValue({
@@ -157,15 +160,10 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         }
       ]
     })
-
+    this.totalRecord = Number((res.data.ds.length / this.sizePage).toFixed()) * this.sizePage;
     this.dataTable = listNhapXuat;
-
-
-    console.log(this.formData.value)
-
+    this.loadListTable(1);
   }
-
-
 
   isDetail(): boolean {
     return (
@@ -200,7 +198,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       idNhaKho: [null, [Validators.required]],
       idNganKho: [null, [Validators.required]],
       idNganLo: [null, [Validators.required]],
-      tonDauKy: [100, [Validators.required]],
+      tonDauKy: [null, [Validators.required]],
       donViTinh: [null],
     });
   }
@@ -255,6 +253,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   changeDiemKho(fromChiTiet: boolean) {
     let diemKho = this.listDiemKho.filter(x => x.title == this.formData.value.idDiemKho);
     if (diemKho && diemKho.length > 0) {
+      if (!this.idInput) {
+        this.formData.patchValue({ idNhaKho: null })
+      }
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
@@ -265,6 +266,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   changeNhaKho(fromChiTiet: boolean) {
     let nhaKho = this.listNhaKho.filter(x => x.title == this.formData.value.idNhaKho);
     if (nhaKho && nhaKho.length > 0) {
+      if (!this.idInput) {
+        this.formData.patchValue({ idNganKho: null })
+      }
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
         this.changeNganKho();
@@ -275,6 +279,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   changeNganKho() {
     let nganKho = this.listNganKho.filter(x => x.title == this.formData.value.idNganKho);
     if (nganKho && nganKho.length > 0) {
+      if (!this.idInput && this.formData.value.idNganLo !== null) {
+        this.formData.patchValue({ idNganLo: null })
+      }
       this.listNganLo = nganKho[0].children;
       this.maNganKho = this.detail.maNganKho;
     }
@@ -289,14 +296,13 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     }
   }
 
-  async changeNganLo() {
-
+  changeNganLo() {
+    this.loadTonDauKy();
   }
 
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-        console.log(hangHoa)
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           const dataVatTu = hangHoa.data.forEach((item) => {
             if (item => item.cap === "1") {
@@ -317,6 +323,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   async changeLoaiHangHoa() {
     let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ten == this.formData.value.idLoaiHangHoa);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
+      if (!this.idInput) {
+        this.formData.patchValue({ idChungLoaiHangHoa: null })
+      }
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
 
@@ -335,16 +344,45 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     this.formData.patchValue({ donViTinh: loaihanghoaDVT[0]?.maDviTinh })
   }
 
+
+  async loadTonDauKy() {
+    try {
+      const body = {
+        "maChiCuc": this.detail.maDvi,
+        "maLokho": this.formData.value.idNganLo,
+        "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY")
+        // "pageSize": 20,
+        // "pageNumber": 1
+      }
+
+      const res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
+
+      res.data.list.forEach((item) => {
+        item.child.forEach((child) => {
+          if (child.maDvi === this.userInfo.MA_DVI) {
+            this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
+          }
+        })
+      })
+
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
   huy() {
     this.onClose.emit();
   }
-  // nút xuất file chi tiết thẻ kho
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show()
       try {
-        let body = this.formData.value;
-        this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
+        let body = {
+          "theKhoId": this.idInput
+        };
+        this.quanLySoKhoTheKhoService.exportCT(body).subscribe((blob) => {
           saveAs(blob, 'chi-tiet-the-kho.xlsx')
         });
         this.spinner.hide();
@@ -356,14 +394,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
     }
-
-
   }
 
   async luu(isDuyet: boolean) {
-
-    console.log(this.formData.value);
-
     try {
       const body = {
         "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
@@ -372,11 +405,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         "maDvi": this.formData.value.idNganLo,
         "nam": this.formData.value.nam,
         "tenDvi": this.formData.value.idDonVi,
-        "tonDauKy": 10,
+        "tonDauKy": this.formData.value.tonDauKy,
         "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY")
       }
-
-      console.log(body);
 
       let res: any;
       if (this.idInput) {
@@ -384,11 +415,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           ...body,
           'id': this.idInput
         }
-        console.log(bodyNew);
         res = await this.quanLySoKhoTheKhoService.sua(bodyNew);
       } else {
         res = await this.quanLySoKhoTheKhoService.them(body);
-
       }
 
       if (res.msg == MESSAGE.SUCCESS) {
@@ -516,21 +545,19 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     });
   }
 
-
-
   taoTheKho() {
     this.isTaoTheKho = true;
     this.loadSoPhieuNhapXuat();
-    this.isCheck = true;
+
   }
 
-  changeDienGiaiGhiChu(event, index, type) {
+  changeDienGiaiGhiChu(event, index: number, type: string) {
+    const indexTable = index + this.sizePage * (this.page - 1);
     if (type === 'diengiai') {
-      this.dataTable[index].dienGiai = event.target.value;
+      this.dataTable[indexTable].dienGiai = event;
     } else if (type === 'ghichu') {
-      this.dataTable[index].ghiChu = event.target.value;
+      this.dataTable[indexTable].ghiChu = event;
     }
-    console.log(this.dataTable)
   }
 
   async loadSoPhieuNhapXuat() {
@@ -542,18 +569,20 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         "maLokho": this.formData.value.idNganLo,
         "maVatTu": this.formData.value.idChungLoaiHangHoa,
         "paggingReq": {
-          "limit": 10,
+          "limit": 100000,
           "orderBy": "",
           "orderType": "",
-          "page": 0
+          "page": this.page - 1
         }
       }
 
       const resNhapXuatKho = await this.quanLyHangTrongKhoService.search();
 
       let listNhapXuat = [];
+      this.totalRecord = Number((resNhapXuatKho.data.totalElements / this.sizePage).toFixed()) * this.sizePage;
 
-      resNhapXuatKho.data.content.forEach(nhapXuatKho => {
+      this.totalElements = resNhapXuatKho.data.totalElements;
+      resNhapXuatKho.data.content.forEach((nhapXuatKho, index) => {
         const ngay = nhapXuatKho.ngayPheDuyet.split("-");
 
         nhapXuatKho.ngayPheDuyet = `${ngay[2]}-${ngay[1]}-${ngay[0]}`;
@@ -573,6 +602,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       })
 
       this.dataTable = listNhapXuat;
+      this.loadListTable(1);
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -580,28 +610,37 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   }
 
-  changePageIndex(event) { }
+  loadListTable(page: number) {
+    this.indexItemStart = this.sizePage * (page - 1);
+    this.indexItemEnd = this.sizePage * (page - 1) + (this.sizePage - 1);
 
-  changePageSize(event) { }
+    let listTable = [];
+
+    this.dataTable.forEach((item, index) => {
+      if (index >= this.indexItemStart && index <= this.indexItemEnd) {
+        listTable = [
+          ...listTable,
+          item
+        ];
+      }
+    })
+
+    this.indexMax = listTable.length + (this.page - 1) * this.sizePage;
+
+    this.listTable = listTable;
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    this.loadListTable(this.page);
+  }
+
+  changePageSize(event) {
+    this.sizePage = event;
+    this.page = 1;
+    this.loadListTable(this.page);
+  }
 }
-
-interface ITheKho {
-  id: number;
-  idDonVi: number;
-  tenDonVi: string;
-  nam: number;
-  tuNgay: Date;
-  denNgay: Date;
-  idLoaiHangHoa: number;
-  tenLoaiHangHoa: string;
-  idChungLoaiHangHoa: number;
-  tenChungLoaiHangHoa: string;
-  idNganLo: number;
-  tenNganLo: string;
-  soLuongTonDauKy: number;
-  donViTinh: string;
-}
-
 interface INhapXuat {
   dienGiai: string;
   ghiChu: string;

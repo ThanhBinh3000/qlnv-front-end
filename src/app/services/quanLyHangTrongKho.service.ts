@@ -15,6 +15,12 @@ export class QuanLyHangTrongKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho`;
     return this.httpClient.get(url).toPromise();
   }
+
+  searchHangTrongKho(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
   searchDetail(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho/detail`;
     return this.httpClient.post(url, body).toPromise();
