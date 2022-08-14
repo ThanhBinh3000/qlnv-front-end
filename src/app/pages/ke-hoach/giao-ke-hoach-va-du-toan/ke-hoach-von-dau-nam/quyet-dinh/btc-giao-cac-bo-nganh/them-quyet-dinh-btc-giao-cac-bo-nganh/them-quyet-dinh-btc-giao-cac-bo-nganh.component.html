@@ -1,34 +1,36 @@
-<div class="them-quyet-dinh-ttcp bg-trang">
-  <div class="header">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-          {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
-        </span>
-        <span>Quyết định của BTC giao bộ ngành</span>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
+      (click)="banHanh()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Ban hành</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+      <i class="icon htvbdh_luu"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          </span>
+          <span>Quyết định của BTC giao bộ ngành</span>
+        </div>
       </div>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="quayLai()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
-        (click)="banHanh()">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Ban hành</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
-        <i class="icon htvbdh_luu"></i>
-        <span>Lưu</span>
-      </button>
-    </div>
-  </div>
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="hang-theo-doi-dac-thu">
-      <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
-        <div nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="3" class="form-item">
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="isView"
@@ -41,8 +43,9 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="4" class="form-item">
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
@@ -55,7 +58,9 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nz-col nzSpan="4" class="form-item">
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd" class="search__input">
@@ -65,44 +70,31 @@
               </ng-template>
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="idTtcpBoNganh" [nzDisabled]="isView" nzAllowClear="true">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
-                </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-                </ng-template>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="24" class="form-item">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="24" class="form-item">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
             <div class="list-file">
               <file-list [data]="taiLieuDinhKemList"></file-list>
             </div>
           </nz-form-item>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </nz-card>
-  <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-tabset nzType="card" class="mt-16 tab-level-3">
-      <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
-        <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
-      </nz-tab>
-      <!-- <nz-tab [nzTitle]="'Xuất giảm'">
+  <nz-tabset nzType="card" class="mt-16 tab-level-3">
+    <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
+      <app-ke-hoach-mua-tang [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
+    </nz-tab>
+    <!-- <nz-tab [nzTitle]="'Xuất giảm'">
         <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
       </nz-tab>
       <nz-tab [nzTitle]="'Xuất bán'">
@@ -111,6 +103,5 @@
       <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
         <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
       </nz-tab> -->
-    </nz-tabset>
-  </nz-card>
+  </nz-tabset>
 </div>

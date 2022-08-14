@@ -20,8 +20,8 @@ export class DauGiaComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-  tabSelected = 'kehoachbandaugia';
-  selectTab(tab) {
+  tabSelected: number = 0;
+  selectTab(tab: number) {
     this.tabSelected = tab;
   }
 }

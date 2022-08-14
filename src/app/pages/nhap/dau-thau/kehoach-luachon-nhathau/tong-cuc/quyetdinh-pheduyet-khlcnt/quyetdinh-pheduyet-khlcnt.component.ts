@@ -427,4 +427,37 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       tenVthh: '',
     }
   }
+
+  allChecked = false;
+  indeterminate = false;
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
 }

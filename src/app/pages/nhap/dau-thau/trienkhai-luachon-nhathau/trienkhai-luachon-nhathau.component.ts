@@ -21,17 +21,12 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: null,
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-      }
+      this.tabs = [...this.tabs, ...res.data.filter(item => item.ma !== '02')];
     }
   }
 

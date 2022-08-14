@@ -29,8 +29,7 @@ export class GiaoNhapHangComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
-        ma: ""
+        ma: null
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
