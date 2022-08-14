@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  FormBuilder, FormGroup,
-  Validators
+  FormBuilder, FormGroup
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
@@ -16,11 +15,13 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { DATEPICKER_CONFIG, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { Cts, QuyetDinhGiaoNhiemVuXuatHang } from 'src/app/models/QuyetDinhGiaoNhiemVuXuatHang';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -32,6 +33,7 @@ import { Globals } from 'src/app/shared/globals';
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   @Input() id: number;
   @Input() typeVthh: string;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -65,7 +67,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  qdGiaoNhiemVuXuatHang: QuyetDinhGiaoNhiemVuXuatHang = new QuyetDinhGiaoNhiemVuXuatHang();
+  chiTietQds: Array<Cts>;
+  hopDongList: any[] = [];
+  listFileDinhKem: Array<FileDinhKem> = [];
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -76,7 +81,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     public globals: Globals,
     private userService: UserService,
     private danhMucService: DanhMucService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhiemVuXuatHangService,
     private uploadFileService: UploadFileService,
   ) { }
 
@@ -103,16 +108,60 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      soQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soQd : null, [Validators.required]],
-      ngayQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ngayQdinh : null, [Validators.required]],
-      canCu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soHd : null, [Validators.required]],
-      veViec: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.veViec : null],
-      trichYeu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.trichYeu : null, [Validators.required]],
-      namNhap: [dayjs().get('year')],
-      donVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.tenDonVi : null],
-      maDonVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.maDvi : null],
-      ghiChu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ghiChu : null],
-      hopDongId: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.hopDongId : null],
+      soQD: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.soQuyetDinh
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      soHopDong: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.soHopDong
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      donVi: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.donVi
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      maDonVi: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.maDonVi
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      ngayQuyetDinh: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.ngayQuyetDinh
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
+      trichYeu: [
+        {
+          value: this.qdGiaoNhiemVuXuatHang
+            ? this.qdGiaoNhiemVuXuatHang.trichYeu
+            : null,
+          disabled: this.isView ? true : false
+        },
+        [],
+      ],
     });
   }
 
@@ -155,12 +204,25 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {},
     });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.formData.patchValue({
-          canCu: data.soHd,
-          hopDongId: data.id
+    modalQD.afterClose.subscribe((hopDongs) => {
+      if (hopDongs) {
+        let canCuHd = '';
+        this.qdGiaoNhiemVuXuatHang.hopDongIds = [];
+        // if (!this.quyetDinhNhapXuat.id) {
+        this.hopDongList = hopDongs;
+        // }
+        hopDongs.forEach(async (hd, i) => {
+          canCuHd += hd.soHd
+          if (i < hopDongs.length - 1) {
+            canCuHd += ' , '
+          };
+          this.qdGiaoNhiemVuXuatHang.hopDongIds.push(hd.id);
         });
+
+        this.formData.patchValue({
+          soHopDong: canCuHd,
+        });
+
       }
     });
   }
@@ -380,119 +442,67 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(this.quyetDinhNhapXuat.detail);
     this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
   }
-  save(isGuiDuyet?: boolean) {
-    if (!this.formData.valid) {
-      return;
-    }
+
+  async save(isOther: boolean) {
     this.spinner.show();
-    this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value + '/QĐ-CDTVT';
-    this.quyetDinhNhapXuat.namNhap = dayjs().get('year');
-    this.quyetDinhNhapXuat.ngayQdinh = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : dayjs().toString();
-    this.quyetDinhNhapXuat.soHd = this.formData.get('canCu').value;
-    this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
-    this.quyetDinhNhapXuat.trichYeu = this.formData.get('trichYeu').value;
-    this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
-    this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
-    this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
-    this.quyetDinhNhapXuat.loaiVthh = this.typeVthh;
-    this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
-    if (this.quyetDinhNhapXuat.id > 0) {
-      const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();
-      quyetDinhNhapXuatInput.detail = this.quyetDinhNhapXuat.detail;
-      quyetDinhNhapXuatInput.fileDinhKems = this.quyetDinhNhapXuat.fileDinhKems;
-      quyetDinhNhapXuatInput.ghiChu = this.quyetDinhNhapXuat.ghiChu;
-      quyetDinhNhapXuatInput.id = this.quyetDinhNhapXuat.id;
-      quyetDinhNhapXuatInput.soQd = this.quyetDinhNhapXuat.soQd;
-      quyetDinhNhapXuatInput.loaiQd = this.quyetDinhNhapXuat.loaiQd;
-      quyetDinhNhapXuatInput.ngayQdinh = this.quyetDinhNhapXuat.ngayQdinh;
-      quyetDinhNhapXuatInput.soHd = this.quyetDinhNhapXuat.soHd;
-      quyetDinhNhapXuatInput.namNhap = this.quyetDinhNhapXuat.namNhap;
-      quyetDinhNhapXuatInput.veViec = this.quyetDinhNhapXuat.veViec;
-      quyetDinhNhapXuatInput.loaiVthh = this.quyetDinhNhapXuat.loaiVthh;
-      quyetDinhNhapXuatInput.trichYeu = this.quyetDinhNhapXuat.trichYeu;
-      quyetDinhNhapXuatInput.maDvi = this.quyetDinhNhapXuat.maDvi;
-      this.quyetDinhNhapXuatService
-        .sua(quyetDinhNhapXuatInput)
-        .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (isGuiDuyet) {
-              let body = {
-                id: res.data.id,
-                lyDoTuChoi: null,
-                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
-              };
-              this.quyetDinhNhapXuatService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.UPDATE_SUCCESS,
-                );
-                this.redirectQdNhapXuat();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
-              this.redirectQdNhapXuat();
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    try {
+      let body = {
+        "cts": [],
+        "fileDinhKems": this.listFileDinhKem,
+        "hopDongIds": this.qdGiaoNhiemVuXuatHang.hopDongIds,
+        "id": this.qdGiaoNhiemVuXuatHang.id,
+        "loaiVthh": this.typeVthh,
+        "ngayQuyetDinh": this.formData.get('ngayQuyetDinh').value ? dayjs(this.formData.get('ngayQuyetDinh').value).format('YYYY-MM-DD') : dayjs().toString(),
+        "soQuyetDinh": this.formData.get('soQD').value + this.userInfo.MA_QD,
+        "trichYeu": this.formData.get('trichYeu').value,
+        "namXuat": dayjs().get('year'),
+      }
+      if (this.id > 0) {
+        let res = await this.quyetDinhNhapXuatService.sua(
+          body,
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS,
+            );
+            this.redirectQdNhapXuat();
           }
-        })
-        .catch((e) => {
-          console.error('error: ', e);
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        .finally(() => {
-          this.spinner.hide();
-        });
-    } else {
-      this.quyetDinhNhapXuatService
-        .them(this.quyetDinhNhapXuat)
-        .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (isGuiDuyet) {
-              let body = {
-                id: res.data.id,
-                lyDoTuChoi: null,
-                trangThai: this.globals.prop.LANH_DAO_DUYET,
-              };
-              this.quyetDinhNhapXuatService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                this.redirectQdNhapXuat();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectQdNhapXuat();
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      } else {
+        let res = await this.quyetDinhNhapXuatService.them(
+          body,
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.redirectQdNhapXuat();
           }
-        })
-        .catch((e) => {
-          console.error('error: ', e);
-          this.notification.error(
-            MESSAGE.ERROR,
-            e.error.errors[0].defaultMessage,
-          );
-        })
-        .finally(() => {
-          this.spinner.hide();
-        });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+
+
+
+
   redirectQdNhapXuat() {
     this.showListEvent.emit();
   }
   loadThongTinQdNhapXuatHang(id: number) {
     this.quyetDinhNhapXuatService
-      .chiTiet(id)
+      .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.quyetDinhNhapXuat = res.data;
@@ -694,6 +704,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.BAN_HANH) {
       return 'da-ban-hanh';
+    }
+  }
+
+
+  isDisableField() {
+    if (this.qdGiaoNhiemVuXuatHang && (this.qdGiaoNhiemVuXuatHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.qdGiaoNhiemVuXuatHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.qdGiaoNhiemVuXuatHang.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+      return true;
     }
   }
 }

@@ -1,7 +1,7 @@
-import { cloneDeep } from 'lodash';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,10 +9,9 @@ import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-ca
 import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -50,10 +49,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   selectedCanCu: any = null;
   searchFilter = {
+    namXuat: '',
     soQd: '',
-    ngayQuyetDinh: '',
-    namNhap: '',
-    trichYeu: ''
+    trichYeu: '',
+    ngayKy: ''
   };
   listNam: any[] = [];
   routerUrl: string;
@@ -79,7 +78,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
@@ -179,10 +178,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
   clearFilter() {
     this.searchFilter = {
+      namXuat: '',
       soQd: '',
-      ngayQuyetDinh: '',
-      namNhap: '',
-      trichYeu: ''
+      trichYeu: '',
+      ngayKy: ''
     }
     this.search();
   }
@@ -190,37 +189,31 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "denNgayQd": this.searchFilter.ngayQuyetDinh
-        ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
+      "namXuat": this.searchFilter.namXuat ?? null,
+      "soQuyetDinh": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
+      "trichyeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+      "ngayKyTu": this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
         : null,
-      "loaiQd": null,
-      "maDvi": null,
+      "ngayKyDen": this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
       "maVthh": null,
       "loaiVthh": this.typeVthh ?? null,
-      "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
-      "ngayQd": null,
-      "orderBy": null,
-      "orderDirection": null,
       "paggingReq": {
         "limit": this.pageSize,
         "orderBy": null,
         "orderType": null,
         "page": this.page - 1
       },
-      "soHd": null,
-      "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-      "str": null,
       "trangThai": null,
-      "tuNgayQd": this.searchFilter.ngayQuyetDinh
-        ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
-        : null,
-      "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-      "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNvXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable);
+
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
@@ -276,7 +269,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaoNhapHangService.xoa({ id: item.id }).then((res) => {
+          this.quyetDinhGiaoNvXuatHangService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -303,34 +296,26 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayQd": this.searchFilter.ngayQuyetDinh
-            ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
+          "namXuat": this.searchFilter.namXuat ?? null,
+          "soQuyetDinh": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
+          "trichyeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+          "ngayKyTu": this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
             : null,
-          "loaiQd": null,
-          "maDvi": null,
+          "ngayKyDen": this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
           "maVthh": null,
           "loaiVthh": this.typeVthh ?? null,
-          "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
-          "ngayQd": null,
-          "orderBy": null,
-          "orderDirection": null,
           "paggingReq": {
             "limit": this.pageSize,
             "orderBy": null,
             "orderType": null,
             "page": this.page - 1
           },
-          "soHd": null,
-          "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-          "str": null,
           "trangThai": null,
-          "tuNgayQd": this.searchFilter.ngayQuyetDinh
-            ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
-            : null,
-          "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-          "veViec": null
         }
-        this.quyetDinhGiaoNhapHangService
+        this.quyetDinhGiaoNvXuatHangService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx'),
@@ -363,7 +348,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: '02',
           };
-          let res = await this.quyetDinhGiaoNhapHangService.updateStatus(body);
+          let res = await this.quyetDinhGiaoNvXuatHangService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.search();
@@ -462,7 +447,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaoNhapHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quyetDinhGiaoNvXuatHangService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
