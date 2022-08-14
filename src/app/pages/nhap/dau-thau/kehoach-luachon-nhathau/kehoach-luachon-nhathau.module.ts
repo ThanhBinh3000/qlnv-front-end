@@ -9,8 +9,6 @@ import { ThemmoiKehoachLcntComponent } from './cuc/danhsach-kehoach-lcnt/themmoi
 import { MainCucComponent } from './cuc/main-cuc/main-cuc.component';
 import { KeHoachLuachonNhathauComponent } from './kehoach-luachon-nhathau.component';
 import { MainTongCucComponent } from './tong-cuc/main-tong-cuc/main-tong-cuc.component';
-import { PhuongAnKhlcntComponent } from './tong-cuc/phuong-an-khlcnt/phuong-an-khlcnt.component';
-import { ThemmoiPhuonganKhlcntComponent } from './tong-cuc/phuong-an-khlcnt/themmoi-phuongan-khlcnt/themmoi-phuongan-khlcnt.component';
 import { QuyetdinhPheduyetKhlcntComponent } from './tong-cuc/quyetdinh-pheduyet-khlcnt/quyetdinh-pheduyet-khlcnt.component';
 import { ThemmoiQuyetdinhKhlcntComponent } from './tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/themmoi-quyetdinh-khlcnt.component';
 import { ThemmoiKehoachLcntTongCucComponent } from './tong-cuc/themmoi-kehoach-lcnt-tong-cuc/themmoi-kehoach-lcnt-tong-cuc.component';
@@ -26,12 +24,9 @@ import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlc
     DanhsachKehoachLcntComponent,
     ThemmoiKehoachLcntComponent,
     MainCucComponent,
-    PhuongAnKhlcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     TongCucComponent,
     MainTongCucComponent,
-    PhuongAnKhlcntComponent,
-    ThemmoiPhuonganKhlcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     ThemmoiQuyetdinhKhlcntComponent,
     ThemmoiKehoachLcntTongCucComponent,
@@ -48,11 +43,9 @@ import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlc
     CucComponent,
     DanhsachKehoachLcntComponent,
     MainCucComponent,
-    PhuongAnKhlcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     TongCucComponent,
     MainTongCucComponent,
-    PhuongAnKhlcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     TongHopKhlcntComponent,
   ]

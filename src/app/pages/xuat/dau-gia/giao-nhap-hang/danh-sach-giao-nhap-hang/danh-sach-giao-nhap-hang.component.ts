@@ -187,6 +187,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   async search() {
+    console.log(this.typeVthh);
+
     this.spinner.show();
     let body = {
       "namXuat": this.searchFilter.namXuat ?? null,
@@ -199,7 +201,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
         : null,
       "maVthh": null,
-      "loaiVthh": this.typeVthh ?? null,
+      "loaiVthh": this.typeVthh,
       "paggingReq": {
         "limit": this.pageSize,
         "orderBy": null,

@@ -1,4 +1,4 @@
-<nz-affix class="menu-lv3 nhap-xuat-hang" [nzOffsetTop]="43">
+<nz-affix class="menu-lv3 nhap-xuat-hang" [nzOffsetTop]="globals.prop.MENU_LV2">
   <div class="tab-content tab-menu" id="myTabContent">
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
@@ -31,7 +31,8 @@
           <span>Từ chối</span>
         </a>
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-          *ngIf="!isDisableField() && !isView" [disabled]="!formData.valid">
+          *ngIf="qdGiaoNhiemVuXuatHang.trangThai == globals.prop.NHAP_CHO_DUYET_TP || qdGiaoNhiemVuXuatHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || qdGiaoNhiemVuXuatHang.trangThai == globals.prop.NHAP_DA_DUYET || !isView"
+          [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>

@@ -5,8 +5,8 @@
     </li>
   </ul>
 </nz-affix>
-<ng-container>
-  <app-main-tong-cuc [loaiVthh]="loaiVthhSelected"></app-main-tong-cuc>
+<ng-container *ngFor="let tab of tabs, let i = index" >
+  <app-main-tong-cuc  *ngIf="tab.ma == loaiVthhSelected" [loaiVthh]="loaiVthhSelected"></app-main-tong-cuc>
 </ng-container>
 
 <!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">

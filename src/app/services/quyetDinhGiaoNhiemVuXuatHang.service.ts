@@ -18,6 +18,8 @@ export class QuyetDinhGiaoNhiemVuXuatHangService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/qd-giao-nvu-xuat-hang?`;
     if (body.namXuat)
       url_ += 'namXuat=' + encodeURIComponent('' + body.namXuat) + '&';
+    if (body.loaiVthh)
+      url_ += 'loaiVthh=' + encodeURIComponent('' + body.loaiVthh) + '&';
     if (body.soQuyetDinh)
       url_ += 'soQuyetDinh=' + encodeURIComponent('' + body.soQuyetDinh) + '&';
     if (body.trichyeu)
@@ -55,8 +57,8 @@ export class QuyetDinhGiaoNhiemVuXuatHangService extends BaseService {
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-giao-nvu-xuat-hang`;
-    return this.httpClient.delete(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-giao-nvu-xuat-hang/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {

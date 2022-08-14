@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, SimpleChanges} from '@angular/core';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 
@@ -20,7 +20,7 @@ export class DieuChinhComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: null
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();

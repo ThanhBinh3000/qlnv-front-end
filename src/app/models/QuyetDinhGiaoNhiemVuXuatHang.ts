@@ -12,6 +12,8 @@ export class QuyetDinhGiaoNhiemVuXuatHang {
     trichYeu: string;
     donVi: string;
     maDonVi: string;
+    tenDvi: string;
+    maDvi: string;
     soHopDong: string;
     trangThai: string;
     tenTrangThai: string;

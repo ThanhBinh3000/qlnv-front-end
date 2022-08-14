@@ -9,4 +9,4 @@ import { ThemSoKhoTheKhoComponent } from './them-so-kho-the-kho/them-so-kho-the-
   imports: [CommonModule, ComponentsModule],
   exports: [SoKhoTheKhoComponent],
 })
-export class SoKhoTheKhoModule {}
+export class SoKhoTheKhoModule { }
