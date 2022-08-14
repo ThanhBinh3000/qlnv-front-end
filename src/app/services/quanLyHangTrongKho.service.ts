@@ -11,10 +11,6 @@ export class QuanLyHangTrongKhoService extends BaseService {
   constructor(private httpClient: HttpClient) {
     super(httpClient, 'QuanLySoKhoTheKho', '');
   }
-  search(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho`;
-    return this.httpClient.get(url).toPromise();
-  }
 
   searchHangTrongKho(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho`;
