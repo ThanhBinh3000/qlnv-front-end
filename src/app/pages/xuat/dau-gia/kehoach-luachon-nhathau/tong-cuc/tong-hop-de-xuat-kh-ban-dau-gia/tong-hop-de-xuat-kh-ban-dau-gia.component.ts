@@ -140,7 +140,6 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      maDvis: this.userInfo.MA_DVI,
       ngayTongHopTuNgay: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,

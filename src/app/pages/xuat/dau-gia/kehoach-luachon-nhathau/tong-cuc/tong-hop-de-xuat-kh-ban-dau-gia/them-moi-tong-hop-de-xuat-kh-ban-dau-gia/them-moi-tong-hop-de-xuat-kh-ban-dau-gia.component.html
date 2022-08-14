@@ -1,43 +1,36 @@
 <nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
-      <div class="trai">
-      </div>
-      <div class="canphai phai">
-        <button type="button" class="btn btn-sub" (click)="quayLai()">
-          <i class="fa fa-arrow-left"></i>
-          <span>Quay lại</span>
-        </button>
-        <button
-          *ngIf="detail.trangThai != globals.prop.NHAP_DU_THAO && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"
-          type="button" class="btn btn-sub" (click)="tuChoi()">
-          <i class="icon htvbdh_tcdt_tuchoi do"></i>
-          <span>Từ chối</span>
-        </button>
-        <button
-          *ngIf="detail.trangThai != globals.prop.NHAP_DU_THAO && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"
-          type="button" class="btn btn-sub" (click)="guiDuyet()" [disabled]="formData.invalid">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Lưu và gửi duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC" (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <button *ngIf="detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_TONG_CUC" type="button" class="btn btn-sub"
-          (click)="save(true)">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Tạo quyết định</span>
-        </button>
-        <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-main"
-          (click)="save()" [disabled]="formData.invalid">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
-        </button>
-      </div>
-    </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button
+      *ngIf="detail.trangThai != globals.prop.NHAP_DU_THAO && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"
+      type="button" class="btn btn-sub" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button
+      *ngIf="detail.trangThai != globals.prop.NHAP_DU_THAO && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"
+      type="button" class="btn btn-sub" (click)="guiDuyet()" [disabled]="formData.invalid">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+      *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC" (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button *ngIf="detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_TONG_CUC" type="button" class="btn btn-sub"
+      (click)="save(true)">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Tạo quyết định</span>
+    </button>
+    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-main" (click)="save()"
+      [disabled]="formData.invalid">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
   </div>
 </nz-affix>
 <div class="contentBor them-moi-nhap-xuat-hang__body">
@@ -160,13 +153,13 @@
             <tbody>
               <tr *ngFor="let data of expandTable.data;let i = index">
                 <td class="text-center">{{ i + 1 }}</td>
-                <td>{{ data.tenDvi }}</td>
+                <td>{{ data.tenDonVi }}</td>
                 <td>{{ data.soKeHoach }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.trichYeu }}</td>
-                <td>{{ data.soLuong }}</td>
-                <td>{{ data.giaKhoiDiem }}</td>
-                <td>{{ data.datTruoc }}</td>
+                <td>{{ data.tongSoLuongDonViTaiSan }}</td>
+                <td>{{ data.tongGiaKhoiDiem }}</td>
+                <td>{{ data.tongKhoanTienDatTruoc }}</td>
               </tr>
             </tbody>
           </nz-table>
