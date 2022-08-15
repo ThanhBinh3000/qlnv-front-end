@@ -13,11 +13,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-them-qd-de-xuat-phuong-an-gia',
-  templateUrl: './them-qd-de-xuat-phuong-an-gia.component.html',
-  styleUrls: ['./them-qd-de-xuat-phuong-an-gia.component.scss']
+  selector: 'app-them-tong-hop-phuong-an-gia',
+  templateUrl: './them-tong-hop-phuong-an-gia.component.html',
+  styleUrls: ['./them-tong-hop-phuong-an-gia.component.scss']
 })
-export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
+export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
@@ -32,10 +32,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   userInfo: UserLogin;
   soDeXuat: string;
 
-  muaTangList: any[] = []
-  xuatGiamList: any[] = []
-  xuatBanList: any[] = []
-  luanPhienList: any[] = []
+
   maDx: string;
   dataTable: any[] = [];
   constructor(
@@ -51,14 +48,14 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   ) {
     this.formData = this.fb.group(
       {
-        id: [],
-        namKeHoach: [dayjs().get('year'), [Validators.required]],
-        soDeXuat: [, [Validators.required]],
-        loaiHangHoa: [null],
-        ngayKy: [null, [Validators.required]],
-        loaiGia: [null],
-        trichYeu: [null],
-        trangThai: ['00'],
+        // id: [],
+        // namKeHoach: [dayjs().get('year'), [Validators.required]],
+        // soDeXuat: [, [Validators.required]],
+        // loaiHangHoa: [null],
+        // ngayKy: [null, [Validators.required]],
+        // loaiGia: [null],
+        // trichYeu: [null],
+        // trangThai: ['00'],
       }
     );
   }
@@ -77,21 +74,21 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   }
 
   async getDataDetail(id) {
-    if (id > 0) {
-      let res = await this.giaDeXuatGiaService.getDetail(id);
-      const data = res.data;
-      console.log(data);
-      this.formData.patchValue({
-        id: data.id,
-        namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat.split('/')[0],
-        loaiHangHoa: data.loaiHangHoa,
-        ngayKy: data.ngayKy,
-        loaiGia: data.loaiGia,
-        trichYeu: data.trichYeu,
-        trangThai: data.trangThai,
-      })
-    }
+    // if (id > 0) {
+    //   let res = await this.giaDeXuatGiaService.getDetail(id);
+    //   const data = res.data;
+    //   console.log(data);
+    //   this.formData.patchValue({
+    //     id: data.id,
+    //     namKeHoach: data.namKeHoach,
+    //     soDeXuat: data.soDeXuat.split('/')[0],
+    //     loaiHangHoa: data.loaiHangHoa,
+    //     ngayKy: data.ngayKy,
+    //     loaiGia: data.loaiGia,
+    //     trichYeu: data.trichYeu,
+    //     trangThai: data.trangThai,
+    //   })
+    // }
   }
 
   async onChangeNamQd(namKeHoach) {
@@ -162,69 +159,70 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   }
 
   banHanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.idInput,
-            lyDoTuChoi: null,
-            trangThai: '11',
-          };
-          let res =
-            await this.giaDeXuatGiaService.approve(
-              body,
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+    // this.modal.confirm({
+    //   nzClosable: false,
+    //   nzTitle: 'Xác nhận',
+    //   nzContent: 'Bạn có chắc chắn muốn ban hành?',
+    //   nzOkText: 'Đồng ý',
+    //   nzCancelText: 'Không',
+    //   nzOkDanger: true,
+    //   nzWidth: 310,
+    //   nzOnOk: async () => {
+    //     this.spinner.show();
+    //     try {
+    //       let body = {
+    //         id: this.idInput,
+    //         lyDoTuChoi: null,
+    //         trangThai: '11',
+    //       };
+    //       let res =
+    //         await this.giaDeXuatGiaService.approve(
+    //           body,
+    //         );
+    //       if (res.msg == MESSAGE.SUCCESS) {
+    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+    //         this.quayLai();
+    //       } else {
+    //         this.notification.error(MESSAGE.ERROR, res.msg);
+    //       }
+    //       this.spinner.hide();
+    //     } catch (e) {
+    //       console.log('error: ', e);
+    //       this.spinner.hide();
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   },
+    // });
   }
+
   async save() {
-    this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      console.log(this.formData.value)
-      this.spinner.hide();
-      return;
-    }
-    let body = this.formData.value;
-    body.soDeXuat = body.soDeXuat + this.maDx;
-    let res
-    if (this.idInput > 0) {
-      res = await this.giaDeXuatGiaService.update(body);
-    } else {
-      res = await this.giaDeXuatGiaService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      }
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    this.spinner.hide();
-    console.log(this.formData)
+    // this.spinner.show();
+    // this.helperService.markFormGroupTouched(this.formData);
+    // if (this.formData.invalid) {
+    //   console.log(this.formData.value)
+    //   this.spinner.hide();
+    //   return;
+    // }
+    // let body = this.formData.value;
+    // body.soDeXuat = body.soDeXuat + this.maDx;
+    // let res
+    // if (this.idInput > 0) {
+    //   res = await this.giaDeXuatGiaService.update(body);
+    // } else {
+    //   res = await this.giaDeXuatGiaService.create(body);
+    // }
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   if (this.idInput > 0) {
+    //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //   } else {
+    //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    //   }
+    //   this.quayLai();
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
+    // this.spinner.hide();
+    // console.log(this.formData)
   }
 
   xoaKeHoach() { }

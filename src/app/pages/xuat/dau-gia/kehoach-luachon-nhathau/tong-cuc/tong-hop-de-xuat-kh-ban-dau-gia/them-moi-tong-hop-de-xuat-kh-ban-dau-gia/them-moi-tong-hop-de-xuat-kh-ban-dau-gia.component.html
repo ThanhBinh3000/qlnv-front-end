@@ -54,7 +54,7 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hoá </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHangHoaError">
-                    <nz-select formControlName="loaiHangHoa" [nzDisabled]="isDisableField() || isView">
+                    <nz-select formControlName="maVatTuCha" [nzDisabled]="isDisableField() || isView">
                       <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                     </nz-select>
                     <ng-template #loaiHangHoaError let-control>

@@ -161,6 +161,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
           item.checked = false;
           item.soQdPheDuyet = item.qdPheDuyetKhbdg.soQuyetDinh;
           item.statusConvert = item.trangThai.name;
+          item.status = item.trangThai.ma;
           item.tenVthh = item.vatTuCha.name;
         });
       }

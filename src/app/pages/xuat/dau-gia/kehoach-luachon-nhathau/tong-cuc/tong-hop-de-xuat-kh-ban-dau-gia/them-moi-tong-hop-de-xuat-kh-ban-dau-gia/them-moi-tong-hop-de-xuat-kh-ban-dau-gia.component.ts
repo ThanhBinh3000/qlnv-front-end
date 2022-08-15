@@ -152,7 +152,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData = this.fb.group({
       id: [],
       namKeHoach: [null],
-      loaiHangHoa: [, [Validators.required]],
+      maVatTuCha: [, [Validators.required]],
       ngayKyDeXuat: [[null, null], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
@@ -197,7 +197,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     let body = {
       ngayKyTuNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[1]).format('YYYY-MM-DD') : null,
-      loaiVatTuHangHoa: this.formData.get('loaiHangHoa').value,
+      loaiVatTuHangHoa: this.formData.get('maVatTuCha').value,
       namKeHoach: this.formData.get('namKeHoach').value,
       pageNumber: this.page,
       pageSize: 1000,
@@ -218,7 +218,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData.patchValue({
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
-      loaiHangHoa: dataDetail ? dataDetail.loaiHangHoa : null,
+      maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
       ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [null, null],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
@@ -407,7 +407,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.dsGtReq = this.listOfData;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.tongHopDeXuatKHBanDauGiaService.sua(body);

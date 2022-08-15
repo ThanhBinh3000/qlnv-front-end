@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ComponentsModule } from 'src/app/components/components.module';
-import { QuyetDinhGiaBtcComponent } from './quyet-dinh-gia-btc.component';
+import { QuyetDinhGiaCdtnnComponent } from './quyet-dinh-gia-cdtnn.component';
 
 
 @NgModule({
-  declarations: [QuyetDinhGiaBtcComponent,],
+  declarations: [QuyetDinhGiaCdtnnComponent],
   imports: [CommonModule,
     ComponentsModule
   ],
-  exports: [QuyetDinhGiaBtcComponent],
+  exports: [QuyetDinhGiaCdtnnComponent],
 })
-export class QuyetDinhGiaBtcModule { }
+export class QuyetDinhGiaCdtnnModule { }

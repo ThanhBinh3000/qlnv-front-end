@@ -34,18 +34,20 @@
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="loai-hang-hoa">
-                <input type="text" nz-input formControlName="loaiHH" />
-              </nz-input-group>
+              <nz-select formControlName="loaiHH" (ngModelChange)="changeLoaiHangHoa()">
+                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="chung-loai-hang-hoa">
-                <input type="text" nz-input formControlName="maChungLoaiHang" />
-              </nz-input-group>
+              <nz-select formControlName="maChungLoaiHang">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
