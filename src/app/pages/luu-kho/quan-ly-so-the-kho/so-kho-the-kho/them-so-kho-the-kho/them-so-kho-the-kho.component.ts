@@ -353,6 +353,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   async loadTonDauKy() {
     try {
+      this.formData.patchValue({ tonDauKy: 0 })
       const body = {
         "loaiHH": this.formData.value.idLoaiHangHoa,
         "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
@@ -368,15 +369,17 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         }
       }
       const res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
-
-      res.data.list.forEach((item) => {
-        item.child.forEach((child) => {
-          if (child.maDvi === this.userInfo.MA_DVI) {
-            this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
-          }
-        })
-      })
-
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          res.data.list.forEach((item) => {
+            item.child.forEach((child) => {
+              if (child.maDvi === this.userInfo.MA_DVI) {
+                this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
+              }
+            })
+          });
+        }
+      }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

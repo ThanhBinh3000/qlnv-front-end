@@ -16,6 +16,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -74,6 +75,9 @@ export class SoKhoTheKhoComponent implements OnInit {
   isStatus: any
   getCount = new EventEmitter<any>();
 
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -82,6 +86,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    private danhMucService: DanhMucService,
 
   ) {
     this.formData = this.fb.group({
@@ -105,6 +110,39 @@ export class SoKhoTheKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                item
+              ];
+            }
+            else {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                ...item.child
+              ];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ten == this.formData.value.idLoaiHangHoa);
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
 
