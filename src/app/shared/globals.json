@@ -33,5 +33,8 @@
   "NHAP_TU_CHOI_TP_KH_QLHDT": "17",
   "NHAP_TU_CHOI_LD_CUC": "18",
   "NHAP_DA_DUYET": "19",
-  "NHAP_BAN_HANH": "20"
+  "NHAP_BAN_HANH": "20",
+  "MENU_LV0" : 42,
+  "MENU_LV1" : 69,
+  "MENU_LV2" : 98
 }

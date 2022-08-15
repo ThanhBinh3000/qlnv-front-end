@@ -130,20 +130,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		},
 	];
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
-	canBos: any[] = [
-		{
-			id: "10008",
-			fullName: "canbocc",
-		},
-		{
-			id: "10005",
-			fullName: "canboc",
-		},
-		{
-			id: "10002",
-			fullName: "canbotc",
-		}
-	];
+	canBos: any[];
 	lstFiles: any[] = []; //show file ra man hinh
 	//file
 	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -223,6 +210,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		await this.getListUser();
 		if (this.id) {
 			await this.getDetailReport();
 		} else {
@@ -315,6 +303,16 @@ export class GiaoNhiemVuComponent implements OnInit {
 	changeDot() {
 		const item1 = this.phuLucs.find(item => item.id == "1")
 		item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao + "/năm " + this.namHienHanh
+	}
+
+	getListUser() {
+		this.quanLyVonPhiService.getListUser().toPromise().then(res => {
+			if (res.statusCode == 0) {
+				this.canBos = res.data;
+			}
+		}, (err) => {
+			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		})
 	}
 
 	//nhóm các nút chức năng --báo cáo-----
@@ -469,7 +467,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_EMPTY_DOTBC)
 			return
 		}
-		
+
 		if (this.congVan.fileName == null) {
 			this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
 			return;
@@ -502,7 +500,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
 		}
-		
+
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.id,

@@ -12,4 +12,9 @@ export class QuyetDinhComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  tabSelected = 0;
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
+
 }

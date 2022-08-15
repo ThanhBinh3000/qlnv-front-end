@@ -32,7 +32,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
     this.spinner.show();
     try {
       this.hopDongList = this.data;
-      await this.search();
+      // await this.showListHd();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -40,6 +40,11 @@ export class DialogCanCuHopDongComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  // async showListHd() {
+  //   let res = await this.quanLyHopDongNhapXuatService.danhSachHopDong();
+  //   this.dataTable = res.data;
+  // }
 
   handleOk(item: any) {
     if (item.checked) {

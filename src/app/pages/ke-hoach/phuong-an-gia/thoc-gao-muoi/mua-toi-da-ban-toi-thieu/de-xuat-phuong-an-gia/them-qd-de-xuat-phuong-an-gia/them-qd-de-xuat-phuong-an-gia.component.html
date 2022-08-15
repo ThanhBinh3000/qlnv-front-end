@@ -1,0 +1,133 @@
+<div class="them-quyet-dinh-ttcp bg-trang">
+    <div class="header">
+        <div class="header-text">
+            <div class="title-chi-tieu">
+
+                <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="quayLai()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="banHanh()">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Ban hành</span>
+            </button>
+            <button type="button" class="btn btn-sub xanh" (click)="save()">
+                <i class="icon htvbdh_luu"></i>
+                <span>Lưu</span>
+            </button>
+        </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16">
+        <div class="hang-theo-doi-dac-thu">
+            <form nzLayout="vertical" nz-form [formGroup]="formData">
+                <div nz-row [nzGutter]="20">
+                    <div nz-col [nzSpan]="3">
+                        <nz-form-item class="form-item">
+                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)"
+                                    [nzDisabled]="isView" nzAllowClear="true">
+                                    <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
+                                </nz-select>
+                                <ng-template #error let-control>
+                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4">
+                        <nz-form-item class="form-item">
+                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số đề xuất
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-input-group nzAddOnAfter="{{soDeXuat}}" id="so-qd">
+                                    <nz-input-number type="text" nz-input formControlName="soDeXuat" [nzMin]="1"
+                                        [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                                    </nz-input-number>
+                                </nz-input-group>
+                                <ng-template #error let-control>
+                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                    </div>
+                    <div nz-col [nzSpan]="4">
+                        <nz-form-item class="form-item">
+                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hành hóa
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-select formControlName="loaiHangHoa" [nzDisabled]="isView" nzAllowClear="true">
+                                    <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
+                                    </nz-option>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4">
+
+                        <nz-form-item class="form-item">
+                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                                    class="search__input">
+                                </nz-date-picker>
+                                <ng-template #error let-control>
+                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4">
+                        <nz-form-item class="form-item">
+                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại giá
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
+                                    <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
+                                    </nz-option>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row [nzGutter]="24">
+                    <nz-form-item nz-col nzSpan="24" class="form-item">
+                        <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
+                        <nz-form-control>
+                            <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-row [nzGutter]="24">
+                    <nz-form-item nz-col nzSpan="24" class="form-item">
+                        <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+                        <div class="list-file">
+                            <file-list [data]="taiLieuDinhKemList"></file-list>
+                        </div>
+                    </nz-form-item>
+                </div>
+            </form>
+        </div>
+    </nz-card>
+</div>

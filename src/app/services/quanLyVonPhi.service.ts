@@ -227,6 +227,7 @@ export class QuanLyVonPhiService extends BaseService {
     }
     return this.httpClient.post(
       this.urlDefault + '/qlnv-core/file/upload',
+      // 'https://192.168.1.109:8091/file/upload',
       request,
       { 'headers': headerss }
     );

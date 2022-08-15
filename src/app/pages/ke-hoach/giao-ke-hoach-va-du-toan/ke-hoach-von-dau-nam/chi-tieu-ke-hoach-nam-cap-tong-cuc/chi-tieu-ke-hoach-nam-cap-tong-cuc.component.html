@@ -1,6 +1,6 @@
 <div class="contentBor chi-tieu__body" *ngIf="!isDetail">
   <div class="contentDetail">
-    <div class="main-content">
+    <div class="main-content bg-trang">
       <nz-card class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]" (keydown)="keyDownFunction($event)">
           <div nz-col nzSpan="2">
@@ -60,8 +60,8 @@
           </button>
         </div>
       </nz-card>
-      <div class="tab-giao-chi-tieu">
-        <nz-tabset nzType="card" class="tab-level-3">
+      <div class="tab-giao-chi-tieu mt12">
+        <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
           <!-- <nz-tab [nzTitle]="title_1">
             <ng-template #title_1>
               Tất cả
@@ -372,20 +372,24 @@
             </div>
           </nz-tab>
         </nz-tabset>
-        <div class="action-giao-chi-tieu" *ngIf="!userService.isChiCuc()">
-          <button type="button" class="btn btn-do" (click)="deleteSelect()">
-            <i class="fa fa-trash-o do"></i>
-            <span>Xóa</span>
-          </button>
-          <button type="button" class="btn btn-sub" (click)="exportData()">
-            <i class="icon htvbdh_chuyen-xu-ly"></i>
-            <span>Xuất file</span>
-          </button>
-          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-        </div>
+        <ng-template #extraTemplate>
+          <div *ngIf="!userService.isChiCuc()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+              <i class="fa fa-trash-o do"></i>
+              <span>Xóa</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="exportData()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+        </ng-template>
+
+
       </div>
     </div>
   </div>

@@ -12,8 +12,6 @@ import { convertIdToLoaiVthh, convertTenVthh } from 'src/app/shared/commonFuncti
 })
 export class CucComponent implements OnInit {
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private danhMucService: DanhMucService
   ) {
     this.loaiVTHHGetAll();
@@ -27,13 +25,18 @@ export class CucComponent implements OnInit {
     this.tabs = [
       {
         giaTri: 'Tất cả',
-        value: null,
+        ma: null,
       }
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.tabs = [...this.tabs, ...res.data.filter(item => item.ma !== '02')];
     }
+  }
+
+  loaiVthhSelected: string
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 
 }

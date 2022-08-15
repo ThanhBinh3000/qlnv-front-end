@@ -351,17 +351,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
-  onInputHangHoa(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsHangHoa = [];
-    } else {
-      this.optionsHangHoa = this.optionsFullHangHoa.filter(
-        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
   save(isGuiDuyet?: boolean) {
     if (!this.formData.valid) {
       return;
