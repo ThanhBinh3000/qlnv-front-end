@@ -6,7 +6,7 @@ import { HangTrongKhoModule } from './hang-trong-kho/hang-trong-kho.module';
 import { QuanLySoTheKhoRoutingModule } from './quan-ly-so-the-kho-routing.module';
 import { QuanLySoTheKhoComponent } from './quan-ly-so-the-kho.component';
 import { SoKhoTheKhoModule } from './so-kho-the-kho/so-kho-the-kho.module';
-
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [QuanLySoTheKhoComponent],
   imports: [
@@ -17,5 +17,7 @@ import { SoKhoTheKhoModule } from './so-kho-the-kho/so-kho-the-kho.module';
     SoKhoTheKhoModule,
     HangTheoDoiDacThuModule,
   ],
+  providers: [DatePipe]
+
 })
-export class QuanLySoTheKhoModule {}
+export class QuanLySoTheKhoModule { }

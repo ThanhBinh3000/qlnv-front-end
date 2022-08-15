@@ -16,9 +16,10 @@ import { HangSapHetHanLuuKhoModule } from './hang-sap-het-han-luu-kho/hang-sap-h
 import { HangHongHocGiamChatLuongModule } from './hang-hong-hoc-giam-chat-luong/hang-hong-hoc-giam-chat-luong.module';
 import { HangDtqgHetHanBaoHanhModule } from './hang-dtqg-het-han-bao-hanh/hang-dtqg-het-han-bao-hanh.module';
 import { HangHongCanBaoHanhModule } from './hang-hong-can-bao-hanh/hang-hong-can-bao-hanh.module';
+import { ChucNangHangTheoDoiDacThuComponent } from './chuc-nang-hang-theo-doi-dac-thu/chuc-nang-hang-theo-doi-dac-thu.component';
 
 @NgModule({
-  declarations: [HangTheoDoiDacThuComponent],
+  declarations: [HangTheoDoiDacThuComponent, ChucNangHangTheoDoiDacThuComponent],
   imports: [
     CommonModule,
     ComponentsModule,

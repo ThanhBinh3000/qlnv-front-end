@@ -10,6 +10,12 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { isEmpty } from 'lodash';
+import { HangDtqgHetHanBaoHanhService } from 'src/app/services/hangthuocdientheodoidacthu/hang-dtqg-het-han-bao-hanh.service';
+import { cloneDeep } from 'lodash';
+import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+
+
 
 @Component({
   selector: 'app-hang-dtqg-het-han-bao-hanh',
@@ -18,120 +24,31 @@ import { isEmpty } from 'lodash';
 })
 export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   userInfo: UserLogin;
-  detail: any = {};
   formData: FormGroup;
-  filterDate = new Date();
-  dsTrangThai: ITrangThai[] = [
-    // fake
-    { id: 1, giaTri: 'Đang xử lý' },
-    { id: 2, giaTri: 'Chờ duyệt' },
-    { id: 3, giaTri: 'Đã duyệt' },
-  ];
-  dsTong: any;
-  dsDonVi = [];
-  dsDonViDataSource = [];
-  dsLoaiHangHoa = [];
-  dsLoaiHangHoaDataSource = [];
-  dsDiemKho = [];
-  dsDiemKhoDataSource = [];
-  dsNhaKho = [];
-  dsNhaKhoDataSource = [];
-  dsNganLo = [];
-  dsNganLoDataSource = [];
+
   searchInTable: any = {
-    idDonVi: null,
-    idLoaiHangHoa: null,
-    tenHangHoa: null,
-    idDiemKho: null,
-    idNhaKho: null,
-    idNganLo: null,
-    ngayNhapKho: new Date(),
+    "maChungLoaiHang": "",
+    "maDonVi": "",
+    "maLoaiHang": "",
   };
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
-  dataExample: IHangDTQGHetHanBaoHanh[] = [
-    {
-      id: 1,
-      idDonVi: 1,
-      tenDonVi: 'Dơn vị 1',
-      idLoaiHangHoa: 1,
-      tenLoaiHangHoa: 'Loại hàng hoá 1',
-      idHangHoa: 1,
-      tenHangHoa: 'Tên hàng hoá 1',
-      idDiemKho: 1,
-      tenDiemKho: 'Tên điểm kho 1',
-      idNhaKho: 1,
-      tenNhaKho: 'Tên nhà kho 1',
-      idNganLo: 1,
-      tenNganLo: 'Tên ngăn lô 1',
-      ngayNhap: new Date(),
-      ngayHetHanBaoHanh: new Date(),
-      soLuong: 1000,
-      donVi: 'Chiếc',
-    },
-    {
-      id: 2,
-      idDonVi: 2,
-      tenDonVi: 'Dơn vị 2',
-      idLoaiHangHoa: 2,
-      tenLoaiHangHoa: 'Loại hàng hoá 2',
-      idHangHoa: 2,
-      tenHangHoa: 'Tên hàng hoá 2',
-      idDiemKho: 2,
-      tenDiemKho: 'Tên điểm kho 2',
-      idNhaKho: 2,
-      tenNhaKho: 'Tên nhà kho 2',
-      idNganLo: 2,
-      tenNganLo: 'Tên ngăn lô 2',
-      ngayNhap: new Date(),
-      ngayHetHanBaoHanh: new Date(),
-      soLuong: 1000,
-      donVi: 'Chiếc',
-    },
-    {
-      id: 3,
-      idDonVi: 3,
-      tenDonVi: 'Dơn vị 3',
-      idLoaiHangHoa: 3,
-      tenLoaiHangHoa: 'Loại hàng hoá 3',
-      idHangHoa: 3,
-      tenHangHoa: 'Tên hàng hoá 3',
-      idDiemKho: 3,
-      tenDiemKho: 'Tên điểm kho 3',
-      idNhaKho: 3,
-      tenNhaKho: 'Tên nhà kho 3',
-      idNganLo: 3,
-      tenNganLo: 'Tên ngăn lô 3',
-      ngayNhap: new Date(),
-      ngayHetHanBaoHanh: new Date(),
-      soLuong: 1000,
-      donVi: 'Chiếc',
-    },
-    {
-      id: 4,
-      idDonVi: 4,
-      tenDonVi: 'Dơn vị 4',
-      idLoaiHangHoa: 4,
-      tenLoaiHangHoa: 'Loại hàng hoá 4',
-      idHangHoa: 4,
-      tenHangHoa: 'Tên hàng hoá 4',
-      idDiemKho: 4,
-      tenDiemKho: 'Tên điểm kho 4',
-      idNhaKho: 4,
-      tenNhaKho: 'Tên nhà kho 4',
-      idNganLo: 4,
-      tenNganLo: 'Tên ngăn lô 4',
-      ngayNhap: new Date(),
-      ngayHetHanBaoHanh: new Date(),
-      soLuong: 1000,
-      donVi: 'Chiếc',
-    },
-  ];
-
+  filterTable: any = {
+    tenDonVi: null,
+    loaiHangHoa: null,
+    chungLoaiHangHoa: null,
+    diemKho: null,
+    nhaKho: null,
+    nganKho: null,
+    loKho: null,
+    ngayNhapKho: null,
+    ngayHetHanBaoHanh: null,
+  };
   constructor(
     private readonly fb: FormBuilder,
     private readonly donviService: DonviService,
@@ -139,14 +56,16 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     private readonly notification: NzNotificationService,
     private readonly userService: UserService,
     private readonly danhMucService: DanhMucService,
+    private hangDtqgHetHanBaoHanhService: HangDtqgHetHanBaoHanhService,
   ) {}
 
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
-      await this.initData();
-      this.dataTable = [...this.dataExample];
+      // await this.initData();
+      this.search()
+      // this.dataTable = [...this.dataExample];
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -156,116 +75,195 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      tenDonVi: [null],
-      tenHangHoa: [null],
-      loaiHangHoa: [null],
-      ngayTao: [null],
-    });
+      "maChungLoaiHang": [null],
+      "maDonVi": [null],
+      "maLoaiHang": [null],
+    })
   }
+  async search() {
+    this.spinner.show();
 
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.detail.maDvi = this.userInfo.MA_DVI;
-    this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
-  }
+    let body = {
+      "maChungLoaiHang": this.formData.value.maChungLoaiHang,
+      "maDonVi": this.formData.value.maDonVi,
+      "maLoaiHang": this.formData.value.maLoaiHang,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "orderBy": "",
+        "orderType": "",
+        "page": this.page - 1,
+      }
 
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsTong = dsTong;
-      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
-      // this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
-      // this.dsDiemKhoDataSource = this.dsDiemKho.map((item) => item.tenDvi);
-      // this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
-      // this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
-      // this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_LO];
-      // this.dsNganLoDataSource = this.dsNganLo.map((item) => item.tenDvi);
     }
-  }
+    let res = await this.hangDtqgHetHanBaoHanhService.search(body);
+    console.log(res.data.content);
 
-  async loaiVTHHGetAll() {
-    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiHangHoa = res.data;
-      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
-    }
-  }
-
-  onChangeAutoComplete(e) {
-    const value = (e.target as HTMLInputElement).value;
-    if (value) {
-      this.dsDonViDataSource = this.dsDonVi
-        .filter((item) =>
-          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
-        )
-        .map((item) => item.tenDvi);
+    if (res.msg = MESSAGE.SUCCESS) {
+      this.dataTable = res.data.content
+      this.totalRecord = res.data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => item.checked = false)
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
     } else {
-      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg)
     }
+    this.spinner.hide()
   }
 
-  onChangeAutoCompleteLoaiHH(e) {
-    const value = (e.target as HTMLInputElement).value;
-    if (value) {
-      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
-        .filter((item) =>
-          item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
-        )
-        .map((item) => item.giaTri);
+
+  filterInTable(key: string, value: string, date: boolean) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        if (date) {
+          console.log(dayjs(value).format('DD/MM/YYYY'));
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() == dayjs(value).format('DD/MM/YYYY')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
+        console.log(temp);
+
+      }
+      this.dataTable = [...this.dataTable, ...temp]
     } else {
-      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
-        (item) => item.giaTri,
-      );
+      this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-
   clearFilter() {
     this.formData.reset();
+    this.search()
   }
 
-  onChangeDonVi(id) {
-    const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
-    if (chiCuc) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
-      };
-      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
-    } else {
-      this.dsDiemKho = [];
-    }
-  }
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show()
+      try {
+        let body = this.formData.value;
+        if (body.ngayTao != null) {
+          body.tuNgay = body.ngayTao[0]
+          body.denNgay = body.ngayTao[1]
+        }
+        this.hangDtqgHetHanBaoHanhService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'danh-sach-hh-het-han-bh-con-luu-kho.xlsx')
+        });
 
-  onChangeDiemKho(id) {
-    const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
-    if (diemKho) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
-      };
-      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     } else {
-      this.dsNhaKho = [];
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
     }
-  }
 
-  onChangeNhaKho(id) {
-    const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
-    if (nhaKho) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
-      };
-      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
-    } else {
-      this.dsNganLo = [];
-    }
   }
+  // async initData() {
+  //   this.userInfo = this.userService.getUserLogin();
+  //   this.detail.maDvi = this.userInfo.MA_DVI;
+  //   this.detail.tenDvi = this.userInfo.TEN_DVI;
+  //   await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
+  // }
+
+  // async loadDsTong() {
+  //   const body = {
+  //     maDviCha: this.detail.maDvi,
+  //     trangThai: '01',
+  //   };
+
+  //   const dsTong = await this.donviService.layDonViTheoCapDo(body);
+  //   if (!isEmpty(dsTong)) {
+  //     this.dsTong = dsTong;
+  //     this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+  //     this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+  //   }
+  // }
+
+  // async loaiVTHHGetAll() {
+  //   let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.dsLoaiHangHoa = res.data;
+  //     this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+  //   }
+  // }
+
+  // onChangeAutoComplete(e) {
+  //   const value = (e.target as HTMLInputElement).value;
+  //   if (value) {
+  //     this.dsDonViDataSource = this.dsDonVi
+  //       .filter((item) =>
+  //         item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
+  //       )
+  //       .map((item) => item.tenDvi);
+  //   } else {
+  //     this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+  //   }
+  // }
+
+  // onChangeAutoCompleteLoaiHH(e) {
+  //   const value = (e.target as HTMLInputElement).value;
+  //   if (value) {
+  //     this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
+  //       .filter((item) =>
+  //         item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
+  //       )
+  //       .map((item) => item.giaTri);
+  //   } else {
+  //     this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
+  //       (item) => item.giaTri,
+  //     );
+  //   }
+  // }
+
+
+
+  // onChangeDonVi(id) {
+  //   const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
+  //   if (chiCuc) {
+  //     const result = {
+  //       ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+  //     };
+  //     this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
+  //   } else {
+  //     this.dsDiemKho = [];
+  //   }
+  // }
+
+  // onChangeDiemKho(id) {
+  //   const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
+  //   if (diemKho) {
+  //     const result = {
+  //       ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
+  //     };
+  //     this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+  //   } else {
+  //     this.dsNhaKho = [];
+  //   }
+  // }
+
+  // onChangeNhaKho(id) {
+  //   const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
+  //   if (nhaKho) {
+  //     const result = {
+  //       ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
+  //     };
+  //     this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
+  //   } else {
+  //     this.dsNganLo = [];
+  //   }
+  // }
 
   onChangeFilterDate(event) {}
 
