@@ -58,7 +58,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search">
+        <button nz-button class="search__button--search" (click)="search()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -76,10 +76,6 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="inDanhSach()">
-          <i class="icon htvbdh_tcdt_print"></i>
-          <span>In</span>
-        </button>
         <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -91,8 +87,11 @@
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
-              (nzCheckedChange)="onAllChecked($event)"></th>
+            <th class="text-center" style="width: 5%;">
+              <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate"
+                (ngModelChange)="updateAllChecked()">
+              </label>
+            </th>
             <th class="text-center" style="width: 5%;">STT</th>
             <th style="width: 10%;">Mã danh sách</th>
             <th style="width: 40%;">Tên đơn vị</th>
@@ -105,14 +104,15 @@
             <th></th>
             <th class="text-center" width="350px">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach"
+                  (ngModelChange)="filterInTable('maDanhSach', searchInTable.maDanhSach)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"
-                  [nzAutocomplete]="donViSearchAuto" (input)="onChangeAutoComplete($event)" />
-                <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenDonvi"
+                  (ngModelChange)="filterInTable('tenDonvi',searchInTable.tenDonvi)" />
+                <!-- <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete> -->
               </nz-input-group>
             </th>
             <th>
@@ -132,13 +132,14 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+            <th>
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+            </th>
             <td>{{ idx + 1 }}</td>
-            <td>{{ data.maDanhSach }}</td>
-            <td>{{ data.tenDonVi }}</td>
+            <td>{{ data.maDanhSach}}</td>
+            <td>{{ data.tenDonvi }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trangThai }}</td>
+            <td>{{ data.trangThaiXuLy }}</td>
             <td style="text-align: center;">
               <a (click)="viewDetail(data.id, false)">
                 <i class="fa fa-eye"></i>
