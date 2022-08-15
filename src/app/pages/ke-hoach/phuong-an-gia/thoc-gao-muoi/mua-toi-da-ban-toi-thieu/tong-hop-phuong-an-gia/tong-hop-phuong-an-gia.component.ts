@@ -4,24 +4,24 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 @Component({
-  selector: 'app-quyet-dinh-gia-btc',
-  templateUrl: './quyet-dinh-gia-btc.component.html',
-  styleUrls: ['./quyet-dinh-gia-btc.component.scss']
+  selector: 'app-tong-hop-phuong-an-gia',
+  templateUrl: './tong-hop-phuong-an-gia.component.html',
+  styleUrls: ['./tong-hop-phuong-an-gia.component.scss']
 })
-export class QuyetDinhGiaBtcComponent implements OnInit {
+export class TongHopPhuongAnGiaComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
-  listVthh: any[] = [];
+
   dsNam: string[] = [];
 
   dataTable: any[] = [];
@@ -77,7 +77,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
+
   }
 
   initForm(): void {

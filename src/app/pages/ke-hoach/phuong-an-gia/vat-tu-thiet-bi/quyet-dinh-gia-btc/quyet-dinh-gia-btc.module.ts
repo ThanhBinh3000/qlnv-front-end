@@ -6,7 +6,7 @@ import { QuyetDinhGiaBtcComponent } from './quyet-dinh-gia-btc.component';
 
 
 @NgModule({
-  declarations: [QuyetDinhGiaBtcComponent,],
+  declarations: [QuyetDinhGiaBtcComponent],
   imports: [CommonModule,
     ComponentsModule
   ],
