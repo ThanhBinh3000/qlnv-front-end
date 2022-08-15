@@ -416,7 +416,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         await this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
-        this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
