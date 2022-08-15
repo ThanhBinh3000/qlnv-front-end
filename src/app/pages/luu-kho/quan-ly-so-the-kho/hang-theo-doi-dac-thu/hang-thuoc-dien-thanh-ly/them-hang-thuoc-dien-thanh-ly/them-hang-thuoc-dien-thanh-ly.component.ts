@@ -79,7 +79,6 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
 
     initForm(): void {
         if (this.detail) {
-            debugger
             const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
                 idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
