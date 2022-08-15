@@ -145,7 +145,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     }
 
     async loaiVTHHGetAll() {
-        let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+        let res = await this.danhMucService.loadDanhMucHangHoaAsync();
         if (res.msg == MESSAGE.SUCCESS) {
             this.dsLoaiHangHoa = res.data;
             this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
