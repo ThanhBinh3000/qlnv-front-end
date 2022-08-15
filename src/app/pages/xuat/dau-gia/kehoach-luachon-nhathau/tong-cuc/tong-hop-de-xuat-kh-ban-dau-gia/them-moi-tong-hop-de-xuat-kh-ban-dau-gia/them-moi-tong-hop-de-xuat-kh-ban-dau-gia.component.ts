@@ -486,6 +486,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detail = res.data;
           this.initForm(res.data);
+          this.tongHopDeXuatTuCuc();
         }
       })
       .catch((e) => {
@@ -562,7 +563,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC;
+    let trangThai = this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC;
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -613,18 +614,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '',
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_TONG_CUC,
           };
-          switch (this.formData.get('trangThai').value) {
-            case '01': {
-              body.trangThai = '03';
-              break;
-            }
-            case '09': {
-              body.trangThai = '12';
-              break;
-            }
-          }
           const res = await this.tongHopDeXuatKHBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
