@@ -510,10 +510,8 @@
                                     <thead>
                                         <tr>
                                             <th width="60px" class="text-center">STT</th>
-                                            <th class="text-left">{{ userService.isTongCuc() ? 'Tên đơn vị' : 'Chi
-                                                cục'}}</th>
-                                            <th class="text-left">{{ userService.isTongCuc() ? 'Số lượng nhập' : 'Địa
-                                                điểm nhập kho'}}</th>
+                                            <th class="text-left">{{ userService.isTongCuc() ? 'Tên đơn vị' : 'Chi cục'}}</th>
+                                            <th class="text-left">{{ userService.isTongCuc() ? 'Số lượng nhập' : 'Địa điểm nhập kho'}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -526,29 +524,6 @@
                                 </nz-table>
                             </nz-card>
                         </nz-tab>
-                        <!-- <nz-tab [nzTitle]="'Danh sách địa điểm nhập hàng'" class="tt-chung__container"
-                            *ngIf="userService.isTongCuc()">
-                            <nz-card class="mt16 flex-card p-lr16">
-                                <nz-table #groupingTable #editRowTable nzBordered class="nowrap"
-                                    [nzFrontPagination]="false" [nzShowPagination]="false"
-                                    [nzData]="listDiaDiemNhapHang">
-                                    <thead>
-                                        <tr>
-                                            <th width="60px" class="text-center">STT</th>
-                                            <th>Tên đơn vị</th>
-                                            <th>Số lượng nhập</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Cục DTNN KV A</td>
-                                            <td>500</td>
-                                        </tr>
-                                    </tbody>
-                                </nz-table>
-                            </nz-card>
-                        </nz-tab> -->
                     </nz-tabset>
                     <form [nzLayout]="'vertical'" [formGroup]="formGoiThau" nz-form class="mt-16">
                         <nz-form-item>
