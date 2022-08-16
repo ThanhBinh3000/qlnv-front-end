@@ -9,6 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -49,7 +50,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     page: 1,
   }
   donViTao!: any;
-  trangThai!:string;
+  trangThai!: string;
   newDate = new Date();
   status: boolean;
   constructor(
@@ -68,8 +69,8 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     await this.getUserInfo(userName); //get user info
     this.searchFilter.namQtoan = new Date().getFullYear()
     this.searchFilter.ngayTaoDen = new Date();
-		this.newDate.setMonth(this.newDate.getMonth() -1);
-		this.searchFilter.ngayTaoTu = this.newDate;
+    this.newDate.setMonth(this.newDate.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.dvql;
     this.userRole = this.userInfo?.roles[0].code;
 
@@ -125,34 +126,34 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
       }
     }
     this.spinner.show();
-    const searchFilterTemp = Object.assign({},this.searchFilter);
-    searchFilterTemp.trangThais= [];
-    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
-    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    const searchFilterTemp = Object.assign({}, this.searchFilter);
+    searchFilterTemp.trangThais = [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
 
-		// if (!this.trangThai){
-      if(ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
-				searchFilterTemp.trangThais = [Utils.TT_BC_2];
+    // if (!this.trangThai){
+    if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) {
+      searchFilterTemp.trangThais = [Utils.TT_BC_2];
 
-			} else if(ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code)) {
-				searchFilterTemp.trangThais = [Utils.TT_BC_4];
+    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code)) {
+      searchFilterTemp.trangThais = [Utils.TT_BC_4];
 
-			}
-      else{
-        searchFilterTemp.trangThais = [Utils.TT_BC_2,Utils.TT_BC_4]
-      }
-		// }
+    }
+    else {
+      searchFilterTemp.trangThais = [Utils.TT_BC_2, Utils.TT_BC_4]
+    }
+    // }
 
     await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
           this.danhSachBaoCao.forEach(e => {
-            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
-            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
-            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
-            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
-            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
@@ -189,13 +190,13 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
 
   taoMoi() {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan',
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan',
     ])
   }
 
   xemChiTiet(id: string) {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan/' + id,
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan/' + id,
     ])
   }
 

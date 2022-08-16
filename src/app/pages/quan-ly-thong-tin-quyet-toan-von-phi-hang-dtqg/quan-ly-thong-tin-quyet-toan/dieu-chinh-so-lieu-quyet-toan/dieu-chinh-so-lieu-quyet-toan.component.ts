@@ -21,6 +21,7 @@ import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
 import { Utils } from './../../../../Utility/utils';
 import { NOI_DUNG } from './dieu-chinh-so-lieu-quyet-toan.constant';
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
     id: "1",
@@ -525,7 +526,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             if (!this.id) {
               this.router.navigate([
-                '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan/' + data.data.id,
+                MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/dieu-chinh-so-lieu-quyet-toan/' + data.data.id,
               ])
             }
             else {
@@ -1178,7 +1179,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   close() {
     // this.location.back();
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG',
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG',
     ]);
   }
 

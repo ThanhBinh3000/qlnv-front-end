@@ -203,14 +203,14 @@
 							[(ngModel)]="editCache[item.id].data.soQd" />
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.khSoLuong"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.khSoLuong"
 							(ngModelChange)="changeModel02(item.id,'21')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.khGiaMuaTd"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
 							(ngModelChange)="changeModel02(item.id,'21')">
 						</nz-input-number>
 					</td>
@@ -218,14 +218,14 @@
 						{{displayValue(editCache[item.id].data.khTtien)}}
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.thSoLuong"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.thSoLuong"
 							(ngModelChange)="changeModel02(item.id,'21')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.thGiaMuaTd"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
 							(ngModelChange)="changeModel02(item.id,'21')">
 						</nz-input-number>
 					</td>
@@ -342,14 +342,14 @@
 							[(ngModel)]="editCache[item.id].data.soQd" />
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.khSoLuong"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.khSoLuong"
 							(ngModelChange)="changeModel02(item.id,'22')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.khGiaMuaTd"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
 							(ngModelChange)="changeModel02(item.id,'22')">
 						</nz-input-number>
 					</td>
@@ -357,14 +357,14 @@
 						{{displayValue(editCache[item.id].data.khTtien)}}
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.thSoLuong"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.thSoLuong"
 							(ngModelChange)="changeModel02(item.id,'22')">
 						</nz-input-number>
 					</td>
 					<td>
-						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-							[(ngModel)]="editCache[item.id].data.thGiaMuaTd"
+						<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
+							[nzPrecision]="4" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
 							(ngModelChange)="changeModel02(item.id,'22')">
 						</nz-input-number>
 					</td>
@@ -412,7 +412,7 @@
 	</nz-table>
 </div>
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-	<div nz-col nzSpan="12">
+	<div nz-col nzSpan="24">
 		<label class="search__label">Thuyết minh</label>
 		<ng-container *ngIf="status;else templatePresent">
 			<br>{{thuyetMinh}}

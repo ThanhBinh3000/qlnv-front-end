@@ -34,13 +34,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg',
-        loadChildren: () =>
-          import('./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.module').then(
-            (m) => m.QuanLyCapVonMuaBanTtTienHangDtqgModule,
-          ),
-      },
-      {
         path: 'quy-trinh-bc-thuc-hien-du-toan-chi-nsnn',
         loadChildren: () =>
           import('./quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn.module').then(

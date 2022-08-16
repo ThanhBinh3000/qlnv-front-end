@@ -6,11 +6,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
+import { DataService } from '../data.service';
 
 
 
@@ -24,14 +25,14 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	userInfo: any;
 	//thong tin tim kiem
 	searchFilter = {
-        loaiTimKiem: '1',
-        trangThai: Utils.TT_BC_7,
+		loaiTimKiem: '1',
+		trangThai: Utils.TT_BC_7,
 		tuNgay: "",
 		denNgay: "",
-        qdChiTieu: "",
-        loaiDn: "",
-        maDviTao: "",
-    };
+		qdChiTieu: "",
+		loaiDn: "",
+		maDviTao: "",
+	};
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -41,7 +42,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		}
 	];
 	donVis: any[] = [];
-    loaiDns: any[] = LOAI_DE_NGHI;
+	loaiDns: any[] = LOAI_DE_NGHI;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -110,9 +111,9 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		
+
 		let trangThais = [];
-		if (this.searchFilter.trangThai){
+		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		const requestReport = {
@@ -120,8 +121,8 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 			maDvi: "",
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            soQdChiTieu: this.searchFilter.qdChiTieu,
-            loaiDn: this.searchFilter.loaiDn,
+			soQdChiTieu: this.searchFilter.qdChiTieu,
+			loaiDn: this.searchFilter.loaiDn,
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
@@ -154,7 +155,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 	tongHop() {
 		this.statusBtnNew = false;
-		if (!this.searchFilter.qdChiTieu){
+		if (!this.searchFilter.qdChiTieu) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
@@ -164,37 +165,37 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		}
 		this.dataSource.changeData(obj);
 		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc'
+			MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tu-cuc-khu-vuc'
 		])
 	}
 
 
 	close() {
 		this.location.back();
-    }
+	}
 
 
 	async xemChiTiet(id: string) {
 		await this.quanLyVonPhiService.ctietDeNghi(id).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    if (data.data.loaiDn == Utils.HD_TRUNG_THAU){
-                        this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id,
-                        ])
-                    } else {
-                        this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id,
-                        ])
-                    }
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+			async (data) => {
+				if (data.statusCode == 0) {
+					if (data.data.loaiDn == Utils.HD_TRUNG_THAU) {
+						this.router.navigate([
+							MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-trung-thau/' + id,
+						])
+					} else {
+						this.router.navigate([
+							MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-don-gia-mua/' + id,
+						])
+					}
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
 	}
 
 	//doi so trang
@@ -212,18 +213,18 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		this.location.back()
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
 	}
 
-	getUnitName(maDvi: string){
+	getUnitName(maDvi: string) {
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
 
-    checkDeleteReport(item: any): boolean{
+	checkDeleteReport(item: any): boolean {
 		let check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;

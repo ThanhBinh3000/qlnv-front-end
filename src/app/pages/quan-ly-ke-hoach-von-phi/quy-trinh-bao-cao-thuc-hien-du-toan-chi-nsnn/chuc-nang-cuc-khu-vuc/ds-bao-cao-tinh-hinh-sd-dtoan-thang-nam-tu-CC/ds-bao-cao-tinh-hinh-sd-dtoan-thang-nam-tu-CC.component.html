@@ -32,8 +32,8 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đơn vị tạo</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
-							[(ngModel)]="searchFilter.donVi">
-							<nz-option *ngFor="let item of donViTaos" [nzValue]="item.id" [nzLabel]="item.tenDvi">
+							[(ngModel)]="searchFilter.maDvi">
+							<nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
 							</nz-option>
 						</nz-select>
 					</div>
@@ -63,17 +63,17 @@
 				<nz-table #basicTable class="nowrap">
 					<thead>
 						<tr>
-							<th nzWidth="60px">STT</th>
-							<th nzWidth="200px">Đơn vị lập</th>
-							<th nzWidth="130px">Mã báo cáo</th>
-							<th nzWidth="100px">Báo cáo năm</th>
-							<th nzWidth="100px">Báo cáo tháng</th>
-							<th nzWidth="175px">Công văn</th>
-							<th nzWidth="175px">Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span>
+							<th>STT</th>
+							<th>Đơn vị lập</th>
+							<th>Mã báo cáo</th>
+							<th>Báo cáo năm</th>
+							<th>Báo cáo tháng</th>
+							<th>Công văn</th>
+							<th>Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span>
 							</th>
-							<th nzWidth="230px">Ngày duyệt <br> <span>(Ngày cục khu vực kiểm tra đánh giá báo
+							<th>Ngày duyệt <br> <span>(Ngày cục khu vực kiểm tra đánh giá báo
 									cáo)</span></th>
-							<th nzWidth="100px" class="text-center">Trạng thái<br> <span>(Cục khu vực đánh giá)</span>
+							<th class="text-center">Trạng thái<br> <span>(Cục khu vực đánh giá)</span>
 							</th>
 							<th>Hành động</th>
 						</tr>

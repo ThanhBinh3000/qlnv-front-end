@@ -12,12 +12,13 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
+import { DataService } from '../data.service';
 
 export class ItemData {
     id: string;
@@ -421,7 +422,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.congVan){
+        if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -579,7 +580,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/0/' + data.data.id,
+                            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tai-tong-cuc/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -609,7 +610,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     }
 
     redirectChiTieuKeHoachNam() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+        this.router.navigate([MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tim-kiem']);
         this.location.back()
     }
 
@@ -727,10 +728,10 @@ export class TongHopTaiTongCucComponent implements OnInit {
             (res) => {
                 if (res.statusCode == 0) {
                     maDeNghiNew = res.data;
-                } 
+                }
             },
         );
-        if (!maDeNghiNew){
+        if (!maDeNghiNew) {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             return;
         }
@@ -783,7 +784,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.spinner.hide();
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

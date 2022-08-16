@@ -94,7 +94,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: MAIN_ROUTES.qlcapVonPhi,
+        path: MAIN_ROUTES.capVon,
         loadChildren: () =>
           import('../../pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.module').then(
             (m) => m.QuanLyKeHoachVonPhiHangModule,

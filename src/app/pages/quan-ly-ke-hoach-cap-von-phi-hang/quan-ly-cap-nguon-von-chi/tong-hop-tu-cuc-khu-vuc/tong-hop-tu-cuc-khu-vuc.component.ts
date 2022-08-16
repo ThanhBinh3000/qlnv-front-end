@@ -12,12 +12,13 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from 'uuid';
 import { displayNumber, DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { DataService } from '../data.service';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
 export class ItemData {
     id: string;
@@ -222,13 +223,13 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             })
             if (!this.qdChiTieu) {
                 this.router.navigate([
-                    'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
+                    MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/danh-sach-de-nghi-tu-cuc-khu-cuc'
                 ])
             }
             await this.tongHop();
             this.trangThai = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            
+
             this.quanLyVonPhiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -398,7 +399,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.congVan){
+        if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -499,7 +500,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             return;
         }
         request.thopCucKvCtiets.forEach(item => {
-            if (item.id.length == 38){
+            if (item.id.length == 38) {
                 item.id = null;
             }
         })
@@ -510,7 +511,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/0/' + data.data.id,
+                            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tu-cuc-khu-vuc/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -589,17 +590,17 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             if (this.lstCtietBcao[i].maCucKv != this.lstCtietBcao[i - 1].maCucKv) {
                 this.lstCtietBcao[i].stt = this.lstCtietBcao[i - 1].stt + 1;
             } else {
-                this.lstCtietBcao[i].stt = this.lstCtietBcao[i-1].stt;
+                this.lstCtietBcao[i].stt = this.lstCtietBcao[i - 1].stt;
             }
         }
     }
 
-    checkEqual(id: string){
+    checkEqual(id: string) {
         const index: number = this.lstCtietBcao.findIndex(e => e.id == id);
-        if (index == 0){
+        if (index == 0) {
             return true;
         } else {
-            if (this.lstCtietBcao[index].stt != this.lstCtietBcao[index-1].stt){
+            if (this.lstCtietBcao[index].stt != this.lstCtietBcao[index - 1].stt) {
                 return true;
             } else {
                 return false;
@@ -634,9 +635,9 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                 if (data.statusCode == 0) {
                     let url: string;
                     if (data.data.loaiDn == Utils.HD_TRUNG_THAU) {
-                        url = '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + id;
+                        url = '/' + MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-trung-thau/' + id;
                     } else {
-                        url = '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + id;
+                        url = '/' + MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-don-gia-mua/' + id;
                     }
                     window.open(url, '_blank');
                 } else {
@@ -654,7 +655,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             this.location.back();
         }
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/' + this.loai
+            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop/' + this.loai
         ])
     }
 
@@ -743,7 +744,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.spinner.hide();
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 
