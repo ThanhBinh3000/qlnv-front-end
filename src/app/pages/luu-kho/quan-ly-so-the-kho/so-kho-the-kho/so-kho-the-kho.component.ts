@@ -16,6 +16,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -74,6 +75,10 @@ export class SoKhoTheKhoComponent implements OnInit {
   isStatus: any
   getCount = new EventEmitter<any>();
 
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+  dsDonVi: any = [];
+
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -82,7 +87,8 @@ export class SoKhoTheKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-
+    private danhMucService: DanhMucService,
+    private readonly donviService: DonviService,
   ) {
     this.formData = this.fb.group({
       nam: [null],
@@ -99,12 +105,57 @@ export class SoKhoTheKhoComponent implements OnInit {
     try {
       this.spinner.show();
       this.loadDsNam();
-      await this.search()
+      await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll(), this.search()]);
       this.spinner.hide();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                item
+              ];
+            }
+            else {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                ...item.child
+              ];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.loaiHH);
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
 
@@ -263,10 +314,20 @@ export class SoKhoTheKhoComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show()
       try {
-        let body = this.formData.value;
-        if (body.ngayTao != null) {
-          body.tuNgay = body.ngayTao[0]
-          body.denNgay = body.ngayTao[1]
+        let body = {
+          "denNgay": "",
+          "loaiHH": this.formData.value.loaiHH,
+          "maChungLoaiHang": this.formData.value.maChungLoaiHang,
+          "maDvi": this.formData.value.maDvi,
+          "nam": this.formData.value.nam,
+          "orderBy": "",
+          "orderType": "",
+          "tenDVi": this.formData.value.tenDVi,
+          "tuNgay": "",
+        }
+        if (this.formData.value.ngayTao != null) {
+          body.tuNgay = this.formData.value.ngayTao[0]
+          body.denNgay = this.formData.value.ngayTao[1]
         }
         this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-so-kho.xlsx')

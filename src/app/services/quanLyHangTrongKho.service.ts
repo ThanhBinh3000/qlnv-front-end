@@ -13,7 +13,7 @@ export class QuanLyHangTrongKhoService extends BaseService {
   }
 
   searchHangTrongKho(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho`;
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho/tra-cuu`;
     return this.httpClient.post(url, body).toPromise();
   }
 

@@ -233,8 +233,8 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
   async search() {
     let body = {
-      "denNgay": "19-JUL-2022",
-      "tuNgay": "12-JUL-2022",
+      "denNgay": "2022-06-19",
+      "tuNgay": "2022-06-12",
       "maLokho": "0101020101010102",
       "maVatTu": "010101",
       "paggingReq": {
