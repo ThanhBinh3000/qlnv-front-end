@@ -235,12 +235,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   }
   //check role cho các nut trinh duyet
   getStatusButton() {
-    // if (this.id) {
-    //   this.status = true;
-    // } else {
-    //   this.status = false;
-    // }
-
     let checkChirld = false;
     const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
     if (dVi && dVi.maDvi == this.userInfo?.dvql) {
@@ -1235,19 +1229,19 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       thuyetMinh: "",
     };
 
-    if(loaiPa){
+    if (loaiPa) {
       if (loaiPa === 1) {
-          this.dataSource.changeData(request1),
+        this.dataSource.changeData(request1),
           this.router.navigate([
             '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi',
           ])
       }
-      
-      if(loaiPa === 2){
-          this.dataSource.changeData(request2),
+
+      if (loaiPa === 2) {
+        this.dataSource.changeData(request2),
           this.router.navigate([
             '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi',
-          ]) 
+          ])
       }
     }
     /**
