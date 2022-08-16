@@ -39,7 +39,8 @@
               <nz-form-item nz-col nzSpan="5" class="form-item">
                 <nz-form-label nzFor="cuc">Cục</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idCuc" id="cuc" (ngModelChange)="onChangeCuc($event)" [nzDisabled]="userService.isChiCuc()">
+                  <nz-select formControlName="idCuc" id="cuc" (ngModelChange)="onChangeCuc($event)"
+                    [nzDisabled]="userService.isChiCuc()">
                     <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
                     </nz-option>
@@ -123,7 +124,7 @@
           </button>
         </div>
         <nz-card class="mt-16 flex-card data-table">
-          <nz-table #expandTable class="nowrap" [nzData]="dataExample" [nzFrontPagination]="false"
+          <nz-table #expandTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
               <tr>
@@ -185,15 +186,15 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let data of expandTable.data, let i = index">
-                <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+                <ng-container *ngFor="let item of mapOfExpandedData[data.maDvi], let j = index">
                   <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
                     <td [nzIndentSize]="item.level! * 20"
                       [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
                       [(nzExpand)]="item.expand"
-                      (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.id], item, $event)">
+                      (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.maDvi], item, $event, 'maDvi')">
                       {{ item.tenDvi }}
-                      </td>
-                      <td>
+                    </td>
+                    <td>
                       <!-- {{ item.loaiHH }} -->
                     </td>
                     <td>

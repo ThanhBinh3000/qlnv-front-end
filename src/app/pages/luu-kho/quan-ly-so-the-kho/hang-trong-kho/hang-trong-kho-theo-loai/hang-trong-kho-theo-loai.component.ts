@@ -189,6 +189,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       this.dsDiemKho = [];
     }
   }
+
   onChangeDiemKho(id) {
     const dsDiemKho = this.dsDiemKho.find((item) => item.id === Number(id));
     this.formData.get('idNhaKho').setValue(null);
@@ -267,10 +268,10 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     }
     let res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      // this.dataTable = [...res.data.content];
-      console.log(this.dataTable);
-      this.dataExample.forEach((item) => {
-        this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
+      this.dataTable = [...res.data.content];
+      // console.log(this.dataTable);
+      this.dataTable.forEach((item) => {
+        this.mapOfExpandedData[item.maDvi] = this.treeTableService.convertTreeToList(item, 'maDvi');
       });
       this.totalRecord = res.data.totalElements;
 
@@ -347,164 +348,8 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
     }
   }
-  dataExample: HangTrongKhoRowItem[] = [
-    {
-      id: 0,
-      tenDvi: 'test 0',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDvi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDvi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDvi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDvi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDvi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDvi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 1,
-      tenDvi: 'test 1',
-      chungLoaiHH: 'test 2',
-      tonKhoDauKy: 1000,
-      nhapTrongKy: 1000,
-      xuatTrongKy: 1000,
-      tonKhoCuoiKy: 1000,
-      donViTinh: 'kg',
-      child: [
-        {
-          id: 1.1,
-          tenDvi: 'test 1.1',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.11,
-              tenDvi: 'test 1.1.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-          ],
-        },
-        {
-          id: 1.2,
-          tenDvi: 'test 1.2',
-          chungLoaiHH: 'test 2',
-          tonKhoDauKy: 1000,
-          nhapTrongKy: 1000,
-          xuatTrongKy: 1000,
-          tonKhoCuoiKy: 1000,
-          donViTinh: 'kg',
-          child: [
-            {
-              id: 1.21,
-              tenDvi: 'test 1.2.1',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-            },
-            {
-              id: 1.22,
-              tenDvi: 'test 1.2.2',
-              chungLoaiHH: 'test 2',
-              tonKhoDauKy: 1000,
-              nhapTrongKy: 1000,
-              xuatTrongKy: 1000,
-              tonKhoCuoiKy: 1000,
-              donViTinh: 'kg',
-              child: [
-                {
-                  id: 1.221,
-                  tenDvi: 'test 1.2.2.1',
-                  chungLoaiHH: 'test 2',
-                  tonKhoDauKy: 1000,
-                  nhapTrongKy: 1000,
-                  xuatTrongKy: 1000,
-                  tonKhoCuoiKy: 1000,
-                  donViTinh: 'kg',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    }
-  ];
+
+  dataExample: HangTrongKhoRowItem[] = [];
 
 }
 
@@ -514,6 +359,7 @@ interface IHangTrongKho {
   id: number;
   child?: IHangTrongKho[];
   tenDvi: string;
+  maDvi: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
@@ -535,6 +381,7 @@ class HangTrongKhoRowItem implements IHangTrongKho, ITreeTableItem {
   id: number;
   child?: IHangTrongKho[];
   tenDvi: string;
+  maDvi: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
