@@ -57,11 +57,15 @@
 
   .nhap-xuat-hang {
     position: absolute;
-    top: 30px;
+    top: 90px;
     right: 0px;
 
     .tab-menu.tab-content {
       border-bottom: none !important;
+    }
+
+    .ant-card-body {
+      padding: 10px !important;
     }
   }
 }

@@ -105,7 +105,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.bienBanGiaoNhan && (this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.bienBanGiaoNhan && (this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -419,7 +419,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     if (this.bienBanGiaoNhan.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -587,7 +587,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     }
     let res = await this.quanLyPhieuKetThucNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -604,7 +604,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "loaiVthh": this.typeVthh,
       "pageSize": 1000,
       "pageNumber": 1,
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     }
     let res = await this.bienBanGuiHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

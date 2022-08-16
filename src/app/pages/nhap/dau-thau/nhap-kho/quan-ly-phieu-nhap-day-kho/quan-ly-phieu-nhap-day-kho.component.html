@@ -1,5 +1,4 @@
 <ng-container *ngIf="!isDetail">
-
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
@@ -31,7 +30,6 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
       <h3>Danh sách biên bản nhập đầy kho </h3>
       <div class="buttons">
@@ -53,7 +51,6 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
         nzBordered>
@@ -153,7 +150,6 @@
           </tr>
         </thead>
         <tbody>
-
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px" *ngIf="userService.isChiCuc()">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
@@ -196,6 +192,16 @@
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
           </div>
         </div>
       </div>
