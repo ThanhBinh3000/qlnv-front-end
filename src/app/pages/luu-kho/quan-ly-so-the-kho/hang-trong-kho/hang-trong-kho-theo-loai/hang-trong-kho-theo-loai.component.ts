@@ -5,7 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { TreeTableService } from 'src/app/services/tree-table.service';
@@ -22,6 +22,11 @@ import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.s
 import { Globals } from 'src/app/shared/globals';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
+import { saveAs } from 'file-saver';
+import * as dayjs from 'dayjs';
+
+
+
 @Component({
   selector: 'app-hang-trong-kho-theo-loai',
   templateUrl: './hang-trong-kho-theo-loai.component.html',
@@ -94,15 +99,20 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   }
 
   loaiVTHHGetAll() {
-    this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
-      this.dsLoaiHangHoa = [...hangHoa.data]
+    this.danhMucService.loadDanhMucHangHoa().subscribe(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsLoaiHangHoa = [...res.data]
+      }
+      else { this.notification.error(MESSAGE.ERROR, res.msg); }
     })
   }
 
   onChangeLoaiHH(id: number) {
-    let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
-      this.dsChungLoaiHangHoa = loaiHangHoa[0].child
+    if (id && id > 0) {
+      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
+      if (loaiHangHoa && loaiHangHoa.length > 0) {
+        this.dsChungLoaiHangHoa = loaiHangHoa[0].child
+      }
     }
   }
 
@@ -143,19 +153,21 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   }
 
   onChangeCuc(id) {
-    console.log(id);
     const cuc = this.dsCuc.find((item) => item.id === Number(id));
     this.formData.get('idChiCuc').setValue(null);
     this.formData.get('idDiemKho').setValue(null);
     this.formData.get('idNhaKho').setValue(null);
     this.formData.get('idNganKho').setValue(null);
     this.formData.get('idLoKho').setValue(null);
-
+    console.log(id);
     if (cuc) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, cuc),
       };
+      console.log(result);
+
       this.dsChiCuc = result[DANH_MUC_LEVEL.CHI_CUC];
+      console.log(this.dsChiCuc);
     } else {
       this.dsChiCuc = [];
     }
@@ -171,6 +183,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
       };
+      console.log(result);
       this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
     } else {
       this.dsDiemKho = [];
@@ -233,28 +246,31 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
   async search() {
     let body = {
-      "denNgay": "2022-06-19",
-      "tuNgay": "2022-06-12",
-      "maLokho": "0101020101010102",
-      "maVatTu": "010101",
+      "loaiHH": this.formData.value.idLoaiHH,
+      "chungLoaiHH": this.formData.value.idLoaiHH,
+      "tuNgay": '',
+      "denNgay": '',
+      "maCuc": this.formData.value.idCuc,
+      "maChiCuc": this.formData.value.idChiCuc,
+      "maDiemKho": this.formData.value.idDiemKho,
+      "maNhaKho": this.formData.value.idNhaKho,
+      "maNganKho": this.formData.value.idNganKho,
+      "maLokho": this.formData.value.idLoKho,
       "paggingReq": {
-        "limit": 20,
-        "orderBy": "",
-        "orderType": "",
+        "limit": 10,
         "page": 0
       }
     }
+    if (this.formData.value.ngay != null) {
+      body.tuNgay = this.formData.value.ngay[0]
+      body.denNgay = this.formData.value.ngay[1]
+    }
     let res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.dataTable = [...res.data.list];
+      // this.dataTable = [...res.data.content];
       console.log(this.dataTable);
-      this.dataTable.forEach((item) => {
-        if (item.id) {
-          this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
-        } else {
-          this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
-          console.log('không có id');
-        }
+      this.dataExample.forEach((item) => {
+        this.mapOfExpandedData[item.id] = this.treeTableService.convertTreeToList(item);
       });
       this.totalRecord = res.data.totalElements;
 
@@ -265,6 +281,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
   clearFilter() {
     this.formData.reset();
+    this.search()
   }
 
   changePageIndex(event) { }
@@ -281,25 +298,222 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        dataEdit: data,
+        dataView: data,
         isView: true,
       },
     });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
+    // modalQD.afterClose.subscribe((data) => {
+    //   if (data) {
+    //     console.log(data);
 
-      }
-    });
+    //   }
+    // });
   }
 
-  exportData() { }
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show()
+      try {
+        let body = {
+          "loaiHH": "",
+          "chungLoaiHH": "",
+          "tuNgay": "",
+          "denNgay": "",
+          "maCuc": "",
+          "maChiCuc": "",
+          "maDiemKho": "",
+          "maNhaKho": "",
+          "maNganKho": "",
+          "maLokho": "",
+          "paggingReq": {
+            "limit": 10,
+            "page": 0
+          }
+        }
+        if (this.formData.value.ngayTao != null) {
+          body.tuNgay = this.formData.value.ngayTao[0]
+          body.denNgay = this.formData.value.ngayTao[1]
+        }
+        this.quanLyHangTrongKhoService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'danh-sach-hang-trong-kho.xlsx')
+        });
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+    }
+  }
+  dataExample: HangTrongKhoRowItem[] = [
+    {
+      id: 0,
+      tenDvi: 'test 0',
+      chungLoaiHH: 'test 2',
+      tonKhoDauKy: 1000,
+      nhapTrongKy: 1000,
+      xuatTrongKy: 1000,
+      tonKhoCuoiKy: 1000,
+      donViTinh: 'kg',
+      child: [
+        {
+          id: 1.1,
+          tenDvi: 'test 1.1',
+          chungLoaiHH: 'test 2',
+          tonKhoDauKy: 1000,
+          nhapTrongKy: 1000,
+          xuatTrongKy: 1000,
+          tonKhoCuoiKy: 1000,
+          donViTinh: 'kg',
+          child: [
+            {
+              id: 1.11,
+              tenDvi: 'test 1.1.1',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+            },
+          ],
+        },
+        {
+          id: 1.2,
+          tenDvi: 'test 1.2',
+          chungLoaiHH: 'test 2',
+          tonKhoDauKy: 1000,
+          nhapTrongKy: 1000,
+          xuatTrongKy: 1000,
+          tonKhoCuoiKy: 1000,
+          donViTinh: 'kg',
+          child: [
+            {
+              id: 1.21,
+              tenDvi: 'test 1.2.1',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+            },
+            {
+              id: 1.22,
+              tenDvi: 'test 1.2.2',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+              child: [
+                {
+                  id: 1.221,
+                  tenDvi: 'test 1.2.2.1',
+                  chungLoaiHH: 'test 2',
+                  tonKhoDauKy: 1000,
+                  nhapTrongKy: 1000,
+                  xuatTrongKy: 1000,
+                  tonKhoCuoiKy: 1000,
+                  donViTinh: 'kg',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 1,
+      tenDvi: 'test 1',
+      chungLoaiHH: 'test 2',
+      tonKhoDauKy: 1000,
+      nhapTrongKy: 1000,
+      xuatTrongKy: 1000,
+      tonKhoCuoiKy: 1000,
+      donViTinh: 'kg',
+      child: [
+        {
+          id: 1.1,
+          tenDvi: 'test 1.1',
+          chungLoaiHH: 'test 2',
+          tonKhoDauKy: 1000,
+          nhapTrongKy: 1000,
+          xuatTrongKy: 1000,
+          tonKhoCuoiKy: 1000,
+          donViTinh: 'kg',
+          child: [
+            {
+              id: 1.11,
+              tenDvi: 'test 1.1.1',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+            },
+          ],
+        },
+        {
+          id: 1.2,
+          tenDvi: 'test 1.2',
+          chungLoaiHH: 'test 2',
+          tonKhoDauKy: 1000,
+          nhapTrongKy: 1000,
+          xuatTrongKy: 1000,
+          tonKhoCuoiKy: 1000,
+          donViTinh: 'kg',
+          child: [
+            {
+              id: 1.21,
+              tenDvi: 'test 1.2.1',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+            },
+            {
+              id: 1.22,
+              tenDvi: 'test 1.2.2',
+              chungLoaiHH: 'test 2',
+              tonKhoDauKy: 1000,
+              nhapTrongKy: 1000,
+              xuatTrongKy: 1000,
+              tonKhoCuoiKy: 1000,
+              donViTinh: 'kg',
+              child: [
+                {
+                  id: 1.221,
+                  tenDvi: 'test 1.2.2.1',
+                  chungLoaiHH: 'test 2',
+                  tonKhoDauKy: 1000,
+                  nhapTrongKy: 1000,
+                  xuatTrongKy: 1000,
+                  tonKhoCuoiKy: 1000,
+                  donViTinh: 'kg',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+  ];
+
 }
+
+
 
 interface IHangTrongKho {
   id: number;
   child?: IHangTrongKho[];
   tenDvi: string;
-  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
@@ -321,7 +535,6 @@ class HangTrongKhoRowItem implements IHangTrongKho, ITreeTableItem {
   id: number;
   child?: IHangTrongKho[];
   tenDvi: string;
-  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;

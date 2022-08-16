@@ -123,7 +123,7 @@
           </button>
         </div>
         <nz-card class="mt-16 flex-card data-table">
-          <nz-table #expandTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+          <nz-table #expandTable class="nowrap" [nzData]="dataExample" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
               <tr>
@@ -177,6 +177,7 @@
                   </nz-input-group>
                 </th>
                 <th></th>
+                <th></th>
                 <ng-template #suffixIconSearch>
                   <i nz-icon nzType="search"></i>
                 </ng-template>
@@ -190,28 +191,28 @@
                       [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
                       [(nzExpand)]="item.expand"
                       (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.id], item, $event)">
-                      {{ item.tenDvi ?item.tenDvi : 'null'}}
+                      {{ item.tenDvi }}
                       </td>
                       <td>
-                        {{ item.loaiHH ?item.loaiHH : 'null' }}
+                      <!-- {{ item.loaiHH }} -->
                     </td>
                     <td>
-                      {{ item.chungLoaiHH?item.chungLoaiHH : 'null' }}
+                      {{ item.chungLoaiHH}}
                     </td>
                     <td>
-                      {{ item.tonKhoDauKy ?item.tonKhoDauKy : 'null' }}
+                      {{ item.tonKhoDauKy }}
                     </td>
                     <td>
-                      {{ item.nhapTrongKy ?item.nhapTrongKy : 'null' }}
+                      {{ item.nhapTrongKy }}
                     </td>
                     <td>
-                      {{ item.xuatTrongKy?item.xuatTrongKy : 'null' }}
+                      {{ item.xuatTrongKy}}
                     </td>
                     <td>
-                      {{ item.tonKhoCuoiKy ?item.tonKhoCuoiKy : 'null' }}
+                      {{ item.tonKhoCuoiKy }}
                     </td>
                     <td>
-                      {{ item.donViTinh ?item.donViTinh : 'null' }}
+                      {{ item.donViTinh }}
                     </td>
                     <td style="text-align: center;">
                       <a (click)="viewDetail(data)">
