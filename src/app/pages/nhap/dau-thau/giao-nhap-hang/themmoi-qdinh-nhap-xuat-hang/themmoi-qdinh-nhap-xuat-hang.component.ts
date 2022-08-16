@@ -135,7 +135,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((hopDongs) => {
       if (hopDongs) {
-        console.log("hopDongs: ", hopDongs);
         let canCuHd = '';
         this.quyetDinhNhapXuat.hopDongIds = [];
         // if (!this.quyetDinhNhapXuat.id) {
@@ -517,7 +516,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP,
           };
           let res =
             await this.quyetDinhNhapXuatService.updateStatus(
@@ -581,7 +580,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   tuChoi() {
-    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP_KH_QLHDT;
+    let trangThai = this.globals.prop.NHAP_TU_CHOI_TP;
     if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
       trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
     }

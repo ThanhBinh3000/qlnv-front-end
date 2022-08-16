@@ -109,7 +109,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_CAN_BO_KE_TOAN || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET)) {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
     }
   }
@@ -251,7 +251,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": this.globals.prop.NHAP_DA_DUYET,
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     };
     let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -404,11 +404,11 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_CAN_BO_KE_TOAN;
-    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_CAN_BO_KE_TOAN) {
+    let trangThai = this.globals.prop.NHAP_CHO_DUYET_KE_TOAN;
+    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN) {
       trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
     } else if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET;
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
     }
     this.modal.confirm({
       nzClosable: false,
@@ -445,8 +445,8 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
 
   tuChoi() {
     let trangThai = this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN;
-    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_CAN_BO_KE_TOAN) {
-      trangThai = this.globals.prop.NHAP_TU_CHOI_CAN_BO_KE_TOAN;
+    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN) {
+      trangThai = this.globals.prop.NHAP_TU_CHOI_KE_TOAN;
     } else if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
       trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC;
     }
@@ -772,7 +772,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
         "limit": 1000,
         "page": 0
       },
-      "trangThai": this.globals.prop.NHAP_DA_DUYET
+      "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC
     };
     let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

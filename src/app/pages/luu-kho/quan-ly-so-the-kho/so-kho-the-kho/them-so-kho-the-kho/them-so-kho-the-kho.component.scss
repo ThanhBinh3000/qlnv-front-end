@@ -29,9 +29,10 @@
             font-size: 13px;
             padding: 4px;
             border-radius: 0px;
-            border: 1px solid #eaeaea;
+            border: 1px solid #FF9393;
             text-transform: uppercase;
             margin-right: 8px;
+            background-color: #FFF1F1;
           }
 
           .da-ban-hanh {
@@ -112,4 +113,8 @@
     color: #e00606;
     border: 1px solid #e00606 !important;
   }
+}
+
+.tong-hop-button {
+  text-align: right;
 }

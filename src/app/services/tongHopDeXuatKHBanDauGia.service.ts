@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -65,7 +65,11 @@ export class TongHopDeXuatKHBanDauGiaService extends BaseService {
 
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-xuat-ke-hoach-ban-dau-gia`;
-    return this.httpClient.delete(url, body).toPromise();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: body
+    }
+    return this.httpClient.delete(url, httpOptions).toPromise();
   }
 
   chiTiet(id: any): Promise<any> {
@@ -74,7 +78,7 @@ export class TongHopDeXuatKHBanDauGiaService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-xuat-ke-hoach-ban-dau-gia/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-xuat-ke-hoach-ban-dau-gia/trang-thai`;
     return this.httpClient.put(url, body).toPromise();
   }
 

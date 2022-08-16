@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isAddNew; else templateThemmoi">
-    <div class="bg-trang">
+    <div>
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
                 <div class="search__body" nz-row [nzGutter]="24">
@@ -147,10 +147,10 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trangThaiXuLy }}</td>
                         <td style="text-align: center; white-space: nowrap;">
-                            <a (click)="viewDetail(data.id, false)">
+                            <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a (click)="viewDetail(data.id, true)">
+                            <a (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a (click)="xoaItem(data.id)">
@@ -158,8 +158,6 @@
                             </a>
                         </td>
                     </tr>
-
-
                 </tbody>
             </nz-table>
             <div class="tab-content tab-menu" id="myTabContent">
@@ -168,6 +166,7 @@
 
                     </div>
                     <div class="canphai">
+                        <!-- begin phân trang  -->
                         <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
@@ -175,6 +174,7 @@
                                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
                             </ng-template>
                         </nz-pagination>
+                        <!-- end phân trang  -->
                     </div>
                 </div>
             </div>
@@ -183,6 +183,7 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa">
+    <app-them-hang-thuoc-dien-thanh-ly (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa"
+        [detail]="isUpdate" [editList]="editList" [dataEditList]="dataDetail">
     </app-them-hang-thuoc-dien-thanh-ly>
 </ng-template>
