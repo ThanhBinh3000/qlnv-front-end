@@ -207,13 +207,15 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </th>
                         <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-                        <td>{{ data.soDeXuat }}</td>
-                        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.quyetDinhChiTieu }}</td>
-                        <td>{{ data.namKeHoach }}</td>
+                        <td>{{ data.soTT }}</td>
+                        <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.noiDung }}</td>
+                        <td>{{ data.namTongHop }}</td>
                         <td>{{ data.loaiHangHoa }}</td>
+                        <td>{{ data.chungLoaiHh }}</td>
                         <td>{{ data.loaiGia }}</td>
+                        <td>{{ data.trangThaiTH }}</td>
+                        <td>{{ data.maToTrinh }}</td>
                         <td>{{ data.trangThai }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, false)">

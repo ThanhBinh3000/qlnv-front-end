@@ -46,14 +46,15 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      soDeXuat: [null],
-      ngayKy: [[]],
-      trichYeu: [null],
-      namKeHoach: [null],
+      soTT: [null],
+      ngayTongHop: [[]],
+      noiDung: [null],
+      namTongHop: [null],
       loaiHangHoa: [null],
+      chungLoaiHh: [null],
       loaiGia: [null],
       trangThai: [null],
-
+      trangThaiTH: [null],
     });
   }
   searchInTable = {

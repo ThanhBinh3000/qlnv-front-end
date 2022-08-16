@@ -61,7 +61,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
-        canCuId: [null],
+        ghiChu: []
       }
     );
   }
@@ -89,7 +89,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       console.log(data);
       this.formData.patchValue({
         id: data.id,
-        canCuId: data.canCuId,
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat.split('/')[0],
         loaiHangHoa: data.loaiHangHoa,
@@ -97,7 +96,9 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
+
       })
+      this.taiLieuDinhKemList = data.fileDinhKems;
     }
   }
 
@@ -213,6 +214,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     });
   }
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -221,6 +223,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     body.soDeXuat = body.soDeXuat + this.maDx;
     let res
     if (this.idInput > 0) {
