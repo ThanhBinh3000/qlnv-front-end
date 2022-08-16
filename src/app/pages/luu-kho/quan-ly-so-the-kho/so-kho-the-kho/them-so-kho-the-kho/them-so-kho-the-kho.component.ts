@@ -122,6 +122,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async loadChiTiet() {
+    this.isTaoTheKho = true;
     let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
     this.dsChiTiet = res.data;
 
@@ -353,6 +354,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   async loadTonDauKy() {
     try {
+      this.formData.patchValue({ tonDauKy: 0 })
       const body = {
         "loaiHH": this.formData.value.idLoaiHangHoa,
         "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
@@ -368,15 +370,17 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         }
       }
       const res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
-
-      res.data.list.forEach((item) => {
-        item.child.forEach((child) => {
-          if (child.maDvi === this.userInfo.MA_DVI) {
-            this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
-          }
-        })
-      })
-
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          res.data.list.forEach((item) => {
+            item.child.forEach((child) => {
+              if (child.maDvi === this.userInfo.MA_DVI) {
+                this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
+              }
+            })
+          });
+        }
+      }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -463,7 +467,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: id,
             lyDo: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.LANH_DAO_DUYET,
           };
 
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
@@ -499,7 +503,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: '02',
+            trangThai: this.globals.prop.BAN_HANH,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 
@@ -537,7 +541,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.globals.prop.TU_CHOI,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 

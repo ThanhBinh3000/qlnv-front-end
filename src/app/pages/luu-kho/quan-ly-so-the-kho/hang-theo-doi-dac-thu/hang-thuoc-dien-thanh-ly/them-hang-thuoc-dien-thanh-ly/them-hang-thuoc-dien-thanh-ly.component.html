@@ -12,7 +12,6 @@
         <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
         <nz-form-control>
           <nz-input-group id="ten-don-vi">
-            <!-- <input type="text" nz-input formControlName="tenDonVi" /> -->
             <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)" [nzShowArrow]="false">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
@@ -90,7 +89,7 @@
             <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idLoaiHangHoa" placeholder="Nhập loại hàng hoá"
               [nzShowArrow]="false" (ngModelChange)="onChangeLoaiVthh($event)">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsLoaiHangHoa">
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
               </nz-option>
             </nz-select>
           </nz-input-group>
@@ -99,7 +98,7 @@
           <nz-input-group>
             <!-- <input type="text" nz-input placeholder="Nhập loại hàng hoá" /> -->
             <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.chungLoaiHangHoa"
-              placeholder="Nhập chủng loại hàng hoá" [nzShowArrow]="false">
+              placeholder="Nhập chủng loại hàng hoá" [nzShowArrow]="false" (ngModelChange)="onChangeChungLoai($event)">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
               </nz-option>
@@ -164,8 +163,7 @@
         </th>
         <th>
           <nz-input-group>
-            <input [disabled]="editList" type="text" [(ngModel)]="rowItem.donVi" nz-input
-              placeholder="Nhập đơn vị tính" />
+            <input disabled type="text" [(ngModel)]="rowItem.donVi" nz-input placeholder="Nhập đơn vị tính" />
           </nz-input-group>
         </th>
         <th>
@@ -208,12 +206,12 @@
         </ng-container>
         <ng-template #editTemplate>
           <td>{{ idx + 1 }}</td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.loaiHang" /></td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.chungLoaiHang" /></td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.diemKho" /></td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.nhaKho" /></td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.nganKho" /></td>
-          <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.loKho" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.loaiHang" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.chungLoaiHang" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.diemKho" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.nhaKho" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.nganKho" /></td>
+          <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.loKho" /></td>
           <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.slTon" /></td>
           <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.slYeuCau" /></td>
           <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.donVi" /></td>

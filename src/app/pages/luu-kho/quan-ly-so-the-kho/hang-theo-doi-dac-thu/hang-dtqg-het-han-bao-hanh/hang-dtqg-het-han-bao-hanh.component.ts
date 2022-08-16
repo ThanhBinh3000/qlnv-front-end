@@ -49,6 +49,17 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     ngayNhapKho: null,
     ngayHetHanBaoHanh: null,
   };
+
+  isView: boolean = true
+  detail: any = {}
+  dsTong: any = []
+  dsDonVi: any = []
+  dsLoaiHangHoa: any = []
+  dsChungLoaiHangHoa: any = []
+
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly donviService: DonviService,
@@ -57,15 +68,15 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     private readonly userService: UserService,
     private readonly danhMucService: DanhMucService,
     private hangDtqgHetHanBaoHanhService: HangDtqgHetHanBaoHanhService,
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
-      // await this.initData();
-      this.search()
-      // this.dataTable = [...this.dataExample];
+      await this.loaiVTHHGetAll();
+      this.search();
+      await this.initData();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -73,13 +84,47 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
   }
 
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                item
+              ];
+            }
+            else {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                ...item.child
+              ];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maLoaiHang);
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
+  }
+
   initForm(): void {
     this.formData = this.fb.group({
-      "maChungLoaiHang": [null],
-      "maDonVi": [null],
-      "maLoaiHang": [null],
+      "maChungLoaiHang": '',
+      "maDonVi": '',
+      "maLoaiHang": '',
     })
   }
+
   async search() {
     this.spinner.show();
 
@@ -96,10 +141,8 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
 
     }
     let res = await this.hangDtqgHetHanBaoHanhService.search(body);
-    console.log(res.data.content);
-
     if (res.msg = MESSAGE.SUCCESS) {
-      this.dataTable = res.data.content
+      this.dataTable = [...res.data.content]
       this.totalRecord = res.data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => item.checked = false)
@@ -133,8 +176,6 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
             }
           });
         }
-        console.log(temp);
-
       }
       this.dataTable = [...this.dataTable, ...temp]
     } else {
@@ -143,7 +184,19 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   }
   clearFilter() {
     this.formData.reset();
+    this.filterTable = {
+      tenDonVi: null,
+      loaiHangHoa: null,
+      chungLoaiHangHoa: null,
+      diemKho: null,
+      nhaKho: null,
+      nganKho: null,
+      loKho: null,
+      ngayNhapKho: null,
+      ngayHetHanBaoHanh: null,
+    };
     this.search()
+
   }
 
   exportData() {
@@ -170,129 +223,97 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
 
   }
-  // async initData() {
-  //   this.userInfo = this.userService.getUserLogin();
-  //   this.detail.maDvi = this.userInfo.MA_DVI;
-  //   this.detail.tenDvi = this.userInfo.TEN_DVI;
-  //   await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
-  // }
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await Promise.all([this.loadDsTong(), this.loaiDsHH()]);
+  }
 
-  // async loadDsTong() {
-  //   const body = {
-  //     maDviCha: this.detail.maDvi,
-  //     trangThai: '01',
-  //   };
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
 
-  //   const dsTong = await this.donviService.layDonViTheoCapDo(body);
-  //   if (!isEmpty(dsTong)) {
-  //     this.dsTong = dsTong;
-  //     this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  //     this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
-  //   }
-  // }
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsTong = dsTong;
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
+  }
 
-  // async loaiVTHHGetAll() {
-  //   let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     this.dsLoaiHangHoa = res.data;
-  //     this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
-  //   }
-  // }
+  async loaiDsHH() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        let ds = [...hangHoa.data];
+        ds.forEach(item => {
+          item.child.forEach(item => this.dsLoaiHangHoa.push(item))
+        })
+      }
+    })
+  }
+  onChangeLoaiHH(id: any) {
+    if (id && id !== '') {
+      this.dsChungLoaiHangHoa = []
+      let data = this.dsLoaiHangHoa.find(item => item.ma === id)
+      let temp = []
+      if (data != undefined) {
+        this.dataTableAll.forEach(item => {
+          if (item.loaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
+            temp.push(item)
+          }
+        })
+        this.isView = false
+        this.dataTable = [...temp]
+        if (this.dataTable.length > 0 && data.child.length > 0) {
+          this.dsChungLoaiHangHoa = data.child
+        } else {
+          this.isView = true
+        }
+      }
+    }
+  }
+  onChangeChungLoaiHH(id: any) {
+    if (id && id !== '') {
+      let data = this.dsChungLoaiHangHoa.find(item => item.ma === id)
+      let temp = []
+      if (data != undefined) {
+        this.dataTableAll.forEach(item => {
+          if (item.chungLoaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
+            temp.push(item)
+          }
+        })
+        this.dataTable = [...temp]
+      }
+    }
+  }
 
-  // onChangeAutoComplete(e) {
-  //   const value = (e.target as HTMLInputElement).value;
-  //   if (value) {
-  //     this.dsDonViDataSource = this.dsDonVi
-  //       .filter((item) =>
-  //         item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
-  //       )
-  //       .map((item) => item.tenDvi);
-  //   } else {
-  //     this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
-  //   }
-  // }
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
-  // onChangeAutoCompleteLoaiHH(e) {
-  //   const value = (e.target as HTMLInputElement).value;
-  //   if (value) {
-  //     this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
-  //       .filter((item) =>
-  //         item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
-  //       )
-  //       .map((item) => item.giaTri);
-  //   } else {
-  //     this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
-  //       (item) => item.giaTri,
-  //     );
-  //   }
-  // }
-
-
-
-  // onChangeDonVi(id) {
-  //   const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
-  //   if (chiCuc) {
-  //     const result = {
-  //       ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
-  //     };
-  //     this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
-  //   } else {
-  //     this.dsDiemKho = [];
-  //   }
-  // }
-
-  // onChangeDiemKho(id) {
-  //   const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
-  //   if (diemKho) {
-  //     const result = {
-  //       ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
-  //     };
-  //     this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
-  //   } else {
-  //     this.dsNhaKho = [];
-  //   }
-  // }
-
-  // onChangeNhaKho(id) {
-  //   const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
-  //   if (nhaKho) {
-  //     const result = {
-  //       ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
-  //     };
-  //     this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
-  //   } else {
-  //     this.dsNganLo = [];
-  //   }
-  // }
-
-  onChangeFilterDate(event) {}
-
-  changePageIndex(event) {}
-
-  changePageSize(event) {}
-}
-
-interface ITrangThai {
-  id: number;
-  giaTri: string;
-}
-
-interface IHangDTQGHetHanBaoHanh {
-  id: number;
-  idDonVi: number;
-  tenDonVi: string;
-  idLoaiHangHoa: number;
-  tenLoaiHangHoa: string;
-  idHangHoa: number;
-  tenHangHoa: string;
-  idDiemKho: number;
-  tenDiemKho: string;
-  idNhaKho: number;
-  tenNhaKho: string;
-  idNganLo: number;
-  tenNganLo: string;
-  ngayNhap: Date;
-  ngayHetHanBaoHanh: Date;
-  soLuong: number;
-  donVi: string;
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 }
