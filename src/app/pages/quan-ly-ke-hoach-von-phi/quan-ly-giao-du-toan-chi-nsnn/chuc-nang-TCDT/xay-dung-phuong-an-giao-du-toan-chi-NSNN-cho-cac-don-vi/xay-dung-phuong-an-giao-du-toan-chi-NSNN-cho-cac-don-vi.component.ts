@@ -21,6 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
+import { DataService } from '../../data.service';
 export class ItemData {
   id!: any;
   stt: any;
@@ -169,6 +170,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     private notification: NzNotificationService,
     private location: Location,
     private modal: NzModalService,
+    private dataSource: DataService,
   ) { }
 
   async ngOnInit() {
@@ -223,20 +225,16 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-      this.ngayTao = this.newDate;
-      this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.maPa = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
+      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+      await this.dataSource.currentData.subscribe(obj => {
+        this.lstCtietBcao = obj.lstCtiets;
+        this.maDviTien = obj.maDviTien;
+        this.maPa = obj.maPa;
+        this.maPaCha = obj.maPaCha;
+        this.trangThaiBanGhi = obj?.trangThai;
+        this.namPa = obj?.namPa;
+        this.updateEditCache();
+      })
       this.namPa = this.newDate.getFullYear();
     }
     this.getStatusButton();
@@ -293,7 +291,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     // this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.code);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
-    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && this.soQd && this.trangThaiBanGhi == '6') { // == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV') 
+    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && this.soQd && this.trangThaiBanGhi == '6') { // == ('TC_KH_VP_NV' || 'C_KH_VP_NV_KH' || 'C_KH_VP_NV_TVQT' || 'CC_KH_VP_NV')
       this.statusBtnGiao = false;
       if (this.checkTrangThaiGiao == '0' || this.checkTrangThaiGiao == '2') {
         this.statusBtnGiaoToanBo = false;
@@ -641,7 +639,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     //   return;
     // }
     this.spinner.show();
-    if (this.id && this.namDtoan) {
+    if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
@@ -657,7 +655,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    } else {
+    } if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
@@ -957,7 +955,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   updateEditCache(): void {
     this.lstCtietBcao.forEach(item => {
       const data: ItemDvi[] = [];
-      if(item.lstCtietDvis){
+      if (item.lstCtietDvis) {
         item.lstCtietDvis.forEach(e => {
           data.push({
             id: e.id,
@@ -1631,12 +1629,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     let url: string;
     if (capDviUser == Utils.TONG_CUC) {
       url = '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    } else if(this.maPaCha.includes('BTC')){
+    } else if (this.maPaCha.includes('BTC')) {
       url = '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    }else{
+    } else {
       url = '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
     }
     window.open(url, '_blank');
   }
-
 }

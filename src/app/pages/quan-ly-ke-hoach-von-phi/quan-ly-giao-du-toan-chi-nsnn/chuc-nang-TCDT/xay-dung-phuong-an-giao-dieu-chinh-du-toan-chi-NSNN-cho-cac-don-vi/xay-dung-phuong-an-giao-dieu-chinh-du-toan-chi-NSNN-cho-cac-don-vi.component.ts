@@ -20,7 +20,9 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import {NOI_DUNG} from './xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.constant';
+import { NOI_DUNG } from './xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.constant';
+import { DataService } from '../../data.service';
+
 
 export class ItemData {
   id!: any;
@@ -165,6 +167,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     private notification: NzNotificationService,
     private location: Location,
     private modal: NzModalService,
+    private dataSource: DataService,
   ) { }
 
   async ngOnInit() {
@@ -214,20 +217,16 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-      this.ngayTao = this.newDate;
-      this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.maPa = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
+      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+      await this.dataSource.currentData.subscribe(obj => {
+        this.lstCtietBcao = obj.lstCtiets;
+        this.maDviTien = obj.maDviTien;
+        this.maPa = obj.maPa;
+        this.maPaCha = obj.maPaCha;
+        this.trangThaiBanGhi = obj?.trangThai;
+        this.namPa = obj?.namPa;
+        this.updateEditCache();
+      })
       this.namPa = this.newDate.getFullYear();
     }
     this.getStatusButton();
@@ -387,7 +386,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.lstCtietBcao.forEach(item => {
             item.tongCong = divMoney(item.tongCong, this.maDviTien);
             item.lstCtietDvis.forEach(e => {
-              e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null: divMoney(e.soTranChi, this.maDviTien);
+              e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
             })
           })
           this.namPa = data.data.namPa;
@@ -497,7 +496,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     let lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     let tongTranChi = 0;
-    
+
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
       if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
@@ -519,7 +518,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       })
     })
 
-    if(tongTranChi == 0){
+    if (tongTranChi == 0) {
       this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
       return;
     }
@@ -617,7 +616,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     //   return;
     // }
     this.spinner.show();
-    if (this.id && this.namDtoan) {
+    if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
@@ -633,7 +632,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    } else {
+    } if (this.id && this.namDtoan) {
       this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
@@ -940,7 +939,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         data.push({
           id: e.id,
           maDviNhan: e.maDviNhan,
-          soTranChi: e.soTranChi == 0? null : e.soTranChi,
+          soTranChi: e.soTranChi == 0 ? null : e.soTranChi,
           trangThai: e.trangThai,
         });
       })
@@ -951,7 +950,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           stt: item.stt,
           level: item.level,
           maNdung: item.maNdung,
-          tongCong: item.tongCong == 0? null : item.tongCong,
+          tongCong: item.tongCong == 0 ? null : item.tongCong,
           lstCtietDvis: data,
           checked: false,
         }
@@ -1073,16 +1072,16 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     let tongTranChi = 0;
 
     for (let itm of this.editCache[id].data.lstCtietDvis) {
-      if (itm.soTranChi < 0){
+      if (itm.soTranChi < 0) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE)
         return;
       }
       tongTranChi += itm.soTranChi;
     }
-    if(tongTranChi == 0){
+    if (tongTranChi == 0) {
       this.notification.warning(MESSAGE.WARNING, 'Bảng chưa có dữ liệu, vui lòng nhập!')
       return;
-    }else if(tongTranChi > this.lstCtietBcao[index].tongCong){
+    } else if (tongTranChi > this.lstCtietBcao[index].tongCong) {
       this.notification.warning(MESSAGE.WARNING, 'Tổng số tiền chi không được lớn hơn tổng số!')
       return;
     }
@@ -1567,30 +1566,30 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         if (this.getHead(item.stt) == stt) {
           item.lstCtietDvis.forEach(e => {
             let ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-            if(
+            if (
               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi == null
-            ){
+            ) {
               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi = 0
             }
             this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
-            if(
+            if (
               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi == 0
-            ){
+            ) {
               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi = null
             }
           })
         }
       })
       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        if(
+        if (
           this.lstCtietBcao[index].tongCong == null
-        ){
+        ) {
           this.lstCtietBcao[index].tongCong = 0
         }
         this.lstCtietBcao[index].tongCong += item.soTranChi;
-        if(
+        if (
           this.lstCtietBcao[index].tongCong == 0
-        ){
+        ) {
           this.lstCtietBcao[index].tongCong = null
         }
       })
