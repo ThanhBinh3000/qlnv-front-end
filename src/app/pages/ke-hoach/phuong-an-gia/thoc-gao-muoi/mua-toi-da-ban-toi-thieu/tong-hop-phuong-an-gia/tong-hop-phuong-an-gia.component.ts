@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
@@ -21,6 +21,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
+  listVthh: any[] = [];
 
   dsNam: string[] = [];
 
@@ -77,6 +78,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
+    this.listVthh = LIST_VAT_TU_HANG_HOA;
 
   }
 

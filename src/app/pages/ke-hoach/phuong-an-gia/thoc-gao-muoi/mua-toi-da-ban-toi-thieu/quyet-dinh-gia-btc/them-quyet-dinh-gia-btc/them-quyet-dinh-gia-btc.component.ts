@@ -4,23 +4,20 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuKQLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-them-qd-de-xuat-phuong-an-gia',
-  templateUrl: './them-qd-de-xuat-phuong-an-gia.component.html',
-  styleUrls: ['./them-qd-de-xuat-phuong-an-gia.component.scss']
+  selector: 'app-them-quyet-dinh-gia-btc',
+  templateUrl: './them-quyet-dinh-gia-btc.component.html',
+  styleUrls: ['./them-quyet-dinh-gia-btc.component.scss']
 })
-export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
+export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
@@ -31,14 +28,17 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-  listQdGoc: any[] = [];
+
   userInfo: UserLogin;
   soDeXuat: string;
-  dsLoaiGia: any[] = [];
 
-
+  muaTangList: any[] = []
+  xuatGiamList: any[] = []
+  xuatBanList: any[] = []
+  luanPhienList: any[] = []
   maDx: string;
   dataTable: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -48,7 +48,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     private helperService: HelperService,
     private giaDeXuatGiaService: GiaDeXuatGiaService,
     private notification: NzNotificationService,
-    private danhMucService: DanhMucService,
 
   ) {
     this.formData = this.fb.group(
@@ -61,7 +60,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
-        canCuId: [null],
       }
     );
   }
@@ -72,15 +70,12 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.loadDsLoaiGia(),
-      this.maDx = '/CDTVP-KH&QLHDT',
+      this.maDx = '/QD-BTC',
       this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namKeHoach').value),
     ])
     this.spinner.hide();
   }
-
-
 
   async getDataDetail(id) {
     if (id > 0) {
@@ -89,7 +84,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       console.log(data);
       this.formData.patchValue({
         id: data.id,
-        canCuId: data.canCuId,
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat.split('/')[0],
         loaiHangHoa: data.loaiHangHoa,
@@ -101,7 +95,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
   }
 
-
   async onChangeNamQd(namKeHoach) {
     let body = {
       namKeHoach: namKeHoach,
@@ -109,22 +102,14 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
     let res = await this.giaDeXuatGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-      if (data) {
-        let detail = await this.giaDeXuatGiaService.getDetail(data[0].id);
-        if (detail.msg == MESSAGE.SUCCESS) {
-          this.dsBoNganh = detail.data.listBoNganh;
-        }
-      }
-      console.log(this.dsBoNganh)
-    }
-  }
-
-  async loadDsLoaiGia() {
-    this.dsLoaiGia = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
+      // const data = res.data.content;
+      // if (data) {
+      //   let detail = await this.giaDeXuatGiaService.getDetail(data[0].id);
+      //   if (detail.msg == MESSAGE.SUCCESS) {
+      //     this.dsBoNganh = detail.data.listBoNganh;
+      //   }
+      // }
+      // console.log(this.dsBoNganh)
     }
   }
 
@@ -212,6 +197,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       },
     });
   }
+
   async save() {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);

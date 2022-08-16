@@ -14,12 +14,13 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-
                     <div nz-col [nzSpan]="4">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="loai-hh">Loại hành hóa</nz-form-label>
+                            <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
                             <nz-form-control>
                                 <nz-select formControlName="loaiHangHoa" id="loai-hh">
+                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
                                     <nz-option>
                                     </nz-option>
                                 </nz-select>
@@ -79,10 +80,10 @@
             </div>
         </div>
 
-        <nz-card class="mt-2px flex-card data-table card-border-content">
-            <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+            <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -198,6 +199,8 @@
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </tr>
+                </thead>
+                <tbody>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
