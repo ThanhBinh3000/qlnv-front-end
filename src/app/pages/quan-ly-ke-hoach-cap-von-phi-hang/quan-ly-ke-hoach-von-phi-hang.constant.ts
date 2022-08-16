@@ -1,8 +1,25 @@
-import { MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG } from '../../constants/routerUrl';
-export const ROUTE_LIST_KE_HOACH = [
-  {
-    icon: 'htvbdh_tcdt_icon-common',
-    title: 'Quản lý cấp nguồn vốn chi DTQG',
-    url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/quan-ly-cap-nguon-von-chi`,
-  },
-];
+import { MAIN_ROUTES } from 'src/app/layout/main/main-routing.constant';
+import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
+
+export const MAIN_ROUTE_CAPVON = MAIN_ROUTES.capVon;
+export const CAP_VON_NGUON_CHI = 'quan-ly-cap-nguon-von-chi';
+export const CAP_VON_MUA_BAN = 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg';
+
+export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
+	{
+		icon: 'htvbdh_tcdt_chitieukehoachnam',
+		title: 'Cấp vốn chi DTQG',
+		url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_NGUON_CHI}`,
+		dropdown: 'giao-chi-tieu',
+		idHover: 'giao-chi-tieu',
+		hasTab: false,
+	},
+	{
+		icon: 'htvbdh_tcdt_kehoachvonphi',
+		title: 'Cấp vốn mua, bán và thanh toán tiền hàng',
+		url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_MUA_BAN}`,
+		dropdown: 'giao-chi-tieu',
+		idHover: 'giao-chi-tieu',
+		hasTab: false,
+	},
+]

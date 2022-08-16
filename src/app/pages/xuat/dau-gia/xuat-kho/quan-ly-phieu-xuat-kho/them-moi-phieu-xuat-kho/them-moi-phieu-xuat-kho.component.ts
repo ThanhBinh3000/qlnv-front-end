@@ -570,6 +570,8 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
         "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan,
         "qdgnvnxId": this.detail.qdgnvnxId,
       };
+
+      console.log(body);
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
           body,

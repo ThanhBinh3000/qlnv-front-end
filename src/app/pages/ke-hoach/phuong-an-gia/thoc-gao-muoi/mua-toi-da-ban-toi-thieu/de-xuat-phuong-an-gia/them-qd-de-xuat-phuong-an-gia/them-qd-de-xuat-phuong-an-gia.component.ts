@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
@@ -22,7 +23,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
-
+  listVthh: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
@@ -35,7 +36,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
   luanPhienList: any[] = []
-
+  maDx: string;
   dataTable: any[] = [];
   constructor(
     private readonly fb: FormBuilder,
@@ -53,27 +54,45 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         id: [],
         namKeHoach: [dayjs().get('year'), [Validators.required]],
         soDeXuat: [, [Validators.required]],
-        loaiHangHoa: [, [Validators.required]],
+        loaiHangHoa: [null],
         ngayKy: [null, [Validators.required]],
-        loaiGia: [, [Validators.required]],
+        loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
-        phuongAnGiaId: [, [Validators.required]]
       }
     );
   }
 
   async ngOnInit() {
     this.spinner.show();
+    this.listVthh = LIST_VAT_TU_HANG_HOA;
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.soDeXuat = '/QĐ-BTC',
+      this.maDx = '/CDTVP-KH&QLHDT',
+      this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namKeHoach').value),
     ])
     this.spinner.hide();
   }
 
+  async getDataDetail(id) {
+    if (id > 0) {
+      let res = await this.giaDeXuatGiaService.getDetail(id);
+      const data = res.data;
+      console.log(data);
+      this.formData.patchValue({
+        id: data.id,
+        namKeHoach: data.namKeHoach,
+        soDeXuat: data.soDeXuat.split('/')[0],
+        loaiHangHoa: data.loaiHangHoa,
+        ngayKy: data.ngayKy,
+        loaiGia: data.loaiGia,
+        trichYeu: data.trichYeu,
+        trangThai: data.trangThai,
+      })
+    }
+  }
 
   async onChangeNamQd(namKeHoach) {
     let body = {
@@ -82,11 +101,16 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
     let res = await this.giaDeXuatGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-      console.log(this.dsBoNganh)
+      // const data = res.data.content;
+      // if (data) {
+      //   let detail = await this.giaDeXuatGiaService.getDetail(data[0].id);
+      //   if (detail.msg == MESSAGE.SUCCESS) {
+      //     this.dsBoNganh = detail.data.listBoNganh;
+      //   }
+      // }
+      // console.log(this.dsBoNganh)
     }
   }
-
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
@@ -131,7 +155,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
   }
 
-
   downloadFileKeHoach(event) { }
 
   quayLai() {
@@ -139,6 +162,40 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   }
 
   banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: '11',
+          };
+          let res =
+            await this.giaDeXuatGiaService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
   async save() {
     this.spinner.show();
@@ -149,8 +206,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soDeXuat = body.soDeXuat + this.soDeXuat;
-    body.phuongAnGiaId = this.dataTable;
+    body.soDeXuat = body.soDeXuat + this.maDx;
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);
@@ -168,17 +224,12 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+    console.log(this.formData)
   }
-
-
 
   xoaKeHoach() { }
 
   themKeHoach() { }
 }
-
-
-
-
 
 

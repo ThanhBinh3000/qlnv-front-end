@@ -17,6 +17,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, displayNumber, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from '../data.service';
 
 export class ItemData {
@@ -543,7 +544,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.router.navigate([
-                            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/0/' + data.data.id,
+                            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-don-gia-mua/0/' + data.data.id,
                         ])
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -635,7 +636,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     redirectChiTieuKeHoachNam() {
-        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+        this.router.navigate([MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tim-kiem']);
         this.location.back()
     }
 
@@ -712,7 +713,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.loai = "0";
         }
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/' + this.loai
+            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tim-kiem/' + this.loai
         ])
     }
 

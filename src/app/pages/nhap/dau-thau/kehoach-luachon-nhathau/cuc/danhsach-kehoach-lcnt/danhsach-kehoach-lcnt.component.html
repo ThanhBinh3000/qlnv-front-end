@@ -53,9 +53,10 @@
       </div>
     </div>
 
-    <nz-card class="mt-2px flex-card data-table card-border-content">
-      <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
-        nzBordered>
+
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th width="45px">
@@ -75,8 +76,6 @@
             <th width="">Trạng thái của đề xuất</th>
             <th width="90px">Hành động</th>
           </tr>
-        </thead>
-        <tbody>
           <tr class="search-table">
             <th></th>
             <th></th>
@@ -172,11 +171,13 @@
             <th>
             </th>
           </tr>
+        </thead>
+        <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
-            <th width="45px">
+            <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != '00'"></label>
-            </th>
+            </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soDxuat }}</td>
             <td *ngIf="userService.isTongCuc()" width="">{{data.tenDvi}}</td>

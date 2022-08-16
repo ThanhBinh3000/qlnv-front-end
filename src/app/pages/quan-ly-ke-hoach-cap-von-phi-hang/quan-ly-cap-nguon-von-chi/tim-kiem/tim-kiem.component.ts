@@ -11,6 +11,7 @@ import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, Utils } from 'src
 import { utils } from 'xlsx';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { CAP_VON_MUA_BAN, CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from '../data.service';
 
 @Component({
@@ -296,12 +297,12 @@ export class TimKiemComponent implements OnInit {
 		this.dataSource.changeData(obj);
 		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau',
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-trung-thau',
 			])
 		}
 		else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua',
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-don-gia-mua',
 			])
 		}
 	}
@@ -309,11 +310,11 @@ export class TimKiemComponent implements OnInit {
 	xemChiTiet(item: any) {
 		if (item.canCuVeGia == Utils.HD_TRUNG_THAU) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + this.loai + '/' + item.id,
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-trung-thau/' + this.loai + '/' + item.id,
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + this.loai + '/' + item.id,
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-don-gia-mua/' + this.loai + '/' + item.id,
 			])
 		}
 	}
@@ -388,7 +389,7 @@ export class TimKiemComponent implements OnInit {
 
 	close() {
 		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
+			MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI,
 		])
 	}
 }

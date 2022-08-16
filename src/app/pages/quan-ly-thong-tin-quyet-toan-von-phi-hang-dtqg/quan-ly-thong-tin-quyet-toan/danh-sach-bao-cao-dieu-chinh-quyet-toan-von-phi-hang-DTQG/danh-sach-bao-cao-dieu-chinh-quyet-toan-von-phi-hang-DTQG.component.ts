@@ -9,6 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
@@ -186,8 +187,8 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.spinner.show();
     const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
-    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
-    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {
       searchFilterTemp.trangThais.push(this.trangThai)
     } else {
@@ -217,11 +218,11 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
             }
           })
           this.danhSachBaoCao.forEach(e => {
-            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
-            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
-            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
-            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
-            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
@@ -259,10 +260,10 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   async taoMoi() {
     this.statusBtnValidate = false;
-    if(!this.searchFilter.namQtoan){
+    if (!this.searchFilter.namQtoan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
       return;
-    }else if(this.searchFilter.namQtoan < 1000 ||  this.searchFilter.namQtoan > 2999){
+    } else if (this.searchFilter.namQtoan < 1000 || this.searchFilter.namQtoan > 2999) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
       return;
     }
@@ -276,7 +277,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
           return;
         } else {
           this.router.navigate([
-            '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan-/' + this.searchFilter.namQtoan,
+            MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/dieu-chinh-so-lieu-quyet-toan-/' + this.searchFilter.namQtoan,
           ])
         }
       },
@@ -288,7 +289,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
 
   xemChiTiet(id: string) {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/dieu-chinh-so-lieu-quyet-toan/' + id,
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/dieu-chinh-so-lieu-quyet-toan/' + id,
     ])
   }
 

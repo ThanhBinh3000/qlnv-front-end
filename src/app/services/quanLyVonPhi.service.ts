@@ -1269,7 +1269,10 @@ export class QuanLyVonPhiService extends BaseService {
 
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach'
+      // 'http://192.168.1.101:8094/bao-cao/danh-sach'
+      , request)
   }
 
   // tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)

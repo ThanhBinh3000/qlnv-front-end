@@ -2,7 +2,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ PHÊ DUYỆT KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -11,7 +11,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ điều chỉnh phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -20,7 +20,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thông tin đấu thầu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -29,7 +29,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt kết quả LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -38,7 +38,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -47,7 +47,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản giao nhận',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -56,7 +56,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hồ sơ kỹ thuật',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -65,7 +65,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Lệnh nhập',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -74,7 +74,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản chuẩn bị kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     isDisabled: true,
     url: '',
     urlTongCuc: '',
@@ -84,7 +84,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -93,7 +93,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -102,7 +102,7 @@ export const MUOI_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập điều chỉnh',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -114,7 +114,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'danh-sach-dau-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -123,7 +123,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Tổng hợp KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'luong-dau-thau-gao',
     urlTongCuc: '',
     urlCuc: '',
@@ -132,7 +132,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -141,7 +141,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ điều chỉnh phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -150,7 +150,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thông tin đấu thầu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'thong-tin-dau-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -159,7 +159,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'hop-dong-mua',
     urlTongCuc: '',
     urlCuc: '',
@@ -168,7 +168,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản giao nhận',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -177,7 +177,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hồ sơ kỹ thuật',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -186,7 +186,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Lệnh nhập',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     isDisabled: true,
     url: '',
     urlTongCuc: '',
@@ -196,7 +196,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt kết quả LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
     urlTongCuc: '',
     urlCuc: '',
@@ -205,7 +205,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản chuẩn bị kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -214,7 +214,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bien-ban-nghiem-thu-ke-lot',
     urlTongCuc: '',
     urlCuc: '',
@@ -223,7 +223,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -232,7 +232,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập điều chỉnh',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -241,7 +241,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phương án trình tổng cục',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'phuong-an-trinh-tong-cuc',
     urlTongCuc: '',
     urlCuc: '',
@@ -250,7 +250,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quyết định giao nhiệm vụ nhập hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -259,7 +259,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-nhap-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -268,7 +268,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý bảng kê cân hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bang-ke-can-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -277,7 +277,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản lấy mẫu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bien-ban-lay-mau',
     urlTongCuc: '',
     urlCuc: '',
@@ -286,7 +286,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu kiểm nghiệm chất lượng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-kiem-nghiem-chat-luong',
     urlTongCuc: '',
     urlCuc: '',
@@ -295,7 +295,7 @@ export const THOC_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu nhập đầy kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-nhap-day-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -307,7 +307,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'danh-sach-dau-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -316,7 +316,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Tổng hợp KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'luong-dau-thau-gao',
     urlTongCuc: '',
     urlCuc: '',
@@ -325,7 +325,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -334,7 +334,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ điều chỉnh phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -343,7 +343,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thông tin đấu thầu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'thong-tin-dau-thau',
     urlTongCuc: '',
     urlCuc: '',
@@ -352,7 +352,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'hop-dong-mua',
     urlTongCuc: '',
     urlCuc: '',
@@ -361,7 +361,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản giao nhận',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -370,7 +370,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hồ sơ kỹ thuật',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -379,7 +379,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Lệnh nhập',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     isDisabled: true,
     url: '',
     urlTongCuc: '',
@@ -389,7 +389,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt kết quả LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
     urlTongCuc: '',
     urlCuc: '',
@@ -398,7 +398,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản chuẩn bị kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -407,7 +407,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bien-ban-nghiem-thu-ke-lot',
     urlTongCuc: '',
     urlCuc: '',
@@ -416,7 +416,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -425,7 +425,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập điều chỉnh',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -434,7 +434,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phương án trình tổng cục',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'phuong-an-trinh-tong-cuc',
     urlTongCuc: '',
     urlCuc: '',
@@ -443,7 +443,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quyết định giao nhiệm vụ nhập hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -452,7 +452,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-nhap-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -461,7 +461,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý bảng kê cân hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bang-ke-can-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -470,7 +470,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản lấy mẫu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-bien-ban-lay-mau',
     urlTongCuc: '',
     urlCuc: '',
@@ -479,7 +479,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu kiểm nghiệm chất lượng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-kiem-nghiem-chat-luong',
     urlTongCuc: '',
     urlCuc: '',
@@ -488,7 +488,7 @@ export const GAO_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu nhập đầy kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'quan-ly-phieu-nhap-day-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -500,7 +500,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Đề xuất KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu',
     urlTongCuc: '',
     urlCuc: '',
@@ -509,7 +509,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ PHÊ DUYỆT KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/quyet-dinh-phe-duyet-ke-hoach-lcnt',
     urlTongCuc: '',
     urlCuc: '',
@@ -518,7 +518,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ điều chỉnh phê duyệt KH LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -527,7 +527,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thông tin đấu thầu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/thong-tin-lcnt',
     urlTongCuc: '',
     urlCuc: '',
@@ -536,7 +536,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt kết quả LCNT',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/quyet-dinh-phe-duyet-ket-qua-lcnt',
     urlTongCuc: '',
     urlCuc: '',
@@ -545,7 +545,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/hop-dong-mua',
     urlTongCuc: '',
     urlCuc: '',
@@ -554,7 +554,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản giao nhận',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -563,7 +563,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hồ sơ kỹ thuật',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/ho-so-ky-thuat',
     urlTongCuc: '',
     urlCuc: '',
@@ -572,7 +572,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Lệnh nhập',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -581,7 +581,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản chuẩn bị kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     isDisabled: true,
     url: '',
     urlTongCuc: '',
@@ -591,7 +591,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -600,7 +600,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -609,7 +609,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập điều chỉnh',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -618,7 +618,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/phieu-nhap-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -627,7 +627,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý bảng kê cân hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/quan-ly-bang-can-ke-hang',
     urlTongCuc: '',
     urlCuc: '',
@@ -636,7 +636,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản kết thúc nhập kho',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/bien-ban-ket-thuc-nhap-kho',
     urlTongCuc: '',
     urlCuc: '',
@@ -645,7 +645,7 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản giao nhận',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/bien-ban-giao-nhan',
     urlTongCuc: '',
     urlCuc: '',
@@ -654,31 +654,31 @@ export const VAT_TU_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quyết định giao nhiệm vụ nhập hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/quyet-dinh-giao-nhiem-vu-nhap-hang',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản chuẩn bị kho trước khi nhập hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý phiếu nhập kho tạm gửi',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/phieu-nhap-kho-tam-gui',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản gửi hàng',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/bien-ban-gui-hang',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Quản lý biên bản bàn giao mẫu',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: 'vat-tu/bien-ban-ban-giao-mau',
   },
 ];
@@ -687,7 +687,7 @@ export const DAU_THAU_LIST = [
   {
     icon: 'htvbdh_tcdt_baothoc',
     title: 'Thóc',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -696,7 +696,7 @@ export const DAU_THAU_LIST = [
   {
     icon: 'htvbdh_tcdt_baogao',
     title: 'Gạo',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -705,7 +705,7 @@ export const DAU_THAU_LIST = [
   {
     icon: 'htvbdh_tcdt_muoi',
     title: 'Muối',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -714,7 +714,7 @@ export const DAU_THAU_LIST = [
   {
     icon: 'htvbdh_tcdt_ngan-kho',
     title: 'Vật tư',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',
@@ -726,7 +726,7 @@ export const MUA_TRUC_TIEP_LIST = [
   {
     icon: 'htvbdh_tcdt_baothoc',
     title: 'Thóc',
-    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    description: '',
     url: '',
     urlTongCuc: '',
     urlCuc: '',

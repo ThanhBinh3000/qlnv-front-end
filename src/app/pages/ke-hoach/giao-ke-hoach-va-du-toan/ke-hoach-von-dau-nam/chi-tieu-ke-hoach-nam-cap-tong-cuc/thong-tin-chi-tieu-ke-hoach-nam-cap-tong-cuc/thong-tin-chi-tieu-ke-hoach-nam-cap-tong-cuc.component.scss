@@ -1,120 +1,105 @@
 ::ng-deep {
   .chi-tiet {
-    .menu-lv3 {
-      position: absolute;
-      top: 35px;
-      right: 14px;
 
-      .tab-menu.tab-content {
-        background-color: transparent !important;
-        border-bottom: none !important;
-      }
-    }
+    // .tab-tt-chi-tieu-level-0 {
+    //   margin-left: 16px;
+    //   margin-right: 16px;
+    //   margin-top: 16px !important;
 
-    .header-tab {
-      // background: #ffffff !important;
-      // margin: 8px 36px 0px 36px !important;
-    }
+    //   .ant-tabs-content-holder {
+    //     display: none !important;
+    //   }
 
-    .tab-tt-chi-tieu-level-0 {
-      margin-left: 16px;
-      margin-right: 16px;
-      margin-top: 16px !important;
+    //   .pagination-card li:first-child {
+    //     left: 10px;
+    //   }
 
-      .ant-tabs-content-holder {
-        display: none !important;
-      }
+    //   .ant-tabs-nav {
+    //     .ant-tabs-top>.ant-tabs-nav::before {
+    //       border-bottom: 0 !important;
+    //     }
 
-      .pagination-card li:first-child {
-        left: 10px;
-      }
+    //     background: #fff !important;
+    //     padding-bottom: 0px !important;
 
-      .ant-tabs-nav {
-        .ant-tabs-top>.ant-tabs-nav::before {
-          border-bottom: 0 !important;
-        }
+    //     .ant-tabs-nav-wrap {
+    //       background: #fff !important;
+    //       margin-left: 16px;
 
-        background: #fff !important;
-        padding-bottom: 0px !important;
+    //       .ant-tabs-tab {
+    //         background-color: #fff !important;
+    //         border-width: 1px 1px 0px 1px;
+    //         // border-color: #fff;
+    //       }
 
-        .ant-tabs-nav-wrap {
-          background: #fff !important;
-          margin-left: 16px;
+    //       .ant-tabs-tab-active::before {
+    //         height: 0;
+    //       }
 
-          .ant-tabs-tab {
-            background-color: #fff !important;
-            border-width: 1px 1px 0px 1px;
-            // border-color: #fff;
-          }
+    //       .ant-tabs-tab.ant-tabs-tab-active {
+    //         background-color: #fff !important;
+    //         border: 1px solid #f3f3f3 !important;
+    //         border-bottom: 0px !important;
 
-          .ant-tabs-tab-active::before {
-            height: 0;
-          }
+    //         .ant-tabs-tab-btn {
+    //           font-weight: 500;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-          .ant-tabs-tab.ant-tabs-tab-active {
-            background-color: #fff !important;
-            border: 1px solid #f3f3f3 !important;
-            border-bottom: 0px !important;
+    // .chi-tieu__body {
+    //   .flex-card.ant-card {
+    //     border: 1px solid #ececec !important;
+    //     background: transparent;
+    //     box-shadow: unset;
+    //     margin-bottom: 0px !important;
+    //     margin-top: 11px !important;
+    //     border-radius: 0px;
+    //   }
 
-            .ant-tabs-tab-btn {
-              font-weight: 500;
-            }
-          }
-        }
-      }
-    }
+    //   .table__body {
+    //     overflow: scroll;
+    //   }
 
-    .chi-tieu__body {
-      .flex-card.ant-card {
-        border: 1px solid #ececec !important;
-        background: transparent;
-        box-shadow: unset;
-        margin-bottom: 0px !important;
-        margin-top: 11px !important;
-        border-radius: 0px;
-      }
+    //   .tab__container {
+    //     margin: 10px;
+    //   }
 
-      .table__body {
-        overflow: scroll;
-      }
+    //   .ghi-chu {
+    //     padding: 0 10px;
 
-      .tab__container {
-        margin: 10px;
-      }
+    //     .ant-form-item-no-colon {
+    //       margin-bottom: 0px !important;
+    //     }
 
-      .ghi-chu {
-        padding: 0 10px;
+    //     ul {
+    //       padding-left: 25px !important;
+    //     }
 
-        .ant-form-item-no-colon {
-          margin-bottom: 0px !important;
-        }
+    //     .ghi-chu__item {
+    //       font-style: italic;
+    //       font-weight: normal;
+    //       font-size: 12px;
+    //       line-height: 200%;
+    //     }
+    //   }
 
-        ul {
-          padding-left: 25px !important;
-        }
+    //   tr.table__header-vat-tu.ant-table-row>td {
+    //     background: #f1f1f1;
+    //   }
 
-        .ghi-chu__item {
-          font-style: italic;
-          font-weight: normal;
-          font-size: 12px;
-          line-height: 200%;
-        }
-      }
+    //   .tab__container {
+    //     position: relative;
+    //   }
 
-      tr.table__header-vat-tu.ant-table-row>td {
-        background: #f1f1f1;
-      }
-
-      .tab__container {
-        position: relative;
-      }
-
-      .action {
-        position: absolute;
-        right: 22px;
-        top: -4px;
-      }
-    }
+    //   .action {
+    //     position: absolute;
+    //     right: 22px;
+    //     top: -4px;
+    //   }
+    // }
 
     .star {
       color: #ff4d4f;
@@ -142,10 +127,12 @@
 
     .tep {
       cursor: pointer;
+      display: inline-flex;
+      align-items: end;
+      line-height: 1;
+      padding: 3px 12px;
       position: absolute;
-      top: 4px;
-      height: 20px;
-      left: 666px !important;
+      left: 0px !important;
       color: #7a8eff;
       white-space: nowrap;
       overflow: hidden;
@@ -229,11 +216,8 @@
     }
 
     .thong-tin-chi-tieu {
-      margin: 10px;
-      margin-top: 0;
       border: 1px solid #e0e0e0;
-      border-radius: 0px;
-      padding: 16px;
+      padding: 0 10px 10px 10px;
 
       .ant-form-item-label.ant-col,
       .ant-form-item-control {

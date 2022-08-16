@@ -6,11 +6,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DataService } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/data.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
+import { DataService } from '../data.service';
 
 
 
@@ -235,11 +236,11 @@ export class TongHopComponent implements OnInit {
 		this.dataSource.changeData(obj);
 		if (this.searchFilter.loaiDn == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc'
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tai-tong-cuc'
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/danh-sach-de-nghi-tu-cuc-khu-cuc'
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/danh-sach-de-nghi-tu-cuc-khu-cuc'
 			])
 		}
 	}
@@ -247,7 +248,7 @@ export class TongHopComponent implements OnInit {
 
 	dong() {
 		this.router.navigate([
-			'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi',
+			MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI,
 		])
 	}
 
@@ -255,11 +256,11 @@ export class TongHopComponent implements OnInit {
 	xemChiTiet(item: any) {
 		if (item.loaiDnghi == Utils.THOP_TAI_TC) {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tai-tong-cuc/' + this.loai + '/' + item.id
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tai-tong-cuc/' + this.loai + '/' + item.id
 			])
 		} else {
 			this.router.navigate([
-				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-tu-cuc-khu-vuc/' + this.loai + '/' + item.id
+				MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop-tu-cuc-khu-vuc/' + this.loai + '/' + item.id
 			])
 		}
 	}
