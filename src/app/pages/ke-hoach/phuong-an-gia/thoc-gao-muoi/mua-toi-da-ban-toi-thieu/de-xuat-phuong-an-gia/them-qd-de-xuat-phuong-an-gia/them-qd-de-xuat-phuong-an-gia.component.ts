@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDdiemDeHangComponent } from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import { API_STATUS_CODE } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { CanCuXacDinhPag, ThongTinKhaoSatGia } from 'src/app/models/DeXuatPhuongAnGia';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -44,7 +45,14 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   dsLoaiHangXdg: any[] = [];
 
   maDx: string;
-  dataTable: any[] = [];
+
+  dataTableCanCuXdg: any[] = [];
+  rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
+
+  dataTableKsGia: any[] = [];
+
+  dataTableKqGia: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -63,27 +71,28 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         id: [],
         namKhoach: [dayjs().get('year'), [Validators.required]],
         soDeXuat: [, [Validators.required]],
-        loaiVthh: [null],
+        loaiVthh: [null, [Validators.required]],
         ngayKy: [null, [Validators.required]],
-        loaiGia: [null],
+        loaiGia: [null, [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        cloaiVthh: [null],
+        cloaiVthh: [null, [Validators.required]],
         moTa: [null],
         tchuanCluong: [null],
-        giaDeNghi: [null],
-        vat: [null],
+        giaDeNghi: [null, [Validators.required]],
+        vat: [5],
         giaDeNghiVat: [null],
         soLuong: [],
         ghiChu: [],
-        diaDiemNhap: [],
+        diaDiemNhap: [null, [Validators.required]],
         //Form căn cứ phương pháp xác định giá
-        maPphapXdg: [],
+        maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: [],
         giaVonNk: [],
         chiPhiChung: [],
         chiPhiPbo: [],
         tongChiPhi: [],
+        noiDung: [null]
       }
     );
     this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
@@ -128,7 +137,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -200,16 +208,8 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
   }
 
-  fileAdd: FileDinhKem = new FileDinhKem();
 
-  getNameFile(event?: any, item?: FileDinhKem) {
-    // if (
-    //   this.trangThai === this.globals.prop.BAN_HANH ||
-    //   this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
-    //   this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
-    // ) {
-    //   return;
-    // }
+  getNameFile(event?: any, tableName?: string, item?: FileDinhKem,) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
     if (fileList) {
@@ -226,16 +226,20 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
             item.fileUrl = resUpload.url;
           }
           else {
-            if (!this.fileAdd) {
-              this.fileAdd = new FileDinhKem();
+            if (!this.rowItemCcXdg.fileDinhKem) {
+              this.rowItemCcXdg.fileDinhKem = new FileDinhKem();
             }
-            this.fileAdd.fileName = resUpload.filename;
-            this.fileAdd.fileSize = resUpload.size;
-            this.fileAdd.fileUrl = resUpload.url;
-            this.fileAdd.idVirtual = new Date().getTime();
+            this.rowItemCcXdg.fileDinhKem.fileName = resUpload.filename;
+            this.rowItemCcXdg.fileDinhKem.fileSize = resUpload.size;
+            this.rowItemCcXdg.fileDinhKem.fileUrl = resUpload.url;
+            this.rowItemCcXdg.fileDinhKem.idVirtual = new Date().getTime();
           }
         });
     }
+  }
+
+  bidingFile(fileDinhKem: FileDinhKem, resUpload) {
+
   }
 
   loadDsNam() {
@@ -328,12 +332,19 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       console.log(this.formData.value)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
     let body = this.formData.value;
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.soDeXuat = body.soDeXuat + this.maDx;
+    body.canCuPhapLy = this.dataTableCanCuXdg;
+    body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
+    body.ketQuaThamDinhGia = this.dataTableKqGia;
+    body.diaDiemDeHang = this.dsDiaDiemDeHang;
+    console.log(body);
+
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);
@@ -351,7 +362,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-    console.log(this.formData)
   }
 
   xoaKeHoach() { }
@@ -390,6 +400,13 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
       diaDiemNhap: ddDeHang.substring(0, ddDeHang.length - 2),
       soLuong: soLuong
     })
+  }
+
+  themDataTable(tableName: String) {
+    if (tableName == 'ccXdg') {
+      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+      this.rowItemCcXdg = new CanCuXacDinhPag();
+    }
   }
 }
 

@@ -136,7 +136,7 @@
                 <div nz-row [nzGutter]="16" class="mb-10">
                     <div nz-col [nzSpan]="5">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                 <nz-select formControlName="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true"
                                     (ngModelChange)="onChangeCloaiVthh($event)">
@@ -184,7 +184,7 @@
                     </div>
                     <div nz-col [nzSpan]="5">
                         <nz-form-item>
-                            <nz-form-label>
+                            <nz-form-label nzRequired>
                                 Giá đề nghị không có VAT(đồng/kg)
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
@@ -210,8 +210,7 @@
                                 <nz-input-group nzAddOnAfter="%">
                                     <nz-input-group id="so-dx">
                                         <nz-input-number formControlName="vat" [nzSize]="'small'"
-                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                         </nz-input-number>
                                     </nz-input-group>
                                 </nz-input-group>
@@ -224,13 +223,13 @@
                     </div>
                     <div nz-col [nzSpan]="3" *ngIf="formData.value.loaiGia == 'LG01'">
                         <nz-form-item>
-                            <nz-form-label>
+                            <nz-form-label nzRequired>
                                 Giá đề nghị có VAT(đồng/kg)
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group nzAddOnAfter="">
                                     <nz-input-number formControlName="giaDeNghiVat" [nzSize]="'small'"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                                     </nz-input-number>
                                 </nz-input-group>
                                 <ng-template #error let-control>
@@ -260,7 +259,7 @@
                     </div>
                     <div nz-col [nzSpan]="24">
                         <nz-form-item>
-                            <nz-form-label>
+                            <nz-form-label nzRequired>
                                 Địa điểm để hàng
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
@@ -283,226 +282,177 @@
             </form>
         </nz-tab>
         <nz-tab [nzTitle]="'Căn cứ phương pháp xác định giá'">
-            <span class="sub-title mb-10">CĂN CỨ PHÁP LÝ</span>
-            <div class="list-file mb-10">
-                <file-list [data]=""></file-list>
-            </div>
-            <span class="sub-title mb-10">Phương pháp xác định giá </span>
-            <form nzLayout="vertical" nz-form [formGroup]="formData" class="mb-10">
-                <div nz-row [nzGutter]="16">
-                    <div nz-col [nzSpan]="4">
-                        <nz-form-item class="form-item">
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="maPphapXdg" [nzDisabled]="isView" nzAllowClear="true">
-                                    <nz-option *ngFor="let p of dsPhuongAnGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                                    </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="10" *ngIf="formData.value.maPphapXdg == 'XDG01'">
-                        <nz-form-item class="form-item">
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-radio-group formControlName="loaiHangXdg">
-                                    <label nz-radio *ngFor="let item of dsLoaiHangXdg"
-                                        [nzValue]="item.ma">{{item.giaTri}}</label>
-                                </nz-radio-group>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-                <div nz-row [nzGutter]="20" *ngIf="formData.value.maPphapXdg == 'XDG01'">
-                    <div nz-col [nzSpan]="4">
-                        <nz-form-item>
-                            <nz-form-label>
-                                Giá vốn nhập khẩu
-                            </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfter="">
-                                    <nz-input-number formControlName="giaVonNk" [nzSize]="'small'"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                                    </nz-input-number>
-                                </nz-input-group>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">
-                                    </ng-container>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="4">
-                        <nz-form-item>
-                            <nz-form-label>
-                                Chi phí chung (đồng/kg)
-                            </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfter="">
-                                    <nz-input-number formControlName="chiPhiChung" [nzSize]="'small'"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                                    </nz-input-number>
-                                </nz-input-group>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">
-                                    </ng-container>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">
-                        <nz-form-item>
-                            <nz-form-label>
-                                Chi phí phân bổ cho sản phẩm phụ (đồng/kg)
-                            </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfter="">
-                                    <nz-input-number formControlName="chiPhiPbo" [nzSize]="'small'"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                                    </nz-input-number>
-                                </nz-input-group>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">
-                                    </ng-container>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="4">
-                        <nz-form-item>
-                            <nz-form-label>
-                                Tổng chi phí (đồng/kg)
-                            </nz-form-label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfter="">
-                                    <nz-input-number formControlName="tongChiPhi" [nzSize]="'small'"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                                    </nz-input-number>
-                                </nz-input-group>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">
-                                    </ng-container>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-            </form>
-        </nz-tab>
-        <nz-tab [nzTitle]="'Thông tin khảo sát giá'">
-            <nz-card class="mt16 flex-card p-lr16 card-table">
-                <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-                <nz-table #dataTable nzBordered [nzData]="" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <nz-card class="mt16 p-lr16 card-table pd-10">
+                <span class="sub-title mb-10">CĂN CỨ PHÁP LÝ</span>
+                <nz-table #dataTable nzBordered [nzData]="dataTableCanCuXdg" [nzFrontPagination]="false"
+                    [nzShowPagination]="false">
                     <thead>
                         <tr>
                             <th style="width: 2%;">STT</th>
-                            <th>Tên đơn vị báo giá</th>
-                            <th>Chủng loại hàng hóa</th>
-                            <th>Đơn giá chưa VAT (đồng/kg)</th>
-                            <th>Đơn giá có VAT (đồng/kg)</th>
-                            <th>Thời hạn báo giá</th>
+                            <th>Mô tả</th>
                             <th>File đính kèm</th>
-                            <th>Ghi chú</th>
-                            <th style="width: 10%;">Hành động</th>
+                            <th style="width: 5%;">Hành động</th>
                         </tr>
                         <tr>
                             <th class="text-center"> </th>
                             <th>
-                                <input type="text" nz-input />
-                            </th>
-                            <th>
-                                <nz-select formControlName="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true"
-                                    (ngModelChange)="onChangeCloaiVthh($event)">
-                                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                                    </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
-                                </nz-select>
-                            </th>
-                            <th>
-                                <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser"
-                                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                                </nz-input-number>
-                            </th>
-                            <th>
-                                <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser"
-                                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                                </nz-input-number>
-                            </th>
-                            <th>
-                                <input type="text" nz-input />
+                                <input type="text" [(ngModel)]="rowItemCcXdg.moTa" nz-input />
                             </th>
                             <th>
                                 <nz-form-control>
                                     <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-                                        <input placeholder="Chọn file" [(ngModel)]="fileAdd.fileName" nz-input
-                                            disabled />
+                                        <input placeholder="Chọn file" [(ngModel)]="rowItemCcXdg.fileDinhKem.fileName"
+                                            nz-input disabled />
                                     </nz-input-group>
                                     <ng-template #suffixIcon>
                                         <i class="icon htvbdh_tcdt_tep"></i>
-                                        <input class="input-file" (change)="getNameFile($event)" type="file" />
+                                        <input class="input-file" (change)="getNameFile($event,'ccXdg')" type="file" />
                                     </ng-template>
                                 </nz-form-control>
                             </th>
-                            <th>
-                                <input type="text" nz-input />
-                            </th>
                             <th class="text-left">
                                 <a>
-                                    <i class="fa fa-eye"></i>
+                                    <i class="icon htvbdh_dau-cong" (click)="themDataTable('ccXdg')"></i>
                                 </a>
                                 <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
-                                    <i class="fa fa-trash-o do"></i>
+                                    <i class="icon  htvbdh_nhap-lai1 "></i>
                                 </a>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-
-                    </tbody>
-                </nz-table>
-                <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-                <nz-table #dataTable nzBordered [nzData]="" [nzFrontPagination]="false" [nzShowPagination]="false">
-                    <thead>
-                        <tr>
-                            <th style="width: 2%;">STT</th>
-                            <th>Tên đơn vị thẩm định</th>
-                            <th>Đơn giá chưa VAT (đồng/kg)</th>
-                            <th>Đơn giá có VAT (đồng/kg)</th>
-                            <th>File đính kèm</th>
-                            <th style="width: 10%;">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center"> </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-left">
-                                <a>
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
+                        <tr *ngFor="let data of dataTableCanCuXdg; let idx = index">
+                            <td class="text-center">{{ idx + 1 }}</td>
+                            <td>{{ data.moTa }}</td>
+                            <td>{{ data.fileDinhKem.fileName }}</td>
+                            <td style="text-align: left; white-space: nowrap;">
+                                <!-- <a (click)="themKeHoach(data, idx,true)">
+                            <i class="fa fa-eye"></i>
+                          </a>
+                          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
+                            <i class="fa fa-pencil"></i>
+                          </a>
+                          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
+                            <i class="fa fa-trash-o do"></i>
+                          </a> -->
                             </td>
                         </tr>
                     </tbody>
                 </nz-table>
+                <span class="sub-title mb-10">Phương pháp xác định giá </span>
+                <form nzLayout="vertical" nz-form [formGroup]="formData" class="mb-10">
+                    <div nz-row [nzGutter]="16">
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item class="form-item">
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-select formControlName="maPphapXdg" [nzDisabled]="isView" nzAllowClear="true">
+                                        <nz-option *ngFor="let p of dsPhuongAnGia, let i = index" [nzValue]="p.ma"
+                                            [nzLabel]="p.giaTri">
+                                        </nz-option>
+                                        <ng-template #error let-control>
+                                            <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="10" *ngIf="formData.value.maPphapXdg == 'XDG01'">
+                            <nz-form-item class="form-item">
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-radio-group formControlName="loaiHangXdg">
+                                        <label nz-radio *ngFor="let item of dsLoaiHangXdg"
+                                            [nzValue]="item.ma">{{item.giaTri}}</label>
+                                    </nz-radio-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row [nzGutter]="20" *ngIf="formData.value.maPphapXdg == 'XDG01'">
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label>
+                                    Giá vốn nhập khẩu
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfter="">
+                                        <nz-input-number formControlName="giaVonNk" [nzSize]="'small'"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                        </nz-input-number>
+                                    </nz-input-group>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label>
+                                    Chi phí chung (đồng/kg)
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfter="">
+                                        <nz-input-number formControlName="chiPhiChung" [nzSize]="'small'"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                        </nz-input-number>
+                                    </nz-input-group>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">
+                            <nz-form-item>
+                                <nz-form-label>
+                                    Chi phí phân bổ cho sản phẩm phụ (đồng/kg)
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfter="">
+                                        <nz-input-number formControlName="chiPhiPbo" [nzSize]="'small'"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                        </nz-input-number>
+                                    </nz-input-group>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label>
+                                    Tổng chi phí (đồng/kg)
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfter="">
+                                        <nz-input-number formControlName="tongChiPhi" [nzSize]="'small'"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                        </nz-input-number>
+                                    </nz-input-group>
+                                    <ng-template #error let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Thông tin khảo sát giá'">
+            <nz-card class="mt16 p-lr16 card-table pd-10">
+                <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
+                <app-thong-tin-ksg [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh"
+                    [(dataTable)]="dataTableKsGia">
+                </app-thong-tin-ksg>
+                <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
+                <app-thong-tin-ksg [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
             </nz-card>
         </nz-tab>
         <nz-tab [nzTitle]="'Phân tích, dự báo biến động giá'" class="ds-goi-thau__container">
@@ -512,7 +462,7 @@
                         <nz-form-item class="form-item">
                             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Nội dung</nz-form-label>
                             <nz-form-control>
-                                <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+                                <textarea formControlName="noiDung" rows="3" class="search__input" nz-input></textarea>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
