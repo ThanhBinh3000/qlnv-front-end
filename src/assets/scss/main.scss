@@ -206,6 +206,26 @@ textarea.ant-input {
   line-height: 18px;
 }
 
+td,
+th {
+  .ant-input-group {
+    input.input-file {
+      left: 0;
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      top: -2px;
+    }
+
+    i.icon.htvbdh_tcdt_tep {
+      height: auto !important;
+      padding: 2px 0 0 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+    }
+  }
+}
 
 .ant-card-body {
   padding: 0 10px 10px 10px;
@@ -2843,6 +2863,7 @@ h3 {
   }
 }
 
+.ant-table .ant-table-thead>tr>th,
 .ant-table .ant-table-tbody>tr>td {
 
   .icontd,

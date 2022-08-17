@@ -21,6 +21,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   text: string = "";
   hopDongList: any[] = [];
   data: any[] = [];
+  dataVthh: string;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -32,7 +33,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
     this.spinner.show();
     try {
       this.hopDongList = this.data;
-      // await this.showListHd();
+      await this.showListHd();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -41,10 +42,31 @@ export class DialogCanCuHopDongComponent implements OnInit {
     }
   }
 
-  // async showListHd() {
-  //   let res = await this.quanLyHopDongNhapXuatService.danhSachHopDong();
-  //   this.dataTable = res.data;
-  // }
+  async showListHd() {
+    let body = {
+      "loaiVthh": this.dataVthh,
+      "pageable": {
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 0,
+        "paged": true,
+        "sort": {
+          "empty": true,
+          "sorted": true,
+          "unsorted": true
+        },
+        "unpaged": true
+      },
+      "paggingReq": {
+        "limit": 20,
+        "orderBy": "string",
+        "orderType": "string",
+        "page": 0
+      }
+    }
+    let res = await this.quanLyHopDongNhapXuatService.danhSachHopDong(body);
+    this.dataTable = res.data;
+  }
 
   handleOk(item: any) {
     if (item.checked) {
