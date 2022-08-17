@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { DialogTTPhuLucQDDCBanDauGiaComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -21,6 +22,7 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { TongHopDeXuatKHBanDauGiaService } from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
@@ -40,6 +42,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   @Input() dataTongHop: any;
   @Output()
   showListEvent = new EventEmitter<any>();
+
 
   // isVisibleChangeTab$ = new Subject();
   // visibleTab: boolean = false;
@@ -89,6 +92,8 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
 
   isVatTu: boolean = false;
 
+  maTongHopList: any = [];
+  thongTinPhuLucs: any = [];
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -104,6 +109,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     private dauThauService: DanhSachDauThauService,
     private uploadFileService: UploadFileService,
     public globals: Globals,
+    private tongHopDeXuatKHBanDauGiaService: TongHopDeXuatKHBanDauGiaService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -157,31 +163,31 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       tgianNhang: [null, [Validators.required]],
       maDvi: [null],
     });
-    this.formData.controls['idThHdr'].valueChanges.subscribe((value) => {
-      if (value) {
-        this.selectMaTongHop(value);
-      }
-    });
-    this.formData.controls['idTrHdr'].valueChanges.subscribe((value) => {
-      if (value) {
-        this.onChangeIdTrHdr(value);
-      }
-    });
-    this.formData.controls['tenVthh'].valueChanges.subscribe((value) => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
-    this.formData.controls['tenCloaiVthh'].valueChanges.subscribe((value) => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
-    this.formData.controls['namKhoach'].valueChanges.subscribe((value) => {
-      if (value) {
-        this.danhSachTongHopGetAll();
-      }
-    });
+    // this.formData.controls['idThHdr'].valueChanges.subscribe((value) => {
+    //   if (value) {
+    //     this.selectMaTongHop(value);
+    //   }
+    // });
+    // this.formData.controls['idTrHdr'].valueChanges.subscribe((value) => {
+    //   if (value) {
+    //     this.onChangeIdTrHdr(value);
+    //   }
+    // });
+    // this.formData.controls['tenVthh'].valueChanges.subscribe((value) => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
+    // this.formData.controls['tenCloaiVthh'].valueChanges.subscribe((value) => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
+    // this.formData.controls['namKhoach'].valueChanges.subscribe((value) => {
+    //   if (value) {
+    //     this.danhSachTongHopGetAll();
+    //   }
+    // });
   }
 
   deleteSelect() { }
@@ -200,7 +206,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         });
       }
       if (this.idInput > 0) {
-        this.loadChiTiet(this.idInput);
+        // this.loadChiTiet(this.idInput);
       } else {
         this.firstInitUpdate = false;
       }
@@ -211,6 +217,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
         this.bindingDataTongHop(this.dataTongHop),
+        this.loadMaTongHop()
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -393,18 +400,17 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     });
   }
 
-  async openDialogDeXuat(index) {
-    let data = this.danhsachDx[index];
+  async openDialogDeXuat(data) {
     this.modal.create({
-      nzTitle: '',
-      nzContent: DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
+      nzTitle: 'CHỈNH SỬA THÔNG TIN PHỤ LỤC QUYẾT ĐỊNH PHÊ DUYỆT KH BÁN ĐẤU GIÁ',
+      nzContent: DialogTTPhuLucQDDCBanDauGiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '90%',
       nzFooter: null,
       nzComponentParams: {
         data: data,
-        isEdit: true,
+        // isEdit: true,
       },
     });
   }
@@ -825,5 +831,63 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         // this.calendarDinhMuc();
       }
     });
+  }
+  async loadMaTongHop() {
+    this.spinner.show();
+    let body = {
+      ngayTongHopTuNgay: null,
+      ngayTongHopDenNgay: null,
+      maVatTuCha: null,
+      namKeHoach: null,
+      noiDungTongHop: null,
+      pageSize: 1000,
+      pageNumber: 1,
+    };
+    let res = await this.tongHopDeXuatKHBanDauGiaService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data.content);
+      this.maTongHopList = res.data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
+  async getMaTongHop(id: number) {
+    if (!id) {
+      return;
+    }
+    this.spinner.show();
+    await this.tongHopDeXuatKHBanDauGiaService
+      .chiTiet(id)
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.tongHopDeXuatTuCuc(res.data.maVatTuCha, res.data.namKeHoach);
+        }
+      })
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+    this.spinner.hide();
+  }
+
+
+  async tongHopDeXuatTuCuc(loaiVthh: string, namKeHoach: number) {
+    this.spinner.show();
+    let body = {
+      loaiVatTuHangHoa: loaiVthh,
+      namKeHoach: namKeHoach,
+      pageNumber: 1,
+      pageSize: 1000,
+    };
+    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.thongTinPhuLucs = res.data.content;
+    } else {
+      this.listOfData = [];
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 }

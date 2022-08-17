@@ -6,13 +6,13 @@ import { Injectable } from '@angular/core';
 export class TreeTableService<T> {
   constructor() { }
 
-  collapse(list: T[], data: T, $event: boolean): void {
+  collapse(list: T[], data: T, $event: boolean, key: string): void {
     if (!$event) {
       if (data['child']) {
         data['child'].forEach((item) => {
-          const target = list.find((a) => a['id'] === item.id)!;
+          const target = list.find((a) => a[key] === item[key])!;
           target['expand'] = false;
-          this.collapse(list, target, false);
+          this.collapse(list, target, false, key);
         });
       } else {
         return;
@@ -20,7 +20,7 @@ export class TreeTableService<T> {
     }
   }
 
-  convertTreeToList(root: T): T[] {
+  convertTreeToList(root: T, key: string): T[] {
     const stack: T[] = [];
     const array: T[] = [];
     const hashMap = new Map<string, boolean>();
@@ -28,7 +28,7 @@ export class TreeTableService<T> {
 
     while (stack.length !== 0) {
       const node = stack.pop()!;
-      this.visitNode(node, hashMap, array);
+      this.visitNode(node, hashMap, array, key);
       if (node['child']?.length) {
         for (let i = node['child'].length - 1; i >= 0; i--) {
           stack.push({
@@ -44,9 +44,9 @@ export class TreeTableService<T> {
     return array;
   }
 
-  visitNode(node: T, hashMap: Map<string, boolean>, list: T[]): void {
-    if (!hashMap.get(node['id'])) {
-      hashMap.set(node['id'], true);
+  visitNode(node: T, hashMap: Map<string, boolean>, list: T[], key: string): void {
+    if (!hashMap.get(node[key])) {
+      hashMap.set(node[key], true);
       list.push(node);
     }
   }
