@@ -145,6 +145,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     return false;
   };
   statusBtnGuiDVCT: boolean;
+  idPaBTC: string;
   // them file vao danh sach
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
@@ -194,22 +195,24 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       }
     );
     if (this.id) {
-      await this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.maGiao = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
-      if (this.id && this.namDtoan) {
+      // await this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
+      //   (res) => {
+      //     if (res.statusCode == 0) {
+      //       this.maGiao = res.data;
+      //     } else {
+      //       this.notification.error(MESSAGE.ERROR, res?.msg);
+      //     }
+      //   },
+      //   (err) => {
+      //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      //   },
+      // );
+      // check dieu kien tong hop hoac call api chi tiet phuong an
+      if (this.id && this.checkSumUp === true) {
         await this.tongHop()
         this.trangThaiBanGhi = "1";
-      } else if (this.id) {
+      }
+      if (this.id) {
         await this.getDetailReport();
       }
     }
@@ -223,9 +226,13 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         this.maDviTien = obj.maDviTien;
         this.maPa = obj.maPa;
         this.maPaCha = obj.maPaCha;
+        this.idPaBTC = obj.idPaBTC;
         this.trangThaiBanGhi = obj?.trangThai;
         this.namPa = obj?.namPa;
         this.updateEditCache();
+      })
+      this.lstCtietBcao.forEach(item => {
+        item.tongCong = divMoney(item.tongCong, this.maDviTien)
       })
       this.namPa = this.newDate.getFullYear();
     }
@@ -611,10 +618,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     if (file) {
       request1.soQd = await this.uploadFile(file);
     }
-    // if (!request.soQd) {
-    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-    //   return;
-    // }
     this.spinner.show();
     if (!this.id) {
       this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
@@ -632,7 +635,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    } if (this.id && this.namDtoan) {
+    } else {
       this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
