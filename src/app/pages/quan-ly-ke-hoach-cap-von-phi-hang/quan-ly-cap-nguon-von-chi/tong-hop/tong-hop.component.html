@@ -29,7 +29,7 @@
 						<label class="search__label">Mã</label>
 						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDeNghi" />
 					</div>
-                    <div nz-col nzSpan="6">
+					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="disable"
 							[(ngModel)]="searchFilter.trangThai">
@@ -49,8 +49,8 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Quyết định chỉ tiêu</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu" 
-						[class]="searchFilter.loaiDn == '5' && !searchFilter.qdChiTieu && !statusBtnNew? 'input-error-validate' : ''"/>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu"
+							[class]="searchFilter.loaiDn == '5' && !searchFilter.qdChiTieu && !statusBtnNew? 'input-error-validate' : ''" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Nguồn báo cáo</label>
@@ -64,8 +64,7 @@
 				</div>
 			</nz-card>
 			<div><br /></div>
-			<nz-card nzTitle="TỔNG HỢP DANH SÁCH ĐỀ NGHỊ CẤP VỐN" [nzExtra]="tableCard1"
-				class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="TỔNG HỢP DANH SÁCH ĐỀ NGHỊ CẤP VỐN" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
@@ -82,7 +81,7 @@
 							<th>Ngày trình duyệt</th>
 							<th>Ngày lãnh đạo duyệt</th>
 							<th>Trạng thái</th>
-                            <th></th>
+							<th></th>
 							<th [hidden]="status">
 								<ng-container *ngIf="checkAll(); else xoa">
 									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
@@ -114,12 +113,13 @@
 								</div>
 							</td>
 							<td>{{item.ngayTao}}</td>
-                            <td>{{item.ngayTrinh}}</td>
-                            <td>{{item.ngayPheDuyet}}</td>
+							<td>{{item.ngayTrinh}}</td>
+							<td>{{item.ngayPheDuyet}}</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-									<br/>
+								<ng-container
+									*ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+									<br />
 									Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
@@ -148,7 +148,7 @@
 							<td [hidden]="status">
 								<ng-container *ngIf="checkDeleteReport(item)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>
@@ -169,13 +169,13 @@
 									{{ range[0] }}-{{ range[1] }} of {{totalElements}} items
 								</ng-template>
 							</nz-pagination>
-							<!-- end phân trang  --> 
+							<!-- end phân trang  -->
 						</div>
 					</div>
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="status">
+				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="statusTaoMoi">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tạo mới</span>
 				</button>
