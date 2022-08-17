@@ -12,8 +12,8 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 @Component({
   selector: 'app-danh-muc-dung-chung',
@@ -77,7 +77,7 @@ export class DanhMucDungChungComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private dmDungCungService: DanhMucDungChungService,
+    private dmDungChungService: DanhMucDungChungService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
@@ -107,7 +107,7 @@ export class DanhMucDungChungComponent implements OnInit {
 
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
-        this.updateCheckedSet(item.id, checked);
+      this.updateCheckedSet(item.id, checked);
     })
     this.refreshCheckedStatus();
   }
@@ -141,7 +141,7 @@ export class DanhMucDungChungComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-            item.checked = true;
+          item.checked = true;
         });
       }
     } else {
@@ -172,7 +172,7 @@ export class DanhMucDungChungComponent implements OnInit {
       limit: this.pageSize,
       page: this.page - 1,
     }
-    let res = await this.dmDungCungService.search(body);
+    let res = await this.dmDungChungService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -239,7 +239,7 @@ export class DanhMucDungChungComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.dmDungCungService.xoa(item.id).then((res) => {
+          this.dmDungChungService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -300,7 +300,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
+            let res = await this.dmDungChungService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -321,21 +321,24 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-    console.log(this.dataTableAll)
+    this.search();
+
+    //   if (value && value != '') {
+    //     this.dataTable = [];
+    //     let temp = [];
+    //     if (this.dataTableAll && this.dataTableAll.length > 0) {
+    //       this.dataTableAll.forEach((item) => {
+    //         if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+    //           temp.push(item)
+    //         }
+    //       });
+    //     }
+    //     this.dataTable = [...this.dataTable, ...temp];
+    //   } else {
+    //     this.dataTable = cloneDeep(this.dataTableAll);
+    //   }
+    //   console.log(this.dataTableAll)
+    // }
   }
 
   print() {
@@ -347,7 +350,7 @@ export class DanhMucDungChungComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        this.dmDungCungService
+        this.dmDungChungService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-danh-muc-dung-chung.xlsx'),
@@ -373,7 +376,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
-        nzClassName:'themdmdungchung',
+        nzClassName: 'themdmdungchung',
         nzComponentParams: {
           dataEdit: data,
           isView: isView,
@@ -419,7 +422,7 @@ export class DanhMucDungChungComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.setOfCheckedId.forEach((item) => {
-          dataDelete.push(item);
+        dataDelete.push(item);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -434,7 +437,7 @@ export class DanhMucDungChungComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
+            let res = await this.dmDungChungService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

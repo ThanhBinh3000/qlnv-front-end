@@ -258,7 +258,7 @@
 											</td>
 											<td>
 												<nz-input-number class="search__input" [nzFormatter]="formatter"
-													[nzPrecision]="4"
+													[nzPrecision]="4" [nzMin]="0"
 													[class]="editCache[data.id].data.vonCapThoc >= 0?'' : 'input-error-validate' "
 													nzSize="small" [(ngModel)]="editCache[data.id].data.vonCapThoc"
 													(ngModelChange)="changeModel(data.id)">

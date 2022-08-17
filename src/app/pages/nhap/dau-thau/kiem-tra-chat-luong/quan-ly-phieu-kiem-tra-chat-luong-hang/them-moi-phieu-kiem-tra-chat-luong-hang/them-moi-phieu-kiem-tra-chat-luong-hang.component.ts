@@ -560,8 +560,4 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
   }
-
-  print() {
-
-  }
 }

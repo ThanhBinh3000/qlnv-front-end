@@ -171,17 +171,16 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="24">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" class="text-left"> Tài liệu đính kèm
-                        </nz-form-label>
-                        <nz-form-control>
-                            <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm"
-                                icon="icon htvbdh_tcdt_tep" type="file" typeFile="tai-lieu-dinh-kem">
-                            </multiple-tag>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    File đính kèm
+                  </nz-form-label>
+                  <div class="list-file">
+                    <file-list></file-list>
+                  </div>
+                </nz-form-item>
+              </div>
             </div>
         </form>
     </nz-card>
@@ -444,3 +443,13 @@
         </div>
     </form>
 </div>
+
+
+
+
+
+
+
+
+
+

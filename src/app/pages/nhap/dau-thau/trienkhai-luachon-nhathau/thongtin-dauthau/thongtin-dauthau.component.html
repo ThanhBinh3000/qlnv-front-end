@@ -54,7 +54,8 @@
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
             <th width="30px">STT</th>
@@ -199,7 +200,7 @@
     </nz-card>
   </div>
 </ng-container>
-<ng-template *ngIf="isDetail">
+<ng-container *ngIf="isDetail">
   <app-themmoi-thongtin-dauthau [idInput]="selectedId" (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau>
-</ng-template>
+</ng-container>
