@@ -213,6 +213,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     inDanhSach() { }
 
     async luu() {
+        this.spinner.show();
         const body = {
             "id": this.detail ? this.dataEditList.id : null,
             "maDonVi": this.formData.controls.maDvi.value,
@@ -237,14 +238,20 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             body.ds.push(objDS)
         })
         var res: any
-        if (this.detail) {
-            res = await this.quanlyChatLuongService.hangTieuHuySuads(body);
-        } else {
-            res = await this.quanlyChatLuongService.hangTieuHuyThemds(body);
-        }
-
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.onClose.emit();
+        try {
+            if (this.detail) {
+                res = await this.quanlyChatLuongService.hangTieuHuySuads(body);
+            } else {
+                res = await this.quanlyChatLuongService.hangTieuHuyThemds(body);
+            }
+            this.spinner.hide();
+            if (res.msg == MESSAGE.SUCCESS) {
+                this.onClose.emit();
+            }
+        } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
 
@@ -259,7 +266,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
             diemKho: this.dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
-            loKho: this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi,
+            loKho: this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho) ? this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi : null,
             loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).ten,
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
             nhaKho: this.dsNhaKho.find((item) => item.id == this.rowItem.idNhaKho).tenDvi,
