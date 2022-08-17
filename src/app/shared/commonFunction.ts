@@ -114,8 +114,11 @@ export function convertTienTobangChu(tien: number): string {
   return VNnum2words(tien);
 }
 
-export function thongTinTrangThaiNhap(trangThai: string): string {
-  if (trangThai === STATUS_DA_DUYET) {
+export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string): string {
+  if (statusDaDuyet && trangThai === statusDaDuyet) {
+    return 'da-ban-hanh';
+  }
+  else if (trangThai === STATUS_DA_DUYET) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';
