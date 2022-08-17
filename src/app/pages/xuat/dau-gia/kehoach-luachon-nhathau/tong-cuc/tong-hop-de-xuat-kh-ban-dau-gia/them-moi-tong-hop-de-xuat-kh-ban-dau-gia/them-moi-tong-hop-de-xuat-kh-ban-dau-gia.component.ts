@@ -152,8 +152,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData = this.fb.group({
       id: [],
       namKeHoach: [null],
-      loaiHangHoa: [, [Validators.required]],
-      ngayKyDeXuat: [[null, null], [Validators.required]],
+      maVatTuCha: [, [Validators.required]],
+      ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[null, null], [Validators.required]],
@@ -197,7 +197,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     let body = {
       ngayKyTuNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[1]).format('YYYY-MM-DD') : null,
-      loaiVatTuHangHoa: this.formData.get('loaiHangHoa').value,
+      loaiVatTuHangHoa: this.formData.get('maVatTuCha').value,
       namKeHoach: this.formData.get('namKeHoach').value,
       pageNumber: this.page,
       pageSize: 1000,
@@ -218,8 +218,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData.patchValue({
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
-      loaiHangHoa: dataDetail ? dataDetail.loaiHangHoa : null,
-      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [null, null],
+      maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
+      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [null, null],
@@ -407,7 +407,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.dsGtReq = this.listOfData;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.tongHopDeXuatKHBanDauGiaService.sua(body);
@@ -417,7 +416,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         await this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
-        this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -487,6 +485,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detail = res.data;
           this.initForm(res.data);
+          this.tongHopDeXuatTuCuc();
         }
       })
       .catch((e) => {
@@ -563,7 +562,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC;
+    let trangThai = this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC;
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -614,18 +613,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '',
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_TONG_CUC,
           };
-          switch (this.formData.get('trangThai').value) {
-            case '01': {
-              body.trangThai = '03';
-              break;
-            }
-            case '09': {
-              body.trangThai = '12';
-              break;
-            }
-          }
           const res = await this.tongHopDeXuatKHBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);

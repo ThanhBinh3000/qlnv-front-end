@@ -161,6 +161,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
           item.checked = false;
           item.soQdPheDuyet = item.qdPheDuyetKhbdg.soQuyetDinh;
           item.statusConvert = item.trangThai.name;
+          item.status = item.trangThai.ma;
           item.tenVthh = item.vatTuCha.name;
         });
       }
@@ -282,7 +283,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          maDvis: this.userInfo.MA_DVI,
+          maDvis: [this.userInfo.MA_DVI],
           ngayTongHopTuNgay: this.searchFilter.ngayTongHop
             ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
             : null,
@@ -291,7 +292,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
             : null,
           maVatTuCha: this.searchFilter.loaiVthh,
           namKeHoach: this.searchFilter.namKh,
-          noiDungTongHop: this.searchFilter.noiDungTongHop,
+          noiDungTongHop: (!this.searchFilter.noiDungTongHop || this.searchFilter.noiDungTongHop === "") ? null : this.searchFilter.noiDungTongHop,
         };
         this.tongHopDeXuatKHBanDauGiaService
           .exportList(body)

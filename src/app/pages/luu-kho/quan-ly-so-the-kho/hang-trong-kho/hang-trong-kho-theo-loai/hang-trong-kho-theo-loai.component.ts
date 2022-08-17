@@ -232,20 +232,19 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   }
 
   async search() {
-    // let body = {
-    //   "denNgay": "19-JUL-2022",
-    //   "tuNgay": "12-JUL-2022",
-    //   "maLokho": "0101020101010102",
-    //   "maVatTu": "010101",
-    //   "paggingReq": {
-    //     "limit": 20,
-    //     "orderBy": "",
-    //     "orderType": "",
-    //     "page": 0
-    //   }
-    // }
-    // let res = await this.quanLyHangTrongKhoService.searchDetail(body);
-    let res = await this.quanLyHangTrongKhoService.search();
+    let body = {
+      "denNgay": "2022-06-19",
+      "tuNgay": "2022-06-12",
+      "maLokho": "0101020101010102",
+      "maVatTu": "010101",
+      "paggingReq": {
+        "limit": 20,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0
+      }
+    }
+    let res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
     if (res.msg === MESSAGE.SUCCESS) {
       this.dataTable = [...res.data.list];
       console.log(this.dataTable);

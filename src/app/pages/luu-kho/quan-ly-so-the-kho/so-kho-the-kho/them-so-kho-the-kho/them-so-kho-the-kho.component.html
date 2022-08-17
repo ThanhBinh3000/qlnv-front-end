@@ -32,7 +32,8 @@
         <span>Từ chối</span>
       </button>
 
-      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()" *ngIf="!isDetail() && userService.isChiCuc() ">
+      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()" *ngIf="!isDetail() && userService.isChiCuc()"
+        [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -202,19 +203,20 @@
                 </nz-form-item>
               </div>
 
+              <div nz-col [nzSpan]="24" *ngIf="!isTaoTheKho">
+                <div class="tong-hop-button group-button-search">
+                  <button type="button" class="btn btn-sub xanh" (click)="taoTheKho()" [disabled]="!formData.valid">
+                    <i class="icon htvbdh_luu-them-moi"></i>
+                    <span>Tạo thẻ kho</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
           </form>
         </nz-card>
       </div>
     </div>
-  </div>
-
-  <div class="tao-the-kho" *ngIf=" idInput === null && !isTaoTheKho">
-    <button type="button" class="btn btn-sub xanh" (click)="taoTheKho()" [disabled]="!formData.valid">
-      <i class="icon htvbdh_luu-them-moi"></i>
-      <span>Tạo thẻ kho</span>
-    </button>
   </div>
 
   <nz-card class="mt-16 flex-card data-table card-border-content" *ngIf="isTaoTheKho || !isTaoTheKho && idInput ">

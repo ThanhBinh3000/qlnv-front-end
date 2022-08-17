@@ -122,6 +122,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async loadChiTiet() {
+    this.isTaoTheKho = true;
     let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
     this.dsChiTiet = res.data;
 
@@ -304,8 +305,14 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          const dataVatTu = hangHoa.data.forEach((item) => {
-            if (item => item.cap === "1") {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                item
+              ];
+            }
+            else {
               this.listLoaiHangHoa = [
                 ...this.listLoaiHangHoa,
                 ...item.child
@@ -347,24 +354,33 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   async loadTonDauKy() {
     try {
+      this.formData.patchValue({ tonDauKy: 0 })
       const body = {
-        "maChiCuc": this.detail.maDvi,
+        "loaiHH": this.formData.value.idLoaiHangHoa,
+        "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
+        "tuNgay": dayjs(this.formData.value.tuNgay).format("YYYY-MM-DD"),
+        "denNgay": dayjs(this.formData.value.denNgay).format("YYYY-MM-DD"),
+        "maDiemKho": this.formData.value.idDiemKho,
+        "maNhaKho": this.formData.value.idNhaKho,
+        "maNganKho": this.formData.value.idNganKho,
         "maLokho": this.formData.value.idNganLo,
-        "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MM-YYYY")
-        // "pageSize": 20,
-        // "pageNumber": 1
+        "paggingReq": {
+          "limit": 1000,
+          "page": 0
+        }
       }
-
       const res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
-
-      res.data.list.forEach((item) => {
-        item.child.forEach((child) => {
-          if (child.maDvi === this.userInfo.MA_DVI) {
-            this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
-          }
-        })
-      })
-
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          res.data.list.forEach((item) => {
+            item.child.forEach((child) => {
+              if (child.maDvi === this.userInfo.MA_DVI) {
+                this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
+              }
+            })
+          });
+        }
+      }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -451,7 +467,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: id,
             lyDo: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.LANH_DAO_DUYET,
           };
 
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
@@ -487,7 +503,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: '02',
+            trangThai: this.globals.prop.BAN_HANH,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 
@@ -525,7 +541,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.globals.prop.TU_CHOI,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 
@@ -564,8 +580,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     try {
       const bodyNhapXuatNho =
       {
-        "denNgay": dayjs(this.formData.value.denNgay).format("DD-MMM-YYYY"),
-        "tuNgay": dayjs(this.formData.value.tuNgay).format("DD-MMM-YYYY"),
+        "denNgay": dayjs(this.formData.value.denNgay).format("YYYY-MM-DD"),
+        "tuNgay": dayjs(this.formData.value.tuNgay).format("YYYY-MM-DD"),
         "maLokho": this.formData.value.idNganLo,
         "maVatTu": this.formData.value.idChungLoaiHangHoa,
         "paggingReq": {
@@ -576,7 +592,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
         }
       }
 
-      const resNhapXuatKho = await this.quanLyHangTrongKhoService.search();
+      const resNhapXuatKho = await this.quanLyHangTrongKhoService.searchDetail(bodyNhapXuatNho);
 
       let listNhapXuat = [];
       this.totalRecord = Number((resNhapXuatKho.data.totalElements / this.sizePage).toFixed()) * this.sizePage;
