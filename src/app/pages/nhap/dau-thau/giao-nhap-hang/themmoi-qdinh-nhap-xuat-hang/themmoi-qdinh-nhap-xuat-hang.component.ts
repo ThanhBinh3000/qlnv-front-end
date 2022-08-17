@@ -130,7 +130,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        data: cloneDeep(this.hopDongList)
+        dataVthh: this.loaiVthh
       },
     });
     modalQD.afterClose.subscribe((hopDongs) => {

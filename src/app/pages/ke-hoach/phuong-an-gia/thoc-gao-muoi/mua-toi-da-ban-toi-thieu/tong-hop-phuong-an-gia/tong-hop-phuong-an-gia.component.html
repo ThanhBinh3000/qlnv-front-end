@@ -14,12 +14,13 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-
                     <div nz-col [nzSpan]="4">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="loai-hh">Loại hành hóa</nz-form-label>
+                            <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
                             <nz-form-control>
                                 <nz-select formControlName="loaiHangHoa" id="loai-hh">
+                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
                                     <nz-option>
                                     </nz-option>
                                 </nz-select>
@@ -79,10 +80,10 @@
             </div>
         </div>
 
-        <nz-card class="mt-2px flex-card data-table card-border-content">
-            <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+            <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -198,19 +199,23 @@
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </tr>
+                </thead>
+                <tbody>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </th>
                         <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-                        <td>{{ data.soDeXuat }}</td>
-                        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.quyetDinhChiTieu }}</td>
-                        <td>{{ data.namKeHoach }}</td>
+                        <td>{{ data.soTT }}</td>
+                        <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.noiDung }}</td>
+                        <td>{{ data.namTongHop }}</td>
                         <td>{{ data.loaiHangHoa }}</td>
+                        <td>{{ data.chungLoaiHh }}</td>
                         <td>{{ data.loaiGia }}</td>
+                        <td>{{ data.trangThaiTH }}</td>
+                        <td>{{ data.maToTrinh }}</td>
                         <td>{{ data.trangThai }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, false)">

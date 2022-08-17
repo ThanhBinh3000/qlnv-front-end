@@ -16,7 +16,7 @@
                     </div>
                     <div nz-col [nzSpan]="3">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="loai-hh">Loại hành hóa</nz-form-label>
+                            <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
                             <nz-form-control>
                                 <nz-select formControlName="loaiHangHoa" id="loai-hh">
                                     <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
@@ -90,10 +90,10 @@
             </div>
         </div>
 
-        <nz-card class="mt-2px flex-card data-table card-border-content">
-            <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+            <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -122,7 +122,6 @@
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
-
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
@@ -132,7 +131,6 @@
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
-
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
@@ -189,10 +187,13 @@
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
+                        <th></th>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </tr>
+                </thead>
+                <tbody>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
@@ -224,7 +225,6 @@
             <div class="tab-content tab-menu" id="myTabContent">
                 <div class="tab-pane fade show active justify-content-between">
                     <div class="trai">
-
                     </div>
                     <div class="canphai">
                         <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
@@ -240,7 +240,6 @@
         </nz-card>
     </div>
 </ng-container>
-
 <ng-template #templateThemmoi>
     <app-them-qd-de-xuat-phuong-an-gia [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
     </app-them-qd-de-xuat-phuong-an-gia>
