@@ -92,6 +92,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   listCanCu: any[] = [];
   listFileDinhKem: any[] = [];
   listHopDong: any[] = [];
+  title: "";
 
   constructor(
     private spinner: NgxSpinnerService,

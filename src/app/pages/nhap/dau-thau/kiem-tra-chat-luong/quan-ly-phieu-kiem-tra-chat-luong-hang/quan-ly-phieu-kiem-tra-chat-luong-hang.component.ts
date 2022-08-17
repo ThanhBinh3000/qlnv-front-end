@@ -65,6 +65,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     tenNhaKho: '',
     tenTrangThai: '',
   };
+  titleStatus: "";
 
   constructor(
     private spinner: NgxSpinnerService,
