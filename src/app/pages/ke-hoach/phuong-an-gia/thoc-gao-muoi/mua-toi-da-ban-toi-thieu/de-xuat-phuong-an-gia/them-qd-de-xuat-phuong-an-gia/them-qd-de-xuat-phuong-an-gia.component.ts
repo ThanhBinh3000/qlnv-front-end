@@ -4,14 +4,16 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuKQLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
+import { DialogDdiemDeHangComponent } from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
+import { API_STATUS_CODE } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
@@ -27,6 +29,8 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   listVthh: any[] = [];
+  listCloaiVthh: any[] = [];
+  dsHangHoa: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
@@ -35,7 +39,9 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   userInfo: UserLogin;
   soDeXuat: string;
   dsLoaiGia: any[] = [];
-
+  dsDiaDiemDeHang: any[] = [];
+  dsPhuongAnGia: any[] = [];
+  dsLoaiHangXdg: any[] = [];
 
   maDx: string;
   dataTable: any[] = [];
@@ -49,38 +55,74 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     private giaDeXuatGiaService: GiaDeXuatGiaService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
-
+    private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private uploadFileService: UploadFileService,
   ) {
     this.formData = this.fb.group(
       {
         id: [],
-        namKeHoach: [dayjs().get('year'), [Validators.required]],
+        namKhoach: [dayjs().get('year'), [Validators.required]],
         soDeXuat: [, [Validators.required]],
-        loaiHangHoa: [null],
+        loaiVthh: [null],
         ngayKy: [null, [Validators.required]],
         loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
-        ghiChu: []
+        cloaiVthh: [null],
+        moTa: [null],
+        tchuanCluong: [null],
+        giaDeNghi: [null],
+        vat: [null],
+        giaDeNghiVat: [null],
+        soLuong: [],
+        ghiChu: [],
+        diaDiemNhap: [],
+        //Form căn cứ phương pháp xác định giá
+        maPphapXdg: [],
+        loaiHangXdg: [],
+        giaVonNk: [],
+        chiPhiChung: [],
+        chiPhiPbo: [],
+        tongChiPhi: [],
       }
     );
+    this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
+      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value / 100 * this.formData.controls.vat.value);
+      this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
+    });
+    this.formData.controls['vat'].valueChanges.subscribe(value => {
+      const gtriHdSauVat = this.formData.controls.giaDeNghi.value + (this.formData.controls.giaDeNghi.value / 100 * this.formData.controls.vat.value);
+      this.formData.controls['giaDeNghiVat'].setValue(gtriHdSauVat);
+    })
+    this.formData.controls['giaVonNk'].valueChanges.subscribe(value => {
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
+      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+    })
+    this.formData.controls['chiPhiChung'].valueChanges.subscribe(value => {
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
+      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+    })
+    this.formData.controls['chiPhiPbo'].valueChanges.subscribe(value => {
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
+      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+    })
+
   }
 
   async ngOnInit() {
     this.spinner.show();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
+      this.loadDsPhuongAnGia(),
+      this.loadDsHangHoaPag(),
+      this.loadDsVthh(),
       this.maDx = '/CDTVP-KH&QLHDT',
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get('namKeHoach').value),
     ])
     this.spinner.hide();
   }
-
-
 
   async getDataDetail(id) {
     if (id > 0) {
@@ -102,30 +144,97 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     }
   }
 
-
-  async onChangeNamQd(namKeHoach) {
-    let body = {
-      namKeHoach: namKeHoach,
-      trangThai: "11"
-    }
-    let res = await this.giaDeXuatGiaService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-      if (data) {
-        let detail = await this.giaDeXuatGiaService.getDetail(data[0].id);
-        if (detail.msg == MESSAGE.SUCCESS) {
-          this.dsBoNganh = detail.data.listBoNganh;
-        }
-      }
-      console.log(this.dsBoNganh)
-    }
-  }
-
   async loadDsLoaiGia() {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsLoaiGia = res.data;
+    }
+  }
+
+  async loadDsPhuongAnGia() {
+    this.dsPhuongAnGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll('PP_XDG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsPhuongAnGia = res.data;
+    }
+  }
+
+  async loadDsHangHoaPag() {
+    this.dsLoaiHangXdg = [];
+    let res = await this.danhMucService.danhMucChungGetAll('PP_XDG_LOAI_HANG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiHangXdg = res.data;
+    }
+  }
+
+  async loadDsVthh() {
+    this.listVthh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVthh = res.data.filter(item => item.ma != '02');
+    }
+  }
+
+  async onChangeLoaiVthh(event) {
+    let body = {
+      "str": event
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.listCloaiVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listCloaiVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async onChangeCloaiVthh(event) {
+    let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
+    if (res.statusCode == API_STATUS_CODE.SUCCESS) {
+      this.formData.patchValue({
+        tchuanCluong: res.data ? res.data.tenQchuan : null
+      })
+    }
+  }
+
+  fileAdd: FileDinhKem = new FileDinhKem();
+
+  getNameFile(event?: any, item?: FileDinhKem) {
+    // if (
+    //   this.trangThai === this.globals.prop.BAN_HANH ||
+    //   this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
+    //   this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    // ) {
+    //   return;
+    // }
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          if (item) {
+            item.fileName = resUpload.filename;
+            item.fileSize = resUpload.size;
+            item.fileUrl = resUpload.url;
+          }
+          else {
+            if (!this.fileAdd) {
+              this.fileAdd = new FileDinhKem();
+            }
+            this.fileAdd.fileName = resUpload.filename;
+            this.fileAdd.fileSize = resUpload.size;
+            this.fileAdd.fileUrl = resUpload.url;
+            this.fileAdd.idVirtual = new Date().getTime();
+          }
+        });
     }
   }
 
@@ -248,6 +357,40 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   xoaKeHoach() { }
 
   themKeHoach() { }
+
+  themMoiDiaDiem() {
+    const modalGT = this.modal.create({
+      nzTitle: 'Địa điểm để hàng',
+      nzContent: DialogDdiemDeHangComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.dsDiaDiemDeHang,
+      },
+    });
+    modalGT.afterClose.subscribe((res) => {
+      if (!res) {
+        return;
+      }
+      this.dsDiaDiemDeHang = res;
+      this.convertDsDiemDeHang(res);
+    });
+  }
+
+  convertDsDiemDeHang(dataTableDd) {
+    let ddDeHang = '';
+    let soLuong = 0;
+    dataTableDd.forEach(item => {
+      ddDeHang += item.tenDvi + "(" + item.soLuong + "), ",
+        soLuong += item.soLuong
+    })
+    this.formData.patchValue({
+      diaDiemNhap: ddDeHang.substring(0, ddDeHang.length - 2),
+      soLuong: soLuong
+    })
+  }
 }
 
 
