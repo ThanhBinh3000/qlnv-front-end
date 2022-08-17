@@ -285,7 +285,8 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzResultModule
   ],
   exports: [
     FormsModule,
@@ -343,7 +344,8 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
     NzAlertModule,
     MultipleTagComponent,
     NzPopconfirmModule,
-    FileListComponent
+    FileListComponent,
+    NzResultModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

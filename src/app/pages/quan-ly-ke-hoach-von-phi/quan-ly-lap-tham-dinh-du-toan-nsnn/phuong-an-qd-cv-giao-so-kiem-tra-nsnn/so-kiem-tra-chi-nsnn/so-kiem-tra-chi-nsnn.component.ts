@@ -61,7 +61,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     fileDetail: NzUploadFile;
     //trang thai
     statusBtnEdit: boolean;
-    statusChinhXac: boolean;
     statusBtnNew: boolean;
     statusBtnEx: boolean;
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
@@ -139,9 +138,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         if (!ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
             this.statusBtnEdit = true;
             this.statusBtnNew = true;
-            this.statusChinhXac = true;
-        } else {
-            this.statusChinhXac = false;
+            this.statusBtnEx = true;
         }
 
     }
