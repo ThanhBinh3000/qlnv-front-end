@@ -228,7 +228,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
                 lyDo: data.lyDo,
                 maChungLoaiHang: lstChungLoai.find((item) => item.ten == data.chungLoaiHang).ma,
                 maDiemKho: this.dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
-                maLoKho: lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi,
+                maLoKho: (lstLoKho && lstLoKho.length > 0 ? lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi : null),
                 maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten)).ma,
                 maNganKho: this.dsNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
                 maNhaKho: this.dsNhaKho.find((item) => item.tenDvi == data.nhaKho).maDvi,
@@ -241,13 +241,24 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         try {
             if (this.detail) {
                 res = await this.quanlyChatLuongService.hangTieuHuySuads(body);
+                if (res.msg == MESSAGE.SUCCESS) {
+                    this.onClose.emit();
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                }
+                else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
             } else {
                 res = await this.quanlyChatLuongService.hangTieuHuyThemds(body);
+                if (res.msg == MESSAGE.SUCCESS) {
+                    this.onClose.emit();
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                }
+                else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
             }
             this.spinner.hide();
-            if (res.msg == MESSAGE.SUCCESS) {
-                this.onClose.emit();
-            }
         } catch (e) {
             console.log('error: ', e);
             this.spinner.hide();
@@ -266,7 +277,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
             diemKho: this.dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
-            loKho: this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho) ? this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi : null,
+            loKho: (this.dsLoKho && this.dsLoKho.length > 0 && this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho)) ? this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi : null,
             loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).ten,
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
             nhaKho: this.dsNhaKho.find((item) => item.id == this.rowItem.idNhaKho).tenDvi,
