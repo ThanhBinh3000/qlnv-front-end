@@ -123,7 +123,7 @@ export class DialogChiTietGiaoDichHangTrongKhoComponent implements OnInit {
         }
 
         this.quanLyHangTrongKhoService.exportList(body).subscribe((blob) => {
-          saveAs(blob, 'danh-sach-so-kho.xlsx')
+          saveAs(blob, 'danh-sach-chi-tiet-hang-trong-kho.xlsx')
         });
         this.spinner.hide();
       } catch (e) {

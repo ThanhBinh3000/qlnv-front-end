@@ -28,7 +28,7 @@ import * as dayjs from 'dayjs';
 })
 export class HangTrongKhoTheoLoaiComponent implements OnInit {
 
-  @Input('idLoaiVthh') idLoaiVthh: string;
+  @Input('maLoaiVthh') maLoaiVthh: string;
 
   userInfo: UserLogin;
   detail: any = {};
@@ -99,12 +99,18 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma != '01') {
+            if (item.cap === "1" && item.ma !== '01' && item.ma === this.maLoaiVthh) {
               this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
             }
             else {
-              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child
-              ];
+              if (item.child && item.child.length > 0) {
+                item.child.forEach((itemHH) => {
+                  if (itemHH.ma === this.maLoaiVthh) {
+                    this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH
+                    ];
+                  }
+                });
+              }
             }
           })
         }
