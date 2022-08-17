@@ -74,12 +74,10 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     ngOnInit() {
         this.initData();
         this.initForm();
-        console.log(this.dataEditList)
     }
 
     initForm(): void {
         if (this.detail) {
-            debugger
             const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
                 idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
@@ -293,7 +291,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     changePageSize(event) { }
 
     editItem(id: number): void {
-        var idx = id - 1;
+        var idx = id > 0 ? id - 1 : id;
         this.dataEdit[idx].edit = true;
     }
 
