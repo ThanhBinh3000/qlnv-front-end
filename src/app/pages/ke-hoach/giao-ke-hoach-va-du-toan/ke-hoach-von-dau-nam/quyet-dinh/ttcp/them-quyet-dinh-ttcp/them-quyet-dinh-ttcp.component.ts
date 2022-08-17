@@ -64,7 +64,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       this.getDataDetail(this.idInput),
     ]);
     this.spinner.hide();
-    console.log(this.idInput);
   }
 
   async getDataDetail(id) {

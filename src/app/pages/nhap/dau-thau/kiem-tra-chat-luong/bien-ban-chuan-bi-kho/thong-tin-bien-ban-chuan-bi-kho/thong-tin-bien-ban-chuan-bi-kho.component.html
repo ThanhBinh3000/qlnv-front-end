@@ -14,12 +14,12 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+    <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light"
       *ngIf="bienBanChuanBiKho.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanChuanBiKho.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
-    </a>
+    </button>
     <button type="button" class="btn btn-sub xanh" *ngIf="!isDisableField() && !isView" (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
