@@ -114,7 +114,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
 
     const body = {
       "denNgay": this.formData.value.ngayTao[1] === undefined ? "" : dayjs(this.formData.value.ngayTao[1]).format("YYYY-MM-DD"),
-      "limit": 20,
+      "limit": this.pageSize,
       "maDonVi": "01070203",
       // "maDonVi": this.formData.value.maDonVi,
       "maDs": "",
@@ -123,7 +123,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
       "maLoaiHang": this.formData.value.maLoaiHang,
       "orderBy": "",
       "orderType": "",
-      "page": 0,
+      "page": this.page - 1,
       "tuNgay": this.formData.value.ngayTao[0] === undefined ? "" : dayjs(this.formData.value.ngayTao[0]).format("YYYY-MM-DD")
     }
 
@@ -234,8 +234,8 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: dataDelete });
-            let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: null });
+            let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: dataDelete });
+            // let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: null });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -271,8 +271,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          // this.quanLyHangBiHongCanBaoHanhService.xoa(id).then((res) => {
-          this.quanLyHangBiHongCanBaoHanhService.xoa(0).then((res) => {
+          this.quanLyHangBiHongCanBaoHanhService.xoa(id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -302,7 +301,8 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         let body = {
           "denNgay": "",
           "limit": 20,
-          "maDonVi": this.formData.value.idDonVi,
+          // "maDonVi": this.formData.value.idDonVi,
+          "maDonVi": "01070203",
           "maDs": "",
           "maVTHH": "",
           "orderBy": "",
@@ -337,6 +337,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   // Quay lại page đầu tiên
   onClose() {
     this.isAddNew = false;
+    this.search();
   }
 
   // Load loại hàng hóa
@@ -392,9 +393,17 @@ export class HangHongCanBaoHanhComponent implements OnInit {
 
   onChangeFilterDate(event) { }
 
-  changePageIndex(event) { }
+  changePageIndex(event: any) {
+    this.page = event;
+    this.search();
+  }
 
-  changePageSize(event) { }
+  changePageSize(event: any) {
+    console.log(event);
+    this.pageSize = event;
+    this.page = 1;
+    this.search();
+  }
 
   viewDetail(id: number, isUpdate: boolean) {
     this.idInput = id;

@@ -12,6 +12,8 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as dayjs from 'dayjs';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import { QuanLyDanhSachHangHongHocService } from 'src/app/services/quanLyDanhSachHangHongHoc.service';
+import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBiHongCanBaoHanh.service';
 
 @Component({
   selector: 'app-them-hang-hong-can-bao-hanh',
@@ -30,6 +32,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   dsLoaiHangHoa: any[];
   formData: FormGroup;
   dataTable: IHangHongCanBaoHanh[] = [];
+  listTable: IHangHongCanBaoHanh[] = [];
   rowItem: IHangHongCanBaoHanh = {
     maLoaiHangHoa: null,
     tenLoaiHangHoa: null,
@@ -53,10 +56,16 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     soLuongCanBaoHanh: null,
     tenDonVi: null,
     lyDo: null,
+    isUpdate: false
   };
+
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 2;
+  // pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
+  indexItemStart: number;
+  indexItemEnd: number;
+
   dataEdit: {
     [key: string]: { edit: boolean; data: IHangHongCanBaoHanh };
   } = {};
@@ -68,6 +77,8 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   dsNhaKhoDataSource = [];
   dsNganLo = [];
   dsNganLoDataSource = [];
+
+  listMaDanhSach: any[] = [];
 
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
@@ -89,30 +100,39 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     public userService: UserService,
     private danhMucService: DanhMucService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
+    private quanLyHangBiHongCanBaoHanhService: QuanLyHangBiHongCanBaoHanhService,
   ) { }
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
 
-    console.log(this.userInfo)
     this.initForm();
     this.initData();
   }
 
   initForm(): void {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      tenDonVi: [null],
-      idDanhSach: [null],
+      maDonVi: [this.detail.maDvi],
+      maDanhSach: [null],
       ngayTao: [new Date()],
     });
   }
 
   initData() {
-    this.loadDsTong();
+    this.loadMaDanhSach();
     this.loadDiemKho();
     this.loaiVTHHGetAll();
+    if (this.idInput) {
+      this.loadItemChiTiet();
+    }
+  }
+
+  async loadItemChiTiet() {
+    console.log(this.idInput)
+    console.log(this.isCheck)
   }
 
   loadDsTong() {
@@ -122,18 +142,32 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
-  onChangeDonVi(id) {
-    const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
-    if (chiCuc) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
-      };
-      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
-    } else {
-      this.dsDiemKho = [];
+  async loadMaDanhSach() {
+    try {
+      const body = {
+        "denNgay": "",
+        "maDonVi": "01070203",
+        "maVTHH": "",
+        "paggingReq": {
+          "limit": 20,
+          "orderBy": "",
+          "orderType": "",
+          "page": 0
+        },
+        "tuNgay": ""
+      }
+      const res = await this.quanLyDanhSachHangHongHocService.tracuu(body);
+      this.listMaDanhSach = res.data.content;
+      console.log(this.listMaDanhSach);
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
+  changeMaDanhSach() {
+    console.log(this.formData.value.maDanhSach)
+  }
 
   // Load loại hàng hóa
   async loaiVTHHGetAll() {
@@ -293,6 +327,45 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   themMoiItem() {
     this.dataTable.push(this.rowItem);
     this.clearData();
+    if (this.dataTable.length > 0) {
+      this.totalRecord = this.dataTable.length;
+    }
+
+    if (this.dataTable.length > this.page * this.pageSize) {
+      if ((this.dataTable.length - this.page * this.pageSize) > this.pageSize) {
+        this.page = Number((this.dataTable.length / this.pageSize).toFixed());
+        console.log('pasize > 10')
+      } else {
+        this.page = this.page + 1;
+        console.log('pasize')
+      }
+    }
+
+    this.loadListTable();
+
+  }
+
+  // Load dữ liệu ở page đang được chọn
+  loadListTable() {
+    this.indexItemStart = this.pageSize * (this.page - 1);
+    this.indexItemEnd = this.pageSize * (this.page - 1) + (this.pageSize - 1);
+    console.log(this.indexItemStart)
+    console.log(this.indexItemEnd)
+
+    let listTable = [];
+
+    this.dataTable.forEach((item, index) => {
+      if (index >= this.indexItemStart && index <= this.indexItemEnd) {
+        listTable = [
+          ...listTable,
+          item
+        ];
+      }
+    })
+
+    this.listTable = listTable;
+    console.log(this.listTable);
+    console.log(this.dataTable);
   }
 
   clearData() {
@@ -319,6 +392,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
       soLuongCanBaoHanh: null,
       tenDonVi: null,
       lyDo: null,
+      isUpdate: false
     };
 
     this.listChungLoaiHangHoa = [];
@@ -327,59 +401,74 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     this.listNganLo = [];
   }
 
-  luu() {
+  async luu() {
+    const ds = this.dataTable.map((item) => {
+      return {
+        "lyDo": item.lyDo,
+        "maChungLoaiHang": item.maChungLoaiHangHoa,
+        "maDiemKho": item.maDiemKho,
+        "maLoKho": item.maNganLo,
+        "maLoaiHang": item.maLoaiHangHoa,
+        "maNganKho": item.maNganKho,
+        "maNhaKho": item.maNhaKho,
+        "slTon": item.soLuongTon,
+        "slYeuCau": item.soLuongCanBaoHanh
+      }
+    })
+
+    const body = {
+      "ds": ds,
+      "maDonVi": this.formData.value.maDonVi,
+      // "maDonVi": "01070203",
+      "maDanhSach": this.formData.value.maDanhSach,
+      "ngayTao": this.formData.value.ngayTao,
+    }
+
+    try {
+      const res = await this.quanLyHangBiHongCanBaoHanhService.them(body);
+
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.huy();
+      }
+      console.log(res);
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+
+  }
+
+  xoaItem(idx: number) {
+    this.dataTable = this.dataTable.filter((item, index) => index !== idx);
+
+    console.log(this.dataTable);
+  }
+
+  editItem(idx: number): void {
+    this.dataTable[idx].isUpdate = !this.dataTable[idx].isUpdate;
+  }
+
+  changeLyDoSoLuong(event: any, idx: number, type: string) {
     console.log(this.dataTable);
   }
 
   exportData() { }
-
   inDanhSach() { }
 
-
-  xoaItem(id: number) { }
-
-
-
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
-
-  editItem(id: number): void {
-    this.dataEdit[id].edit = true;
+  changePageIndex(event: any) {
+    this.page = event;
+    this.loadListTable();
   }
 
-  // huyEdit(id: number): void {
-  //   const index = this.dataTable.findIndex((item) => item.id === id);
-  //   this.dataEdit[id] = {
-  //     data: { ...this.dataTable[index] },
-  //     edit: false,
-  //   };
-  // }
+  changePageSize(event: any) {
+    this.page = 1;
+    this.pageSize = event;
+    this.loadListTable();
 
-  // luuEdit(id: number): void {
-  //   const index = this.dataTable.findIndex((item) => item.id === id);
-  //   Object.assign(this.dataTable[index], this.dataEdit[id].data);
-  //   this.dataEdit[id].edit = false;
-  // }
 
-  // updateEditCache(): void {
-  //   this.dataTable.forEach((item) => {
-  //     this.dataEdit[item.id] = {
-  //       edit: false,
-  //       data: { ...item },
-  //     };
-  //   });
-  // }
-}
+  }
 
-interface IDanhSachHangHongCanBaoHanh {
-  id: number;
-  maDanhSach: string;
-  idDonVi: number;
-  tenDonVi: string;
-  ngayTao: Date;
-  trangThai: string;
-  danhSachHang: IHangHongCanBaoHanh[];
 }
 
 interface IHangHongCanBaoHanh {
@@ -405,4 +494,5 @@ interface IHangHongCanBaoHanh {
   soLuongCanBaoHanh: number;
   tenDonVi: string;
   lyDo: string;
+  isUpdate: boolean;
 }

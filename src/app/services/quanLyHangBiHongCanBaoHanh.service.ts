@@ -19,6 +19,11 @@ export class QuanLyHangBiHongCanBaoHanhService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  them(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-can-bao-hanh`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   xoa(id: number): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-can-bao-hanh/${id}`;
     return this.httpClient.delete<any>(url).toPromise();
@@ -30,7 +35,7 @@ export class QuanLyHangBiHongCanBaoHanhService extends BaseService {
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/export/list`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/hang-can-bao-hanh/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 

@@ -3,17 +3,8 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
         <div class="search__body" nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="ma-don-vi">
-                <input type="text" nz-input formControlName="idDonVi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
           <nz-form-item nz-col nzSpan="9" class="form-item">
-            <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
+            <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="maDonVi" id="ma-don-vi">
                 <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
@@ -136,16 +127,16 @@
             <th>
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
             </th>
-            <td class="text-center">{{ idx + 1 }}</td>
+            <td class="text-center">{{(page -1)*pageSize+ idx + 1 }}</td>
             <td>{{ data.maDanhSach}}</td>
             <td>{{ data.tenDonvi }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trangThaiXuLy }}</td>
             <td style="text-align: center;">
-              <a (click)="viewDetail(data.id, false)">
+              <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)">
+              <a (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a (click)="xoaItem(data.id)">

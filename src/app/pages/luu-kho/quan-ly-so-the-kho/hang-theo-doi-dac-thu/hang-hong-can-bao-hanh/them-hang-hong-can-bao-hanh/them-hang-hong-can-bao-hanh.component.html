@@ -19,35 +19,28 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
       <div class="search__body" nz-row [nzGutter]="24">
-        <nz-form-item nz-col nzSpan="3" class="form-item">
-          <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
-          <nz-form-control>
-            <nz-input-group id="ma-don-vi" [nzSuffix]="suffixIconOpenFolder">
-              <input type="text" nz-input formControlName="idDonVi" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
 
         <nz-form-item nz-col nzSpan="9" class="form-item">
-          <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
+          <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
           <nz-form-control>
             <nz-input-group id="ten-don-vi">
-              <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
-                </nz-option>
-              </nz-select>
+              <nz-input-group>
+                <input type="text" [value]="this.detail.tenDvi" nz-input readonly />
+              </nz-input-group>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ma-danh-sach">Mã danh sách</nz-form-label>
-          <nz-form-control>
-            <nz-input-group id="ma-danh-sach" [nzSuffix]="suffixIconOpenFolder">
-              <input type="text" nz-input formControlName="idDanhSach" />
-            </nz-input-group>
-          </nz-form-control>
+          <nz-input-group>
+            <nz-select formControlName="maDanhSach" (ngModelChange)="changeMaDanhSach()">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.maDanhSach}}" nzLabel="{{item.maDanhSach}}"
+                *ngFor="let item of listMaDanhSach">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
         </nz-form-item>
 
         <nz-form-item nz-col nzSpan="4" class="form-item">
@@ -182,8 +175,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of dataTable; let idx = index">
-          <td>{{ idx + 1 }}</td>
+        <!-- <tr *ngFor="let data of dataTable; let idx = index"> -->
+        <tr *ngFor="let data of listTable; let idx = index">
+          <td>{{ (page -1)*pageSize+ idx + 1 }}</td>
           <td>{{ data.tenLoaiHangHoa }}</td>
           <td>{{ data.tenChungLoaiHangHoa }}</td>
           <td>{{ data.tenDiemKho }}</td>
@@ -191,37 +185,30 @@
           <td>{{ data.tenNganKho }}</td>
           <td>{{ data.tenNganLo }}</td>
           <td>{{ data.soLuongTon }}</td>
-          <td>{{ data.soLuongCanBaoHanh }}</td>
+
+          <td *ngIf="!data.isUpdate">{{ data.soLuongCanBaoHanh }}</td>
+          <td *ngIf="data.isUpdate">
+            <nz-input-group>
+              <nz-input-number [(ngModel)]="data.soLuongCanBaoHanh " [nzMin]="1" [nzMax]="data.soLuongTon"
+                [nzSize]="'small'">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
           <td>{{ data.tenDonVi }}</td>
-          <td>{{ data.lyDo }}</td>
+          <td *ngIf="!data.isUpdate">{{ data.lyDo }}</td>
+          <td *ngIf="data.isUpdate">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="data.lyDo " (ngModelChange)="changeLyDoSoLuong($event,idx ,'lydo')" />
+            </nz-input-group>
+          </td>
           <td style="text-align: center;">
-            <!-- <a (click)="editItem(data.id)"> -->
-            <a>
+            <a (click)="editItem(idx)">
               <i class="table-icon fa fa-pencil"></i>
             </a>
-            <!-- <a (click)="xoaItem(data.id)"> -->
-            <a>
+            <a (click)="xoaItem(idx)">
               <i class="table-icon fa fa-trash-o do"></i>
             </a>
           </td>
-          <!-- <ng-template #editTemplate>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.loaiHangHoa" />
-            </td>
-            <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenHangHoa" /></td>
-            <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenDiemKho" /></td>
-            <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenNhaKho" /></td>
-            <td><input type="text" nz-input [(ngModel)]="dataEdit[data.id].data.tenNganLo" /></td>
-            <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.soLuongTon" /></td>
-            <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.soLuongThanhLy" /></td>
-            <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.donVi" /></td>
-            <td><input type="number" nz-input [(ngModel)]="dataEdit[data.id].data.lyDo" /></td>
-
-            <td>
-              <a (click)="luuEdit(data.id)" class="save">Lưu</a>
-              <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
-            </td>
-          </ng-template> -->
         </tr>
       </tbody>
     </nz-table>
