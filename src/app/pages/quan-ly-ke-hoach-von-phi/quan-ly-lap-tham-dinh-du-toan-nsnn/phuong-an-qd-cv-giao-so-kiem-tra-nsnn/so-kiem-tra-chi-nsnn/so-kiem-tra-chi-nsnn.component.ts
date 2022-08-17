@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, KHOAN_MUC, LA_MA, mulMoney, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import { DataService } from '../../data.service';
 import * as uuid from 'uuid';
 export class ItemData {
@@ -61,6 +61,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     fileDetail: NzUploadFile;
     //trang thai
     statusBtnEdit: boolean;
+    statusChinhXac: boolean;
     statusBtnNew: boolean;
     statusBtnEx: boolean;
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
@@ -115,7 +116,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             }
         );
 
-        
+
         this.getStatusButtom();
         this.spinner.hide();
     }
@@ -134,6 +135,13 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             this.statusBtnEx = true;
             this.statusBtnEdit = true;
             this.statusBtnNew = true;
+        }
+        if (!ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+            this.statusBtnEdit = true;
+            this.statusBtnNew = true;
+            this.statusChinhXac = true;
+        } else {
+            this.statusChinhXac = false;
         }
 
     }
@@ -353,8 +361,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         };
         this.dataSource.changeData(request);
         this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-		])
+            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
+        ])
     }
 
     async sua() {
@@ -363,31 +371,31 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             maBcao: this.maBaoCao,
         }
         let check = false;
-		const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-		const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-        if (capDvi == Utils.TONG_CUC){
+        const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
+        const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+        if (capDvi == Utils.TONG_CUC) {
             trangThais.push(Utils.TT_BC_7);
         }
-		const requestReport = {
-			loaiTimKiem: "0",
-			maBcao: this.maBaoCao,
-			maDvi: this.userInfo?.dvql,
-			paggingReq: {
-				limit: 10,
-				page: 1,
-			},
-			trangThais: trangThais,
-		};
-		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-                    if (data.data.content?.length > 0){
+        const requestReport = {
+            loaiTimKiem: "0",
+            maBcao: this.maBaoCao,
+            maDvi: this.userInfo?.dvql,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThais: trangThais,
+        };
+        await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
                         check = true;
                     }
-				} 
+                }
             }
-		);
-        if (!check){
+        );
+        if (!check) {
             this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
             return;
         }
@@ -408,7 +416,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         );
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 }
