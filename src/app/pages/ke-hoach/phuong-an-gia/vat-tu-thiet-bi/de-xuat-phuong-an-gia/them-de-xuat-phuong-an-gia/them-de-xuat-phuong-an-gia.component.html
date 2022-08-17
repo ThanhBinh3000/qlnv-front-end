@@ -2,6 +2,9 @@
     <div class="header">
         <div class="header-text">
             <div class="title-chi-tieu">
+              <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+                        {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+                    </span>
                 <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
             </div>
         </div>
