@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
@@ -87,27 +81,40 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
-      this.initForm();
-      this.loaiVTHHGetAll()
-      await this.initData();
-      await this.search()
+      Promise.all([
+        this.initForm(),
+        this.loaiVTHHGetAll(),
+        this.initData(),
+        this.search()
+      ])
+
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
   }
-
-  loaiVTHHGetAll() {
-    this.danhMucService.loadDanhMucHangHoa().subscribe(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.dsLoaiHangHoa = [...res.data]
-      }
-      else { this.notification.error(MESSAGE.ERROR, res.msg); }
-    })
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
+            }
+            else {
+              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child
+              ];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
-
-  onChangeLoaiHH(id: number) {
+  async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
       let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
       if (loaiHangHoa && loaiHangHoa.length > 0) {
@@ -159,15 +166,11 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     this.formData.get('idNhaKho').setValue(null);
     this.formData.get('idNganKho').setValue(null);
     this.formData.get('idLoKho').setValue(null);
-    console.log(id);
     if (cuc) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, cuc),
       };
-      console.log(result);
-
       this.dsChiCuc = result[DANH_MUC_LEVEL.CHI_CUC];
-      console.log(this.dsChiCuc);
     } else {
       this.dsChiCuc = [];
     }
@@ -183,7 +186,6 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
       };
-      console.log(result);
       this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
     } else {
       this.dsDiemKho = [];
@@ -210,9 +212,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     this.formData.get('idNganKho').setValue(null);
     this.formData.get('idLoKho').setValue(null);
     if (nhaKho) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
-      };
+      const result = { ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho), };
       this.dsNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
     } else {
       this.dsNganKho = [];
@@ -232,23 +232,10 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     }
   }
 
-  onChangeAutoComplete(e) {
-    const value = (e.target as HTMLInputElement).value;
-    if (value) {
-      this.dsChiCucDataSource = this.dsChiCuc
-        .filter((item) =>
-          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
-        )
-        .map((item) => item.tenDvi);
-    } else {
-      this.dsChiCucDataSource = this.dsChiCuc.map((item) => item.tenDvi);
-    }
-  }
-
   async search() {
     let body = {
       "loaiHH": this.formData.value.idLoaiHH,
-      "chungLoaiHH": this.formData.value.idLoaiHH,
+      "chungLoaiHH": this.formData.value.idChungLoaiHH,
       "tuNgay": '',
       "denNgay": '',
       "maCuc": this.formData.value.idCuc,
@@ -267,14 +254,13 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       body.denNgay = this.formData.value.ngay[1]
     }
     let res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
+
     if (res.msg === MESSAGE.SUCCESS) {
       this.dataTable = [...res.data.content];
-      // console.log(this.dataTable);
       this.dataTable.forEach((item) => {
         this.mapOfExpandedData[item.maDvi] = this.treeTableService.convertTreeToList(item, 'maDvi');
       });
       this.totalRecord = res.data.totalElements;
-
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -284,31 +270,52 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     this.formData.reset();
     this.search()
   }
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
-  changePageIndex(event) { }
-
-  changePageSize(event) { }
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 
   viewDetail(data: HangTrongKhoRowItem) {
-
+    this.mapOfExpandedData[data.maDvi] = this.treeTableService.convertTreeToList(data, 'maDvi');
     const modalQD = this.modal.create({
       nzTitle: 'Chi tiết giao dich',
       nzContent: DialogChiTietGiaoDichHangTrongKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1400px',
       nzFooter: null,
       nzComponentParams: {
-        dataView: data,
+        dataView: this.mapOfExpandedData[data.maDvi][this.mapOfExpandedData[data.maDvi].length - 1],
         isView: true,
       },
     });
-    // modalQD.afterClose.subscribe((data) => {
-    //   if (data) {
-    //     console.log(data);
-
-    //   }
-    // });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+      }
+    });
   }
 
   exportData() {
@@ -348,9 +355,6 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
     }
   }
-
-  dataExample: HangTrongKhoRowItem[] = [];
-
 }
 
 
@@ -360,6 +364,7 @@ interface IHangTrongKho {
   child?: IHangTrongKho[];
   tenDvi: string;
   maDvi: string;
+  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
@@ -382,6 +387,7 @@ class HangTrongKhoRowItem implements IHangTrongKho, ITreeTableItem {
   child?: IHangTrongKho[];
   tenDvi: string;
   maDvi: string;
+  loaiHH: string;
   chungLoaiHH: string;
   tonKhoDauKy: number;
   nhapTrongKy: number;
