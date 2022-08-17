@@ -15,7 +15,7 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="24"> Đơn vị tính </nz-form-label>
       <nz-form-control nz-col [nzSpan]="24">
-        <input nz-input [(ngModel)]="diaDiemNhapKho.soLuong" [readonly]="true" />
+        <input nz-input [(ngModel)]="diaDiemNhapKho.donViTinh" [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -32,107 +32,231 @@
   <div nz-col [nzSpan]="4">
     <nz-form-item>
       <nz-form-label [nzNoColon]="true">SL theo chỉ tiêu </nz-form-label>
-      <nz-input-number [nzMin]="1" [nzDisabled]="true" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+      <nz-input-number [(ngModel)]="diaDiemNhapKho.soLuongTheoChiTieu" [nzMin]="1" [nzDisabled]="true"
+        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
       </nz-input-number>
     </nz-form-item>
   </div>
   <div nz-col [nzSpan]="3">
     <nz-form-item>
       <nz-form-label [nzNoColon]="true">SL đã lên KH bán</nz-form-label>
-      <nz-input-number [nzMin]="1" [nzDisabled]="true" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+      <nz-input-number [(ngModel)]="diaDiemNhapKho.slDaLenKHBan" [nzMin]="1" [nzDisabled]="true"
+        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
       </nz-input-number>
     </nz-form-item>
   </div>
   <div nz-col [nzSpan]="3">
     <nz-form-item>
       <nz-form-label [nzNoColon]="true">Khoản tiền đặt trước (%)</nz-form-label>
-      <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+      <nz-input-number [(ngModel)]="diaDiemNhapKho.khoanTienDatTruoc" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+        [nzStep]="1" [nzSize]="'small'">
       </nz-input-number>
     </nz-form-item>
   </div>
 </div>
 <br />
 <!-- </form> -->
-<nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
-  [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">
+<nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzFrontPagination]="false" [nzShowPagination]="false"
+  [nzData]="dsChiTietDiemNhapKhoClone" [nzBordered]="true">
   <thead>
     <tr>
-      <th width="200px" class="text-center">STT</th>
-      <th width="200px" class="text-center">Điểm kho</th>
-      <th width="200px" class="text-center">Ngăn kho</th>
-      <th width="200px" class="text-center">Lô kho</th>
-      <th width="200px" class="text-center">Chủng loại hàng hóa</th>
-      <th width="200px" class="text-center">Mã đơn vị tài sản</th>
-      <th width="200px" class="text-center">Tồn kho</th>
-      <th width="200px" class="text-center">Số lượng</th>
-      <th width="200px" class="text-center">Đơn giá chưa VAT(đồng)</th>
-      <th width="200px" class="text-center">Giá khởi điểm (đồng)</th>
-      <th width="200px" class="text-center">Số tiền đặt trước (đồng)</th>
-      <th width="80px" class="text-center">Hành động</th>
+      <th>STT</th>
+      <th>Điểm kho</th>
+      <th>Nhà kho</th>
+      <th>Ngăn kho</th>
+      <th>Lô kho</th>
+      <th>Chủng loại hàng hóa</th>
+      <th>Đơn vị tính</th>
+      <th>Mã đơn vị tài sản</th>
+      <th>Tồn kho</th>
+      <th>Số lượng</th>
+      <th>Đơn giá chưa VAT(đồng)</th>
+      <th>Giá khởi điểm (đồng)</th>
+      <th>Số tiền đặt trước (đồng)</th>
+      <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td></td>
       <td>
-        <nz-select>
-          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maDiemKho"
+          (ngModelChange)="changeDiemKho(chiTietDiemNhapKhoCreate.maDiemKho)" class="w-150">
+          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
         </nz-select>
       </td>
       <td>
-        <nz-select>
-          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNhaKho"
+          (ngModelChange)="changeNhaKho(chiTietDiemNhapKhoCreate.maNhaKho)" class="w-150">
+          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
         </nz-select>
       </td>
       <td>
-        <nz-select>
-          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNganKho"
+          (ngModelChange)="changeNganKho(chiTietDiemNhapKhoCreate.maNganKho)" class="w-150">
+          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
         </nz-select>
       </td>
       <td>
-        <input class="search__input" nz-input />
+        <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNganLo"
+          (ngModelChange)="changeNganLo(chiTietDiemNhapKhoCreate.maNganLo)" class="w-150">
+          <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
+        </nz-select>
       </td>
       <td>
-        <input class="search__input" nz-input />
+        <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.chungLoaiHh"
+          (ngModelChange)="changeChungLoaiHang(chiTietDiemNhapKhoCreate.chungLoaiHh)" class="w-150">
+          <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+          </nz-option>
+        </nz-select>
       </td>
       <td>
-        1.000.000
+        {{chiTietDiemNhapKhoCreate.donViTinh}}
       </td>
       <td>
-        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        <input nz-input [(ngModel)]="chiTietDiemNhapKhoCreate.maDonViTaiSan" class="w-150" />
+      </td>
+      <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
+      <td>
+        <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
+          [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho" class="w-150">
         </nz-input-number>
       </td>
       <td>
-        <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+        <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.donGiaChuaVAT"
+          [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150">
         </nz-input-number>
       </td>
       <td>
-
+        {{calcGiaKhoiDiem()}}
       </td>
       <td>
-
+        {{calcSoTienDatTruoc()}}
       </td>
       <td class="text-center">
-        <a>
-          <i class="icon htvbdh_dau-cong xanhla"></i>
+        <a (click)="addDiaDiem()">
+          <i class="icon htvbdh_dau-cong"></i>
         </a>
-        <a>
+        <a (click)="newObjectDiaDiem()">
           <i class="fa fa-refresh"></i>
         </a>
       </td>
     </tr>
-    <tr *ngIf="listOfData.length > 0">
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <ng-container *ngIf="!dsChiTietDiemNhapKhoClone[i]?.isEdit; else editTemplate">
+        <td>{{i+1}}</td>
+        <td>{{data.tenDiemKho}}</td>
+        <td>{{data.tenNhaKho}} </td>
+        <td>{{data.tenNganKho}}</td>
+        <td>{{data.tenNganLo}}</td>
+        <td>{{data.tenChungLoaiHh}}</td>
+        <td>{{data.donViTinh}}</td>
+        <td>{{data.maDonViTaiSan}}</td>
+        <td>{{data.tonKho}}</td>
+        <td>{{data.soLuong}}</td>
+        <td>{{data.donGiaChuaVAT}}</td>
+        <td>{{data.giaKhoiDiem}}</td>
+        <td>{{data.soTienDatTruoc}}</td>
+        <td class="text-center">
+          <a (click)="startEdit(i)">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a (click)="deleteData(dsChiTietDiemNhapKhoClone[i].idVirtual)">
+            <i class="fa fa-trash-o do"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td></td>
+        <td>
+          <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maDiemKho"
+            (ngModelChange)="changeDiemKho(dsChiTietDiemNhapKhoClone[i].maDiemKho,i,true)" class="w-150">
+            <nz-option *ngFor="let item of listDiemKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+            </nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNhaKho"
+            (ngModelChange)="changeNhaKho(dsChiTietDiemNhapKhoClone[i].maNhaKho,i,true)" class="w-150">
+            <nz-option *ngFor="let item of listNhaKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+            </nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNganKho"
+            (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maNganKho,i,true)" class="w-150">
+            <nz-option *ngFor="let item of listNganKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+            </nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNganLo"
+            (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maNganLo,i,true)" class="w-150">
+            <nz-option *ngFor="let item of listNganLoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+            </nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].chungLoaiHh"
+            (ngModelChange)="changeChungLoaiHang(dsChiTietDiemNhapKhoClone[i].chungLoaiHh,i,true)" class="w-150">
+            <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+            </nz-option>
+          </nz-select>
+        </td>
+        <td>
+          {{dsChiTietDiemNhapKhoClone[i].donViTinh}}
+        </td>
+        <td>
+          <input nz-input [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maDonViTaiSan" class="w-150" />
+        </td>
+        <td>{{dsChiTietDiemNhapKhoClone[i].tonKho}}</td>
+        <td>
+          <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="dsChiTietDiemNhapKhoClone[i].soLuong"
+            [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150">
+          </nz-input-number>
+        </td>
+        <td>
+          <nz-input-number type="text" nz-input [nzSize]="'small'"
+            [(ngModel)]="dsChiTietDiemNhapKhoClone[i].donGiaChuaVAT" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+            class="w-150">
+          </nz-input-number>
+        </td>
+        <td>
+          {{ calcGiaKhoiDiemEdit(i) }}
+        </td>
+        <td>
+          {{ calcSoTienDatTruocEdit(i) }}
+        </td>
+        <td class="text-center">
+          <a (click)="saveEdit(i)">
+            <i class="icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="cancelEdit(i)">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </td>
+      </ng-template>
+    </tr>
+    <tr *ngIf="dsChiTietDiemNhapKhoClone.length > 0">
       <td></td>
       <td>Cộng</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
-      <td>6.000</td>
-      <td>6.000</td>
       <td></td>
-      <td>6.000</td>
-      <td>6.000.000</td>
+      <td></td>
+      <td></td>
+      <td>
+        {{calcSoLuong()}}
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
       <td></td>
     </tr>
   </tbody>

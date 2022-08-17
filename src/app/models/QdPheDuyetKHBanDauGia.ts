@@ -18,6 +18,7 @@ export class QuyetDinhPheDuyetKeHoachBanDauGia {
     tongHopDeXuatKhbdgId: number;
     trangThai: string;
     trichYeu: string;
+    donViTinh: string;
     constructor(fileDinhKems: Array<FileDinhKem> = []) {
         this.fileDinhKems = fileDinhKems;
     }

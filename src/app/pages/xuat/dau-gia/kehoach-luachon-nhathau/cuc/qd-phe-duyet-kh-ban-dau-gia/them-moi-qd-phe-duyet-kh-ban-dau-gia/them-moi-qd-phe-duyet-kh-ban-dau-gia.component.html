@@ -45,8 +45,7 @@
               <nz-form-label nz-col nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
-                <nz-select formControlName="namKhoach" nzAllowClear
-                  [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                <nz-select formControlName="namKeHoach" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
                 <ng-template #namKeHoachError let-control>
@@ -59,9 +58,8 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="/{{maQd}}">
-                    <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                      [nzSize]="'small'"
-                      [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                    <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                      [nzSize]="'small'">
                     </nz-input-number>
                   </nz-input-group>
                   <ng-template #error let-control>
@@ -74,8 +72,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker class="search__input" formControlName="ngayKy" nzFormat="dd/MM/yyyy"
-                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                  <nz-date-picker class="search__input" formControlName="ngayKy" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                   <ng-template #error let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -87,8 +84,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker class="search__input" formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                  <nz-date-picker class="search__input" formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                   <ng-template #error let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -102,9 +98,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp </nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idThHdr" (ngModelChange)="getMaTongHop($event)"
-                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
-                    nzAllowClear>
+                  <nz-select formControlName="tongHopDeXuatKhbdgId" (ngModelChange)="getMaTongHop($event)" nzAllowClear>
                     <nz-option *ngFor="let p of maTongHopList" [nzValue]="p.id" [nzLabel]="p.maTongHop">
                     </nz-option>
                   </nz-select>
@@ -117,26 +111,22 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                    <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
-                  </nz-input-group>
-                  <ng-template #loaiVthhError let-control>
-                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-select formControlName="maVatTuCha" (ngModelChange)="changeHangHoa($event)">
+                    <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                    <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
-                  </nz-input-group>
-                  <ng-template #loaiVthhError let-control>
-                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-select formControlName="maVatTu" (ngModelChange)="changeChungLoaiHangHoa($event)">
+                    <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -144,9 +134,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                    <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
-                  </nz-input-group>
+                  <input class="search__input" nz-input formControlName="loaiVthh" readonly="true" />
                   <ng-template #loaiVthhError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                   </ng-template>
@@ -157,8 +145,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn tổ chức bán đấu giá </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-range-picker class="search__input" formControlName="thoiHanToChuc" nzFormat="dd/MM/yyyy"
-                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                  <nz-range-picker class="search__input" formControlName="thoiHanTcBdg" nzFormat="dd/MM/yyyy">
                   </nz-range-picker>
                   <ng-template #error let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -174,8 +161,7 @@
                   Trích yếu
                 </nz-form-label>
                 <nz-form-control>
-                  <textarea nz-input [rows]="3" formControlName="trichYeu"
-                    [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
+                  <textarea nz-input [rows]="3" formControlName="trichYeu"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -192,8 +178,6 @@
               </nz-form-item>
             </div>
           </div>
-
-
           <br />
         </form>
       </div>
@@ -222,7 +206,7 @@
                 <td class="text-center">{{i + 1}} </td>
                 <td>{{ data.tenDonVi }}</td>
                 <td class="text-blue">{{ data.soKeHoach }}</td>
-                <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+                <td>{{ data.ngayKy }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ data.tongSoLuongDonViTaiSan }}</td>
                 <td>{{ data.tongGiaKhoiDiem | number: '1.0-1' }}</td>

@@ -86,6 +86,7 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
   userInfo: UserLogin;
   slLonHonChiTieu: boolean;
   listChiCuc: any[] = [];
+  donViTinh: string;
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -117,13 +118,14 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+
     if (this.data) {
       this.diaDiemNhapKho.tenDonVi = this.data.tenDonVi;
       this.diaDiemNhapKho.maDvi = this.data.maDv;
-      this.diaDiemNhapKho.donViTinh = this.data.maDv;
-
+      this.diaDiemNhapKho.donViTinh = this.donViTinh;
     }
     this.loadChiCuc();
+    this.loadDanhMucHang();
     // this.initForm();
   }
 
@@ -152,9 +154,25 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
   }
 
   async loadChiCuc() {
-    let res = await this.donViService.layDonViChiCuc();
+    let body = {
+      maDviCha: this.diaDiemNhapKho.maDvi,
+      trangThai: '01',
+    }
+    const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.chiCucList = res.data;
+      if (res.data && res.data.length > 0) {
+        this.chiCucList = res.data[0].children;
+        res.data.forEach(element => {
+          if (element && element.capDvi == '3' && element.children) {
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
+            this.listDiemKhoEdit = cloneDeep(this.listDiemKho);
+          }
+        });
+      }
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -274,7 +292,7 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
 
   async loadDanhMucHang() {
     let body = {
-      "str": this.loaiHangHoa
+      "str": this.data.loaiHangHoa
     };
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -286,12 +304,15 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
     }
   }
   loadChiTieu() {
+    if (!this.data.qdGiaoChiTieuId) {
+      return;
+    }
     this.chiTieuKeHoachNamService
-      .loadThongTinChiTieuKeHoachNam(this.idChiTieu)
+      .loadThongTinChiTieuKeHoachNam(this.data.qdGiaoChiTieuId)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.chiTieu = res.data;
-          switch (this.loaiHangHoa) {
+          switch (this.data.loaiHangHoa) {
             //gao
             case "0102":
               const gao = this.chiTieu?.khLuongThuc.find(x => x.maDonVi = this.diaDiemNhapKho.maDvi);
@@ -320,5 +341,103 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       });
+  }
+  calcSoLuong(): string {
+    const tong = this.dsChiTietDiemNhapKhoClone.reduce((previousChiTiet, currentChiTiet) => previousChiTiet + currentChiTiet.soLuong,
+      0);
+    this.diaDiemNhapKho.soLuong = tong;
+    return tong
+      ? Intl.NumberFormat('en-US').format(tong)
+      : '0';
+  }
+  calcGiaKhoiDiem(): string {
+    this.chiTietDiemNhapKhoCreate.giaKhoiDiem = this.chiTietDiemNhapKhoCreate.soLuong * this.chiTietDiemNhapKhoCreate.donGiaChuaVAT;
+    return this.chiTietDiemNhapKhoCreate.giaKhoiDiem
+      ? Intl.NumberFormat('en-US').format(this.chiTietDiemNhapKhoCreate.giaKhoiDiem)
+      : '0';
+  }
+  calcSoTienDatTruoc(): string {
+    this.chiTietDiemNhapKhoCreate.soTienDatTruoc = this.chiTietDiemNhapKhoCreate.giaKhoiDiem * this.khoanTienDatTruoc / 100;
+    return this.chiTietDiemNhapKhoCreate.soTienDatTruoc
+      ? Intl.NumberFormat('en-US').format(this.chiTietDiemNhapKhoCreate.soTienDatTruoc)
+      : '0';
+  }
+  calcGiaKhoiDiemEdit(i: number): string {
+    this.dsChiTietDiemNhapKhoClone[i].giaKhoiDiem = this.dsChiTietDiemNhapKhoClone[i].soLuong * this.dsChiTietDiemNhapKhoClone[i].donGiaChuaVAT;
+    return this.dsChiTietDiemNhapKhoClone[i].giaKhoiDiem
+      ? Intl.NumberFormat('en-US').format(this.dsChiTietDiemNhapKhoClone[i].giaKhoiDiem)
+      : '0';
+  }
+  calcSoTienDatTruocEdit(i: number): string {
+    this.dsChiTietDiemNhapKhoClone[i].soTienDatTruoc = this.dsChiTietDiemNhapKhoClone[i].giaKhoiDiem * this.khoanTienDatTruoc / 100;
+    return this.dsChiTietDiemNhapKhoClone[i].soTienDatTruoc
+      ? Intl.NumberFormat('en-US').format(this.dsChiTietDiemNhapKhoClone[i].soTienDatTruoc)
+      : '0';
+  }
+  addDiaDiem() {
+    if (!this.chiTietDiemNhapKhoCreate.maDiemKho
+      || !this.chiTietDiemNhapKhoCreate.chungLoaiHh) {
+      return;
+    }
+    this.chiTietDiemNhapKhoCreate.idVirtual = new Date().getTime();
+    this.diaDiemNhapKho.idVirtual = new Date().getTime();
+    this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
+    this.newObjectDiaDiem();
+    this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
+    this.calcSoLuong();
+    this.checkSoLuong();
+
+  }
+  checkSoLuong() {
+    const tongSoLuong = this.diaDiemNhapKho.soLuong;
+    if (tongSoLuong > this.diaDiemNhapKho.soLuongTheoChiTieu - this.diaDiemNhapKho.slDaLenKHBan) {
+      this.slLonHonChiTieu = true;
+    } else {
+      this.slLonHonChiTieu = false;
+    }
+  }
+  newObjectDiaDiem() {
+    this.chiTietDiemNhapKhoCreate = new ChiTietDiaDiemNhapKho();
+    this.listNhaKho = [];
+    this.listNganKho = [];
+    this.listNganLo = [];
+  }
+  startEdit(index: number) {
+    this.dsChiTietDiemNhapKhoClone[index].isEdit = true;
+  }
+  saveEdit(i: number) {
+    this.dsChiTietDiemNhapKhoClone[i].isEdit = false;
+    Object.assign(
+      this.diaDiemNhapKho.chiTietDiaDiems[i],
+      this.dsChiTietDiemNhapKhoClone[i],
+    );
+    this.checkSoLuong();
+  }
+  cancelEdit(index: number) {
+    this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
+    this.dsChiTietDiemNhapKhoClone[index].isEdit = false;
+  }
+  deleteData(id: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.diaDiemNhapKho.chiTietDiaDiems =
+          this.diaDiemNhapKho.chiTietDiaDiems.filter(
+            (ddNhapKho) => ddNhapKho.idVirtual !== id,
+          );
+        this.dsChiTietDiemNhapKhoClone = cloneDeep(
+          this.diaDiemNhapKho.chiTietDiaDiems,
+        );
+        if (this.dsChiTietDiemNhapKhoClone.length == 0) {
+          this.slLonHonChiTieu = false;
+        }
+      },
+    });
   }
 }
