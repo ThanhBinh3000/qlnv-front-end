@@ -212,7 +212,6 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     }
 
     xoa() {
-        // this.setOfCheckedId
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -288,7 +287,6 @@ export class HangThuocDienThanhLyComponent implements OnInit {
 
     onChangeFilterDate(event) {
         console.log(event)
-        debugger
     }
 
     async changePageIndex(event) {

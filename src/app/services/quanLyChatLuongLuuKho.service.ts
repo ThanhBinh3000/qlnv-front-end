@@ -54,6 +54,18 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
+  // hang tieu huy
+
+  hangTieuHuyThemds(body: any): Promise<any> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy`;
+    return this.httpClient.post<any>(url_, body).toPromise();
+  }
+
+  hangTieuHuySuads(body: any): Promise<any> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy`;
+    return this.httpClient.put<any>(url_, body).toPromise();
+  }
+
   hangTieuHuytraCuu(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy/tra-cuu`;
     return this.httpClient.post<any>(url_, body).toPromise();
@@ -72,5 +84,15 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
   hangTieuHuyExportList(body: any): Observable<Blob> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy/export/list`;
     return this.httpClient.post(url_, body, { responseType: 'blob' });
+  }
+
+  hangTieuHuyexportListDetail(body: any): Observable<Blob> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy/export/listct`;
+    return this.httpClient.post(url_, body, { responseType: 'blob' });
+  }
+
+  hangTieuHuyDetail(id: any): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
   }
 }
