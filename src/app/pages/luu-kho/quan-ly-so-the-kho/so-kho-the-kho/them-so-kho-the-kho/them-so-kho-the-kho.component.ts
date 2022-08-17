@@ -122,6 +122,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async loadChiTiet() {
+    this.isTaoTheKho = true;
     let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
     this.dsChiTiet = res.data;
 
@@ -466,7 +467,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: id,
             lyDo: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.LANH_DAO_DUYET,
           };
 
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
@@ -502,7 +503,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: '02',
+            trangThai: this.globals.prop.BAN_HANH,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 
@@ -540,7 +541,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.globals.prop.TU_CHOI,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
 

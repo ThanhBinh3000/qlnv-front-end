@@ -13,21 +13,12 @@
             </nz-form-control>
           </nz-form-item>
 
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
+          <nz-form-item nz-col nzSpan="8" class="form-item">
+            <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="ma-don-vi">
-                <input type="text" nz-input formControlName="maDvi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="ten-don-vi">
-                <input type="text" nz-input formControlName="tenDVi" />
-              </nz-input-group>
+              <nz-select formControlName="maDvi" id="ma-don-vi">
+                <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
@@ -35,7 +26,7 @@
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="loaiHH" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -74,7 +65,7 @@
     <div class="group-button">
       <h3>Danh sách thẻ kho</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>

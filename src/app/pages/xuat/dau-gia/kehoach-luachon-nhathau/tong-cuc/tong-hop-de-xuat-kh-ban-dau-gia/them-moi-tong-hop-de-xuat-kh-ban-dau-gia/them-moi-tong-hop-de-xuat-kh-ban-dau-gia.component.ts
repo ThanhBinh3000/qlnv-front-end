@@ -153,7 +153,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       id: [],
       namKeHoach: [null],
       maVatTuCha: [, [Validators.required]],
-      ngayKyDeXuat: [[null, null], [Validators.required]],
+      ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[null, null], [Validators.required]],
@@ -219,7 +219,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
       maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
-      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [null, null],
+      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [null, null],
@@ -416,7 +416,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         await this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
-        this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

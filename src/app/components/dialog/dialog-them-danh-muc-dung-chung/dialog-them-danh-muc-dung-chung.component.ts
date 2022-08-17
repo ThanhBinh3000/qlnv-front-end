@@ -5,9 +5,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { Globals } from 'src/app/shared/globals';
-import {HelperService} from "../../../services/helper.service";
-import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
-import {Router} from "@angular/router";
+import { HelperService } from "../../../services/helper.service";
+import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'dialog-them-danh-muc-dung-chung',
@@ -20,10 +20,12 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
   formData: FormGroup;
   totalRecord: number = 10;
   danhMucList: any[] = [];
+  selectedValue = null;
+
   submited: boolean = false;
 
   constructor(
-    private router : Router,
+    private router: Router,
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -35,10 +37,10 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       loai: [null, [Validators.required]],
-      ma:  [null, [Validators.required]],
-      maCha:  [null],
-      trangThai:  ['01'],
-      giaTri:  [null, [Validators.required]],
+      ma: [null, [Validators.required]],
+      maCha: [null],
+      trangThai: ['01'],
+      giaTri: [null, [Validators.required]],
       ghiChu: [null]
     });
   }
@@ -48,12 +50,9 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       this.getDmList()
     ])
     this.bindingData(this.dataEdit)
-    console.log(this.dataEdit)
-    console.log(this.isView)
-    console.log(this.formData.value)
   }
 
-  async  save() {
+  async save() {
     this.submited = true;
     if (this.formData.valid) {
       this.spinner.show();
@@ -82,14 +81,12 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       }
       this.spinner.hide();
     }
- }
+  }
 
-  async  getDmList() {
+  async getDmList() {
     let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
     this.danhMucList = data.data;
   }
-
-
 
   handleCancel() {
     this._modalRef.destroy();

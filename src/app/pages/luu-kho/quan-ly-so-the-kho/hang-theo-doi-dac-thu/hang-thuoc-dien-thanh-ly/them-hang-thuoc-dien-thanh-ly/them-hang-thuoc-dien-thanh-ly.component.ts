@@ -72,17 +72,17 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.initForm();
         this.initData();
+        this.initForm();
         console.log(this.dataEditList)
     }
 
     initForm(): void {
         if (this.detail) {
+            const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
-                idDonVi: [{ value: null, disabled: this.editList }],
-                maDvi: [{ value: null, disabled: this.editList }],
-                tenDonVi: [{ value: this.dataEditList.tenDonvi, disabled: this.editList }],
+                idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
+                maDvi: [{ value: donvi ? donvi.maDvi : null, disabled: this.editList }],
                 idDanhSach: [{ value: this.dataEditList.maDanhSach, disabled: this.editList }],
                 ngayTao: [{ value: this.dataEditList.ngayTao, disabled: this.editList }],
             });
@@ -113,9 +113,16 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
 
     onChangeLoaiVthh(event) {
         this.dsChungLoaiHangHoa = [];
-        const loaiVthh = this.dsLoaiHangHoa.filter(item => item.ma == event);
+        const loaiVthh = this.dsLoaiHangHoa.filter(item => item.id == event);
         if (loaiVthh.length > 0) {
             this.dsChungLoaiHangHoa = loaiVthh[0].child;
+        }
+    }
+
+    onChangeChungLoai(event) {
+        const chungLoai = this.dsChungLoaiHangHoa.filter(item => item.ma == event)
+        if (chungLoai) {
+            this.rowItem.donVi = chungLoai[0].maDviTinh;
         }
     }
 
@@ -219,12 +226,14 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
         this.dataTable.map((data: any) => {
             const lstNganKho = this.dsNganKho.find((item) => item.tenDvi == data.nganKho)
             const lstLoKho = lstNganKho?.children;
+            const lstLoaiHang = this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten));
+            const lstChungLoai = lstLoaiHang?.child
             const objDS = {
                 lyDo: data.lyDo,
-                maChungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ten == data.chungLoaiHang).ma,
+                maChungLoaiHang: lstChungLoai.find((item) => item.ten == data.chungLoaiHang).ma,
                 maDiemKho: this.dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
                 maLoKho: lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi,
-                maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.giaTri)).ma,
+                maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten)).ma,
                 maNganKho: this.dsNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
                 maNhaKho: this.dsNhaKho.find((item) => item.tenDvi == data.nhaKho).maDvi,
                 slTon: data.slTon,
@@ -256,7 +265,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
             diemKho: this.dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
             loKho: this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi,
-            loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).giaTri,
+            loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).ten,
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
             nhaKho: this.dsNhaKho.find((item) => item.id == this.rowItem.idNhaKho).tenDvi,
             slTon: this.rowItem.soLuongTon,

@@ -56,6 +56,10 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   dsDonVi: any = []
   dsLoaiHangHoa: any = []
   dsChungLoaiHangHoa: any = []
+
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly donviService: DonviService,
@@ -70,12 +74,46 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     try {
       this.spinner.show();
       this.initForm();
+      await this.loaiVTHHGetAll();
       this.search();
       await this.initData();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                item
+              ];
+            }
+            else {
+              this.listLoaiHangHoa = [
+                ...this.listLoaiHangHoa,
+                ...item.child
+              ];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maLoaiHang);
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
 
@@ -86,6 +124,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       "maLoaiHang": '',
     })
   }
+
   async search() {
     this.spinner.show();
 

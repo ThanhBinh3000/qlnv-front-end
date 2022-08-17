@@ -1,7 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { convertTenVthh } from 'src/app/shared/commonFunction';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -9,9 +7,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import * as dayjs from 'dayjs';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -22,22 +19,20 @@ export class DanhSachHopDongComponent implements OnInit {
   @Input()
   typeVthh: string;
 
-  ngayKy: string;
-  soHd: string;
+  searchBody = {
+    ngayKy: '',
+    soHd: '',
+    tenHd: '',
+    nhaCungCap: ''
+  }
+
   userInfo: UserLogin;
-  tenHd: string;
-  nhaCungCap: string;
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
-  optionsDonVi: any[] = [];
-  inputDonVi: string = '';
-  optionsDonViShow: any[] = [];
-  selectedDonVi: any = {};
 
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -58,22 +53,19 @@ export class DanhSachHopDongComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     public userService: UserService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private donViService: DonviService,
-    private thongTinHopDong: ThongTinHopDongService,
+    private hopDongXuatHang: HopDongXuatHangService
   ) {
+
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await this.loadDonVi();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -114,72 +106,23 @@ export class DanhSachHopDongComponent implements OnInit {
     }
   }
 
-  async loadDonVi() {
-    const res = await this.donViService.layDonViCon();
-    this.optionsDonVi = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          ...res.data[i],
-          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-        };
-        this.optionsDonVi.push(item);
-      }
-      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  onInputDonVi(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-    } else {
-      this.optionsDonViShow = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  async selectDonVi(donVi) {
-    this.inputDonVi = donVi.tenDvi;
-    this.selectedDonVi = donVi;
-  }
-
   async search() {
-    let maDonVi = null;
-    let tenDvi = null;
-    let donviId = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-        tenDvi = getDonVi[0].tenDvi;
-        donviId = getDonVi[0].id;
-      }
-    }
     let body = {
-      "loaiVthh": '',
-      "maDvi": maDonVi,
-      "nhaCcap": this.nhaCungCap ?? '',
-      "tenHd": this.tenHd ?? '',
+      "loaiVthh": this.typeVthh ?? '',
+      "tenHd": this.searchBody.tenHd ?? '',
+      "soHd": this.searchBody.soHd,
+      "denNgayKy": this.searchBody.ngayKy && this.searchBody.ngayKy.length > 1
+        ? dayjs(this.searchBody.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      "tuNgayKy": this.searchBody.ngayKy && this.searchBody.ngayKy.length > 0
+        ? dayjs(this.searchBody.ngayKy[0]).format('YYYY-MM-DD')
+        : null,
       "paggingReq": {
         limit: this.pageSize,
         page: this.page - 1,
-      },
-      soHd: this.soHd,
-      denNgayKy: this.ngayKy && this.ngayKy.length > 1
-        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
-        : null,
-      tuNgayKy: this.ngayKy && this.ngayKy.length > 0
-        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
-        : null,
-
+      }
     };
-    let res = await this.thongTinHopDong.timKiem(body);
+    let res = await this.hopDongXuatHang.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -208,7 +151,7 @@ export class DanhSachHopDongComponent implements OnInit {
         const body = {
           id: item.id,
         }
-        let res = await this.thongTinHopDong.delete(
+        let res = await this.hopDongXuatHang.delete(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -222,10 +165,10 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   clearFilter() {
-    this.ngayKy = null;
-    this.soHd = null;
-    this.tenHd = null;
-    this.nhaCungCap = null;
+    // this.ngayKy = null;
+    // this.soHd = null;
+    // this.tenHd = null;
+    // this.nhaCungCap = null;
   }
 
   async changePageIndex(event) {
