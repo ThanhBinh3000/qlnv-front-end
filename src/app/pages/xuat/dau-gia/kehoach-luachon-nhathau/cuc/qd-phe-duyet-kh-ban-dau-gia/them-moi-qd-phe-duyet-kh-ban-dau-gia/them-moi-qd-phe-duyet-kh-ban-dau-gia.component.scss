@@ -33,13 +33,13 @@
       }
     }
 
-    .ant-form {
-      .ant-row {
-        .ant-col {
-          padding: 0px 9px !important;
-        }
-      }
-    }
+    // .ant-form {
+    //   .ant-row {
+    //     .ant-col {
+    //       padding: 0px 9px !important;
+    //     }
+    //   }
+    // }
 
     .header-table-nvnh {
       height: 163px;
@@ -57,5 +57,9 @@
   .content-thong-tin {
     padding: 0;
     margin: 0px !important;
+  }
+
+  .text-blue {
+    color: #2196F3;
   }
 }
