@@ -441,15 +441,15 @@
       // padding-right: 15px;
     }
 
-    .ant-table-tbody,
-    .ant-table-thead,
-    tfoot {
+    // .ant-table-tbody,
+    // .ant-table-thead,
+    // tfoot {
 
-      &>tr>td,
-      &>tr>th {
-        height: 32px;
-      }
-    }
+    //   &>tr>td,
+    //   &>tr>th {
+    //     height: 32px;
+    //   }
+    // }
   }
 
   .ant-table-column-sorter {
@@ -564,11 +564,7 @@
 
   .timkiem .form-control {
     min-width: auto !important;
-    height: 26px;
-  }
-
-  .timkiem .form-control {
-    height: 32px;
+    height: $bnt-h;
   }
 
   .btn-timkiem2 {

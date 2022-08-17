@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 
 @Component({
@@ -23,6 +24,7 @@ export class QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
 	statusApprove = false;
 	statusCheck = false;
 	statusSynthetic = false;
+	tabSelected = 'timkiem';
 
 	userInfo: any;
 	user: any;
@@ -35,6 +37,7 @@ export class QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
+		public globals: Globals,
 	) { }
 
 	async ngOnInit(): Promise<void> {
@@ -42,20 +45,6 @@ export class QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.user = this.userService.getUserLogin();
-		//lay danh sach danh muc
-		// await this.danhMuc.dMDonVi().toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0) {
-		// 			this.donVis = data.data;
-		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// );
 		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code) && (this.user.CAP_DVI != Utils.CHI_CUC)) {
 			this.statusApprove = true;
 			this.statusCheck = true;
@@ -86,5 +75,9 @@ export class QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
 			'/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
 			1,
 		]);
+	}
+
+	selectTab(tab) {
+		this.tabSelected = tab;
 	}
 }

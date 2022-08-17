@@ -22,6 +22,7 @@ import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../..
 import { Utils, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './them-moi-bao-cao-quyet-toan.constant';
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
     id: "1",
@@ -475,7 +476,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             if (!this.id) {
               this.router.navigate([
-                '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan/' + data.data.id,
+                MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan/' + data.data.id,
               ])
             }
             else {
@@ -1128,7 +1129,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   close() {
     // this.location.back();
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
     ]);
   }
 

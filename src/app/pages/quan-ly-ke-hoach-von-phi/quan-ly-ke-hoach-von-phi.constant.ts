@@ -17,11 +17,6 @@ export const ROUTE_LIST_KE_HOACH = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Quản lý cấp vốn mua, bán, thanh toán tiền hàng DTQG',
-    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg`,
-  },
-  {
-    icon: 'htvbdh_tcdt_icon-common',
     title: 'Quy trình báo cáo kết quả thực hiện vốn, phí hàng DTQG tại tổng cục DTNN',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn`,
   },

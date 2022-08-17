@@ -160,7 +160,7 @@
   </nz-card>
   <nz-tabset nzType="card" [nzTabBarExtraContent]="tableCardNhaThau">
     <nz-tab [nzTitle]="'Thông tin chung'" (nzClick)="tabSelected = 'thongTinChung'">
-      <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16 mb-16">
+      <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="[12]">
           <div nz-col [nzSpan]="24">
             <span class="sub-title">Thông tin dự án</span>
@@ -414,7 +414,7 @@
             </nz-form-item>
           </div>
         </div>
-        <div nz-row [nzGutter]="[12]">
+        <div nz-row [nzGutter]="[12]" class="mb-10">
           <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">
@@ -434,7 +434,7 @@
         </div>
       </form>
     </nz-tab>
-    <nz-tab [nzTitle]="'Phụ lục đề xuất kế hoạch lựa chon nhà thầu'" class="ds-goi-thau__container tab-level-3-specical"
+    <nz-tab class="card-table" [nzTitle]="'Phụ lục đề xuất kế hoạch lựa chon nhà thầu'"
       (nzClick)="tabSelected = 'dsGoiThau'">
       <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
         <thead>

@@ -28,13 +28,16 @@
 							<td>{{baoCao?.nguoiTao}}</td>
 							<td>{{baoCao?.ngayTao}}</td>
 							<td>
-								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
-									<button nz-button>
-										<i nz-icon nzType="upload"></i>
-										Select File
-									</button>
-								</nz-upload>
-								<div class="tep" (click)="downloadFileCv()">
+								<ng-container *ngIf="!status">
+									<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+										<button nz-button>
+											<i nz-icon nzType="upload"></i>
+											Select File
+										</button>
+									</nz-upload>
+									<br />
+								</ng-container>
+								<div class="tep__sqd" (click)="downloadFileCv()">
 									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
 									<span>{{baoCao?.congVan?.fileName}}</span>
 								</div>

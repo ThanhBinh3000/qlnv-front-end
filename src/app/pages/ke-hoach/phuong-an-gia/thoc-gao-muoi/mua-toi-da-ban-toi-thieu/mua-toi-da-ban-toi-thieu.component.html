@@ -4,6 +4,9 @@
             Đề xuất phương án giá
         </li>
         <li nz-menu-item (click)="selectTab(1)">
+            Tổng hợp phương án giá
+        </li>
+        <li nz-menu-item (click)="selectTab(2)">
             Quyết định giá của BTC
         </li>
     </ul>
@@ -12,5 +15,8 @@
     <app-de-xuat-phuong-an-gia></app-de-xuat-phuong-an-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
+    <app-tong-hop-phuong-an-gia></app-tong-hop-phuong-an-gia>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
     <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
 </ng-container>

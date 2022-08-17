@@ -38,7 +38,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 			page: 1
 		},
 		str: '',
-		donVi: '',
+		maDvi: '',
 		maPhanBcao: '0',
 		loaiTimKiem: '1',
 	};
@@ -65,7 +65,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 		this.onSubmit();
 
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donViTaos = data.data;
@@ -129,13 +129,13 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 		this.onSubmit();
 	}
 
-	deleteCondition(){
+	deleteCondition() {
 		this.searchFilter.maBcao = null
 		this.searchFilter.namBcao = null
 		this.searchFilter.thangBcao = null
 		this.searchFilter.ngayTaoTu = null
 		this.searchFilter.ngayTaoDen = null
-		this.searchFilter.donVi = null
+		this.searchFilter.maDvi = null
 		this.searchFilter.maLoaiBcao = null
 		this.trangThai = null
 	}

@@ -21,7 +21,6 @@ export const MAIN_ROUTES = {
   quanTriDanhMuc: 'quan-tri-danh-muc',
   quanTriHeThong: 'quan-tri-he-thong',
   qlkhVonPhi: 'qlkh-von-phi',
-  qlcapVonPhi: 'qlcap-von-phi-hang',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -80,10 +79,6 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kế hoạch vốn phí',
     route: MAIN_ROUTES.qlkhVonPhi,
-  },
-  {
-    title: 'Quản lý cấp vốn phí hàng',
-    route: MAIN_ROUTES.qlcapVonPhi,
   },
   {
     title: 'QTDM',

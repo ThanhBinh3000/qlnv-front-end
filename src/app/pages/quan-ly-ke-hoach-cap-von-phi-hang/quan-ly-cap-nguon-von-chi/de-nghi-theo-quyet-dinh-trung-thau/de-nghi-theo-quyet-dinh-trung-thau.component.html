@@ -95,7 +95,7 @@
 										Select File
 									</button>
 								</nz-upload>
-								<div class="tep" (click)="downloadFileCv()">
+								<div class="tep__sqd" (click)="downloadFileCv()">
 									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
 									<span>{{congVan?.fileName}}</span>
 								</div>
@@ -193,7 +193,8 @@
 													{{displayValue(kphiDaCap)}}
 												</ng-container>
 												<ng-template #edit>
-													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap" [nzFormatter]="formatter" [nzPrecision]="4"
+													<nz-input-number nzSize="small" [(ngModel)]="kphiDaCap"
+														[nzFormatter]="formatter" [nzPrecision]="4"
 														[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap >= 0) ?'' : 'input-error-validate' ">
 													</nz-input-number>
 												</ng-template>

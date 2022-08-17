@@ -12,6 +12,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { QuanLyChatLuongLuuKhoService } from 'src/app/services/quanLyChatLuongLuuKho.service';
 import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { saveAs } from 'file-saver';
 @Component({
     selector: 'app-hang-thuoc-dien-thanh-ly',
     templateUrl: './hang-thuoc-dien-thanh-ly.component.html',
@@ -51,40 +53,10 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     dataTable: any[] = [];
     dataTableAll: any[] = [];
 
-    dataExample: IHangThanhLy[] = [
-        {
-            id: 1,
-            maDanhSach: 'DS1',
-            idDonVi: 1,
-            tenDonVi: 'Test 1',
-            ngayTao: new Date(),
-            trangThai: 'Chờ duyệt',
-        },
-        {
-            id: 2,
-            maDanhSach: 'DS2',
-            idDonVi: 1,
-            tenDonVi: 'Test 2',
-            ngayTao: new Date(),
-            trangThai: 'Chờ duyệt',
-        },
-        {
-            id: 3,
-            maDanhSach: 'DS3',
-            idDonVi: 3,
-            tenDonVi: 'Test 3',
-            ngayTao: new Date(),
-            trangThai: 'Chờ duyệt',
-        },
-        {
-            id: 4,
-            maDanhSach: 'DS4',
-            idDonVi: 4,
-            tenDonVi: 'Test 1',
-            ngayTao: new Date(),
-            trangThai: 'Chờ duyệt',
-        },
-    ];
+    dataExample: IHangThanhLy[] = [];
+    dataDetail: any;
+    isUpdate: boolean = false;
+    editList: boolean = false;
     isAddNew = false;
 
     constructor(
@@ -95,6 +67,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
         private readonly spinner: NgxSpinnerService,
         private readonly notification: NzNotificationService,
+        private modal: NzModalService,
     ) { }
 
     async ngOnInit(): Promise<void> {
@@ -123,32 +96,36 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.detail.maDvi = this.userInfo.MA_DVI;
         this.detail.tenDvi = this.userInfo.TEN_DVI;
-        var data = this.traCuuDsHangThanhLy();
-        console.log(data);
+        await this.traCuuDsHangThanhLy();
         await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
     }
 
     async traCuuDsHangThanhLy() {
+        this.spinner.show();
         const body = {
             denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
             tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
-            maDonVi: this.detail.maDvi, // 
+            maDonVi: "", // this.detail.maDvi
             maVTHH: "",
             paggingReq: {
                 limit: this.pageSize,
                 orderBy: "",
                 orderType: "",
-                page: this.page,
+                page: this.page - 1,
             },
         }
-        const res = await this.quanlyChatLuongService.traCuu(body);
+        const res = await this.quanlyChatLuongService.traCuuHTL(body);
         if (res.msg == MESSAGE.SUCCESS) {
-            this.totalRecord = res.data.totalElements;
-            this.rangeTemplate = res.data.totalPages;
-            this.dataTable = res.data?.content;
+            let data = res.data;
+            this.dataTable = data.content;
             this.dataTableAll = cloneDeep(this.dataTable);
+            this.totalRecord = data.totalElements;
+        } else {
+            this.dataTable = [];
+            this.totalRecord = 0;
+            this.notification.error(MESSAGE.ERROR, res.msg);
         }
-        console.log(res.data?.content)
+        this.spinner.hide();
     }
 
     async loadDsTong() {
@@ -168,7 +145,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     }
 
     async loaiVTHHGetAll() {
-        let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+        let res = await this.danhMucService.loadDanhMucHangHoaAsync();
         if (res.msg == MESSAGE.SUCCESS) {
             this.dsLoaiHangHoa = res.data;
             this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
@@ -202,17 +179,85 @@ export class HangThuocDienThanhLyComponent implements OnInit {
                 (item) => item.giaTri,
             );
         }
-        console.log(value)
     }
 
-    exportData() { }
+    exportData() {
+        if (this.totalRecord > 0) {
+            this.spinner.show();
+            try {
+                const body = {
+                    denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
+                    tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
+                    maDonVi: "", // this.detail.maDvi
+                    maVTHH: "",
+                    paggingReq: {
+                        limit: this.pageSize,
+                        orderBy: "",
+                        orderType: "",
+                        page: this.page - 1,
+                    },
+                }
+                this.quanlyChatLuongService
+                    .exportList(body)
+                    .subscribe((blob) =>
+                        saveAs(blob, 'danh-sach-hang-thanh-ly.xlsx'),
+                    );
+                this.spinner.hide();
+            } catch (e) {
+                console.log('error: ', e);
+                this.spinner.hide();
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        }
+    }
 
-    xoa() { }
+    xoa() {
+        // this.setOfCheckedId
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: () => {
+                this.spinner.show();
+                try {
+
+                    const body = { "ids": [] }
+                    this.setOfCheckedId.forEach(item => {
+                        body.ids.push(item)
+                    })
+                    this.quanlyChatLuongService.xoalstds(body).then(async (res) => {
+                        if (res.msg == MESSAGE.SUCCESS) {
+                            this.notification.success(
+                                MESSAGE.SUCCESS,
+                                MESSAGE.DELETE_SUCCESS,
+                            );
+                            this.traCuuDsHangThanhLy()
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, res.msg);
+                        }
+                        await this.traCuuDsHangThanhLy();
+                        this.spinner.hide();
+                    });
+                }
+                catch (e) {
+                    console.log('error: ', e)
+                    this.spinner.hide();
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+            },
+        });
+    }
 
     inDanhSach() { }
 
     themMoi() {
         this.isAddNew = true;
+        this.editList = false;
+        this.isUpdate = false;
     }
 
     onAllChecked(checked) {
@@ -241,15 +286,84 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         this.formData.reset();
     }
 
-    onChangeFilterDate(event) { }
+    onChangeFilterDate(event) {
+        console.log(event)
+        debugger
+    }
 
-    changePageIndex(event) { }
+    async changePageIndex(event) {
+        this.spinner.show();
+        try {
+            this.page = event;
+            await this.traCuuDsHangThanhLy();
+            this.spinner.hide();
+        } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+    }
 
-    changePageSize(event) { }
+    async changePageSize(event) {
+        this.spinner.show();
+        try {
+            this.pageSize = event;
+            if (this.page === 1) {
+                await this.traCuuDsHangThanhLy();
+            }
+            this.spinner.hide();
+        } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+    }
 
-    viewDetail(id: number, isUpdate: boolean) { }
+    viewDetail(id: number, isUpdate: boolean) {
+        this.quanlyChatLuongService.detail(id).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+                this.dataDetail = res.data;
+                this.isUpdate = true;
+                this.isAddNew = true;
+                this.editList = isUpdate;
+            }
+        })
+    }
 
-    xoaItem(id: number) { }
+    async xoaItem(id: number) {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: () => {
+                this.spinner.show();
+                try {
+                    this.quanlyChatLuongService.xoads(id).then(async (res) => {
+                        if (res.msg == MESSAGE.SUCCESS) {
+                            this.notification.success(
+                                MESSAGE.SUCCESS,
+                                MESSAGE.DELETE_SUCCESS,
+                            );
+                            this.traCuuDsHangThanhLy()
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, res.msg);
+                        }
+                        await this.traCuuDsHangThanhLy();
+                        this.spinner.hide();
+                    });
+                }
+                catch (e) {
+                    console.log('error: ', e)
+                    this.spinner.hide();
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+            },
+        });
+    }
 
     onItemChecked(id: number, checked) {
         this.updateCheckedSet(id, checked);
@@ -258,6 +372,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
 
     onClose() {
         this.isAddNew = false;
+        this.traCuuDsHangThanhLy();
     }
 
     filterInTable(key: string, value: string) {

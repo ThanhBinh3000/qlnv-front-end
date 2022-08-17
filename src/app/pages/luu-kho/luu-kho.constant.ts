@@ -52,4 +52,5 @@ export const DANH_MUC_LEVEL = {
   NHA_KHO: '5',
   NGAN_KHO: '6',
   NGAN_LO: '7',
+  LO_KHO: '7'
 };

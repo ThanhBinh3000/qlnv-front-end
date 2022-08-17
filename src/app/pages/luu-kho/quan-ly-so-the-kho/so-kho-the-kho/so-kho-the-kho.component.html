@@ -13,46 +13,39 @@
             </nz-form-control>
           </nz-form-item>
 
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
+          <nz-form-item nz-col nzSpan="8" class="form-item">
+            <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="ma-don-vi">
-                <input type="text" nz-input formControlName="maDvi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="ten-don-vi">
-                <input type="text" nz-input formControlName="tenDVi" />
-              </nz-input-group>
+              <nz-select formControlName="maDvi" id="ma-don-vi">
+                <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="loai-hang-hoa">
-                <input type="text" nz-input formControlName="loaiHH" />
-              </nz-input-group>
+              <nz-select formControlName="loaiHH" (ngModelChange)="changeLoaiHangHoa()">
+                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="3" class="form-item">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="chung-loai-hang-hoa">
-                <input type="text" nz-input formControlName="maChungLoaiHang" />
-              </nz-input-group>
+              <nz-select formControlName="maChungLoaiHang">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
+            <nz-form-label nzFor="ngay-tao">Ngày tạo </nz-form-label>
             <nz-form-control>
-              <nz-range-picker formControlName="denNgay" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+              <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -60,7 +53,7 @@
       </form>
       <div class="cangiua group-button-search">
         <button nz-button class="search__button--clear" (click)="clearFilter()">
-          <i class="icon  htvbdh_nhap-lai1"></i>
+          <i class="icon htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
         <button nz-button class="search__button--search" (click)="search()">
@@ -72,7 +65,7 @@
     <div class="group-button">
       <h3>Danh sách thẻ kho</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -80,7 +73,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="viewDetail(null,false)">
+        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null,false,null)"
+          *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Thêm</span>
         </button>
@@ -91,7 +85,7 @@
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th style="width: 2.5%;">
+            <th class="text-center" style="width: 2.5%;">
               <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate"
                 (ngModelChange)="updateAllChecked()">
               </label>
@@ -117,74 +111,70 @@
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                  (input)="filterInTable('nam',filterTable.nam)" size="smail" />
+                  (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tuNgay"
-                  (input)="filterInTable('tuNgay',filterTable.tuNgay)" size="smail" />
-              </nz-input-group>
+              <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.tuNgay"
+                (ngModelChange)="filterInTable('tuNgay',filterTable.tuNgay,true)">
+              </nz-date-picker>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.denNgay"
-                  (input)="filterInTable('denNgay',filterTable.denNgay)" size="smail" />
-              </nz-input-group>
+              <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.denNgay"
+                (ngModelChange)="filterInTable('denNgay',filterTable.denNgay,true)">
+              </nz-date-picker>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                  (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa)" size="smail" />
+                  (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiHangHoa"
-                  (input)="filterInTable('chungLoaiHangHoa',filterTable.chungLoaiHangHoa)" size="smail" />
+                  (input)="filterInTable('chungLoaiHangHoa',filterTable.chungLoaiHangHoa, false)" size="smail" />
               </nz-input-group>
             </th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="smail" />
-              </nz-input-group>
+            <th>
+              <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayTao"
+                (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao,true)">
+              </nz-date-picker>
             </th>
-
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donVi"
-                  (input)="filterInTable('donVi',filterTable.donVi)" size="smail" />
+                  (input)="filterInTable('donVi',filterTable.donVi, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"
-                  (input)="filterInTable('diemKho',filterTable.diemKho)" size="smail" />
+                  (input)="filterInTable('diemKho',filterTable.diemKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"
-                  (input)="filterInTable('nhaKho',filterTable.nhaKho)" size="smail" />
+                  (input)="filterInTable('nhaKho',filterTable.nhaKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nganKho"
-                  (input)="filterInTable('nganKho',filterTable.nganKho)" size="smail" />
+                  (input)="filterInTable('nganKho',filterTable.nganKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loKho"
-                  (input)="filterInTable('loKho',filterTable.loKho)" size="smail" />
+                  (input)="filterInTable('loKho',filterTable.loKho, false)" size="smail" />
               </nz-input-group>
             </th>
             <th class="text-center">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (input)="filterInTable('trangThai',filterTable.trangThai)" size="smail" />
+                  (input)="filterInTable('trangThai',filterTable.trangThai, false)" size="smail" />
               </nz-input-group>
             </th>
             <th></th>
@@ -212,14 +202,15 @@
             <td>{{ data.nganKho }}</td>
             <td>{{ data.loKho }}</td>
             <td>{{ convertTrangThai(data.trangThai) }}</td>
-            <td style="text-align: center; white-space: nowrap;">
-              <a (click)="viewDetail(data.id, false)">
+            <td style="text-align: left; white-space: nowrap;">
+              <a (click)="viewDetail(data.id, true,data.trangThai)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)" *ngIf="!userService.isChiCuc()">
+              <a (click)="viewDetail(data.id, false,data.trangThai)"
+                *ngIf="data.trangThai === globals.prop.DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)" *ngIf="!userService.isChiCuc()">
+              <a (click)="xoaItem(data.id)" *ngIf="data.trangThai === globals.prop.DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -246,5 +237,6 @@
   </div>
 </ng-container>
 <ng-template #templateThemmoi>
-  <app-them-so-kho-the-kho [isCheck]="isCheck" [idInput]="idSelected" (close)="onClose()"></app-them-so-kho-the-kho>
+  <app-them-so-kho-the-kho [isStatus]="isStatus" [isCheck]="isCheck" [idInput]="idSelected" (close)="onClose()">
+  </app-them-so-kho-the-kho>
 </ng-template>

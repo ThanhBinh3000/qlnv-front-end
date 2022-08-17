@@ -16,6 +16,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from '../data.service';
 
 export class ItemCongVan {
@@ -507,7 +508,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         if (!this.id) {
                             this.router.navigate([
-                                '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/0/' + data.data.id,
+                                MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/de-nghi-theo-quyet-dinh-trung-thau/0/' + data.data.id,
                             ])
                         }
                         else {
@@ -560,7 +561,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             this.loai = "0";
         }
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tim-kiem/' + this.loai
+            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tim-kiem/' + this.loai
         ])
     }
 
