@@ -142,8 +142,6 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-select formControlName="loaiHangHoa" [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
-                                </nz-option>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                                     </ng-container>
@@ -152,13 +150,14 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+
+                <div nz-col [nzSpan]="3">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại giá
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
+                                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                 </nz-option>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -168,6 +167,8 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
+
+
                 <div nz-col [nzSpan]="6">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Tiêu chuẩn chất

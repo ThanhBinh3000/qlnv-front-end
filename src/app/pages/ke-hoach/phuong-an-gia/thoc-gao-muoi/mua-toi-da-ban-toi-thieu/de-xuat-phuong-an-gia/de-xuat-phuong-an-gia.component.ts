@@ -109,8 +109,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       body.ngayKyTu = body.ngayKy[0];
       body.ngayKyDen = body.ngayKy[1];
     }
-
-    body.soDx = body.soDeXuat,
+    body.namKh = body.namKeHoach,
+      body.soDx = body.soDeXuat,
       body.loaiHh = body.loaiHangHoa,
       body.paggingReq = {
         limit: this.pageSize,
