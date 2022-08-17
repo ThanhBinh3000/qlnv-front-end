@@ -26,7 +26,10 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   listVthh: any[] = [];
+  isQuyetDinh: boolean = false;
+  errorInputRequired: string = null;
 
+  formTraCuu: FormGroup;
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
@@ -48,6 +51,17 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     private danhMucService: DanhMucService,
 
   ) {
+    this.formTraCuu = this.fb.group(
+      {
+        loaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null],
+        loaiGia: [null],
+        tenCloaiVthh: [null, [Validators.required]],
+        namTongHop: [dayjs().get('year'), [Validators.required]],
+        giaDnTu: [null],
+        giaDnDen: [null]
+      }
+    );
     this.formData = this.fb.group(
       {
         id: [],
@@ -69,7 +83,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.loadDsLoaiGia(),
+      // this.loadDsLoaiGia(),
       // this.maDx = '/CDTVP-KH&QLHDT',
       this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namTongHop').value),
@@ -94,13 +108,13 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
   }
 
-  async loadDsLoaiGia() {
-    this.dsLoaiGia = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
-    }
-  }
+  // async loadDsLoaiGia() {
+  //   this.dsLoaiGia = [];
+  //   let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.dsLoaiGia = res.data;
+  //   }
+  // }
 
   async onChangeNamQd(namTongHop) {
     let body = {
@@ -235,10 +249,60 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     // this.spinner.hide();
     // console.log(this.formData)
   }
-
+  initForm(dataDetail?) {
+    // if (dataDetail) {
+    //   this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+    //   this.formData.patchValue({
+    //     id: dataDetail.id,
+    //     namKhoach: dataDetail.namKhoach,
+    //     ngayThop: dataDetail.ngayTao ? dataDetail.ngayTao : dayjs().format("YYYY-MM-DD"),
+    //     noiDung: dataDetail.noiDung,
+    //     loaiVthh: dataDetail.loaiVthh,
+    //     cloaiVthh: dataDetail.cloaiVthh,
+    //     loaiHdong: dataDetail.loaiHdong,
+    //     pthucLcnt: dataDetail.pthucLcnt,
+    //     hthucLcnt: dataDetail.hthucLcnt,
+    //     nguonVon: dataDetail.nguonVon,
+    //     tgianBdauTchuc: [dataDetail.tgianBdauTchucTu, dataDetail.tgianBdauTchucDen],
+    //     tgianDthau: [dataDetail.tgianDthauTu, dataDetail.tgianDthauDen],
+    //     tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
+    //     tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
+    //     ghiChu: dataDetail.ghiChu,
+    //     trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai,
+    //     tenVthh: dataDetail.tenVthh,
+    //     tenCloaiVthh: dataDetail.tenCloaiVthh,
+    //     tchuanCluong: dataDetail.tchuanCluong
+    //   })
+    //   console.log(this.formData.get('trangThai').value);
+    //   this.isTongHop = true;
+    // }
+  }
+  async tongHopDeXuatTuCuc() {
+    // this.spinner.show();
+    // try {
+    //   this.helperService.markFormGroupTouched(this.formTraCuu);
+    //   if (this.formTraCuu.invalid) {
+    //     this.spinner.hide();
+    //     return;
+    //   }
+    //   let body = this.formTraCuu.value;
+    //   let res = await this.tonghopphuongangia.search(body);
+    //   if (res.msg == MESSAGE.SUCCESS) {
+    //     this.initForm(res.data);
+    //   } else {
+    //     this.notification.error(MESSAGE.ERROR, res.msg);
+    //   }
+    //   this.spinner.hide();
+    // } catch (e) {
+    //   console.log('error: ', e);
+    //   this.spinner.hide();
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    // }
+  }
   xoaKeHoach() { }
 
   themKeHoach() { }
+
 }
 
 
