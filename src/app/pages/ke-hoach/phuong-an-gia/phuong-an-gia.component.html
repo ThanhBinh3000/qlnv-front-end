@@ -3,7 +3,7 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Thóc, Gạo, Muối
         </li>
-        <li nz-menu-item (click)="selectTab(1)">
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isTongCuc()">
             Vật tư, thiết bị
         </li>
     </ul>

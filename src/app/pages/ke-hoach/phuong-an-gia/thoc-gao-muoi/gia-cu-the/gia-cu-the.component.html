@@ -3,7 +3,7 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Đề xuất phương án giá
         </li>
-        <li nz-menu-item (click)="selectTab(1)">
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isTongCuc()">
             Tổng hợp phương án giá
         </li>
         <li nz-menu-item (click)="selectTab(2)">
