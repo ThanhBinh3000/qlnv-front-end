@@ -6,22 +6,22 @@
         <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isTongCuc()">
             Vật tư, thiết bị
         </li>
-        <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc()">
+        <!-- <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc()">
             Vật tư, thiết bị
-        </li>
+        </li> -->
     </ul>
 </nz-affix>
 
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 0">
-            <app-thoc-gao-muoi [loaiVthh]="'LT'"></app-thoc-gao-muoi>
+            <app-main-phuong-an-gia [loaiVthh]="'LT'"></app-main-phuong-an-gia>
         </ng-container>
         <ng-container *ngIf="tabSelected == 1">
-            <app-thoc-gao-muoi [loaiVthh]="'VT'"></app-thoc-gao-muoi>
+            <app-main-phuong-an-gia [loaiVthh]="'VT'"></app-main-phuong-an-gia>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 2">
+        <!-- <ng-container *ngIf="tabSelected == 2">
             <app-vat-tu-thiet-bi></app-vat-tu-thiet-bi>
-        </ng-container>
+        </ng-container> -->
     </div>
 </div>
