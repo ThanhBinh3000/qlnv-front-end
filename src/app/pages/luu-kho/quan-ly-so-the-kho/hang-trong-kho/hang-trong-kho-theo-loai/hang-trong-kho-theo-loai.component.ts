@@ -18,6 +18,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 
 
 
@@ -61,6 +62,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
 
   mapOfExpandedData: { [key: string]: HangTrongKhoRowItem[] } = {};
 
@@ -159,8 +161,17 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     if (!isEmpty(dsTong)) {
       this.dsTong = dsTong;
       this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
+      if (this.userInfo.CAP_DVI === this.globals.prop.CUC) {
+        this.formData.get('idCuc').setValue(this.dsCuc[0].tenDvi)
+        this.formData.controls['idCuc'].disable();
+        this.onChangeCuc(this.dsCuc[0].id);
+      }
       if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
         this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+        this.formData.get('idChiCuc').setValue(this.dsChiCuc[0].tenDvi)
+        this.formData.controls['idCuc'].disable();
+        this.formData.controls['idChiCuc'].disable();
+        this.onChangeChiCuc(this.dsChiCuc[0].id);
       }
     }
   }
@@ -260,21 +271,22 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       body.denNgay = this.formData.value.ngay[1]
     }
     let res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
-
     if (res.msg === MESSAGE.SUCCESS) {
-      this.dataTable = [...res.data.content];
-      this.dataTable.forEach((item) => {
+      this.dataTableAll = [...res.data.content];
+      this.dataTableAll.forEach((item) => {
         this.mapOfExpandedData[item.maDvi] = this.treeTableService.convertTreeToList(item, 'maDvi');
       });
+      this.dataTable = cloneDeep(this.dataTableAll)
       this.totalRecord = res.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
     this.search()
+    await this.loadDsTong()
   }
   async changePageIndex(event) {
     this.spinner.show();
@@ -318,10 +330,10 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
         isView: true,
       },
     });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-      }
-    });
+    // modalQD.afterClose.subscribe((data) => {
+    //   if (data) {
+    //   }
+    // });
   }
 
   exportData() {
