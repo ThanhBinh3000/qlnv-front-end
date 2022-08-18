@@ -272,6 +272,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   viewDetail(id: number, isViewDetail: boolean) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;

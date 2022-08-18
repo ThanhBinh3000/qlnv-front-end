@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -7,7 +7,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./gia-cu-the.component.scss']
 })
 export class GiaCuTheComponent implements OnInit {
-
+  @Input() type: string;
+  @Input() loaiVthh: string;
   constructor(
     public userService: UserService
   ) { }

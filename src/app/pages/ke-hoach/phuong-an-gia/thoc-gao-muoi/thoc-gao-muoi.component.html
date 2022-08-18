@@ -9,8 +9,8 @@
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-mua-toi-da-ban-toi-thieu></app-mua-toi-da-ban-toi-thieu>
+    <app-mua-toi-da-ban-toi-thieu [type]="'GMTDBTT'" [loaiVthh]="loaiVthh"></app-mua-toi-da-ban-toi-thieu>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-gia-cu-the></app-gia-cu-the>
+    <app-gia-cu-the [type]="'GCT'" [loaiVthh]="loaiVthh"></app-gia-cu-the>
 </ng-container>

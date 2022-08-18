@@ -34,7 +34,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKhoach" [nzDisabled]="isView" nzAllowClear="true">
+                            <nz-select formControlName="namKeHoach" [nzDisabled]="isView" nzAllowClear="true">
                                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>
@@ -265,7 +265,7 @@
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group [nzSuffix]="suffixIconSearch" class="input-suffix">
                                     <input type="text" [nzSize]="'small'" readonly nz-input
-                                        formControlName="diaDiemNhap" />
+                                        formControlName="diaDiemDeHang" />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
                                     <button nz-button nzType="primary" nzSearch (click)="themMoiDiaDiem()"><i nz-icon
@@ -324,7 +324,7 @@
                         <tr *ngFor="let data of dataTableCanCuXdg; let idx = index">
                             <td class="text-center">{{ idx + 1 }}</td>
                             <td>{{ data.moTa }}</td>
-                            <td>{{ data.fileDinhKem.fileName }}</td>
+                            <td>{{ data.fileDinhKem?.fileName }}</td>
                             <td style="text-align: left; white-space: nowrap;">
                                 <!-- <a (click)="themKeHoach(data, idx,true)">
                             <i class="fa fa-eye"></i>
