@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+	<!-- (nzChange)="onChange($event)" -->
+	<ul nz-menu nzMode="horizontal">
+		<li nz-menu-item nzSelected (click)="selectTab('thuchien')">
+			Quy trình báo cáo thực hiện dự toán chi NSNN tại Tổng cục DTNN
+		</li>
+		<li nz-menu-item (click)="selectTab('ketqua')">
+			Quy trình báo cáo kết quả thực hiện vốn, phí hàng DTQG tại tổng cục DTNN
+		</li>
+	</ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+	<div class="contentDetail">
+		<ng-container *ngIf="tabSelected == 'thuchien'">
+			<app-bao-cao-thuc-hien-du-toan-chi-nsnn></app-bao-cao-thuc-hien-du-toan-chi-nsnn>
+		</ng-container>
+		<ng-container *ngIf="tabSelected == 'ketqua'">
+			<app-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg></app-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg>
+		</ng-container>
+	</div>
+</div>
