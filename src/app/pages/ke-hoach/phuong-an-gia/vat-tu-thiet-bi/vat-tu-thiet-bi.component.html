@@ -1,28 +1,40 @@
-<nz-affix [nzOffsetTop]="98" class="level2">
-    <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Đề xuất phương án giá
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Quyết định giá của BTC
-        </li>
-        <li nz-menu-item (click)="selectTab(2)">
-            Quyết định giá của CDTNN
-        </li>
-        <li nz-menu-item (click)="selectTab(3)">
-            Quyết định điều chỉnh của CDTNN
-        </li>
-    </ul>
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Đề xuất phương án giá
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Quyết định giá của BTC
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Quyết định giá của CDTNN
+    </li>
+    <li nz-menu-item (click)="selectTab(3)">
+      Quyết định điều chỉnh của CDTNN
+    </li>
+    <li nz-menu-item  (click)="selectTab(4)">
+      Giá mua tối da giá bán tối thiểu
+    </li>
+    <li nz-menu-item (click)="selectTab(5)">
+      Giá cụ thể
+    </li>
+  </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-de-xuat-phuong-an-gia></app-de-xuat-phuong-an-gia>
+  <app-de-xuat-phuong-an-gia></app-de-xuat-phuong-an-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
+  <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
-    <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
+  <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
 </ng-container>
 <ng-container *ngIf="tabSelected == 3">
-    <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
+  <app-quyet-dinh-gia-btc></app-quyet-dinh-gia-btc>
+</ng-container>
+<ng-container *ngIf="tabSelected == 4">
+  <app-gia-mua-ban></app-gia-mua-ban>
+</ng-container>
+<ng-container *ngIf="tabSelected == 5">
+  <app-gia-cu-the></app-gia-cu-the>
 </ng-container>

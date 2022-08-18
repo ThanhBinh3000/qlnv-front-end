@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Đề xuất phương án giá
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Quyết định giá của TCDTNN
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Quyết định điều chỉnh của TCDTNN
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-de-xuat-phuong-an-gct></app-de-xuat-phuong-an-gct>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+<app-qd-gct-tcdtnn></app-qd-gct-tcdtnn>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-qd-dc-tcdtnn></app-qd-dc-tcdtnn>
+</ng-container>
