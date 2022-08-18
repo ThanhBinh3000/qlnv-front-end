@@ -28,6 +28,9 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
+  @Input()
+  type: string;
+
   formData: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -69,7 +72,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namKhoach: [dayjs().get('year'), [Validators.required]],
+        namKeHoach: [dayjs().get('year'), [Validators.required]],
         soDeXuat: [, [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         ngayKy: [null, [Validators.required]],
@@ -84,7 +87,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         giaDeNghiVat: [null],
         soLuong: [],
         ghiChu: [],
-        diaDiemNhap: [null, [Validators.required]],
+        diaDiemDeHang: [null, [Validators.required]],
         //Form căn cứ phương pháp xác định giá
         maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: [],
@@ -141,13 +144,31 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         id: data.id,
         namKeHoach: data.namKeHoach,
         soDeXuat: data.soDeXuat.split('/')[0],
-        loaiHangHoa: data.loaiHangHoa,
+        loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
-
+        cloaiVthh: data.cloaiVthh,
+        moTa: data.moTa,
+        tchuanCluong: data.tchuanCluong,
+        giaDeNghi: data.giaDeNghi,
+        vat: data.vat,
+        giaDeNghiVat: data.giaDeNghiVat,
+        soLuong: data.soLuong,
+        ghiChu: data.ghiChu,
+        diaDiemDeHang: data.diaDiemDeHang,
+        maPphapXdg: data.maPphapXdg,
+        loaiHangXdg: data.loaiHangXdg,
+        giaVonNk: data.giaVonNk,
+        chiPhiChung: data.chiPhiChung,
+        chiPhiPbo: data.chiPhiPbo,
+        tongChiPhi: data.tongChiPhi,
+        noiDung: data.noiDung
       })
+      this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
+      this.dataTableKqGia = data.ketQuaThamDinhGia
       this.taiLieuDinhKemList = data.fileDinhKems;
     }
   }
@@ -342,7 +363,8 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
-    body.diaDiemDeHang = this.dsDiaDiemDeHang;
+    body.diaDiemDeHangs = this.dsDiaDiemDeHang;
+    body.type = this.type;
     console.log(body);
 
     let res
@@ -397,7 +419,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         soLuong += item.soLuong
     })
     this.formData.patchValue({
-      diaDiemNhap: ddDeHang.substring(0, ddDeHang.length - 2),
+      diaDiemDeHang: ddDeHang.substring(0, ddDeHang.length - 2),
       soLuong: soLuong
     })
   }
