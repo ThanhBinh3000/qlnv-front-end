@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { ItemCongVan } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { DialogCopyGiaoDuToanComponent } from './../../../../../components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
@@ -50,7 +50,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   id: any;
   userInfo: any;
   //thong tin chung bao cao
-
+  userRole: string; // role người dùng
   ngayTao: string;
   maDonViTao: string;
   maPa: string;
@@ -158,7 +158,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     //lay thong tin user
     const userName = this.userService.getUserName();
     await this.getUserInfo(userName);
-
+    this.userRole = this.userInfo?.roles[0].code;
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -258,6 +258,13 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       }
     }
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    if (ROLE_LANH_DAO.includes(this.userRole) || ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+      this.statusBtnSave = true;
+      this.statusBtnNew = true;
+      this.statusBtnCopy = true;
+      this.statusBtnPrint = true;
+      this.status = true;
+    }
   }
   //upload file
   async uploadFile(file: File) {
@@ -354,6 +361,13 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
+          if (ROLE_LANH_DAO.includes(this.userRole) || ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+            this.statusBtnSave = true;
+            this.statusBtnNew = true;
+            this.statusBtnCopy = true;
+            this.statusBtnPrint = true;
+            this.status = true;
+          }
           this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -1174,7 +1188,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       listCtietDvi.push({
         id: uuid.v4() + 'FE',
         maDviNhan: item.maDvi,
-        soTranChi: null,
+        soTranChi: 0,
       })
     })
 
@@ -1183,6 +1197,9 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.lstCtietBcao.forEach(item => {
       lstCtietBcaoTemp.push({
         ...item,
+        tongCong: item.tongCong,
+        nguonNsnn: item.nguonNsnn,
+        nguonKhac: item.nguonKhac,
         lstCtietDvis: listCtietDvi,
         id: uuid.v4() + 'FE',
       })
@@ -1227,6 +1244,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.router.navigate([
             '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi',
           ])
+        return
       }
 
       if (loaiPa === 2) {
@@ -1234,6 +1252,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.router.navigate([
             '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi',
           ])
+        return
       }
     }
   }

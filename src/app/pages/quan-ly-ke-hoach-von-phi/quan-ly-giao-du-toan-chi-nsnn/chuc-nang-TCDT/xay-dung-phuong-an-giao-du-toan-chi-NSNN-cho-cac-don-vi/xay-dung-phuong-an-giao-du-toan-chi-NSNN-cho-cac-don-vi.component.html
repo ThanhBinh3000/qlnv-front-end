@@ -20,7 +20,7 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi đơn vị cấp trên</span>
         </button>
-        <button class="btn btn-main" (click)="tongHop()" [hidden]="checkSumUp">
+        <button class="btn btn-main" (click)="tongHop()" [hidden]="statusBtnTongHop">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Tổng hợp</span>
         </button>
@@ -142,10 +142,17 @@
                   </th>
                 </tr>
                 <tr>
-                  <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                    (nzOnConfirm)="deleteCol(item.maDvi)">
-                    {{item.tenDvi}}
-                  </th>
+                  <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
+                    <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                      (nzOnConfirm)="deleteCol(item.maDvi)">
+                      {{item.tenDvi}}
+                    </th>
+                  </ng-container>
+                  <ng-template #nonDeleteCol>
+                    <th *ngFor="let item of lstDvi">
+                      {{item.tenDvi}}
+                    </th>
+                  </ng-template>
                 </tr>
               </thead>
               <tbody>
@@ -156,7 +163,7 @@
                     </td>
                     <td>
                       <div *ngFor="let item of noiDungs">
-                        <div *ngIf="item.id ==data.maNdung">
+                        <div *ngIf="item.id == data.maNdung">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -203,7 +210,7 @@
                       <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
                         <div *ngIf="e.maDviNhan == item.maDvi">
                           <nz-input-number class="search__input" nzSize="small" [(ngModel)]="e.soTranChi"
-                            [class]="e.soTranChi >= 0 ?'' : 'input-error-validate'"
+                            [class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
                             (ngModelChange)="changeModel(data.id)">
                           </nz-input-number>
                           <!-- <nz-input-number class="search__input" nzSize="small"
@@ -362,15 +369,15 @@
               <span>Thêm</span>
             </button>
           </ng-container>
-          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiaoToanBo">
+          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo">
             <span>Giao toàn bộ</span>
           </button>
-          <!-- <ng-container *ngIf="lstCtietBcao.length == 0">
-						<button type="button" class="btn btn-main" (click)="addAllCol()" [hidden]="status">
-							<i class="icon htvbdh_dau-cong"></i>
-							<span>Thêm cột</span>
-						</button>
-					</ng-container> -->
+          <ng-container *ngIf="lstCtietBcao.length == 0">
+            <button type="button" class="btn btn-main" (click)="addAllCol()" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm cột</span>
+            </button>
+          </ng-container>
           <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>

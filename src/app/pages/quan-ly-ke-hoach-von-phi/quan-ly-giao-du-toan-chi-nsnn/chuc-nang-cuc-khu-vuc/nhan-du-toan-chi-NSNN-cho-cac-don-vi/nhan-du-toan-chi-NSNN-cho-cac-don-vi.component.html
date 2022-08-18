@@ -5,19 +5,22 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button type="button" class="btn btn-main" (click)="save()"
-        [hidden]="!statusBtnNew">
+        <button *ngIf="userRole !== ( 'CC_KH_VP_TBP' || 'CC_KH_VP_LD')" nz-button type="button" class="btn btn-main"
+          (click)="save()" [hidden]="!statusBtnNew">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Tiếp nhận</span>
         </button>
         <ng-template #contentTemplate>
           <div class="contentTemplate_chonpa">
-            <a (click)="linkToPaPbo()" style="color: #1890ff;">1. Phương án phân bổ giao dự toán chi</a>
-            <a (click)="linkToPaGiaoDC()" style="color: #1890ff;">2. Phương án giao, điều chỉnh dự toán chi</a>
+            <!-- <a (click)="linkToPaPbo()" style="color: #1890ff;">1. Phương án phân bổ giao dự toán chi</a>
+            <a (click)="linkToPaGiaoDC()" style="color: #1890ff;">2. Phương án giao, điều chỉnh dự toán chi</a> -->
+            <a (click)="taoMoiPhuongAn(1)" style="color: #1890ff;">1. Phương án phân bổ giao dự toán chi</a>
+            <a (click)="taoMoiPhuongAn(2)" style="color: #1890ff;">2. Phương án giao, điều chỉnh dự toán chi</a>
           </div>
         </ng-template>
-        <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
-          [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnNew">
+        <button *ngIf="userRole !== ('CC_KH_VP_NV' || 'CC_KH_VP_TBP' || 'CC_KH_VP_LD')" class="btn btn-main" nz-button
+          nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click"
+          [hidden]="statusBtnNew">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Tạo phương án</span>
         </button>

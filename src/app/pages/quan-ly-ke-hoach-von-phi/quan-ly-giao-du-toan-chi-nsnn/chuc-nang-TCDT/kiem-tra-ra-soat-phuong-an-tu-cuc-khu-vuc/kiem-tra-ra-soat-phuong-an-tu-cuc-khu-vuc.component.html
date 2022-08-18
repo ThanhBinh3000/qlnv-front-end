@@ -23,14 +23,15 @@
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="KIỂM TRA TÌNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI"
+        class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
         </div>
         <nz-table nzBordered #basicTable [nzData]="listBcaoKqua" class="nowrap">
           <thead>
             <tr>
               <th nzWidth="60px">STT</th>
-              <th nzWidth="300px">Đơn vị</th>
+              <th nzWidth="300px">Đơn vị nhận</th>
               <th nzWidth="130px">Mã phương án</th>
               <th nzWidth="100px">Năm dự toán</th>
               <th nzWidth="150px" class="text-center">Trạng thái</th>
@@ -42,7 +43,7 @@
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDviNhan)}}</td>
               <td>{{ item.maPa }}</td>
-              <td>{{item.namPa}}</td>
+              <td>{{item.namDtoan}}</td>
               <td class="text-center">
                 {{getStatusName(item.trangThai)}}
               </td>
@@ -92,10 +93,10 @@
           <i nz-icon nzType="stop"></i>
           <span>Đóng</span>
         </button>
-        <button nz-button class="search__button--clear" (click)="xoaDieuKien()" >
-					<i nz-icon nzType="close"></i>
-					Xóa điều kiện
-				</button>
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+          <i nz-icon nzType="close"></i>
+          Xóa điều kiện
+        </button>
       </ng-template>
     </div>
   </div>
