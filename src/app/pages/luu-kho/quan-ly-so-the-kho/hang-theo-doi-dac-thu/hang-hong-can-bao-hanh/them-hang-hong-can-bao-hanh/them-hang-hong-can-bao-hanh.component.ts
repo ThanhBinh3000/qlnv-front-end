@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -14,6 +14,7 @@ import * as dayjs from 'dayjs';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { QuanLyDanhSachHangHongHocService } from 'src/app/services/quanLyDanhSachHangHongHoc.service';
 import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBiHongCanBaoHanh.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-hang-hong-can-bao-hanh',
@@ -22,12 +23,11 @@ import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBi
 })
 export class ThemHangHongCanBaoHanhComponent implements OnInit {
   @Output('close') onClose = new EventEmitter<any>();
-
-
   @Input() idInput: number;
-  @Input() isCheck: boolean;
-  // @Input() isStatus: any;
+  @Input() isCheck: boolean = false;
 
+  detail: any = {};
+  userInfo: UserLogin;
   dsTong: any[];
   dsLoaiHangHoa: any[];
   formData: FormGroup;
@@ -54,29 +54,16 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
 
     soLuongTon: null,
     soLuongCanBaoHanh: null,
-    tenDonVi: null,
+    tenDonViTinh: null,
     lyDo: null,
     isUpdate: false
   };
 
   page: number = 1;
-  pageSize: number = 2;
-  // pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   indexItemStart: number;
   indexItemEnd: number;
-
-  dataEdit: {
-    [key: string]: { edit: boolean; data: IHangHongCanBaoHanh };
-  } = {};
-  dsDonVi = [];
-  dsDonViDataSource = [];
-  dsDiemKho = [];
-  dsDiemKhoDataSource = [];
-  dsNhaKho = [];
-  dsNhaKhoDataSource = [];
-  dsNganLo = [];
-  dsNganLoDataSource = [];
 
   listMaDanhSach: any[] = [];
 
@@ -86,11 +73,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganKho: any[] = [];
   listNganLo: any[] = [];
-  detail: any = {};
-  userInfo: UserLogin;
-
-  tenDonVi: string;
-
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -115,30 +97,107 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      maDonVi: [this.detail.maDvi],
-      maDanhSach: [null],
-      ngayTao: [new Date()],
+      maDonVi: [this.detail.maDvi, [Validators.required]],
+      maDanhSach: [null, [Validators.required]],
+      ngayTao: [new Date(), [Validators.required]],
     });
   }
 
-  initData() {
-    this.loadMaDanhSach();
-    this.loadDiemKho();
-    this.loaiVTHHGetAll();
+  async initData() {
+
+    await Promise.all([this.loadMaDanhSach(), this.loadDiemKho(), this.loaiVTHHGetAll()])
+
     if (this.idInput) {
-      this.loadItemChiTiet();
+      await this.loadItemChiTiet();
     }
   }
 
-  async loadItemChiTiet() {
-    console.log(this.idInput)
-    console.log(this.isCheck)
+  isDetail() {
+    return this.isCheck;
   }
 
-  loadDsTong() {
-    if (!isEmpty(this.dsTong)) {
-      this.dsDonVi = this.dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
+  async loadItemChiTiet() {
+    try {
+      const res = await this.quanLyHangBiHongCanBaoHanhService.chitiet(this.idInput);
+
+      if (res.data && res.msg == MESSAGE.SUCCESS) {
+        this.formData.patchValue({ ngayTao: res.data.ngayTao, maDanhSach: res.data.maDanhSach });
+
+        if (res.data.ds && res.data.ds.length > 0) {
+
+          res.data.ds.forEach((item: any) => {
+            // Loại hàng hóa
+            this.listLoaiHangHoa.forEach((loaihanghoa: any) => {
+              if (loaihanghoa.ten === item.loaiHang) {
+                this.rowItem.maLoaiHangHoa = loaihanghoa.ma;
+                this.rowItem.tenLoaiHangHoa = loaihanghoa.ten;
+                this.changeLoaiHangHoa();
+
+                this.listChungLoaiHangHoa.forEach((chungloaihanghoa: any) => {
+                  if (chungloaihanghoa.ten === item.chungLoaiHang) {
+                    this.rowItem.maChungLoaiHangHoa = chungloaihanghoa.ma;
+                    this.rowItem.tenChungLoaiHangHoa = chungloaihanghoa.ten;
+                    this.rowItem.tenDonViTinh = chungloaihanghoa.maDviTinh;
+                  }
+                })
+
+              }
+            })
+
+            // Điểm kho
+            this.listDiemKho.forEach((diemkho: any) => {
+              if (diemkho.title === item.diemKho) {
+                this.rowItem.maDiemKho = diemkho.maDvi;
+                this.rowItem.tenDiemKho = diemkho.title;
+                this.changeDiemKho(false);
+
+                this.listNhaKho.forEach((nhakho: any) => {
+                  if (nhakho.title === item.nhaKho) {
+                    this.rowItem.maNhaKho = nhakho.maDvi;
+                    this.rowItem.tenNhaKho = nhakho.title;
+
+                    this.changeNhaKho(false);
+
+                    this.listNganKho.forEach((ngankho: any) => {
+                      if (ngankho.title === item.nganKho) {
+                        this.rowItem.maNganKho = ngankho.maDvi;
+                        this.rowItem.tenNganKho = ngankho.title;
+
+                        this.changeNganKho();
+
+                        this.listNganLo.forEach((nganlo: any) => {
+                          if (ngankho.title === item.nganKho) {
+                            this.rowItem.maNganLo = nganlo.maDvi;
+                            this.rowItem.tenNganLo = nganlo.title;
+                          }
+                        })
+
+                      }
+                    })
+
+                  }
+                })
+
+              }
+            })
+
+            this.rowItem.lyDo = item.lyDo;
+            this.rowItem.soLuongTon = item.slTon;
+            this.rowItem.soLuongCanBaoHanh = item.slYeuCau;
+
+            this.dataTable.push(this.rowItem);
+            this.clearData();
+
+          })
+          this.totalRecord = this.dataTable.length;
+          this.loadListTable();
+        }
+
+      }
+
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -158,15 +217,10 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
       }
       const res = await this.quanLyDanhSachHangHongHocService.search(body);
       this.listMaDanhSach = res.data.content;
-      console.log(this.listMaDanhSach);
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  changeMaDanhSach() {
-    console.log(this.formData.value.maDanhSach)
   }
 
   // Load loại hàng hóa
@@ -197,7 +251,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   }
 
   // load chủng loại hàng hóa
-  async changeLoaiHangHoa() {
+  changeLoaiHangHoa() {
     let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.rowItem.maLoaiHangHoa);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.rowItem.tenLoaiHangHoa = loaiHangHoa[0].ten;
@@ -209,11 +263,10 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     let chungLoaiHangHoa = this.listChungLoaiHangHoa.filter(x => x.ma == this.rowItem.maChungLoaiHangHoa);
     if (chungLoaiHangHoa && chungLoaiHangHoa.length > 0) {
       this.rowItem.tenChungLoaiHangHoa = chungLoaiHangHoa[0].ten;
-      this.rowItem.tenDonVi = chungLoaiHangHoa[0].maDviTinh;
+      this.rowItem.tenDonViTinh = chungLoaiHangHoa[0].maDviTinh;
     }
 
   }
-
 
   // load điểm kho
   async loadDiemKho() {
@@ -274,14 +327,12 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   }
 
   // change Ngăn lô
-  changeNganLo() {
+  async changeNganLo() {
     let nganLo = this.listNganLo.filter(x => x.maDvi == this.rowItem.maNganLo);
     if (nganLo && nganLo.length > 0) {
       this.rowItem.tenNganLo = nganLo[0].title;
     }
-    console.log(this.rowItem);
-
-    this.loadSoLuongTon();
+    await this.loadSoLuongTon();
   }
 
   //load số lượng tồn
@@ -325,23 +376,26 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   }
 
   themMoiItem() {
-    this.dataTable.push(this.rowItem);
-    this.clearData();
-    if (this.dataTable.length > 0) {
-      this.totalRecord = this.dataTable.length;
-    }
-
-    if (this.dataTable.length > this.page * this.pageSize) {
-      if ((this.dataTable.length - this.page * this.pageSize) > this.pageSize) {
-        this.page = Number((this.dataTable.length / this.pageSize).toFixed());
-        console.log('pasize > 10')
-      } else {
-        this.page = this.page + 1;
-        console.log('pasize')
+    if (this.rowItem.maChungLoaiHangHoa !== null && this.rowItem.maNganLo !== null) {
+      this.dataTable.push(this.rowItem);
+      this.clearData();
+      if (this.dataTable.length > 0) {
+        this.totalRecord = this.dataTable.length;
       }
-    }
 
-    this.loadListTable();
+      if (this.dataTable.length > this.page * this.pageSize) {
+        if ((this.dataTable.length - this.page * this.pageSize) > this.pageSize) {
+          this.page = Number((this.dataTable.length / this.pageSize).toFixed());
+        } else {
+          this.page = this.page + 1;
+        }
+      }
+
+      this.loadListTable();
+    } else {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_NOT_EMPTY);
+    }
 
   }
 
@@ -349,23 +403,21 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   loadListTable() {
     this.indexItemStart = this.pageSize * (this.page - 1);
     this.indexItemEnd = this.pageSize * (this.page - 1) + (this.pageSize - 1);
-    console.log(this.indexItemStart)
-    console.log(this.indexItemEnd)
 
     let listTable = [];
 
-    this.dataTable.forEach((item, index) => {
-      if (index >= this.indexItemStart && index <= this.indexItemEnd) {
-        listTable = [
-          ...listTable,
-          item
-        ];
-      }
-    })
+    if (this.dataTable.length > 0) {
+      this.dataTable.forEach((item, index) => {
+        if (index >= this.indexItemStart && index <= this.indexItemEnd) {
+          listTable = [
+            ...listTable,
+            item
+          ];
+        }
+      })
+    }
 
     this.listTable = listTable;
-    console.log(this.listTable);
-    console.log(this.dataTable);
   }
 
   clearData() {
@@ -390,7 +442,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
 
       soLuongTon: null,
       soLuongCanBaoHanh: null,
-      tenDonVi: null,
+      tenDonViTinh: null,
       lyDo: null,
       isUpdate: false
     };
@@ -402,36 +454,48 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   }
 
   async luu() {
-    const ds = this.dataTable.map((item) => {
-      return {
-        "lyDo": item.lyDo,
-        "maChungLoaiHang": item.maChungLoaiHangHoa,
-        "maDiemKho": item.maDiemKho,
-        "maLoKho": item.maNganLo,
-        "maLoaiHang": item.maLoaiHangHoa,
-        "maNganKho": item.maNganKho,
-        "maNhaKho": item.maNhaKho,
-        "slTon": item.soLuongTon,
-        "slYeuCau": item.soLuongCanBaoHanh
-      }
-    })
+    let ds = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      ds = this.dataTable.map((item) => {
+        return {
+          "lyDo": item.lyDo,
+          "maChungLoaiHang": item.maChungLoaiHangHoa,
+          "maDiemKho": item.maDiemKho,
+          "maLoKho": item.maNganLo,
+          "maLoaiHang": item.maLoaiHangHoa,
+          "maNganKho": item.maNganKho,
+          "maNhaKho": item.maNhaKho,
+          "slTon": item.soLuongTon,
+          "slYeuCau": item.soLuongCanBaoHanh
+        }
+      })
+    }
 
     const body = {
       "ds": ds,
       "maDonVi": this.formData.value.maDonVi,
-      // "maDonVi": "01070203",
-      "maDanhSach": this.formData.value.maDanhSach,
+      "maDanhSach": "TDSDAF",
+      // "maDanhSach": this.formData.value.maDanhSach,
       "ngayTao": this.formData.value.ngayTao,
     }
 
     try {
-      const res = await this.quanLyHangBiHongCanBaoHanhService.them(body);
+      let res: any;
+
+      if (this.idInput) {
+        const bodyEdit = {
+          ...body,
+          "id": this.idInput,
+        }
+        res = await this.quanLyHangBiHongCanBaoHanhService.sua(bodyEdit);
+      } else {
+        res = await this.quanLyHangBiHongCanBaoHanhService.them(body);
+      }
 
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, this.idInput ? MESSAGE.UPDATE_SUCCESS : MESSAGE.ADD_SUCCESS);
         this.huy();
       }
-      console.log(res);
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -440,21 +504,42 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   }
 
   xoaItem(idx: number) {
-    this.dataTable = this.dataTable.filter((item, index) => index !== idx);
-
-    console.log(this.dataTable);
+    if (idx !== undefined) {
+      this.dataTable = this.dataTable.filter((item, index) => index !== idx);
+      this.totalRecord = this.dataTable.length;
+      this.loadListTable();
+    }
   }
 
   editItem(idx: number): void {
-    this.dataTable[idx].isUpdate = !this.dataTable[idx].isUpdate;
+    if (idx !== undefined) {
+      this.dataTable[idx].isUpdate = !this.dataTable[idx].isUpdate;
+    }
   }
 
-  changeLyDoSoLuong(event: any, idx: number, type: string) {
-    console.log(this.dataTable);
-  }
+  // Chưa hoàn thiện
+  async exportData() {
+    try {
+      const body = {
+        "denNgay": "",
+        "limit": 20,
+        "maDonVi": this.detail.maDvi,
+        "maDs": this.formData.value.maDanhSach,
+        "maVTHH": this.rowItem.maChungLoaiHangHoa,
+        "orderBy": "",
+        "orderType": "",
+        "page": 0,
+        "tuNgay": ""
+      }
 
-  exportData() { }
-  inDanhSach() { }
+      const res = await this.quanLyHangBiHongCanBaoHanhService.exportListct(body).subscribe((blob) => {
+        saveAs(blob, 'danh-sach-hang-bi-hong-can-bao-hanh-chi-tiet.xlsx')
+      });
+
+    } catch (error) { }
+
+
+  }
 
   changePageIndex(event: any) {
     this.page = event;
@@ -465,8 +550,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     this.page = 1;
     this.pageSize = event;
     this.loadListTable();
-
-
   }
 
 }
@@ -492,7 +575,7 @@ interface IHangHongCanBaoHanh {
 
   soLuongTon: number;
   soLuongCanBaoHanh: number;
-  tenDonVi: string;
+  tenDonViTinh: string;
   lyDo: string;
   isUpdate: boolean;
 }

@@ -58,7 +58,7 @@
     <div class="group-button">
       <h3>Danh sách hàng bị hỏng cần bảo hành</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -66,7 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null, false)">
+        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null, false)" *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -87,7 +87,7 @@
             <th style="width: 40%;">Tên đơn vị</th>
             <th style="width: 15%;">Ngày tạo</th>
             <th style="width: 15%;">Trạng thái xử lý của Cục</th>
-            <th width="">Hành động</th>
+            <th width="10%">Hành động</th>
           </tr>
           <tr>
             <th></th>
@@ -136,10 +136,10 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, false)">
+              <a (click)="viewDetail(data.id, false)" *ngIf="userService.isChiCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)">
+              <a (click)="xoaItem(data.id)" *ngIf="userService.isChiCuc()">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
