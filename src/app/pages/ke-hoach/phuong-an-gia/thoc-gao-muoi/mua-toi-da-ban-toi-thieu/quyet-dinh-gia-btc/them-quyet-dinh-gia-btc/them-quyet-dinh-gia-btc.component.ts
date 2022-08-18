@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
@@ -28,7 +29,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-
+  dsLoaiGia: any[] = [];
   userInfo: UserLogin;
   soDeXuat: string;
 
@@ -48,7 +49,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     private helperService: HelperService,
     private giaDeXuatGiaService: GiaDeXuatGiaService,
     private notification: NzNotificationService,
-
+    private danhMucService: DanhMucService,
   ) {
     this.formData = this.fb.group(
       {
@@ -70,6 +71,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.loadDsLoaiGia(),
       this.maDx = '/QD-BTC',
       this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namKeHoach').value),
@@ -92,6 +94,14 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
       })
+    }
+  }
+
+  async loadDsLoaiGia() {
+    this.dsLoaiGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiGia = res.data;
     }
   }
 

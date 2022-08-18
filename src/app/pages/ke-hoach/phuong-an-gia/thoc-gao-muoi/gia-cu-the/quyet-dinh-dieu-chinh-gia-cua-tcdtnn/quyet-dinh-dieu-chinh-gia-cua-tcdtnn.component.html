@@ -7,7 +7,7 @@
                         <nz-form-item class="form-item">
                             <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="namTongHop" id="nam-kh">
+                                <nz-select formControlName="namKeHoach" id="nam-kh">
                                     <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                                     </nz-option>
                                 </nz-select>
@@ -16,33 +16,30 @@
                     </div>
                     <div nz-col [nzSpan]="4">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
+                            <nz-form-label nzFor="so-dx">Số quyết định</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="loaiHangHoa" id="loai-hh">
-                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
-                                    </nz-option>
-                                    <nz-option>
-                                    </nz-option>
-                                </nz-select>
+                                <nz-input-group id="so-dx">
+                                    <input type="text" nz-input formControlName="soDeXuat" />
+                                </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="trich-yeu">Nội dung tổng hợp</nz-form-label>
+                            <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
                             <nz-form-control>
                                 <nz-input-group id="trich-yeu">
-                                    <input type="text" nz-input formControlName="noiDung" />
+                                    <input type="text" nz-input formControlName="trichYeu" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="5">
                         <nz-form-item class="form-item">
-                            <nz-form-label nzFor="ngay-ky">Ngày tổng hợp</nz-form-label>
+                            <nz-form-label nzFor="ngay-ky">Ngày ký</nz-form-label>
                             <nz-form-control>
                                 <nz-form-control>
-                                    <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy">
+                                    <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy">
                                     </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-control>
@@ -90,15 +87,13 @@
                                 [nzIndeterminate]="indeterminate"></label>
                         </th>
                         <th class="text-center" style="width: 2%;">STT</th>
-                        <th class="text-center" style="width: 9%;">Mã tổng hợp</th>
-                        <th class="text-center" style="width: 9%;">Ngày tổng hợp</th>
-                        <th class="text-center" style="width: 13%;">Nội dung tổng hợp</th>
-                        <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
-                        <th class="text-center" style="width: 7%;">Loại hàng hóa</th>
-                        <th class="text-center" style="width: 9%;">Chủng loại hàng hóa</th>
-                        <th class="text-center" style="width: 7%;">Loại giá</th>
-                        <th class="text-center" style="width: 9%;">Trạng thái tổng hợp</th>
-                        <th class="text-center" style="width: 9%;">Mã tờ trình</th>
+                        <th class="text-center" style="width: 9%;">Số quyết định</th>
+                        <th class="text-center" style="width: 9%;">Ngày ký</th>
+                        <th class="text-center" style="width: 32%;">Trích yếu</th>
+                        <th class="text-center" style="width: 10%;">Số QĐ giá của TCDTNN</th>
+                        <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+                        <th class="text-center" style="width: 9%;">Loại giá</th>
+                        <th class="text-center" style="width: 9%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 7%;">Trạng thái</th>
                         <th class="text-center" width="width: 5%;">Hành động</th>
                     </tr>
@@ -107,8 +102,7 @@
                         <th></th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTT"
-                                    (input)="filterInTable('soTT',filterTable.soTT)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -117,8 +111,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
-                                    (input)="filterInTable('ngayTongHop',filterTable.ngayTongHop)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -127,8 +120,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDung"
-                                    (input)="filterInTable('noiDung',filterTable.noiDung)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -137,8 +129,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namTongHop"
-                                    (input)="filterInTable('namTongHop',filterTable.namTongHop)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -147,8 +138,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                                    (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -157,8 +147,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiHh"
-                                    (input)="filterInTable('chungLoaiHh',filterTable.chungLoaiHh)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -167,8 +156,7 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiGia"
-                                    (input)="filterInTable('loaiGia',filterTable.loaiGia)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
@@ -177,34 +165,17 @@
 
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiTH"
-                                    (input)="filterInTable('trangThaiTH',filterTable.trangThaiTH)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
 
-                        <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maToTrinh"
-                                    (input)="filterInTable('maToTrinh',filterTable.maToTrinh)" size="small" />
-                            </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
-                        </th>
 
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                                    (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
-                            </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
+
                         </th>
-                        <th></th>
 
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
@@ -226,8 +197,6 @@
                         <td>{{ data.chungLoaiHh }}</td>
                         <td>{{ data.loaiGia }}</td>
                         <td>{{ data.trangThaiTH }}</td>
-                        <td>{{ data.maToTrinh }}</td>
-                        <td>{{ data.trangThai }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-eye"></i>
@@ -263,6 +232,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <app-them-tong-hop-phuong-an-gia [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
-    </app-them-tong-hop-phuong-an-gia>
+    <!-- <app-them-tong-hop-phuong-an-gia [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    </app-them-tong-hop-phuong-an-gia> -->
 </ng-template>
