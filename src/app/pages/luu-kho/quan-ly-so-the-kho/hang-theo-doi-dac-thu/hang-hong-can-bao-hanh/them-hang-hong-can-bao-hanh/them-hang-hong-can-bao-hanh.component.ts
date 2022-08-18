@@ -156,7 +156,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
         },
         "tuNgay": ""
       }
-      const res = await this.quanLyDanhSachHangHongHocService.tracuu(body);
+      const res = await this.quanLyDanhSachHangHongHocService.search(body);
       this.listMaDanhSach = res.data.content;
       console.log(this.listMaDanhSach);
     } catch (error) {

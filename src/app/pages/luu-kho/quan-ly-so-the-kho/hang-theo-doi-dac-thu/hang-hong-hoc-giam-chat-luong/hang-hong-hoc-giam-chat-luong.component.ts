@@ -10,6 +10,10 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { isEmpty } from 'lodash';
+import { QuanLyDanhSachHangHongHocService } from 'src/app/services/quanLyDanhSachHangHongHoc.service';
+import { cloneDeep } from 'lodash';
+import * as dayjs from 'dayjs';
+
 
 @Component({
   selector: 'app-hang-hong-hoc-giam-chat-luong',
@@ -20,16 +24,14 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   isAddNew = false;
+
   formData: FormGroup;
+
   allChecked = false;
   indeterminate = false;
+
   filterDate = new Date();
-  dsTrangThai: ITrangThai[] = [
-    // fake
-    { id: 1, giaTri: 'Đang xử lý' },
-    { id: 2, giaTri: 'Chờ duyệt' },
-    { id: 3, giaTri: 'Đã duyệt' },
-  ];
+
   dsTong;
   dsDonVi = [];
   dsDonViDataSource = [];
@@ -43,48 +45,20 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     ngayTao: new Date(),
     trangThai: null,
   };
+  filterTable: any = {
+    maDS: [null],
+    tenDVi: [null],
+    ngayTao: [null],
+    trangThaiXL: [null],
+  }
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
+
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
-
-  dataExample: IHangHongHocGiamChatLuong[] = [
-    {
-      id: 1,
-      maDanhSach: 'DS1',
-      idDonVi: 1,
-      tenDonVi: 'Test 1',
-      ngayTao: new Date(),
-      trangThai: 'Chờ duyệt',
-    },
-    {
-      id: 2,
-      maDanhSach: 'DS2',
-      idDonVi: 1,
-      tenDonVi: 'Test 2',
-      ngayTao: new Date(),
-      trangThai: 'Chờ duyệt',
-    },
-    {
-      id: 3,
-      maDanhSach: 'DS3',
-      idDonVi: 3,
-      tenDonVi: 'Test 3',
-      ngayTao: new Date(),
-      trangThai: 'Chờ duyệt',
-    },
-    {
-      id: 4,
-      maDanhSach: 'DS4',
-      idDonVi: 4,
-      tenDonVi: 'Test 1',
-      ngayTao: new Date(),
-      trangThai: 'Chờ duyệt',
-    },
-  ];
-
+  dataTableAll: any[] = [];
   constructor(
     private readonly fb: FormBuilder,
     private readonly userService: UserService,
@@ -92,14 +66,16 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
     private readonly notification: NzNotificationService,
-  ) {}
+    private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
       await this.initData();
-      this.dataTable = [...this.dataExample];
+
+      await this.search()
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -109,11 +85,9 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      tenDonVi: [null],
-      tenHangHoa: [null],
-      loaiHangHoa: [null],
-      ngayTao: [null],
+      "maDonVi": [null],
+      "maVTHH": [null],
+      "ngayTao": [null]
     });
   }
 
@@ -123,6 +97,39 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     this.detail.tenDvi = this.userInfo.TEN_DVI;
     await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
   }
+
+  async search() {
+    this.spinner.show();
+    let body = {
+      "denNgay": '',
+      "maDonVi": this.formData.value.maDonVi,
+      "maVTHH": this.formData.value.maVTHH,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "orderBy": "",
+        "orderType": "",
+        "page": this.page - 1
+      },
+      "tuNgay": ""
+    }
+    if (this.formData.value.ngayTao != null) {
+      body.tuNgay = this.formData.value.ngayTao[0]
+      body.denNgay = this.formData.value.ngayTao[1]
+    }
+    let res = await this.quanLyDanhSachHangHongHocService.search(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dataTable = [...res.data.content]
+      this.totalRecord = res.data.totalElements;
+      this.dataTableAll = cloneDeep(this.dataTable)
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg)
+    }
+  }
+
+
+
 
   async loadDsTong() {
     const body = {
@@ -180,11 +187,11 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     this.formData.reset();
   }
 
-  exportData() {}
+  exportData() { }
 
-  xoa() {}
+  xoa() { }
 
-  inDanhSach() {}
+  inDanhSach() { }
 
   themMoi() {
     this.isAddNew = true;
@@ -212,15 +219,15 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       !this.allChecked;
   }
 
-  onChangeFilterDate(event) {}
+  onChangeFilterDate(event) { }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 
-  viewDetail(id: number, isUpdate: boolean) {}
+  viewDetail(id: number, isUpdate: boolean) { }
 
-  xoaItem(id: number) {}
+  xoaItem(id: number) { }
 
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
