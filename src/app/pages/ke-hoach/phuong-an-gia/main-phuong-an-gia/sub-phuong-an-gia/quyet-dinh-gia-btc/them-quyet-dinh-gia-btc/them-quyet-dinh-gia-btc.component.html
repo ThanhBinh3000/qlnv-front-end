@@ -23,7 +23,7 @@
                     <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
                         {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
                     </span>
-                    <span>QUYẾT ĐỊNH GIÁ CÚA BTC</span>
+                    <span>QUYẾT ĐỊNH GIÁ CỦA BTC</span>
                 </div>
             </div>
         </div>
@@ -51,8 +51,8 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfter="{{maDx}}" id="so-qd">
-                                <nz-input-number type="text" nz-input formControlName="soDeXuat" [nzMin]="1"
+                            <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
+                                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1"
                                     [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                                 </nz-input-number>
                             </nz-input-group>
@@ -68,7 +68,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky"
                                 class="search__input">
                             </nz-date-picker>
                             <ng-template #error let-control>
@@ -83,7 +83,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày hiệu lực
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc"
                                 class="search__input">
                             </nz-date-picker>
                             <ng-template #error let-control>
@@ -121,11 +121,11 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hành hóa
+                        <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-select formControlName="loaiHangHoa" [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
+                                <nz-option *ngFor="let p of dsVthh" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -142,22 +142,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-select formControlName="loaiHangHoa" [nzDisabled]="isView" nzAllowClear="true">
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                    </ng-container>
-                                </ng-template>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-col [nzSpan]="3">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại giá
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                <nz-option *ngFor="let p of dsVthh" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -167,8 +152,22 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
-
+                <div nz-col [nzSpan]="4">
+                    <nz-form-item class="form-item">
+                        <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại giá
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
+                                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
+                                </nz-option>
+                                <ng-template #error let-control>
+                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                    </ng-container>
+                                </ng-template>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
                 <div nz-col [nzSpan]="6">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Tiêu chuẩn chất
@@ -186,23 +185,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzFor="nam-qd">vùng miền
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
-                                </nz-option>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                    </ng-container>
-                                </ng-template>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
             </div>
         </form>
     </nz-card>
