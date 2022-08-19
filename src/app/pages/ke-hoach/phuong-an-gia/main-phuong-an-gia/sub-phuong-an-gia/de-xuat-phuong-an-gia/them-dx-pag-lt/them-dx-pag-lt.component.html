@@ -4,12 +4,26 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
-            (click)="banHanh()">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Ban hành</span>
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || 
+            formData.value.trangThai == STATUS.CHO_DUYET_LDC" type="button" class="btn btn-sub do" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
         </button>
-        <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || 
+            formData.value.trangThai == STATUS.CHO_DUYET_LDC " type="button" class="btn btn-sub xanh-nhat"
+            (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || 
+            formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
+            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet "></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || 
+            formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
+            type="button" class="btn btn-sub xanh" (click)="save()">
             <i class="icon htvbdh_luu"></i>
             <span>Lưu</span>
         </button>
@@ -20,13 +34,18 @@
         <div class="header">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-                        {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+                    <span
+                        [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                        {{ formData.value.tenTrangThai }}
                     </span>
                     <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
                 </div>
             </div>
         </div>
+        <nz-alert
+            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+        </nz-alert>
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="20">
                 <div nz-col [nzSpan]="3">
@@ -392,15 +411,15 @@
                             <td>{{ data.moTa }}</td>
                             <td>{{ data.fileDinhKem?.fileName }}</td>
                             <td style="text-align: left; white-space: nowrap;">
-                                <!-- <a (click)="themKeHoach(data, idx,true)">
-                            <i class="fa fa-eye"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="themKeHoach(data, idx,false)">
-                            <i class="fa fa-pencil"></i>
-                          </a>
-                          <a *ngIf="formData.value.trangThai == '00' && !isView" (click)="xoaItem(idx)">
-                            <i class="fa fa-trash-o do"></i>
-                          </a> -->
+                                <a (click)="downloadFile(data.fileDinhKem)">
+                                    <i class="icon htvbdh_tcdt_import "></i>
+                                </a>
+                                <a>
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a>
+                                    <i class="fa fa-trash-o do"></i>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
