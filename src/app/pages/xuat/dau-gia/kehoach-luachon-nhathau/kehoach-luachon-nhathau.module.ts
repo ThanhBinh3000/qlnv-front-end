@@ -7,24 +7,17 @@ import { CucComponent } from './cuc/cuc.component';
 import { DanhsachKehoachLcntComponent } from './cuc/danhsach-kehoach-lcnt/danhsach-kehoach-lcnt.component';
 import { ThemmoiKehoachLcntComponent } from './cuc/danhsach-kehoach-lcnt/themmoi-kehoach-lcnt/themmoi-kehoach-lcnt.component';
 import { MainCucComponent } from './cuc/main-cuc/main-cuc.component';
-import { KeHoachLuachonNhathauComponent } from './kehoach-luachon-nhathau.component';
-import { MainTongCucComponent } from './tong-cuc/main-tong-cuc/main-tong-cuc.component';
-import { PhuongAnKhlcntComponent } from './tong-cuc/phuong-an-khlcnt/phuong-an-khlcnt.component';
-import { ThemmoiPhuonganKhlcntComponent } from './tong-cuc/phuong-an-khlcnt/themmoi-phuongan-khlcnt/themmoi-phuongan-khlcnt.component';
-import { QuyetdinhPheduyetKhlcntComponent } from './tong-cuc/quyetdinh-pheduyet-khlcnt/quyetdinh-pheduyet-khlcnt.component';
-import { ThemmoiQuyetdinhKhlcntComponent } from './tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/themmoi-quyetdinh-khlcnt.component';
-import { ThemmoiKehoachLcntTongCucComponent } from './tong-cuc/themmoi-kehoach-lcnt-tong-cuc/themmoi-kehoach-lcnt-tong-cuc.component';
-import { TongCucComponent } from './tong-cuc/tong-cuc.component';
-import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
-import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
 import { QdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/qd-phe-duyet-kh-ban-dau-gia.component';
 import { ThemMoiQdPheDuyetKhBanDauGiaComponent } from './cuc/qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia/them-moi-qd-phe-duyet-kh-ban-dau-gia.component';
+import { KeHoachLuachonNhathauComponent } from './kehoach-luachon-nhathau.component';
 import { DeXuatKhBanDauGiaComponent } from './tong-cuc/de-xuat-kh-ban-dau-gia/de-xuat-kh-ban-dau-gia.component';
 import { ThemMoiDeXuatKhBanDauGiaComponent } from './tong-cuc/de-xuat-kh-ban-dau-gia/them-moi-de-xuat-kh-ban-dau-gia/them-moi-de-xuat-kh-ban-dau-gia.component';
+import { MainTongCucComponent } from './tong-cuc/main-tong-cuc/main-tong-cuc.component';
 import { QuyetDinhPheDuyetKhBanDauGiaComponent } from './tong-cuc/quyet-dinh-phe-duyet-kh-ban-dau-gia/quyet-dinh-phe-duyet-kh-ban-dau-gia.component';
 import { ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent } from './tong-cuc/quyet-dinh-phe-duyet-kh-ban-dau-gia/them-moi-quyet-dinh-phe-duyet-kh-ban-dau-gia/them-moi-quyet-dinh-phe-duyet-kh-ban-dau-gia.component';
-import { TongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de-xuat-kh-ban-dau-gia/tong-hop-de-xuat-kh-ban-dau-gia.component';
+import { TongCucComponent } from './tong-cuc/tong-cuc.component';
 import { ThemMoiTongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de-xuat-kh-ban-dau-gia/them-moi-tong-hop-de-xuat-kh-ban-dau-gia/them-moi-tong-hop-de-xuat-kh-ban-dau-gia.component';
+import { TongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de-xuat-kh-ban-dau-gia/tong-hop-de-xuat-kh-ban-dau-gia.component';
 
 
 @NgModule({
@@ -34,17 +27,8 @@ import { ThemMoiTongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de
     DanhsachKehoachLcntComponent,
     ThemmoiKehoachLcntComponent,
     MainCucComponent,
-    PhuongAnKhlcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
     TongCucComponent,
     MainTongCucComponent,
-    PhuongAnKhlcntComponent,
-    ThemmoiPhuonganKhlcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
-    ThemmoiQuyetdinhKhlcntComponent,
-    ThemmoiKehoachLcntTongCucComponent,
-    TongHopKhlcntComponent,
-    ThemmoiTonghopKhlcntComponent,
     QdPheDuyetKhBanDauGiaComponent,
     ThemMoiQdPheDuyetKhBanDauGiaComponent,
     DeXuatKhBanDauGiaComponent,
@@ -64,13 +48,8 @@ import { ThemMoiTongHopDeXuatKhBanDauGiaComponent } from './tong-cuc/tong-hop-de
     CucComponent,
     DanhsachKehoachLcntComponent,
     MainCucComponent,
-    PhuongAnKhlcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
     TongCucComponent,
     MainTongCucComponent,
-    PhuongAnKhlcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
-    TongHopKhlcntComponent,
   ]
 })
 export class KehoachLuachonNhathauModule { }
