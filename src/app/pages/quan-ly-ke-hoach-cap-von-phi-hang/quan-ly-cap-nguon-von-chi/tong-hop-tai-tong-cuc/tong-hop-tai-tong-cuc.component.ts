@@ -187,10 +187,15 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
+
+
+    }
+
+    async ngAfterViewInit() {
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
-        this.spinner.show();
+        // this.spinner.show();
         const userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         //lay danh sach danh muc
@@ -256,8 +261,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             );
         }
         this.getStatusButton();
-        this.spinner.hide();
-
+        // this.spinner.hide();
     }
 
     redirectkehoachvonphi() {
