@@ -1,45 +1,42 @@
-<nz-affix class="menu-lv3 nhap-xuat-hang" [nzOffsetTop]="43">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
-      <div class="trai">
-      </div>
-      <div class="canphai phai" *ngIf="!isChiTiet">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
-          <i class="fa fa-arrow-left"></i>
-          <span>Quay lại</span>
-        </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() && typeVthh == '02'"
-          (click)="guiDuyet()" [disabled]="!formData.valid">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Lưu và gửi duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_TP || quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && typeVthh == '02'"
-          (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_TP || quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && typeVthh == '02'"
-          (click)="tuChoi()">
-          <i class="icon htvbdh_tcdt_tuchoi do"></i>
-          <span>Từ chối</span>
-        </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() &&  typeVthh != '02'"
-          [disabled]="!formData.valid">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Ban hành</span>
-        </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
-          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail()" [disabled]="!formData.valid">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
-        </button>
-      </div>
-    </div>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+  <div class="btn-group" *ngIf="!isChiTiet">
+    <button type="button" class="btn btn-sub" (click)="huyBo()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button type="button"
+            class="btn btn-sub"
+            *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() && typeVthh == '02'"
+            (click)="guiDuyet()" [disabled]="!formData.valid">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button type="button"
+    class="btn btn-sub"
+            *ngIf="(quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT || quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && typeVthh == '02'"
+            (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button type="button"
+            class="btn btn-sub"
+            *ngIf="(quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_TP_KH_QLHDT || quyetDinhNhapXuat.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && typeVthh == '02'"
+            (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Từ chối</span>
+    </button>
+    <button *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() &&  typeVthh != '02'"
+    [disabled]="!formData.valid" type="button"
+            class="btn btn-sub">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Ban hành</span>
+    </button>
+    <button  *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail()" [disabled]="!formData.valid"
+            type="
+          button" class="btn btn-main" (click)="save()">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
   </div>
 </nz-affix>
 <div class="contentBor them-moi-nhap-xuat-hang__body">
@@ -48,6 +45,7 @@
       <div class="title-chi-tieu">
         <span class="title-form">Thông tin quyết định giao nhiệm vụ nhập hàng</span>
       </div>
+      <br>
       <nz-card class="flex-card p-lr16">
         <form nz-form [formGroup]="formData" class="mt-16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
@@ -114,7 +112,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tài liệu đính kèm
+                  File đính kèm
                 </nz-form-label>
               </nz-form-item>
               <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>

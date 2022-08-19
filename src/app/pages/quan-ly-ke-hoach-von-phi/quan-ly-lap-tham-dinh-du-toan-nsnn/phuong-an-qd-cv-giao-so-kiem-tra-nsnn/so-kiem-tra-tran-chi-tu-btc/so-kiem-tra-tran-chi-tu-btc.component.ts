@@ -66,6 +66,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     statusBtnSave: boolean;
     statusBtnNew: boolean;
     statusBtnEdit: boolean;
+    statusChinhXac: boolean;
     statusBtnCopy: boolean;
     statusBtnPrint: boolean;
     allChecked = false;
@@ -155,7 +156,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 this.maBaoCao = obj?.maBcao;
                 this.namPa = obj?.namBcao;
             })
-            if (!this.maBaoCao){
+            if (!this.maBaoCao) {
                 this.location.back();
             }
 
@@ -250,6 +251,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         }
         this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
         this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
+        if (!ROLE_CAN_BO.includes(userRole)) {
+            this.statusBtnEdit = true;
+            this.statusBtnNew = true;
+            this.statusChinhXac = true;
+        } else {
+            this.statusChinhXac = false;
+        }
     }
 
     //upload file
@@ -875,7 +883,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNhom == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
-                    if (this.lstCtietBcao.findIndex(e => e.maNhom == item.id) == -1){
+                    if (this.lstCtietBcao.findIndex(e => e.maNhom == item.id) == -1) {
                         this.addLow(id, item);
                     }
                 })
@@ -987,8 +995,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         };
         this.dataSource.changeData(request);
         this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-		])
+            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
+        ])
     }
 
     async sua() {
@@ -997,31 +1005,31 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             maBcao: this.maBaoCao,
         }
         let check = false;
-		const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-		const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
-        if (capDvi == Utils.TONG_CUC){
+        const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
+        const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
+        if (capDvi == Utils.TONG_CUC) {
             trangThais.push(Utils.TT_BC_7);
         }
-		const requestReport = {
-			loaiTimKiem: "0",
-			maBcao: this.maBaoCao,
-			maDvi: this.maDonViTao,
-			paggingReq: {
-				limit: 10,
-				page: 1,
-			},
-			trangThais: trangThais,
-		};
-		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-                    if (data.data.content?.length > 0){
+        const requestReport = {
+            loaiTimKiem: "0",
+            maBcao: this.maBaoCao,
+            maDvi: this.maDonViTao,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThais: trangThais,
+        };
+        await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
                         check = true;
                     }
-				} 
+                }
             }
-		);
-        if (!check){
+        );
+        if (!check) {
             this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
             return;
         }
@@ -1042,7 +1050,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         );
     }
 
-    displayValue(num: number): string{
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

@@ -12,7 +12,7 @@ import { utils } from 'xlsx';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { CAP_VON_MUA_BAN, CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
 	selector: 'app-tim-kiem',

@@ -138,6 +138,7 @@ import { DialogQuyenComponent } from './dialog/dialog-quyen/dialog-quyen.compone
 import { DialogNhomQuyenComponent } from './dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
 import { DialogThemQuyenComponent } from './dialog/dialog-them-quyen/dialog-them-quyen.component';
 import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
+import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 
 @NgModule({
   declarations: [
@@ -228,7 +229,8 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
     DialogQuyenComponent,
     DialogNhomQuyenComponent,
     DialogThemQuyenComponent,
-    DialogChiTietGiaoDichHangTrongKhoComponent
+    DialogChiTietGiaoDichHangTrongKhoComponent,
+    DialogDdiemDeHangComponent
   ],
   imports: [
     CommonModule,
@@ -285,7 +287,8 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzResultModule
   ],
   exports: [
     FormsModule,
@@ -343,7 +346,8 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
     NzAlertModule,
     MultipleTagComponent,
     NzPopconfirmModule,
-    FileListComponent
+    FileListComponent,
+    NzResultModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

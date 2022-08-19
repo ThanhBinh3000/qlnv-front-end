@@ -15,10 +15,10 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NGUON_BAO_CAO, ROLE_CAN_BO, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 
 export class ItemData {
     id: string;
@@ -666,25 +666,32 @@ export class TongHopTaiTongCucComponent implements OnInit {
     }
 
     changeModel(id: any) {
-        this.editCache[id].data.tongSoThoc = Number(this.editCache[id].data.vonCapThoc) + Number(this.editCache[id].data.vonUngThoc);
-        this.editCache[id].data.tongSoGao = Number(this.editCache[id].data.giaoDuToanGao) + Number(this.editCache[id].data.vonCapGao) + Number(this.editCache[id].data.vonUngGao);
-        this.editCache[id].data.tongSoMuoi = Number(this.editCache[id].data.giaoDuToanMuoi) + Number(this.editCache[id].data.vonCapMuoi) + Number(this.editCache[id].data.vonUngMuoi);
+        this.editCache[id].data.tongSoThoc = sumNumber([this.editCache[id].data.vonCapThoc, this.editCache[id].data.vonUngThoc]);
+        this.editCache[id].data.tongSoGao = sumNumber([this.editCache[id].data.giaoDuToanGao, this.editCache[id].data.vonCapGao, this.editCache[id].data.vonUngGao]);
+        this.editCache[id].data.tongSoMuoi = sumNumber([this.editCache[id].data.giaoDuToanMuoi, this.editCache[id].data.vonCapMuoi, this.editCache[id].data.vonUngMuoi]);
     }
 
     total(heSo: number, item: ItemData) {
-        this.tongSo.vonCapThoc += heSo * item.vonCapThoc;
-        this.tongSo.vonUngThoc += heSo * item.vonUngThoc;
-        this.tongSo.tongSoThoc += heSo * item.tongSoThoc;
-        this.tongSo.giaoDuToanGao += heSo * item.giaoDuToanGao;
-        this.tongSo.vonCapGao += heSo * item.vonCapGao;
-        this.tongSo.vonUngGao += heSo * item.vonUngGao;
-        this.tongSo.tongSoGao += heSo * item.tongSoGao;
-        this.tongSo.giaoDuToanMuoi += heSo * item.giaoDuToanMuoi;
-        this.tongSo.vonCapMuoi += heSo * item.vonCapMuoi;
-        this.tongSo.vonUngMuoi += heSo * item.vonUngMuoi;
-        this.tongSo.tongSoMuoi += heSo * item.tongSoMuoi;
-        this.tongSo.capVonVttb += heSo * item.capVonVttb;
-        this.tongSo.tcGiaoVonHoanUngNam += heSo * item.tcGiaoVonHoanUngNam;
+        this.tongSo.vonCapThoc = sumNumber([this.tongSo.vonCapThoc, this.mulNumber(heSo, item.vonCapThoc)]);
+        this.tongSo.vonUngThoc = sumNumber([this.tongSo.vonUngThoc, this.mulNumber(heSo, item.vonUngThoc)]);
+        this.tongSo.tongSoThoc = sumNumber([this.tongSo.tongSoThoc, this.mulNumber(heSo, item.tongSoThoc)]);
+        this.tongSo.giaoDuToanGao = sumNumber([this.tongSo.giaoDuToanGao, this.mulNumber(heSo, item.giaoDuToanGao)]);
+        this.tongSo.vonCapGao = sumNumber([this.tongSo.vonCapGao, this.mulNumber(heSo, item.vonCapGao)]);
+        this.tongSo.vonUngGao = sumNumber([this.tongSo.vonUngGao, this.mulNumber(heSo, item.vonUngGao)]);
+        this.tongSo.tongSoGao = sumNumber([this.tongSo.tongSoGao, this.mulNumber(heSo, item.tongSoGao)]);
+        this.tongSo.giaoDuToanMuoi = sumNumber([this.tongSo.giaoDuToanMuoi, this.mulNumber(heSo, item.giaoDuToanMuoi)]);
+        this.tongSo.vonCapMuoi = sumNumber([this.tongSo.vonCapMuoi, this.mulNumber(heSo, item.vonCapMuoi)]);
+        this.tongSo.vonUngMuoi = sumNumber([this.tongSo.vonUngMuoi, this.mulNumber(heSo, item.vonUngMuoi)]);
+        this.tongSo.tongSoMuoi = sumNumber([this.tongSo.tongSoMuoi, this.mulNumber(heSo, item.tongSoMuoi)]);
+        this.tongSo.capVonVttb = sumNumber([this.tongSo.capVonVttb, this.mulNumber(heSo, item.capVonVttb)]);
+        this.tongSo.tcGiaoVonHoanUngNam = sumNumber([this.tongSo.tcGiaoVonHoanUngNam, this.mulNumber(heSo, item.tcGiaoVonHoanUngNam)]);
+    }
+
+    mulNumber(num1: number, num2: number) {
+        if ((!num1 && num1 !== 0) || (!num2 && num2 !== 0)) {
+            return null;
+        }
+        return num1 * num2;
     }
 
     getStatusName() {
@@ -696,7 +703,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             this.loai = "0";
         }
         this.router.navigate([
-            'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop/' + this.loai
+            MAIN_ROUTE_CAPVON + '/' + CAP_VON_NGUON_CHI + '/tong-hop/' + this.loai
         ])
     }
 
