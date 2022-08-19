@@ -1,0 +1,90 @@
+<nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th style="width: 2%;">STT</th>
+            <th>Tên đơn vị thẩm định</th>
+            <th *ngIf="isTableKetQua">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
+            <th>Đơn giá chưa VAT (đồng/kg)</th>
+            <th>Đơn giá có VAT (đồng/kg)</th>
+            <th *ngIf="isTableKetQua">Thời hạn báo giá</th>
+            <th>File đính kèm</th>
+            <th *ngIf="isTableKetQua">Ghi chú</th>
+            <th style="width: 5%;">Hành động</th>
+        </tr>
+        <tr>
+            <th class="text-center"> </th>
+            <th>
+                <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+            </th>
+            <th *ngIf="isTableKetQua">
+                <input type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
+                <!-- <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                    </nz-option>
+                    <ng-template #error let-control>
+                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                        </ng-container>
+                    </ng-template>
+                </nz-select> -->
+            </th>
+            <th>
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"
+                    [nzParser]="globals.parser">
+                </nz-input-number>
+            </th>
+            <th>
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
+                    [nzParser]="globals.parser">
+                </nz-input-number>
+            </th>
+            <th *ngIf="isTableKetQua">
+                <input type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input />
+            </th>
+            <th>
+                <nz-form-control>
+                    <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+                        <input placeholder="Chọn file" [(ngModel)]="rowItem.fileDinhKem.fileName" nz-input disabled />
+                    </nz-input-group>
+                    <ng-template #suffixIcon>
+                        <i class="icon htvbdh_tcdt_tep"></i>
+                        <input class="input-file" (change)="getNameFile($event)" type="file" />
+                    </ng-template>
+                </nz-form-control>
+            </th>
+            <th *ngIf="isTableKetQua">
+                <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
+            </th>
+            <th class="text-left">
+                <a>
+                    <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
+                </a>
+                <a>
+                    <i class="icon  htvbdh_nhap-lai1 "></i>
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of dataTable; let idx = index">
+            <td class="text-center">{{ idx + 1 }}</td>
+            <td>{{ data.tenDviBaoGia }}</td>
+            <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
+            <td>{{data.donGia }}</td>
+            <td>{{data.donGiaVat }}</td>
+            <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
+            <td>{{data.fileDinhKem?.fileName }}</td>
+            <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>
+            <td style="text-align: left; white-space: nowrap;">
+                <a (click)="downloadFile(data.fileDinhKem)">
+                    <i class="icon htvbdh_tcdt_import "></i>
+                </a>
+                <a>
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a>
+                    <i class="fa fa-trash-o do"></i>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
