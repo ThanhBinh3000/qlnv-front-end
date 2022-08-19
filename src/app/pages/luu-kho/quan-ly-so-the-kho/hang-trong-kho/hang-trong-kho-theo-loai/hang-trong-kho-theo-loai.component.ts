@@ -262,8 +262,8 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       "maNganKho": this.formData.value.idNganKho,
       "maLokho": this.formData.value.idLoKho,
       "paggingReq": {
-        "limit": 10,
-        "page": 0
+        "limit": this.pageSize,
+        "page": this.page - 1,
       }
     }
     if (this.formData.value.ngay != null) {
