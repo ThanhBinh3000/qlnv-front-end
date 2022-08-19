@@ -553,7 +553,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       id: this.id,
       idPaBTC: this.idPaBTC,
       fileDinhKems: this.lstFiles,
-      listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -573,7 +573,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       id: null,
       idPaBTC: this.idPaBTC,
       fileDinhKems: this.lstFiles,
-      listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
