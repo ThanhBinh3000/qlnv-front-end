@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../dieu-chinh-du-toan-chi-nsnn.constant';
 // loai trang thai kiem tra
 export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
@@ -189,6 +189,10 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
 
 	dong() {
+		const obj = {
+			tabSelected: 'dieuchinhdutoan',
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
 			MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
 		])

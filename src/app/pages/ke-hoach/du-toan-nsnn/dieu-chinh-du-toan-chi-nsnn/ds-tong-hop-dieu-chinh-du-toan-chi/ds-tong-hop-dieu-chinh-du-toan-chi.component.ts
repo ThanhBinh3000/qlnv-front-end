@@ -1,16 +1,16 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../dieu-chinh-du-toan-chi-nsnn.constant';
-import { DU_TOAN_NSNN } from '../../../ke-hoach.constant';
 
 
 
@@ -79,6 +79,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
+    private dataSource: DataService,
   ) {
   }
 
@@ -199,6 +200,10 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   }
 
   close() {
+    const obj = {
+      tabSelected: 'dieuchinhdutoan',
+    }
+    this.dataSource.changeData(obj);
     this.router.navigate([
       MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
     ])

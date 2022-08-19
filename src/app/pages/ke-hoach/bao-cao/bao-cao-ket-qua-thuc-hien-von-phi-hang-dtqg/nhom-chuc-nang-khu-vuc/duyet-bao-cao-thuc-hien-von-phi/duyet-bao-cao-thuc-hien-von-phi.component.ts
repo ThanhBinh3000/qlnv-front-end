@@ -14,6 +14,7 @@ import * as fileSaver from 'file-saver';
 import { MAIN_ROUTE_KE_HOACH } from 'src/app/pages/ke-hoach/ke-hoach.constant';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 import { BAO_CAO_THUC_HIEN } from '../../../bao-cao-thuc-hien-du-toan-chi-nsnn/bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
 	selector: 'app-duyet-bao-cao-thuc-hien-von-phi',
@@ -76,6 +77,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		private nguoiDungSerivce: UserService,
 		private spinner: NgxSpinnerService,
 		private location: Location,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -226,6 +228,10 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 	}
 
 	close() {
+		const obj = {
+			tabSelected: 'ketqua',
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
 			MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_BAO_CAO,
 		])
