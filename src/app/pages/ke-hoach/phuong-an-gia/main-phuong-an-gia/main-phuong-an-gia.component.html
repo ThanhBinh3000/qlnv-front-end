@@ -1,0 +1,16 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)">
+            Giá mua tối đa, giá bán tối thiểu
+        </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Giá cụ thể
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+    <app-sub-phuong-an-gia [type]="'GMTDBTT'" [loaiVthh]="loaiVthh"></app-sub-phuong-an-gia>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-sub-phuong-an-gia [type]="'GCT'" [loaiVthh]="loaiVthh"></app-sub-phuong-an-gia>
+</ng-container>

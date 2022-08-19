@@ -1,0 +1,13 @@
+.input-suffix {
+    &.ant-input-affix-wrapper {
+        padding: 0 !important;
+    }
+
+    input.ant-input {
+        padding: 0 8px !important;
+    }
+
+    button.ant-btn {
+        border: none !important;
+    }
+}

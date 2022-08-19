@@ -20,6 +20,8 @@ export class DiaDiemNhapKho {
   soLuong: number;
   soLuongTheoChiTieu: number;
   slDaLenKHBan: number;
+  khoanTienDatTruoc: number;
+  donViTinh: string;
   chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho>;
   constructor(chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho> = []) {
     this.chiTietDiaDiems = chiTietDiaDiems;
