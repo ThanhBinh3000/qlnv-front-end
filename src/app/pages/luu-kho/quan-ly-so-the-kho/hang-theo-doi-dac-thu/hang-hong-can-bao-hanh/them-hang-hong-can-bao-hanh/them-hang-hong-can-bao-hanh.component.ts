@@ -194,6 +194,31 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
+=======
+  async loadMaDanhSach() {
+    try {
+      const body = {
+        "denNgay": "",
+        "maDonVi": "01070203",
+        "maVTHH": "",
+        "paggingReq": {
+          "limit": 20,
+          "orderBy": "",
+          "orderType": "",
+          "page": 0
+        },
+        "tuNgay": ""
+      }
+      const res = await this.quanLyDanhSachHangHongHocService.search(body);
+      this.listMaDanhSach = res.data.content;
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+>>>>>>> 986dcc333b3a10c1dc80dc8eb226176e6b72a9c1
   // Load loại hàng hóa
   async loaiVTHHGetAll() {
     try {

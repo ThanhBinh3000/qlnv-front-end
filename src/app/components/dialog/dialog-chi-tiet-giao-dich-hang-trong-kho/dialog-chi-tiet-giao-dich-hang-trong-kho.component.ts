@@ -8,7 +8,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'dialog-chi-tiet-giao-dich-hang-trong-kho',
@@ -36,6 +36,7 @@ export class DialogChiTietGiaoDichHangTrongKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private notification: NzNotificationService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
