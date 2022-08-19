@@ -14,6 +14,7 @@ import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBi
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-hang-hong-can-bao-hanh',
@@ -68,6 +69,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
     private readonly notification: NzNotificationService,
     private quanLyHangBiHongCanBaoHanhService: QuanLyHangBiHongCanBaoHanhService,
     private modal: NzModalService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -115,10 +117,8 @@ export class HangHongCanBaoHanhComponent implements OnInit {
       "denNgay": this.formData.value.ngayTao[1] === undefined ? "" : dayjs(this.formData.value.ngayTao[1]).format("YYYY-MM-DD"),
       "limit": this.pageSize,
       "maDonVi": this.detail.maDvi,
-      "maDs": "",
-      // "maVTHH": this.formData.value.chungLoaiHangHoa === undefined ? "" : this.formData.value.chungLoaiHangHoa,
       "maChungLoaiHang": this.formData.value.maChungLoaiHangHoa,
-      "maLoaiHang": this.formData.value.maLoaiHang,
+      "maVTHH": this.formData.value.maLoaiHang,
       "orderBy": "",
       "orderType": "",
       "page": this.page - 1,
@@ -134,7 +134,8 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = res.data.numberOfElements;
+      this.totalRecord = res.data.totalElements;
+
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -297,7 +298,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         let body = {
           "denNgay": "",
           "limit": 20,
-          "maDonVi": this.formData.value.idDonVi,
+          "maDonVi": this.detail.maDvi,
           "maDs": "",
           "maVTHH": "",
           "orderBy": "",

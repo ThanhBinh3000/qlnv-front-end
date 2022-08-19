@@ -107,11 +107,12 @@
             </th>
             <th>
               <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"
-                (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao,true)"></nz-date-picker>
+                (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao,true)" class="search__input">
+              </nz-date-picker>
             </th>
             <th>
               <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThaiXuLy"
-                (ngModelChange)="filterInTable('trangThaiXuLy',searchInTable.trangThaiXuLy,false)">
+                (ngModelChange)="filterInTable('trangThaiXuLy',searchInTable.trangThaiXuLy,false)" class="text-center">
                 <nz-option nzValue="{{item.giaTri}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
                 </nz-option>
               </nz-select>
@@ -136,10 +137,12 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, false)" *ngIf="userService.isChiCuc()">
+              <a (click)="viewDetail(data.id, false)"
+                *ngIf="data.maTrangThai === globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)" *ngIf="userService.isChiCuc()">
+              <a (click)="xoaItem(data.id)"
+                *ngIf="data.maTrangThai === globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
