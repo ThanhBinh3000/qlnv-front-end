@@ -18,7 +18,7 @@ import { MESSAGE } from '../../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
-import { DataService } from '../../data.service';
+import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../../lap-tham-dinh.constant';
 
 

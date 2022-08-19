@@ -25,6 +25,7 @@ export class HangTrongKhoComponent implements OnInit {
       this.tabs = res.data.map((loai, index) => {
         return {
           id: loai.id,
+          ma: loai.ma,
           giaTri: loai.giaTri,
           total: 10,
           isSelected: index === 0
@@ -37,6 +38,7 @@ export class HangTrongKhoComponent implements OnInit {
 
 interface ITab {
   id: number;
+  ma: string;
   giaTri: string;
   total: number;
   isSelected: boolean;

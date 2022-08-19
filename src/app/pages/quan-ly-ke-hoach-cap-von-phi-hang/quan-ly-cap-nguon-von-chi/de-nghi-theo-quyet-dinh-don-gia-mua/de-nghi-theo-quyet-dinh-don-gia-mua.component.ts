@@ -18,7 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, displayNumber, divMoney, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 
 export class ItemData {
     id: string;

@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
@@ -104,6 +105,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
+    private dataSource: DataService,
   ) {
   }
 
@@ -275,6 +277,10 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   }
 
   close() {
+    const obj = {
+      tabSelected: 'dieuchinhdutoan',
+    }
+    this.dataSource.changeData(obj);
     this.router.navigate([
       MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
     ])

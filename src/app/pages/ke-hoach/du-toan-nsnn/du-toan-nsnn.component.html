@@ -1,14 +1,14 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab('lapthamdinh')">
+        <li nz-menu-item (click)="selectTab('lapthamdinh')" [nzSelected]="tabSelected == 'lapthamdinh'">
             Lập kế hoạch và thẩm định dự toán
         </li>
-        <li nz-menu-item (click)="selectTab('dieuchinhdutoan')">
+        <li nz-menu-item (click)="selectTab('dieuchinhdutoan')" [nzSelected]="tabSelected == 'dieuchinhdutoan'">
             Điều chỉnh dự toán chi NSNN
             <!-- </button> -->
         </li>
-        <li nz-menu-item (click)="selectTab('giaodutoan')">
+        <li nz-menu-item (click)="selectTab('giaodutoan')" [nzSelected]="tabSelected == 'giaodutoan'">
             Giao dự toán chi NSNN
         </li>
 

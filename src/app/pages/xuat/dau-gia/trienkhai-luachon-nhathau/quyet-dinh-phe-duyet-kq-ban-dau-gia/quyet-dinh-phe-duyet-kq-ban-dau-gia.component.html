@@ -68,8 +68,6 @@
                     <th width="300px">Trạng thái </th>
                     <th width="130px" nzRight>Hành động</th>
                   </tr>
-                </thead>
-                <tbody>
                   <tr class="search-table">
                     <th></th>
                     <th></th>
@@ -192,10 +190,12 @@
                     </th>
                     <th nzRight></th>
                   </tr>
+                </thead>
+                <tbody>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != '00'"></label>
+                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">1</td>
                     <td>576/KH-CDTVP</td>
@@ -214,10 +214,12 @@
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(data.id)">
+                      <a (click)="redirectToChiTiet(data.id)"
+                        *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data.id)">
+                      <a (click)="xoaItem(data.id)"
+                        *ngIf="userService.isCuc() && data.trangThai && data.trangThai == globals.prop.NHAP_DU_THAO">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -244,7 +246,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #extraTemplate>
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -252,7 +254,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
               <span>Thêm</span>
             </button>

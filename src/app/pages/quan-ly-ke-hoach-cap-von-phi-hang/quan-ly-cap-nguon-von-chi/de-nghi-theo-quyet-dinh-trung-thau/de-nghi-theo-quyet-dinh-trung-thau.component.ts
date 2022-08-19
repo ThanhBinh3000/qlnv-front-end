@@ -17,7 +17,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 
 export class ItemCongVan {
     fileName: string;

@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
-import { DataService } from '../../data.service';
+import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 export class ItemCongVan {
@@ -452,6 +452,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     close() {
+        const obj = {
+            tabSelected: 'lapthamdinh',
+        }
+        this.dataSource.changeData(obj);
         this.router.navigate([
             MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
         ])

@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DataService } from 'src/app/services/data.service';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
@@ -54,6 +55,7 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private userService: UserService,
         private location: Location,
+        private dataSource: DataService,
     ) {
     }
 
@@ -189,6 +191,10 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     close() {
+        const obj = {
+            tabSelected: 'lapthamdinh',
+        }
+        this.dataSource.changeData(obj);
         this.router.navigate([
             MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
         ])

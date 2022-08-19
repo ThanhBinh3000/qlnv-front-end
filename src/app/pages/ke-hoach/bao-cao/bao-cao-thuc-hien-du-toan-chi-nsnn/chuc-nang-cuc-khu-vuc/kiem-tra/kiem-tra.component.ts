@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 import { BAO_CAO_THUC_HIEN, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
@@ -52,6 +53,7 @@ export class KiemTraComponent implements OnInit {
 		private notification: NzNotificationService,
 		private location: Location,
 		private spinner: NgxSpinnerService,
+		private dataSource: DataService,
 	) {
 	}
 
@@ -131,6 +133,10 @@ export class KiemTraComponent implements OnInit {
 	}
 
 	close() {
+		const obj = {
+			tabSelected: 'thuchien',
+		}
+		this.dataSource.changeData(obj);
 		this.router.navigate([
 			MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_BAO_CAO,
 		])

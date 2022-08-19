@@ -14,6 +14,7 @@ import { QuyetDinhPheDuyetKQBanDauGiaService } from 'src/app/services/quyetDinhP
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kq-ban-dau-gia',
@@ -30,7 +31,8 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    public globals: Globals,
   ) { }
 
   listNam: any[] = [];
@@ -73,6 +75,7 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -100,7 +103,7 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -208,11 +211,15 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     await this.search()
   }
 
-  clearFilter() {
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+  async clearFilter() {
+    this.searchFilter = {
+      soQdinh: '',
+      namKh: dayjs().get('year'),
+      ngayTongHop: '',
+      loaiVthh: '',
+      trichYeu: ''
+    };
+    await this.search();
   }
 
   xoaItem(item: any) {

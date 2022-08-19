@@ -74,7 +74,6 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     ngOnInit() {
         this.initData();
         this.initForm();
-        console.log(this.dataEditList)
     }
 
     initForm(): void {
@@ -292,7 +291,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     changePageSize(event) { }
 
     editItem(id: number): void {
-        var idx = id - 1;
+        var idx = id > 0 ? id - 1 : id;
         this.dataEdit[idx].edit = true;
     }
 

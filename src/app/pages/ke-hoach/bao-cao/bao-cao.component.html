@@ -1,10 +1,10 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
 	<!-- (nzChange)="onChange($event)" -->
 	<ul nz-menu nzMode="horizontal">
-		<li nz-menu-item nzSelected (click)="selectTab('thuchien')">
+		<li nz-menu-item (click)="selectTab('thuchien')" [nzSelected]="tabSelected == 'thuchien'">
 			Quy trình báo cáo thực hiện dự toán chi NSNN tại Tổng cục DTNN
 		</li>
-		<li nz-menu-item (click)="selectTab('ketqua')">
+		<li nz-menu-item (click)="selectTab('ketqua')" [nzSelected]="tabSelected == 'ketqua'">
 			Quy trình báo cáo kết quả thực hiện vốn, phí hàng DTQG tại tổng cục DTNN
 		</li>
 	</ul>
