@@ -5,25 +5,27 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDdiemDeHangComponent } from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
-import { API_STATUS_CODE } from 'src/app/constants/config';
+import { API_STATUS_CODE, TYPE_PAG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { CanCuXacDinhPag, ThongTinKhaoSatGia } from 'src/app/models/DeXuatPhuongAnGia';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-them-qd-de-xuat-phuong-an-gia',
-  templateUrl: './them-qd-de-xuat-phuong-an-gia.component.html',
-  styleUrls: ['./them-qd-de-xuat-phuong-an-gia.component.scss']
+  selector: 'app-them-dx-pag-lt',
+  templateUrl: './them-dx-pag-lt.component.html',
+  styleUrls: ['./them-dx-pag-lt.component.scss']
 })
-export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
+export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input()
   idInput: number;
@@ -31,10 +33,13 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   @Input()
   type: string;
 
+  isGiaMuaToiDa: boolean = false;
+
   formData: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   dsHangHoa: any[] = [];
+  dsQdPdKhlcnt: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
@@ -68,6 +73,9 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+
   ) {
     this.formData = this.fb.group(
       {
@@ -78,6 +86,7 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         ngayKy: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
         trichYeu: [null],
+        soCanCu: [null],
         trangThai: ['00'],
         cloaiVthh: [null, [Validators.required]],
         moTa: [null],
@@ -95,7 +104,8 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         chiPhiChung: [],
         chiPhiPbo: [],
         tongChiPhi: [],
-        noiDung: [null]
+        noiDung: [null],
+        tgianNhang: []
       }
     );
     this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
@@ -124,11 +134,14 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
+      this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA,
       this.userInfo = this.userService.getUserLogin(),
+      this.getDataChiTieu(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
+      this.loadDsQdPduyetKhlcnt(),
       this.loadDsVthh(),
       this.maDx = '/CDTVP-KH&QLHDT',
       this.getDataDetail(this.idInput),
@@ -164,12 +177,15 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         chiPhiChung: data.chiPhiChung,
         chiPhiPbo: data.chiPhiPbo,
         tongChiPhi: data.tongChiPhi,
-        noiDung: data.noiDung
+        noiDung: data.noiDung,
+        tgianNhang: data.tgianNhang,
+        soCanCu: data.soCanCu
       })
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
-      this.dataTableKqGia = data.ketQuaThamDinhGia
-      this.taiLieuDinhKemList = data.fileDinhKems;
+      this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.dsDiaDiemDeHang = data.diaDiemDeHangs;
+      // this.taiLieuDinhKemList = data.fileDinhKems;
     }
   }
 
@@ -194,6 +210,23 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('PP_XDG_LOAI_HANG');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsLoaiHangXdg = res.data;
+    }
+  }
+
+  async loadDsQdPduyetKhlcnt() {
+    if (!this.isGiaMuaToiDa) {
+      let body = {
+        namKhoach: this.formData.get('namKeHoach').value,
+        lastest: 1,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+      };
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsQdPdKhlcnt = res.data.content;
+      }
     }
   }
 
@@ -269,6 +302,23 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
+    }
+  }
+
+  async onChangeSoQd($event) {
+    console.log($event);
+    let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
+    console.log(dataQd);
+    if (dataQd.length > 0) {
+      let dataDetail = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(dataQd[0].id);
+      const data = dataDetail.data;
+      this.formData.patchValue({
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tgianNhang: data.tgianNhang
+      })
+      this.dsDiaDiemDeHang = data.hhQdKhlcntDtlList
+      this.convertDsDiemDeHang(data.hhQdKhlcntDtlList);
     }
   }
 
@@ -365,8 +415,6 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.type = this.type;
-    console.log(body);
-
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);
@@ -389,6 +437,16 @@ export class ThemQdDeXuatPhuongAnGiaComponent implements OnInit {
   xoaKeHoach() { }
 
   themKeHoach() { }
+
+  async getDataChiTieu() {
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+    if (res2.msg == MESSAGE.SUCCESS) {
+      const dataChiTieu = res2.data;
+      this.formData.patchValue({
+        soCanCu: dataChiTieu.soQuyetDinh,
+      });
+    }
+  }
 
   themMoiDiaDiem() {
     const modalGT = this.modal.create({
