@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -9,14 +10,12 @@ import { Globals } from 'src/app/shared/globals';
 export class PhuongAnGiaComponent implements OnInit {
 
   constructor(
-    public globals: Globals
+    public globals: Globals,
+    public userService: UserService
   ) { }
   tabSelected: number = 0;
   ngOnInit() {
-    // this.tabH = window.innerHeight - document.querySelector('.tab-level-0').getBoundingClientRect().top - 28;
-    // window.addEventListener('resize', (e) => {
-    //   this.tabH = window.innerHeight - document.querySelector('.tab-level-0').getBoundingClientRect().top - 28;
-    // });
+
   }
   selectTab(tab) {
     this.tabSelected = tab;

@@ -407,6 +407,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.chiTietList = this.listOfData;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.tongHopDeXuatKHBanDauGiaService.sua(body);

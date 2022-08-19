@@ -6,13 +6,16 @@
           <nz-form-item nz-col nzSpan="8" class="form-item">
             <nz-form-label nzFor="ma-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maDonVi" id="ma-don-vi">
+              <nz-input-group *ngIf="userService.isChiCuc()" id="ma-don-vi">
+                <input type="text" nz-input formControlName="maDonVi" />
+              </nz-input-group>
+              <nz-select formControlName="maDonVi" id="ma-don-vi" *ngIf="!userService.isChiCuc()">
                 <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ten-hang-hoa">Tên hàng hoá</nz-form-label>
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="maLoaiHang" (ngModelChange)="changeLoaiHangHoa()">
                 <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
@@ -83,7 +86,7 @@
               <nz-form-control>
                 <nz-select style="width:  164px;" name="" id="" [(ngModel)]="filterTable.loaiHangHoa"
                   (ngModelChange)="onChangeLoaiHH($event)">
-                  <nz-option *ngFor="let item of dsLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                  <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                   </nz-option>
                 </nz-select>
               </nz-form-control>
@@ -91,7 +94,7 @@
             <th class="text-center ">
               <nz-select style="width:  164px;" [nzDisabled]="isView" [(ngModel)]="filterTable.chungLoaiHangHoa"
                 (ngModelChange)="onChangeChungLoaiHH($event)">
-                <nz-option *ngFor="let item of dsChungLoaiHangHoa" nzValue="{{item.ma|| ''}}"
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma|| ''}}"
                   nzLabel="{{item.ten ||''}}">
                 </nz-option>
               </nz-select>

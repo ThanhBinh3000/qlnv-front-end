@@ -72,7 +72,7 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
   }
 
   hangTieuHuyXoads(id: any): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huu/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-tieu-huy/${id}`;
     return this.httpClient.delete<any>(url_).toPromise();
   }
 
