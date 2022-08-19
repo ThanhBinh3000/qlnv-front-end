@@ -5,7 +5,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="idInput">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -34,12 +34,7 @@
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ma-danh-sach">Mã danh sách</nz-form-label>
           <nz-input-group>
-            <nz-select formControlName="maDanhSach">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.maDanhSach}}" nzLabel="{{item.maDanhSach}}"
-                *ngFor="let item of listMaDanhSach">
-              </nz-option>
-            </nz-select>
+            <input type="text" formControlName="maDanhSach" nz-input readonly />
           </nz-input-group>
         </nz-form-item>
 

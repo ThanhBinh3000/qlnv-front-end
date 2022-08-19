@@ -1,18 +1,14 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import * as dayjs from 'dayjs';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
-import { QuanLyDanhSachHangHongHocService } from 'src/app/services/quanLyDanhSachHangHongHoc.service';
 import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBiHongCanBaoHanh.service';
 import { saveAs } from 'file-saver';
 
@@ -52,7 +48,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     maNganLo: null,
     tenNganLo: null,
 
-    soLuongTon: null,
+    soLuongTon: 0,
     soLuongCanBaoHanh: null,
     tenDonViTinh: null,
     lyDo: null,
@@ -64,8 +60,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   totalRecord: number = 10;
   indexItemStart: number;
   indexItemEnd: number;
-
-  listMaDanhSach: any[] = [];
 
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
@@ -82,7 +76,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     public userService: UserService,
     private danhMucService: DanhMucService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
     private quanLyHangBiHongCanBaoHanhService: QuanLyHangBiHongCanBaoHanhService,
   ) { }
 
@@ -98,14 +91,14 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   initForm(): void {
     this.formData = this.fb.group({
       maDonVi: [this.detail.maDvi, [Validators.required]],
-      maDanhSach: [null, [Validators.required]],
+      maDanhSach: [null],
       ngayTao: [new Date(), [Validators.required]],
     });
   }
 
   async initData() {
 
-    await Promise.all([this.loadMaDanhSach(), this.loadDiemKho(), this.loaiVTHHGetAll()])
+    await Promise.all([this.loadDiemKho(), this.loaiVTHHGetAll()])
 
     if (this.idInput) {
       await this.loadItemChiTiet();
@@ -201,6 +194,8 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
+=======
   async loadMaDanhSach() {
     try {
       const body = {
@@ -223,6 +218,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
+>>>>>>> 986dcc333b3a10c1dc80dc8eb226176e6b72a9c1
   // Load loại hàng hóa
   async loaiVTHHGetAll() {
     try {
@@ -377,6 +373,9 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
 
   themMoiItem() {
     if (this.rowItem.maChungLoaiHangHoa !== null && this.rowItem.maNganLo !== null) {
+      if (this.rowItem.soLuongCanBaoHanh === null) {
+        this.rowItem.soLuongCanBaoHanh = 0;
+      }
       this.dataTable.push(this.rowItem);
       this.clearData();
       if (this.dataTable.length > 0) {
@@ -440,7 +439,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
       maNganLo: null,
       tenNganLo: null,
 
-      soLuongTon: null,
+      soLuongTon: 0,
       soLuongCanBaoHanh: null,
       tenDonViTinh: null,
       lyDo: null,
@@ -474,8 +473,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     const body = {
       "ds": ds,
       "maDonVi": this.formData.value.maDonVi,
-      "maDanhSach": "TDSDAF",
-      // "maDanhSach": this.formData.value.maDanhSach,
       "ngayTao": this.formData.value.ngayTao,
     }
 
@@ -517,26 +514,25 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
-  // Chưa hoàn thiện
-  async exportData() {
+
+  exportData() {
     try {
       const body = {
-        "denNgay": "",
-        "limit": 20,
         "maDonVi": this.detail.maDvi,
         "maDs": this.formData.value.maDanhSach,
-        "maVTHH": this.rowItem.maChungLoaiHangHoa,
-        "orderBy": "",
-        "orderType": "",
-        "page": 0,
-        "tuNgay": ""
+        // "maVTHH": this.rowItem.maChungLoaiHangHoa,
+        "ngayTao": this.formData.value.ngayTao,
       }
 
-      const res = await this.quanLyHangBiHongCanBaoHanhService.exportListct(body).subscribe((blob) => {
+      this.quanLyHangBiHongCanBaoHanhService.exportListct(body).subscribe((blob) => {
         saveAs(blob, 'danh-sach-hang-bi-hong-can-bao-hanh-chi-tiet.xlsx')
       });
 
-    } catch (error) { }
+      this.spinner.hide();
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
 
 
   }
