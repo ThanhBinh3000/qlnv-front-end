@@ -36,31 +36,6 @@
 			</div>
 		</ng-template>
 		<div nz-col class="gutter-row canphai phai" [nzSpan]="15" style="display:flex; justify-content: end;">
-
-			<button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
-				<i nz-icon nzType="printer" nzTheme="outline"></i>
-				<span>In</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1');" [hidden]="statusBtnOk">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>OK</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0');" [hidden]="statusBtnOk">
-				<i nz-icon nzType="close" nzTheme="outline"></i>
-				<span>Not OK</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
-				<i class="icon htvbdh_tcdt_save"></i>
-				<span>Lưu</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>Hoàn tất nhập liệu</span>
-			</button>
-			<button type="button" class="btn btn-sub" (click)="export()" [hidden]="statusBtnExport">
-				<i class="icon htvbdh_tcdt_import"></i>
-				<span>Export</span>
-			</button>
 			<!-- <button type="button" class="btn btn-sub" [hidden]="status">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Import</span>
@@ -74,7 +49,7 @@
 	<nz-table nzBordered class="table__body">
 		<thead>
 			<tr>
-				<th rowspan="2" nzWidth="35px">STT</th>
+				<th rowspan="2" nzWidth="100px">STT</th>
 				<th rowspan="2" nzWidth="200px">Tên vật tư, hàng hóa</th>
 				<th rowspan="2">DVT</th>
 				<th rowspan="2">Số lượng theo kế hoạch</th>
@@ -141,7 +116,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao031; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate1">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -285,7 +260,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao032; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate2">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -329,7 +304,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate2>
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -564,4 +539,30 @@
 			</nz-textarea-count>
 		</ng-template>
 	</div>
+</div>
+<div class="action">
+	<button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+		<i nz-icon nzType="printer" nzTheme="outline"></i>
+		<span>In</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1');" [hidden]="statusBtnOk">
+		<i nz-icon nzType="check" nzTheme="outline"></i>
+		<span>OK</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0');" [hidden]="statusBtnOk">
+		<i nz-icon nzType="close" nzTheme="outline"></i>
+		<span>Not OK</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
+		<i class="icon htvbdh_tcdt_save"></i>
+		<span>Lưu</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
+		<i nz-icon nzType="check" nzTheme="outline"></i>
+		<span>Hoàn tất nhập liệu</span>
+	</button>
+	<button type="button" class="btn btn-sub" (click)="export()" [hidden]="statusBtnExport">
+		<i class="icon htvbdh_tcdt_import"></i>
+		<span>Export</span>
+	</button>
 </div>
