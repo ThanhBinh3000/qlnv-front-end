@@ -1,22 +1,22 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
     <ul nz-menu nzMode="horizontal">
         <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
+            Đề xuất KH bán đấu giá
         </li>
         <li nz-menu-item (click)="selectTab(1)">
-            Đề xuất kế hoạch lựa chọn nhà thầu
+            Tổng hợp đề xuất KH bán đấu giá
         </li>
         <li nz-menu-item (click)="selectTab(2)">
-            Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+            Quyết định phê duyệt KH bán đấu giá
         </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-tong-hop-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh">
-    </app-tong-hop-de-xuat-kh-ban-dau-gia>
+    <app-danhsach-kehoach-lcnt [loaiVthh]="loaiVthh"></app-danhsach-kehoach-lcnt>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-de-xuat-kh-ban-dau-gia>
+    <app-tong-hop-de-xuat-kh-ban-dau-gia [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh">
+    </app-tong-hop-de-xuat-kh-ban-dau-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
     <app-quyet-dinh-phe-duyet-kh-ban-dau-gia [loaiVthh]="loaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-dau-gia>

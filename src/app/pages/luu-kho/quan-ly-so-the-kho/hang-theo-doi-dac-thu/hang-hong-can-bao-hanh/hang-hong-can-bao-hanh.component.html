@@ -3,43 +3,33 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
         <div class="search__body" nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="3" class="form-item">
-            <nz-form-label nzFor="ma-don-vi">Mã đơn vị</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="ma-don-vi">
-                <input type="text" nz-input formControlName="idDonVi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
           <nz-form-item nz-col nzSpan="9" class="form-item">
-            <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
+            <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="ten-don-vi">
-                <input type="text" nz-input formControlName="tenDonVi" [nzAutocomplete]="donViAuto"
-                  (input)="onChangeAutoComplete($event)" />
-                <nz-autocomplete #donViAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
-              </nz-input-group>
+              <nz-select formControlName="maDonVi" id="ma-don-vi">
+                <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
             <nz-form-label nzFor="ten-hang-hoa">Tên hàng hoá</nz-form-label>
+
             <nz-form-control>
-              <nz-input-group id="ten-hang-hoa">
-                <input type="text" nz-input formControlName="tenHangHoa" />
-              </nz-input-group>
+              <nz-select formControlName="maLoaiHang" (ngModelChange)="changeLoaiHangHoa()">
+                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
+            <nz-form-label nzFor="loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="loai-hang-hoa">
-                <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto"
-                  (input)="onChangeLoaiHHAutoComplete($event)" />
-                <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource"></nz-autocomplete>
-              </nz-input-group>
+              <nz-select formControlName="maChungLoaiHangHoa" (ngModelChange)="changeLoaiHangHoa()">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
@@ -58,7 +48,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search">
+        <button nz-button class="search__button--search" (click)="search()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -68,7 +58,7 @@
     <div class="group-button">
       <h3>Danh sách hàng bị hỏng cần bảo hành</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -76,11 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="inDanhSach()">
-          <i class="icon htvbdh_tcdt_print"></i>
-          <span>In</span>
-        </button>
-        <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
+        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null, false)" *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -91,36 +77,42 @@
       <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th style="width: 5%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
-              (nzCheckedChange)="onAllChecked($event)"></th>
-            <th class="text-center" style="width: 5%;">STT</th>
+            <th class="text-center" style="width: 2.5%;">
+              <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate"
+                (ngModelChange)="updateAllChecked()">
+              </label>
+            </th>
+            <th class="text-center" style="width: 2.5%;">STT</th>
             <th style="width: 10%;">Mã danh sách</th>
             <th style="width: 40%;">Tên đơn vị</th>
             <th style="width: 15%;">Ngày tạo</th>
             <th style="width: 15%;">Trạng thái xử lý của Cục</th>
-            <th width="">Hành động</th>
+            <th width="10%">Hành động</th>
           </tr>
           <tr>
             <th></th>
             <th></th>
             <th class="text-center" width="350px">
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach"
+                  (ngModelChange)="filterInTable('maDanhSach', searchInTable.maDanhSach, false)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"
-                  [nzAutocomplete]="donViSearchAuto" (input)="onChangeAutoComplete($event)" />
-                <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenDonvi"
+                  (ngModelChange)="filterInTable('tenDonvi',searchInTable.tenDonvi,false)" />
+                <!-- <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete> -->
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"></nz-date-picker>
+              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"
+                (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao,true)"></nz-date-picker>
             </th>
             <th>
-              <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThai">
-                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
+              <nz-select class="filter-in-table" [(ngModel)]="searchInTable.trangThaiXuLy"
+                (ngModelChange)="filterInTable('trangThaiXuLy',searchInTable.trangThaiXuLy,false)">
+                <nz-option nzValue="{{item.giaTri}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsTrangThai">
                 </nz-option>
               </nz-select>
             </th>
@@ -132,21 +124,22 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-            <td>{{ idx + 1 }}</td>
-            <td>{{ data.maDanhSach }}</td>
-            <td>{{ data.tenDonVi }}</td>
+            <th>
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+            </th>
+            <td class="text-center">{{(page -1)*pageSize+ idx + 1 }}</td>
+            <td>{{ data.maDanhSach}}</td>
+            <td>{{ data.tenDonvi }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trangThai }}</td>
+            <td>{{ data.trangThaiXuLy }}</td>
             <td style="text-align: center;">
-              <a (click)="viewDetail(data.id, false)">
+              <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="viewDetail(data.id, true)">
+              <a (click)="viewDetail(data.id, false)" *ngIf="userService.isChiCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data.id)">
+              <a (click)="xoaItem(data.id)" *ngIf="userService.isChiCuc()">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -176,6 +169,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-hang-hong-can-bao-hanh (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa">
+  <app-them-hang-hong-can-bao-hanh (close)="onClose()" [idInput]="idInput" [isCheck]="isCheck">
   </app-them-hang-hong-can-bao-hanh>
 </ng-template>
