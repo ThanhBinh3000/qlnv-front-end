@@ -550,6 +550,14 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	getStatusButton() {
+		if (this.baoCao.trangThai == Utils.TT_BC_1 ||
+			this.baoCao.trangThai == Utils.TT_BC_3 ||
+			this.baoCao.trangThai == Utils.TT_BC_5 ||
+			this.baoCao.trangThai == Utils.TT_BC_8) {
+			this.status = false;
+		} else {
+			this.status = true;
+		}
 		let checkParent = false;
 		let checkChirld = false;
 		const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
@@ -598,51 +606,51 @@ export class BaoCaoComponent implements OnInit {
 							item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
 						}
 					}
-					switch (item.maLoai) {
-						// bm 02
-						case BAO_CAO_NHAP_HANG_DTQG:
-							item?.lstCtietBcaos.filter(el => {
-								el.khTtien = divMoney(el.khTtien, item.maDviTien);
-								el.khGiaMuaTd = divMoney(el.khGiaMuaTd, item.maDviTien);
-								el.thTtien = divMoney(el.thTtien, item.maDviTien);
-								el.thGiaMuaTd = divMoney(el.thGiaMuaTd, item.maDviTien);
-							})
-							break;
-						// bm 03
+					// switch (item.maLoai) {
+					// 	// bm 02
+					// 	case BAO_CAO_NHAP_HANG_DTQG:
+					// 		item?.lstCtietBcaos.filter(el => {
+					// 			el.khTtien = divMoney(el.khTtien, item.maDviTien);
+					// 			el.khGiaMuaTd = divMoney(el.khGiaMuaTd, item.maDviTien);
+					// 			el.thTtien = divMoney(el.thTtien, item.maDviTien);
+					// 			el.thGiaMuaTd = divMoney(el.thGiaMuaTd, item.maDviTien);
+					// 		})
+					// 		break;
+					// 	// bm 03
 
-						case BAO_CAO_XUAT_HANG_DTQG:
-							item?.lstCtietBcaos.filter(el => {
-								el.dgGiaKhoach = divMoney(el.dgGiaKhoach, item.maDviTien);
-								el.dgGiaBanTthieu = divMoney(el.dgGiaBanTthieu, item.maDviTien);
-								el.dgGiaBanTte = divMoney(el.dgGiaBanTte, item.maDviTien);
-								el.ttGiaHtoan = divMoney(el.ttGiaHtoan, item.maDviTien);
-								el.ttGiaBanTte = divMoney(el.ttGiaBanTte, item.maDviTien);
-								el.ttClechGiaTteVaGiaHtoan = divMoney(el.ttClechGiaTteVaGiaHtoan, item.maDviTien);
-							})
-							break;
+					// 	case BAO_CAO_XUAT_HANG_DTQG:
+					// 		item?.lstCtietBcaos.filter(el => {
+					// 			el.dgGiaKhoach = divMoney(el.dgGiaKhoach, item.maDviTien);
+					// 			el.dgGiaBanTthieu = divMoney(el.dgGiaBanTthieu, item.maDviTien);
+					// 			el.dgGiaBanTte = divMoney(el.dgGiaBanTte, item.maDviTien);
+					// 			el.ttGiaHtoan = divMoney(el.ttGiaHtoan, item.maDviTien);
+					// 			el.ttGiaBanTte = divMoney(el.ttGiaBanTte, item.maDviTien);
+					// 			el.ttClechGiaTteVaGiaHtoan = divMoney(el.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+					// 		})
+					// 		break;
 
-						// 04a/BCPN-X_x
-						case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG:
-							// nhan tien va validate
-							break;
+					// 	// 04a/BCPN-X_x
+					// 	case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG:
+					// 		// nhan tien va validate
+					// 		break;
 
-						// 04a/BCPN-X_n
-						case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG:
-							// nhan tien va validate
-							break;
+					// 	// 04a/BCPN-X_n
+					// 	case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG:
+					// 		// nhan tien va validate
+					// 		break;
 
-						// 04b/BCPN-X
-						case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO:
-							// nhan tien va validate
-							break;
+					// 	// 04b/BCPN-X
+					// 	case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO:
+					// 		// nhan tien va validate
+					// 		break;
 
-						// 05/BCPBQ
-						case KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG:
-							// nhan tien va validate
-							break;
-						default:
-							break;
-					}
+					// 	// 05/BCPBQ
+					// 	case KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG:
+					// 		// nhan tien va validate
+					// 		break;
+					// 	default:
+					// 		break;
+					// }
 				})
 
 				this.lstFiles = data.data.lstFiles;
@@ -653,15 +661,6 @@ export class BaoCaoComponent implements OnInit {
 				this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 				this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
 				this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-
-				if (this.baoCao.trangThai == Utils.TT_BC_1 ||
-					this.baoCao.trangThai == Utils.TT_BC_3 ||
-					this.baoCao.trangThai == Utils.TT_BC_5 ||
-					this.baoCao.trangThai == Utils.TT_BC_8) {
-					this.status = false;
-				} else {
-					this.status = true;
-				}
 			} else {
 				this.notification.error(MESSAGE.ERROR, data?.msg);
 			}
@@ -1335,7 +1334,7 @@ export class BaoCaoComponent implements OnInit {
 
 	viewDetail(id) {
 		const modalIn = this.modal.create({
-			nzTitle: 'Danh sách phụ lục',
+			nzTitle: 'Báo cáo từ đơn vị cấp dưới',
 			nzContent: BaoCaoComponent,
 			nzMaskClosable: false,
 			nzClosable: false,

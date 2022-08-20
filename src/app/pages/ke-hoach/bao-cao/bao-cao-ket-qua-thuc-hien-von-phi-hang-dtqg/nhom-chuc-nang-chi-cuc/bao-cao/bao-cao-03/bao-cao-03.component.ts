@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK } from "src/app/Utility/utils";
+import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 
@@ -119,6 +119,15 @@ export class BaoCao03Component implements OnInit {
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
+        //chia tien
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            item.dgGiaKhoach = divMoney(item.dgGiaKhoach, this.maDviTien);
+            item.dgGiaBanTthieu = divMoney(item.dgGiaBanTthieu, this.maDviTien);
+            item.dgGiaBanTte = divMoney(item.dgGiaBanTte, this.maDviTien);
+            item.ttGiaHtoan = divMoney(item.ttGiaHtoan, this.maDviTien);
+            item.ttGiaBanTte = divMoney(item.ttGiaBanTte, this.maDviTien);
+            item.ttClechGiaTteVaGiaHtoan = divMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien);
+        })
         // 03
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             switch (el.header) {
@@ -391,9 +400,6 @@ export class BaoCao03Component implements OnInit {
         }
         this.replaceIndex(lstIndex, 1, phuLuc);
 
-
-
-
         // them moi phan tu
         if (initItem?.id) {
             const item = {
@@ -627,6 +633,7 @@ export class BaoCao03Component implements OnInit {
                 ...initItem,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
+                level: 0,
                 listCtiet: []
             }
         }
@@ -809,7 +816,26 @@ export class BaoCao03Component implements OnInit {
     }
 
     async saveAppendix(maChucNang: string) {
-        await this.saveMau03();
+        this.lstCTietBaoCaoTemp = [];
+        this.saveMau03(this.lstCtietBcao031);
+        this.saveMau03(this.lstCtietBcao032);
+        this.saveMau03(this.lstCtietBcao033);
+        //check khoang gia tien co qua lon ko
+        let checkMoneyRange = true;
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            if (item.dgGiaKhoach > MONEY_LIMIT || item.dgGiaBanTthieu > MONEY_LIMIT || item.dgGiaBanTte > MONEY_LIMIT ||
+                item.ttGiaHtoan > MONEY_LIMIT || item.ttGiaBanTte > MONEY_LIMIT) {
+                checkMoneyRange = false;
+                return;
+            }
+
+        })
+
+        if (!checkMoneyRange == true) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+
         const baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
@@ -817,7 +843,6 @@ export class BaoCao03Component implements OnInit {
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
 
-        const checkMoneyRange = true;
         let checkPersonReport = true;
 
         // validate nguoi thuc hien bao cao
@@ -848,10 +873,6 @@ export class BaoCao03Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        if (!checkMoneyRange == true) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-            return;
-        }
 
         //call service cap nhat phu luc
         this.spinner.show();
@@ -873,16 +894,17 @@ export class BaoCao03Component implements OnInit {
         this.spinner.hide();
     }
 
-    async saveMau03() {
-        this.lstCTietBaoCaoTemp = [];
-        await this.lstCtietBcao031.forEach(e => {
-            this.lstCTietBaoCaoTemp.push(e);
-        })
-        await this.lstCtietBcao032.forEach(e => {
-            this.lstCTietBaoCaoTemp.push(e);
-        })
-        await this.lstCtietBcao033.forEach(e => {
-            this.lstCTietBaoCaoTemp.push(e);
+    async saveMau03(lstCTietBCao: ItemDataMau03[]) {
+        lstCTietBCao.forEach(item => {
+            this.lstCTietBaoCaoTemp.push({
+                ...item,
+                dgGiaKhoach: mulMoney(item.dgGiaKhoach, this.maDviTien),
+                dgGiaBanTthieu: mulMoney(item.dgGiaBanTthieu, this.maDviTien),
+                dgGiaBanTte: mulMoney(item.dgGiaBanTte, this.maDviTien),
+                ttGiaHtoan: mulMoney(item.ttGiaHtoan, this.maDviTien),
+                ttGiaBanTte: mulMoney(item.ttGiaBanTte, this.maDviTien),
+                ttClechGiaTteVaGiaHtoan: mulMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien),
+            })
         })
     }
 

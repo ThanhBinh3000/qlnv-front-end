@@ -22,30 +22,7 @@
 				<i class="icon htvbdh_dau-cong"></i>
 				<span>Thêm cột</span>
 			</button>
-			<button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
-				<i nz-icon nzType="printer" nzTheme="outline"></i>
-				<span>In</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1');" [hidden]="statusBtnOk">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>OK</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0');" [hidden]="statusBtnOk">
-				<i nz-icon nzType="close" nzTheme="outline"></i>
-				<span>Not OK</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
-				<i class="icon htvbdh_tcdt_save"></i>
-				<span>Lưu</span>
-			</button>
-			<button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
-				<i nz-icon nzType="check" nzTheme="outline"></i>
-				<span>Hoàn tất nhập liệu</span>
-			</button>
-			<button type="button" class="btn btn-sub" (click)="export()" [hidden]="statusBtnExport">
-				<i class="icon htvbdh_tcdt_import"></i>
-				<span>Export</span>
-			</button>
+
 			<!-- <button type="button" class="btn btn-sub" [hidden]="status">
         <i class="icon htvbdh_tcdt_import"></i>
         <span>Import</span>
@@ -232,4 +209,30 @@
 			</nz-textarea-count>
 		</ng-template>
 	</div>
+</div>
+<div class="action">
+	<button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+		<i nz-icon nzType="printer" nzTheme="outline"></i>
+		<span>In</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1');" [hidden]="statusBtnOk">
+		<i nz-icon nzType="check" nzTheme="outline"></i>
+		<span>OK</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0');" [hidden]="statusBtnOk">
+		<i nz-icon nzType="close" nzTheme="outline"></i>
+		<span>Not OK</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
+		<i class="icon htvbdh_tcdt_save"></i>
+		<span>Lưu</span>
+	</button>
+	<button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
+		<i nz-icon nzType="check" nzTheme="outline"></i>
+		<span>Hoàn tất nhập liệu</span>
+	</button>
+	<button type="button" class="btn btn-sub" (click)="export()" [hidden]="statusBtnExport">
+		<i class="icon htvbdh_tcdt_import"></i>
+		<span>Export</span>
+	</button>
 </div>

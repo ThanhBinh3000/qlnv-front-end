@@ -138,12 +138,16 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+
+	}
+
+	async ngAfterViewInit() {
 		this.baoCao.id = this.routerActive.snapshot.paramMap.get('id');
 		const lbc = this.routerActive.snapshot.paramMap.get('baoCao');
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.getListUser();
-		this.spinner.show();
+		// this.spinner.show();
 		if (this.idDialog) {
 			this.baoCao.id = this.idDialog;
 			this.statusBtnClose = true;
@@ -228,7 +232,7 @@ export class BaoCaoComponent implements OnInit {
 			}
 		);
 		this.getStatusButton();
-		this.spinner.hide();
+		// this.spinner.hide();
 	}
 
 	getLuyKe() {

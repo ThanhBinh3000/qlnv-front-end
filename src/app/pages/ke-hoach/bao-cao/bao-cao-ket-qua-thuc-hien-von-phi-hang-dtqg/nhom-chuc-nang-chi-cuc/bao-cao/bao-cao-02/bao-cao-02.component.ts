@@ -10,7 +10,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK } from "src/app/Utility/utils";
+import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 
 export class ItemDataMau02 {
@@ -56,7 +56,7 @@ export class BaoCao02Component implements OnInit {
 
     //thong tin chung
     id: any;
-    lstCTietBaoCaoTemp: any[] = [];
+    lstCTietBaoCaoTemp: ItemDataMau02[] = [];
 
     thuyetMinh: string;
     maDviTien = '1';
@@ -110,6 +110,13 @@ export class BaoCao02Component implements OnInit {
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
         this.idBaoCao = this.data?.idBaoCao
+        //tinh toan theo don vi tien
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            item.khGiaMuaTd = divMoney(item.khGiaMuaTd, this.maDviTien);
+            item.khTtien = divMoney(item.khTtien, this.maDviTien);
+            item.thGiaMuaTd = divMoney(item.thGiaMuaTd, this.maDviTien);
+            item.thTtien = divMoney(item.thTtien, this.maDviTien);
+        })
         // 02
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             switch (el.header) {
@@ -789,7 +796,23 @@ export class BaoCao02Component implements OnInit {
     }
 
     async saveAppendix(maChucNang: string) {
-        await this.saveMau02();
+        this.lstCTietBaoCaoTemp = [];
+        this.saveMau02(this.lstCtietBcao021);
+        this.saveMau02(this.lstCtietBcao022);
+        let checkMoneyRange = true;
+
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            if (item.khGiaMuaTd > MONEY_LIMIT || item.khTtien > MONEY_LIMIT ||
+                item.thGiaMuaTd > MONEY_LIMIT || item.thTtien > MONEY_LIMIT) {
+                checkMoneyRange = false;
+                return;
+            }
+        })
+
+        if (!checkMoneyRange == true) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
         const baoCaoChiTietTemp = JSON.parse(JSON.stringify(this.data));
         baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
         baoCaoChiTietTemp.maDviTien = this.maDviTien;
@@ -798,7 +821,6 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
         console.log(baoCaoChiTietTemp.tuNgay);
 
-        const checkMoneyRange = true;
         let checkPersonReport = true;
 
         // validate nguoi thuc hien bao cao
@@ -829,10 +851,6 @@ export class BaoCao02Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        if (!checkMoneyRange == true) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-            return;
-        }
 
         //call service cap nhat phu luc
         this.spinner.show();
@@ -854,13 +872,15 @@ export class BaoCao02Component implements OnInit {
         this.spinner.hide();
     }
 
-    async saveMau02() {
-        this.lstCTietBaoCaoTemp = [];
-        await this.lstCtietBcao021.forEach(e => {
-            this.lstCTietBaoCaoTemp.push(e);
-        })
-        await this.lstCtietBcao022.forEach(e => {
-            this.lstCTietBaoCaoTemp.push(e);
+    async saveMau02(lstCTietBCao: ItemDataMau02[]) {
+        lstCTietBCao.forEach(item => {
+            this.lstCTietBaoCaoTemp.push({
+                ...item,
+                khGiaMuaTd: mulMoney(item.khGiaMuaTd, this.maDviTien),
+                khTtien: mulMoney(item.khTtien, this.maDviTien),
+                thGiaMuaTd: mulMoney(item.thGiaMuaTd, this.maDviTien),
+                thTtien: mulMoney(item.thTtien, this.maDviTien),
+            })
         })
     }
 

@@ -527,7 +527,6 @@
                 </td>
                 <td>
                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                        [class]="editCache[data.id].data.ddiemXdung ? '' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.ddiemXdung">
                         <nz-option *ngFor="let item of ddiemXdungs" [nzValue]="item.id" [nzLabel]="item.tenDm">
                         </nz-option>
