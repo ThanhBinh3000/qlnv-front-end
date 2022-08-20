@@ -159,7 +159,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       tgDuKienTcbdg: [[null, null], [Validators.required]],
       ghiChu: [null],
     });
-    this.loaiVTHHGetAll();
   }
 
   async ngOnInit() {
@@ -236,7 +235,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
       maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
-      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [dayjs().toDate(), dayjs().toDate()],
+      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyTuNgay, dataDetail.ngayKyDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [null, null],

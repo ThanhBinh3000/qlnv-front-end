@@ -96,19 +96,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      // let res = await this.donViService.layTatCaDonVi();
-      // this.optionsDonVi = [];
-      // if (res.msg == MESSAGE.SUCCESS) {
-      //   for (let i = 0; i < res.data.length; i++) {
-      //     var item = {
-      //       ...res.data[i],
-      //       labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-      //     };
-      //     this.optionsDonVi.push(item);
-      //   }
-      // } else {
-      //   this.notification.error(MESSAGE.ERROR, res.msg);
-      // }
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -200,15 +187,9 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "ngayKyDen": this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
         : null,
-      "maVthh": null,
       "loaiVthh": this.typeVthh,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
-      "trangThai": null,
+      "pageable.pageSize": this.pageSize,
+      "pageable.pageNumber": this.page,
     }
     let res = await this.quyetDinhGiaoNvXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -307,15 +288,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           "ngayKyDen": this.searchFilter.ngayKy
             ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
             : null,
-          "maVthh": null,
           "loaiVthh": this.typeVthh ?? null,
-          "paggingReq": {
-            "limit": this.pageSize,
-            "orderBy": null,
-            "orderType": null,
-            "page": this.page - 1
-          },
-          "trangThai": null,
         }
         this.quyetDinhGiaoNvXuatHangService
           .exportList(body)
