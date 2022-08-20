@@ -32,6 +32,25 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
   //thong tin dang nhap
   userInfo: any;
   //thong tin tim kiem
+  // searchFilter = {
+  //   loaiTimKiem: "0",
+  //   maPhanGiao: '2',
+  //   maLoai: '2',
+  //   namPa: null,
+  //   ngayTaoTu: "",
+  //   ngayTaoDen: "",
+  //   donViTao: "",
+  //   loai: null,
+  //   trangThais: [],
+  //   maPa: "",
+  //   maLoaiDan: null,
+  //   soQd: "",
+  //   paggingReq: {
+  //     limit: 10,
+  //     page: 1
+  //   },
+  // };
+
   searchFilter = {
     loaiTimKiem: "0",
     maPhanGiao: '2',
@@ -45,11 +64,13 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
     maPa: "",
     maLoaiDan: null,
     soQd: "",
+    trangThaiGiaos: [],
     paggingReq: {
       limit: 10,
       page: 1
     },
   };
+
   //danh muc
   danhSachBaoCao: any = [];
   loaiDuAns: any[] = [
@@ -116,7 +137,7 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
         id: "4",
         tenDm: 'Trưởng BP duyệt'
       });
-        this.roleUser = 'lanhDao';
+      this.roleUser = 'lanhDao';
     }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -176,8 +197,39 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
       }
     }
     this.spinner.show();
+    // const searchFilterTemp = Object.assign({}, this.searchFilter);
+    // searchFilterTemp.trangThais = [];
+    // searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    // searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    // if (this.trangThai) {
+    //   searchFilterTemp.trangThais.push(this.trangThai)
+    // } else {
+    //   searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+    // }
+    // await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.danhSachBaoCao = data.data.content;
+    //       this.danhSachBaoCao.forEach(e => {
+    //         e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+    //         e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+    //         e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+    //         e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+    //         e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+    //       })
+    //       this.totalElements = data.data.totalElements;
+    //       this.totalPages = data.data.totalPages;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
     const searchFilterTemp = Object.assign({}, this.searchFilter);
     searchFilterTemp.trangThais = [];
+    searchFilterTemp.trangThaiGiaos = ["0", "1", "2"]
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {

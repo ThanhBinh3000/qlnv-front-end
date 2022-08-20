@@ -62,6 +62,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   maDviTien: any;
   newDate = new Date();
   tenDvi: string;
+  maDviNhan: string;
   //danh muc
   donViTiens: any[] = DON_VI_TIEN;
   lstCtietBcao: ItemData[] = [];
@@ -160,6 +161,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
           this.namDtoan = data.data.namDtoan;
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDvi;
+          this.maDviNhan = data.data.maDviNhan;
           // this.trangThai = data.data.trangThai;
 
           this.tenDvi = this.donVis.find((item) => item.maDvi == data.data.maDvi)?.tenDvi;
@@ -261,7 +263,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
+    return this.donVis.find((item) => item.maDvi == this.maDviNhan)?.tenDvi;
   }
 
 

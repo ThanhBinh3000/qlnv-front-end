@@ -74,8 +74,8 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
       NHAN_VIEN_TC,
-      // TRUONG_BP_TC,
-      // LANH_DAO_TC,
+      TRUONG_BP_TC,
+      LANH_DAO_TC,
     ],
     isDisabled: false,
   },
