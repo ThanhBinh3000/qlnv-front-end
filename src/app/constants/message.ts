@@ -51,5 +51,7 @@ export const MESSAGE = {
   CHUA_CO_BAO_CAO: 'Chưa có bản ghi nào trong năm đã nhập',
   GUI_DUYET_SUCCESS: 'Gửi duyệt thành công',
   PHE_DUYET_SUCCESS: 'Phê duyệt thành công',
-  BAN_HANH_SUCCESS: 'Ban hành thành công'
+  BAN_HANH_SUCCESS: 'Ban hành thành công',
+  TONG_HOP_SUCCESS: 'Tổng hợp thành công',
+  TAO_BAO_CAO_SUCCESS: 'Tạo báo cáo thành công',
 };

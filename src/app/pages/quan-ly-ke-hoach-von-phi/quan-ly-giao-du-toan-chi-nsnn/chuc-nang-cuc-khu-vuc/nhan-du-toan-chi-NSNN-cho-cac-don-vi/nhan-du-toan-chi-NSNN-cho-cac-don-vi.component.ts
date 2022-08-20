@@ -161,7 +161,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.lstCtietBcao = data.data.lstCtiets;
@@ -175,6 +175,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
           this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDviTao);
           this.trangThai = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
+          this.maDviTien = data.data.maDviTien
           if (data.data.trangThai == '1') {
             this.statusBtnNew = true;
           }
@@ -292,7 +293,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
       maLoai: "1"
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -313,7 +314,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
     let maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maPa = res.data;
