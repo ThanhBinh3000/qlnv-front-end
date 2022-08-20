@@ -283,7 +283,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
-          this.lstDviTrucThuoc = data.data.lstGiaoDtoanTrucThuocs;
+          if (!data.data.lstGiaoDtoanTrucThuocs) {
+            this.lstDviTrucThuoc = []
+          } else {
+            this.lstDviTrucThuoc = data.data?.lstGiaoDtoanTrucThuocs;
+          }
           this.checkSumUp = data.data.checkSumUp;
           if (this.checkSumUp == true) {
             this.statusBtnTongHop = false
