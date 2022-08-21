@@ -259,6 +259,10 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     }
 
     async themMoiItem() {
+        if (!this.rowItem.idLoKho) {
+            this.notification.error(MESSAGE.ERROR_NOT_EMPTY, 'Vui lòng chọn lô kho.');
+            return;
+        }
         const newItem = {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
