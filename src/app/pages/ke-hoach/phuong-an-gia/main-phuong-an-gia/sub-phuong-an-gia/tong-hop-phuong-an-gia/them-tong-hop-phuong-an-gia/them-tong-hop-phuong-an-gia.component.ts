@@ -42,7 +42,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-
+  huhu: any[] = [];
   userInfo: UserLogin;
   dsLoaiGia: any[] = [];
 
@@ -117,7 +117,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiGia: data.loaiGia,
         noiDung: data.noiDung,
         ghiChu: data.ghiChu,
-      })
+      });
       this.pagChiTiet = data.pagChiTiets;
     }
   }
@@ -175,13 +175,16 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async save() {
     this.setValidators(true);
     this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
     this.helperService.markFormGroupTouched(this.formTraCuu);
     if (this.formTraCuu.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
+
     let body = this.formTraCuu.value;
+    body.formData = this.formData.value;
     body.ngayKyTu = body.ngayKy[0];
     body.ngayKyDen = body.ngayKy[1];
     body.type = this.type;
