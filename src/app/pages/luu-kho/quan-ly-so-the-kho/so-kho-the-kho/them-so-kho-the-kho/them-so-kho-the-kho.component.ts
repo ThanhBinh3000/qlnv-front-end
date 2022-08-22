@@ -26,7 +26,6 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
   styleUrls: ['./them-so-kho-the-kho.component.scss'],
 })
 export class ThemSoKhoTheKhoComponent implements OnInit {
-  // @Input('dsTong') dsTong: any;
   @Output('close') onClose = new EventEmitter<any>();
 
   @Input() idInput: number;
@@ -53,7 +52,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
-  dsNam: string[] = [];
   dsDonVi = [];
 
   listDiemKho: any[] = [];
@@ -136,6 +134,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       idNhaKho: res.data.nhaKho,
       idNganKho: res.data.nganKho,
       idNganLo: res.data.loKho,
+      tonDauKy: res.data.tonDauKy
     });
 
     this.changeLoaiHangHoa();
@@ -190,7 +189,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       idDonVi: [this.detail.tenDvi, [Validators.required]],
-      nam: [2021, [Validators.required]],
+      nam: [null, [Validators.required]],
       tuNgay: [null, [Validators.required]],
       denNgay: [null, [Validators.required]],
       idLoaiHangHoa: [null, [Validators.required]],
@@ -210,10 +209,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   loadDsNam() {
-    let thisYear = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
-    }
+    let nam = new Date();
+    this.formData.patchValue({ nam: nam.getFullYear() })
   }
 
   async loadDsTong() {
@@ -226,6 +223,19 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     if (!isEmpty(dsTong)) {
       this.dsTong = dsTong;
       this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
+  }
+
+
+  async changeDate(type: string) {
+    if (type === 'tuNgay') {
+      if (this.formData.value.denNgay && this.formData.value.idNganLo && this.formData.value.idChungLoaiHangHoa) {
+        await this.loadTonDauKy();
+      }
+    } else if (type === 'denNgay') {
+      if (this.formData.value.tuNgay && this.formData.value.idNganLo && this.formData.value.idChungLoaiHangHoa) {
+        await this.loadTonDauKy();
+      }
     }
   }
 
@@ -252,7 +262,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(x => x.title == this.formData.value.idDiemKho);
+    let diemKho = this.listDiemKho.filter(x => {
+      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idDiemKho
+    });
     if (diemKho && diemKho.length > 0) {
       if (!this.idInput) {
         this.formData.patchValue({ idNhaKho: null })
@@ -261,11 +273,14 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
       }
+
     }
   }
 
   changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => x.title == this.formData.value.idNhaKho);
+    let nhaKho = this.listNhaKho.filter(x => {
+      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idNhaKho
+    });
     if (nhaKho && nhaKho.length > 0) {
       if (!this.idInput) {
         this.formData.patchValue({ idNganKho: null })
@@ -278,27 +293,30 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.title == this.formData.value.idNganKho);
+    let nganKho = this.listNganKho.filter(x => {
+      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idNganKho
+    });
+
     if (nganKho && nganKho.length > 0) {
       if (!this.idInput && this.formData.value.idNganLo !== null) {
         this.formData.patchValue({ idNganLo: null })
       }
       this.listNganLo = nganKho[0].children;
       this.maNganKho = this.detail.maNganKho;
-    }
-
-    if (this.idInput) {
-      this.listNganLo.forEach(nganLo => {
-        if (nganLo.title === this.formData.value.idNganLo) {
-          this.formData.patchValue({ idNganLo: nganLo.maDvi });
-        }
-      })
-
+      if (this.idInput && this.listNganLo.length > 0) {
+        this.listNganLo.forEach(x => {
+          if (x.title == this.formData.value.idNganLo) {
+            this.detail.maNganLo = x.maDvi;
+          }
+        });
+      }
     }
   }
 
-  changeNganLo() {
-    this.loadTonDauKy();
+  async changeNganLo() {
+    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.idChungLoaiHangHoa) {
+      await this.loadTonDauKy();
+    }
   }
 
   async loaiVTHHGetAll() {
@@ -328,7 +346,9 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
   }
 
   async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ten == this.formData.value.idLoaiHangHoa);
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => {
+      return (this.idInput ? x.ten : x.ma) == this.formData.value.idLoaiHangHoa;
+    });
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       if (!this.idInput) {
         this.formData.patchValue({ idChungLoaiHangHoa: null })
@@ -339,22 +359,28 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     if (this.idInput) {
       this.listChungLoaiHangHoa.forEach(chungLoaiHangHoa => {
         if (chungLoaiHangHoa.ten === this.formData.value.idChungLoaiHangHoa) {
-          this.formData.patchValue({ idChungLoaiHangHoa: chungLoaiHangHoa.ma });
+          this.detail.maChungLoaiHangHoa = chungLoaiHangHoa.ma;
           this.formData.patchValue({ donViTinh: chungLoaiHangHoa.maDviTinh });
         }
       })
     }
   }
 
-  changeChungLoaiHangHoa() {
+  async changeChungLoaiHangHoa() {
     const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ma === this.formData.value.idChungLoaiHangHoa);
-    this.formData.patchValue({ donViTinh: loaihanghoaDVT[0]?.maDviTinh })
+    this.formData.patchValue({ donViTinh: loaihanghoaDVT[0]?.maDviTinh });
+
+    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.idNganLo) {
+      await this.loadTonDauKy();
+    }
   }
 
 
   async loadTonDauKy() {
+    console.log("ton dau ky")
     try {
       this.formData.patchValue({ tonDauKy: 0 })
+
       const body = {
         "loaiHH": this.formData.value.idLoaiHangHoa,
         "chungLoaiHH": this.formData.value.idChungLoaiHangHoa,
@@ -371,8 +397,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       }
       const res = await this.quanLyHangTrongKhoService.searchHangTrongKho(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length > 0) {
-          res.data.list.forEach((item) => {
+        if (res.data && res.data.content.length > 0) {
+          res.data.content.forEach((item) => {
             item.child.forEach((child) => {
               if (child.maDvi === this.userInfo.MA_DVI) {
                 this.formData.patchValue({ tonDauKy: child.tonKhoDauKy })
@@ -429,6 +455,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       if (this.idInput) {
         const bodyNew = {
           ...body,
+          "chungLoaiHH": this.detail.maChungLoaiHangHoa,
+          "maDvi": this.detail.maNganLo,
           'id': this.idInput
         }
         res = await this.quanLySoKhoTheKhoService.sua(bodyNew);

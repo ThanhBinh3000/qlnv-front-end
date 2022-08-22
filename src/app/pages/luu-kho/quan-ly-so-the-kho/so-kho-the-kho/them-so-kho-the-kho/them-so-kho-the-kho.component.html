@@ -70,10 +70,9 @@
                   <nz-form-label [nzNoColon]="true">
                     Năm
                   </nz-form-label>
-                  <nz-select formControlName="nam" [nzDisabled]="idInput? true : false">
-                    <nz-option *ngFor="let item of dsNam" nzValue="{{item}}" nzLabel="{{item}}">
-                    </nz-option>
-                  </nz-select>
+                  <nz-input-group>
+                    <input type="text" formControlName="nam" nz-input readonly />
+                  </nz-input-group>
                 </nz-form-item>
               </div>
 
@@ -83,7 +82,7 @@
                     Từ ngày
                   </nz-form-label>
                   <nz-date-picker formControlName="tuNgay" class="search__input" nzFormat="dd-MM-yyyy"
-                    [nzDisabled]="idInput? true : false">
+                    (ngModelChange)="changeDate('tuNgay')" [nzDisabled]="idInput? true : false || isTaoTheKho">
                   </nz-date-picker>
                 </nz-form-item>
               </div>
@@ -94,7 +93,7 @@
                     Đến ngày
                   </nz-form-label>
                   <nz-date-picker formControlName="denNgay" class="search__input" nzFormat="dd-MM-yyyy"
-                    [nzDisabled]="idInput? true : false">
+                    (ngModelChange)="changeDate('denNgay')" [nzDisabled]="idInput? true : false || isTaoTheKho">
                   </nz-date-picker>
                 </nz-form-item>
               </div>
@@ -104,9 +103,14 @@
                   <nz-form-label [nzNoColon]="true">
                     Loại hàng hóa
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idLoaiHangHoa" nz-input readonly />
+                  </nz-input-group>
+
                   <nz-select formControlName="idLoaiHangHoa" (ngModelChange)="changeLoaiHangHoa()"
-                    [nzDisabled]="idInput? true : false">
-                    <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ten}}" nzLabel="{{item.ten}}">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
+                    <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -117,8 +121,13 @@
                   <nz-form-label [nzNoColon]="true">
                     Chủng loại hàng hóa
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idChungLoaiHangHoa" nz-input readonly />
+                  </nz-input-group>
+
                   <nz-select formControlName="idChungLoaiHangHoa" (ngModelChange)="changeChungLoaiHangHoa()"
-                    [nzDisabled]="idInput? true : false">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
                     <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                     </nz-option>
                   </nz-select>
@@ -130,9 +139,14 @@
                   <nz-form-label [nzNoColon]="true">
                     Điểm kho
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idDiemKho" nz-input readonly />
+                  </nz-input-group>
+
                   <nz-select formControlName="idDiemKho" (ngModelChange)="changeDiemKho(false)"
-                    [nzDisabled]="idInput? true : false">
-                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
+                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -143,9 +157,14 @@
                   <nz-form-label [nzNoColon]="true">
                     Nhà kho
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idNhaKho" nz-input readonly />
+                  </nz-input-group>
+
                   <nz-select formControlName="idNhaKho" (ngModelChange)="changeNhaKho(false)"
-                    [nzDisabled]="idInput? true : false">
-                    <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
+                    <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -156,9 +175,14 @@
                   <nz-form-label [nzNoColon]="true">
                     Ngăn kho
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idNganKho" nz-input readonly />
+                  </nz-input-group>
+
                   <nz-select formControlName="idNganKho" (ngModelChange)="changeNganKho()"
-                    [nzDisabled]="idInput? true : false">
-                    <nz-option *ngFor="let item of listNganKho" [nzValue]="item.title" [nzLabel]="item.title">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
+                    <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
                 </nz-form-item>
@@ -169,8 +193,12 @@
                   <nz-form-label [nzNoColon]="true">
                     Lô kho
                   </nz-form-label>
+
+                  <nz-input-group *ngIf="idInput">
+                    <input type="text" formControlName="idNganLo" nz-input readonly />
+                  </nz-input-group>
                   <nz-select formControlName="idNganLo" (ngModelChange)="changeNganLo()"
-                    [nzDisabled]="idInput? true : false">
+                    [nzDisabled]="idInput? true : false || isTaoTheKho" *ngIf="!idInput">
                     <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -180,11 +208,15 @@
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label nzFor="ton-dau-ky">Tồn đầu kỳ</nz-form-label>
-                  <nz-form-control>
+
+                  <nz-input-group *ngIf="idInput">
+                    <nz-input-number formControlName="tonDauKy" [nzMin]="1" [nzSize]="'small'" [nzDisabled]="true">
+                    </nz-input-number>
+                  </nz-input-group>
+                  <nz-form-control *ngIf="!idInput">
                     <nz-input-group id="ton-dau-ky">
                       <nz-input-number formControlName="tonDauKy" [nzMin]="1" [nzSize]="'small'" [nzDisabled]="true">
                       </nz-input-number>
-
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
