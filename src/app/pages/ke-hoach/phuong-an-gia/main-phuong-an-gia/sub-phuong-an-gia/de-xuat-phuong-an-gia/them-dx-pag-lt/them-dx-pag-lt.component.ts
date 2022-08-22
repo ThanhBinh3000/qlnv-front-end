@@ -39,6 +39,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
+  isVat: boolean = false;
 
   formData: FormGroup;
   listVthh: any[] = [];
@@ -89,7 +90,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soDeXuat: [, [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         ngayKy: [null, [Validators.required]],
-        loaiGia: [null, [Validators.required]],
+        loaiGia: ['', [Validators.required]],
         trichYeu: [null],
         soCanCu: [null],
         trangThai: ['00'],
@@ -112,6 +113,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tongChiPhi: [],
         noiDung: [null],
         lyDoTuChoi: [],
+        tgianNhang: []
       }
     );
     this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
@@ -200,9 +202,18 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
+      if (this.type == TYPE_PAG.GIA_MUA_TOI_DA) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG01' || item.ma == 'LG02'
+        );
+      }
+      if (this.type == TYPE_PAG.GIA_CU_THE) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG03' || item.ma == 'LG04'
+        );
+      }
     }
-  }
+  } w
 
   async loadDsPhuongAnGia() {
     this.dsPhuongAnGia = [];
@@ -296,6 +307,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
           }
         });
     }
+  }
+
+  onChangeLoaiGia($event) {
+    this.isVat = ($event == 'LG01' || $event == 'LG03');
+    console.log(this.isVat);
   }
 
   loadDsNam() {

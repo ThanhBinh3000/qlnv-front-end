@@ -13,15 +13,21 @@ import { saveAs } from 'file-saver';
 export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Input()
   isTableKetQua: boolean;
+
   @Input()
   dataTable = [];
+
   @Output()
   dataTableChange = new EventEmitter<any>();
 
   @Input()
-  listCloaiVthh = []
+  isVat: boolean;
+
   @Input()
-  isView: boolean
+  listCloaiVthh = [];
+
+  @Input()
+  isView: boolean;
 
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
   constructor(
@@ -36,6 +42,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log(this.isVat, this.isTableKetQua);
   }
 
 
