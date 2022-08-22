@@ -12,7 +12,6 @@ import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
 
-
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
   templateUrl: './them-quyet-dinh-ttcp.component.html',
@@ -28,7 +27,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  maQd: string
+  maQd: string;
   userInfo: UserLogin;
   dataTable: any[] = [];
 
@@ -42,30 +41,28 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     public userService: UserService,
     private helperService: HelperService,
   ) {
-    this.formData = this.fb.group(
-      {
-        id: [],
-        soQd: [, [Validators.required]],
-        ngayQd: [null, [Validators.required]],
-        namQd: [dayjs().get('year'), [Validators.required]],
-        trichYeu: [null],
-        trangThai: ['00'],
-        muaTangList: [],
-        xuatGiamList: [],
-        xuatBanList: [],
-        luanPhienList: [],
-      }
-    );
+    this.formData = this.fb.group({
+      id: [],
+      soQd: [, [Validators.required]],
+      ngayQd: [null, [Validators.required]],
+      namQd: [dayjs().get('year'), [Validators.required]],
+      trichYeu: [null],
+      trangThai: ['00'],
+      muaTangList: [],
+      xuatGiamList: [],
+      xuatBanList: [],
+      luanPhienList: [],
+    });
   }
 
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
+      (this.userInfo = this.userService.getUserLogin()),
       this.loadDsNam(),
-      this.maQd = '/QĐ-TTg',
+      (this.maQd = '/QĐ-TTg'),
       this.getDataDetail(this.idInput),
-    ])
+    ]);
     this.spinner.hide();
   }
 
@@ -80,13 +77,12 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
-      })
-      this.dataTable = data.listBoNganh
+        trichYeu: data.trichYeu,
+      });
+      this.dataTable = data.listBoNganh;
       this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
-
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
@@ -130,12 +126,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {}
 
-
-  xoaItem(id: number) {
-
-  }
+  xoaItem(id: number) {}
 
   quayLai() {
     this.onClose.emit();
@@ -158,12 +151,12 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: '11',
           };
-          let res =
-            await this.quyetDinhTtcpService.approve(
-              body,
-            );
+          let res = await this.quyetDinhTtcpService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.BAN_HANH_SUCCESS,
+            );
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -179,16 +172,19 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save() {
-    console.log(this.taiLieuDinhKemList)
+    console.log(this.taiLieuDinhKemList);
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
+      console.log(this.formData.value);
       this.spinner.hide();
       return;
     }
     if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Danh sách kế hoạch không được để trống");
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Danh sách kế hoạch không được để trống',
+      );
       this.spinner.hide();
       return;
     }
@@ -196,7 +192,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    let res
+    let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);
     } else {
@@ -215,7 +211,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     this.spinner.hide();
   }
 
-  exportData() { }
+  exportData() {}
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({

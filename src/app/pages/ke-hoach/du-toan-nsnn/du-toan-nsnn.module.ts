@@ -4,10 +4,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DieuChinhDuToanChiNSNNModule } from './dieu-chinh-du-toan-chi-nsnn/dieu-chinh-du-toan-chi-nsnn.module';
 import { DuToanNsnnRoutingModule } from './du-toan-nsnn-routing.module';
 import { DuToanNsnnComponent } from './du-toan-nsnn.component';
+import { GiaoDuToanChiNSNNModule } from './giao-du-toan-chi-nsnn/giao-du-toan-chi-nsnn.module';
 import { LapThamDinhModule } from './lap-tham-dinh/lap-tham-dinh.module';
-// import { KeHoachVonDauNamModule } from './ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module';
-// import { KeHoachVonMuaBuModule } from './ke-hoach-von-mua-bu/ke-hoach-von-mua-bu.module';
-// import { KeHoachXuatModule } from './ke-hoach-xuat/ke-hoach-xuat.module';
 
 @NgModule({
     declarations: [
@@ -19,9 +17,7 @@ import { LapThamDinhModule } from './lap-tham-dinh/lap-tham-dinh.module';
         ComponentsModule,
         LapThamDinhModule,
         DieuChinhDuToanChiNSNNModule,
-        // KeHoachVonDauNamModule,
-        // KeHoachVonMuaBuModule,
-        // KeHoachXuatModule,
+        GiaoDuToanChiNSNNModule,
     ],
 })
 export class DuToanNsnnModule { }

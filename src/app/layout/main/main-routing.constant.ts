@@ -20,7 +20,7 @@ export const MAIN_ROUTES = {
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
   quanTriHeThong: 'quan-tri-he-thong',
-  qlkhVonPhi: 'qlkh-von-phi',
+  // qlkhVonPhi: 'qlkh-von-phi',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -76,10 +76,10 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
   },
-  {
-    title: 'Quản lý kế hoạch vốn phí',
-    route: MAIN_ROUTES.qlkhVonPhi,
-  },
+  // {
+  //   title: 'Quản lý kế hoạch vốn phí',
+  //   route: MAIN_ROUTES.qlkhVonPhi,
+  // },
   {
     title: 'QTDM',
     route: MAIN_ROUTES.quanTriDanhMuc,

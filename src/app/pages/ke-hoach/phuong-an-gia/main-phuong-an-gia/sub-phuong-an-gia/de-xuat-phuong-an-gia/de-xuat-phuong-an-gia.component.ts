@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 })
 export class DeXuatPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -99,7 +100,6 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
@@ -110,14 +110,16 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       body.ngayKyTu = body.ngayKy[0];
       body.ngayKyDen = body.ngayKy[1];
     }
-    body.namKh = body.namKeHoach,
-      body.soDx = body.soDeXuat,
-      body.loaiHh = body.loaiHangHoa,
-      body.paggingReq = {
-        limit: this.pageSize,
-        page: this.page - 1,
+    body.namKh = body.namKeHoach;
+    body.soDx = body.soDeXuat;
+    body.loaiHh = body.loaiHangHoa;
+    body.type = this.type;
+    body.pagType = this.pagType;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
 
-      }
+    }
     let res = await this.giaDeXuatGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

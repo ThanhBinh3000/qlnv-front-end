@@ -20,6 +20,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { cloneDeep } from 'lodash';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
+import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-dau-gia',
@@ -90,7 +91,8 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
-  ) {}
+    public qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKHBDGService,
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -261,22 +263,22 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   async search() {
     this.dataTable = [];
     let body = {
-      tuNgayQd: this.searchFilter.ngayKy
+      ngayKyTuNgay: this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
         : null,
-      denNgayQd: this.searchFilter.ngayKy
+      ngayKyDenNgay: this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
         : null,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
-      soQd: this.searchFilter.soQd,
+      soQuyetDinh: this.searchFilter.soQd,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    let res = await this.qdPheDuyetKhBanDauGia.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

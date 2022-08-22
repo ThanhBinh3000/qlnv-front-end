@@ -38,6 +38,26 @@
             Thảo'}}</span>
           <span class="title-form">Biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</span>
         </div>
+        <div class="summary-table-data" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="4" class="text-summary">
+            Tổng số kinh phí thực tế đã thực hiện
+          </div>
+          <div nz-col nzSpan="4" class="bg-gray text-center text-money">
+            {{ (caculatorThanhTienTN() + caculatorThanhTienQT()) | number: '1.0-1' }}
+          </div>
+          <div nz-col nzSpan="2" class="text-summary">
+            Viết bằng chữ:
+          </div>
+          <div nz-col nzSpan="10" class="bg-gray text-money text-specical-money">
+            {{ convertTien(caculatorThanhTienTN() + caculatorThanhTienQT()) }}
+          </div>
+        </div>
+        <div class="comment-last" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="24" class="text-summary">Nhận xét kết luận</div>
+          <div nz-col nzSpan="24">
+            <textarea nz-input [(ngModel)]="detail.ketLuan"></textarea>
+          </div>
+        </div>
       </div>
     </div>
     <div class="search__body" nz-row [nzGutter]="[18, 6]">

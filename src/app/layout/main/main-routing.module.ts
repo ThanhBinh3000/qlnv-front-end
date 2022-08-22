@@ -86,13 +86,13 @@ const routes: Routes = [
             (m) => m.QuanTriHeThongNewModule,
           ),
       },
-      {
-        path: MAIN_ROUTES.qlkhVonPhi,
-        loadChildren: () =>
-          import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(
-            (m) => m.QuanLyKeHoachVonPhiModule,
-          ),
-      },
+      // {
+      //   path: MAIN_ROUTES.qlkhVonPhi,
+      //   loadChildren: () =>
+      //     import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(
+      //       (m) => m.QuanLyKeHoachVonPhiModule,
+      //     ),
+      // },
       {
         path: MAIN_ROUTES.capVon,
         loadChildren: () =>

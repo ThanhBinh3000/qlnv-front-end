@@ -6,19 +6,19 @@
         <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isTongCuc() && loaiVthh == 'LT'">
             Tổng hợp phương án giá
         </li>
-        <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc() && type == 'GMTDBTT'">
+        <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA">
             Quyết định giá của BTC
         </li>
-        <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isTongCuc() && type == 'GCT'">
+        <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_CU_THE">
             Quyết định giá của TCDTNN
         </li>
-        <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isTongCuc() && type == 'GCT'">
+        <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_CU_THE">
             Quyết định điều chỉnh giá của TCDTNN
         </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-de-xuat-phuong-an-gia [type]="type"></app-de-xuat-phuong-an-gia>
+    <app-de-xuat-phuong-an-gia [type]="type" [pagType]="loaiVthh"></app-de-xuat-phuong-an-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
     <app-tong-hop-phuong-an-gia [type]="type"></app-tong-hop-phuong-an-gia>

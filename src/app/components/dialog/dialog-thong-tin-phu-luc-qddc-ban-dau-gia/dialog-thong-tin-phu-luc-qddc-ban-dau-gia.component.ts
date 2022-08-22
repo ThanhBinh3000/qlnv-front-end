@@ -87,6 +87,8 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
   slLonHonChiTieu: boolean;
   listChiCuc: any[] = [];
   donViTinh: string;
+  soTienDatTruoc: number;
+  bangPhanBoList: Array<any> = [];
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -123,6 +125,7 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
       this.diaDiemNhapKho.tenDonVi = this.data.tenDonVi;
       this.diaDiemNhapKho.maDvi = this.data.maDv;
       this.diaDiemNhapKho.donViTinh = this.donViTinh;
+      this.khoanTienDatTruoc = this.data.tongKhoanTienDatTruoc;
     }
     this.loadChiCuc();
     this.loadDanhMucHang();
@@ -144,6 +147,8 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
 
   changeChiCuc() {
     this.listDiemKho = [];
+    this.dsChiTietDiemNhapKhoClone = [];
+    this.diaDiemNhapKho.chiTietDiaDiems = [];
     this.loadDiemKho();
     const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maDvi);
     if (donVi) {
@@ -386,7 +391,8 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
     this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
     this.calcSoLuong();
     this.checkSoLuong();
-
+    const diDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho);
+    this.checkExistBangPhanLo(diDiemNhapKhoClone);
   }
   checkSoLuong() {
     const tongSoLuong = this.diaDiemNhapKho.soLuong;
@@ -412,6 +418,8 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
       this.dsChiTietDiemNhapKhoClone[i],
     );
     this.checkSoLuong();
+    const diDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho);
+    this.checkExistBangPhanLo(diDiemNhapKhoClone);
   }
   cancelEdit(index: number) {
     this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
@@ -440,4 +448,24 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
       },
     });
   }
+
+
+  checkExistBangPhanLo(data: any) {
+    if (this.bangPhanBoList) {
+      let indexExist = this.bangPhanBoList.findIndex(
+        (x) => x.maDvi == data.maDvi,
+      );
+      if (indexExist != -1) {
+        this.bangPhanBoList.splice(indexExist, 1);
+      }
+    } else {
+      this.bangPhanBoList = [];
+    }
+    this.bangPhanBoList = [
+      ...this.bangPhanBoList,
+      data,
+    ];
+
+  }
+
 }

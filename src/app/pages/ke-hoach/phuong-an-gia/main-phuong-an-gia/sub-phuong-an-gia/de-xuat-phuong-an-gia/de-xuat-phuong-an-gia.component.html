@@ -203,7 +203,7 @@
                         <td>{{ data.soDeXuat }}</td>
                         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.quyetDinhChiTieu }}</td>
+                        <td>{{ data.soCanCu }}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>
@@ -241,6 +241,6 @@
     </div>
 </ng-container>
 <ng-template #templateThemmoi>
-    <app-them-qd-de-xuat-phuong-an-gia [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
-    </app-them-qd-de-xuat-phuong-an-gia>
+    <app-them-dx-pag-lt [type]="type" [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    </app-them-dx-pag-lt>
 </ng-template>
