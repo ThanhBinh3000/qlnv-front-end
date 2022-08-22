@@ -10,6 +10,7 @@ import { Detail } from 'src/app/models/HopDong';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopPhuongAnGiaService } from 'src/app/services/tong-hop-phuong-an-gia.service';
 import { UserService } from 'src/app/services/user.service';
@@ -42,6 +43,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   giaDng: any[] = [];
   giaDngVat: any[] = [];
   dataTable: any[] = [];
+  listCuc: any[] = [];
+
+  listCucSelected: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -54,6 +58,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private donviService: DonviService
   ) {
     this.formData = this.fb.group(
       {
@@ -72,7 +77,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
-        maDvis: [["0101", "01010201"]],
+        maDvis: [[], [Validators.required]],
         ngayKy: [null, [Validators.required]],
         ngayTongHop: [],
         noiDung: [],
@@ -86,6 +91,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.getListCuc(),
       this.loadDsVthh(),
       this.loadDsLoaiGia(),
       this.getDataDetail(this.idInput),
@@ -93,6 +99,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     ])
     this.spinner.hide();
   }
+
+  async getListCuc() {
+    const res = await this.donviService.layTatCaDonViByLevel(2);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listCuc = res.data;
+    }
+  }
+
 
   async getDataDetail(id) {
     if (id > 0) {

@@ -23,7 +23,7 @@
     <nz-card class="mt16 flex-card p-lr16">
         <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
             <div nz-row [nzGutter]="20" class="mb-10">
-                <div nz-col [nzSpan]="3">
+                <div nz-col [nzSpan]="2">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm tổng hợp
                         </nz-form-label>
@@ -39,7 +39,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="5">
+                <div nz-col [nzSpan]="3">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
                         </nz-form-label>
@@ -56,7 +56,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="3">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -88,19 +88,22 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="8">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNNKV </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-select formControlName="maDvis" [nzDisabled]="isView" nzAllowClear="true"
-                                (ngModelChange)="onChangeCloaiVthh($event)">
-                                <nz-option>
+                            <nz-select formControlName="maDvis" [nzDisabled]="isView" [nzMaxTagCount]="2"
+                                nzMode="multiple" [(ngModel)]="listCucSelected">
+                                <nz-option *ngFor="let item of listCuc" [nzLabel]="item.tenDvi" [nzValue]="item.maDvi">
                                 </nz-option>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                                     </ng-container>
                                 </ng-template>
                             </nz-select>
+                            <ng-template #tagPlaceHolder let-selectedList>and {{ selectedList.length }} more selected
+                            </ng-template>
+
                         </nz-form-control>
                     </nz-form-item>
                 </div>
