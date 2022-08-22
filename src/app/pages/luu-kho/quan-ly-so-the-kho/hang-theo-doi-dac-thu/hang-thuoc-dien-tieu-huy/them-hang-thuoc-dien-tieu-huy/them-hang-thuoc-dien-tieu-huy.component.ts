@@ -9,6 +9,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { saveAs } from 'file-saver';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
 
 @Component({
     selector: 'app-them-hang-thuoc-dien-tieu-huy',
@@ -57,6 +59,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     dsNganKho = [];
     dsChungLoaiHangHoa = [];
     dsLoKho = [];
+    userInfo: UserLogin;
     @Output('close') onClose = new EventEmitter<any>();
 
     constructor(
@@ -65,9 +68,11 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
         private notification: NzNotificationService,
         private readonly spinner: NgxSpinnerService,
+        public userService: UserService,
     ) { }
 
     ngOnInit(): void {
+        this.userInfo = this.userService.getUserLogin();
         this.initData();
         this.initForm();
     }
@@ -76,7 +81,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         if (this.detail) {
             const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
-                idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
+                tenDonvi: [{ value: this.dataEditList.tenDonvi, disabled: this.editList }],
                 maDvi: [{ value: donvi ? donvi.maDvi : null, disabled: this.editList }],
                 idDanhSach: [{ value: this.dataEditList.maDanhSach, disabled: this.editList }],
                 ngayTao: [{ value: this.dataEditList.ngayTao, disabled: this.editList }],
@@ -93,8 +98,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             this.dataTable = this.dataEditList.ds;
         } else {
             this.formData = this.fb.group({
-                idDonVi: [null],
-                maDvi: [null],
+                tenDonvi: [this.userInfo.TEN_DVI],
+                maDvi: [this.userInfo.MA_DVI],
                 tenDonVi: [null],
                 idDanhSach: [null],
                 ngayTao: [new Date()],
@@ -342,7 +347,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
 interface IDanhSachHangTieuHuy {
     id: number;
     maDanhSach: string;
-    idDonVi: number;
+    tenDonvi: number;
     tenDonVi: string;
     ngayTao: Date;
     trangThai: string;
