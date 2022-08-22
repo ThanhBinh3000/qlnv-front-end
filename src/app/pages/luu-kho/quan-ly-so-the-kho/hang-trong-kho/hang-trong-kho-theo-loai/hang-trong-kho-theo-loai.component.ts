@@ -83,9 +83,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     try {
       this.spinner.show();
       this.initForm();
-      this.loaiVTHHGetAll()
-      await this.initData();
-      await this.search()
+      await Promise.all([this.loaiVTHHGetAll(), await this.initData(), await this.search()])
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -93,9 +91,14 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
     }
   }
 
-  loaiVTHHGetAll() {
-    this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
+  async loaiVTHHGetAll() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
       this.dsLoaiHangHoa = [...hangHoa.data]
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+
     })
   }
 
