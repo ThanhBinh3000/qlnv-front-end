@@ -510,6 +510,7 @@ export class BaoCao03Component implements OnInit {
                 lstIndex.push(i);
             }
         }
+
         this.replaceIndex(lstIndex, -1, phuLuc);
         this.sum(stt, phuLuc);
         this.updateEditCache(phuLuc);
