@@ -18,7 +18,7 @@ import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-lap-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './lap-bien-ban-nghiem-thu-bao-quan.component.html',
-  styleUrls: ['./lap-bien-ban-nghiem-thu-bao-quan.component.scss']
+  styleUrls: ['./lap-bien-ban-nghiem-thu-bao-quan.component.scss'],
 })
 export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   @Input() typeVthh: string;
@@ -82,7 +82,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public globals: Globals,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -104,9 +104,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      await Promise.all([
-        this.search(),
-      ]);
+      await Promise.all([this.search()]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -135,10 +133,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -160,15 +158,15 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   async loadNhaKho(diemKhoId: any) {
     if (diemKhoId && diemKhoId > 0) {
       let body = {
-        "diemKhoId": diemKhoId,
-        "maNhaKho": null,
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
+        diemKhoId: diemKhoId,
+        maNhaKho: null,
+        paggingReq: {
+          limit: 1000,
+          page: 1,
         },
-        "str": null,
-        "tenNhaKho": null,
-        "trangThai": null
+        str: null,
+        tenNhaKho: null,
+        trangThai: null,
       };
       let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -182,7 +180,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.diemKho);
+    let diemKho = this.listDiemKho.filter((x) => x.maDiemkho == this.diemKho);
     this.nhaKho = null;
     if (diemKho && diemKho.length > 0) {
       await this.loadNhaKho(diemKho[0].id);
@@ -191,15 +189,15 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async loadNganLo() {
     let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
+      maNganLo: null,
+      nganKhoId: null,
+      paggingReq: {
+        limit: 1000,
+        page: 1,
       },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
+      str: null,
+      tenNganLo: null,
+      trangThai: null,
     };
     let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -224,27 +222,29 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async search() {
     let body = {
-      "capDvis": ['3'],
-      "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
-        ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      "maDvi": this.userInfo.MA_DVI,
-      "maNganKho": this.nganLo,
-      "maNganlo": this.nganLo,
-      "maDiemkho": this.diemKho,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page - 1
+      capDvis: ['3'],
+      denNgayLap:
+        this.ngayTongHop && this.ngayTongHop.length > 1
+          ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
+          : null,
+      maVatTuCha: this.isTatCa ? null : this.typeVthh,
+      maDvi: this.userInfo.MA_DVI,
+      maNganKho: this.nganLo,
+      maNganlo: this.nganLo,
+      maDiemkho: this.diemKho,
+      orderBy: null,
+      orderDirection: null,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
       },
-      "soBb": this.soBB,
-      "str": null,
-      "trangThai": null,
-      "tuNgayLap": this.ngayTongHop && this.ngayTongHop.length > 0
-        ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
+      soBb: this.soBB,
+      str: null,
+      trangThai: null,
+      tuNgayLap:
+        this.ngayTongHop && this.ngayTongHop.length > 0
+          ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
+          : null,
     };
     let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -253,7 +253,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           if (item.ngayNghiemThu && item.ngayNghiemThu != null) {
-            item.ngayNghiemThuShow = dayjs(item.ngayNghiemThu).format('DD/MM/YYYY')
+            item.ngayNghiemThuShow = dayjs(item.ngayNghiemThu).format(
+              'DD/MM/YYYY',
+            );
           }
           item.checked = false;
         });
@@ -303,20 +305,18 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService
-            .xoa({ id: item.id })
-            .then((res) => {
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.DELETE_SUCCESS,
-                );
-                this.search();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-              this.spinner.hide();
-            });
+          this.quanLyNghiemThuKeLotService.xoa({ id: item.id }).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -338,20 +338,18 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService
-            .xoa({ id: item.id })
-            .then((res) => {
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.DELETE_SUCCESS,
-                );
-                this.search();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-              this.spinner.hide();
-            });
+          this.quanLyNghiemThuKeLotService.xoa({ id: item.id }).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -366,21 +364,23 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
-            ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
-          "loaiVthh": this.typeVthh,
-          "maDvi": this.userInfo.MA_DVI,
-          "maNganKho": this.nganLo,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBb": this.soBB,
-          "str": null,
-          "trangThai": null,
-          "tuNgayLap": this.ngayTongHop && this.ngayTongHop.length > 0
-            ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
+          denNgayLap:
+            this.ngayTongHop && this.ngayTongHop.length > 1
+              ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
+              : null,
+          loaiVthh: this.typeVthh,
+          maDvi: this.userInfo.MA_DVI,
+          maNganKho: this.nganLo,
+          orderBy: null,
+          orderDirection: null,
+          paggingReq: null,
+          soBb: this.soBB,
+          str: null,
+          trangThai: null,
+          tuNgayLap:
+            this.ngayTongHop && this.ngayTongHop.length > 0
+              ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
+              : null,
         };
         this.quanLyNghiemThuKeLotService
           .exportList(body)
@@ -430,9 +430,14 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({
+              ids: dataDelete,
+            });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -445,9 +450,11 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -457,14 +464,16 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
+            -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -481,10 +490,8 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       chiPhiThucHienNamTruoc: '',
       tongGiaTri: '',
       trangThaiDuyet: '',
-    }
+    };
   }
 
-  print() {
-
-  }
+  print() {}
 }
