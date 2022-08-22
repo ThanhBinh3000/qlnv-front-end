@@ -9,9 +9,10 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
+import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from "src/app/Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
+import { DatePipe } from '@angular/common';
 
 export class ItemDataMau03 {
     id = null;
@@ -105,6 +106,7 @@ export class BaoCao03Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -322,6 +324,7 @@ export class BaoCao03Component implements OnInit {
                 item.stt = item.stt.replace(nho, str);
             })
         })
+        this.setBieuMau(baoCao, phuLuc);
     }
 
     addLine(id: any, phuLuc) {
@@ -507,6 +510,7 @@ export class BaoCao03Component implements OnInit {
                 lstIndex.push(i);
             }
         }
+
         this.replaceIndex(lstIndex, -1, phuLuc);
         this.sum(stt, phuLuc);
         this.updateEditCache(phuLuc);
@@ -842,6 +846,11 @@ export class BaoCao03Component implements OnInit {
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
+
+        if (this.datePipe.transform(baoCaoChiTietTemp.tuNgay, Utils.FORMAT_DATE_STR) > this.datePipe.transform(baoCaoChiTietTemp.denNgay, Utils.FORMAT_DATE_STR)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
+            return;
+        }
 
         let checkPersonReport = true;
 

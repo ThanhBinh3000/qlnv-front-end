@@ -10,8 +10,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
+import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from "src/app/Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
+import { DatePipe } from '@angular/common';
 
 export class ItemDataMau02 {
     bcaoCtietId = null;
@@ -95,6 +96,7 @@ export class BaoCao02Component implements OnInit {
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -819,7 +821,11 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
-        console.log(baoCaoChiTietTemp.tuNgay);
+
+        if (this.datePipe.transform(baoCaoChiTietTemp.tuNgay, Utils.FORMAT_DATE_STR) > this.datePipe.transform(baoCaoChiTietTemp.denNgay, Utils.FORMAT_DATE_STR)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
+            return;
+        }
 
         let checkPersonReport = true;
 
