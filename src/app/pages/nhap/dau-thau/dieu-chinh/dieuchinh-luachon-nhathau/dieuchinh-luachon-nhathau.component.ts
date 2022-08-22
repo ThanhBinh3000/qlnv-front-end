@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -12,11 +18,11 @@ import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nh
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
   templateUrl: './dieuchinh-luachon-nhathau.component.html',
-  styleUrls: ['./dieuchinh-luachon-nhathau.component.scss']
+  styleUrls: ['./dieuchinh-luachon-nhathau.component.scss'],
 })
 export class DieuchinhLuachonNhathauComponent implements OnInit {
   @Input() typeVthh: string;
@@ -31,7 +37,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     namKh: dayjs().get('year'),
     ngayQd: '',
     loaiVthh: '',
-    trichYeu: ''
+    trichYeu: '',
   };
 
   allChecked = false;
@@ -50,9 +56,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService
-  ) {
-  }
+    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
+    public globals: Globals,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -66,9 +72,8 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       }
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -103,10 +108,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai
+    body.trangThai = trangThai;
     return this.danhSachDauThauService.search(body);
   }
-
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -140,10 +144,10 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -175,7 +179,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 
   clearFilter() {
@@ -198,16 +202,15 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": item.id,
-            "maDvi": ""
-          }
+            id: item.id,
+            maDvi: '',
+          };
           this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -247,5 +250,4 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     // }
   }
-
 }

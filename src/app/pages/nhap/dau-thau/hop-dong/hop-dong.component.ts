@@ -2,18 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-hop-dong',
   templateUrl: './hop-dong.component.html',
   styleUrls: ['./hop-dong.component.scss'],
 })
 export class HopDongComponent implements OnInit {
-  loaiVthhSelected: string
+  loaiVthhSelected: string;
   tabs: any[] = [];
 
   constructor(
     private danhMucService: DanhMucService,
-  ) { }
+    public globals: Globals,
+  ) {}
 
   ngOnInit() {
     this.loaiVTHHGetAll();
@@ -23,12 +25,12 @@ export class HopDongComponent implements OnInit {
       {
         giaTri: 'Tất cả',
         ma: null,
-      }
+      },
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
+        res.data.forEach((element) => {
           element.count = 0;
           this.tabs.push(element);
         });
@@ -39,5 +41,4 @@ export class HopDongComponent implements OnInit {
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
-
 }

@@ -14,7 +14,7 @@ import { HangDtqgHetHanBaoHanhService } from 'src/app/services/hangthuocdientheo
 import { cloneDeep } from 'lodash';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-
+import { Globals } from 'src/app/shared/globals';
 
 
 @Component({
@@ -54,52 +54,71 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   detail: any = {}
   dsTong: any = []
   dsDonVi: any = []
-  dsLoaiHangHoa: any = []
-  dsChungLoaiHangHoa: any = []
-
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly donviService: DonviService,
-    private readonly spinner: NgxSpinnerService,
-    private readonly notification: NzNotificationService,
-    private readonly userService: UserService,
-    private readonly danhMucService: DanhMucService,
+    private fb: FormBuilder,
+    private donviService: DonviService,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    public userService: UserService,
+    private danhMucService: DanhMucService,
     private hangDtqgHetHanBaoHanhService: HangDtqgHetHanBaoHanhService,
+    public globals: Globals,
   ) { }
-
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
-      await this.loaiVTHHGetAll();
-      this.search();
-      await this.initData();
+      await Promise.all([this.initData(), this.loaiVTHHGetAll(), this.search()]);
+      this.spinner.hide();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
   }
-
+  initForm(): void {
+    this.formData = this.fb.group({
+      "maChungLoaiHang": [null],
+      "maDonVi": [null],
+      "maLoaiHang": [null],
+    })
+  }
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
+  }
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.detail.maDvi,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      if (this.userInfo.CAP_DVI === this.globals.prop.CUC) {
+        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      }
+      if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
+        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+        this.formData.get('maDonVi').setValue(this.dsDonVi[0].tenDvi)
+        this.formData.controls['maDonVi'].disable();
+      }
+    }
+  }
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma != '01') {
-              this.listLoaiHangHoa = [
-                ...this.listLoaiHangHoa,
-                item
-              ];
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
             }
             else {
-              this.listLoaiHangHoa = [
-                ...this.listLoaiHangHoa,
-                ...item.child
-              ];
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
           })
         }
@@ -107,27 +126,52 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+
     }
   }
-
   async changeLoaiHangHoa() {
     let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maLoaiHang);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
-
-  initForm(): void {
-    this.formData = this.fb.group({
-      "maChungLoaiHang": '',
-      "maDonVi": '',
-      "maLoaiHang": '',
-    })
+  onChangeLoaiHH(id: any) {
+    if (id && id !== '') {
+      this.listChungLoaiHangHoa = []
+      let data = this.listLoaiHangHoa.find(item => item.ma === id)
+      let temp = []
+      if (data != undefined) {
+        this.dataTableAll.forEach(item => {
+          if (item.loaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
+            temp.push(item)
+          }
+        })
+        this.isView = false
+        this.dataTable = [...temp]
+        if (this.dataTable.length > 0 && data.child.length > 0) {
+          this.listChungLoaiHangHoa = data.child
+        } else {
+          this.isView = true
+        }
+      }
+    }
   }
-
+  onChangeChungLoaiHH(id: any) {
+    if (id && id !== '') {
+      let data = this.listChungLoaiHangHoa.find(item => item.ma === id)
+      let temp = []
+      if (data != undefined) {
+        this.dataTableAll.forEach(item => {
+          if (item.chungLoaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
+            temp.push(item)
+          }
+        })
+        this.dataTable = [...temp]
+      }
+    }
+  }
   async search() {
     this.spinner.show();
-
     let body = {
       "maChungLoaiHang": this.formData.value.maChungLoaiHang,
       "maDonVi": this.formData.value.maDonVi,
@@ -138,7 +182,6 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
         "orderType": "",
         "page": this.page - 1,
       }
-
     }
     let res = await this.hangDtqgHetHanBaoHanhService.search(body);
     if (res.msg = MESSAGE.SUCCESS) {
@@ -155,15 +198,12 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
     this.spinner.hide()
   }
-
-
   filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         if (date) {
-          console.log(dayjs(value).format('DD/MM/YYYY'));
           this.dataTableAll.forEach((item) => {
             if (item[key] && item[key].toString().toLowerCase() == dayjs(value).format('DD/MM/YYYY')) {
               temp.push(item)
@@ -184,6 +224,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   }
   clearFilter() {
     this.formData.reset();
+    this.isView = true
     this.filterTable = {
       tenDonVi: null,
       loaiHangHoa: null,
@@ -195,10 +236,9 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       ngayNhapKho: null,
       ngayHetHanBaoHanh: null,
     };
+    this.initData()
     this.search()
-
   }
-
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show()
@@ -223,72 +263,6 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
 
   }
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.detail.maDvi = this.userInfo.MA_DVI;
-    this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await Promise.all([this.loadDsTong(), this.loaiDsHH()]);
-  }
-
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsTong = dsTong;
-      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-    }
-  }
-
-  async loaiDsHH() {
-    await this.danhMucService.loadDanhMucHangHoa().subscribe(hangHoa => {
-      if (hangHoa.msg == MESSAGE.SUCCESS) {
-        let ds = [...hangHoa.data];
-        ds.forEach(item => {
-          item.child.forEach(item => this.dsLoaiHangHoa.push(item))
-        })
-      }
-    })
-  }
-  onChangeLoaiHH(id: any) {
-    if (id && id !== '') {
-      this.dsChungLoaiHangHoa = []
-      let data = this.dsLoaiHangHoa.find(item => item.ma === id)
-      let temp = []
-      if (data != undefined) {
-        this.dataTableAll.forEach(item => {
-          if (item.loaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
-            temp.push(item)
-          }
-        })
-        this.isView = false
-        this.dataTable = [...temp]
-        if (this.dataTable.length > 0 && data.child.length > 0) {
-          this.dsChungLoaiHangHoa = data.child
-        } else {
-          this.isView = true
-        }
-      }
-    }
-  }
-  onChangeChungLoaiHH(id: any) {
-    if (id && id !== '') {
-      let data = this.dsChungLoaiHangHoa.find(item => item.ma === id)
-      let temp = []
-      if (data != undefined) {
-        this.dataTableAll.forEach(item => {
-          if (item.chungLoaiHangHoa.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
-            temp.push(item)
-          }
-        })
-        this.dataTable = [...temp]
-      }
-    }
-  }
-
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -301,7 +275,6 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   async changePageSize(event) {
     this.spinner.show();
     try {

@@ -65,8 +65,6 @@
             <th width="161px">Trạng thái</th>
             <th width="140px">Hành động</th>
           </tr>
-        </thead>
-        <tbody>
           <tr class="search-table">
             <th *ngIf="userService.isChiCuc()"></th>
             <th></th>
@@ -135,6 +133,9 @@
             </th>
             <th></th>
           </tr>
+        </thead>
+        <tbody>
+
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px" *ngIf="userService.isChiCuc()">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"

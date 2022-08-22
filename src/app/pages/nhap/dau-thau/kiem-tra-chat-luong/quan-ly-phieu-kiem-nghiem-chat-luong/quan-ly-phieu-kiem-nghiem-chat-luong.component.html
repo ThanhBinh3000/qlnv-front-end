@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isDetail">
-  <div class=" bg-trang">
+  <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
         <div nz-col nzSpan="4">
@@ -123,7 +123,7 @@
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != '00'"></label>
+                [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
             </th>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soPhieu }}</td>
