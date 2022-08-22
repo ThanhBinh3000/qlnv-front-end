@@ -510,27 +510,29 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQd = body.soQd + '/' + this.maQd;
-    body.dsDeXuat = this.danhsachDx;
-    body.dsGoiThau = this.danhsachDx;
-    body.fileDinhKems = this.fileDinhKem;
-    let res = null;
-    if (this.formData.get('id').value) {
-      res = await this.deXuatKeHoachBanDauGiaService.sua(body);
-    } else {
-      res = await this.deXuatKeHoachBanDauGiaService.them(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.quayLai();
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.quayLai();
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    console.log("body: ", body);
+
+    // body.soQd = body.soQd + '/' + this.maQd;
+    // body.dsDeXuat = this.danhsachDx;
+    // body.dsGoiThau = this.danhsachDx;
+    // body.fileDinhKems = this.fileDinhKem;
+    // let res = null;
+    // if (this.formData.get('id').value) {
+    //   res = await this.deXuatKeHoachBanDauGiaService.sua(body);
+    // } else {
+    //   res = await this.deXuatKeHoachBanDauGiaService.them(body);
+    // }
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   if (this.formData.get('id').value) {
+    //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //     this.quayLai();
+    //   } else {
+    //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    //     this.quayLai();
+    //   }
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
   }
 
   tuChoi() {
@@ -881,11 +883,15 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     if (!id) {
       return;
     }
+    console.log(this.maTongHopList);
+
     this.spinner.show();
     await this.tongHopDeXuatKHBanDauGiaService
       .chiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+          console.log("res.data: ", res.data);
+
           this.tongHopDeXuatTuCuc(res.data.maVatTuCha, res.data.namKeHoach);
         }
       })

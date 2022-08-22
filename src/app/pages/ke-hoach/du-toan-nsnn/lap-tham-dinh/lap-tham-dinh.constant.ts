@@ -1,7 +1,7 @@
 import { MAIN_ROUTES } from 'src/app/layout/main/main-routing.constant';
 import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DU_TOAN_NSNN } from '../../ke-hoach.constant';
-import { QuanLyLapThamDinhDuToanNSNN } from './lap-tham-dinh.type';
+import { DuToanNSNN } from '../du-toan-nsnn.type';
 
 export const MAIN_ROUTE_KE_HOACH = MAIN_ROUTES.kehoach;
 export const MAIN_ROUTE_DU_TOAN = DU_TOAN_NSNN;
@@ -53,7 +53,7 @@ export const LANH_DAO_TC = {
 }
 
 
-export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] = [
+export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
     {
         icon: 'htvbdh_tcdt_icon-common',
         title: 'Danh sách dự toán NSNN hàng năm và KHTC 03 năm',

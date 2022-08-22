@@ -3,6 +3,7 @@ import { ThongTinKhaoSatGia } from 'src/app/models/DeXuatPhuongAnGia';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-ksg',
@@ -81,6 +82,13 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
           }
         });
     }
+  }
+
+
+  downloadFile(item: FileDinhKem) {
+    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+      saveAs(blob, item.fileName);
+    });
   }
 
 }

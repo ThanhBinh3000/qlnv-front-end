@@ -13,11 +13,12 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
   templateUrl: './danh-sach-hop-dong.component.html',
-  styleUrls: ['./danh-sach-hop-dong.component.scss']
+  styleUrls: ['./danh-sach-hop-dong.component.scss'],
 })
 export class DanhSachHopDongComponent implements OnInit {
   @Input()
@@ -67,8 +68,8 @@ export class DanhSachHopDongComponent implements OnInit {
     private modal: NzModalService,
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
-  ) {
-  }
+    public globals: Globals,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -78,7 +79,7 @@ export class DanhSachHopDongComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -104,10 +105,10 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -163,22 +164,23 @@ export class DanhSachHopDongComponent implements OnInit {
       }
     }
     let body = {
-      "loaiVthh": '',
-      "maDvi": maDonVi,
-      "nhaCcap": this.nhaCungCap ?? '',
-      "tenHd": this.tenHd ?? '',
-      "paggingReq": {
+      loaiVthh: '',
+      maDvi: maDonVi,
+      nhaCcap: this.nhaCungCap ?? '',
+      tenHd: this.tenHd ?? '',
+      paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       soHd: this.soHd,
-      denNgayKy: this.ngayKy && this.ngayKy.length > 1
-        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
-        : null,
-      tuNgayKy: this.ngayKy && this.ngayKy.length > 0
-        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
-        : null,
-
+      denNgayKy:
+        this.ngayKy && this.ngayKy.length > 1
+          ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+          : null,
+      tuNgayKy:
+        this.ngayKy && this.ngayKy.length > 0
+          ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
+          : null,
     };
     let res = await this.thongTinHopDong.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -208,10 +210,8 @@ export class DanhSachHopDongComponent implements OnInit {
       nzOnOk: async () => {
         const body = {
           id: item.id,
-        }
-        let res = await this.thongTinHopDong.delete(
-          body,
-        );
+        };
+        let res = await this.thongTinHopDong.delete(body);
         if (res.msg == MESSAGE.SUCCESS) {
           this.search();
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -263,7 +263,7 @@ export class DanhSachHopDongComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 
   exportData() {
@@ -284,23 +284,23 @@ export class DanhSachHopDongComponent implements OnInit {
           }
         }
         let body = {
-          "loaiVthh": '',
-          "maDvi": maDonVi,
-          "nhaCcap": this.nhaCungCap ?? '',
-          "tenHd": this.tenHd ?? '',
+          loaiVthh: '',
+          maDvi: maDonVi,
+          nhaCcap: this.nhaCungCap ?? '',
+          tenHd: this.tenHd ?? '',
           soHd: this.soHd,
-          denNgayKy: this.ngayKy && this.ngayKy.length > 1
-            ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
-            : null,
-          tuNgayKy: this.ngayKy && this.ngayKy.length > 0
-            ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
-            : null,
+          denNgayKy:
+            this.ngayKy && this.ngayKy.length > 1
+              ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+              : null,
+          tuNgayKy:
+            this.ngayKy && this.ngayKy.length > 0
+              ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
+              : null,
         };
         this.thongTinHopDong
           .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'thong-tin-hop-dong.xlsx'),
-          );
+          .subscribe((blob) => saveAs(blob, 'thong-tin-hop-dong.xlsx'));
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -347,9 +347,11 @@ export class DanhSachHopDongComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -359,14 +361,16 @@ export class DanhSachHopDongComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
+            -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -381,6 +385,6 @@ export class DanhSachHopDongComponent implements OnInit {
       chuDauTu: '',
       nhaCungCap: '',
       gtriHdSauVat: '',
-    }
+    };
   }
 }

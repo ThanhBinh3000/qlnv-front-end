@@ -5,11 +5,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="idInput">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-sub xanh" (click)="luu()">
+      <button type="button" class="btn btn-sub xanh" (click)="luu()" *ngIf="!isDetail()" [disabled]="!formData.valid">
         <i class="fa fa-floppy-o"></i>
         <span>Lưu</span>
       </button>
@@ -34,19 +34,15 @@
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ma-danh-sach">Mã danh sách</nz-form-label>
           <nz-input-group>
-            <nz-select formControlName="maDanhSach" (ngModelChange)="changeMaDanhSach()">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.maDanhSach}}" nzLabel="{{item.maDanhSach}}"
-                *ngFor="let item of listMaDanhSach">
-              </nz-option>
-            </nz-select>
+            <input type="text" formControlName="maDanhSach" nz-input readonly />
           </nz-input-group>
         </nz-form-item>
 
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
           <nz-form-control>
-            <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+            <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao"
+              class="search__input">
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
@@ -74,9 +70,9 @@
           <th style="width: 10%;">Số lượng cần bảo hành</th>
           <th style="width: 5%;">Đơn vị tính</th>
           <th style="width: 10%;">Lý do</th>
-          <th style="width: 10%;">Hành động</th>
+          <th style="width: 10%;" *ngIf="!isDetail()">Hành động</th>
         </tr>
-        <tr>
+        <tr *ngIf="!isDetail()">
           <th></th>
           <th class="text-center" width="350px">
             <nz-input-group>
@@ -156,7 +152,7 @@
           </th>
           <th>
             <nz-input-group>
-              {{rowItem.tenDonVi}}
+              {{rowItem.tenDonViTinh}}
             </nz-input-group>
           </th>
           <th>
@@ -194,14 +190,14 @@
               </nz-input-number>
             </nz-input-group>
           </td>
-          <td>{{ data.tenDonVi }}</td>
+          <td>{{ data.tenDonViTinh }}</td>
           <td *ngIf="!data.isUpdate">{{ data.lyDo }}</td>
           <td *ngIf="data.isUpdate">
             <nz-input-group>
-              <input nz-input [(ngModel)]="data.lyDo " (ngModelChange)="changeLyDoSoLuong($event,idx ,'lydo')" />
+              <input nz-input [(ngModel)]="data.lyDo " />
             </nz-input-group>
           </td>
-          <td style="text-align: center;">
+          <td style="text-align: center;" *ngIf="!isDetail()">
             <a (click)="editItem(idx)">
               <i class="table-icon fa fa-pencil"></i>
             </a>

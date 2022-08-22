@@ -4,12 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && idInput > 0 && !isView" type="button" class="btn btn-sub"
-      (click)="pheDuyet()">
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO && idInput > 0 && !isView" type="button"
+      class="btn btn-sub" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
+    <button *ngIf="formData.value.trangThai == globals.prop.DU_THAO && !isView" type="button" class="btn btn-sub xanh"
+      (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -20,8 +21,9 @@
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          <span
+            [ngClass]="formData.value.trangThai == globals.prop.DU_THAO ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == globals.prop.DU_THAO ? 'Dự Thảo' : 'Ban Hành' }}
           </span>
           <span>Quyết định thủ tướng chính phủ</span>
         </div>

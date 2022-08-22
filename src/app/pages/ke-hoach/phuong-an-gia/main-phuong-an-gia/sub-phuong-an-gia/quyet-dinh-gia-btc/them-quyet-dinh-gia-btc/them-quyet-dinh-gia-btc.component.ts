@@ -7,11 +7,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 
 @Component({
   selector: 'app-them-quyet-dinh-gia-btc',
@@ -24,12 +24,16 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
-  listVthh: any[] = [];
+
+  dsVthh: any[] = [];
+  dsCloaiVthh: any[] = [];
+  dsHangHoa: any[] = [];
+  dsLoaiGia: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-  dsLoaiGia: any[] = [];
+
   userInfo: UserLogin;
   soDeXuat: string;
 
@@ -37,7 +41,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
   luanPhienList: any[] = []
-  maDx: string;
+  maQd: string;
   dataTable: any[] = [];
 
   constructor(
@@ -47,32 +51,35 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private helperService: HelperService,
-    private giaDeXuatGiaService: GiaDeXuatGiaService,
-    private notification: NzNotificationService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private danhMucService: DanhMucService,
+    private notification: NzNotificationService,
+
   ) {
     this.formData = this.fb.group(
       {
         id: [],
         namKeHoach: [dayjs().get('year'), [Validators.required]],
-        soDeXuat: [, [Validators.required]],
+        soQd: [, [Validators.required]],
         loaiHangHoa: [null],
         ngayKy: [null, [Validators.required]],
         loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
+        ghiChu: [null],
       }
     );
   }
 
   async ngOnInit() {
     this.spinner.show();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
+    //this.listVthh = LIST_VAT_TU_HANG_HOA;
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
-      this.maDx = '/QD-BTC',
+      this.loadDsVthh(),
+      this.maQd = '/QD-BTC',
       this.getDataDetail(this.idInput),
       this.onChangeNamQd(this.formData.get('namKeHoach').value),
     ])
@@ -81,27 +88,20 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.giaDeXuatGiaService.getDetail(id);
+      let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
       console.log(data);
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat.split('/')[0],
+        soQd: data.soQd.split('/')[0],
         loaiHangHoa: data.loaiHangHoa,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
+        ghiChu: data.ghiChu,
       })
-    }
-  }
-
-  async loadDsLoaiGia() {
-    this.dsLoaiGia = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
     }
   }
 
@@ -110,11 +110,11 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       namKeHoach: namKeHoach,
       trangThai: "11"
     }
-    let res = await this.giaDeXuatGiaService.search(body);
+    let res = await this.quyetDinhGiaCuaBtcService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       // const data = res.data.content;
       // if (data) {
-      //   let detail = await this.giaDeXuatGiaService.getDetail(data[0].id);
+      //   let detail = await this.quyetDinhGiaCuaBtcService.getDetail(data[0].id);
       //   if (detail.msg == MESSAGE.SUCCESS) {
       //     this.dsBoNganh = detail.data.listBoNganh;
       //   }
@@ -189,7 +189,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
             trangThai: '11',
           };
           let res =
-            await this.giaDeXuatGiaService.approve(
+            await this.quyetDinhGiaCuaBtcService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -217,12 +217,12 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soDeXuat = body.soDeXuat + this.maDx;
+    body.soQd = body.soQd + this.maQd;
     let res
     if (this.idInput > 0) {
-      res = await this.giaDeXuatGiaService.update(body);
+      res = await this.quyetDinhGiaCuaBtcService.update(body);
     } else {
-      res = await this.giaDeXuatGiaService.create(body);
+      res = await this.quyetDinhGiaCuaBtcService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -238,9 +238,36 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     console.log(this.formData)
   }
 
-  xoaKeHoach() { }
+  async loadDsLoaiGia() {
+    this.dsLoaiGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiGia = res.data;
+    }
+  }
 
-  themKeHoach() { }
+  async loadDsVthh() {
+    this.dsVthh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsVthh = res.data.filter(item => item.ma != '02');
+    }
+  }
+
+  async onChangeLoaiVthh(event) {
+    let body = {
+      "str": event
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.dsCloaiVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsCloaiVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 }
 
 
