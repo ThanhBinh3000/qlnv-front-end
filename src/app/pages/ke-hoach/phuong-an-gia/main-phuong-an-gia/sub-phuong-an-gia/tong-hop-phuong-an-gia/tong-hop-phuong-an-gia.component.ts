@@ -21,6 +21,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   getCount = new EventEmitter<any>();
   isAddNew = false;
   formData: FormGroup;
+  formThongTin: FormGroup;
   toDay = new Date();
   allChecked = false;
   listVthh: any[] = [];
@@ -49,35 +50,41 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     private tonghopphuongangia: TongHopPhuongAnGiaService,
   ) {
     this.formData = this.fb.group({
+      soDeXuat: [null],
+      ngayKy: [[]],
       ngayTongHop: [[]],
       noiDung: [null],
-      namTongHop: [null],
-      loaiHangHoa: [null],
-      chungLoaiHh: [null],
+      namKeHoach: [null],
+      loaiVthh: [null],
+      cloaiVthh: [null],
+      loaiHangHoa: '',
       loaiGia: [null],
       trangThai: [null],
       trangThaiTH: [null],
+      soToTrinh: [null],
     });
   }
   searchInTable = {
-    namTongHop: dayjs().get('year'),
+    namKeHoach: dayjs().get('year'),
     loaiHangHoa: '',
     soTT: '',
     noiDung: '',
     ngayTongHop: '',
+    ngayKy: ''
 
   };
   filterTable: any = {
-    soTT: '',
+    soDx: '',
     ngayTongHop: '',
     noiDung: '',
-    namTongHop: '',
+    namKeHoach: '',
     loaiHangHoa: '',
     chungLoaiHh: '',
     loaiGia: '',
     trangThaiTH: '',
-    maToTrinh: '',
-    trangThai: ''
+    soToTrinh: '',
+    trangThai: '',
+    ngayKy: ''
   };
 
   async ngOnInit() {
@@ -109,11 +116,12 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     if (body.ngayKy != null) {
-      body.ngayKyTu = body.ngayTongHop[0];
-      body.ngayKyDen = body.ngayTongHop[1];
+      body.ngayKyTu = body.ngayKy[0];
+      body.ngayKyDen = body.ngayKy[1];
     }
-    body.namKh = body.namTongHop,
-      body.loaiHh = body.loaiHangHoa,
+    body.namKh = body.namKeHoach,
+      body.soDx = body.soDeXuat;
+    body.loaiHh = body.loaiHangHoa,
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1,
@@ -333,15 +341,15 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   }
   clearFilterTable() {
     this.filterTable = {
-      soTT: '',
+      soDeXuat: '',
       ngayTongHop: '',
       noiDung: '',
-      namTongHop: '',
+      namKeHoach: '',
       loaiHangHoa: '',
       chungLoaiHh: '',
       loaiGia: '',
       trangThaiTH: '',
-      maToTrinh: '',
+      soToTrinh: '',
       trangThai: ''
     }
   }
