@@ -10,6 +10,7 @@ import { UserLogin } from "src/app/models/userlogin";
 import { HelperService } from "src/app/services/helper.service";
 import { UserService } from "src/app/services/user.service";
 import { Globals } from "src/app/shared/globals";
+import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { TongHopPhuongAnGiaService } from "src/app/services/tong-hop-phuong-an-gia.service";
@@ -22,18 +23,19 @@ import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinG
 })
 export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   @Input("isView") isView: boolean;
+  @Input("noEdit") noEdit: boolean;
   @Input()
   idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
 
+  STATUS: any;
   dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
+  dsTieuChuanCl: any[] = [];
   dsHangHoa: any[] = [];
   dsLoaiGia: any[] = [];
   dsToTrinhDeXuat: any[] = [];
-  dsThongTinGia: any[] = [];
-  tableThongTinGia: { [key: string]: any } = {};
   arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia>;
 
   taiLieuDinhKemList: any[] = [];
@@ -73,6 +75,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
         loaiVthh: [null],
         cloaiVthh: [null],
         loaiGia: [null],
+        tieuChuanCl: [null],
         trichYeu: [null],
         trangThai: ["00"],
         ghiChu: [null],
@@ -110,6 +113,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
+        tieuChuanCl: data.tieuChuanCl,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
@@ -200,7 +204,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: "11"
+            trangThai: STATUS.BAN_HANH
           };
           let res =
             await this.quyetDinhGiaCuaBtcService.approve(
@@ -279,9 +283,10 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
 
   async onChangeSoToTrinh(event) {
     let curToTrinh=this.dsToTrinhDeXuat.find(item=> item.id == event)
-
+    //loai hh
     this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
+    //chung loai hang hoa
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
     this.dsCloaiVthh = [];
     if (res.msg == MESSAGE.SUCCESS) {
@@ -290,8 +295,21 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       }
     }
     this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
+
+    //loai gia
     this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
 
+    //tieu chuan chat luong
+    res = await this.danhMucService.danhSachTieuChuanTheoMaHh(curToTrinh.loaiVthh);
+    this.dsTieuChuanCl = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsTieuChuanCl = res.data;
+      }
+    }
+    this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
+
+    //thong tin gia
     this.arrThongTinGia = [];
     res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
     if (res.msg == MESSAGE.SUCCESS && res.data) {

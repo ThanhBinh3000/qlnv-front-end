@@ -35,7 +35,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)"
-                         [nzDisabled]="isView" nzAllowClear="true">
+                         [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -52,7 +52,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1"
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="noEdit"
                                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
@@ -68,7 +68,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-ky">Ngày ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky"
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="noEdit"
                               class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
@@ -83,7 +83,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày hiệu lực
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc"
+              <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc" [nzDisabled]="noEdit"
                               class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
@@ -99,7 +99,7 @@
               xuất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="soToTrinh" [nzDisabled]="isView" nzAllowClear="true"
+              <nz-select formControlName="soToTrinh" [nzDisabled]="noEdit" nzAllowClear="true"
                          (ngModelChange)="onChangeSoToTrinh($event)">
                 <nz-option *ngFor="let p of dsToTrinhDeXuat" [nzValue]="p.id" [nzLabel]="p.id+'-'+p.noiDung">
                 </nz-option>
@@ -113,10 +113,10 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Trích yếu
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
             <nz-form-control>
-              <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input [readonly]="noEdit"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -125,7 +125,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+              <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
                 <ng-template #error let-control>
@@ -142,7 +142,7 @@
               hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+              <nz-select formControlName="cloaiVthh" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
                 <ng-template #error let-control>
@@ -158,7 +158,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
+              <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
                 <ng-template #error let-control>
@@ -175,8 +175,8 @@
               lượng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenBoNganh">
+              <nz-select formControlName="tieuChuanCl" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsTieuChuanCl" [nzValue]="p.id" [nzLabel]="p.tenQchuan">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -221,7 +221,8 @@
                     <nz-input-number nz-input
                                      [ngModelOptions]="{standalone: true}"
                                      [(ngModel)]="arrThongTinGia[idx].giaQd"
-                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                     [nzDisabled]="noEdit">
                     </nz-input-number>
                   </nz-input-group>
                 </td>
@@ -230,7 +231,8 @@
                     <nz-input-number nz-input
                                      [ngModelOptions]="{standalone: true}"
                                      [(ngModel)]="arrThongTinGia[idx].giaQdVat"
-                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                     [nzDisabled]="noEdit">
                     </nz-input-number>
                   </nz-input-group>
                 </td>
@@ -250,7 +252,7 @@
           Ghi chú
         </nz-form-label>
         <nz-form-control>
-                    <textarea [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03'"
+                    <textarea [readonly]="noEdit"
                               nz-input [rows]="3" formControlName="ghiChu"></textarea>
         </nz-form-control>
       </nz-form-item>
