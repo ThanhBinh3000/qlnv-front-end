@@ -14,6 +14,7 @@
     </button>
   </div>
 </nz-affix>
+
 <div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
@@ -129,6 +130,7 @@
       </div>
     </form>
   </nz-card>
+
   <div class="tab-padding-10">
     <nz-tabset nzType="card">
       <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" (nzClick)="tabSelected = 'thongTinChung'">

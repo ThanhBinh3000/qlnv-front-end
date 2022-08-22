@@ -273,7 +273,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
       }
-
     }
   }
 

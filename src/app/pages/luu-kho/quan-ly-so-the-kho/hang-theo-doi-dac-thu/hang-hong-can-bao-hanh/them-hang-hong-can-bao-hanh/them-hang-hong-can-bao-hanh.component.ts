@@ -194,7 +194,10 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7568ce04b15f9502d9f8c8d28667282ac49393af
   // Load loại hàng hóa
   async loaiVTHHGetAll() {
     try {
