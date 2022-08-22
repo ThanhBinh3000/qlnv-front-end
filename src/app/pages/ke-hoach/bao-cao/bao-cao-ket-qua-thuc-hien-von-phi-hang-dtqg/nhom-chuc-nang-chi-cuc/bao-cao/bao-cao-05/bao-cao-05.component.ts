@@ -252,7 +252,7 @@ export class BaoCao05Component implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string, dauMuc: string, dauMucCha: string): string {
+    getChiMuc(str: string): string {
         if (str) {
             str = str.substring(str.indexOf('.') + 1, str.length);
             let xau = "";

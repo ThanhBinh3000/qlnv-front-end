@@ -78,7 +78,9 @@
         <tbody>
             <tr *ngFor="let item of lstCtietBcao5; let i = index">
                 <ng-container *ngIf="!editCache[item.id].edit; else editTemplate5B">
-                    <td>{{getChiMuc(item.stt,'0',null)}}</td>
+                    <td [nzIndentSize]="item.level * 8">
+                        {{getChiMuc(item.stt)}}
+                    </td>
                     <td>
                         <div *ngFor="let vtu of noiDungChiFull">
                             <div *ngIf="vtu.id == item.maNdungChi">
@@ -138,7 +140,9 @@
                     </td>
                 </ng-container>
                 <ng-template #editTemplate5B>
-                    <td></td>
+                    <td [nzIndentSize]="editCache[item.id].data.level * 8">
+                        {{getChiMuc(editCache[item.id].data.stt)}}
+                    </td>
                     <td>
                         <div *ngFor="let vtu of noiDungChiFull">
                             <div *ngIf="vtu.id == item.maNdungChi">
