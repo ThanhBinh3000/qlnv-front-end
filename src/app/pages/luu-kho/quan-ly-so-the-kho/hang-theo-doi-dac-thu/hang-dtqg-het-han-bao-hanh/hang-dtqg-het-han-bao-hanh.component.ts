@@ -26,7 +26,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   userInfo: UserLogin;
   formData: FormGroup;
 
-  searchInTable: any = {
+  dataSearch: any = {
     "maChungLoaiHang": "",
     "maDonVi": "",
     "maLoaiHang": "",
@@ -56,6 +56,9 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   dsDonVi: any = []
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  dsLoaiHangHoaDataSource = [];
+  dsChungLoaiHangHoaDataSource = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -173,9 +176,9 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "maChungLoaiHang": this.formData.value.maChungLoaiHang,
-      "maDonVi": this.formData.value.maDonVi,
-      "maLoaiHang": this.formData.value.maLoaiHang,
+      "maChungLoaiHang": this.dataSearch.maChungLoaiHang,
+      "maDonVi": this.dataSearch.maDonVi,
+      "maLoaiHang": this.dataSearch.maLoaiHang,
       "paggingReq": {
         "limit": this.pageSize,
         "orderBy": "",
@@ -236,6 +239,13 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       ngayNhapKho: null,
       ngayHetHanBaoHanh: null,
     };
+    this.dataSearch = {
+      maChungLoaiHang: null,
+      maDonVi: null,
+      maLoaiHang: null,
+    };
+
+    this.dsChungLoaiHangHoaDataSource = []
     this.initData()
     this.search()
   }
@@ -287,6 +297,43 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+  onChangeLoaiHHAutoComplete(value: any) {
+    this.dsChungLoaiHangHoaDataSource = []
+    this.formData.get('maChungLoaiHang').setValue('')
+    if (value) {
+      this.dsLoaiHangHoaDataSource = this.listLoaiHangHoa
+        .filter((item) => item?.ten?.toLowerCase()?.includes(value.toString().toLowerCase()),)
+        .map((item) => item.ten);
+      let data = this.listLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maLoaiHang.toString().toLowerCase())
+      if (data && data.child.length > 0 && data !== undefined) {
+        this.listChungLoaiHangHoa = data.child
+        this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map((item => item.ten))
+        this.dataSearch.maLoaiHang = data.ma
+      } else {
+        this.formData.get('maChungLoaiHang').setValue('')
+        this.dsChungLoaiHangHoaDataSource = []
+      }
+    } else {
+      this.dsLoaiHangHoaDataSource = this.listLoaiHangHoa.map(
+        (item) => item.ten,
+      );
+    }
+  }
+  onChangeChungLoaiHHAutoComplete(value: any) {
+    if (value) {
+      let data = this.listChungLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maChungLoaiHang.toString().toLowerCase())
+      if (data !== undefined) {
+        this.dataSearch.maChungLoaiHang = data.ma
+      } else {
+        this.dataSearch.maChungLoaiHang = this.formData.value.maChungLoaiHang
+      }
+    } else {
+      this.dataSearch.maChungLoaiHang = this.formData.value.maChungLoaiHang
+      this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map(
+        (item) => item.ten,
+      );
     }
   }
 }
