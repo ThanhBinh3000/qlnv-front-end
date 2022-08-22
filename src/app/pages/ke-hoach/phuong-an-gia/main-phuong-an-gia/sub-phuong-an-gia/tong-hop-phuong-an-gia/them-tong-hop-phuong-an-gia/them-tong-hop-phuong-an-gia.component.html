@@ -10,7 +10,6 @@
         </button>
     </div>
 </nz-affix>
-
 <div class="bg-trang">
     <div class="header">
         <div class="header-text">
@@ -40,7 +39,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="5">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
@@ -58,7 +56,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
@@ -75,7 +72,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="3">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại giá
@@ -110,7 +106,7 @@
                 </div>
                 <div nz-col [nzSpan]="5">
                     <nz-form-item class="form-item">
-                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký
+                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> ngày đề xuất
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
@@ -136,7 +132,6 @@
             </div>
         </form>
     </nz-card>
-
     <div class="header">
         <div class="header-text">
             <div class="title-chi-tieu">
@@ -165,7 +160,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="14">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true"> Nội
@@ -177,7 +171,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="5">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true"> Mã tổng
@@ -205,7 +198,8 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="3">
+                <div nz-col [nzSpan]="3"
+                    *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Giá khảo sát thị trường có VAT </nz-form-label>
                         <nz-form-control>
@@ -215,21 +209,22 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <!-- <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Giá khảo sát sở tài chính </nz-form-label>
-                        <nz-form-control>
-                            <nz-input-number class="text-right" nz-input formControlName="giaKsSoTc" [nzSize]="'small'"
-                                nzDisabled>
-                            </nz-input-number>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div> -->
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Kết quả thẩm định giá có VAT </nz-form-label>
                         <nz-form-control>
                             <nz-input-number class="text-right" nz-input formControlName="kqTdVat" [nzSize]="'small'"
+                                nzDisabled>
+                            </nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="3"
+                    *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true"> Kết quả thẩm định giá chưa VAT </nz-form-label>
+                        <nz-form-control>
+                            <nz-input-number class="text-right" nz-input formControlName="kqTd" [nzSize]="'small'"
                                 nzDisabled>
                             </nz-input-number>
                         </nz-form-control>
@@ -247,8 +242,8 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
-                <div nz-col [nzSpan]="3">
+                <div nz-col [nzSpan]="3"
+                    *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Giá đề nghị có VAT </nz-form-label>
                         <nz-form-control>
@@ -275,14 +270,12 @@
             [nzShowPagination]="false">
             <thead>
                 <tr class="header-row">
-
                     <th class="text-center" style="width: 2%;">STT</th>
                     <th class="text-center" style="width: 6%;">Số đề xuất</th>
                     <th class="text-center" style="width: 25%;">Đơn vị</th>
                     <th class="text-center" style="width: 4%;">Số lượng (tấn)</th>
                     <th class="text-center" style="width: 7%;">Giá đề nghị chưa VAT (đồng/kg)</th>
                     <th class="text-center" style="width: 7%;">Giá đề nghị có VAT (đồng/kg)</th>
-
                 </tr>
             </thead>
             <tbody>

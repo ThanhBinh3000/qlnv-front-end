@@ -4,8 +4,9 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { API_STATUS_CODE, PAGE_SIZE_DEFAULT, TYPE_PAG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { Detail } from 'src/app/models/HopDong';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
@@ -13,7 +14,6 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TongHopPhuongAnGiaService } from 'src/app/services/tong-hop-phuong-an-gia.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
   templateUrl: './them-tong-hop-phuong-an-gia.component.html',
@@ -26,28 +26,23 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   @Input() type: string;
-
   pagChiTiet: any[] = [];
   formTraCuu: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
-  isQuyetDinh: boolean = false;
-  errorInputRequired: string = null;
   pageSize: number = PAGE_SIZE_DEFAULT;
   page: number = 1;
-  totalRecord: number = 10;
-  dataTableAll: any[] = [];
-  allChecked = false;
-  indeterminate = false;
-  taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  dsBoNganh: any[] = [];
-  huhu: any[] = [];
   userInfo: UserLogin;
   dsLoaiGia: any[] = [];
-
-  maDx: string;
+  giaKsTt: any[] = [];
+  giaKsTtVat: any[] = [];
+  kqTdVat: any[] = [];
+  kqTd: any[] = [];
+  giaDng: any[] = [];
+  giaDngVat: any[] = [];
   dataTable: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -60,12 +55,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
-
     this.formData = this.fb.group(
       {
         giaKsTt: [],
         giaKsTtVat: [],
         kqTdVat: [],
+        kqTd: [],
         giaDng: [],
         giaDngVat: [],
       }
@@ -82,10 +77,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayTongHop: [],
         noiDung: [],
         ghiChu: []
-
-
       }
-
     );
   }
 
@@ -109,7 +101,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       console.log(data);
       this.formTraCuu.patchValue({
         id: data.id,
-        namKeHoach: data.namKeHoach,
+        namKh: data.namKh,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         ngayTongHop: data.ngayTongHop,
@@ -118,7 +110,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         noiDung: data.noiDung,
         ghiChu: data.ghiChu,
       });
-      this.pagChiTiet = data.pagChiTiets;
+      this.bindingDataTongHop(res.data)
     }
   }
 
@@ -126,7 +118,16 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
+      if (this.type == TYPE_PAG.GIA_MUA_TOI_DA) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG01' || item.ma == 'LG02'
+        );
+      }
+      if (this.type == TYPE_PAG.GIA_CU_THE) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG03' || item.ma == 'LG04'
+        );
+      }
     }
   }
 
@@ -141,25 +142,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
   }
 
-
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
       this.dsNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
-    }
-  }
-
-
-  openFile(event) {
-  }
-
-  deleteTaiLieuDinhKemTag(data: any) {
-    if (!this.isView) {
-      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-        (x) => x.id !== data.id,
-      );
     }
   }
 
@@ -182,9 +170,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-
     let body = this.formTraCuu.value;
-    body.formData = this.formData.value;
+    this.formData = this.formData.value;
+    body.namKh = body.namKeHoach;
     body.ngayKyTu = body.ngayKy[0];
     body.ngayKyDen = body.ngayKy[1];
     body.type = this.type;
@@ -200,11 +188,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+
     this.spinner.hide();
-
   }
-
-
 
   setValidators(isSave) {
     if (isSave) {
@@ -223,7 +209,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.listVthh = res.data.filter(item => item.ma != '02');
     }
   }
-
 
   async onChangeLoaiVthh(event) {
     let body = {
@@ -261,7 +246,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     let body = this.formTraCuu.value;
     body.ngayKyTu = body.ngayKy[0];
     body.ngayKyDen = body.ngayKy[1];
-
     body.type = this.type;
     delete body.ngayKy;
     let res = await this.tongHopPhuongAnGiaService.tongHop(body);
@@ -278,25 +262,20 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     console.log(data);
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? data.giaKsTtTu + " - " + data.giaKsTtDen : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? data.giaKsTtVatTu + " - " + data.giaKsTtVatDen : null;
+    let kqTd = data.giaTdTu && data.giaTdDen ? data.giaTdTu + " - " + data.giaTdDen : null;
     let kqTdVat = data.giaTdVatTu && data.giaTdVatDen ? data.giaTdVatTu + " - " + data.giaTdVatDen : null;
     let giaDng = data.giaDnTu && data.giaDnDen ? data.giaDnTu + " - " + data.giaDnDen : null;
     let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? data.giaDnVatTu + " - " + data.giaDnVatDen : null;
     this.formData.patchValue({
       giaKsTt: giaKsTt,
       giaKsTtVat: giaKsTtVat,
-      // giaKsSoTc: giaKsSoTc,
+      kqTd: kqTd,
       kqTdVat: kqTdVat,
       giaDng: giaDng,
       giaDngVat: giaDngVat,
     })
     this.dataTable = data.pagChiTiets;
   }
-
-
-  xoaKeHoach() { }
-
-  themKeHoach() { }
-
 }
 
 
