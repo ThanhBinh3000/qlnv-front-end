@@ -333,6 +333,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
         this.dataSearch.maChungLoaiHang = this.formData.value.maChungLoaiHang
       }
     } else {
+      this.dataSearch.maChungLoaiHang = this.formData.value.maChungLoaiHang
       this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map(
         (item) => item.ten,
       );
