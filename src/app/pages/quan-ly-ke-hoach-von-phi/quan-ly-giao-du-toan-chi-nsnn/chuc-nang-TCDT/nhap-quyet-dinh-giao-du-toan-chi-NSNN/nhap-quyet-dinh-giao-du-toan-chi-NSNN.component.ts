@@ -184,7 +184,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         this.maPa = obj?.maPa;
         this.namPa = obj?.namPa;
       })
-      this.quanLyVonPhiService.maPhuongAnGiao1(this.maLoai).toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
