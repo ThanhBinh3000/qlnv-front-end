@@ -14,6 +14,7 @@ import { QuanLyHangBiHongCanBaoHanhService } from 'src/app/services/quanLyHangBi
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-hang-hong-can-bao-hanh',
@@ -28,17 +29,14 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   filterDate = new Date();
+
   dsTrangThai: ITrangThai[] = [
-    // fake
     { id: 1, giaTri: 'Chưa xử lý' },
     { id: 2, giaTri: 'Đã tổng hợp' },
   ];
+
   dsTong;
   dsDonVi = [];
-  dsDonViDataSource = [];
-  dsHangHoa = [];
-  dsLoaiHangHoa = [];
-  dsLoaiHangHoaDataSource = [];
 
   searchInTable: any = {
     maDanhSach: null,
@@ -64,13 +62,14 @@ export class HangHongCanBaoHanhComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly userService: UserService,
+    public userService: UserService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
     private readonly notification: NzNotificationService,
     private quanLyHangBiHongCanBaoHanhService: QuanLyHangBiHongCanBaoHanhService,
     private modal: NzModalService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -110,39 +109,33 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   async search() {
     this.spinner.show();
 
-    console.log(this.userInfo);
+    if (this.formData.value.maDonVi) {
+      this.detail.maDvi = this.formData.value.maDonVi
+    }
 
     const body = {
       "denNgay": this.formData.value.ngayTao[1] === undefined ? "" : dayjs(this.formData.value.ngayTao[1]).format("YYYY-MM-DD"),
       "limit": this.pageSize,
-      "maDonVi": "01070203",
-      // "maDonVi": this.formData.value.maDonVi,
-      "maDs": "",
-      // "maVTHH": this.formData.value.chungLoaiHangHoa === undefined ? "" : this.formData.value.chungLoaiHangHoa,
+      "maDonVi": this.detail.maDvi,
       "maChungLoaiHang": this.formData.value.maChungLoaiHangHoa,
-      "maLoaiHang": this.formData.value.maLoaiHang,
+      "maVTHH": this.formData.value.maLoaiHang,
       "orderBy": "",
       "orderType": "",
       "page": this.page - 1,
       "tuNgay": this.formData.value.ngayTao[0] === undefined ? "" : dayjs(this.formData.value.ngayTao[0]).format("YYYY-MM-DD")
     }
 
-    console.log(body);
-
     const res = await this.quanLyHangBiHongCanBaoHanhService.tracuu(body);
 
     if (res.msg = MESSAGE.SUCCESS) {
       this.dataTable = res.data.content;
-
-      // Chỉnh dữ liệu để có cái tìm kiếm
-      this.dataTable[0].tenDonvi = "Chi cục Dự trữ Nhà nước Việt Trì";
-      this.dataTable[2].tenDonvi = "Chi cục Dự trữ Nhà nước Việt Trì";
 
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = res.data.totalElements;
+
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -235,10 +228,10 @@ export class HangHongCanBaoHanhComponent implements OnInit {
           this.spinner.show();
           try {
             let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: dataDelete });
-            // let res = await this.quanLyHangBiHongCanBaoHanhService.deleteMultiple({ ids: null });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
+              this.indeterminate = false;
               this.allChecked = false;
               this.getCount.emit();
             } else {
@@ -258,39 +251,43 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   }
 
   // Xóa 1 Item
-  xoaItem(id: any) {
-    console.log(id);
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          this.quanLyHangBiHongCanBaoHanhService.xoa(id).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
-              this.getCount.emit();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
+  xoaItem(id: number) {
+    if (id > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: () => {
+          this.spinner.show();
+          try {
+            this.quanLyHangBiHongCanBaoHanhService.xoa(id).then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+                this.getCount.emit();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
+          } catch (e) {
+            console.log('error: ', e);
             this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Dữ liệu không phù hợp để xóa.");
+    }
+
   }
 
   // Xuất file excel
@@ -301,8 +298,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         let body = {
           "denNgay": "",
           "limit": 20,
-          // "maDonVi": this.formData.value.idDonVi,
-          "maDonVi": "01070203",
+          "maDonVi": this.detail.maDvi,
           "maDs": "",
           "maVTHH": "",
           "orderBy": "",
@@ -325,8 +321,16 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   }
 
   // Xóa giá trị search
-  clearFilter() {
-    this.formData.reset();
+  async clearFilter() {
+    this.formData.patchValue({
+      maDonVi: '',
+      maLoaiHang: '',
+      maChungLoaiHangHoa: '',
+      ngayTao: ''
+    })
+    this.initData();
+
+    await this.search();
   }
 
   // Hiển thị màn hình thêm mới
@@ -335,9 +339,9 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   }
 
   // Quay lại page đầu tiên
-  onClose() {
+  async onClose() {
     this.isAddNew = false;
-    this.search();
+    await this.search();
   }
 
   // Load loại hàng hóa
@@ -389,17 +393,12 @@ export class HangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
-  inDanhSach() { }
-
-  onChangeFilterDate(event) { }
-
   changePageIndex(event: any) {
     this.page = event;
     this.search();
   }
 
   changePageSize(event: any) {
-    console.log(event);
     this.pageSize = event;
     this.page = 1;
     this.search();
@@ -409,7 +408,6 @@ export class HangHongCanBaoHanhComponent implements OnInit {
     this.idInput = id;
     this.isCheck = isUpdate;
     this.isAddNew = true;
-
   }
 
 }
@@ -419,11 +417,3 @@ interface ITrangThai {
   giaTri: string;
 }
 
-interface IHangHongCanBaoHanh {
-  id: number;
-  maDanhSach: string;
-  idDonVi: number;
-  tenDonVi: string;
-  ngayTao: Date;
-  trangThai: string;
-}

@@ -12,11 +12,13 @@
               </nz-select>
             </nz-form-control>
           </nz-form-item>
-
           <nz-form-item nz-col nzSpan="8" class="form-item">
             <nz-form-label nzFor="ten-don-vi">Đơn vị</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maDvi" id="ma-don-vi">
+              <nz-input-group *ngIf="userService.isChiCuc()" id="ma-don-vi">
+                <input type="text" nz-input formControlName="maDvi" />
+              </nz-input-group>
+              <nz-select formControlName="maDvi" id="ma-don-vi" *ngIf="!userService.isChiCuc()">
                 <nz-option *ngFor="let item of dsDonVi" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -36,7 +38,7 @@
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="maChungLoaiHang">
-                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                <nz-option [nzDisabled]="isView" *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -125,16 +127,20 @@
               </nz-date-picker>
             </th>
             <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                  (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa, false)" size="smail" />
-              </nz-input-group>
+              <nz-form-control>
+                <nz-select style="width:  164px;" name="" id="" [(ngModel)]="filterTable.loaiHang"
+                  (ngModelChange)="onChangeLoaiHH($event)">
+                  <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
             </th>
             <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiHangHoa"
-                  (input)="filterInTable('chungLoaiHangHoa',filterTable.chungLoaiHangHoa, false)" size="smail" />
-              </nz-input-group>
+              <nz-select style="width:  164px;" [nzDisabled]="isView" [(ngModel)]="filterTable.chungLoaiHangHoa"
+                (ngModelChange)="onChangeChungLoaiHH($event)">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma|| ''}}" nzLabel="{{item.ten ||''}}">
+                </nz-option>
+              </nz-select>
             </th>
             <th>
               <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayTao"

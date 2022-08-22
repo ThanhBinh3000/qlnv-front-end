@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TYPE_PAG } from 'src/app/constants/config';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -9,9 +10,13 @@ import { UserService } from 'src/app/services/user.service';
 export class SubPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
   @Input() loaiVthh: string;
+
+  typeConst: any
   constructor(
     public userService: UserService,
-  ) { }
+  ) {
+    this.typeConst = TYPE_PAG;
+  }
   tabSelected: number = 0;
   ngOnInit(): void {
   }
