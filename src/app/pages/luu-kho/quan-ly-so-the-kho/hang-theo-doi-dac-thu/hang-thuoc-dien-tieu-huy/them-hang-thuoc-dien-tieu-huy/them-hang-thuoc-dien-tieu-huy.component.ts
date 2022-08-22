@@ -68,8 +68,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.initForm();
         this.initData();
+        this.initForm();
     }
 
     initForm(): void {
@@ -220,17 +220,18 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             "ds": [],
         }
         this.dataTable.map((data: any) => {
-            const lstNganKho = this.dsNganKho.find((item) => item.tenDvi == data.nganKho)
-            const lstLoKho = lstNganKho?.children;
+            const lstNganKho = this.dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+            const dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+            const lstLoKho = this.dsTong[DANH_MUC_LEVEL.LO_KHO];
             const lstLoaiHang = this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten));
             const lstChungLoai = lstLoaiHang?.child
             const objDS = {
                 lyDo: data.lyDo,
                 maChungLoaiHang: lstChungLoai.find((item) => item.ten == data.chungLoaiHang).ma,
-                maDiemKho: this.dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
+                maDiemKho: dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
                 maLoKho: (lstLoKho && lstLoKho.length > 0 ? lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi : null),
                 maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten)).ma,
-                maNganKho: this.dsNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
+                maNganKho: lstNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
                 maNhaKho: this.dsNhaKho.find((item) => item.tenDvi == data.nhaKho).maDvi,
                 slTon: data.slTon,
                 slYeuCau: data.slYeuCau
@@ -243,7 +244,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
                 res = await this.quanlyChatLuongService.hangTieuHuySuads(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                     this.onClose.emit();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                 }
                 else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -252,7 +253,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
                 res = await this.quanlyChatLuongService.hangTieuHuyThemds(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                     this.onClose.emit();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                 }
                 else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -277,10 +278,11 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR_NOT_EMPTY, 'Vui lòng chọn lô kho.');
             return;
         }
+        var dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
         const newItem = {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
-            diemKho: this.dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
+            diemKho: dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
             loKho: (this.dsLoKho && this.dsLoKho.length > 0 && this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho)) ? this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi : null,
             loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).ten,
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
@@ -323,8 +325,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
 
     luuEdit(id: number): void {
         const index = this.dataTable.findIndex((item) => item.id === id);
-        Object.assign(this.dataTable[index], this.dataEdit[id].data);
-        this.dataEdit[id].edit = false;
+        Object.assign(this.dataTable[index], this.dataEdit[index].data);
+        this.dataEdit[index].edit = false;
     }
 
     updateEditCache(): void {
