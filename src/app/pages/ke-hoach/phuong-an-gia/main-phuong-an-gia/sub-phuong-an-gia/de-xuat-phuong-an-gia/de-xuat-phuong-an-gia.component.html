@@ -83,7 +83,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-sub xanh" (click)="viewDetail(0,false)">
+              <button *ngIf="!(userService.isTongCuc() && pagType=='LT')" type="button" class="btn btn-sub xanh" (click)="viewDetail(0,false)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -209,10 +209,10 @@
                         <td>{{ data.tenLoaiGia }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, false)">
+                            <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
+                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
@@ -241,6 +241,7 @@
     </div>
 </ng-container>
 <ng-template #templateThemmoi>
-    <app-them-dx-pag-lt [type]="type" [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    <app-them-dx-pag-lt  *ngIf="userService.isCuc() && pagType=='LT'"[type]="type" [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
     </app-them-dx-pag-lt>
+  <app-them-moi-de-xuat-pag *ngIf="userService.isTongCuc() && pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()"></app-them-moi-de-xuat-pag>
 </ng-template>
