@@ -4,14 +4,18 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save()">
+        <button *ngIf="isTongHop && !formData.value.id" type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
+        </button>
+        <button *ngIf="isTongHop" type="button" class="btn btn-sub xanh-nhat" (click)="taoTtrinh()">
+            <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
+            <span>Tạo tờ trình</span>
         </button>
     </div>
 </nz-affix>
 <div class="bg-trang">
-    <div *ngIf="isChiTiet == false">
+    <div>
         <div class="header">
             <div class="header-text">
                 <div class="title-chi-tieu">
@@ -29,7 +33,7 @@
                             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm tổng hợp
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="namKeHoach" [nzDisabled]="isView" nzAllowClear="true">
+                                <nz-select formControlName="namTongHop" [nzDisabled]="isView" nzAllowClear="true">
                                     <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                                     </nz-option>
                                 </nz-select>
@@ -116,7 +120,7 @@
                                 xuất
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy" id="ngay-qd"
                                     class="search__input">
                                 </nz-range-picker>
                                 <ng-template #error let-control>
@@ -127,7 +131,7 @@
                         </nz-form-item>
                     </div>
                 </div>
-                <div nz-row [nzGutter]="20" class="mb-10">
+                <div nz-row [nzGutter]="20" *ngIf="!formData.value.id">
                     <div nz-col [nzSpan]="24">
                         <div class="tong-hop-button group-button-search">
                             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHop()">
@@ -151,7 +155,7 @@
             </div>
         </div>
         <nz-card class="mt16 flex-card p-lr16">
-            <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
+            <form nzLayout="vertical" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="20" class="mb-10">
                     <div nz-col [nzSpan]="5">
                         <nz-form-item class="form-item">
@@ -159,8 +163,8 @@
                                 tổng hợp
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-date-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy" id="ngay-qd"
-                                    class="search__input">
+                                <nz-date-picker formControlName="ngayTongHop" nzDisabled nzFormat="dd/MM/yyyy"
+                                    id="ngay-qd" class="search__input">
                                 </nz-date-picker>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -177,12 +181,16 @@
                                 <nz-input-group>
                                     <input type="text" nz-input formControlName="noiDung" />
                                 </nz-input-group>
+                                <ng-template #error let-control>
+                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                                    </ng-container>
+                                </ng-template>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="5">
                         <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true"> Mã tổng
+                            <nz-form-label [nzNoColon]="true" [nzNoColon]="true"> Mã tổng
                                 hợp </nz-form-label>
                             <nz-form-control>
                                 <nz-input-number class="text-right" nz-input formControlName="id" [nzSize]="'small'"
@@ -218,16 +226,6 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="4">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true"> Kết quả thẩm định giá có VAT </nz-form-label>
-                            <nz-form-control>
-                                <nz-input-number class="text-right" nz-input formControlName="kqTdVat"
-                                    [nzSize]="'small'" nzDisabled>
-                                </nz-input-number>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
                     <div nz-col [nzSpan]="4"
                         *ngIf="formTraCuu.value.loaiGia == 'LG01' || formTraCuu.value.loaiGia == 'LG03'">
                         <nz-form-item>
@@ -235,6 +233,16 @@
                             <nz-form-control>
                                 <nz-input-number class="text-right" nz-input formControlName="kqTd" [nzSize]="'small'"
                                     nzDisabled>
+                                </nz-input-number>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Kết quả thẩm định giá có VAT </nz-form-label>
+                            <nz-form-control>
+                                <nz-input-number class="text-right" nz-input formControlName="kqTdVat"
+                                    [nzSize]="'small'" nzDisabled>
                                 </nz-input-number>
                             </nz-form-control>
                         </nz-form-item>
@@ -299,7 +307,7 @@
                 </tbody>
             </nz-table>
         </nz-card>
-        <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
                     <nz-form-item class="form-item">
