@@ -10,12 +10,12 @@ export class TongHopPhuongAnGiaService extends BaseService {
   gateway: string = "/qlnv-khoach";
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, "kh-lt-pag/luong-thuc/gia-lh/tong-hop", "/qlnv-khoach");
+    super(httpClient, "phuong-an-gia/tong-hop", "/qlnv-khoach");
 
   }
 
   tongHop(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/kh-lt-pag/luong-thuc/gia-lh/tong-hop`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop`;
     return this.httpClient.post(url, body).toPromise();
   }
 }

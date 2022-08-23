@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -8,6 +8,7 @@ import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/confi
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
@@ -15,6 +16,7 @@ import { cloneDeep } from 'lodash';
   styleUrls: ['./quyet-dinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -44,19 +46,16 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
     this.formData = this.fb.group({
-      soTT: [null],
-      ngayTongHop: [[]],
-      noiDung: [null],
-      namTongHop: [null],
-      loaiHangHoa: [null],
-      chungLoaiHh: [null],
-      loaiGia: [null],
-      trangThai: [null],
-      trangThaiTH: [null],
+      namKh: [null],
+      soQd: [null],
+      trichYeu: [null],
+      ngayKy: [null],
     });
   }
+
   searchInTable = {
     namKeHoach: dayjs().get('year'),
     loaiHangHoa: '',
@@ -79,8 +78,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
-
   }
 
   initForm(): void {
@@ -99,44 +96,44 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
-    // this.spinner.show();
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      if (body.ngayKy != null) {
+        body.ngayKyTu = body.ngayKy[0];
+        body.ngayKyDen = body.ngayKy[1];
+      }
+      delete body.ngayKy;
+      body.pagType = this.pagType;
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1,
+      }
+      let res = await this.quyetDinhGiaTCDTNNService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+            // item.statusConvert = this.convertTrangThai(item.trangThai);
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
 
-    // let body = this.formData.value;
-    // if (body.ngayKy != null) {
-    //   body.ngayKyTu = body.ngayKy[0];
-    //   body.ngayKyDen = body.ngayKy[1];
-    // }
-
-    // body.soDx = body.soDeXuat,
-    //   body.loaiHh = body.loaiHangHoa,
-    //   body.paggingReq = {
-    //     limit: this.pageSize,
-    //     page: this.page - 1,
-
-    //   }
-    // let res = await this.giaDeXuatGiaService.search(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.dataTable = data.content;
-    //   this.totalRecord = data.totalElements;
-    //   if (this.dataTable && this.dataTable.length > 0) {
-    //     this.dataTable.forEach((item) => {
-    //       item.checked = false;
-    //       // item.statusConvert = this.convertTrangThai(item.trangThai);
-    //     });
-    //   }
-    //   this.dataTableAll = cloneDeep(this.dataTable);
-
-    // } else {
-    //   this.dataTable = [];
-    //   this.totalRecord = 0;
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
-    // this.spinner.hide();
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+    }
   }
 
   xoa() {
