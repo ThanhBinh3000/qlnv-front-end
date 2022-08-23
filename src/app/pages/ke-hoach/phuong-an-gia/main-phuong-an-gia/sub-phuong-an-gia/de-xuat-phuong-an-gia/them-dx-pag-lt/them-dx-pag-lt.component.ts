@@ -198,6 +198,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
+      this.updateEditCache();
     }
   }
 

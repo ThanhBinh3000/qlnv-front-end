@@ -271,7 +271,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
       this.bindingDataTongHop(res.data);
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
     } else {
       this.isTongHop = false;
       this.notification.error(MESSAGE.ERROR, res.msg);

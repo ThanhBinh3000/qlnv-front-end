@@ -27,8 +27,8 @@
     <app-quyet-dinh-gia-btc [type]="type"></app-quyet-dinh-gia-btc>
 </ng-container>
 <ng-container *ngIf="tabSelected == 3">
-    <app-quyet-dinh-gia-cua-tcdtnn></app-quyet-dinh-gia-cua-tcdtnn>
+    <app-quyet-dinh-gia-cua-tcdtnn [pagType]="loaiVthh"></app-quyet-dinh-gia-cua-tcdtnn>
 </ng-container>
 <ng-container *ngIf="tabSelected == 4">
-    <app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn></app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn>
+    <app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn [pagType]="loaiVthh"></app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn>
 </ng-container>

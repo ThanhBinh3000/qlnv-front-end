@@ -7,7 +7,7 @@
                         <nz-form-item class="form-item">
                             <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="namKeHoach">
+                                <nz-select formControlName="namKh">
                                     <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                                     </nz-option>
                                 </nz-select>
@@ -175,15 +175,13 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </th>
                         <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-                        <td>{{ data.soTT }}</td>
-                        <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{ data.noiDung }}</td>
-                        <td>{{ data.namTongHop }}</td>
-                        <td>{{ data.loaiHangHoa }}</td>
-                        <td>{{ data.chungLoaiHh }}</td>
-                        <td>{{ data.loaiGia }}</td>
-                        <td>{{ data.trangThaiTH }}</td>
-                        <td>{{ data.maToTrinh }}</td>
+                        <td>{{ data.soQd }}</td>
+                        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.trichYeu }}</td>
+                        <td>{{ data.namKeHoach }}</td>
+                        <td>{{ data.tenLoaiGia }}</td>
+                        <td>{{ data.tenLoaiVthh }}</td>
+                        <td>{{ data.tenTrangThai }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-eye"></i>
@@ -219,6 +217,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <!-- <app-them-tong-hop-phuong-an-gia [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
-    </app-them-tong-hop-phuong-an-gia> -->
+    <app-them-moi-qd-gia-tcdtnn [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    </app-them-moi-qd-gia-tcdtnn>
 </ng-template>

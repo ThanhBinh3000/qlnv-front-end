@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./quyet-dinh-dieu-chinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
+  @Input() pagType: String;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
