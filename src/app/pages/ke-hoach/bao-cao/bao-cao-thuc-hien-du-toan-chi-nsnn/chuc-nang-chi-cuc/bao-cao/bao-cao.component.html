@@ -1,0 +1,347 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+	<div class="tab-content tab-menu" id="myTabContent">
+		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+			aria-labelledby="banhanh-tab">
+			<div class="trai">
+				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="close()">
+					<i class="fa fa-arrow-circle-left"></i>
+				</a>
+			</div>
+			<div class="canphai phai">
+				<button class="btn btn-main" (click)="save()"
+					[hidden]="statusBtnSave || userInfo?.username != baoCao?.nguoiTao">
+					<i class="icon htvbdh_tcdt_save"></i>
+					<span>Lưu</span>
+				</button>
+				<button class="btn btn-main" (click)="onSubmit('2',null)"
+					[hidden]="statusBtnApprove || userInfo?.username != baoCao?.nguoiTao">
+					<i class="icon htvbdh_tcdt_guiduyet"></i>
+					<span>Trình duyệt</span>
+				</button>
+				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Từ chối</span>
+				</a>
+				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Duyệt</span>
+				</button>
+				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Từ chối</span>
+				</button>
+				<a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Phê duyệt</span>
+				</a>
+				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Từ chối</span>
+				</button>
+				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
+					<i class="icon htvbdh_tcdt_tuchoi"></i>
+					<span>Chấp nhận</span>
+				</a>
+				<a class="btn btn-main" (click)="doShowDialogCopy()" [hidden]="statusBtnCopy">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Copy</span>
+				</a>
+				<a class="btn btn-main" [hidden]="statusBtnPrint">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</a>
+				<a class="btn btn-main" (click)="close()" [hidden]="statusBtnClose">
+					<i nz-icon nzType="stop" nzTheme="outline"></i>
+					<span>Đóng</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</nz-affix>
+<div class="contentBor chi-tieu__body">
+	<div class="contentDetail">
+		<div class="main-content">
+			<nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+				<nz-table #basicTable class="nowrap">
+					<thead>
+						<tr>
+							<th>Mã báo cáo</th>
+							<th>Báo cáo năm</th>
+							<th>Báo cáo tháng</th>
+							<th>Người tạo</th>
+							<th>Ngày lập</th>
+							<th>Công văn</th>
+							<th>Ngày trình duyệt</th>
+							<th>Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
+							<th>Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên
+							</th>
+							<th>Ngày đơn vị cấp trên trả kết quả</th>
+							<th>Trạng thái</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{baoCao?.maBcao}}</td>
+							<td>{{baoCao?.namBcao}}</td>
+							<td>{{baoCao?.thangBcao}}</td>
+							<td>{{baoCao?.nguoiTao}}</td>
+							<td>{{baoCao?.ngayTao}}</td>
+							<td>
+								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+									<button nz-button>
+										<i nz-icon nzType="upload"></i>
+										Select File
+									</button>
+								</nz-upload>
+								<div class="tep__sqd" (click)="downloadFileCv()">
+									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+									<span>{{baoCao?.congVan?.fileName}}</span>
+								</div>
+
+							</td>
+							<td>{{baoCao?.ngayTrinh}}</td>
+							<td>{{baoCao?.ngayDuyet}}</td>
+							<td>{{baoCao?.ngayPheDuyet}}</td>
+							<td>{{baoCao?.ngayTraKq}}</td>
+							<td>{{getStatusName(baoCao?.trangThai)}}</td>
+						</tr>
+					</tbody>
+				</nz-table>
+			</nz-card>
+			<div class="tab__container" style="margin-top: 12px;">
+				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex" nzType="editable-card"
+					(nzClose)="closeTab($event)" nzHideAdd>
+					<nz-tab [nzTitle]="'DANH SÁCH PHỤ LỤC'">
+						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+							<div nz-col class="gutter-row canphai phai" [nzSpan]="24"
+								style="display:flex; justify-content: end;">
+								<button type="button" class="btn btn-main" (click)="addPhuLuc()"
+									[hidden]="status || userInfo?.username != baoCao?.nguoiTao">
+									<i class="icon htvbdh_dau-cong"></i>
+									<span>Thêm</span>
+								</button>
+								<button type="button" class="btn btn-sub" (click)="deletePhuLucList()"
+									[hidden]="status || userInfo?.username != baoCao?.nguoiTao">
+									<i class="icon htvbdh_tcdt_delete"></i>
+									<span>Xóa</span>
+								</button>
+							</div>
+						</div>
+						<nz-table nzBordered class="table__body">
+							<thead>
+								<tr>
+									<th>STT</th>
+									<th>Phụ lục</th>
+									<th>Tiêu đề</th>
+									<th>Trạng thái</th>
+									<th>Giao cho</th>
+									<th>Hành động</th>
+									<th class="th" [hidden]="status">
+										<label [hidden]="userInfo?.username != baoCao?.nguoiTao" nz-checkbox
+											[(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+										</label>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let item of baoCao?.lstBcaos; let i = index">
+									<td>{{ i + 1 }}</td>
+									<td>{{item.tenPhuLuc}}</td>
+									<td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/
+										</ng-template>
+										{{baoCao.namBcao}}</td>
+									<td>{{getStatusAppendixName(item.trangThai)}}
+										<ng-template [ngIf]="item.trangThai == '0'"><br>Lý do: {{item.lyDoTuChoi}}
+										</ng-template>
+									</td>
+									<td>
+										<ng-container
+											*ngIf="userInfo?.username == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
+											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện"
+												[(ngModel)]="item.nguoiBcao"
+												[class]="item.nguoiBcao ?'' : 'input-error-validate' ">
+												<nz-option *ngFor="let item of nguoiBcaos" [nzValue]="item.username"
+													[nzLabel]="item.username">
+												</nz-option>
+											</nz-select>
+										</ng-container>
+										<ng-template #templateNguoiBcao>
+											<div *ngFor="let itemDetail of allUsers">
+												<div *ngIf="itemDetail.username == item.nguoiBcao">
+													{{itemDetail.username}}
+												</div>
+											</div>
+										</ng-template>
+									</td>
+									<td>
+										<button type="button" class="btn btn-main" (click)="newTab(item.maLoai)"
+											[hidden]="status || userInfo?.username != item.nguoiBcao || !baoCao.id">
+											<span>Nhập dữ liệu</span>
+										</button>
+										<button type="button" class="btn btn-main" (click)="newTab(item.maLoai)"
+											[hidden]="!status">
+											<span>Xem</span>
+										</button>
+										<!-- <button type="button" class="btn btn-main"
+                            [hidden]="status || userInfo?.username != item.nguoiBcao || !id">
+                            <span>Biểu mẫu nhập số liệu</span>
+                          </button> -->
+									</td>
+									<td [hidden]="status">
+										<label [hidden]="userInfo?.username != baoCao?.nguoiTao" nz-checkbox
+											[nzValue]="item.id" [(ngModel)]="item.checked"
+											(ngModelChange)="updateSingleChecked()"></label>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
+						<ng-container *ngIf="baoCao.lstBcaoDviTrucThuocs.length != 0">
+							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+								<div nz-col class="gutter-row" [nzSpan]="12">
+									Danh sách báo cáo từ các đơn vị trực thuộc
+									<br />
+								</div>
+							</div>
+							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+								<div nz-col class="gutter-row" [nzSpan]="24">
+									<nz-table #basicTable class="nowrap">
+										<thead>
+											<tr>
+												<th>STT</th>
+												<th>Đơn vị lập</th>
+												<th>Mã báo cáo</th>
+												<th>Báo cáo năm</th>
+												<th>Báo cáo tháng</th>
+												<th>Người tạo</th>
+												<th>
+													Ngày trình duyệt<br>
+													(Ngày đơn vị cấp dưới gửi báo cáo)
+												</th>
+												<th>
+													Ngày duyệt<br>
+													(Ngày cục khu vực kiểm tra đánh giá báo cáo)
+												</th>
+												<th>
+													Trạng thái<br>
+													(Cục khu vực đánh giá)
+												</th>
+												<th>
+
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let item of baoCao?.lstBcaoDviTrucThuocs; let i = index">
+												<td>{{ i + 1 }}</td>
+												<td>{{getUnitName(item.maDvi)}}</td>
+												<td>{{item.maBcao}}</td>
+												<td>{{item.namBcao}}</td>
+												<td>{{item.thangBcao}}</td>
+												<td>{{item.nguoiTao}}</td>
+												<td>{{item.ngayTrinh}}</td>
+												<td>{{item.ngayDuyet}}</td>
+												<td>{{getStatusName(item.trangThai)}}</td>
+												<td>
+													<button type="button" class="btn btn-main"
+														(click)="viewDetail(item.id)">
+														<span>Xem</span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</nz-table>
+								</div>
+							</div>
+						</ng-container>
+						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+							<div nz-col class="gutter-row" [nzSpan]="3">
+								<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+									<button nz-button>
+										<i nz-icon nzType="upload"></i>
+										Select File
+									</button>
+								</nz-upload>
+								<button nz-button [nzType]="'primary'" (click)="handleUpload()"
+									[disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+									Thêm vào danh sách
+								</button>
+							</div>
+						</div>
+						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+							<div nz-col class="gutter-row" [nzSpan]="12">
+								<nz-table nzBordered class="table__body">
+									<thead>
+										<tr>
+											<th>STT</th>
+											<th>Tên file</th>
+											<th></th>
+											<th class="th" [hidden]="status"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let data of lstFiles; let i = index">
+											<td>{{ i + 1 }} </td>
+											<td>{{ data.fileName }}</td>
+											<td>
+												<button class="btn btn-function"
+													(click)="downloadFile(data.id)">Xem</button>
+											</td>
+											<td [hidden]="status">
+												<button class="btn btn-function"
+													(click)="deleteFile(data.id)">Xóa</button>
+											</td>
+										</tr>
+									</tbody>
+								</nz-table>
+							</div>
+						</div>
+					</nz-tab>
+					<nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab?.tieuDe">
+						<ng-container *ngIf="tab.maPhuLuc == '1'">
+							<app-phu-luc-1 [data]="data" (dataChange)="getNewData($event)">
+							</app-phu-luc-1>
+						</ng-container>
+						<ng-container *ngIf="tab.maPhuLuc == '2'">
+							<app-phu-luc-2 [data]="data" (dataChange)="getNewData($event)">
+							</app-phu-luc-2>
+						</ng-container>
+						<ng-container *ngIf="tab.maPhuLuc == '3'">
+							<app-phu-luc-3 [data]="data" (dataChange)="getNewData($event)">
+							</app-phu-luc-3>
+						</ng-container>
+					</nz-tab>
+				</nz-tabset>
+			</div>
+			<div class="ghi-chu">
+				<nz-form-label nzRequired [nzNoColon]="true">
+					Ghi chú
+				</nz-form-label>
+				<ul>
+					<li class="ghi-chu__item">
+						Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+						CSDL về Tài
+						chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+						dựng CSDL về
+						Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát
+						xây dựng CSDL
+						về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo
+						sát xây dựng
+						CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến
+						khảo sát xây
+						dựng CSDL về Tài chính
+					</li>
+					<li class="ghi-chu__item">
+						Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+						hoạch năm
+						2022
+					</li>
+					<li class="ghi-chu__item">
+						Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+						hoạch năm
+						2022
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

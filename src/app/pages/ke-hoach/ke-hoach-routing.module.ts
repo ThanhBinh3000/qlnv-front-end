@@ -20,6 +20,20 @@ const routes: Routes = [
           ).then((m) => m.GiaoKeHoachVaDuToanModule),
       },
       {
+        path: 'bao-cao',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/bao-cao/bao-cao.module'
+          ).then((m) => m.BaoCaoModule),
+      },
+      {
+        path: 'du-toan-nsnn',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/du-toan-nsnn/du-toan-nsnn.module'
+          ).then((m) => m.DuToanNsnnModule),
+      },
+      {
         path: '',
         redirectTo: 'dieu-chinh-chi-tieu-ke-hoach-nam',
         pathMatch: 'full'
