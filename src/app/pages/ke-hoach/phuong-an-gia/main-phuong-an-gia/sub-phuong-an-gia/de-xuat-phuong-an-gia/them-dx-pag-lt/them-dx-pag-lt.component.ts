@@ -62,10 +62,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   dataTableCanCuXdg: any[] = [];
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
+  dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
   dataTableKsGia: any[] = [];
 
   dataTableKqGia: any[] = [];
+
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -567,10 +570,57 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     })
   }
 
-  themDataTable(tableName: String) {
-    if (tableName == 'ccXdg') {
-      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
-      this.rowItemCcXdg = new CanCuXacDinhPag();
+  themDataTable() {
+    this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+    this.rowItemCcXdg = new CanCuXacDinhPag();
+    this.updateEditCache();
+  }
+
+  startEdit(index: number) {
+    this.dataEdit[index].edit = true;
+  }
+
+  cancelEdit(index: number) {
+    this.dataEdit[index] = {
+      data: { ...this.dataTableCanCuXdg[index] },
+      edit: false,
+    };
+  }
+
+  saveEdit(idx: number) {
+
+  }
+
+  deleteItem(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTableCanCuXdg.splice(index, 1);
+          this.updateEditCache();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  updateEditCache(): void {
+    if (this.dataTableCanCuXdg) {
+      let i = 0;
+      this.dataTableCanCuXdg.forEach((item) => {
+        this.dataEdit[i] = {
+          edit: false,
+          data: { ...item },
+        };
+        i++
+      });
     }
   }
 }
