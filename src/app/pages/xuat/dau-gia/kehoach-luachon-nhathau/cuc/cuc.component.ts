@@ -32,7 +32,12 @@ export class CucComponent implements OnInit {
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.tabs = [...this.tabs, ...res.data.filter(item => item.ma !== '02')];
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(item => {
+          this.tabs.push(item)
+        })
+      }
+      // this.tabs = [...this.tabs, ...res.data.filter(item => item.ma !== '02')];
     }
   }
   loaiVthhSelected: string

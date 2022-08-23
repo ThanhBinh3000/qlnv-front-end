@@ -6,13 +6,16 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { UserService } from 'src/app/services/user.service';
-
+import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
   templateUrl: './danhsach-kehoach-lcnt.component.html',
@@ -25,17 +28,21 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private modal: NzModalService,
     public userService: UserService,
+    private donviService: DonviService,
+    public globals: Globals,
   ) { }
   @Input()
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
 
+
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
     soKeHoach: null,
+    tenDvi: null,
     namKh: dayjs().get('year'),
     ngayKy: null,
     loaiVthh: null,
@@ -43,6 +50,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   };
   filterTable: any = {
     soKeHoach: '',
+    tenDonVi: '',
     ngayLapKeHoach: '',
     ngayKy: '',
     trichYeu: '',
@@ -61,7 +69,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
+  dsDonvi: any[] = [];
   userInfo: UserLogin;
+  userdetail: any = {};
+
   selectedId: number = 0;
 
   isVatTu: boolean = false;
@@ -73,7 +84,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.userInfo = this.userService.getUserLogin();
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -83,6 +93,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         });
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
+      this.initData()
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -90,7 +101,23 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.userdetail.maDvi = this.userInfo.MA_DVI;
+    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
+  }
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.userdetail.maDvi,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
+    }
 
+  }
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -132,12 +159,19 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
       maDvis: this.userInfo.MA_DVI,
+<<<<<<< HEAD
       // pageNumber: this.page,
       // pageSize: this.pageSize + 10,
       page: this.page,
       pageLimit: this.pageSize,
+=======
+      pageNumber: this.page - 1,
+      pageSize: this.pageSize,
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

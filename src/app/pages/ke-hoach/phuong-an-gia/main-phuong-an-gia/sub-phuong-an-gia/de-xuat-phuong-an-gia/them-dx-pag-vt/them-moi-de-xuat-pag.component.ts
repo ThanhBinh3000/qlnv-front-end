@@ -6,7 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { UserService } from "../../../../../../../services/user.service";
 import { Globals } from "../../../../../../../shared/globals";
 import { HelperService } from "../../../../../../../services/helper.service";
-import { GiaDeXuatGiaService } from "../../../../../../../services/gia-de-xuat-gia.service";
+import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
@@ -44,7 +44,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private helperService: HelperService,
-    private giaDeXuatGiaService: GiaDeXuatGiaService,
+    private giaDeXuatGiaService: DeXuatPAGService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
 

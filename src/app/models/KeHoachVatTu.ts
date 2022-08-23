@@ -1,4 +1,4 @@
-import { ItemDetail } from './ItemDetail';
+import { ItemDetail } from './itemDetail';
 export class KeHoachVatTu {
   id: number;
   donViId: number;

@@ -694,19 +694,25 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
-            case '03':
-            case '00': {
               body.trangThaiId = '01';
               break;
+<<<<<<< HEAD
             }
             case '01': {
               body.trangThaiId = '02';
               break;
             }
             case '09': {
+=======
+            case '01':
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
               body.trangThaiId = '02';
-            }
+              break;
           }
+<<<<<<< HEAD
+=======
+          console.log(body);
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
 
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -745,6 +751,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
+<<<<<<< HEAD
             trangThaiId: this.globals.prop.TU_CHOI,
           };
 
@@ -758,7 +765,26 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               break;
             }
           }
+=======
+            trangThai: '02',
+          };
+          // switch (this.khBanDauGia.trangThai) {
+          //   case '01': {
+          //     body.trangThai = '03';
+          //     break;
+          //   }
+          //   case '09': {
+          //     body.trangThai = '12';
+          //     break;
+          //   }
+          // }
+          // console.log(this.khBanDauGia.trangThai);
+          // console.log(body);
+
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
           const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
+          console.log(res);
+
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();

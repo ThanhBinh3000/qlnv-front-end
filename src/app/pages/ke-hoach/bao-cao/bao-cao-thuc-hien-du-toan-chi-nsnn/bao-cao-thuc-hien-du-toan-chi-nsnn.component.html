@@ -1,0 +1,23 @@
+<div class="contentBor dau-thau">
+    <div class="contentDetail">
+        <div class="main-content-dau-thau">
+            <nz-tabset nzType="card">
+                <nz-tab>
+                    <div nz-row [nzGutter]="24" class="vat-tu">
+                        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let menu of danhSach">
+                            <nz-card class="card-tree">
+                                <a routerLinkActive="active" [routerLink]="menu.url">
+                                    <div class="content-item">
+                                        <span class="icon" [ngClass]="menu.icon"></span>
+                                        <div class="content-item-title">{{menu.title}}</div>
+                                        <div class="content-item-description">{{menu.description}}</div>
+                                    </div>
+                                </a>
+                            </nz-card>
+                        </div>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

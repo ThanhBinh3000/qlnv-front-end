@@ -86,6 +86,27 @@ const routes: Routes = [
             (m) => m.QuanTriHeThongNewModule,
           ),
       },
+      // {
+      //   path: MAIN_ROUTES.qlkhVonPhi,
+      //   loadChildren: () =>
+      //     import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(
+      //       (m) => m.QuanLyKeHoachVonPhiModule,
+      //     ),
+      // },
+      {
+        path: MAIN_ROUTES.capVon,
+        loadChildren: () =>
+          import('../../pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.module').then(
+            (m) => m.QuanLyKeHoachVonPhiHangModule,
+          ),
+      },
+      {
+        path: MAIN_ROUTES.quyetToan,
+        loadChildren: () =>
+          import('../../pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.module').then(
+            (m) => m.QuanLyThongTinQuyetToanVonPhiHangDtqgModule,
+          ),
+      },
       {
         path: MAIN_ROUTES.quanTriDanhMuc,
         loadChildren: () =>

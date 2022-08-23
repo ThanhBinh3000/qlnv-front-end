@@ -8,6 +8,7 @@ import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/confi
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
@@ -44,19 +45,16 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
     this.formData = this.fb.group({
-      soTT: [null],
-      ngayTongHop: [[]],
-      noiDung: [null],
-      namTongHop: [null],
-      loaiHangHoa: [null],
-      chungLoaiHh: [null],
-      loaiGia: [null],
-      trangThai: [null],
-      trangThaiTH: [null],
+      namKeHoach: [null],
+      soQd: [[]],
+      trichYeu: [null],
+      ngayKy: [null],
     });
   }
+
   searchInTable = {
     namKeHoach: dayjs().get('year'),
     loaiHangHoa: '',
@@ -79,8 +77,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
-
   }
 
   initForm(): void {
@@ -99,7 +95,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
@@ -118,7 +113,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     //     page: this.page - 1,
 
     //   }
-    // let res = await this.giaDeXuatGiaService.search(body);
+    // let res = await this.quyetDinhGiaTCDTNNService.search(body);
     // if (res.msg == MESSAGE.SUCCESS) {
     //   let data = res.data;
     //   this.dataTable = data.content;

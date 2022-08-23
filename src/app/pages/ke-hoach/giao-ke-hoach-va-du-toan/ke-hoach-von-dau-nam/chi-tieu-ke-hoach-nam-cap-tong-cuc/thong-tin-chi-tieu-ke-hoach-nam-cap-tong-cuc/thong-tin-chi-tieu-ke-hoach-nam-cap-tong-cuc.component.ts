@@ -25,7 +25,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { ItemDetail } from 'src/app/models/ItemDetail';
+import { ItemDetail } from 'src/app/models/itemDetail';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { KeHoachVatTu, VatTuThietBi } from 'src/app/models/KeHoachVatTu';

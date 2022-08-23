@@ -57,22 +57,47 @@ export class UserService {
     // }
     // return new UserLogin({})
     // var userInfo = decodeURIComponent(escape(window.atob(decoded.toString())));
-      return new UserLogin(decoded);
+    return new UserLogin(decoded);
   }
 
-  isTongCuc(){
+  isTongCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "1"
   }
 
-  isCuc(){
+  isCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "2"
   }
 
-  isChiCuc(){
+  isChiCuc() {
     let user = this.getUserLogin();
     return user.CAP_DVI == "3"
+  }
+
+  //get user info
+  getUserInfo(username: string) {
+    return this.httpClient.post<any>(environment.SERVICE_API + '/qlnv-system/user/userInfo',
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": username,
+        "trangThai": ""
+      }
+    );
+  }
+
+  //get user name
+  getUserName() {
+    var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
+    var decoded = jwt_decode(token);
+    if (decoded && decoded["sub"]) {
+      var userName = decoded["sub"];
+      return userName;
+    }
+    return null;
   }
 
 }
