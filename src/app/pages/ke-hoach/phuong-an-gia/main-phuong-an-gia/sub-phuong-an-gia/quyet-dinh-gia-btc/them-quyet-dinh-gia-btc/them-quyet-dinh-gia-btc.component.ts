@@ -15,6 +15,7 @@ import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.s
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { TongHopPhuongAnGiaService } from "src/app/services/tong-hop-phuong-an-gia.service";
 import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
+import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc",
@@ -63,7 +64,8 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private danhMucTieuChuanService: DanhMucTieuChuanService
   ) {
     this.formData = this.fb.group(
       {
@@ -251,7 +253,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-      this.isErrorUnique=true;
+      this.isErrorUnique = true;
       this.helperService.markFormGroupTouched(this.formData);
     }
     this.spinner.hide();
@@ -302,7 +304,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
 
       //tieu chuan chat luong
-      res = await this.danhMucService.danhSachTieuChuanTheoMaHh(curToTrinh.loaiVthh);
+      res = await this.danhMucTieuChuanService.getDetailByMaHh(curToTrinh.loaiVthh);
       this.dsTieuChuanCl = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {

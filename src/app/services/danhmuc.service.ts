@@ -95,9 +95,4 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/danh-sach`;
     return this.httpClient.get<any>(url).toPromise();
   }
-
-  danhSachTieuChuanTheoMaHh(loaiVthh: string): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/chi-tiet/ma-hh/${loaiVthh}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
 }
