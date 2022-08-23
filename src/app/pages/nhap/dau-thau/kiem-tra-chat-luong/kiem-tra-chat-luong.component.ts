@@ -14,7 +14,7 @@ export class KiemTraChatLuongComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loaiVTHHGetAll();

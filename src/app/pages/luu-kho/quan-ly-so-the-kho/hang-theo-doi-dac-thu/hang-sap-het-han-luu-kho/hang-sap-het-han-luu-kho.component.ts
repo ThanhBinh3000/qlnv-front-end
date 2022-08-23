@@ -139,7 +139,7 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
     private readonly notification: NzNotificationService,
     private readonly userService: UserService,
     private readonly danhMucService: DanhMucService,
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -267,11 +267,11 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
     }
   }
 
-  onChangeFilterDate(event) {}
+  onChangeFilterDate(event) { }
 
-  changePageIndex(event) {}
+  changePageIndex(event) { }
 
-  changePageSize(event) {}
+  changePageSize(event) { }
 }
 
 interface ITrangThai {

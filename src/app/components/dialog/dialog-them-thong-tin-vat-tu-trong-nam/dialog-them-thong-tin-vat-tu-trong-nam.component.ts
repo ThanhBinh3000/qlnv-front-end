@@ -36,7 +36,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     //treeview

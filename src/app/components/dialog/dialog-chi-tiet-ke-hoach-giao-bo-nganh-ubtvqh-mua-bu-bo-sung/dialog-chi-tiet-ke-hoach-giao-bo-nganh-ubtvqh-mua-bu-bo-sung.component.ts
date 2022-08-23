@@ -1,12 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   KeHoachLuongThucComponent
 } from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {Globals} from "../../../shared/globals";
-import {MESSAGE} from "../../../constants/message";
-import {MuaBuComponent} from "./mua-bu/mua-bu.component";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../services/danhmuc.service";
+import { Globals } from "../../../shared/globals";
+import { MESSAGE } from "../../../constants/message";
+import { MuaBuComponent } from "./mua-bu/mua-bu.component";
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung',

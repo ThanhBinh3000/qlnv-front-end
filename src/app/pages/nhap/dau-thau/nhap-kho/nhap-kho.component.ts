@@ -15,7 +15,7 @@ export class NhapKhoComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loaiVTHHGetAll();

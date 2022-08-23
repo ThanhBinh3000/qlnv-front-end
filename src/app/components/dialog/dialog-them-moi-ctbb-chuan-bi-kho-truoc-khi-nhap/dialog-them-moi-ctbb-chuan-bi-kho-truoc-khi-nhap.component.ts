@@ -13,8 +13,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   ],
 })
 export class DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent
-  implements OnInit
-{
+  implements OnInit {
   data: any;
   radioValue: string = 'trung';
   listOfMapData: VatTu[];
@@ -29,9 +28,9 @@ export class DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   handleOk() {
     this._modalRef.close();

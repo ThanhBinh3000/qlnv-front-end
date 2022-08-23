@@ -73,7 +73,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   thongTinDXKHLCNTInput: ThongTinDeXuatKeHoachLuaChonNhaThauInput =
     new ThongTinDeXuatKeHoachLuaChonNhaThauInput();
-  errorGhiChu : boolean = false;
+  errorGhiChu: boolean = false;
   editCache: {
     [key: string]: { edit: boolean; data: DanhSachGoiThau };
   } = {};

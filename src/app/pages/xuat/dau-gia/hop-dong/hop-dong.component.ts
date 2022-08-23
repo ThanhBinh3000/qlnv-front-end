@@ -1,4 +1,4 @@
-import {Component, OnInit, SimpleChanges} from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -7,7 +7,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   templateUrl: './hop-dong.component.html',
   styleUrls: ['./hop-dong.component.scss'],
 })
-export class HopDongComponent implements OnInit{
+export class HopDongComponent implements OnInit {
   tabs: any[] = [];
 
   constructor(
