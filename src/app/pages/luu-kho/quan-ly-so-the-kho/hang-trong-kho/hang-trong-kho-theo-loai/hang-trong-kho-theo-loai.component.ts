@@ -35,7 +35,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   detail: any = {};
 
   dsLoaiHangHoa = [];
-  dsChungLoaiHangHoa = []; ư
+  dsChungLoaiHangHoa = [];
   dsTong;
   dsCuc = [];
   dsChiCuc = [];
@@ -67,16 +67,16 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
   mapOfExpandedData: { [key: string]: HangTrongKhoRowItem[] } = {};
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly donviService: DonviService,
-    private readonly danhMucService: DanhMucService,
-    private readonly spinner: NgxSpinnerService,
-    public readonly userService: UserService,
-    private readonly notification: NzNotificationService,
+    private fb: FormBuilder,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private spinner: NgxSpinnerService,
+    public userService: UserService,
+    private notification: NzNotificationService,
     public treeTableService: TreeTableService<HangTrongKhoRowItem>,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     public globals: Globals,
-    private readonly modal: NzModalService,
+    private modal: NzModalService,
 
   ) { }
 
@@ -88,8 +88,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
         this.loaiVTHHGetAll(),
         this.initData(),
         this.search()
-      ])
-
+      ]);
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -107,10 +106,7 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
             else {
               if (item.child && item.child.length > 0) {
                 item.child.forEach((itemHH) => {
-                  if (itemHH.ma === this.maLoaiVthh) {
-                    this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH
-                    ];
-                  }
+                  if (itemHH.ma === this.maLoaiVthh) { this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH]; }
                 });
               }
             }

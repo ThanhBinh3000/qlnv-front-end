@@ -690,19 +690,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
-            case '03':
-            case '00': {
               body.trangThaiId = '01';
               break;
-            }
-            case '01': {
-              body.trangThaiId = '09';
-              break;
-            }
-            case '09': {
+            case '01':
               body.trangThaiId = '02';
-            }
+              break;
           }
+          console.log(body);
+
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -740,19 +735,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '',
+            trangThai: '02',
           };
-          switch (this.khBanDauGia.trangThai) {
-            case '01': {
-              body.trangThai = '03';
-              break;
-            }
-            case '09': {
-              body.trangThai = '12';
-              break;
-            }
-          }
+          // switch (this.khBanDauGia.trangThai) {
+          //   case '01': {
+          //     body.trangThai = '03';
+          //     break;
+          //   }
+          //   case '09': {
+          //     body.trangThai = '12';
+          //     break;
+          //   }
+          // }
+          // console.log(this.khBanDauGia.trangThai);
+          // console.log(body);
+
           const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
+          console.log(res);
+
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();
