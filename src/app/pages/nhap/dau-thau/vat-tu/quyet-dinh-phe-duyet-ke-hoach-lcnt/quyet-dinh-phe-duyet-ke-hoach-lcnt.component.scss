@@ -1,0 +1,40 @@
+.action-top {
+  padding-right: 50px;
+}
+::ng-deep {
+  .luong-dau-thau-gao__body {
+    .flex-card.ant-card {
+      border: 1px solid #ececec !important;
+      background: transparent;
+      box-shadow: unset;
+      margin-bottom: 0px !important;
+      margin-top: 11px !important;
+      border-radius: 0px;
+    }
+    .ant-tabs-tabpane {
+      height: 100%;
+    }
+    .ant-tabs-content-holder {
+      padding: 0px !important;
+    }
+    .ant-table-wrapper {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+    .pagination-card li:first-child {
+      left: 60px !important;
+    }
+  }
+  .tab__container {
+    margin-top: 12px;
+    position: relative;
+  }
+  .action {
+    position: absolute;
+    right: 25px;
+    top: 0;
+  }
+  .pd-0 {
+    padding: 0 !important;
+  }
+}

@@ -42,6 +42,8 @@
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                 </ng-container>
+                <ng-container *ngIf="control.hasError('badValueFound')">hahaha
+                </ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -155,7 +157,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại giá
+            <nz-form-label [nzNoColon]="true" nzFor="loai-gia">Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
@@ -171,7 +173,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Tiêu chuẩn chất
+            <nz-form-label [nzNoColon]="true" nzFor="tieu-chuan-cl">Tiêu chuẩn chất
               lượng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">

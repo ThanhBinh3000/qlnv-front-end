@@ -17,7 +17,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { ItemDetail } from 'src/app/models/ItemDetail';
+import { ItemDetail } from 'src/app/models/itemDetail';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',

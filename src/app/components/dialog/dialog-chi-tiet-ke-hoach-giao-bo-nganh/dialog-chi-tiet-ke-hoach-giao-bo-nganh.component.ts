@@ -5,7 +5,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from './../../../services/danhmuc.service';
+import { DanhMucService } from '../../../services/danhmuc.service';
 import { KeHoachLuongThucComponent } from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
 

@@ -64,7 +64,6 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
 
   }
 

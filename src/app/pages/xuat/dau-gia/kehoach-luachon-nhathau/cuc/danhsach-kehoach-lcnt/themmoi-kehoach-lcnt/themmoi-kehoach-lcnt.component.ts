@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -96,6 +96,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private cdr: ChangeDetectorRef,
   ) {}
   async ngOnInit() {
+
+    console.log(this.khBanDauGia);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maKeHoach = '/' + this.userInfo.MA_TR;
@@ -117,6 +119,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm() {
+    console.log(this.khBanDauGia);
     this.formData = this.fb.group({
       id: [
         {
@@ -137,21 +140,21 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.soKeHoach : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       trichYeu: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.trichYeu : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       ngayLapKeHoach: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.ngayLapKeHoach : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       ngayKy: [
         {
@@ -166,8 +169,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.loaiHangHoa : null,
           disabled: this.isView ? true : false,
         },
-
-        [],
+        [Validators.required],
       ],
       qdGiaoChiTieuId: [
         {
@@ -184,8 +186,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false,
         },
-
-        [],
+        [Validators.required],
       ],
       tenQdGiaoChiTieu: [
         {
@@ -219,8 +220,15 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       ],
       thoiGianDuKien: [
         {
+<<<<<<< HEAD
           value: this.khBanDauGia ? this.khBanDauGia.thoiGianDuKien : null,
           disabled: this.isView ? true : false,
+=======
+          value: this.khBanDauGia
+            ? this.khBanDauGia.thoiGianDuKien
+            : [],
+          disabled: this.isView ? true : false
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
         },
         [],
       ],
@@ -476,6 +484,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           phanLoTaiSan.tonKho = null;
           this.phanLoTaiSanList = [...this.phanLoTaiSanList, phanLoTaiSan];
         });
+<<<<<<< HEAD
       });
       console.log(this.formData.value.ngayKy);
       console.log(this.formData.value.ngayLapKeHoach);
@@ -526,13 +535,58 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         trangThai: null,
         trichYeu: this.formData.get('trichYeu').value,
         ghiChu: this.formData.get('ghiChu').value,
+=======
+      })
+
+      let body = {
+        "capDv": null,
+        "diaDiemGiaoNhanList": this.diaDiemGiaoNhanList,
+        "fileDinhKems": this.listFileDinhKem,
+        "id": this.formData.get("id").value,
+        "khoanTienDatTruoc": this.formData.get("khoanTienDatTruoc").value,
+        "loaiHangHoa": this.formData.get("loaiHangHoa").value,
+        "loaiHopDong": this.formData.get("loaiHopDong").value,
+        "loaiVatTuHangHoa": null,
+        "maDv": null,
+        "namKeHoach": this.formData.get("namKeHoach").value,
+        "ngayKy": this.formData.get("ngayKy").value ? dayjs(this.formData.get("ngayKy").value).format("YYYY-MM-DD") : null,
+        "ngayLapKeHoach": this.formData.get("ngayLapKeHoach").value ? dayjs(this.formData.get("ngayLapKeHoach").value).format("YYYY-MM-DD") : null,
+        "phanLoTaiSanList": this.phanLoTaiSanList,
+        "phuongThucGiaoNhan": this.formData.get("phuongThucGiaoNhan").value,
+        "phuongThucThanhToan": this.formData.get("phuongThucThanhToan").value,
+        "qdGiaoChiTieuId": this.formData.get("qdGiaoChiTieuId").value,
+        "soKeHoach": this.formData.get("soKeHoach").value,
+        "soLuong": this.formData.get("soLuong").value,
+        "tgDkTcDenNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[0]).format("YYYY-MM-DD") : null,
+        "tgDkTcTuNgay": this.formData.get("thoiGianDuKien").value ? dayjs(this.formData.get("thoiGianDuKien").value[1]).format("YYYY-MM-DD") : null,
+        "thoiGianKyHd": this.formData.get("thoiGianKyHd").value,
+        "thoiGianKyHopDongGhiChu": this.formData.get("thoiGianKyHdGhiChu").value,
+        "thoiHanGiaoNhan": this.formData.get("thoiHanGiaoNhan").value,
+        "thoiHanGiaoNhanGhiChu": this.formData.get("thoiHanGiaoNhanGhiChu").value,
+        "thoiHanThanhToan": this.formData.get("thoiHanThanhToan").value,
+        "thoiHanThanhToanGhiChu": this.formData.get("thoiHanThanhToanGhiChu").value,
+        "thongBaoKhBdg": this.formData.get("thongBaoKhBdg").value,
+        "tieuChuanChatLuong": this.formData.get("tieuChuanChatLuong").value,
+        "trangThai": null,
+        "trichYeu": this.formData.get("trichYeu").value,
+        "ghiChu": this.formData.get("ghiChu").value
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
       };
       if (this.idInput > 0) {
         let res = await this.deXuatKeHoachBanDauGiaService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
+<<<<<<< HEAD
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+=======
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS,
+            )
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -543,6 +597,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -581,6 +637,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.khBanDauGia = res.data;
+          console.log(res.data);
           this.initForm();
           const ddGiaoNhans = res.data?.diaDiemGiaoNhanList;
           ddGiaoNhans.forEach((ddgn) => {
@@ -664,24 +721,46 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
+          const id = await this.save(true);
           let body = {
-            id: this.formData.get('id').value,
-            trangThaiId: '',
+            id: id,
+            trangThaiId: this.globals.prop.LANH_DAO_DUYET,
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
               body.trangThaiId = '01';
               break;
+<<<<<<< HEAD
             }
             case '01': {
               body.trangThaiId = '09';
+=======
+<<<<<<< HEAD
+            }
+            case '01': {
+              body.trangThaiId = '02';
+              break;
+            }
+            case '09': {
+=======
+            case '01':
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
+              body.trangThaiId = '02';
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
               break;
             }
             case '09': {
               body.trangThaiId = '02';
             }
           }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+          console.log(body);
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
+
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -719,8 +798,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
+<<<<<<< HEAD
+            trangThaiId: this.globals.prop.TU_CHOI,
+          };
+
+          switch (this.khBanDauGia.trangThai) {
+            case '01': {
+              body.trangThaiId = '03';
+              break;
+            }
+            case '09': {
+              body.trangThaiId = '12';
+              break;
+            }
+          }
+=======
             trangThai: '02',
           };
+<<<<<<< HEAD
           switch (this.khBanDauGia.trangThai) {
             case '01': {
               body.trangThai = '03';
@@ -731,6 +826,22 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               break;
             }
           }
+=======
+          // switch (this.khBanDauGia.trangThai) {
+          //   case '01': {
+          //     body.trangThai = '03';
+          //     break;
+          //   }
+          //   case '09': {
+          //     body.trangThai = '12';
+          //     break;
+          //   }
+          // }
+          // console.log(this.khBanDauGia.trangThai);
+          // console.log(body);
+
+>>>>>>> 4d361ab88787b6d2074b302c9f0342de220c064e
+>>>>>>> f885aa04fd0d73b365c12e3107d334fa9b8543ea
           const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
@@ -750,6 +861,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
+    console.log(trangThai);
     switch (trangThai) {
       case '00': {
         this.titleStatus = 'Dự thảo';
