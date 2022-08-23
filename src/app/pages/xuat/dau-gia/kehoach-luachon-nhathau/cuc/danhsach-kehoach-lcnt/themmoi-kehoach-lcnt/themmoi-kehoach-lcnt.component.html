@@ -28,7 +28,7 @@
         <button
           *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || khBanDauGia.trangThai == '12')"
           type="
-          button" class="btn btn-main" (click)="save(false)">
+          button" class="btn btn-main" (click)="save(false)" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -45,8 +45,9 @@
             <span *ngIf="!khBanDauGia.id" class="du-thao-va-lanh-dao-duyet">
               Dự Thảo
             </span>
-            <span *ngIf="khBanDauGia.id"
-              [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{khBanDauGia.tenTrangThai}}</span>
+            <!-- <span *ngIf="khBanDauGia.id"
+              [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{khBanDauGia.tenTrangThai}}</span> -->
+            <span *ngIf="khBanDauGia.id" [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span>
             <span>Đề xuất kế hoạch bán đấu giá</span>
           </div>
           <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
@@ -112,6 +113,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
+
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
@@ -125,18 +127,24 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
+
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Quyết định giao chỉ tiêu kế hoạch năm </nz-form-label>
+
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="qdGiaoCTError">
+
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
                       <input class="search__input" [readonly]="true" nz-input readonly="true"
                         formControlName="qdGiaoChiTieuNam" />
                     </nz-input-group>
+
                     <ng-template #qdGiaoCTError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                     </ng-template>
+
                   </nz-form-control>
+
                 </nz-form-item>
               </div>
             </div>

@@ -132,8 +132,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
       maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      // pageNumber: this.page,
+      // pageSize: this.pageSize + 10,
+      page: this.page,
+      pageLimit: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

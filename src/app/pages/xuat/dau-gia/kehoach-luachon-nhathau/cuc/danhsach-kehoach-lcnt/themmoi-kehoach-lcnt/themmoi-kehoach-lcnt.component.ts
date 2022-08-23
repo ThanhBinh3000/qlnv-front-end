@@ -6,7 +6,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -90,6 +90,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   ) {
   }
   async ngOnInit() {
+
+    console.log(this.khBanDauGia);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maKeHoach = '/' + this.userInfo.MA_TR;
@@ -114,6 +116,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm() {
+    console.log(this.khBanDauGia);
     this.formData = this.fb.group({
       id: [
         {
@@ -136,7 +139,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.soKeHoach : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       trichYeu: [
         {
@@ -145,7 +148,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       ngayLapKeHoach: [
         {
@@ -154,7 +157,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       ngayKy: [
         {
@@ -173,8 +176,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-
-        [],
+        [Validators.required],
       ],
       qdGiaoChiTieuId: [
         {
@@ -193,8 +195,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-
-        [],
+        [Validators.required],
       ],
       tenQdGiaoChiTieu: [
         {
@@ -238,7 +239,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         {
           value: this.khBanDauGia
             ? this.khBanDauGia.thoiGianDuKien
-            : null,
+            : [],
           disabled: this.isView ? true : false
         },
         [],
@@ -365,7 +366,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
-    if (this.idInput == 0 && !this.isView) {
+    if (this.idInput >= 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
         nzContent: DialogQuyetDinhGiaoChiTieuComponent,
@@ -507,6 +508,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           this.phanLoTaiSanList = [...this.phanLoTaiSanList, phanLoTaiSan]
         });
       })
+
       let body = {
         "capDv": null,
         "diaDiemGiaoNhanList": this.diaDiemGiaoNhanList,
@@ -518,8 +520,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         "loaiVatTuHangHoa": null,
         "maDv": null,
         "namKeHoach": this.formData.get("namKeHoach").value,
-        "ngayKy": this.formData.get("ngayKy").value ? dayjs(this.formData.get("ngayKy").value[0]).format("YYYY-MM-DD") : null,
-        "ngayLapKeHoach": this.formData.get("ngayLapKeHoach").value ? dayjs(this.formData.get("ngayLapKeHoach").value[0]).format("YYYY-MM-DD") : null,
+        "ngayKy": this.formData.get("ngayKy").value ? dayjs(this.formData.get("ngayKy").value).format("YYYY-MM-DD") : null,
+        "ngayLapKeHoach": this.formData.get("ngayLapKeHoach").value ? dayjs(this.formData.get("ngayLapKeHoach").value).format("YYYY-MM-DD") : null,
         "phanLoTaiSanList": this.phanLoTaiSanList,
         "phuongThucGiaoNhan": this.formData.get("phuongThucGiaoNhan").value,
         "phuongThucThanhToan": this.formData.get("phuongThucThanhToan").value,
@@ -549,8 +551,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             this.notification.success(
               MESSAGE.SUCCESS,
               MESSAGE.UPDATE_SUCCESS,
-            );
+            )
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -563,6 +567,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -593,15 +599,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-
-
-
   async loadDeXuatKHBanDauGia(id: number) {
     await this.deXuatKeHoachBanDauGiaService
       .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.khBanDauGia = res.data;
+          console.log(res.data);
           this.initForm();
           const ddGiaoNhans = res.data?.diaDiemGiaoNhanList;
           ddGiaoNhans.forEach(ddgn => {
@@ -683,10 +687,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
+          const id = await this.save(true);
           let body = {
-            id: this.formData.get('id').value,
-            trangThaiId: '',
+            id: id,
+            trangThaiId: this.globals.prop.LANH_DAO_DUYET,
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
@@ -696,13 +700,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               break;
             }
             case '01': {
-              body.trangThaiId = '09';
+              body.trangThaiId = '02';
               break;
             }
             case '09': {
               body.trangThaiId = '02';
             }
           }
+
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -740,15 +745,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '',
+            trangThaiId: this.globals.prop.TU_CHOI,
           };
+
           switch (this.khBanDauGia.trangThai) {
             case '01': {
-              body.trangThai = '03';
+              body.trangThaiId = '03';
               break;
             }
             case '09': {
-              body.trangThai = '12';
+              body.trangThaiId = '12';
               break;
             }
           }
@@ -771,6 +777,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
+    console.log(trangThai);
     switch (trangThai) {
       case '00': {
         this.titleStatus = 'Dự thảo';
