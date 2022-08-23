@@ -671,8 +671,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
-            case '03':
-            case '00': {
               body.trangThaiId = '01';
               break;
             }
@@ -721,7 +719,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '',
+            trangThai: '02',
           };
           switch (this.khBanDauGia.trangThai) {
             case '01': {
@@ -733,9 +731,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               break;
             }
           }
-          const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(
-            body,
-          );
+          const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();
