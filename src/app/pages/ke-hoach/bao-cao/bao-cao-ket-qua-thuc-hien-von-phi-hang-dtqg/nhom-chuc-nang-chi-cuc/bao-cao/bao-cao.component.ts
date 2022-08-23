@@ -833,7 +833,7 @@ export class BaoCaoComponent implements OnInit {
 			this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
 			this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
 		}
-		this.closeTab();
+		// this.closeTab();
 	}
 
 	// getStatusButtonOk() {
