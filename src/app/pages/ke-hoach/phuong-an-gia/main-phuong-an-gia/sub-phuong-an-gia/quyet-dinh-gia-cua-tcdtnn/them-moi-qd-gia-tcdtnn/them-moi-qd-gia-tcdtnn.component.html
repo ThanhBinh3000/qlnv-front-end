@@ -63,13 +63,13 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="5">
+                <div nz-col [nzSpan]="10">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số tờ trình đề xuất
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open">
-                                <input nz-input formControlName="soTtrinh" [readonly]="true" />
+                                <input nz-input formControlName="soToTrinh" [readonly]="true" />
 
                             </nz-input-group>
                             <ng-template #error let-control>
@@ -79,7 +79,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="5">
+                <!-- <div nz-col [nzSpan]="5">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số quyết định giá của TCDTNN
                         </nz-form-label>
@@ -93,7 +93,7 @@
                             </ng-template>
                         </nz-form-control>
                     </nz-form-item>
-                </div>
+                </div> -->
                 <div nz-col [nzSpan]="3">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Ngày ký
@@ -113,7 +113,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Ngày hiệu lực
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy">
+                            <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy">
                             </nz-date-picker>
                             <ng-template #error let-control>
                                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -169,7 +169,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true">Giá tối đa/tối thiểu chưa VAT của BTC
+                        <nz-form-label [nzNoColon]="true">Giá tối đa/tối thiểu chưa VAT của BTC (đồng/kg)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <input nz-input formControlName="gia" [readonly]="true" />
@@ -178,7 +178,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true">Giá tối đa/ tối thiển gồm VAT của BTC
+                        <nz-form-label [nzNoColon]="true">Giá tối đa/ tối thiển gồm VAT của BTC (đồng/kg)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <input nz-input formControlName="giaVat" [readonly]="true" />
@@ -223,4 +223,18 @@
             </tbody>
         </nz-table>
     </nz-card>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="20">
+            <div nz-col nzSpan="24">
+                <nz-form-item class="form-item">
+                    <nz-form-label>
+                        Ghi chú
+                    </nz-form-label>
+                    <nz-form-control>
+                        <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
 </div>
