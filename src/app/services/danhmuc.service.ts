@@ -32,6 +32,11 @@ export class DanhMucService extends BaseService {
     return this.httpClient.post<any>(url, null).toPromise();
   }
 
+  loadDanhMucHangChiTiet(id: string): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/chi-tiet/${id}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   loaiVatTuHangHoaGetAll(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/LOAI_HHOA`;
     return this.httpClient.get<any>(url).toPromise();

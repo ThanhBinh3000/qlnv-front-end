@@ -42,7 +42,7 @@
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                 </ng-container>
-                <ng-container *ngIf="control.hasError('badValueFound')">hahaha
+                <ng-container *ngIf="control.hasError('uniqueError')">hahaha
                 </ng-container>
               </ng-template>
             </nz-form-control>
