@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { BaseService } from "./base.service";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BaseService } from './base.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class DanhMucService extends BaseService {
-  gateway: string = "/qlnv-category";
+  gateway: string = '/qlnv-category'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, "dm-hang", "/qlnv-category");
+    super(httpClient, 'dm-hang', '/qlnv-category');
   }
 
   loadDanhMucHangHoa() {
@@ -81,7 +81,6 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
-
   loadDanhMucHinhThucBaoQuan(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-hthuc-bquan/findList`;
     return this.httpClient.post<any>(url, body).toPromise();
