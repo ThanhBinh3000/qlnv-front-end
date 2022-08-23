@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import dayjs from "dayjs";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -10,7 +10,7 @@ import { UserLogin } from "src/app/models/userlogin";
 import { HelperService } from "src/app/services/helper.service";
 import { UserService } from "src/app/services/user.service";
 import { Globals } from "src/app/shared/globals";
-import { STATUS } from 'src/app/constants/status';
+import { STATUS } from "src/app/constants/status";
 import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { TongHopPhuongAnGiaService } from "src/app/services/tong-hop-phuong-an-gia.service";
@@ -51,6 +51,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   luanPhienList: any[] = [];
   maQd: string;
   dataTable: any[] = [];
+  isErrorUnique = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -68,7 +69,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       {
         id: [],
         namKeHoach: [dayjs().get("year"), [Validators.required]],
-        soQd: [, [Validators.required]],
+        soQd: [, [Validators.required, this.usernameValidator.bind(this)]],
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         soToTrinh: [null],
@@ -230,13 +231,11 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value);
       this.spinner.hide();
       return;
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
-    console.log(this.formData.value);
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -252,9 +251,10 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      this.isErrorUnique=true;
+      this.helperService.markFormGroupTouched(this.formData);
     }
     this.spinner.hide();
-    console.log(this.formData);
   }
 
   async loadDsLoaiGia() {
@@ -282,41 +282,46 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
   }
 
   async onChangeSoToTrinh(event) {
-    let curToTrinh=this.dsToTrinhDeXuat.find(item=> item.id == event)
-    //loai hh
-    this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
+    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.id == event);
+    if (curToTrinh) {
+      //loai hh
+      this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
-    //chung loai hang hoa
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
-    this.dsCloaiVthh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.dsCloaiVthh = res.data;
+      //chung loai hang hoa
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
+      this.dsCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.dsCloaiVthh = res.data;
+          console.log(this.dsCloaiVthh);
+        }
       }
-    }
-    this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
+      this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
 
-    //loai gia
-    this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
+      //loai gia
+      this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
 
-    //tieu chuan chat luong
-    res = await this.danhMucService.danhSachTieuChuanTheoMaHh(curToTrinh.loaiVthh);
-    this.dsTieuChuanCl = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.dsTieuChuanCl = res.data;
+      //tieu chuan chat luong
+      res = await this.danhMucService.danhSachTieuChuanTheoMaHh(curToTrinh.loaiVthh);
+      this.dsTieuChuanCl = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          let tmp = [];
+          tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
+          this.dsTieuChuanCl = tmp;
+        }
       }
-    }
-    this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
+      this.formData.controls["tieuChuanCl"].setValue(this.dsTieuChuanCl[0].id);
 
-    //thong tin gia
-    this.arrThongTinGia = [];
-    res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
-    if (res.msg == MESSAGE.SUCCESS && res.data) {
-      this.arrThongTinGia = res.data;
-      this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
-    } else {
+      //thong tin gia
       this.arrThongTinGia = [];
+      res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        this.arrThongTinGia = res.data;
+        this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
+      } else {
+        this.arrThongTinGia = [];
+      }
     }
   }
 
@@ -333,6 +338,20 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  private usernameValidator(c: AbstractControl): { [key: string]: boolean } {
+
+    // check a property of c, the Control this validator is attached to
+    if (this.isErrorUnique) {
+      return { "badValueFound": true };
+    }
+    return null;
+
+    // if (c.value === "bad value") {
+    //   // if a bad username is detected, return an error
+    //   return { 'badValueFound': true };
+    // }
   }
 }
 
