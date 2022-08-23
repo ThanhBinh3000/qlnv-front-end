@@ -503,10 +503,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
-    console.log(this.fileDinhKem);
-    if (this.formData) {
+    if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData.value);
+      console.log(this.formData);
       return;
     }
     if (this.listOfData.length == 0) {

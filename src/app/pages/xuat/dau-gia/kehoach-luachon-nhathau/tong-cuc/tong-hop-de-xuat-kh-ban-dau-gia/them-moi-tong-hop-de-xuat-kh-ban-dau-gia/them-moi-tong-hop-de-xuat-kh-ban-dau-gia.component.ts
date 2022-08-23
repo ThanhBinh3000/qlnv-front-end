@@ -194,6 +194,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
 
   async tongHopDeXuatTuCuc() {
     this.spinner.show();
+    this.listOfData = [];
     let body = {
       ngayKyTuNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[1]).format('YYYY-MM-DD') : null,
@@ -206,9 +207,25 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.isTongHop = true;
-      this.listOfData = data.content;
+      if (data.content && data.content.length > 0) {
+        data.content.forEach((item) => {
+          let itemAdd = {
+            "tenDonVi": item.tenDonVi,
+            "soKeHoach": item.soKeHoach,
+            "bhDgKeHoachId": item.id,
+            "bhTongHopDeXuatId": 0,
+            "giaKhoiDiem": item.tongGiaKhoiDiem,
+            "id": 0,
+            "khoanTienDatTruoc": item.tongKhoanTienDatTruoc,
+            "maDonVi": item.maDv,
+            "ngayKy": item.ngayKy,
+            "soLuongDvTaiSan": item.tongSoLuongDonViTaiSan,
+            "trichYeu": item.trichYeu,
+          }
+          this.listOfData.push(itemAdd);
+        });
+      }
     } else {
-      this.listOfData = [];
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -407,6 +424,15 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    if (this.formData.get("ngayKyDeXuat").value) {
+      body.ngayKyTuNgay = dayjs(this.formData.get("ngayKyDeXuat").value[0]).format("YYYY-MM-DD");
+      body.ngayKyDenNgay = dayjs(this.formData.get("ngayKyDeXuat").value[1]).format("YYYY-MM-DD");
+    }
+    if (this.formData.get("tgDuKienTcbdg").value) {
+      body.tgDuKienTcbdgTuNgay = dayjs(this.formData.get("tgDuKienTcbdg").value[0]).format("YYYY-MM-DD");
+      body.tgDuKienTcbdgDenNgay = dayjs(this.formData.get("tgDuKienTcbdg").value[1]).format("YYYY-MM-DD");
+    }
+    body.chiTietList = this.listOfData;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.tongHopDeXuatKHBanDauGiaService.sua(body);
@@ -485,7 +511,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detail = res.data;
           this.initForm(res.data);
-          this.tongHopDeXuatTuCuc();
+          this.listOfData = this.detail.chiTietList;
         }
       })
       .catch((e) => {

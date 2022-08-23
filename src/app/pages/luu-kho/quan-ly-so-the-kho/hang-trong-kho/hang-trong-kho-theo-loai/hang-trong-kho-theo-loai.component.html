@@ -39,7 +39,10 @@
               <nz-form-item nz-col nzSpan="5" class="form-item">
                 <nz-form-label nzFor="cuc">Cục</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idCuc" id="cuc" (ngModelChange)="onChangeCuc($event)" [nzDisabled]="userService.isChiCuc()">
+                  <nz-input-group *ngIf="!userService.isTongCuc()" id="cuc">
+                    <input type="text" nz-input formControlName="idCuc" />
+                  </nz-input-group>
+                  <nz-select *ngIf="userService.isTongCuc()" formControlName="idCuc" id="cuc" (ngModelChange)="onChangeCuc($event)">
                     <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
                     </nz-option>
@@ -49,7 +52,11 @@
               <nz-form-item nz-col nzSpan="5" class="form-item">
                 <nz-form-label nzFor="chi-cuc">Chi cục</nz-form-label>
                 <nz-form-control>
-                  <nz-select formControlName="idChiCuc" id="chi-cuc" (ngModelChange)="onChangeChiCuc($event)">
+                  <nz-input-group *ngIf="userService.isChiCuc()" id="chicuc">
+                    <input type="text" nz-input formControlName="idChiCuc" />
+                  </nz-input-group>
+                  <nz-select *ngIf="!userService.isChiCuc()" formControlName="idChiCuc" id="chi-cuc"
+                    (ngModelChange)="onChangeChiCuc($event)">
                     <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsChiCuc">
                     </nz-option>
@@ -127,23 +134,20 @@
             [nzShowPagination]="false">
             <thead>
               <tr>
-                <th class="text-center">Tên đơn vị</th>
-                <th style="width: 10%;">Loại HH</th>
-                <th style="width: 10%;">Chủng loại HH</th>
-                <th style="width: 10%;">Tồn kho đầu kỳ</th>
-                <th style="width: 10%;">Nhập trong kỳ</th>
-                <th style="width: 10%;">Xuất trong kỳ</th>
-                <th style="width: 10%;">Tồn kho cuối kỳ</th>
-                <th style="width: 10%;">Đơn vị tính</th>
-                <th style="width: 10%;">Hành động</th>
+                <th class="text-center ">Tên đơn vị</th>
+                <th style="width: 14%;">Loại HH</th>
+                <th style="width: 14%;">Chủng loại HH</th>
+                <th style="width: 8%;">Tồn kho đầu kỳ</th>
+                <th style="width: 8%;">Nhập trong kỳ</th>
+                <th style="width: 8%;">Xuất trong kỳ</th>
+                <th style="width: 8%;">Tồn kho cuối kỳ</th>
+                <th style="width: 5%;">Đơn vị tính</th>
+                <th style="width: 5%;">Hành động</th>
               </tr>
               <tr>
                 <th class="text-center" width="350px">
                   <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.donVi"
-                      [nzAutocomplete]="donViAuto" (input)="onChangeAutoComplete($event)" />
-                    <nz-autocomplete #donViAuto [nzDataSource]="dsChiCucDataSource">
-                    </nz-autocomplete>
+                    <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="searchInTable.donVi" />
                   </nz-input-group>
                 </th>
                 <th>
@@ -177,6 +181,7 @@
                   </nz-input-group>
                 </th>
                 <th></th>
+                <th></th>
                 <ng-template #suffixIconSearch>
                   <i nz-icon nzType="search"></i>
                 </ng-template>
@@ -184,37 +189,23 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let data of expandTable.data, let i = index">
-                <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+                <ng-container *ngFor="let item of mapOfExpandedData[data.maDvi], let j = index">
                   <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                    <td [nzIndentSize]="item.level! * 20"
+                    <td class="overflow-hidden" [nzIndentSize]="item.level! * 20"
                       [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
                       [(nzExpand)]="item.expand"
-                      (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.id], item, $event)">
-                      {{ item.tenDvi ?item.tenDvi : 'null'}}
-                      </td>
-                      <td>
-                        {{ item.loaiHH ?item.loaiHH : 'null' }}
+                      (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.maDvi], item, $event, 'maDvi')">
+                      {{ item.tenDvi }}
                     </td>
-                    <td>
-                      {{ item.chungLoaiHH?item.chungLoaiHH : 'null' }}
-                    </td>
-                    <td>
-                      {{ item.tonKhoDauKy ?item.tonKhoDauKy : 'null' }}
-                    </td>
-                    <td>
-                      {{ item.nhapTrongKy ?item.nhapTrongKy : 'null' }}
-                    </td>
-                    <td>
-                      {{ item.xuatTrongKy?item.xuatTrongKy : 'null' }}
-                    </td>
-                    <td>
-                      {{ item.tonKhoCuoiKy ?item.tonKhoCuoiKy : 'null' }}
-                    </td>
-                    <td>
-                      {{ item.donViTinh ?item.donViTinh : 'null' }}
-                    </td>
+                    <td>{{ item.loaiHH }}</td>
+                    <td>{{ item.chungLoaiHH}}</td>
+                    <td style="text-align: center;">{{ item.tonKhoDauKy }}</td>
+                    <td style="text-align: center;">{{ item.nhapTrongKy }}</td>
+                    <td style="text-align: center;">{{ item.xuatTrongKy}}</td>
+                    <td style="text-align: center;">{{ item.tonKhoCuoiKy }}</td>
+                    <td style="text-align: center;">{{ item.donViTinh }}</td>
                     <td style="text-align: center;">
-                      <a (click)="viewDetail(data)">
+                      <a (click)="viewDetail(data)" *ngIf="item.loaiHH && item.chungLoaiHH">
                         <i class="fa fa-eye"></i>
                       </a>
                     </td>
@@ -222,18 +213,6 @@
                 </ng-container>
               </ng-container>
             </tbody>
-            <tfoot>
-              <tr>
-                <td class="text-center" style="width: 35%;"></td>
-                <td style="width: 10%;"></td>
-                <td style="width: 10%;"></td>
-                <td style="width: 10%;"></td>
-                <td style="width: 10%;"></td>
-                <td style="width: 10%;"></td>
-                <td style="width: 10%;"></td>
-                <td width=""></td>
-              </tr>
-            </tfoot>
           </nz-table>
           <div class="tab-content tab-menu" id="myTabContent">
             <div class="tab-pane fade show active justify-content-between">

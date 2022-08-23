@@ -206,6 +206,26 @@ textarea.ant-input {
   line-height: 18px;
 }
 
+td,
+th {
+  .ant-input-group {
+    input.input-file {
+      left: 0;
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      top: -2px;
+    }
+
+    i.icon.htvbdh_tcdt_tep {
+      height: auto !important;
+      padding: 2px 0 0 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+    }
+  }
+}
 
 .ant-card-body {
   padding: 0 10px 10px 10px;
@@ -2843,6 +2863,7 @@ h3 {
   }
 }
 
+.ant-table .ant-table-thead>tr>th,
 .ant-table .ant-table-tbody>tr>td {
 
   .icontd,
@@ -4616,6 +4637,13 @@ th {
   .btn.btn-sub {
     margin-right: 10px;
 
+    &.xanh-nhat {
+      background-color: #EAF3F3;
+      color: #4E5484;
+      border-color: #4E5484;
+
+    }
+
     &.xanh {
       background-color: #4E5484;
       color: #fff;
@@ -4623,9 +4651,9 @@ th {
 
     &.do,
     &.btn-xoa {
-      background-color: rgba(224, 6, 6, 0.2);
-      color: #e00606;
-      border: 1px solid #e00606 !important;
+      background-color: #FFF3F3;
+      color: #FF4D4E !important;
+      border-color: #FF4D4E !important;
     }
   }
 }

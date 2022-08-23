@@ -1,29 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuKQLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThongTinPhuLucBangGiaHopDongComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
+import dayjs from 'dayjs';
 
 interface DonviLienQuanModel {
   id: number;
@@ -73,7 +67,7 @@ export class ThongTinComponent implements OnInit {
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
 
-  formDetailHopDong: FormGroup;
+  formData: FormGroup;
   maHopDongSuffix: string = '';
   dvLQuan: DonviLienQuanModel = {
     id: 0,
@@ -90,24 +84,20 @@ export class ThongTinComponent implements OnInit {
   diaDiemNhapListCuc = [];
   donGiaCore: number = 0;
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     public userService: UserService,
     public globals: Globals,
     private modal: NzModalService,
-    private thongTinHopDong: ThongTinHopDongService,
-    private routerActive: ActivatedRoute,
-    private donViService: DonviService,
     private notification: NzNotificationService,
-    private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
     private dauThauGoiThauService: dauThauGoiThauService,
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
-    private _modalService: NzModalService
+    private _modalService: NzModalService,
+    private hopDongXuatHangService: HopDongXuatHangService
   ) {
-    this.formDetailHopDong = this.fb.group(
+    this.formData = this.fb.group(
       {
         canCu: [null],
         idGoiThau: [null],
@@ -136,17 +126,18 @@ export class ThongTinComponent implements OnInit {
         tenNguoiDdien: [null],
         chucVu: [null],
         idNthau: [null],
-        ghiChu: [null]
+        ghiChu: [null],
+        trangThai: ['00']
       }
     );
-    this.formDetailHopDong.controls['donGiaVat'].valueChanges.subscribe(value => {
+    this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
       if (value) {
         this.donGiaCore = value;
-        const gtriHdSauVat = this.formDetailHopDong.controls.donGiaVat.value * this.formDetailHopDong.controls.soLuong.value;
-        this.formDetailHopDong.controls['gtriHdSauVat'].setValue(gtriHdSauVat);
+        const gtriHdSauVat = this.formData.controls.donGiaVat.value * this.formData.controls.soLuong.value;
+        this.formData.controls['gtriHdSauVat'].setValue(gtriHdSauVat);
       } else {
         this.donGiaCore = 0;
-        this.formDetailHopDong.controls['gtriHdSauVat'].setValue(0);
+        this.formData.controls['gtriHdSauVat'].setValue(0);
       }
     });
   }
@@ -159,15 +150,12 @@ export class ThongTinComponent implements OnInit {
     const yearNow = new Date().getUTCFullYear();
     this.maHopDongSuffix = `/${yearNow}/HĐMB`;
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
-    this.detail.trangThai = "00";
     this.userInfo = this.userService.getUserLogin();
-    this.formDetailHopDong.patchValue({
+    this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null
     })
     await Promise.all([
-      this.loadDonVi(),
-      this.loaiHopDongGetAll(),
       this.loaiDonviLienquanAll()
     ]);
     await this.loadChiTiet(this.id);
@@ -176,7 +164,7 @@ export class ThongTinComponent implements OnInit {
   }
 
   validateGhiChu() {
-    if (this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu != '') {
+    if (this.formData.value.ghiChu && this.formData.value.ghiChu != '') {
       this.errorGhiChu = false;
     }
     else {
@@ -186,11 +174,11 @@ export class ThongTinComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.thongTinHopDong.getDetail(id);
+      let res = await this.hopDongXuatHangService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
-          this.formDetailHopDong.patchValue({
+          this.formData.patchValue({
             canCu: this.detail.canCu ?? null,
             idGoiThau: this.detail.idGoiThau ?? null,
             maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
@@ -218,7 +206,7 @@ export class ThongTinComponent implements OnInit {
             ghiChu: this.detail.ghiChu ?? null
           })
           if (this.userService.isTongCuc) {
-            this.formDetailHopDong.patchValue({
+            this.formData.patchValue({
               dviTinh: this.detail.dviTinh ?? null
             })
           }
@@ -226,14 +214,6 @@ export class ThongTinComponent implements OnInit {
           await this.getListGoiThau(this.detail.id);
         }
       }
-    }
-  }
-
-  async loaiHopDongGetAll() {
-    this.listLoaiHopDong = [];
-    let res = await this.danhMucService.loaiHopDongGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHopDong = res.data;
     }
   }
 
@@ -248,100 +228,65 @@ export class ThongTinComponent implements OnInit {
     }
   }
 
-  async loadDonVi() {
-    const res = await this.donViService.layDonViCon();
-    this.optionsDonVi = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          ...res.data[i],
-          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-        };
-        this.optionsDonVi.push(item);
-      }
-      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  onInputDonVi(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-    } else {
-      this.optionsDonViShow = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  async selectDonVi(donVi) {
-    this.detail.tenDvi = donVi.tenDvi;
-    this.detailChuDauTu.ten = this.detail.tenDvi;
-    this.detail.maDvi = donVi.maDvi;
-    this.detailChuDauTu.ma = this.detail.maDvi;
-  }
-
   async save(isOther: boolean) {
-    let body = this.formDetailHopDong.value;
+    let body = this.formData.value;
     console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
 
 
-    // this.spinner.show();
-    // try {
-    //   if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
-    //     this.errorGhiChu = true;
-    //   }
-    //   else {
-    //     let body = this.formDetailHopDong.value;
-    //     body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
-    //     body.fileDinhKems = this.fileDinhKem,
-    //       body.tuNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
-    //       body.denNgayHluc = this.formDetailHopDong.value.ngayHieuLuc && this.formDetailHopDong.value.ngayHieuLuc.length > 0 ? dayjs(this.formDetailHopDong.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
-    //       delete body.ngayHieuLuc;
-    //     delete body.maHdong;
-    //     delete body.tenCloaiVthh;
-    //     delete body.tenVthh;
+    this.spinner.show();
+    try {
+      if (!this.formData.value.ghiChu && this.formData.value.ghiChu == '') {
+        this.errorGhiChu = true;
+      }
+      else {
+        let body = this.formData.value;
+        body.soHd = `${this.formData.value.maHdong}${this.maHopDongSuffix}`;
+        body.fileDinhKems = this.fileDinhKem,
+          body.tuNgayHluc = this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0 ? dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
+          body.denNgayHluc = this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0 ? dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,
+          delete body.ngayHieuLuc;
+        delete body.maHdong;
+        delete body.tenCloaiVthh;
+        delete body.tenVthh;
 
-    //     body.idNthau = `${this.dvLQuan.id}`;
-    //     body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
-    //     if (this.id > 0) {
-    //       body.id = this.id;
-    //       let res = await this.thongTinHopDong.update(
-    //         body,
-    //       );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         if (!isOther) {
-    //           this.notification.success(
-    //             MESSAGE.SUCCESS,
-    //             MESSAGE.UPDATE_SUCCESS,
-    //           );
-    //           this.back();
-    //         }
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //     } else {
-    //       let res = await this.thongTinHopDong.create(
-    //         body,
-    //       );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         if (!isOther) {
-    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-    //           this.back();
-    //         }
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //     }
-    //   }
-    //   this.spinner.hide();
-    // } catch (e) {
-    //   console.log('error: ', e);
-    //   this.spinner.hide();
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // }
+        body.idNthau = `${this.dvLQuan.id}`;
+        body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
+        if (this.id > 0) {
+          body.id = this.id;
+          let res = await this.hopDongXuatHangService.update(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (!isOther) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.UPDATE_SUCCESS,
+              );
+              this.back();
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } else {
+          let res = await this.hopDongXuatHangService.create(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (!isOther) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.back();
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async setTitle() {
@@ -403,7 +348,7 @@ export class ThongTinComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formDetailHopDong.patchValue({
+        this.formData.patchValue({
           canCu: data.soQd ?? null,
           namKh: +data.namKhoach ?? null,
           idGoiThau: null,
@@ -427,7 +372,7 @@ export class ThongTinComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
-        this.formDetailHopDong.patchValue({
+        this.formData.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
           tenVthh: data.tenVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
@@ -442,7 +387,7 @@ export class ThongTinComponent implements OnInit {
           delete element.id
         });
         if (this.userService.isTongCuc()) {
-          this.formDetailHopDong.patchValue({
+          this.formData.patchValue({
             dviTinh: data.dviTinh ?? null
           })
         }
@@ -515,7 +460,7 @@ export class ThongTinComponent implements OnInit {
           id: this.detail.id,
           trangThai: '02',
         }
-        let res = await this.thongTinHopDong.approve(
+        let res = await this.hopDongXuatHangService.approve(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
