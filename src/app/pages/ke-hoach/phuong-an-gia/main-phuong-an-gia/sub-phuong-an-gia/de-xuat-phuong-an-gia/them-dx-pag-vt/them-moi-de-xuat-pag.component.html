@@ -144,7 +144,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group >
-                <nz-select formControlName="qdCtKhNam" [nzDisabled]="isView" nzAllowClear="true">
+                <nz-select  formControlName="qdCtKhNam" [nzDisabled]="isView" nzAllowClear="true">
                   <nz-option *ngFor="let p of dsQdPdKhlcnt" [nzValue]="p.soQd" [nzLabel]="p.soQd">
                   </nz-option>
                   <ng-template #error let-control>
@@ -325,6 +325,7 @@
           </tbody>
         </nz-table>
         <span class="sub-title">PHƯƠNG PHÁP XÁC ĐỊNH GIÁ</span>
+        <br>
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mb-10">
           <div nz-row [nzGutter]="16">
             <div nz-col [nzSpan]="4">
@@ -342,94 +343,113 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="10" *ngIf="formData.value.maPphapXdg == 'XDG01'">
+              <nz-form-item class="form-item">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-radio-group formControlName="loaiHangXdg">
+                    <label nz-radio (select)="item[0]" *ngFor="let item of dsLoaiHangXdg, let idx = index"
+                           [nzValue]="item.ma">{{item.giaTri}}</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
           </div>
         </form>
-        <br>
-        <nz-table #editRowTable [nzData]="pagPpXacDinhGias" [nzFrontPagination]="false" [nzShowPagination]="false">
-          <thead>
-          <tr>
-            <th class="text-center" style="width: 4%;">STT</th>
-            <th style="width: 42%;">Chủng loại hàng hóa</th>
-            <th style="width: 16%;">Giá vốn nhập khẩu (đồng/đơn vị)</th>
-            <th style="width: 16%;">Chi phí chung (đồng/đơn vị)</th>
-            <th style="width: 16%;">Tổng chi phí (đồng/đơn vị)</th>
-            <th style="width: 6%;"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td></td>
-            <td>
-              <nz-select [(ngModel)]="rowItemPpxdg.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                  </ng-container>
-                </ng-template>
-              </nz-select>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number  [(ngModel)]="rowItemPpxdg.giaVonNk" [nzSize]="'small'" nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number  [(ngModel)]="rowItemPpxdg.chiPhiChung" [nzSize]="'small'" nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number disabled name="giaDn" [(ngModel)]="rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung" [nzSize]="'small'" nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td class="text-left">
-              <a >
-                <i class="icon htvbdh_dau-cong" (click)="themDataTable('ppxdg')"></i>
-              </a>
-              <a >
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-          </tr>
-          <tr *ngFor="let data of pagPpXacDinhGias; let idx = index">
-            <ng-container>
-              <td>{{ idx + 1 }}</td>
-              <td>{{data.cloaiVthh}}</td>
-              <td>{{ data.giaVonNk }}</td>
-              <td>{{ data.chiPhiChung }}</td>
-              <td>{{ data.tongChiPhi }}</td>
-              <td style="text-align: center;">
-                <a >
-                  <i class=" fa fa-pencil"></i>
-                </a>
-                <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
-                  <i class="icon  htvbdh_nhap-lai1 "></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td></td>
-              <td>
-              </td>
-              <td>
-              </td>
+          <div nz-row [nzGutter]="20" *ngIf="formData.value.maPphapXdg == 'XDG01'">
+            <nz-table #editRowTable [nzData]="pagPpXacDinhGias" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <thead>
+              <tr>
+                <th class="text-center" style="width: 4%;">STT</th>
+                <th style="width: 35%;">Chủng loại hàng hóa</th>
+                <th style="width: 15%;">Giá vốn nhập khẩu (đồng/đơn vị)</th>
+                <th style="width: 15%;">Chi phí chung (đồng/đơn vị)</th>
+                <th style="width: 15%;" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">Chi phân bổ (đồng/đơn vị)</th>
+                <th style="width: 15%;">Tổng chi phí (đồng/đơn vị)</th>
+                <th style="width: 5%;">Hành động</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <nz-select [(ngModel)]="rowItemPpxdg.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                    </nz-option>
+                    <ng-template #error let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                      </ng-container>
+                    </ng-template>
+                  </nz-select>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number  [(ngModel)]="rowItemPpxdg.giaVonNk" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number  [(ngModel)]="rowItemPpxdg.chiPhiChung" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
 
-              <td class="text-center">
-                <a  class="save">
-                  <i class="fa fa-save"></i>
-                </a>
-                <a >
-                  <i class="fa fa-ban do"></i> </a>
+                <td *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">
+                  <nz-input-group >
+                    <nz-input-number  name="giaDn" [(ngModel)]="rowItemPpxdg.chiPhiPhanBo" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                <nz-input-group>
+                  <nz-input-number disabled name="giaDn" [(ngModel)]="rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung + rowItemPpxdg.chiPhiPhanBo" [nzSize]="'small'" nz-input [nzMin]="0">
+                  </nz-input-number>
+                </nz-input-group>
               </td>
-            </ng-template>
-          </tr>
-          </tbody>
-        </nz-table>
+                <td style="text-align: center;">
+                  <a >
+                    <i class="fa fa-plus" (click)="themDataTable('ppxdg')"></i>
+                  </a>
+                  <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                    <i class="icon  htvbdh_nhap-lai1 "></i>
+                  </a>
+                </td>
+              </tr>
+              <tr *ngFor="let data of pagPpXacDinhGias; let idx = index">
+                <ng-container>
+                  <td>{{ idx + 1 }}</td>
+                  <td>{{data.cloaiVthh}}</td>
+                  <td>{{ data.giaVonNk }}</td>
+                  <td>{{ data.chiPhiChung }}</td>
+                  <td>{{ data.tongChiPhi }}</td>
+                  <td style="text-align: center;">
+                    <a >
+                      <i class=" fa fa-pencil"></i>
+                    </a>
+                    <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                      <i class="icon  htvbdh_nhap-lai1 "></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                  <td></td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+
+                  <td class="text-center">
+                    <a  class="save">
+                      <i class="fa fa-save"></i>
+                    </a>
+                    <a >
+                      <i class="fa fa-ban do"></i> </a>
+                  </td>
+                </ng-template>
+              </tr>
+              </tbody>
+            </nz-table>
+          </div>
       </nz-card>
     </nz-tab>
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'">

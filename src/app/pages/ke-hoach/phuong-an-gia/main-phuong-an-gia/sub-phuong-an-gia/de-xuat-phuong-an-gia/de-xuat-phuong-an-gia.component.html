@@ -143,8 +143,8 @@
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.quyetDinhChiTieu"
-                                    (input)="filterInTable('quyetDinhChiTieu',filterTable.quyetDinhChiTieu)"
+                                    [(ngModel)]="filterTable.qdCtKhNam"
+                                    (input)="filterInTable('quyetDinhChiTieu',filterTable.qdCtKhNam)"
                                     size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo>
@@ -203,7 +203,7 @@
                         <td>{{ data.soDeXuat }}</td>
                         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.soCanCu }}</td>
+                        <td>{{ data.qdCtKhNam }}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>

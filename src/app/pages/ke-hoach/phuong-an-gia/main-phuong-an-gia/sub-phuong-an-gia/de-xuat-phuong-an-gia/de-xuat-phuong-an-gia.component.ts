@@ -71,7 +71,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     soDeXuat: '',
     ngayKy: '',
     trichYeu: '',
-    quyetDinhChiTieu: '',
+    qdCtKhNam: '',
     namKeHoach: '',
     loaiHangHoa: '',
     loaiGia: '',

@@ -32,6 +32,7 @@ export class PhuongPhapXacDinhGia {
   cloaiVthh?: string;
   giaVonNk?: number = 0;
   chiPhiChung?: number = 0;
+  chiPhiPhanBo?: number = 0;
   tongChiPhi?: number = 0;
 }
 

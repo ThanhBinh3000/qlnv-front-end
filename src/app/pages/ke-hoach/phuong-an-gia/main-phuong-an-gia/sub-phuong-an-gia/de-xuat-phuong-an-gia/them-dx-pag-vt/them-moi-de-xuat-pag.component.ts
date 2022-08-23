@@ -10,7 +10,7 @@ import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA} from "../../../../../../../constants/config";
+import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG} from "../../../../../../../constants/config";
 import { MESSAGE } from "../../../../../../../constants/message";
 import {DanhMucTieuChuanService} from "../../../../../../../services/danhMucTieuChuan.service";
 import {UploadFileService} from "../../../../../../../services/uploaFile.service";
@@ -24,6 +24,7 @@ import {
   ThongTinKhaoSatGia
 } from "../../../../../../../models/DeXuatPhuongAnGia";
 import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -61,6 +62,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   maDx: string;
   dataTable: any[] = [];
   dsPhuongAnGia: any[] = [];
+  dsLoaiHangXdg: any[] = [];
+  STATUS: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -89,15 +92,16 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         trichYeu: [null, [Validators.required]],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
-        cloaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null],
         ghiChu: [],
-        loaiHangXdg: [],
         noiDung: [null],
         lyDoTuChoi: [],
         qdCtKhNam:[null, [Validators.required] ],
-        maPphapXdg:[null, [Validators.required] ]
+        maPphapXdg:[null, [Validators.required] ],
+        loaiHangXdg:[]
       }
     );
+    this.STATUS = STATUS
   }
 
   async loadDsPhuongAnGia() {
@@ -117,6 +121,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.loadDsNam(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
+      this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',
       this.getDataDetail(this.idInput)
@@ -128,6 +133,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
     if (res.statusCode == API_STATUS_CODE.SUCCESS) {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
+    }
+  }
+  async loadDsHangHoaPag() {
+    this.dsLoaiHangXdg = [];
+    let res = await this.danhMucService.danhMucChungGetAll('PP_XDG_LOAI_HANG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiHangXdg = res.data;
     }
   }
 
@@ -165,6 +177,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   themDataTableTtc() {
+    this.formData.get('cloaiVthh').setValue( this.rowItemTtc.cloaiVthh)
     this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
     this.rowItemTtc = new ThongTinChungPag();
   }
@@ -189,9 +202,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         loaiHangXdg: data.loaiHangXdg,
         noiDung: data.noiDung,
         lyDoTuChoi: data.lyDoTuChoi,
-        qdCtKhNam: data.qdCtKh,
+        qdCtKhNam: data.qdCtKhNam,
         maPphapXdg: data.maPphapXdg
       })
+      this.pagTtChungs =data.pagTtChungs;
+      this.pagPpXacDinhGias = data.pagPpXacDinhGias;
+      this.dataTableKqGia = data.dataTableKqGia;
+      this.dataTableKsGia = data.dataTableKsGia;
+      this.dataTableCanCuXdg = data.canCuPhapLy;
     }
   }
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem,) {
@@ -229,7 +247,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.rowItemCcXdg = new CanCuXacDinhPag();
     }
     if (tableName == 'ppxdg') {
-      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung
+      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
     }
@@ -245,7 +263,16 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
+      if (this.type == TYPE_PAG.GIA_MUA_TOI_DA) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG01' || item.ma == 'LG02'
+        );
+      }
+      if (this.type == TYPE_PAG.GIA_CU_THE) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG03' || item.ma == 'LG04'
+        );
+      }
     }
   }
   async onChangeSoQd($event) {
@@ -255,8 +282,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     //   const data = dataDetail.data;
     //   this.formData.patchValue({
     //     loaiVthh: data.loaiVthh,
-    //     cloaiVthh: data.cloaiVthh,
-    //     tgianNhang: data.tgianNhang
     //   })
     // }
   }
@@ -339,29 +364,40 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  banHanh()  {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 310,
+      nzWidth: 350,
       nzOnOk: async () => {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
-            lyDoTuChoi: null,
-            trangThai: '11',
+            id: this.formData.get('id').value,
+            trangThai: ''
           };
-          let res =
-            await this.giaDeXuatGiaService.approve(
-              body,
-            );
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.DU_THAO:
+            case STATUS.TU_CHOI_TP:
+            case STATUS.TU_CHOI_LDC: {
+              body.trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              body.trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              body.trangThai = STATUS.DA_DUYET_LDC;
+            }
+          }
+          let res = await this.giaDeXuatGiaService.approve(body)
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -389,17 +425,18 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsQdPdKhlcnt = res.data.content;
     }
+    console.log(this.dsQdPdKhlcnt)
   }
   async save() {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      console.log(this.formData.value)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
-      console.log(this.formData.value)
     }
     let body = this.formData.value;
-    body.fileDinhKems = this.taiLieuDinhKemList;
     body.soDeXuat = body.soDeXuat + this.maDx;
     body.pagTtChungs = this.pagTtChungs;
     body.pagPpXacDinhGias = this.pagPpXacDinhGias;
