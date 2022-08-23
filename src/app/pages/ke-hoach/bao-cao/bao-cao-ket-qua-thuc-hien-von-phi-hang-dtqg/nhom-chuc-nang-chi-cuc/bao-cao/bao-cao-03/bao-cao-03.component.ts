@@ -854,8 +854,12 @@ export class BaoCao03Component implements OnInit {
             return;
         }
 
-        let checkPersonReport = true;
+        if (!baoCaoChiTietTemp.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
 
+        let checkPersonReport = true;
         // validate nguoi thuc hien bao cao
         if (!baoCaoChiTietTemp.nguoiBcao) {
             checkPersonReport = false;
