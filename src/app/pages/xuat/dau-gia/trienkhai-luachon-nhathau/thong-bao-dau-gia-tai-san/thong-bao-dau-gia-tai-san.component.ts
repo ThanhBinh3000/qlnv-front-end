@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-thong-bao-dau-gia-tai-san',
@@ -73,7 +74,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
-
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
@@ -107,7 +108,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
