@@ -9,10 +9,10 @@
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA">
             Quyết định giá của BTC
         </li>
-        <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_CU_THE">
+        <li nz-menu-item (click)="selectTab(3)" *ngIf="type == typeConst.GIA_CU_THE">
             Quyết định giá của TCDTNN
         </li>
-        <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isTongCuc() && type == typeConst.GIA_CU_THE">
+        <li nz-menu-item (click)="selectTab(4)" *ngIf="type == typeConst.GIA_CU_THE">
             Quyết định điều chỉnh giá của TCDTNN
         </li>
     </ul>

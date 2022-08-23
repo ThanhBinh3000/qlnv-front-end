@@ -23,11 +23,12 @@ export enum STATUS {
   CHO_DUYET_LDTC = '21',
   TU_CHOI_LDTC = '22',
   DA_DUYET_LDTC = '23',
-  DA_TONG_HOP = '24',
-  CHUA_TAO_QD = '25',
-  DA_DU_THAO_QD = '26',
-  DA_BAN_HANH_QD = '27',
-  BAN_HANH = '28',
+  CHUA_TONG_HOP = '24',
+  DA_TONG_HOP = '25',
+  CHUA_TAO_QD = '26',
+  DA_DU_THAO_QD = '27',
+  DA_BAN_HANH_QD = '28',
+  BAN_HANH = '29',
 }
 
 export enum LoaiTaiLieu {

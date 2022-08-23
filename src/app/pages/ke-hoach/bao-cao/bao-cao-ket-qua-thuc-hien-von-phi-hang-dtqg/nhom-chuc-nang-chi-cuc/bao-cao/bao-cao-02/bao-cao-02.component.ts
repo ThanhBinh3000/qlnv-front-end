@@ -300,6 +300,9 @@ export class BaoCao02Component implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number, phuLuc: string) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         const baoCao = this.getBieuMau(phuLuc);
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
