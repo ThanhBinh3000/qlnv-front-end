@@ -1,26 +1,24 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import * as dayjs from 'dayjs';
-import {
-  PAGE_SIZE_DEFAULT,
-  LIST_VAT_TU_HANG_HOA,
-} from 'src/app/constants/config';
-import { Subject } from 'rxjs';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UserLogin } from 'src/app/models/userlogin';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { Subject } from 'rxjs';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import {
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
+} from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { cloneDeep } from 'lodash';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { saveAs } from 'file-saver';
-import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-dau-gia',
@@ -88,10 +86,9 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
-    public qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKHBDGService,
+    public qdPheDuyetKhBanDauGiaService: QuyetDinhPheDuyetKHBDGService,
   ) { }
 
   async ngOnInit() {
@@ -152,12 +149,8 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          let body = {
-            id: data.id,
-            maDvi: null,
-          };
-          this.quyetDinhPheDuyetKeHoachLCNTService
-            .delete(body)
+          this.qdPheDuyetKhBanDauGiaService
+            .xoa(data.id)
             .then(async (res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 await this.search();
@@ -278,7 +271,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
         page: this.page - 1,
       },
     };
-    let res = await this.qdPheDuyetKhBanDauGia.timKiem(body);
+    let res = await this.qdPheDuyetKhBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -345,7 +338,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
             ? dayjs(this.startValue).format('DD/MM/YYYY')
             : null,
         };
-        this.quyetDinhPheDuyetKeHoachLCNTService
+        this.qdPheDuyetKhBanDauGiaService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(
