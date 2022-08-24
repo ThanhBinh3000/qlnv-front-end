@@ -22,7 +22,7 @@ export class ThongBaoBanDauGia {
     luuYVeThoiGianXemTaiSan: string;
     maDonVi: string;
     maThongBao: string;
-    namKeHoach: string;
+    namKeHoach: number;
     nganHang: string;
     phuongThucDauGia: string;
     phuongThucThanhToan: string;

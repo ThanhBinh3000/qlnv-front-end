@@ -19,6 +19,7 @@ import { STATUS } from "../../../../../../constants/status";
 })
 export class QuyetDinhGiaBtcComponent implements OnInit {
   @Input() type: string;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -109,8 +110,8 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
 
   async search() {
     this.spinner.show();
-
     let body = this.formData.value;
+    body.pagType = this.pagType;
     if (body.ngayKy != null) {
       body.ngayKyTu = body.ngayKy[0];
       body.ngayKyDen = body.ngayKy[1];
@@ -289,7 +290,6 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       this.noEdit = false;
     }
   }
-
 
   deleteItem(item: any) {
     this.modal.confirm({
