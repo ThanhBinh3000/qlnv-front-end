@@ -12,7 +12,7 @@ import {Globals} from "src/app/shared/globals";
 import {STATUS} from "src/app/constants/status";
 import {QuyetDinhGiaCuaBtcService} from "src/app/services/quyetDinhGiaCuaBtc.service";
 import {DanhMucService} from "src/app/services/danhmuc.service";
-import {TongHopPhuongAnGiaService} from "src/app/services/tong-hop-phuong-an-gia.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
 import {DanhMucTieuChuanService} from "src/app/services/danhMucTieuChuan.service";
 
