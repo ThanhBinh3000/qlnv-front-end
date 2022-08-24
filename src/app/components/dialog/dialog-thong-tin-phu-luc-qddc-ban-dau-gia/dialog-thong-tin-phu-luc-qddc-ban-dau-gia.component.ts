@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { QuyetDinhPheDuyetKeHoachBanDauGia } from 'src/app/models/QdPheDuyetKHBanDauGia';
 import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -29,6 +30,7 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   expandSet = new Set<number>();
+  qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKeHoachBanDauGia = new QuyetDinhPheDuyetKeHoachBanDauGia();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -123,20 +125,22 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
 
     if (this.data) {
       this.diaDiemNhapKho.tenDonVi = this.data.tenDonVi;
-      this.diaDiemNhapKho.maDvi = this.data.maDv;
-      this.diaDiemNhapKho.donViTinh = this.donViTinh;
-      this.khoanTienDatTruoc = this.data.tongKhoanTienDatTruoc;
+      this.diaDiemNhapKho.maDvi = this.data.maDonVi;
+      this.diaDiemNhapKho.donViTinh = this.qdPheDuyetKhBanDauGia.donViTinh;
+      this.khoanTienDatTruoc = this.data.khoanTienDatTruoc;
+      this.loadChiCuc();
     }
-    this.loadChiCuc();
     this.loadDanhMucHang();
     // this.initForm();
   }
 
   save() {
-    this.formData.patchValue({
-      children: this.listOfData
-    })
-    this._modalRef.close(this.formData);
+    const body = {
+      diaDiemNhapKho: this.diaDiemNhapKho,
+      data: this.data
+    }
+    console.log("this.diaDiemNhapKho: ", body);
+    this._modalRef.close(body);
   }
 
   onCancel() {
@@ -159,6 +163,9 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
   }
 
   async loadChiCuc() {
+    if (!this.diaDiemNhapKho.maDvi) {
+      return;
+    }
     let body = {
       maDviCha: this.diaDiemNhapKho.maDvi,
       trangThai: '01',
@@ -297,7 +304,7 @@ export class DialogTTPhuLucQDDCBanDauGiaComponent implements OnInit {
 
   async loadDanhMucHang() {
     let body = {
-      "str": this.data.loaiHangHoa
+      "str": this.qdPheDuyetKhBanDauGia.maVatTuCha
     };
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
