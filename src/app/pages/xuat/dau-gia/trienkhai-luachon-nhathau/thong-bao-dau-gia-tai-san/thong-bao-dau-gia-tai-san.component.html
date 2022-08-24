@@ -12,7 +12,9 @@
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Loại hàng hóa</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.maVatTuCha" />
+              <nz-select [(ngModel)]="searchFilter.maVatTuCha">
+                <nz-option *ngFor="let p of listHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="4">
               <label class="search__label">Số QĐ phê duyệt KH BĐG</label>
@@ -68,15 +70,13 @@
                     <th width="161px">Trạng thái</th>
                     <th width="140px">Hành động</th>
                   </tr>
-                </thead>
-                <tbody>
                   <tr class="search-table">
                     <th></th>
                     <th></th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieu"
-                          (input)="filterInTable('soPhieu',filterTable.soPhieu)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.qdPheDuyetKhbdg"
+                          (input)="filterInTable('qdPheDuyetKhbdg',filterTable.qdPheDuyetKhbdg)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -93,8 +93,9 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayToChuc"
-                          (input)="filterInTable('ngayToChuc',filterTable.ngayToChuc)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm"
+                          [(ngModel)]="filterTable.thoiGianToChucDauGiaTuNgay"
+                          (input)="filterInTable('thoiGianToChucDauGiaTuNgay',filterTable.thoiGianToChucDauGiaTuNgay)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -111,8 +112,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ketLuan"
-                          (input)="filterInTable('ketLuan',filterTable.ketLuan)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.hinhThucDauGia"
+                          (input)="filterInTable('hinhThucDauGia',filterTable.hinhThucDauGia)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -120,8 +121,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ketLuan"
-                          (input)="filterInTable('ketLuan',filterTable.ketLuan)" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.phuongThucDauGia"
+                          (input)="filterInTable('phuongThucDauGia',filterTable.phuongThucDauGia)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -183,13 +184,15 @@
                     </th>
                     <th></th>
                   </tr>
+                </thead>
+                <tbody>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.soPhieu }}</td>
+                    <td>{{ data.qdPheDuyetKhbdg }}</td>
                     <td>{{ data.maThongBao }}</td>
                     <td>{{ data.thoiGianToChucDauGiaTuNgay }}</td>
                     <td>{{ data.trichYeu }}</td>

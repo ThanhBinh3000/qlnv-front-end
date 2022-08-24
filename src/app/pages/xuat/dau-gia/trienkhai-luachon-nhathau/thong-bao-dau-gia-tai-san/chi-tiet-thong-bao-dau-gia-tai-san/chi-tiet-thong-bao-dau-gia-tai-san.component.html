@@ -8,7 +8,7 @@
       <i class="icon htvbdh_checkfile2"></i>
       <span>Áp dụng chỉnh sửa</span>
     </a>
-    <button class="btn btn-main" *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
+    <button class="btn btn-main" *ngIf="thongBaoBanDauGia.trangThai == globals.prop.NHAP_DU_THAO && !isView"
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -200,7 +200,8 @@
                   Bước giá của từng đơn vị tài sản (%)
                 </nz-form-label>
                 <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="buocGiaCuaTungDonViTaiSan"
-                  [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">

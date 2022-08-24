@@ -35,12 +35,14 @@ export class ThongBaoBanDauGia {
     thoiHanDangKyThamGiaDauGiaTuNgay: string;
     thoiHanNopTienDatTruocDenNgay: string;
     thoiHanNopTienDatTruocTuNgay: string;
-    thoiHanToChucXemTaiSanDenNgay: string;
     trichYeu: string;
     tienMuaHoSo: string;
     trangThai: string;
     thoiHanToChucXemTaiSan: string;
+    thoiHanToChucXemTaiSanTuNgay: string;
+    thoiHanToChucXemTaiSanDenNgay: string;
     thoiHanNopTienDatTruoc: string;
     thoiGianToChucDauGia: string;
     thoiHanDangKyThamGiaDauGia: string;
+    maVatTuCha: string;
 }
