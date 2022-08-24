@@ -28,8 +28,8 @@ import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
-  templateUrl: './them-moi-de-xuat-pag.component.html',
-  styleUrls: ['./them-moi-de-xuat-pag.component.scss']
+  templateUrl: './them-dx-pag-vt.html',
+  styleUrls: ['./them-dx-pag-vt.scss']
 })
 export class ThemMoiDeXuatPagComponent implements OnInit {
   @Input() loaiVthh: string;
