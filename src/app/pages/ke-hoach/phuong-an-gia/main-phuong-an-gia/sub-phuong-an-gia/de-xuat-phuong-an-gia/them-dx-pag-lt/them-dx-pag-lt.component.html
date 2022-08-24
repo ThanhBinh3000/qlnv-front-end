@@ -4,24 +4,24 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || 
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP ||
             formData.value.trangThai == STATUS.CHO_DUYET_LDC" type="button" class="btn btn-sub do" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || 
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP ||
             formData.value.trangThai == STATUS.CHO_DUYET_LDC " type="button" class="btn btn-sub xanh-nhat"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || 
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO ||
             formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
             type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet "></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || 
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO ||
             formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
             type="button" class="btn btn-sub xanh" (click)="save()">
             <i class="icon htvbdh_luu"></i>
