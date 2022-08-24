@@ -39,14 +39,14 @@ export class HangHongCanBaoHanhComponent implements OnInit {
   dsDonVi = [];
 
   searchInTable: any = {
-    maDanhSach: null,
-    tenDonvi: null,
-    ngayTao: null,
-    trangThaiXuLy: null,
+    maLoaiHangHoa: null,
+    maChungLoaiHangHoa: null,
   };
 
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  dsLoaiHangHoaDataSource = [];
+  dsChungLoaiHangHoaDataSource = [];
 
   idInput: number;
   isCheck: boolean;
@@ -117,8 +117,9 @@ export class HangHongCanBaoHanhComponent implements OnInit {
       "denNgay": this.formData.value.ngayTao[1] === undefined ? "" : dayjs(this.formData.value.ngayTao[1]).format("YYYY-MM-DD"),
       "limit": this.pageSize,
       "maDonVi": this.detail.maDvi,
-      "maChungLoaiHang": this.formData.value.maChungLoaiHangHoa,
-      "maVTHH": this.formData.value.maLoaiHang,
+      // "maChungLoaiHang": this.searchInTable.maChungLoaiHangHoa ? this.searchInTable.maChungLoaiHangHoa : null,
+      "maVTHH": this.searchInTable.maChungLoaiHangHoa ? this.searchInTable.maChungLoaiHangHoa : null,
+      // "maVTHH": this.searchInTable.maLoaiHangHoa ? this.searchInTable.maLoaiHangHoa : null,
       "orderBy": "",
       "orderType": "",
       "page": this.page - 1,
@@ -328,6 +329,9 @@ export class HangHongCanBaoHanhComponent implements OnInit {
       maChungLoaiHangHoa: '',
       ngayTao: ''
     })
+
+    this.searchInTable.maLoaiHangHoa = null;
+    this.searchInTable.maChungLoaiHangHoa = null;
     this.initData();
 
     await this.search();
@@ -371,13 +375,49 @@ export class HangHongCanBaoHanhComponent implements OnInit {
     }
   }
 
-  // load chủng loại hàng hóa
-  async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maLoaiHang);
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
-      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+  onChangeLoaiHHAutoComplete(value: any) {
+    this.dsChungLoaiHangHoaDataSource = []
+    this.formData.get('maChungLoaiHangHoa').setValue('')
+    if (value) {
+      this.dsLoaiHangHoaDataSource = this.listLoaiHangHoa
+        .filter((item) => item?.ten?.toLowerCase()?.includes(value.toString().toLowerCase()),)
+        .map((item) => item.ten);
+      let data = this.listLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maLoaiHang.toString().toLowerCase());
+
+      console.log(data);
+
+      if (data && data.child.length > 0 && data !== undefined) {
+        this.listChungLoaiHangHoa = data.child;
+        this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map((item => item.ten));
+        this.searchInTable.maLoaiHangHoa = data.ma;
+      } else {
+        this.formData.get('maChungLoaiHangHoa').setValue('')
+        this.dsChungLoaiHangHoaDataSource = []
+      }
+    } else {
+      this.dsLoaiHangHoaDataSource = this.listLoaiHangHoa.map(
+        (item) => item.ten,
+      );
     }
   }
+
+  onChangeChungLoaiHHAutoComplete(value: any) {
+    if (value) {
+      console.log(this.listChungLoaiHangHoa);
+      let data = this.listChungLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maChungLoaiHangHoa.toString().toLowerCase())
+      if (data !== undefined) {
+        this.searchInTable.maChungLoaiHangHoa = data.ma
+      } else {
+        this.searchInTable.maChungLoaiHangHoa = this.formData.value.maChungLoaiHangHoa
+      }
+    } else {
+      this.searchInTable.maChungLoaiHangHoa = this.formData.value.maChungLoaiHangHoa
+      this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map(
+        (item) => item.ten,
+      );
+    }
+  }
+
 
   // load danh sách đơn vị
   async loadDsTong() {
