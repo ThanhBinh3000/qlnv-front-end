@@ -86,8 +86,10 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listNam: any[] = [];
-  listLoaiVthh: any[] = [];
-  listCLoaiVthh: any[] = [];
+  // listLoaiVthh: any[] = [];
+  listLoaiHangHoa: any[] = [];
+  // listCLoaiVthh: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
   listHangHoa: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
@@ -153,13 +155,13 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       id: [],
       namKeHoach: [null],
       maVatTuCha: [, [Validators.required]],
+      maChungLoaiHH: [null],
       ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[null, null], [Validators.required]],
       ghiChu: [null],
     });
-    this.loaiVTHHGetAll();
   }
 
   async ngOnInit() {
@@ -204,6 +206,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       pageSize: 1000,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.isTongHop = true;
@@ -236,7 +240,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
       maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
-      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyDeXuatTu, dataDetail.ngayKyDeXuatDen] : [dayjs().toDate(), dayjs().toDate()],
+      ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyTuNgay, dataDetail.ngayKyDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [null, null],
@@ -482,20 +486,31 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.listLoaiVthh = [];
-    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        if (!this.loaiVthhInput) {
-          this.listLoaiVthh = res.data;
+    this.listLoaiHangHoa = [];
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+            }
+            else {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+            }
+          })
         }
-        else {
-          this.listLoaiVthh = res.data.filter(x => x.ma == this.loaiVthhInput);
-        }
-      }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  async changeLoaiHangHoa() {
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maVatTuCha);
+    if (loaiHangHoa && loaiHangHoa.length > 0) {
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
+  }
   async loaiHopDongGetAll() {
     this.listLoaiHopDong = [];
     let res = await this.danhMucService.loaiHopDongGetAll();

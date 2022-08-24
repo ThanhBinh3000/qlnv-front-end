@@ -407,7 +407,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         this.searchInTable = {
             maDanhSach: null,
             donVi: null,
-            ngayTao: new Date(),
+            ngayTao: null,
             trangThai: null,
         }
     }

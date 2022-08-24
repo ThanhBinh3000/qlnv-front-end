@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./quyet-dinh-dieu-chinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
+  @Input() pagType: String;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -33,9 +34,7 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
 
-  last30Day = new Date(
-    new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
-  );
+
 
   isViewDetail: boolean = false;
   idSelected: number = 0;
@@ -46,25 +45,12 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
     private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      soTT: [null],
-      ngayTongHop: [[]],
-      noiDung: [null],
-      namTongHop: [null],
-      loaiHangHoa: [null],
-      chungLoaiHh: [null],
-      loaiGia: [null],
-      trangThai: [null],
-      trangThaiTH: [null],
+      namKeHoach: [null],
+      soQdinh: [[]],
+      trichYeu: [null],
+      ngayKy: [null],
     });
   }
-  searchInTable = {
-    namKeHoach: dayjs().get('year'),
-    loaiHangHoa: '',
-    soDx: '',
-    trichYeu: '',
-    ngayKy: '',
-
-  };
   filterTable: any = {
     soDeXuat: '',
     ngayKy: '',
@@ -79,7 +65,6 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
 
   }
 
@@ -99,7 +84,6 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {

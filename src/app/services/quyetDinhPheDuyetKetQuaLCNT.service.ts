@@ -13,5 +13,4 @@ export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dx-kh/qd-pduyet-kqlcnt', '/qlnv-hang');
   }
-
 }

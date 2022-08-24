@@ -1,25 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import dayjs from "dayjs";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from "src/app/constants/config";
+import { MESSAGE } from "src/app/constants/message";
+import { UserService } from "src/app/services/user.service";
+import { cloneDeep } from "lodash";
+import { saveAs } from "file-saver";
 import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
+import { STATUS } from "../../../../../../constants/status";
+
 @Component({
-  selector: 'app-quyet-dinh-gia-btc',
-  templateUrl: './quyet-dinh-gia-btc.component.html',
-  styleUrls: ['./quyet-dinh-gia-btc.component.scss']
+  selector: "app-quyet-dinh-gia-btc",
+  templateUrl: "./quyet-dinh-gia-btc.component.html",
+  styleUrls: ["./quyet-dinh-gia-btc.component.scss"]
 })
 export class QuyetDinhGiaBtcComponent implements OnInit {
   @Input() type: string;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
+  noEdit = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
@@ -35,17 +39,18 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   indeterminate = false;
 
   last30Day = new Date(
-    new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
+    new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000)
   );
 
   isViewDetail: boolean = false;
   idSelected: number = 0;
+
   constructor(private readonly fb: FormBuilder,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private modal: NzModalService,
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
+              private spinner: NgxSpinnerService,
+              private notification: NzNotificationService,
+              public userService: UserService,
+              private modal: NzModalService,
+              private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     this.formData = this.fb.group({
       soQd: [null],
@@ -54,27 +59,28 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       namKeHoach: [null],
       loaiHangHoa: [null],
       loaiGia: [null],
-      trangThai: [null],
+      trangThai: [null]
 
     });
   }
+
   searchInTable = {
-    namKeHoach: dayjs().get('year'),
-    loaiHangHoa: '',
-    soQd: '',
-    trichYeu: '',
-    ngayKy: '',
+    namKeHoach: dayjs().get("year"),
+    loaiHangHoa: "",
+    soQd: "",
+    trichYeu: "",
+    ngayKy: ""
 
   };
   filterTable: any = {
-    soQd: '',
-    ngayKy: '',
-    trichYeu: '',
-    quyetDinhChiTieu: '',
-    namKeHoach: '',
-    loaiHangHoa: '',
-    loaiGia: '',
-    trangThai: '',
+    soQd: "",
+    ngayKy: "",
+    trichYeu: "",
+    quyetDinhChiTieu: "",
+    namKeHoach: "",
+    loaiHangHoa: "",
+    loaiGia: "",
+    trangThai: ""
   };
 
   async ngOnInit() {
@@ -90,7 +96,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
   }
 
   loadDsNam() {
-    let thisYear = dayjs().get('year');
+    let thisYear = dayjs().get("year");
     for (let i = -3; i < 23; i++) {
       this.dsNam.push((thisYear - i).toString());
     }
@@ -104,18 +110,18 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
 
   async search() {
     this.spinner.show();
-
     let body = this.formData.value;
+    body.pagType = this.pagType;
     if (body.ngayKy != null) {
       body.ngayKyTu = body.ngayKy[0];
       body.ngayKyDen = body.ngayKy[1];
     }
-      body.loaiHh = body.loaiHangHoa,
+    body.loaiHh = body.loaiHangHoa,
       body.paggingReq = {
         limit: this.pageSize,
-        page: this.page - 1,
+        page: this.page - 1
 
-      }
+      };
     let res = await this.quyetDinhGiaCuaBtcService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -149,10 +155,10 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     if (dataDelete && dataDelete.length > 0) {
       this.modal.confirm({
         nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
+        nzTitle: "Xác nhận",
+        nzContent: "Bạn có chắc chắn muốn xóa các bản ghi đã chọn?",
+        nzOkText: "Đồng ý",
+        nzCancelText: "Không",
         nzOkDanger: true,
         nzWidth: 310,
         nzOnOk: async () => {
@@ -168,15 +174,14 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
           } catch (e) {
-            console.log('error: ', e);
+            console.log("error: ", e);
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           } finally {
             this.spinner.hide();
           }
-        },
+        }
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -191,11 +196,11 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
         this.quyetDinhGiaCuaBtcService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-bo-tai-chinh-giao-bo-nganh.xlsx'),
+            saveAs(blob, "quyet-dinh-bo-tai-chinh-giao-bo-nganh.xlsx")
           );
         this.spinner.hide();
       } catch (e) {
-        console.log('error: ', e);
+        console.log("error: ", e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
@@ -208,11 +213,12 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     this.idSelected = 0;
     this.isViewDetail = false;
     this.isAddNew = true;
+    this.noEdit = false;
   }
 
   async onClose() {
     this.isAddNew = false;
-    await this.search()
+    await this.search();
 
   }
 
@@ -231,7 +237,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
 
   refreshCheckedStatus(): void {
     this.allChecked = this.dataTable.every(({ id }) =>
-      this.setOfCheckedId.has(id),
+      this.setOfCheckedId.has(id)
     );
     this.indeterminate =
       this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
@@ -251,7 +257,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log("error: ", e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -266,25 +272,32 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log("error: ", e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  viewDetail(id: number, isViewDetail: boolean) {
+
+  viewDetail(id: number, isViewDetail: boolean, trangThai: string) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
+    if (trangThai == STATUS.BAN_HANH) {
+      this.noEdit = true;
+    } else if (trangThai == STATUS.DU_THAO && isViewDetail) {
+      this.noEdit = true;
+    } else if (trangThai == STATUS.DU_THAO && !isViewDetail) {
+      this.noEdit = false;
+    }
   }
-
 
   deleteItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn xóa?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
@@ -294,7 +307,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
+                MESSAGE.DELETE_SUCCESS
               );
               this.search();
               this.getCount.emit();
@@ -304,42 +317,42 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
             this.spinner.hide();
           });
         } catch (e) {
-          console.log('error: ', e);
+          console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-      },
+      }
     });
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value && value != "") {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayKy: '',
-      trichYeu: '',
-      quyetDinhChiTieu: '',
-      namKeHoach: '',
-      loaiHangHoa: '',
-      loaiGia: '',
-      trangThai: '',
-    }
+      soQd: "",
+      ngayKy: "",
+      trichYeu: "",
+      quyetDinhChiTieu: "",
+      namKeHoach: "",
+      loaiHangHoa: "",
+      loaiGia: "",
+      trangThai: ""
+    };
   }
 
 
@@ -348,7 +361,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == "00") {
             item.checked = true;
           }
         });

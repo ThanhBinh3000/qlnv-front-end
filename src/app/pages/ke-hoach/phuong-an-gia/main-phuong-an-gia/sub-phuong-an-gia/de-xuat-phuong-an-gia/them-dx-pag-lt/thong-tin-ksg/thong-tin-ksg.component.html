@@ -5,7 +5,7 @@
             <th>Tên đơn vị thẩm định</th>
             <th *ngIf="isTableKetQua">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
             <th>Đơn giá chưa VAT (đồng/kg)</th>
-            <th>Đơn giá có VAT (đồng/kg)</th>
+            <th *ngIf="isVat">Đơn giá có VAT (đồng/kg)</th>
             <th *ngIf="isTableKetQua">Thời hạn báo giá</th>
             <th>File đính kèm</th>
             <th *ngIf="isTableKetQua">Ghi chú</th>
@@ -32,7 +32,7 @@
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
-            <th>
+            <th *ngIf="isVat">
                 <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
@@ -70,7 +70,7 @@
             <td>{{ data.tenDviBaoGia }}</td>
             <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
             <td>{{data.donGia }}</td>
-            <td>{{data.donGiaVat }}</td>
+            <td *ngIf="isVat">{{data.donGiaVat }}</td>
             <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
             <td>{{data.fileDinhKem?.fileName }}</td>
             <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>

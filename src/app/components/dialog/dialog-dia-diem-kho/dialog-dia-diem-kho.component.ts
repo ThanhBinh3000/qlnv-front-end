@@ -7,7 +7,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from './../../../constants/message';
-import { DanhMucService } from './../../../services/danhmuc.service';
+import { DanhMucService } from '../../../services/danhmuc.service';
 
 @Component({
   selector: 'dialog-dia-diem-kho',

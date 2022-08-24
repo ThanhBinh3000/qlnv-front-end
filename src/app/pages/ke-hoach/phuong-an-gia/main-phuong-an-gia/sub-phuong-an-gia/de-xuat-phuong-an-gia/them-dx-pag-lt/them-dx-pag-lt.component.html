@@ -118,7 +118,8 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại giá
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
+                            <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true"
+                                (ngModelChange)="onChangeLoaiGia($event)">
                                 <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                 </nz-option>
                                 <ng-template #error let-control>
@@ -255,8 +256,7 @@
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                    <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy" id="ngay-qd"
-                                        class="search__input">
+                                    <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-input-group>
                             </nz-form-control>
@@ -374,9 +374,9 @@
                     <thead>
                         <tr>
                             <th style="width: 2%;">STT</th>
-                            <th>Mô tả</th>
-                            <th>File đính kèm</th>
-                            <th style="width: 5%;">Hành động</th>
+                            <th style="width: 75%;">Mô tả</th>
+                            <th style="width: 16%;">File đính kèm</th>
+                            <th style="width: 6%;">Hành động</th>
                         </tr>
                         <tr>
                             <th class="text-center"> </th>
@@ -397,7 +397,7 @@
                             </th>
                             <th class="text-left">
                                 <a>
-                                    <i class="icon htvbdh_dau-cong" (click)="themDataTable('ccXdg')"></i>
+                                    <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
                                 </a>
                                 <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
                                     <i class="icon  htvbdh_nhap-lai1 "></i>
@@ -407,20 +407,52 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of dataTableCanCuXdg; let idx = index">
-                            <td class="text-center">{{ idx + 1 }}</td>
-                            <td>{{ data.moTa }}</td>
-                            <td>{{ data.fileDinhKem?.fileName }}</td>
-                            <td style="text-align: left; white-space: nowrap;">
-                                <a (click)="downloadFile(data.fileDinhKem)">
-                                    <i class="icon htvbdh_tcdt_import "></i>
-                                </a>
-                                <a>
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a>
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
-                            </td>
+                            <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+                                <td class="text-center">{{ idx + 1 }}</td>
+                                <td>{{ data.moTa }}</td>
+                                <td>{{ data.fileDinhKem?.fileName }}</td>
+                                <td style="text-align: left; white-space: nowrap;">
+                                    <a (click)="downloadFile(data.fileDinhKem)">
+                                        <i class="icon htvbdh_tcdt_import "></i>
+                                    </a>
+                                    <a (click)="startEdit(idx)">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a (click)="deleteItem(idx)">
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
+                            </ng-container>
+                            <ng-template #editTemplate>
+                                <td></td>
+                                <td>
+                                    <input type="text" [(ngModel)]="dataEdit[idx].data.moTa" nz-input />
+                                </td>
+                                <td>
+                                    <nz-form-control>
+                                        <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+                                            <input placeholder="Chọn file"
+                                                [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input
+                                                disabled />
+                                        </nz-input-group>
+                                        <ng-template #suffixIcon>
+                                            <i class="icon htvbdh_tcdt_tep"></i>
+                                            <input class="input-file" (change)="getNameFile($event,'ccXdg')"
+                                                type="file" />
+                                        </ng-template>
+                                    </nz-form-control>
+                                </td>
+                                <td>
+                                    <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
+                                        <i class="icon htvbdh_tcdt_import "></i>
+                                    </a>
+                                    <a (click)="saveEdit(idx)" class="save">
+                                        <i class="fa fa-save"></i>
+                                    </a>
+                                    <a (click)="cancelEdit(idx)">
+                                        <i class="fa fa-ban do"></i> </a>
+                                </td>
+                            </ng-template>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -533,11 +565,12 @@
         <nz-tab [nzTitle]="'Thông tin khảo sát giá'" *ngIf="isGiaMuaToiDa">
             <nz-card class="mt16 p-lr16 card-table pd-10">
                 <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-                <app-thong-tin-ksg [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh"
-                    [(dataTable)]="dataTableKsGia">
+                <app-thong-tin-ksg [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
+                    [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
                 </app-thong-tin-ksg>
                 <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-                <app-thong-tin-ksg [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
+                <app-thong-tin-ksg [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
+                    [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
             </nz-card>
         </nz-tab>
         <nz-tab [nzTitle]="'Phân tích, dự báo biến động giá'" *ngIf="isGiaMuaToiDa">
@@ -661,11 +694,15 @@
                     </div>
                 </form>
                 <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-                <app-thong-tin-ksg [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh"
-                    [(dataTable)]="dataTableKsGia">
+                <app-thong-tin-ksg [isTableKetQua]="true"
+                    [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
+                    [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia">
                 </app-thong-tin-ksg>
                 <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-                <app-thong-tin-ksg [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
+                <app-thong-tin-ksg [isTableKetQua]="false"
+                    [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
+                    [(dataTable)]="dataTableKqGia">
+                </app-thong-tin-ksg>
             </nz-card>
         </nz-tab>
     </nz-tabset>

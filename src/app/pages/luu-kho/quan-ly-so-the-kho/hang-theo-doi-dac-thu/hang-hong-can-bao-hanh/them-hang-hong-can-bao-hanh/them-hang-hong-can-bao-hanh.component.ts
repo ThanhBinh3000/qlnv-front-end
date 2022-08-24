@@ -193,7 +193,6 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   // Load loại hàng hóa
   async loaiVTHHGetAll() {
     try {

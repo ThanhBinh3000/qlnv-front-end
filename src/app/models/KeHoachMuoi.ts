@@ -1,4 +1,4 @@
-import { ItemDetail } from './ItemDetail';
+import { ItemDetail } from './itemDetail';
 
 export class KeHoachMuoi {
   stt: number;
