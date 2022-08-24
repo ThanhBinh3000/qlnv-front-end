@@ -98,7 +98,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       loaiVthh: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.loaiVthh
+            ? this.thongBaoBanDauGia.maVatTuCha
             : null,
           disabled: this.isView ? true : false
         },
@@ -161,7 +161,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanDangKyThamGiaDauGia: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanDangKyThamGiaDauGia
+            ? [this.thongBaoBanDauGia.thoiHanDangKyThamGiaDauGiaTuNgay, this.thongBaoBanDauGia.thoiGianToChucDauGiaDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -215,7 +215,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanToChucXemTaiSan: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanToChucXemTaiSan
+            ? [this.thongBaoBanDauGia.thoiHanToChucXemTaiSanTuNgay, this.thongBaoBanDauGia.thoiHanToChucXemTaiSanDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -242,7 +242,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanNopTienDatTruoc: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanNopTienDatTruoc
+            ? [this.thongBaoBanDauGia.thoiHanNopTienDatTruocTuNgay, this.thongBaoBanDauGia.thoiHanNopTienDatTruocDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -305,7 +305,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiGianToChucDauGia: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiGianToChucDauGia
+            ? [this.thongBaoBanDauGia.thoiGianToChucDauGiaTuNgay, this.thongBaoBanDauGia.thoiGianToChucDauGiaDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -382,6 +382,12 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     }
   }
 
+  isDisableField() {
+    if (this.thongBaoBanDauGia && (this.thongBaoBanDauGia.trangThai != this.globals.prop.NHAP_DU_THAO)) {
+      return true;
+    }
+  }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -440,7 +446,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-          if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc) {
+          if (phanLoTaiSans[i].chiCuc && phanLoTaiSans[j].chiCuc && (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc)) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
             diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
@@ -550,6 +556,9 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.thongBaoBanDauGia = res.data;
+          if (this.thongBaoBanDauGia && this.thongBaoBanDauGia.fileDinhKems) {
+            this.listFileDinhKem = this.thongBaoBanDauGia.fileDinhKems;
+          }
           this.initForm();
           this.changeSoQuyetDinh();
         }
