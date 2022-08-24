@@ -313,8 +313,20 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    console.log(this.listVthh)
     console.log(this.listCloaiVthh)
   }
+
+  async onChangecloaiVthh(event) {
+    this.rowItemTtc.donViTinh = null;
+    const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
+    if (cloaiVthh.length > 0) {
+      this.rowItemTtc.donViTinh = cloaiVthh[0].maDviTinh
+      this.rowItemTtc.tchuanCluong = cloaiVthh[0].tchuanCluong
+    }
+  }
+
+
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
@@ -382,17 +394,16 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           };
           switch (this.formData.get('trangThai').value) {
             case STATUS.DU_THAO:
-            case STATUS.TU_CHOI_TP:
-            case STATUS.TU_CHOI_LDC: {
-              body.trangThai = STATUS.CHO_DUYET_TP;
+            case STATUS.CHO_DUYET_LDV: {
+              body.trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_TP: {
-              body.trangThai = STATUS.CHO_DUYET_LDC;
+            case STATUS.TU_CHOI_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDC: {
-              body.trangThai = STATUS.DA_DUYET_LDC;
+            case STATUS.DA_DUYET_LDV: {
+              body.trangThai = STATUS.DA_DUYET_LDV;
             }
           }
           let res = await this.giaDeXuatGiaService.approve(body)

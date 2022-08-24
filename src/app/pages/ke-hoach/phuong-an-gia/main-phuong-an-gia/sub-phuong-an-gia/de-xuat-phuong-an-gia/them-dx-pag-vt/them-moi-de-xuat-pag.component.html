@@ -23,14 +23,13 @@
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
       <div class="header-text">
-        <div class="title-chi-tieu">
-                    <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-                        {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                        {{ formData.value.tenTrangThai }}
                     </span>
-          <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
+        <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
         </div>
       </div>
-    </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="2">
@@ -183,8 +182,8 @@
               <tr>
                 <td></td>
                 <td>
-                  <nz-select [(ngModel)]="rowItemTtc.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
-                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                  <nz-select (ngModelChange)="onChangecloaiVthh($event)" [(ngModel)]="rowItemTtc.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+                    <nz-option  *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                     </nz-option>
                     <ng-template #error let-control>
                       <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -220,10 +219,10 @@
                   </nz-input-group>
                 </td>
                 <td style="text-align: center;">
-                  <a >
+                  <a *ngIf="!isView">
                     <i class="fa fa-plus" (click)="themDataTableTtc()"></i>
                   </a>
-                  <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                  <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                     <i class="icon  htvbdh_nhap-lai1 "></i>
                   </a>
                 </td>
@@ -238,10 +237,10 @@
                   <td>{{ data.giaDn }}</td>
                   <td>{{ data.giaDnVat }}</td>
                   <td style="text-align: center;">
-                    <a >
+                    <a *ngIf="!isView">
                       <i class=" fa fa-pencil"></i>
                     </a>
-                    <a (click)="deleteItem(idx)">
+                    <a *ngIf="!isView" (click)="deleteItem(idx)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -296,10 +295,10 @@
               </nz-form-control>
             </th>
             <th class="text-left">
-              <a>
+              <a *ngIf="!isView">
                 <i class="icon htvbdh_dau-cong" (click)="themDataTable('ccXdg')"></i>
               </a>
-              <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+              <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                 <i class="icon  htvbdh_nhap-lai1 "></i>
               </a>
             </th>
@@ -314,10 +313,10 @@
               <a (click)="downloadFile(data.fileDinhKem)">
                 <i class="icon htvbdh_tcdt_import "></i>
               </a>
-              <a>
+              <a *ngIf="!isView">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a >
+              <a *ngIf="!isView" >
                 <i class="fa fa-trash-o do" ></i>
               </a>
             </td>
@@ -408,9 +407,9 @@
               </td>
                 <td style="text-align: center;">
                   <a >
-                    <i class="fa fa-plus" (click)="themDataTable('ppxdg')"></i>
+                    <i *ngIf="!isView" class="fa fa-plus" (click)="themDataTable('ppxdg')"></i>
                   </a>
-                  <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                  <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                     <i class="icon  htvbdh_nhap-lai1 "></i>
                   </a>
                 </td>
@@ -423,10 +422,10 @@
                   <td>{{ data.chiPhiChung }}</td>
                   <td>{{ data.tongChiPhi }}</td>
                   <td style="text-align: center;">
-                    <a >
+                    <a *ngIf="!isView">
                       <i class=" fa fa-pencil"></i>
                     </a>
-                    <a *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'">
+                    <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                       <i class="icon  htvbdh_nhap-lai1 "></i>
                     </a>
                   </td>
@@ -439,10 +438,10 @@
                   </td>
 
                   <td class="text-center">
-                    <a  class="save">
+                    <a *ngIf="!isView"  class="save">
                       <i class="fa fa-save"></i>
                     </a>
-                    <a >
+                    <a *ngIf="!isView" >
                       <i class="fa fa-ban do"></i> </a>
                   </td>
                 </ng-template>
