@@ -42,9 +42,6 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
   dsLoaiHangHoa = [];
   dsLoaiHangHoaDataSource = [];
 
-  listLoaiHangHoa: any[] = [];
-  listChungLoaiHangHoa: any[] = [];
-
   searchInTable: any = {
     maDanhSach: null,
     donVi: null,
@@ -52,7 +49,7 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     trangThai: null,
   };
 
-  page: number = 0;
+  page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
   setOfCheckedId = new Set<number>();
@@ -92,8 +89,8 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     this.formData = this.fb.group({
       idDonVi: [null],
       tenDonVi: [null],
+      tenHangHoa: [null],
       loaiHangHoa: [null],
-      chungLoaiHangHoa: [null],
       ngayTao: [null],
     });
   }
@@ -105,11 +102,10 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
       limit: this.pageSize,
       maDonVi: null, // this.detail.maDvi
       maDs: null,
-      maVTHH: this.formData.value.loaiHangHoa ? this.formData.value.loaiHangHoa : null,
-      maChungLoaiHang: this.formData.value.chungLoaiHangHoa ? this.formData.value.chungLoaiHangHoa : null,
+      maVTHH: null,
       orderBy: "string",
       orderType: "string",
-      page: this.page,
+      page: this.page - 1,
     }
     const res = await this.quanlyChatLuongService.hangTieuHuytraCuu(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -146,37 +142,10 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    try {
-      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma != '01') {
-              this.listLoaiHangHoa = [
-                ...this.listLoaiHangHoa,
-                item
-              ];
-            }
-            else {
-              this.listLoaiHangHoa = [
-                ...this.listLoaiHangHoa,
-                ...item.child
-              ];
-            }
-          })
-        }
-      })
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-
-
-  }
-
-  async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.loaiHangHoa);
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
-      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    let res = await this.danhMucService.loadDanhMucHangHoaAsync();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiHangHoa = res.data;
+      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
     }
   }
 
@@ -219,8 +188,6 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
         const body = {
           denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
           tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
-          limit: this.pageSize,
-          page: this.page,
           "chungLoaiHH": "",
           "maDonVi": "",
           "maDs": "",
@@ -333,9 +300,7 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
-      if (this.page === 1) {
-        await this.traCuuDsHangTieuHuy();
-      }
+      await this.traCuuDsHangTieuHuy();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

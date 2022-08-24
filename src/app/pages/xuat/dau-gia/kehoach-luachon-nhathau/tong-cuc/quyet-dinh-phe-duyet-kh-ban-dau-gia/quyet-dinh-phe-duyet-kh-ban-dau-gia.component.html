@@ -144,11 +144,10 @@
                       <a (click)="detail(data)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai == '00' || data.trangThai == '03') && userService.isTongCuc()"
-                        (click)="detail(data)">
+                      <a *ngIf="userService.isTongCuc()" (click)="detail(data)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="delete(data)">
+                      <a *ngIf="userService.isTongCuc()" (click)="delete(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

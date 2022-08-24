@@ -35,9 +35,9 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
     if (body.trangThai)
       url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
-      url_ += 'pageable.pageNumber=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
-      url_ += 'pageable.pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
 
     if (body.page != null || body.page != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.page - 1)) + '&';

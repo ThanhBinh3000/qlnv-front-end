@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MuaBuComponent} from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {Globals} from "../../../shared/globals";
-import {MESSAGE} from "../../../constants/message";
-import {MuabuBosungComponent} from "./muabu-bosung/muabu-bosung.component";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MuaBuComponent } from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/mua-bu/mua-bu.component";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../services/danhmuc.service";
+import { Globals } from "../../../shared/globals";
+import { MESSAGE } from "../../../constants/message";
+import { MuabuBosungComponent } from "./muabu-bosung/muabu-bosung.component";
 
 @Component({
   selector: 'app-dialog-qd-muabubosung-ttcp',

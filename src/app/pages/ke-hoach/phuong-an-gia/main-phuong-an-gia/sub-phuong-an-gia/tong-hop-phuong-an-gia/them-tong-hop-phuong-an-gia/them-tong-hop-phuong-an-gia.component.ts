@@ -45,7 +45,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   dataTable: any[] = [];
   listCuc: any[] = [];
   isTongHop: boolean = false;
-  isChiTiet: boolean = false;
   listCucSelected: any[] = [];
 
   constructor(
@@ -63,6 +62,17 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   ) {
     this.formData = this.fb.group(
       {
+        id: [],
+        namTongHop: [],
+        loaiVthh: [],
+        cloaiVthh: [],
+        loaiGia: [],
+        maDvis: [],
+        ngayDxTu: [],
+        ngayDxDen: [],
+        ngayTongHop: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+        noiDung: [null, [Validators.required]],
+        ghiChu: [],
         giaKsTt: [],
         giaKsTtVat: [],
         kqTdVat: [],
@@ -74,15 +84,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.formTraCuu = this.fb.group(
       {
         id: [],
-        namKeHoach: [dayjs().get('year'), [Validators.required]],
+        namTongHop: [dayjs().get('year'), [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
         maDvis: [[], [Validators.required]],
-        ngayKy: [null, [Validators.required]],
-        ngayTongHop: [],
-        noiDung: [],
-        ghiChu: []
+        ngayDx: [null, [Validators.required]],
       }
     );
   }
@@ -96,7 +103,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.loadDsVthh(),
       this.loadDsLoaiGia(),
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formTraCuu.get('namKeHoach').value),
     ])
     this.spinner.hide();
   }
@@ -108,28 +114,21 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
   }
 
-
   async getDataDetail(id) {
     if (id > 0) {
       this.isTongHop = true;
       let res = await this.tongHopPhuongAnGiaService.getDetail(id);
       const data = res.data;
       console.log(data);
-      if (this.isChiTiet = true) {
-        this.formTraCuu.patchValue({
-          id: data.id,
-          namKh: data.namKh,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          maDvis: data.maDvis,
-          ngayTongHop: data.ngayTongHop,
-          ngayKy: data.ngayKy,
-          loaiGia: data.loaiGia,
-          noiDung: data.noiDung,
-          ghiChu: data.ghiChu,
-        });
-        this.bindingDataTongHop(res.data)
-      }
+      this.formTraCuu.patchValue({
+        namTongHop: data.namTongHop,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        maDvis: data.maDvis,
+        ngayDx: [data.ngayDxTu, data.ngayDxDen],
+        loaiGia: data.loaiGia,
+      });
+      this.bindingDataTongHop(res.data, null)
     }
   }
 
@@ -147,17 +146,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
           item.ma == 'LG03' || item.ma == 'LG04'
         );
       }
-    }
-  }
-
-  async onChangeNamQd(namKeHoach) {
-    let body = {
-      namKeHoach: namKeHoach,
-      trangThai: "11"
-    }
-    let res = await this.tongHopPhuongAnGiaService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
     }
   }
 
@@ -180,22 +168,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   async save() {
-    this.setValidators(true);
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    this.helperService.markFormGroupTouched(this.formTraCuu);
-    if (this.formTraCuu.invalid) {
+    if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    let body = this.formTraCuu.value;
-    this.formData = this.formData.value;
-    body.namKh = body.namKeHoach;
-    body.ngayKyTu = body.ngayKy[0];
-    body.ngayKyDen = body.ngayKy[1];
+    let body = this.formData.value;
     body.type = this.type;
-    delete body.ngayKy;
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -209,16 +190,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
 
     this.spinner.hide();
-  }
-
-  setValidators(isSave) {
-    if (isSave) {
-      this.formTraCuu.controls["ngayTongHop"].setValidators([Validators.required]);
-      this.formTraCuu.controls["noiDung"].setValidators([Validators.required]);
-    } else {
-      this.formTraCuu.controls["ngayTongHop"].clearValidators();
-      this.formTraCuu.controls["noiDung"].clearValidators();
-    }
   }
 
   async loadDsVthh() {
@@ -255,7 +226,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   async tongHop() {
     this.spinner.show();
-    this.setValidators(false);
     this.helperService.markFormGroupTouched(this.formTraCuu);
     if (this.formTraCuu.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -263,15 +233,17 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       return;
     }
     let body = this.formTraCuu.value;
-    body.ngayKyTu = body.ngayKy[0];
-    body.ngayKyDen = body.ngayKy[1];
+    if (body.ngayDx) {
+      body.ngayDxTu = body.ngayDx[0];
+      body.ngayDxDen = body.ngayDx[1];
+    }
     body.type = this.type;
-    delete body.ngayKy;
+    delete body.ngayDx;
     let res = await this.tongHopPhuongAnGiaService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
-      this.bindingDataTongHop(res.data);
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      this.bindingDataTongHop(res.data, body);
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
     } else {
       this.isTongHop = false;
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -279,7 +251,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.spinner.hide();
   }
 
-  bindingDataTongHop(data) {
+  bindingDataTongHop(data, reqBody) {
     console.log(data);
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? data.giaKsTtTu + " - " + data.giaKsTtDen : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? data.giaKsTtVatTu + " - " + data.giaKsTtVatDen : null;
@@ -288,6 +260,16 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     let giaDng = data.giaDnTu && data.giaDnDen ? data.giaDnTu + " - " + data.giaDnDen : null;
     let giaDngVat = data.giaDnVatTu && data.giaDnVatDen ? data.giaDnVatTu + " - " + data.giaDnVatDen : null;
     this.formData.patchValue({
+      id: data.id,
+      namTongHop: data.namTongHop ?? reqBody.namTongHop,
+      loaiVthh: data.loaiVthh ?? reqBody.loaiVthh,
+      cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
+      loaiGia: data.loaiGia ?? reqBody.loaiGia,
+      maDvis: data.maDvis ?? reqBody.maDvis,
+      ngayDxTu: data.ngayDxTu ?? reqBody.ngayDxTu,
+      ngayDxDen: data.ngayDxDen ?? reqBody.ngayDxDen,
+      noiDung: data.noiDung,
+      ghiChu: data.ghiChu,
       giaKsTt: giaKsTt,
       giaKsTtVat: giaKsTtVat,
       kqTd: kqTd,
@@ -296,6 +278,10 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       giaDngVat: giaDngVat,
     })
     this.dataTable = data.pagChiTiets;
+  }
+
+  taoTtrinh() {
+
   }
 }
 

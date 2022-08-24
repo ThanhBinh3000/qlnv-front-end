@@ -18,15 +18,15 @@ import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinG
 import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
 
 @Component({
-  selector: "app-them-quyet-dinh-gia-btc",
-  templateUrl: "./them-quyet-dinh-gia-btc.component.html",
-  styleUrls: ["./them-quyet-dinh-gia-btc.component.scss"]
+  selector: "app-them-quyet-dinh-gia-btc-lt",
+  templateUrl: "./them-quyet-dinh-gia-btc-lt.component.html",
+  styleUrls: ["./them-quyet-dinh-gia-btc-lt.component.scss"]
 })
-export class ThemQuyetDinhGiaBtcComponent implements OnInit {
+export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
+  @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
-  @Input()
-  idInput: number;
+  @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
 
@@ -71,7 +71,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       {
         id: [],
         namKeHoach: [dayjs().get("year"), [Validators.required]],
-        soQd: [, [Validators.required, this.usernameValidator.bind(this)]],
+        soQd: [, [Validators.required]],
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         soToTrinh: [null],
@@ -253,8 +253,6 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
       this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-      this.isErrorUnique = true;
-      this.helperService.markFormGroupTouched(this.formData);
     }
     this.spinner.hide();
   }
@@ -277,7 +275,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat({});
+    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhTongHop({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }
@@ -317,7 +315,7 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
 
       //thong tin gia
       this.arrThongTinGia = [];
-      res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
+      res = await this.quyetDinhGiaCuaBtcService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.arrThongTinGia = res.data;
         this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
@@ -342,11 +340,11 @@ export class ThemQuyetDinhGiaBtcComponent implements OnInit {
     }
   }
 
-  private usernameValidator(c: AbstractControl): { [key: string]: boolean } {
+  private UniqueValue(c: AbstractControl): { [key: string]: boolean } {
 
     // check a property of c, the Control this validator is attached to
     if (this.isErrorUnique) {
-      return { "badValueFound": true };
+      return { "uniqueError": true };
     }
     return null;
 

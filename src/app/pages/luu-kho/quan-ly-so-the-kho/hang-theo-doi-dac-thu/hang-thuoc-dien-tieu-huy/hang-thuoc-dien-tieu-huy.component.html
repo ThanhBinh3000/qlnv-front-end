@@ -24,23 +24,22 @@
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="ten-hang-hoa">Loại hang hóa</nz-form-label>
-
+            <nz-form-label nzFor="ten-hang-hoa">Loại hàng hóa</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-                </nz-option>
-              </nz-select>
+              <nz-input-group id="ten-hang-hoa">
+                <input type="text" nz-input formControlName="tenHangHoa" />
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
+            <nz-form-label nzFor="loai-hang-hoa">Chủng loại hàng hóa</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="chungLoaiHangHoa">
-                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-                </nz-option>
-              </nz-select>
+              <nz-input-group id="loai-hang-hoa">
+                <input type="text" nz-input formControlName="loaiHangHoa" [nzAutocomplete]="loaiHHAuto"
+                  (input)="onChangeLoaiHHAutoComplete($event)" />
+                <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource"></nz-autocomplete>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
 
@@ -59,7 +58,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="traCuuDsHangTieuHuy()">
+        <button nz-button class="search__button--search">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -94,12 +93,12 @@
           <tr>
             <th style="width: 45px;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
-            <th class="text-center" style="width: 2.5%;">STT</th>
+            <th class="text-center" style="width: 45px;">STT</th>
             <th style="width: 10%;">Mã danh sách</th>
-            <th>Tên đơn vị</th>
+            <th style="width: 40%;">Tên đơn vị</th>
             <th style="width: 15%;">Ngày tạo</th>
             <th style="width: 15%;">Trạng thái xử lý của Cục</th>
-            <th style="width: 7%;">Hành động</th>
+            <th width="">Hành động</th>
           </tr>
           <tr>
             <th></th>
@@ -138,7 +137,7 @@
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-            <td>{{ idx + 1 }}</td>
+            <td style="text-align: center">{{ idx + 1 }}</td>
             <td>{{ data.maDanhSach }}</td>
             <td>{{ data.tenDonvi }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
