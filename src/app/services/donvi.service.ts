@@ -20,7 +20,7 @@ export class DonviService extends BaseService {
   }
 
   layTatCaDonViByLevel(level): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca/${level}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/tat-ca/${level}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
