@@ -15,7 +15,7 @@ export class HangTrongKhoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.loaiVTHHGetAll();
+    await this.loaiVTHHGetAll();
 
   }
 

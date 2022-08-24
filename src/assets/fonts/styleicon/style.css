@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?z1s6ix');
-  src:  url('fonts/htvbdh.eot?z1s6ix#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?z1s6ix') format('truetype'),
-    url('fonts/htvbdh.woff?z1s6ix') format('woff'),
-    url('fonts/htvbdh.svg?z1s6ix#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?ld5tju');
+  src:  url('fonts/htvbdh.eot?ld5tju#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?ld5tju') format('truetype'),
+    url('fonts/htvbdh.woff?ld5tju') format('woff'),
+    url('fonts/htvbdh.svg?ld5tju#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_tao-ttrinh:before {
+  content: "\eb26";
+}
 .htvbdh_tcdt_phan-quyen:before {
   content: "\eb25";
 }

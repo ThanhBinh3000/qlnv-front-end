@@ -12,16 +12,7 @@
                 <nz-form-item nz-col nzSpan="9" class="form-item">
                     <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
                     <nz-form-control>
-                        <nz-input-group id="ten-don-vi">
-                            <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)" [nzShowArrow]="false">
-                                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
-                                </nz-option>
-                            </nz-select>
-                            <ng-template #suffixIconSearch>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
-                        </nz-input-group>
+                        <input type="text" nz-input formControlName="tenDonvi" readonly />
                     </nz-form-control>
                 </nz-form-item>
 
@@ -35,7 +26,8 @@
                 <nz-form-item nz-col nzSpan="4" class="form-item">
                     <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
                     <nz-form-control>
-                        <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+                        <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao"
+                            class="search__input">
                         </nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
@@ -50,9 +42,9 @@
     <div class="group-button">
         <h3>Danh sách hàng thuộc diện tiêu huỷ</h3>
         <div class="buttons">
-            <button type="button" class="btn btn-sub btn-xoa" (click)="huy()">
-                <i class="fa fa-times do"></i>
-                <span>Huỷ bỏ</span>
+            <button type="button" class="btn btn-sub" (click)="huy()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
             </button>
             <button type="button" class="btn btn-sub" (click)="exportData()">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -87,9 +79,12 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập loại hàng hoá" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idLoaiHangHoa" placeholder="Nhập loại hàng hoá" [nzShowArrow]="false" (ngModelChange)="onChangeLoaiVthh($event)">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idLoaiHangHoa"
+                                placeholder="Nhập loại hàng hoá" [nzShowArrow]="false"
+                                (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}"
+                                    *ngFor="let item of dsLoaiHangHoa">
                                 </nz-option>
                             </nz-select>
                         </nz-input-group>
@@ -97,9 +92,12 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập loại hàng hoá" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.chungLoaiHangHoa" placeholder="Nhập chủng loại hàng hoá" [nzShowArrow]="false" (ngModelChange)="onChangeChungLoai($event)">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.chungLoaiHangHoa"
+                                placeholder="Nhập chủng loại hàng hoá" [nzShowArrow]="false"
+                                (ngModelChange)="onChangeChungLoai($event)">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
+                                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}"
+                                    *ngFor="let item of dsChungLoaiHangHoa">
                                 </nz-option>
                             </nz-select>
                         </nz-input-group>
@@ -107,9 +105,12 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập điểm kho" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idDiemKho" placeholder="Nhập điểm kho" (ngModelChange)="onChangeDiemKho($event)" [nzShowArrow]="false">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idDiemKho"
+                                placeholder="Nhập điểm kho" (ngModelChange)="onChangeDiemKho($event)"
+                                [nzShowArrow]="false">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDiemKho">
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}"
+                                    *ngFor="let item of dsDiemKho">
                                 </nz-option>
                             </nz-select>
                         </nz-input-group>
@@ -117,9 +118,11 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập nhà kho" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idNhaKho" placeholder="Nhập nhà kho" (ngModelChange)="onChangeNhaKho($event)" [nzShowArrow]="false">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idNhaKho" placeholder="Nhập nhà kho"
+                                (ngModelChange)="onChangeNhaKho($event)" [nzShowArrow]="false">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNhaKho">
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}"
+                                    *ngFor="let item of dsNhaKho">
                                 </nz-option>
                             </nz-select>
                         </nz-input-group>
@@ -127,9 +130,12 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập ngăn lô" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idNganKho" placeholder="Nhập ngăn kho" (ngModelChange)="onChangeNganKho($event)" [nzShowArrow]="false">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idNganKho"
+                                placeholder="Nhập ngăn kho" (ngModelChange)="onChangeNganKho($event)"
+                                [nzShowArrow]="false">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsNganKho">
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}"
+                                    *ngFor="let item of dsNganKho">
                                 </nz-option>
                             </nz-select>
                         </nz-input-group>
@@ -137,7 +143,8 @@
                     <th>
                         <nz-input-group>
                             <!-- <input type="text" nz-input placeholder="Nhập lô kho" /> -->
-                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idLoKho" placeholder="Nhập lô kho" [nzShowArrow]="false">
+                            <nz-select [nzDisabled]="editList" [(ngModel)]="rowItem.idLoKho" placeholder="Nhập lô kho"
+                                [nzShowArrow]="false">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                                 <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsLoKho">
                                 </nz-option>
@@ -146,22 +153,26 @@
                     </th>
                     <th>
                         <nz-input-group>
-                            <input [disabled]="editList" type="number" [(ngModel)]="rowItem.soLuongTon" nz-input placeholder="Nhập số lượng" />
+                            <input [disabled]="editList" type="number" [(ngModel)]="rowItem.soLuongTon" nz-input
+                                placeholder="Nhập số lượng" />
                         </nz-input-group>
                     </th>
                     <th>
                         <nz-input-group>
-                            <input [disabled]="editList" type="number" [(ngModel)]="rowItem.soLuongThanhLy" nz-input placeholder="Nhập số lượng" />
+                            <input [disabled]="editList" type="number" [(ngModel)]="rowItem.soLuongThanhLy" nz-input
+                                placeholder="Nhập số lượng" />
                         </nz-input-group>
                     </th>
                     <th>
                         <nz-input-group>
-                            <input disabled type="text" [(ngModel)]="rowItem.donVi" nz-input placeholder="Nhập đơn vị tính" />
+                            <input disabled type="text" [(ngModel)]="rowItem.donVi" nz-input
+                                placeholder="Nhập đơn vị tính" />
                         </nz-input-group>
                     </th>
                     <th>
                         <nz-input-group>
-                            <input [disabled]="editList" type="text" [(ngModel)]="rowItem.lyDo" nz-input placeholder="Nhập lý do" />
+                            <input [disabled]="editList" type="text" [(ngModel)]="rowItem.lyDo" nz-input
+                                placeholder="Nhập lý do" />
                         </nz-input-group>
                     </th>
                     <th style="text-align: center;">
@@ -208,10 +219,13 @@
                         <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.slTon" /></td>
                         <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.slYeuCau" /></td>
                         <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.donVi" /></td>
-                        <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.lyDo" /></td>
-                        <td>
-                            <a (click)="luuEdit(data.id)" class="save">Lưu</a>
-                            <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+                        <td><input type="text" nz-input [(ngModel)]="dataEdit[idx].data.lyDo" /></td>
+                        <td class="text-center">
+                            <a (click)="luuEdit(data.id)" class="save">
+                                <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="huyEdit(data.id)">
+                                <i class="fa fa-times do"></i> </a>
                         </td>
                     </ng-template>
                 </tr>
@@ -223,7 +237,9 @@
 
                 </div>
                 <div class="canphai">
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                        (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
                             {{ range[0] }}-{{ range[1] }} of {{ total }} items
                         </ng-template>

@@ -19,7 +19,7 @@ export const MESSAGEVALIDATE = {
   OVER_SIZE: "Kích thước file không vượt quá 2MB",
   NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
   EXIST_REPORT: "Báo cáo đã tồn tại",
-  WRONG_DAY: '"Đến ngày" cần lớn hơn "Ngày lập từ"',
+  WRONG_DAY: '"Đến ngày" cần lớn hơn "Từ ngày"',
   EXIST_CONTRACT: "Hợp đồng không tồn tại",
   LOCAL_EXIST: "Địa phương nhận đã tồn tại",
   NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",

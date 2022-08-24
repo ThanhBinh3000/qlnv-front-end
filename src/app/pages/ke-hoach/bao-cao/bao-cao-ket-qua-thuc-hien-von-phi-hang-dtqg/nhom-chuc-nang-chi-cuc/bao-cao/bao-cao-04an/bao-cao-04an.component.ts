@@ -8,11 +8,10 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, DON_VI_TIEN, LA_MA, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
-import { LISTBIEUMAUDOT } from '../bao-cao.constant';
+import * as uuid from "uuid";
 
 export class ItemDataMau0405 {
     bcaoCtietId = null;
@@ -67,6 +66,7 @@ export class BaoCao04anComponent implements OnInit {
     maDviTien = '1';
     tuNgay: any;
     denNgay: any;
+    namBcao: number;
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
@@ -89,6 +89,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     async ngOnInit() {
+
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien;
         this.thuyetMinh = this.data?.thuyetMinh;
@@ -97,6 +98,7 @@ export class BaoCao04anComponent implements OnInit {
         this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.namBcao = this.data?.namBcao;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
         this.spinner.show();
         //lấy danh sách nội dung chi
@@ -804,14 +806,14 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        const baoCao = this.lstCtietBcao4an;
-        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
-        if (index == -1) {
-            return false;
-        }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
-        const maNdung = baoCao.find(e => e.stt == str)?.maNdungChi;
+        const maNdung = this.lstCtietBcao4an.find(e => e.stt == str)?.maNdungChi;
         if (this.getRoleCalculate(maNdung) == '7') {
+            return true;
+        }
+        //kiem tra xem co ton tai ban ghi level con hay ko
+        const index: number = this.lstCtietBcao4an.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
             return false;
         }
         return true;

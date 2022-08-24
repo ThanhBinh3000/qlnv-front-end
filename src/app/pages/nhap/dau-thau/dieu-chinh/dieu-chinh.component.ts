@@ -13,7 +13,7 @@ export class DieuChinhComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.loaiVTHHGetAll();
   }
