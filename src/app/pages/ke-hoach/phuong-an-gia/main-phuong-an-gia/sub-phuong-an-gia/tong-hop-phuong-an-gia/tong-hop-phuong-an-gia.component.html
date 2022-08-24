@@ -18,7 +18,7 @@
                         <nz-form-item class="form-item">
                             <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="loaiHangHoa" id="loai-hh">
+                                <nz-select formControlName="loaiVthh" id="loai-hh">
                                     <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
                                     </nz-option>
                                     <nz-option>
@@ -223,18 +223,18 @@
                         <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.noiDung }}</td>
                         <td>{{ data.namTongHop }}</td>
-                        <td>{{ data.tenloaiVthh }}</td>
+                        <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
-                        <td>{{ data.tenloaiGia }}</td>
-                        <td>{{ data.tenTrangThaiTH }}</td>
-                        <td>{{ data.soToTrinh }}</td>
-                        <td>{{ data.tenTrangThaiTT }}</td>
+                        <td>{{ data.tenLoaiGia }}</td>
+                        <td>{{ data.tenTrangThaiTh }}</td>
+                        <td><a class="link" (click)="viewDetail(data.id, true,false)">{{ data.soToTrinh }}</a></td>
+                        <td>{{ data.soToTrinh ? data.tenTrangThaiTt : '' }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, false)">
+                            <a (click)="viewDetail(data.id, false,true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
-                                <i class="fa fa-pencil"></i>
+                            <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT" (click)="viewDetail(data.id, true,false)">
+                                <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
                             </a>
                             <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
@@ -264,6 +264,10 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-    <app-them-tong-hop-phuong-an-gia [type]="type" [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    <app-them-tong-hop-phuong-an-gia *ngIf="isTongHop" [type]="type" [isView]="isViewDetail" [idInput]="idSelected"
+        (onClose)="onClose()">
     </app-them-tong-hop-phuong-an-gia>
+    <app-them-moi-to-trinh-pag *ngIf="!isTongHop" [type]="type" [isView]="isViewDetail" [idInput]="idSelected"
+        (onClose)="onClose()">
+    </app-them-moi-to-trinh-pag>
 </ng-template>
