@@ -677,20 +677,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             case '00':
               body.trangThaiId = '01';
               break;
-<<<<<<< HEAD
-
-            case '01':
-              body.trangThaiId = '02';
-              break;
-
-            case '09':
-            case '01':
-              body.trangThaiId = '02';
-              break;
-          }
-
-
-=======
             case '01':
               body.trangThaiId = '02';
               break;
@@ -698,7 +684,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               body.trangThaiId = '02';
               break;
           }
->>>>>>> b57f9323b58985ea285949a1adec556be4551e76
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -742,16 +727,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             case '01':
               body.trangThaiId = '03';
               break;
-
             case '09':
               body.trangThaiId = '12';
               break;
           }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> b57f9323b58985ea285949a1adec556be4551e76
           const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);

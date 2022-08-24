@@ -16,7 +16,7 @@ export class ThongBaoBanDauGia {
     ghiChu: string;
     hinhThucDauGia: string;
     id: string;
-    loaiHangHoa: string;
+    loaiVthh: string;
     luuYVeThoiGianDangKy: string;
     luuYVeThoiGianNopTienDatTruoc: string;
     luuYVeThoiGianXemTaiSan: string;

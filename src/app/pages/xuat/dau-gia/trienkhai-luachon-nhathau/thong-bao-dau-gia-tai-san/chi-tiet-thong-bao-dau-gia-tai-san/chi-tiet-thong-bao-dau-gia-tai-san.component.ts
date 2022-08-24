@@ -95,10 +95,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         },
         [],
       ],
-      loaiHangHoa: [
+      loaiVthh: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.loaiHangHoa
+            ? this.thongBaoBanDauGia.loaiVthh
             : null,
           disabled: this.isView ? true : false
         },
@@ -364,10 +364,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       this.thongBaoBanDauGia.maDonVi = this.userInfo.MA_DVI;
       this.thongBaoBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
       this.thongBaoBanDauGia.namKeHoach = this.yearNow;
-      this.thongBaoBanDauGia.loaiHangHoa = this.typeVthh;
+      this.thongBaoBanDauGia.loaiVthh = this.typeVthh;
       this.formData.patchValue({
         namKeHoach: this.yearNow,
-        loaiHangHoa: this.thongBaoBanDauGia.loaiHangHoa,
+        loaiVthh: this.thongBaoBanDauGia.loaiVthh,
       });
       await this.loadChiTiet(this.id);
       await Promise.all([
@@ -392,7 +392,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
 
   async loadQuyetDinhPheDuyetKHBDG() {
     let body = {
-      loaiVthh: this.thongBaoBanDauGia.loaiHangHoa,
+      loaiVthh: this.thongBaoBanDauGia.loaiVthh,
       namKhoach: this.thongBaoBanDauGia.namKeHoach,
       paggingReq: {
         limit: 1000,
@@ -411,11 +411,11 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
   async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (!this.thongBaoBanDauGia.loaiHangHoa) {
+      if (!this.thongBaoBanDauGia.loaiVthh) {
         this.listHangHoa = res.data;
       }
       else {
-        this.listHangHoa = res.data?.filter(x => x.ma == this.thongBaoBanDauGia.loaiHangHoa);
+        this.listHangHoa = res.data?.filter(x => x.ma == this.thongBaoBanDauGia.loaiVthh);
       };
     }
   }
@@ -571,6 +571,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         ...body,
         // "capDonVi": this.formData.get("capDonVi").value,
         "fileDinhKems": this.listFileDinhKem,
+        "maVatTuCha": this.formData.get("loaiVthh") ? this.formData.get("loaiVthh").value : null,
         "id": this.formData.get("id") ? this.formData.get("id").value : null,
         // "maDonVi": this.formData.get("maDonVi").value,
         "taiSanIdList": this.taiSanIdList,
