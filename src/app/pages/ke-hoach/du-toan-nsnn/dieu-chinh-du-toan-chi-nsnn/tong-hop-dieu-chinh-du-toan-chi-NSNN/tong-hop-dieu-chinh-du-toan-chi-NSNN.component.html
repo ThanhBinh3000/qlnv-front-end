@@ -1,0 +1,128 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button nz-button class="search__button--search" (click)="onSubmit()">
+          Kiểm tra
+        </button>
+        <button nz-button class="search__button--search" (click)="dong()">
+          Đóng
+        </button>
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+          <i nz-icon nzType="close"></i>
+          Xóa điều kiện
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="THÔNG TIN CHUNG" class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+          <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+            <nz-descriptions-item nzTitle="Năm báo cáo" [nzSpan]="1">
+              <nz-input-number class="input__search" nzSize="small"
+                [class]="statusBtnValidate || (namHienTai && namHienTai >= 1000 &&  namHienTai <= 2999)?'' : 'input-error-validate' "
+                [(ngModel)]="namHienTai"></nz-input-number>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Đợt báo cáo" [nzSpan]="1">
+              <nz-input-number class="input__search" nzSize="small" [(ngModel)]="dotBcao"
+                [class]="statusBtnValidate || dotBcao?'' : 'input-error-validate' "></nz-input-number>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+                <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+                </nz-option>
+              </nz-select>
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+      </nz-card>
+      <div><br /></div>
+      <nz-card nzTitle="DANH SÁCH BÁO CÁO ĐIỀU CHỈNH DỰ TOÁN CHI NSNN" [nzExtra]="tableCard1"
+        class="mt16 flex-card p-lr16">
+        <div class="row">
+          <div class="col-lg-12 form-group">
+            <label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
+          </div>
+        </div>
+        <nz-table #basicTable class="nowrap">
+          <thead>
+            <tr>
+              <th nzWidth="5%">STT</th>
+              <th nzWidth="20%">Đơn vị lập</th>
+              <th nzWidth="10%">Mã báo cáo</th>
+              <th nzWidth="10%">Năm báo cáo</th>
+              <th nzWidth="20%">Ngày trình duyệt (Ngày đơn vị cấp dưới gửi báo cáo)</th>
+              <th nzWidth="20%">Ngày duyệt (Ngày cấp trên duyệt báo cáo)</th>
+              <th nzWidth="15%">Trạng thái</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of danhSachDieuChinh; let i = index">
+              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{getUnitName(item.maDvi)}}</td>
+              <td>
+                <a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+                  {{ item.maBcao}}
+                </a>
+              </td>
+              <!-- <td>{{item.ngayTao}}</td> -->
+              <td>{{item.namHienHanh}}</td>
+              <td>{{item.ngayTrinh}}</td>
+              <td>{{item.ngayDuyet}}</td>
+              <td>{{getStatusName(item.trangThai)}}</td>
+              <td>
+                <ng-container *ngIf="item.trangThai == '-1'">
+                  <button type="button" class="btn btn-main">
+                    <span>Thông báo đến đơn vị cấp dưới</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '7'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Phê duyệt</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '9'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Xem</span>
+                  </button>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-card>
+      <ng-template #tableCard1>
+        <button type="button" class="btn btn-main" (click)="tongHop()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tổng hợp</span>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>

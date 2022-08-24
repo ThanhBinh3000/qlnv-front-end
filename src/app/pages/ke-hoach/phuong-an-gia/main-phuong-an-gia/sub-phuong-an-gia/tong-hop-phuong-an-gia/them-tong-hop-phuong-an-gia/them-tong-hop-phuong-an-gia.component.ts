@@ -44,7 +44,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   giaDngVat: any[] = [];
   dataTable: any[] = [];
   listCuc: any[] = [];
-
+  isTongHop: boolean = false;
+  isChiTiet: boolean = false;
   listCucSelected: any[] = [];
 
   constructor(
@@ -110,21 +111,25 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
+      this.isTongHop = true;
       let res = await this.tongHopPhuongAnGiaService.getDetail(id);
       const data = res.data;
       console.log(data);
-      this.formTraCuu.patchValue({
-        id: data.id,
-        namKh: data.namKh,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        ngayTongHop: data.ngayTongHop,
-        ngayKy: data.ngayKy,
-        loaiGia: data.loaiGia,
-        noiDung: data.noiDung,
-        ghiChu: data.ghiChu,
-      });
-      this.bindingDataTongHop(res.data)
+      if (this.isChiTiet = true) {
+        this.formTraCuu.patchValue({
+          id: data.id,
+          namKh: data.namKh,
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          maDvis: data.maDvis,
+          ngayTongHop: data.ngayTongHop,
+          ngayKy: data.ngayKy,
+          loaiGia: data.loaiGia,
+          noiDung: data.noiDung,
+          ghiChu: data.ghiChu,
+        });
+        this.bindingDataTongHop(res.data)
+      }
     }
   }
 
@@ -264,9 +269,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     delete body.ngayKy;
     let res = await this.tongHopPhuongAnGiaService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.isTongHop = true;
       this.bindingDataTongHop(res.data);
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
     } else {
+      this.isTongHop = false;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();

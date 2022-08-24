@@ -53,8 +53,8 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hoá </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHangHoaError">
-                    <nz-select formControlName="maVatTuCha" [nzDisabled]="isDisableField() || isView">
-                      <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                    <nz-select formControlName="maVatTuCha" [nzDisabled]="isDisableField() || isView" (ngModelChange)="changeLoaiHangHoa()">
+                      <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
                     </nz-select>
                     <ng-template #loaiHangHoaError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -64,6 +64,19 @@
               </div>
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
+                  <nz-form-label nzRequired [nzNoColon]="true">Chủng Loại hàng hoá </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="chungLoaiHangHoaError">
+                    <nz-select formControlName="maChungLoaiHH" [nzDisabled]="isDisableField() || isView">
+                      <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                    </nz-select>
+                    <ng-template #chungLoaiHangHoaError let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                    </ng-template>
+                  </nz-form-control>
+                  </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="5">
+                    <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký đề xuất KH bán đấu giá </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyDeXuatError">
                     <nz-range-picker class="search__input" [nzDisabled]="isDisableField() || isView"

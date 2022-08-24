@@ -204,7 +204,6 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
   onCancel() {
     this._modalRef.close();
   }
-
   editRow(idGoiThau) {
     // console.log(idGoiThau);
     const dataRow = this.listOfData.filter(item => item.id === idGoiThau);

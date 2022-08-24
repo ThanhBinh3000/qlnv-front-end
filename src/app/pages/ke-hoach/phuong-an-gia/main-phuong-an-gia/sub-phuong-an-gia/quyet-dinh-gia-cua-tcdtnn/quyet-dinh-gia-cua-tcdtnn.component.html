@@ -7,7 +7,7 @@
                         <nz-form-item class="form-item">
                             <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="namKeHoach" id="nam-kh">
+                                <nz-select formControlName="namKeHoach">
                                     <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                                     </nz-option>
                                 </nz-select>
@@ -19,7 +19,7 @@
                             <nz-form-label nzFor="so-dx">Số quyết định</nz-form-label>
                             <nz-form-control>
                                 <nz-input-group id="so-dx">
-                                    <input type="text" nz-input formControlName="soDeXuat" />
+                                    <input type="text" nz-input formControlName="soQd" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>

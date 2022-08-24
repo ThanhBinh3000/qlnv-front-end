@@ -5,7 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
+import { DeXuatPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
@@ -42,7 +42,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   isViewDetail: boolean = false;
   idSelected: number = 0;
   constructor(private readonly fb: FormBuilder,
-    private giaDeXuatGiaService: GiaDeXuatGiaService,
+    private deXuatPAGService: DeXuatPAGService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -120,7 +120,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       page: this.page - 1,
 
     }
-    let res = await this.giaDeXuatGiaService.search(body);
+    let res = await this.deXuatPAGService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -162,7 +162,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.giaDeXuatGiaService.deleteMuti({ ids: dataDelete });
+            let res = await this.deXuatPAGService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -192,7 +192,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayKy[0];
         body.denNgay = body.ngayKy[1];
-        this.giaDeXuatGiaService
+        this.deXuatPAGService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-bo-tai-chinh-giao-bo-nganh.xlsx'),
@@ -295,7 +295,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.giaDeXuatGiaService.delete({ id: item.id }).then((res) => {
+          this.deXuatPAGService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
