@@ -15,7 +15,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
-import { GiaDeXuatGiaService } from 'src/app/services/gia-de-xuat-gia.service';
+import { DeXuatPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
@@ -39,6 +39,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
+  isVat: boolean = false;
 
   formData: FormGroup;
   listVthh: any[] = [];
@@ -61,10 +62,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   dataTableCanCuXdg: any[] = [];
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
+  dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
   dataTableKsGia: any[] = [];
 
   dataTableKqGia: any[] = [];
+
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -73,7 +77,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private helperService: HelperService,
-    private giaDeXuatGiaService: GiaDeXuatGiaService,
+    private deXuatPAGService: DeXuatPAGService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
@@ -89,7 +93,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         soDeXuat: [, [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         ngayKy: [null, [Validators.required]],
-        loaiGia: [null, [Validators.required]],
+        loaiGia: ['', [Validators.required]],
         trichYeu: [null],
         soCanCu: [null],
         trangThai: ['00'],
@@ -112,6 +116,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tongChiPhi: [],
         noiDung: [null],
         lyDoTuChoi: [],
+        tgianNhang: []
       }
     );
     this.formData.controls['giaDeNghi'].valueChanges.subscribe(value => {
@@ -157,7 +162,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.giaDeXuatGiaService.getDetail(id);
+      let res = await this.deXuatPAGService.getDetail(id);
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
@@ -193,6 +198,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
+      this.updateEditCache();
     }
   }
 
@@ -200,9 +206,18 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiGia = res.data;
+      if (this.type == TYPE_PAG.GIA_MUA_TOI_DA) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG01' || item.ma == 'LG02'
+        );
+      }
+      if (this.type == TYPE_PAG.GIA_CU_THE) {
+        this.dsLoaiGia = res.data.filter(item =>
+          item.ma == 'LG03' || item.ma == 'LG04'
+        );
+      }
     }
-  }
+  } w
 
   async loadDsPhuongAnGia() {
     this.dsPhuongAnGia = [];
@@ -298,6 +313,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
+  onChangeLoaiGia($event) {
+    this.isVat = ($event == 'LG01' || $event == 'LG03');
+    console.log(this.isVat);
+  }
+
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
       this.dsNam.push({
@@ -388,9 +408,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.type = this.type;
     let res
     if (this.idInput > 0) {
-      res = await this.giaDeXuatGiaService.update(body);
+      res = await this.deXuatPAGService.update(body);
     } else {
-      res = await this.giaDeXuatGiaService.create(body);
+      res = await this.deXuatPAGService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -444,7 +464,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               body.trangThai = STATUS.DA_DUYET_LDC;
             }
           }
-          let res = await this.giaDeXuatGiaService.approve(body)
+          let res = await this.deXuatPAGService.approve(body)
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.quayLai();
@@ -490,7 +510,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               break;
             }
           }
-          let res = await this.giaDeXuatGiaService.approve(body);
+          let res = await this.deXuatPAGService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();
@@ -551,10 +571,57 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     })
   }
 
-  themDataTable(tableName: String) {
-    if (tableName == 'ccXdg') {
-      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
-      this.rowItemCcXdg = new CanCuXacDinhPag();
+  themDataTable() {
+    this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+    this.rowItemCcXdg = new CanCuXacDinhPag();
+    this.updateEditCache();
+  }
+
+  startEdit(index: number) {
+    this.dataEdit[index].edit = true;
+  }
+
+  cancelEdit(index: number) {
+    this.dataEdit[index] = {
+      data: { ...this.dataTableCanCuXdg[index] },
+      edit: false,
+    };
+  }
+
+  saveEdit(idx: number) {
+
+  }
+
+  deleteItem(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTableCanCuXdg.splice(index, 1);
+          this.updateEditCache();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  updateEditCache(): void {
+    if (this.dataTableCanCuXdg) {
+      let i = 0;
+      this.dataTableCanCuXdg.forEach((item) => {
+        this.dataEdit[i] = {
+          edit: false,
+          data: { ...item },
+        };
+        i++
+      });
     }
   }
 }

@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MuabuBosungComponent} from "../dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {Globals} from "../../../shared/globals";
-import {MESSAGE} from "../../../constants/message";
-import {MuaBuBoSungComponent} from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MuabuBosungComponent } from "../dialog-qd-muabubosung-ttcp/muabu-bosung/muabu-bosung.component";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../services/danhmuc.service";
+import { Globals } from "../../../shared/globals";
+import { MESSAGE } from "../../../constants/message";
+import { MuaBuBoSungComponent } from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
 
 @Component({
   selector: 'app-dialog-muabu-bosung-btc',
@@ -14,7 +14,7 @@ import {MuaBuBoSungComponent} from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
 export class DialogMuabuBosungBtcComponent implements OnInit {
 
   @ViewChild('keHoachMuaBu') kehoachmuaBuBoSung: MuaBuBoSungComponent
-  ;
+    ;
 
   isView: boolean = false;
   errorBn: boolean = false;

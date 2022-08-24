@@ -20,7 +20,7 @@ export class GiaoNhapHangComponent implements OnInit {
     private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.spinner.show();

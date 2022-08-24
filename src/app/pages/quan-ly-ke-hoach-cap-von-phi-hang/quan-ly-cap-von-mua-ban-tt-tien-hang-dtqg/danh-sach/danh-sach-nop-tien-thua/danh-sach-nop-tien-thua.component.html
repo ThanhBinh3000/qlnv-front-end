@@ -1,0 +1,198 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+	<div class="tab-content tab-menu" id="myTabContent">
+		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+			aria-labelledby="banhanh-tab">
+			<div class="trai">
+			</div>
+			<div class="canphai phai action-top">
+
+				<button nz-button class="search__button--search" (click)="close()">
+					<i nz-icon nzType="stop"></i>
+					Đóng
+				</button>
+				<button nz-button type="submit" class="search__button--search"
+					(click)="pages.page = 1; pages.size = 10 ;onSubmit()">
+					<i nz-icon nzType="search"></i>
+					Tìm kiếm
+				</button>
+				<button nz-button class="search__button--clear" (click)="xoaDieuKien()" [hidden]="!status">
+					<i nz-icon nzType="close"></i>
+					Xóa điều kiện
+				</button>
+			</div>
+		</div>
+	</div>
+</nz-affix>
+<div class="contentBor chi-tieu__body">
+	<div class="contentDetail">
+		<div class="main-content">
+			<nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
+				<div class="search__body" nz-row [nzGutter]="[18, 12]">
+					<div nz-col nzSpan="6">
+						<label class="search__label">Mã cấp ứng vốn nhận từ đơn vị cấp trên</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn" 
+							[(ngModel)]="searchFilter.maCvUv"
+							[class]="statusNew || searchFilter.maCvUv ?'' : 'input-error-validate' ">
+							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonTuCapTren" [nzLabel]="item.maCapUngVonTuCapTren">
+							</nz-option>
+						</nz-select>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Trạng thái</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [nzDisabled]="disable"
+							[(ngModel)]="searchFilter.trangThai">
+							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							</nz-option>
+						</nz-select>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Ngày lập từ</label>
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">
+						</nz-date-picker>
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Đến ngày</label>
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
+						</nz-date-picker>
+					</div>
+                    <div nz-col nzSpan="6">
+						<label class="search__label">Mã nộp tiền thừa</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.maTienThua" />
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Ngày lập (ủy nhiệm chi)</label>
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayLap" nzFormat="dd/MM/yyyy">
+						</nz-date-picker>
+					</div>
+				</div>
+			</nz-card>
+			<nz-card nzTitle="Danh sách nhập nộp tiền thừa lên đơn vị cấp trên" [nzExtra]="tableCard1"
+				class="mt16 flex-card p-lr16">
+				<div class="row">
+					<div class="col-lg-12 form-group">
+						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
+					</div>
+				</div>
+				<nz-table #basicTable class="nowrap">
+					<thead>
+						<tr>
+							<th>STT</th>
+							<th>Mã nộp tiền thừa</th>
+                            <th>Mã cấp ứng vốn nhận từ đơn vị cấp trên</th>
+							<th>Ngày lập (ủy nhiệm chi)</th>
+							<th>Ngày nhận (lệnh chuyển có)</th>
+							<th>Ngày lập</th>
+							<th>Ngày trình duyệt</th>
+							<th>Ngày TBP duyệt</th>
+							<th>Ngày lãnh đạo duyệt</th>
+							<th>Trạng thái</th>
+							<th></th>
+							<th [hidden]="!status">
+								<ng-container *ngIf="checkAll(); else xoa">
+									<button type="button" class="btn btn-main" (click)="updateAllCheck()">
+										<span>Tất cả</span>
+									</button>
+								</ng-container>
+								<ng-template #xoa>
+									<button type="button" class="btn btn-main" (click)="xoaBaoCao('')">
+										<span>Xóa</span>
+									</button>
+								</ng-template>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let item of danhSach; let i = index">
+							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+							<td>
+								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+									{{ item.maNopTienThua}}
+								</a>
+							</td>
+                            <td>
+                                {{item.maCapUngVonTuCapTren}}
+                            </td>
+                            <td>
+                                {{item.ngayLap}}
+                            </td>
+							<td>
+								{{item.ngayNhan}}
+							</td>
+							<td>
+								{{item.ngayTao}}
+							</td>
+							<td>
+								{{item.ngayTrinh}}
+							</td>
+							<td>
+								{{item.ngayDuyet}}
+							</td>
+							<td>
+								{{item.ngayPheDuyet}}
+							</td>
+							<td>
+								{{getStatusName(item.trangThai)}}
+								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+									<br>Lý do: {{item.lyDoTuChoi}}
+								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngIf="status; else pheDuyet">
+									<ng-container *ngIf="checkDeleteReport(item); else xem">
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Nhập/Sửa dữ liệu</span>
+										</button>
+										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)">
+											<span>Xóa</span>
+										</button>
+									</ng-container>
+									<ng-template #xem>
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+											<span>Xem</span>
+										</button>
+									</ng-template>
+								</ng-container>
+								<ng-template #pheDuyet>
+									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<span>Phê duyệt</span>
+									</button>
+								</ng-template>
+							</td>
+							<td [hidden]="!status">
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+									(ngModelChange)="changeListIdDelete(item.id)"></label>
+								</ng-container>
+							</td>
+						</tr>
+					</tbody>
+				</nz-table>
+				<div class="tab-content tab-menu" id="myTabContent">
+					<div class="tab-pane fade show active justify-content-between">
+						<div class="trai">
+
+						</div>
+						<div class="canphai">
+							<!-- begin phân trang  -->
+							<nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+								nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+								(nzPageIndexChange)="onPageIndexChange($event)"
+								(nzPageSizeChange)="onPageSizeChange($event)">
+								<ng-template #rangeTemplate let-range="range" let-total>
+									{{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+								</ng-template>
+							</nz-pagination>
+							<!-- end phân trang  -->
+						</div>
+					</div>
+				</div>
+			</nz-card>
+			<ng-template #tableCard1>
+				<button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="statusTaoMoi">
+					<i class="icon htvbdh_dau-cong"></i>
+					<span>Tạo mới</span>
+				</button>
+			</ng-template>
+		</div>
+	</div>
+</div>

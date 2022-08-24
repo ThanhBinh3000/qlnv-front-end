@@ -49,9 +49,9 @@
 <div class="group-button">
     <h3>Danh sách hàng thuộc diện thanh lý</h3>
     <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="huy()">
-            <i class="fa fa-times do"></i>
-            <span>Huỷ bỏ</span>
+        <button type="button" class="btn btn-sub" (click)="huy()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -208,9 +208,12 @@
                     <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.slYeuCau" /></td>
                     <td><input disabled type="text" nz-input [(ngModel)]="dataEdit[idx].data.donVi" /></td>
                     <td><input type="number" nz-input [(ngModel)]="dataEdit[idx].data.lyDo" /></td>
-                    <td>
-                        <a (click)="luuEdit(data.id)" class="save">Lưu</a>
-                        <a (click)="huyEdit(data.id)">Huỷ bỏ</a>
+                    <td class="text-center">
+                        <a (click)="luuEdit(data.id)" class="save">
+                            <i class="fa fa-save"></i>
+                        </a>
+                        <a (click)="huyEdit(data.id)">
+                            <i class="fa fa-times do"></i> </a>
                     </td>
                 </ng-template>
             </tr>

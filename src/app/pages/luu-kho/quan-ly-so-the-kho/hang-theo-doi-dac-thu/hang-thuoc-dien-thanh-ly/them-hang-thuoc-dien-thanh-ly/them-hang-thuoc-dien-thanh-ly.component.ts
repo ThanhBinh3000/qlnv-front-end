@@ -223,17 +223,18 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             "ds": [],
         }
         this.dataTable.map((data: any) => {
-            const lstNganKho = this.dsNganKho.find((item) => item.tenDvi == data.nganKho)
-            const lstLoKho = lstNganKho?.children;
             const lstLoaiHang = this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten));
             const lstChungLoai = lstLoaiHang?.child
+            const lstNganKho = this.dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+            const dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+            const lstLoKho = this.dsTong[DANH_MUC_LEVEL.LO_KHO];
             const objDS = {
                 lyDo: data.lyDo,
                 maChungLoaiHang: lstChungLoai.find((item) => item.ten == data.chungLoaiHang).ma,
-                maDiemKho: this.dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
+                maDiemKho: dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
                 maLoKho: lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi,
                 maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten)).ma,
-                maNganKho: this.dsNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
+                maNganKho: lstNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
                 maNhaKho: this.dsNhaKho.find((item) => item.tenDvi == data.nhaKho).maDvi,
                 slTon: data.slTon,
                 slYeuCau: data.slYeuCau
@@ -241,14 +242,31 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             body.ds.push(objDS)
         })
         var res: any
-        if (this.detail) {
-            res = await this.quanlyChatLuongService.suads(body);
-        } else {
-            res = await this.quanlyChatLuongService.themds(body);
-        }
-
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.onClose.emit();
+        try {
+            if (this.detail) {
+                res = await this.quanlyChatLuongService.suads(body);
+                if (res.msg == MESSAGE.SUCCESS) {
+                    this.onClose.emit();
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                }
+                else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+            } else {
+                res = await this.quanlyChatLuongService.themds(body);
+                if (res.msg == MESSAGE.SUCCESS) {
+                    this.onClose.emit();
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                }
+                else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+            }
+            this.spinner.hide();
+        } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
 
@@ -259,6 +277,10 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     }
 
     async themMoiItem() {
+        if (!this.rowItem.idLoKho) {
+            this.notification.error(MESSAGE.ERROR_NOT_EMPTY, 'Vui lòng chọn lô kho.');
+            return;
+        }
         const newItem = {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,

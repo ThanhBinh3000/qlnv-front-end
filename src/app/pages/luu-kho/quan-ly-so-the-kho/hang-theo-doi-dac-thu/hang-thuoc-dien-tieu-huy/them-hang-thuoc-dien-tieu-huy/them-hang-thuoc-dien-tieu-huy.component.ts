@@ -9,6 +9,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { saveAs } from 'file-saver';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
 
 @Component({
     selector: 'app-them-hang-thuoc-dien-tieu-huy',
@@ -57,6 +59,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     dsNganKho = [];
     dsChungLoaiHangHoa = [];
     dsLoKho = [];
+    userInfo: UserLogin;
     @Output('close') onClose = new EventEmitter<any>();
 
     constructor(
@@ -65,18 +68,20 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
         private notification: NzNotificationService,
         private readonly spinner: NgxSpinnerService,
+        public userService: UserService,
     ) { }
 
     ngOnInit(): void {
-        this.initForm();
+        this.userInfo = this.userService.getUserLogin();
         this.initData();
+        this.initForm();
     }
 
     initForm(): void {
         if (this.detail) {
             const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
-                idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
+                tenDonvi: [{ value: this.dataEditList.tenDonvi, disabled: this.editList }],
                 maDvi: [{ value: donvi ? donvi.maDvi : null, disabled: this.editList }],
                 idDanhSach: [{ value: this.dataEditList.maDanhSach, disabled: this.editList }],
                 ngayTao: [{ value: this.dataEditList.ngayTao, disabled: this.editList }],
@@ -93,8 +98,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             this.dataTable = this.dataEditList.ds;
         } else {
             this.formData = this.fb.group({
-                idDonVi: [null],
-                maDvi: [null],
+                tenDonvi: [this.userInfo.TEN_DVI],
+                maDvi: [this.userInfo.MA_DVI],
                 tenDonVi: [null],
                 idDanhSach: [null],
                 ngayTao: [new Date()],
@@ -220,17 +225,18 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             "ds": [],
         }
         this.dataTable.map((data: any) => {
-            const lstNganKho = this.dsNganKho.find((item) => item.tenDvi == data.nganKho)
-            const lstLoKho = lstNganKho?.children;
+            const lstNganKho = this.dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+            const dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+            const lstLoKho = this.dsTong[DANH_MUC_LEVEL.LO_KHO];
             const lstLoaiHang = this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten));
             const lstChungLoai = lstLoaiHang?.child
             const objDS = {
                 lyDo: data.lyDo,
                 maChungLoaiHang: lstChungLoai.find((item) => item.ten == data.chungLoaiHang).ma,
-                maDiemKho: this.dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
+                maDiemKho: dsDiemKho.find((item) => item.tenDvi == data.diemKho).maDvi,
                 maLoKho: (lstLoKho && lstLoKho.length > 0 ? lstLoKho.find((item) => item.tenDvi == data.loKho).maDvi : null),
                 maLoaiHang: this.dsLoaiHangHoa.find((item) => data.loaiHang.includes(item.ten)).ma,
-                maNganKho: this.dsNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
+                maNganKho: lstNganKho.find((item) => item.tenDvi == data.nganKho).maDvi,
                 maNhaKho: this.dsNhaKho.find((item) => item.tenDvi == data.nhaKho).maDvi,
                 slTon: data.slTon,
                 slYeuCau: data.slYeuCau
@@ -243,7 +249,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
                 res = await this.quanlyChatLuongService.hangTieuHuySuads(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                     this.onClose.emit();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                 }
                 else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -252,7 +258,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
                 res = await this.quanlyChatLuongService.hangTieuHuyThemds(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                     this.onClose.emit();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                 }
                 else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -273,10 +279,15 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     }
 
     themMoiItem() {
+        if (!this.rowItem.idLoKho) {
+            this.notification.error(MESSAGE.ERROR_NOT_EMPTY, 'Vui lòng chọn lô kho.');
+            return;
+        }
+        var dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
         const newItem = {
             lyDo: this.rowItem.lyDo,
             chungLoaiHang: this.dsChungLoaiHangHoa.find((item) => item.ma == this.rowItem.chungLoaiHangHoa).ten,
-            diemKho: this.dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
+            diemKho: dsDiemKho.find((item) => item.id == this.rowItem.idDiemKho).tenDvi,
             loKho: (this.dsLoKho && this.dsLoKho.length > 0 && this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho)) ? this.dsLoKho.find((item) => item.id == this.rowItem.idLoKho).tenDvi : null,
             loaiHang: this.dsLoaiHangHoa.find((item) => item.id == this.rowItem.idLoaiHangHoa).ten,
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
@@ -319,8 +330,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
 
     luuEdit(id: number): void {
         const index = this.dataTable.findIndex((item) => item.id === id);
-        Object.assign(this.dataTable[index], this.dataEdit[id].data);
-        this.dataEdit[id].edit = false;
+        Object.assign(this.dataTable[index], this.dataEdit[index].data);
+        this.dataEdit[index].edit = false;
     }
 
     updateEditCache(): void {
@@ -336,7 +347,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
 interface IDanhSachHangTieuHuy {
     id: number;
     maDanhSach: string;
-    idDonVi: number;
+    tenDonvi: number;
     tenDonVi: string;
     ngayTao: Date;
     trangThai: string;

@@ -18,7 +18,7 @@ export class CucComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
   tabs: any;
   async loaiVTHHGetAll() {
     this.tabs = [

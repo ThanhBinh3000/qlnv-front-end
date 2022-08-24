@@ -1,0 +1,261 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
+            (click)="banHanh()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Ban hành</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+      <i class="icon htvbdh_luu"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+                    <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+                        {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+                    </span>
+          <span>QUYẾT ĐỊNH GIÁ CỦA BTC</span>
+        </div>
+      </div>
+    </div>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)"
+                         [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="noEdit"
+                                 [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                </nz-input-number>
+              </nz-input-group>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-ky">Ngày ký
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="noEdit"
+                              class="search__input">
+              </nz-date-picker>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày hiệu lực
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc" [nzDisabled]="noEdit"
+                              class="search__input">
+              </nz-date-picker>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-to-trinh">Số tờ trình đề
+              xuất
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="soToTrinh" [nzDisabled]="noEdit" nzAllowClear="true"
+                         (ngModelChange)="onChangeSoToTrinh($event)">
+                <nz-option *ngFor="let p of dsToTrinhDeXuat" [nzValue]="p.id" [nzLabel]="p.id+'-'+p.noiDung">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
+            </nz-form-label>
+            <nz-form-control>
+              <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input [readonly]="noEdit"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Chủng loại hàng
+              hóa
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="cloaiVthh" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="loai-gia">Loại giá
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="tieu-chuan-cl">Tiêu chuẩn chất
+              lượng
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="tieuChuanCl" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsTieuChuanCl" [nzValue]="p.id" [nzLabel]="p.tenQchuan">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-col nzSpan="24">
+      <nz-tabset nzType="card" class="mt16 flex-card p-lr16" [nzTabBarExtraContent]="">
+        <nz-tab [nzTitle]="'Thông tin về giá'" class="ds-goi-thau__container">
+          <nz-card class="mt16 flex-card p-lr16 card-table">
+            <nz-table #rowTable nzBordered [nzData]="arrThongTinGia" [nzFrontPagination]="false"
+                      [nzShowPagination]="false">
+              <thead>
+              <tr>
+                <th style="width: 2%">STT</th>
+                <th style="width: 30%">Đơn vị</th>
+                <th style="width: 10%">Số lượng</th>
+                <th style="width: 10%">Đơn giá chưa VAT (đồng/kg)</th>
+                <th style="width: 10%">Đơn giá có VAT(đồng/kg)</th>
+                <th style="width: 10%">Đơn giá QĐ chưa VAT (đồng/kg)</th>
+                <th style="width: 10%">Đơn giá QĐ có VAT(đồng/kg)</th>
+                <!--                <th style="width: 5%">Trạng thái</th>-->
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let data of arrThongTinGia; let idx = index">
+                <td class="text-center">{{idx + 1}}</td>
+                <!--                 <td>{{ data.maDvi }}</td>-->
+                <td>{{ data.tenDvi }}</td>
+                <td>{{ data.soLuong }}</td>
+                <td>{{ data.giaDn }}</td>
+                <td>{{ data.giaDnVat }}</td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number nz-input
+                                     [ngModelOptions]="{standalone: true}"
+                                     [(ngModel)]="arrThongTinGia[idx].giaQd"
+                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                     [nzDisabled]="noEdit">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number nz-input
+                                     [ngModelOptions]="{standalone: true}"
+                                     [(ngModel)]="arrThongTinGia[idx].giaQdVat"
+                                     [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                     [nzDisabled]="noEdit">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <!--                                <td>{{ data.tenTrangThai }}</td>-->
+              </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </form>
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-col nzSpan="24">
+      <nz-form-item class="form-item">
+        <nz-form-label>
+          Ghi chú
+        </nz-form-label>
+        <nz-form-control>
+                    <textarea [readonly]="noEdit"
+                              nz-input [rows]="3" formControlName="ghiChu"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</div>
