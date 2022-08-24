@@ -27,6 +27,7 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   dsTong: any[];
   dsLoaiHangHoa: any[];
   formData: FormGroup;
+  tenDonViChiCuc: string;
   dataTable: IHangHongCanBaoHanh[] = [];
   listTable: IHangHongCanBaoHanh[] = [];
   rowItem: IHangHongCanBaoHanh = {
@@ -112,6 +113,15 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
   async loadItemChiTiet() {
     try {
       const res = await this.quanLyHangBiHongCanBaoHanhService.chitiet(this.idInput);
+
+      if (res.data.tenDonvi) {
+        this.tenDonViChiCuc = res.data.tenDonvi;
+      }
+
+      if (this.userService.isCuc) {
+        await this.loadDiemKho();
+      }
+
 
       if (res.data && res.msg == MESSAGE.SUCCESS) {
         this.formData.patchValue({ ngayTao: res.data.ngayTao, maDanhSach: res.data.maDanhSach });
@@ -244,17 +254,44 @@ export class ThemHangHongCanBaoHanhComponent implements OnInit {
       maDviCha: this.detail.maDvi,
       trangThai: '01',
     }
+
     const res = await this.donviService.getTreeAll(body);
+
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = [
-              ...this.listDiemKho,
-              ...element.children
-            ]
+        if (this.userService.isCuc()) {
+          let diemkho: any[] = [];
+          res.data.forEach((item: any) => {
+            if (item.maDvi === this.detail.maDvi) {
+              item.children.forEach((child: any) => {
+                if (child.tenDvi === this.tenDonViChiCuc) {
+                  diemkho = [child];
+                }
+              })
+            }
+          })
+
+          if (diemkho.length > 0) {
+            diemkho.forEach(element => {
+              if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKho = [
+                  ...this.listDiemKho,
+                  ...element.children
+                ]
+              }
+            });
+
           }
-        });
+        } else {
+          res.data.forEach(element => {
+            if (element && element.capDvi == '3' && element.children) {
+              this.listDiemKho = [
+                ...this.listDiemKho,
+                ...element.children
+              ]
+            }
+          });
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
