@@ -6,13 +6,14 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { API_STATUS_CODE, PAGE_SIZE_DEFAULT, TYPE_PAG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { Detail } from 'src/app/models/HopDong';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopPhuongAnGiaService } from 'src/app/services/tong-hop-phuong-an-gia.service';
+import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 @Component({
@@ -45,8 +46,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   dataTable: any[] = [];
   listCuc: any[] = [];
   isTongHop: boolean = false;
+  isMain: boolean = true;
   listCucSelected: any[] = [];
-
+  STATUS: any
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -79,6 +81,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         kqTd: [],
         giaDng: [],
         giaDngVat: [],
+        trangThaiTh: [],
+        trangThaiTt: []
       }
     );
     this.formTraCuu = this.fb.group(
@@ -92,6 +96,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayDx: [null, [Validators.required]],
       }
     );
+    this.STATUS = STATUS
   }
 
   async ngOnInit() {
@@ -276,12 +281,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       kqTdVat: kqTdVat,
       giaDng: giaDng,
       giaDngVat: giaDngVat,
+      trangThaiTh: data.trangThaiTh,
+      trangThaiTt: data.trangThaiTt
     })
     this.dataTable = data.pagChiTiets;
   }
 
   taoTtrinh() {
+    this.isMain = false;
+  }
 
+  reOpenMain() {
+    this.isMain = true;
   }
 }
 
