@@ -1,22 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UserLogin } from "../../../../../../../models/userlogin";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { UserService } from "../../../../../../../services/user.service";
-import { Globals } from "../../../../../../../shared/globals";
-import { HelperService } from "../../../../../../../services/helper.service";
-import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UserLogin} from "../../../../../../../models/userlogin";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {UserService} from "../../../../../../../services/user.service";
+import {Globals} from "../../../../../../../shared/globals";
+import {HelperService} from "../../../../../../../services/helper.service";
+import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
 import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG} from "../../../../../../../constants/config";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {DanhMucTieuChuanService} from "../../../../../../../services/danhMucTieuChuan.service";
 import {UploadFileService} from "../../../../../../../services/uploaFile.service";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {QuyetDinhPheDuyetKeHoachLCNTService} from "../../../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {
   CanCuXacDinhPag,
   PhuongPhapXacDinhGia,
@@ -32,7 +32,6 @@ import {STATUS} from "../../../../../../../constants/status";
   styleUrls: ['./them-moi-de-xuat-pag.component.scss']
 })
 export class ThemMoiDeXuatPagComponent implements OnInit {
-  isGiaMuaToiDa: boolean = false;
   @Input() loaiVthh: string;
   @Input('isView') isView: boolean;
   @Input()
@@ -40,9 +39,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   @Input()
   type: string;
   @Output('onClose') onClose = new EventEmitter<any>();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
+  dataEdit: { [key: string]: { edit: boolean ; data: ThongTinChungPag } } = {};
   formData: FormGroup;
-  pagPpXacDinhGias:  any[] = [];
+  pagPpXacDinhGias: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   dataTableKsGia: any[] = [];
@@ -57,13 +56,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dsLoaiGia: any[] = [];
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
-  rowItemPpxdg: PhuongPhapXacDinhGia =  new PhuongPhapXacDinhGia();
+  rowItemPpxdg: PhuongPhapXacDinhGia = new PhuongPhapXacDinhGia();
   pagTtChungs: any[] = []
   maDx: string;
   dataTable: any[] = [];
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -78,7 +78,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-
   ) {
     this.formData = this.fb.group(
       {
@@ -96,9 +95,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         ghiChu: [],
         noiDung: [null],
         lyDoTuChoi: [],
-        qdCtKhNam:[null, [Validators.required] ],
-        maPphapXdg:[null, [Validators.required] ],
-        loaiHangXdg:[]
+        qdCtKhNam: [null, [Validators.required]],
+        maPphapXdg: [null, [Validators.required]],
+        loaiHangXdg: []
       }
     );
     this.STATUS = STATUS
@@ -129,12 +128,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.spinner.hide();
   }
 
+  luuEdit(id: number): void {
+    const index = this.dataTable.findIndex((item) => item.id === id);
+    Object.assign(this.dataTable[index], this.dataEdit[id].data);
+    this.dataEdit[id].edit = false;
+  }
+
   async onChangeCloaiVthh(event) {
     let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
     if (res.statusCode == API_STATUS_CODE.SUCCESS) {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
     }
   }
+
   async loadDsHangHoaPag() {
     this.dsLoaiHangXdg = [];
     let res = await this.danhMucService.danhMucChungGetAll('PP_XDG_LOAI_HANG');
@@ -143,7 +149,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  deleteItem(index: number) {
+  deleteItem(index: number, page: string) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -154,8 +160,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.pagTtChungs.splice(index, 1);
-          this.updateEditCache();
+          if (page == 'ttc') {
+            this.pagTtChungs.splice(index, 1);
+            this.updateEditCache('ttc');
+          }
+          if (page == 'ccxdg') {
+            this.dataTableCanCuXdg.splice(index, 1);
+            this.updateEditCache('ccxdg');
+          }
+          if (page == 'ppxdg') {
+            this.dataTableCanCuXdg.splice(index, 1);
+            this.updateEditCache('ppxdg');
+          }
+
         } catch (e) {
           console.log('error', e);
         }
@@ -163,21 +180,35 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     });
   }
 
-  updateEditCache(): void {
-    if (this.dataTableCanCuXdg) {
-      let i = 0;
-      this.pagTtChungs.forEach((item) => {
-        this.dataEdit[i] = {
-          edit: false,
-          data: { ...item },
-        };
-        i++
-      });
+  updateEditCache(page): void {
+    if (page == 'ttc') {
+      if (this.dataTableCanCuXdg) {
+        let i = 0;
+        this.pagTtChungs.forEach((item) => {
+          this.dataEdit[i] = {
+            edit: false,
+            data: {...item},
+          };
+          i++
+        });
+      }
+    }
+    if (page == 'ppxdg') {
+      if (this.pagPpXacDinhGias) {
+        let i = 0;
+        this.pagPpXacDinhGias.forEach((item) => {
+          this.dataEdit[i] = {
+            edit: false,
+            data: {...item},
+          };
+          i++
+        });
+      }
     }
   }
 
   themDataTableTtc() {
-    this.formData.get('cloaiVthh').setValue( this.rowItemTtc.cloaiVthh)
+    this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh)
     this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
     this.rowItemTtc = new ThongTinChungPag();
   }
@@ -195,7 +226,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         nguoiKy: data.nguoiKy,
         loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
-        trangThai:data.trangThai,
+        trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
         cloaiVthh: data.cloaiVthh,
         ghiChu: data.ghiChu,
@@ -205,13 +236,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         qdCtKhNam: data.qdCtKhNam,
         maPphapXdg: data.maPphapXdg
       })
-      this.pagTtChungs =data.pagTtChungs;
+      this.pagTtChungs = data.pagTtChungs;
       this.pagPpXacDinhGias = data.pagPpXacDinhGias;
       this.dataTableKqGia = data.dataTableKqGia;
       this.dataTableKsGia = data.dataTableKsGia;
       this.dataTableCanCuXdg = data.canCuPhapLy;
     }
   }
+
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem,) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
@@ -227,8 +259,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             item.fileName = resUpload.filename;
             item.fileSize = resUpload.size;
             item.fileUrl = resUpload.url;
-          }
-          else {
+          } else {
             if (!this.rowItemCcXdg.fileDinhKem) {
               this.rowItemCcXdg.fileDinhKem = new FileDinhKem();
             }
@@ -275,6 +306,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       }
     }
   }
+
   async onChangeSoQd($event) {
     // let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
     // if (dataQd.length > 0) {
@@ -288,7 +320,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   async loadDsVthh() {
     let body = {
-      "str" : "02"
+      "str": "02"
     };
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.listVthh = [];
@@ -300,9 +332,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
   async onChangeLoaiVthh(event) {
     let body = {
-      "str" : event
+      "str": event
     };
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.listCloaiVthh = [];
@@ -325,7 +358,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.rowItemTtc.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
-
 
 
   loadDsNam() {
@@ -370,13 +402,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
   quayLai() {
     this.onClose.emit();
   }
 
-  banHanh()  {
+  banHanh(id) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -389,23 +422,23 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.formData.get('id').value,
-            trangThai: ''
+            id: id ? id : this.formData.get('id').value,
+            trangThai: '01'
           };
-          switch (this.formData.get('trangThai').value) {
-            case STATUS.DU_THAO:
-            case STATUS.CHO_DUYET_LDV: {
-              body.trangThai = STATUS.CHO_DUYET_LDV;
-              break;
-            }
-            case STATUS.TU_CHOI_LDV: {
-              body.trangThai = STATUS.TU_CHOI_LDV;
-              break;
-            }
-            case STATUS.DA_DUYET_LDV: {
-              body.trangThai = STATUS.DA_DUYET_LDV;
-            }
-          }
+          // switch (this.formData.get('trangThai').value) {
+          //   case STATUS.DU_THAO: {
+          //     body.trangThai = STATUS.CHO_DUYET_LDV;
+          //     break;
+          //   }
+          //   case STATUS.CHO_DUYET_LDV: {
+          //     body.trangThai = STATUS.DA_DUYET_LDV;
+          //     break;
+          //   }
+          //   case STATUS.TU_CHOI_LDV: {
+          //     body.trangThai = STATUS.TU_CHOI_LDV;
+          //     break;
+          //   }
+          // }
           let res = await this.giaDeXuatGiaService.approve(body)
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
@@ -423,6 +456,18 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     });
   }
 
+  startEdit(index: number) {
+    this.dataEdit[index].edit = true;
+  }
+
+  cancelEdit(index: number) {
+    this.dataEdit[index] = {
+      data: {...this.pagPpXacDinhGias[index]},
+      edit: false,
+    };
+  }
+
+
   async loadDsQdPduyetKhlcnt() {
     let body = {
       namKhoach: this.formData.get('namKeHoach').value,
@@ -438,7 +483,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     console.log(this.dsQdPdKhlcnt)
   }
-  async save() {
+
+  async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -462,17 +508,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       res = await this.giaDeXuatGiaService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      if (isGuiDuyet) {
+        this.banHanh(res.data.id)
       }
       this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-    console.log(this.formData)
   }
 
 

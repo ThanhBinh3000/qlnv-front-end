@@ -4,8 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub"
-            (click)="banHanh()">
+    <button *ngIf="!isView" type="button" class="btn btn-sub"
+            (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
@@ -13,7 +13,7 @@
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
+    <button *ngIf="!isView " type="button" class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -23,10 +23,10 @@
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
       <div class="header-text">
-        <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-                        {{ formData.value.tenTrangThai }}
+         <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+                        {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
                     </span>
+
         <span>ĐỀ XUẤT PHƯƠNG ÁN GIÁ</span>
         </div>
       </div>
@@ -228,7 +228,7 @@
                 </td>
               </tr>
               <tr *ngFor="let data of pagTtChungs; let idx = index">
-                <ng-container>
+                <ng-container *ngIf="true; else editTemplate">
                   <td>{{ idx + 1 }}</td>
                   <td>{{ data.cloaiVthh }}</td>
                   <td>{{ data.tchuanCluong }}</td>
@@ -238,28 +238,61 @@
                   <td>{{ data.giaDnVat }}</td>
                   <td style="text-align: center;">
                     <a *ngIf="!isView">
-                      <i class=" fa fa-pencil"></i>
+                      <i class=" fa fa-pencil" (click)="startEdit(idx)"></i>
                     </a>
-                    <a *ngIf="!isView" (click)="deleteItem(idx)">
+                    <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                  <td></td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-
-                  <td class="text-center">
-                    <a  class="save">
-                      <i class="fa fa-save"></i>
-                    </a>
-                    <a >
-                      <i class="fa fa-ban do"></i> </a>
-                  </td>
-                </ng-template>
+                <td></td>
+                <td>
+                  <nz-select (ngModelChange)="onChangecloaiVthh($event)" [(ngModel)]="dataEdit[idx].data.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
+                    <nz-option  *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                    </nz-option>
+                    <ng-template #error let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                      </ng-container>
+                    </ng-template>
+                  </nz-select>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <input type="text" name="tchuanCluong" [(ngModel)]="dataEdit[idx].data.tchuanCluong" nz-input readonly />
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <input type="text" name="soLuong" [(ngModel)]="dataEdit[idx].data.soLuong"  nz-input  />
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <input nz-input type="text" name="donViTinh"  [(ngModel)]="dataEdit[idx].data.donViTinh" readonly>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number name="giaDn" [(ngModel)]="dataEdit[idx].data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number name="giaDnVat" [(ngModel)]="dataEdit[idx].data.giaDnVat" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td style="text-align: center;">
+                  <a *ngIf="!isView">
+                    <i class="fa fa-plus" (click)="luuEdit(idx)"></i>
+                  </a>
+                  <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
+                    <i class="icon  htvbdh_nhap-lai1 "></i>
+                  </a>
+                </td>
+              </ng-template>
               </tr>
               </tbody>
             </nz-table>
@@ -317,7 +350,7 @@
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="!isView" >
-                <i class="fa fa-trash-o do" ></i>
+                <i class="fa fa-trash-o do" (click)="deleteItem(idx, 'ccxdg')" ></i>
               </a>
             </td>
           </tr>
@@ -442,7 +475,7 @@
                       <i class="fa fa-save"></i>
                     </a>
                     <a *ngIf="!isView" >
-                      <i class="fa fa-ban do"></i> </a>
+                      <i class="fa fa-trash" (click)="deleteItem(idx,'ppxdg')"></i> </a>
                   </td>
                 </ng-template>
               </tr>
