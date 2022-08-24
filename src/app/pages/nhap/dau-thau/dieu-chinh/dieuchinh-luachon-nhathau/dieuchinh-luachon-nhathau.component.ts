@@ -183,10 +183,18 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   clearFilter() {
+    this.searchFilter = {
+      soQdinh: '',
+      namKh: dayjs().get('year'),
+      ngayQd: '',
+      loaiVthh: '',
+      trichYeu: '',
+    };
     // this.namKeHoach = null;
     // this.loaiVthh = null;
     // this.startValue = null;
     // this.endValue = null;
+    this.search();
   }
 
   xoaItem(item: any) {
