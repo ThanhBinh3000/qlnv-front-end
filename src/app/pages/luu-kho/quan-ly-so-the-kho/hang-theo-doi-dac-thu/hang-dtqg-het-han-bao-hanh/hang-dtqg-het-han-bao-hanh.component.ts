@@ -102,11 +102,8 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     };
     const dsTong = await this.donviService.layDonViTheoCapDo(body);
     if (!isEmpty(dsTong)) {
-      if (this.userInfo.CAP_DVI === this.globals.prop.CUC) {
-        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      }
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
       if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
-        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
         this.formData.get('maDonVi').setValue(this.dsDonVi[0].tenDvi)
         this.formData.controls['maDonVi'].disable();
       }
@@ -119,6 +116,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma != '01') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+              this.onChangeLoaiHHAutoComplete('')
             }
             else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
@@ -177,7 +175,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     this.spinner.show();
     let body = {
       "maChungLoaiHang": this.dataSearch.maChungLoaiHang,
-      "maDonVi": this.dataSearch.maDonVi,
+      "maDonVi": this.formData.value.maDonVi,
       "maLoaiHang": this.dataSearch.maLoaiHang,
       "paggingReq": {
         "limit": this.pageSize,
