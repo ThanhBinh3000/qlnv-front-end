@@ -1436,6 +1436,7 @@ export function displayNumber(num: number): string {
         return '';
     }
     const dau = num < 0 ? '-' : '';
+    num = Math.abs(num);
     let real!: string;
     let imaginary!: string;
     if (num == Math.floor(num)) {

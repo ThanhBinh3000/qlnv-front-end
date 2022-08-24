@@ -50,7 +50,7 @@
 	<nz-table nzBordered class="table__body">
 		<thead>
 			<tr>
-				<th rowspan="2" nzWidth="35px">STT</th>
+				<th rowspan="2" nzWidth="100px">STT</th>
 				<th rowspan="2" nzWidth="200px">Tên vật tư, hàng hóa</th>
 				<th rowspan="2">DVT</th>
 				<th colspan="4">Kế hoạch</th>
@@ -113,7 +113,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao021; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate01">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -156,7 +156,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate01>
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -252,7 +252,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao022; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate02">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -295,7 +295,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate02>
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>

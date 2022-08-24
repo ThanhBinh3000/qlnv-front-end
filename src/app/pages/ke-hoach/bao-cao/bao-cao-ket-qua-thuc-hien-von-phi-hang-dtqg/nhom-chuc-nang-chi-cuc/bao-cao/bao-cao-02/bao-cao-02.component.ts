@@ -101,39 +101,6 @@ export class BaoCao02Component implements OnInit {
     }
 
     async ngOnInit() {
-        this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien;
-        this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = this.data?.status;
-        this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
-        this.statusBtnExport = this.data?.statusBtnExport;
-        this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
-        this.tuNgay = this.data?.tuNgay;
-        this.denNgay = this.data?.denNgay;
-        this.idBaoCao = this.data?.idBaoCao
-        //tinh toan theo don vi tien
-        this.lstCTietBaoCaoTemp.forEach(item => {
-            item.khGiaMuaTd = divMoney(item.khGiaMuaTd, this.maDviTien);
-            item.khTtien = divMoney(item.khTtien, this.maDviTien);
-            item.thGiaMuaTd = divMoney(item.thGiaMuaTd, this.maDviTien);
-            item.thTtien = divMoney(item.thTtien, this.maDviTien);
-        })
-        // 02
-        await this.lstCTietBaoCaoTemp?.filter(async el => {
-            switch (el.header) {
-                case '21':
-                    this.lstCtietBcao021.push(el);
-                    this.updateEditCache('21');
-                    break;
-                case '22':
-                    this.lstCtietBcao022.push(el);
-                    this.updateEditCache('22');
-                    break;
-                default:
-                    break;
-            }
-        });
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -158,6 +125,39 @@ export class BaoCao02Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        ///////////////////////////////////////////////////////////////
+        this.id = this.data?.id;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
+        this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.tuNgay = this.data?.tuNgay;
+        this.denNgay = this.data?.denNgay;
+        this.idBaoCao = this.data?.idBaoCao
+        //tinh toan theo don vi tien
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            item.khGiaMuaTd = divMoney(item.khGiaMuaTd, this.maDviTien);
+            item.khTtien = divMoney(item.khTtien, this.maDviTien);
+            item.thGiaMuaTd = divMoney(item.thGiaMuaTd, this.maDviTien);
+            item.thTtien = divMoney(item.thTtien, this.maDviTien);
+        })
+        // 02
+        await this.lstCTietBaoCaoTemp?.filter(async el => {
+            switch (el.header) {
+                case '21':
+                    this.lstCtietBcao021.push(el);
+                    break;
+                case '22':
+                    this.lstCtietBcao022.push(el);
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (this.lstCTietBaoCaoTemp.length > 0) {
             if (!this.lstCTietBaoCaoTemp[0].stt) {
                 await this.sortWithoutIndex();

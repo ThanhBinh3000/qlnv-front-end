@@ -814,14 +814,14 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        const baoCao = this.lstCtietBcao4ax;
-        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
-        if (index == -1) {
-            return false;
-        }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
-        const maNdung = baoCao.find(e => e.stt == str)?.maNdungChi;
+        const maNdung = this.lstCtietBcao4ax.find(e => e.stt == str)?.maNdungChi;
         if (this.getRoleCalculate(maNdung) == '7') {
+            return true;
+        }
+        //kiem tra xem cos ton tai ban ghi level con ko
+        const index: number = this.lstCtietBcao4ax.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
             return false;
         }
         return true;

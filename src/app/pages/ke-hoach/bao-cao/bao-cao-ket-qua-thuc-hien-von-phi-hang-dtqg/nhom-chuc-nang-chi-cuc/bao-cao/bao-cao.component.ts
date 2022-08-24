@@ -809,6 +809,7 @@ export class BaoCaoComponent implements OnInit {
 				status: this.status,
 				idBaoCao: this.baoCao.id,
 				luyKes: this.luyKes,
+				namBcao: this.baoCao.namBcao,
 			}
 			this.tabs = [];
 			this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));

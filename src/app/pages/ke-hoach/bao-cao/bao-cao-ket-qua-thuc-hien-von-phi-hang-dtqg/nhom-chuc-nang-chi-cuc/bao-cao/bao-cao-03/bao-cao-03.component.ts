@@ -111,44 +111,7 @@ export class BaoCao03Component implements OnInit {
     }
 
     async ngOnInit() {
-        this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien;
-        this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = this.data?.status;
-        this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
-        this.statusBtnExport = this.data?.statusBtnExport;
-        this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
-        this.tuNgay = this.data?.tuNgay;
-        this.denNgay = this.data?.denNgay;
-        //chia tien
-        this.lstCTietBaoCaoTemp.forEach(item => {
-            item.dgGiaKhoach = divMoney(item.dgGiaKhoach, this.maDviTien);
-            item.dgGiaBanTthieu = divMoney(item.dgGiaBanTthieu, this.maDviTien);
-            item.dgGiaBanTte = divMoney(item.dgGiaBanTte, this.maDviTien);
-            item.ttGiaHtoan = divMoney(item.ttGiaHtoan, this.maDviTien);
-            item.ttGiaBanTte = divMoney(item.ttGiaBanTte, this.maDviTien);
-            item.ttClechGiaTteVaGiaHtoan = divMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien);
-        })
-        // 03
-        await this.lstCTietBaoCaoTemp?.filter(async el => {
-            switch (el.header) {
-                case '31':
-                    this.lstCtietBcao031.push(el);
-                    this.updateEditCache('31');
-                    break;
-                case '32':
-                    this.lstCtietBcao032.push(el);
-                    this.updateEditCache('32');
-                    break;
-                case '33':
-                    this.lstCtietBcao033.push(el);
-                    this.updateEditCache('33');
-                    break;
-                default:
-                    break;
-            }
-        });
+        console.log(this.displayValue(-120));
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -173,6 +136,43 @@ export class BaoCao03Component implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        ///////////////////////////////////////////////////////////////
+        this.id = this.data?.id;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.statusBtnOk = this.data?.statusBtnOk;
+        this.statusBtnExport = this.data?.statusBtnExport;
+        this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.tuNgay = this.data?.tuNgay;
+        this.denNgay = this.data?.denNgay;
+        //chia tien
+        this.lstCTietBaoCaoTemp.forEach(item => {
+            item.dgGiaKhoach = divMoney(item.dgGiaKhoach, this.maDviTien);
+            item.dgGiaBanTthieu = divMoney(item.dgGiaBanTthieu, this.maDviTien);
+            item.dgGiaBanTte = divMoney(item.dgGiaBanTte, this.maDviTien);
+            item.ttGiaHtoan = divMoney(item.ttGiaHtoan, this.maDviTien);
+            item.ttGiaBanTte = divMoney(item.ttGiaBanTte, this.maDviTien);
+            item.ttClechGiaTteVaGiaHtoan = divMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien);
+        })
+        // 03
+        await this.lstCTietBaoCaoTemp?.filter(async el => {
+            switch (el.header) {
+                case '31':
+                    this.lstCtietBcao031.push(el);
+                    break;
+                case '32':
+                    this.lstCtietBcao032.push(el);
+                    break;
+                case '33':
+                    this.lstCtietBcao033.push(el);
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (this.lstCTietBaoCaoTemp.length > 0) {
             if (!this.lstCTietBaoCaoTemp[0].stt) {
                 await this.sortWithoutIndex();
@@ -516,6 +516,7 @@ export class BaoCao03Component implements OnInit {
 
         this.replaceIndex(lstIndex, -1, phuLuc);
         this.sum(stt, phuLuc);
+        this.changeModel();
         this.updateEditCache(phuLuc);
     }
 

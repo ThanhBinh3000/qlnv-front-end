@@ -70,6 +70,7 @@ export class BaoCao05Component implements OnInit {
     maDviTien = '1';
     tuNgay: any;
     denNgay: any;
+    namBcao: number;
 
     //trang thai cac nut
     status = false;
@@ -97,12 +98,17 @@ export class BaoCao05Component implements OnInit {
         this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
+        this.namBcao = this.data?.namBcao;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '9')?.lstCtietBcaos;
         this.spinner.show();
         //lấy danh sách nội dung chi
         await this.danhMucService.dMNoiDungChi05().toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.noiDungChis = res.data;
+                const index = this.noiDungChis.findIndex(e => e.ma == '0.2.1');
+                if (index != -1) {
+                    this.noiDungChis[index].giaTri += ' ' + this.namBcao.toString();
+                }
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
             }
@@ -824,14 +830,13 @@ export class BaoCao05Component implements OnInit {
     }
 
     getLowStatus(str: string) {
-        const baoCao = this.lstCtietBcao5;
-        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
-        if (index == -1) {
-            return false;
-        }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
-        const maNdung = baoCao.find(e => e.stt == str)?.maNdungChi;
+        const maNdung = this.lstCtietBcao5.find(e => e.stt == str)?.maNdungChi;
         if (this.getRoleCalculate(maNdung) == '7') {
+            return true;
+        }
+        const index: number = this.lstCtietBcao5.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
             return false;
         }
         return true;
