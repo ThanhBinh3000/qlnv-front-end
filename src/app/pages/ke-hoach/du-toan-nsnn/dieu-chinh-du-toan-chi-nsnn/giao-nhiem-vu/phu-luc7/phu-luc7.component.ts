@@ -427,20 +427,6 @@ export class PhuLuc7Component implements OnInit {
     const chiSo: any = str.split('.');
     const n: number = chiSo.length - 1;
     const k: number = parseInt(chiSo[n], 10);
-    // if (n == 0) {
-    //   for (var i = 0; i < this.soLaMa.length; i++) {
-    //     while (k >= this.soLaMa[i].gTri) {
-    //       xau += this.soLaMa[i].kyTu;
-    //       k -= this.soLaMa[i].gTri;
-    //     }
-    //   }
-    // };
-    // if (n == 0) {
-    //   xau = chiSo[n];
-    // };
-    // if (n == 2) {
-    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    // };
     if (n == 0) {
       xau = String.fromCharCode(k + 96).toUpperCase();
     }
