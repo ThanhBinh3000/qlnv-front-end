@@ -14,15 +14,24 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="3">
+                  <div nz-col [nzSpan]="3" *ngIf="pagType=='LT'">
+                    <nz-form-item class="form-item">
+                      <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
+                      <nz-form-control>
+                        <nz-select  formControlName="loaiHangHoa" >
+                          <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                    <div nz-col [nzSpan]="3"  *ngIf="pagType=='VT'">
                         <nz-form-item class="form-item">
                             <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
                             <nz-form-control>
-                                <nz-select formControlName="loaiHangHoa" id="loai-hh">
-                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
-                                    </nz-option>
-                                    <nz-option>
-                                    </nz-option>
+                                <nz-select  formControlName="loaiHangHoa" >
+                                  <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                                  </nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>

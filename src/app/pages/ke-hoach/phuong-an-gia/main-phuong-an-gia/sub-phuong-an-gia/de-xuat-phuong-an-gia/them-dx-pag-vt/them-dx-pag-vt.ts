@@ -25,6 +25,8 @@ import {
 } from "../../../../../../../models/DeXuatPhuongAnGia";
 import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 import {STATUS} from "../../../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {ThongTinQuyetDinh} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -39,7 +41,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   @Input()
   type: string;
   @Output('onClose') onClose = new EventEmitter<any>();
-  dataEdit: { [key: string]: { edit: boolean ; data: ThongTinChungPag } } = {};
+  dataEdit: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
+  dataEditCc: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
+  dataEditPp: { [key: string]: { edit: boolean; data: PhuongPhapXacDinhGia } } = {};
   formData: FormGroup;
   pagPpXacDinhGias: any[] = [];
   listVthh: any[] = [];
@@ -128,10 +132,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.spinner.hide();
   }
 
-  luuEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    Object.assign(this.dataTable[index], this.dataEdit[id].data);
-    this.dataEdit[id].edit = false;
+  luuEdit(id: number, page: string): void {
+    if (page == 'ttc') {
+      const index = this.pagTtChungs.findIndex((item) => item.id === id);
+      Object.assign(this.pagTtChungs[index], this.dataEdit[id].data);
+      this.dataEdit[id].edit = false;
+    }
+
+    if (page == 'ccxdg') {
+      const index = this.dataTableCanCuXdg.findIndex((item) => item.id === id);
+      Object.assign(this.dataTableCanCuXdg[index], this.dataEditCc[id].data);
+      this.dataEditCc[id].edit = false;
+    }
+
   }
 
   async onChangeCloaiVthh(event) {
@@ -140,6 +153,48 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
     }
   }
+  async tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: text,
+            trangThai: ''
+          };
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDV;
+              break;
+            }
+          }
+          let res = await this.giaDeXuatGiaService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
 
   async loadDsHangHoaPag() {
     this.dsLoaiHangXdg = [];
@@ -169,10 +224,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             this.updateEditCache('ccxdg');
           }
           if (page == 'ppxdg') {
-            this.dataTableCanCuXdg.splice(index, 1);
+            this.pagPpXacDinhGias.splice(index, 1);
             this.updateEditCache('ppxdg');
           }
-
+          console.log(
+            this.dataTableCanCuXdg
+          )
         } catch (e) {
           console.log('error', e);
         }
@@ -182,9 +239,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   updateEditCache(page): void {
     if (page == 'ttc') {
+      if (this.pagTtChungs) {
+        this.pagTtChungs.forEach((item) => {
+          this.dataEdit[item.id] = {
+            edit: false,
+            data: {...item},
+          };
+        });
+      }
+    }
+    if (page == 'ccxdg') {
       if (this.dataTableCanCuXdg) {
         let i = 0;
-        this.pagTtChungs.forEach((item) => {
+        this.dataTableCanCuXdg.forEach((item) => {
           this.dataEdit[i] = {
             edit: false,
             data: {...item},
@@ -211,6 +278,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh)
     this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
     this.rowItemTtc = new ThongTinChungPag();
+    this.updateEditCache('ttc');
   }
 
   async getDataDetail(id) {
@@ -273,9 +341,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   themDataTable(tableName: String) {
-    if (tableName == 'ccXdg') {
+    if (tableName == 'ccxdg') {
       this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
       this.rowItemCcXdg = new CanCuXacDinhPag();
+      this.updateEditCache('ccxdg')
     }
     if (tableName == 'ppxdg') {
       this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
@@ -356,6 +425,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (cloaiVthh.length > 0) {
       this.rowItemTtc.donViTinh = cloaiVthh[0].maDviTinh
       this.rowItemTtc.tchuanCluong = cloaiVthh[0].tchuanCluong
+    }
+  }
+  async onChangecloaiVthh123(event, id) {
+    this.dataEdit[id].data.donViTinh = null;
+    const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
+    if (cloaiVthh.length > 0) {
+      this.dataEdit[id].data.donViTinh = cloaiVthh[0].maDviTinh
+      this.dataEdit[id].data.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
 
@@ -456,8 +533,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     });
   }
 
-  startEdit(index: number) {
-    this.dataEdit[index].edit = true;
+  startEdit(index: number, page: string) {
+    if (page == 'ttc') {
+      this.dataEdit[index].edit = true;
+    }
+    if (page == 'ccxdg') {
+      this.dataEditCc[index].edit = true;
+    }
   }
 
   cancelEdit(index: number) {
@@ -519,4 +601,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
 
+  huyEdit(id) {
+    this.dataEdit[id].edit = false
+    this.dataEditCc[id].edit = false
+  }
 }
