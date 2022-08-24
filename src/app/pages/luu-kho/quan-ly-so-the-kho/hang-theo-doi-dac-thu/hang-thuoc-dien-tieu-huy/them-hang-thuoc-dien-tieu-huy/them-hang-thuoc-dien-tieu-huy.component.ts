@@ -40,7 +40,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         idLoKho: null,
         tenLoKho: null,
         soLuongTon: null,
-        soLuongThanhLy: null,
+        soLuongTieuHuy: null,
         donVi: null,
         lyDo: null,
     };
@@ -283,7 +283,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             this.notification.error(MESSAGE.FORM_REQUIRED_ERROR, 'Vui lòng chọn lô kho.');
             return;
         }
-        if (this.rowItem.soLuongTon > this.rowItem.soLuongThanhLy) {
+        if (this.rowItem.soLuongTon > this.rowItem.soLuongTieuHuy) {
             this.notification.error(MESSAGE.ERROR, 'Không được phép nhập Số lượng thanh lý lớn hơn số lượng tồn kho');
             return;
         }
@@ -297,7 +297,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             nganKho: this.dsNganKho.find((item) => item.id == this.rowItem.idNganKho).tenDvi,
             nhaKho: this.dsNhaKho.find((item) => item.id == this.rowItem.idNhaKho).tenDvi,
             slTon: this.rowItem.soLuongTon,
-            slYeuCau: this.rowItem.soLuongThanhLy,
+            slYeuCau: this.rowItem.soLuongTieuHuy,
             donVi: this.rowItem.donVi,
             id: this.dataTable.length,
         }
@@ -373,7 +373,7 @@ interface IHangTieuHuy {
     idLoKho: string;
     tenLoKho: string;
     soLuongTon: number;
-    soLuongThanhLy: number;
+    soLuongTieuHuy: number;
     donVi: string;
     lyDo: string;
 }

@@ -10,6 +10,8 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { saveAs } from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -58,7 +60,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     dsNganKhoDataSource = [];
     dsChungLoaiHangHoa = [];
     dsLoKho = [];
-
+    userInfo: UserLogin;
     @Output('close') onClose = new EventEmitter<any>();
 
     constructor(
@@ -69,11 +71,13 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
         private donViService: DonviService,
         private notification: NzNotificationService,
         private readonly spinner: NgxSpinnerService,
+        public userService: UserService,
     ) { }
 
     ngOnInit() {
         this.initData();
         this.initForm();
+        this.userInfo = this.userService.getUserLogin();
     }
 
     initForm(): void {
@@ -97,8 +101,8 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             this.dataTable = this.dataEditList.ds;
         } else {
             this.formData = this.fb.group({
-                idDonVi: [null],
-                maDvi: [null],
+                tenDonvi: [this.userInfo.TEN_DVI],
+                maDvi: [this.userInfo.MA_DVI],
                 tenDonVi: [null],
                 idDanhSach: [null],
                 ngayTao: [new Date()],
