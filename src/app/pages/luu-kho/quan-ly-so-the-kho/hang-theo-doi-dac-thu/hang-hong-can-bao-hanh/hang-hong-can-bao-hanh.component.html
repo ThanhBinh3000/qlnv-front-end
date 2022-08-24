@@ -13,23 +13,24 @@
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="ten-hang-hoa">Tên hàng hoá</nz-form-label>
-
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maLoaiHang" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-                </nz-option>
-              </nz-select>
+              <nz-input-group id="ten-don-vi">
+                <input type="text" nz-input formControlName="maLoaiHang" [nzAutocomplete]="loaiHHAuto"
+                  (ngModelChange)="onChangeLoaiHHAutoComplete($event)" />
+                <nz-autocomplete #loaiHHAuto [nzDataSource]="dsLoaiHangHoaDataSource"></nz-autocomplete>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="4" class="form-item">
-            <nz-form-label nzFor="loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
+            <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maChungLoaiHangHoa" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-                </nz-option>
-              </nz-select>
+              <nz-input-group id="ten-don-vi">
+                <input type="text" nz-input formControlName="maChungLoaiHangHoa" [nzAutocomplete]="cloaiHHAuto"
+                  (ngModelChange)="onChangeChungLoaiHHAutoComplete($event)" />
+                <nz-autocomplete #cloaiHHAuto [nzDataSource]="dsChungLoaiHangHoaDataSource"></nz-autocomplete>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
 
@@ -84,10 +85,10 @@
             </th>
             <th class="text-center" style="width: 2.5%;">STT</th>
             <th style="width: 10%;">Mã danh sách</th>
-            <th style="width: 40%;">Tên đơn vị</th>
+            <th>Tên đơn vị</th>
             <th style="width: 15%;">Ngày tạo</th>
             <th style="width: 15%;">Trạng thái xử lý của Cục</th>
-            <th width="10%">Hành động</th>
+            <th width="7%">Hành động</th>
           </tr>
           <tr>
             <th></th>
