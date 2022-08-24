@@ -1,5 +1,5 @@
 import { MESSAGE } from './../../../constants/message';
-import { DanhMucService } from './../../../services/danhmuc.service';
+import { DanhMucService } from '../../../services/danhmuc.service';
 import { VatTu } from './../dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';

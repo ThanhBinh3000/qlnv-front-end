@@ -52,7 +52,7 @@
                 </div>
             </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearFilterTable()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -134,7 +134,7 @@
                         <td>{{ data.tenDonvi }}</td>
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trangThaiXuLy }}</td>
-                        <td style="text-align: center; white-space: nowrap;">
+                        <td style="text-align: left; white-space: nowrap;">
                             <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>

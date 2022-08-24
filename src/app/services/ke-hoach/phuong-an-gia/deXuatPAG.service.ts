@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
+import { BaseService } from '../../base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GiaDeXuatGiaService extends BaseService {
+export class DeXuatPAGService extends BaseService {
   gateway: string = '/qlnv-khoach'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'kh-lt-pag/luong-thuc/gia-lh/dx-pag', '/qlnv-khoach')
+    super(httpClient, 'phuong-an-gia/dx-pag', '/qlnv-khoach')
 
   }
 
