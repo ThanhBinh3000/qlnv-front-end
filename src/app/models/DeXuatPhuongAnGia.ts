@@ -20,6 +20,7 @@ export class ThongTinKhaoSatGia {
 }
 
 export class ThongTinChungPag {
+  id: number;
   cloaiVthh?: string;
   tchuanCluong?: string;
   soLuong?: number;
@@ -29,6 +30,7 @@ export class ThongTinChungPag {
 }
 
 export class PhuongPhapXacDinhGia {
+  id: number;
   cloaiVthh?: string;
   giaVonNk?: number = 0;
   chiPhiChung?: number = 0;

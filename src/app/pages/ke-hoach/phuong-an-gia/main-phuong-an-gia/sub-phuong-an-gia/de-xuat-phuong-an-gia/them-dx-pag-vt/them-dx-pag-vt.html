@@ -230,7 +230,7 @@
             </td>
             <td style="text-align: center;">
               <a *ngIf="!isView">
-                <i class="fa fa-plus" (click)="themDataTableTtc()"></i>
+                <i class="fa fa-plus" (click)="themDataTable('ttc')"></i>
               </a>
               <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                 <i class="icon  htvbdh_nhap-lai1 "></i>
@@ -306,11 +306,11 @@
         </nz-table>
       </nz-card>
     </nz-tab>
-    <nz-tab [nzTitle]="'Căn cứ, phương pháp xác định giá'">
+    <nz-tab [nzTitle]="'Căn cứ, phương pháp xác định giá'" >
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title">CĂN CỨ PHÁP LÝ</span>
         <br>
-        <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <nz-table #editRowTable [nzData]="dataTableCanCuXdg" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
           <tr>
             <th style="width: 2%;">STT</th>
@@ -319,25 +319,25 @@
             <th style="width: 5%;">Hành động</th>
           </tr>
           <tr>
-            <th class="text-center"></th>
+            <th class="text-center"> </th>
             <th>
-              <input type="text" [(ngModel)]="rowItemCcXdg.moTa" nz-input name="moTa"/>
+              <input type="text" [(ngModel)]="rowItemCcXdg.moTa" nz-input name="moTa" />
             </th>
             <th>
               <nz-form-control>
                 <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
                   <input placeholder="Chọn file" [(ngModel)]="rowItemCcXdg.fileDinhKem.fileName" name="file"
-                         nz-input disabled/>
+                         nz-input disabled />
                 </nz-input-group>
                 <ng-template #suffixIcon>
                   <i class="icon htvbdh_tcdt_tep"></i>
-                  <input class="input-file" (change)="getNameFile($event,'ccXdg')" type="file"/>
+                  <input class="input-file" (change)="getNameFile($event,'ccXdg')" type="file" />
                 </ng-template>
               </nz-form-control>
             </th>
             <th class="text-left">
               <a *ngIf="!isView">
-                <i class="icon htvbdh_dau-cong" (click)="themDataTable('ccxdg')"></i>
+                <i class="icon htvbdh_dau-cong" (click)="themDataTable('ccXdg')"></i>
               </a>
               <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                 <i class="icon  htvbdh_nhap-lai1 "></i>
@@ -355,28 +355,44 @@
               <a (click)="downloadFile(data.fileDinhKem)">
                 <i class="icon htvbdh_tcdt_import "></i>
               </a>
-              <a *ngIf="!isView" (click)="startEdit(data.id, 'ccxdg')">
-                <i class="fa fa-pencil"></i>
-              </a>
               <a *ngIf="!isView">
-                <i class="fa fa-trash-o do" (click)="deleteItem(idx, 'ccxdg')"></i>
+                <i class="fa fa-pencil" (click)="startEdit(data.id, 'ccXdg')"></i>
+              </a>
+              <a *ngIf="!isView" >
+                <i class="fa fa-trash-o do" (click)="deleteItem(idx, 'ccXdg')" ></i>
               </a>
             </td>
             </ng-container>
-            <ng-container #editTemplate123>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td> <a *ngIf="!isView">
-                <i class="fa fa-save" (click)="luuEdit(data.id, 'ccxdg')"></i>
-              </a>
+            <ng-template #editTemplate123>
+              <th class="text-center"> </th>
+              <th>
+                <input type="text" [(ngModel)]="dataEditCc[data.id].data.moTa" nz-input name="moTa" />
+              </th>
+              <th>
+                <nz-form-control>
+                  <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+                    <input placeholder="Chọn file" [(ngModel)]="dataEditCc[data.id].data.fileDinhKem.fileName" name="file"
+                           nz-input disabled />
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <i class="icon htvbdh_tcdt_tep"></i>
+                    <input class="input-file" (change)="getNameFile($event,'ccXdg')" type="file" />
+                  </ng-template>
+                </nz-form-control>
+              </th>
+              <th style="text-align: center;">
+                <a *ngIf="!isView">
+                  <i class="fa fa-save" (click)="luuEdit(data.id, 'ccXdg')"></i>
+                </a>
                 <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                   <i  class="fa fa-times do" (click)="huyEdit(data.id)"></i>
-                </a></td>
-            </ng-container>
+                </a>
+              </th>
+            </ng-template>
           </tr>
           </tbody>
         </nz-table>
+
         <span class="sub-title">PHƯƠNG PHÁP XÁC ĐỊNH GIÁ</span>
         <br>
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mb-10">
@@ -473,34 +489,70 @@
               </td>
             </tr>
             <tr *ngFor="let data of pagPpXacDinhGias; let idx = index">
-              <ng-container>
+              <ng-container *ngIf="!dataEditPp[data.id].edit; else editTemplate1">
                 <td>{{ idx + 1 }}</td>
                 <td>{{data.cloaiVthh}}</td>
                 <td>{{ data.giaVonNk }}</td>
                 <td>{{ data.chiPhiChung }}</td>
+                <td *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">{{ data.chiPhiPhanBo }}</td>
                 <td>{{ data.tongChiPhi }}</td>
                 <td style="text-align: center;">
                   <a *ngIf="!isView">
-                    <i class=" fa fa-pencil"></i>
+                    <i class=" fa fa-pencil" (click)="startEdit(data.id, 'ppxdg')"></i>
                   </a>
                   <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
                     <i class="icon  htvbdh_nhap-lai1 "></i>
                   </a>
                 </td>
               </ng-container>
-              <ng-template #editTemplate>
+              <ng-template #editTemplate1>
                 <td></td>
                 <td>
+                  <nz-select [(ngModel)]="dataEditPp[data.id].data.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView"
+                             nzAllowClear="true">
+                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                    </nz-option>
+                    <ng-template #error let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                      </ng-container>
+                    </ng-template>
+                  </nz-select>
                 </td>
                 <td>
+                  <nz-input-group>
+                    <nz-input-number [(ngModel)]="dataEditPp[data.id].data.giaVonNk" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number [(ngModel)]="dataEditPp[data.id].data.chiPhiChung" [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+
+                <td *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">
+                  <nz-input-group>
+                    <nz-input-number name="giaDn" [(ngModel)]="dataEditPp[data.id].data.chiPhiPhanBo" [nzSize]="'small'" nz-input
+                                     [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <nz-input-number disabled name="giaDn"
+                                     [(ngModel)]="dataEditPp[data.id].data.giaVonNk + dataEditPp[data.id].data.chiPhiChung + dataEditPp[data.id].data.chiPhiPhanBo"
+                                     [nzSize]="'small'" nz-input [nzMin]="0">
+                    </nz-input-number>
+                  </nz-input-group>
                 </td>
 
                 <td class="text-center">
                   <a *ngIf="!isView" class="save">
-                    <i class="fa fa-save"></i>
+                    <i class="fa fa-save" (click)="luuEdit(data.id, 'ppxdg')"></i>
                   </a>
                   <a *ngIf="!isView">
-                    <i class="fa fa-trash" (click)="deleteItem(idx,'ppxdg')"></i> </a>
+                    <i class="fa fa-times do" (click)="huyEdit(data.id)"></i> </a>
                 </td>
               </ng-template>
             </tr>

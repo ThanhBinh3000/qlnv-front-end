@@ -139,10 +139,16 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataEdit[id].edit = false;
     }
 
-    if (page == 'ccxdg') {
+    if (page == 'ccXdg') {
       const index = this.dataTableCanCuXdg.findIndex((item) => item.id === id);
       Object.assign(this.dataTableCanCuXdg[index], this.dataEditCc[id].data);
       this.dataEditCc[id].edit = false;
+    }
+    if (page == 'ppxdg') {
+      this.dataEditPp[id].data.tongChiPhi = this.dataEditPp[id].data.giaVonNk + this.dataEditPp[id].data.chiPhiChung + this.dataEditPp[id].data.chiPhiPhanBo;
+      const index = this.pagPpXacDinhGias.findIndex((item) => item.id === id);
+      Object.assign(this.pagPpXacDinhGias[index], this.dataEditPp[id].data);
+      this.dataEditPp[id].edit = false;
     }
 
   }
@@ -219,9 +225,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             this.pagTtChungs.splice(index, 1);
             this.updateEditCache('ttc');
           }
-          if (page == 'ccxdg') {
+          if (page == 'ccXdg') {
             this.dataTableCanCuXdg.splice(index, 1);
-            this.updateEditCache('ccxdg');
+            this.updateEditCache('ccXdg');
           }
           if (page == 'ppxdg') {
             this.pagPpXacDinhGias.splice(index, 1);
@@ -248,37 +254,46 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         });
       }
     }
-    if (page == 'ccxdg') {
+    if (page == 'ccXdg') {
       if (this.dataTableCanCuXdg) {
-        let i = 0;
         this.dataTableCanCuXdg.forEach((item) => {
-          this.dataEdit[i] = {
+          this.dataEditCc[item.id] = {
             edit: false,
             data: {...item},
           };
-          i++
         });
       }
     }
     if (page == 'ppxdg') {
       if (this.pagPpXacDinhGias) {
-        let i = 0;
         this.pagPpXacDinhGias.forEach((item) => {
-          this.dataEdit[i] = {
+          this.dataEditPp[item.id] = {
             edit: false,
             data: {...item},
           };
-          i++
         });
       }
     }
   }
 
-  themDataTableTtc() {
-    this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh)
-    this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
-    this.rowItemTtc = new ThongTinChungPag();
-    this.updateEditCache('ttc');
+  themDataTable(page: string) {
+    if (page == 'ttc') {
+      this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh)
+      this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
+      this.rowItemTtc = new ThongTinChungPag();
+      this.updateEditCache(page);
+    }
+    if (page == 'ccXdg') {
+      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
+      this.rowItemCcXdg = new CanCuXacDinhPag();
+      this.updateEditCache(page)
+    }
+    if (page == 'ppxdg') {
+      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
+      this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
+      this.rowItemPpxdg = new PhuongPhapXacDinhGia();
+      this.updateEditCache(page)
+    }
   }
 
   async getDataDetail(id) {
@@ -337,19 +352,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             this.rowItemCcXdg.fileDinhKem.idVirtual = new Date().getTime();
           }
         });
-    }
-  }
-
-  themDataTable(tableName: String) {
-    if (tableName == 'ccxdg') {
-      this.dataTableCanCuXdg = [...this.dataTableCanCuXdg, this.rowItemCcXdg];
-      this.rowItemCcXdg = new CanCuXacDinhPag();
-      this.updateEditCache('ccxdg')
-    }
-    if (tableName == 'ppxdg') {
-      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
-      this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
-      this.rowItemPpxdg = new PhuongPhapXacDinhGia();
     }
   }
 
@@ -415,8 +417,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.listVthh)
-    console.log(this.listCloaiVthh)
   }
 
   async onChangecloaiVthh(event) {
@@ -537,8 +537,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (page == 'ttc') {
       this.dataEdit[index].edit = true;
     }
-    if (page == 'ccxdg') {
+    if (page == 'ccXdg') {
       this.dataEditCc[index].edit = true;
+    }
+    if (page == 'ppxdg') {
+      this.dataEditPp[index].edit = true;
     }
   }
 
@@ -570,7 +573,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
@@ -604,5 +606,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   huyEdit(id) {
     this.dataEdit[id].edit = false
     this.dataEditCc[id].edit = false
+    this.dataEditPp[id].edit = false
   }
 }
