@@ -1,21 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { LIST_VAT_TU_HANG_HOA } from "src/app/constants/config";
-import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { HelperService } from "src/app/services/helper.service";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
-import { STATUS } from "src/app/constants/status";
-import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { TongHopPhuongAnGiaService } from "src/app/services/tong-hop-phuong-an-gia.service";
-import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
-import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {LIST_VAT_TU_HANG_HOA} from "src/app/constants/config";
+import {MESSAGE} from "src/app/constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {HelperService} from "src/app/services/helper.service";
+import {UserService} from "src/app/services/user.service";
+import {Globals} from "src/app/shared/globals";
+import {STATUS} from "src/app/constants/status";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/quyetDinhGiaCuaBtc.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/tong-hop-phuong-an-gia.service";
+import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
+import {DanhMucTieuChuanService} from "src/app/services/danhMucTieuChuan.service";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -53,6 +53,8 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   isErrorUnique = false;
+  thueVat: number;
+
 
   constructor(
     private readonly fb: FormBuilder,
@@ -98,7 +100,8 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.loadToTrinhDeXuat(),
       this.maQd = "/QD-BTC",
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get("namKeHoach").value)
+      this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      this.loadTiLeThue()
     ]);
     this.spinner.hide();
   }
@@ -149,6 +152,15 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         value: dayjs().get("year") - i,
         text: dayjs().get("year") - i
       });
+    }
+  }
+
+  async loadTiLeThue() {
+    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.thueVat = res.data[0].giaTri;
+    } else {
+      this.thueVat = 10;
     }
   }
 
@@ -238,6 +250,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
+    body.pagType = this.pagType;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -288,7 +301,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
       //chung loai hang hoa
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
       this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
@@ -307,7 +320,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           let tmp = [];
-          tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
+          tmp.push({"id": res.data.id, "tenQchuan": res.data.tenQchuan});
           this.dsTieuChuanCl = tmp;
         }
       }
@@ -344,7 +357,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
     // check a property of c, the Control this validator is attached to
     if (this.isErrorUnique) {
-      return { "uniqueError": true };
+      return {"uniqueError": true};
     }
     return null;
 
@@ -352,6 +365,15 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     //   // if a bad username is detected, return an error
     //   return { 'badValueFound': true };
     // }
+  }
+
+  async calculateVAT(index: number, type: number) {
+    //0:gia>vat 1:vat>gia
+    if (type === 0) {
+      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
+    } else if (type === 1) {
+      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
+    }
   }
 }
 

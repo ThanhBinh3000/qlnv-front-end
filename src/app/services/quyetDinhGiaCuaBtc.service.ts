@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
+import { BaseService } from './base.service.local';
 import { environment } from "../../environments/environment";
 
 
@@ -10,7 +10,7 @@ import { environment } from "../../environments/environment";
 export class QuyetDinhGiaCuaBtcService extends BaseService {
   gateway: string = '/qlnv-khoach'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'phuong-an-gia/qd-gia-btc', '/qlnv-khoach')
+    super(httpClient, 'phuong-an-gia/qd-gia-btc', 'qlnv-khoach')
   }
 
   loadToTrinhDeXuat(body: any) {
