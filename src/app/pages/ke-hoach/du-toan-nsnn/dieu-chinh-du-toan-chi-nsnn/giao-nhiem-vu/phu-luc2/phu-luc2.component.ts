@@ -130,10 +130,6 @@ export class PhuLuc2Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
-        thienSluongTteThien: divMoney(item.thienSluongTteThien, this.maDviTien),
-        thienSluongUocThien: divMoney(item.thienSluongUocThien, this.maDviTien),
-        thienCong: divMoney(item.thienCong, this.maDviTien),
         thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
         thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
         kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
@@ -211,28 +207,21 @@ export class PhuLuc2Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const thienSluongKhoachDgiao = mulMoney(item.thienSluongKhoachDgiao, this.maDviTien);
-      const thienSluongTteThien = mulMoney(item.thienSluongTteThien, this.maDviTien);
-      const thienSluongUocThien = mulMoney(item.thienSluongUocThien, this.maDviTien);
-      const thienCong = mulMoney(item.thienCong, this.maDviTien);
       const thienDinhMuc = mulMoney(item.thienDinhMuc, this.maDviTien);
       const thienThanhTien = mulMoney(item.thienThanhTien, this.maDviTien);
       const kphiThieuNtruoc = mulMoney(item.kphiThieuNtruoc, this.maDviTien);
       const ncauKphi = mulMoney(item.ncauKphi, this.maDviTien);
-      if (thienSluongKhoachDgiao > MONEY_LIMIT || thienDinhMuc > MONEY_LIMIT ||
-        thienSluongTteThien > MONEY_LIMIT || thienThanhTien > MONEY_LIMIT ||
-        thienSluongUocThien > MONEY_LIMIT || kphiThieuNtruoc > MONEY_LIMIT ||
-        thienCong > MONEY_LIMIT || ncauKphi > MONEY_LIMIT
+      if (
+        thienDinhMuc > MONEY_LIMIT ||
+        thienThanhTien > MONEY_LIMIT ||
+        kphiThieuNtruoc > MONEY_LIMIT ||
+        ncauKphi > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        thienSluongKhoachDgiao: thienSluongKhoachDgiao,
-        thienSluongTteThien: thienSluongTteThien,
-        thienSluongUocThien: thienSluongUocThien,
-        thienCong: thienCong,
         thienDinhMuc: thienDinhMuc,
         thienThanhTien: thienThanhTien,
         kphiThieuNtruoc: kphiThieuNtruoc
