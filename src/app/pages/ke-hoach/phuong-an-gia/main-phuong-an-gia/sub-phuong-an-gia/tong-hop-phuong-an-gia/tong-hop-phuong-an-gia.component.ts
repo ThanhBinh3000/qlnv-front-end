@@ -9,7 +9,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { TongHopPhuongAnGiaService } from 'src/app/services/tong-hop-phuong-an-gia.service';
+import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import { STATUS } from 'src/app/constants/status';
 @Component({
   selector: 'app-tong-hop-phuong-an-gia',
   templateUrl: './tong-hop-phuong-an-gia.component.html',
@@ -20,11 +21,13 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
+  isTongHop = false;
   formData: FormGroup;
   formThongTin: FormGroup;
   toDay = new Date();
   allChecked = false;
   listVthh: any[] = [];
+  STATUS: any;
 
   dsNam: string[] = [];
 
@@ -47,22 +50,15 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
-    private tonghopphuongangia: TongHopPhuongAnGiaService,
+    private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
   ) {
     this.formData = this.fb.group({
-      soDeXuat: [null],
       ngayKy: [[]],
-      ngayTongHop: [[]],
       noiDung: [null],
       namKeHoach: [null],
       loaiVthh: [null],
-      cloaiVthh: [null],
-      loaiHangHoa: '',
-      loaiGia: [null],
-      trangThai: [null],
-      trangThaiTH: [null],
-      soToTrinh: [null],
     });
+    this.STATUS = STATUS
   }
   searchInTable = {
     namKeHoach: dayjs().get('year'),
@@ -90,7 +86,6 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
   }
 
   initForm(): void {
@@ -109,7 +104,6 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
@@ -119,15 +113,13 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       body.ngayKyTu = body.ngayKy[0];
       body.ngayKyDen = body.ngayKy[1];
     }
-    body.namKh = body.namKeHoach,
-      body.soDx = body.soDeXuat;
-    body.loaiHh = body.loaiHangHoa,
-      body.paggingReq = {
-        limit: this.pageSize,
-        page: this.page - 1,
-
-      }
-    let res = await this.tonghopphuongangia.search(body);
+    body.namKh = body.namKeHoach
+    body.type = this.type
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.tongHopPhuongAnGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -168,7 +160,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.tonghopphuongangia.deleteMuti({ ids: dataDelete });
+            let res = await this.tongHopPhuongAnGiaService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -198,7 +190,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayTongHop[0];
         body.denNgay = body.ngayTongHop[1];
-        this.tonghopphuongangia
+        this.tongHopPhuongAnGiaService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-bo-tai-chinh-giao-bo-nganh.xlsx'),
@@ -218,12 +210,12 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     this.idSelected = 0;
     this.isViewDetail = false;
     this.isAddNew = true;
+    this.isTongHop = true;
   }
 
   async onClose() {
     this.isAddNew = false;
     await this.search()
-
   }
 
   onAllChecked(checked) {
@@ -281,10 +273,12 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  viewDetail(id: number, isViewDetail: boolean) {
+
+  viewDetail(id: number, isViewDetail: boolean, isTongHop: boolean) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
+    this.isTongHop = isTongHop;
   }
 
 
@@ -300,7 +294,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.tonghopphuongangia.delete({ id: item.id }).then((res) => {
+          this.tongHopPhuongAnGiaService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
