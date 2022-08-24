@@ -43,7 +43,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   @Input() dataTongHop: any;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  @Input() isView: boolean;
 
   // isVisibleChangeTab$ = new Subject();
   // visibleTab: boolean = false;
@@ -168,7 +168,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.namKeHoach
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -177,7 +177,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.soQuyetDinh
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -186,7 +186,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.ngayKy
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -195,7 +195,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.ngayHieuLuc
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -204,7 +204,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.tongHopDeXuatKhbdgId
             : null,
-          // disabled: this.isView ? true : false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -213,7 +213,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.maVatTuCha
             : null,
-          // disabled: this.isView ? true : false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -222,7 +222,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.maVatTu
             : null,
-          // disabled: this.isView ? true : false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -231,7 +231,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.loaiVthh
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -240,7 +240,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.thoiHanTcBdg
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -249,7 +249,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.trichYeu
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
@@ -258,12 +258,12 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.trangThai
             : null,
-          disabled: false
+          disabled: this.isView ? true : false
         },
         [],
       ],
     });
-    this.setTitle();
+    // this.setTitle();
   }
 
 
@@ -458,6 +458,43 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       if (data) {
         console.log("data: ", data);
         this.dataPopup = data;
+        let arr = [];
+        this.dataPopup.diaDiemNhapKho?.chiTietDiaDiems.forEach(dd => {
+          let temp =
+          {
+            "bhDgKehoachId": this.dataPopup.data.bhDgKeHoachId,
+            "chungLoaiHh": dd.chungLoaiHh,
+            "donGia": dd.donGiaChuaVAT,
+            "donViTinh": dd.donViTinh,
+            "ghiChu": null,
+            "giaKhoiDiem": dd.giaKhoiDiem,
+            "id": null,
+            "maChiCuc": this.dataPopup.diaDiemNhapKho.maDonVi,
+            "maDiemKho": dd.maDiemKho,
+            "maDvTaiSan": dd.maDonViTaiSan,
+            "maLoKho": dd.maNganLo,
+            "maNganKho": dd.maNganKho,
+            "maNhaKho": dd.maNhaKho,
+            "qdPheDuyetKhbdgChiTietId": null,
+            "soLuong": dd.soLuong,
+            "soTienDatTruoc": dd.soTienDatTruoc,
+            "stt": null,
+            "tenChiCuc": this.dataPopup.diaDiemNhapKho.tenDonVi,
+            "tenDiemKho": dd.tenDiemKho,
+            "tenLoKho": dd.tenNganLo,
+            "tenNganKho": dd.tenNganKho,
+            "tenNhaKho": dd.tenNhaKho,
+            "tonKho": dd.tonKho
+          }
+          arr.push(temp);
+        })
+
+        const thongTin = this.thongTinPhuLucs.find(x => x.bhDgKeHoachId === this.dataPopup.data.bhDgKeHoachId);
+        if (thongTin) {
+          thongTin.thongTinTaiSans = arr;
+        }
+        console.log(this.thongTinPhuLucs);
+
       }
     });
   }
@@ -527,47 +564,25 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
 
   async save(isOther?: boolean) {
     this.spinner.show();
+    console.log("this.qdPheDuyetKhBanDauGia: ", this.qdPheDuyetKhBanDauGia);
+    console.log("form: ", this.formData.value);
+
     try {
-      let arr = [];
-      this.dataPopup.diaDiemNhapKho?.chiTietDiaDiems.forEach(dd => {
-        let temp =
+      const arr = [];
+      this.thongTinPhuLucs.forEach(tt => {
+        let tempTT =
         {
-          "bhDgKehoachId": this.dataPopup.data.bhDgKeHoachId,
-          "chungLoaiHh": dd.chungLoaiHh,
-          "donGia": dd.donGiaChuaVAT,
-          "donViTinh": dd.donViTinh,
-          "ghiChu": null,
-          "giaKhoiDiem": dd.giaKhoiDiem,
-          "id": null,
-          "maChiCuc": this.dataPopup.data.maDonVi,
-          "maDiemKho": dd.maDiemKho,
-          "maDvTaiSan": dd.maDonViTaiSan,
-          "maLoKho": dd.maNganLo,
-          "maNganKho": dd.maNganKho,
-          "maNhaKho": dd.maNhaKho,
-          "qdPheDuyetKhbdgChiTietId": null,
-          "soLuong": dd.soLuong,
-          "soTienDatTruoc": dd.soTienDatTruoc,
-          "stt": null,
-          "tenChiCuc": this.dataPopup.data.tenDonVi,
-          "tenDiemKho": dd.tenDiemKho,
-          "tenLoKho": dd.tenNganLo,
-          "tenNganKho": dd.tenNganKho,
-          "tenNhaKho": dd.tenNhaKho,
-          "tonKho": dd.tonKho
+          "bhDgKeHoachId": tt.bhDgKeHoachId,
+          "quyetDinhPheDuyetId": null,
+          "thongTinTaiSans": tt.thongTinTaiSans
         }
-        arr.push(temp);
-      })
+        arr.push(tempTT);
+      });
+
+
       const body = {
         "capDonVi": this.userInfo.CAP_DVI,
-        "chiTietList": [
-          {
-            "bhDgKeHoachId": this.dataPopup.data.bhDgKeHoachId,
-            "id": null,
-            "quyetDinhPheDuyetId": 0,
-            "thongTinTaiSans": arr
-          }
-        ],
+        "chiTietList": arr,
         "fileDinhKems": this.listFileDinhKem,
         "id": this.qdPheDuyetKhBanDauGia.id,
         "loaiVthh": this.formData.get("loaiVthh").value,

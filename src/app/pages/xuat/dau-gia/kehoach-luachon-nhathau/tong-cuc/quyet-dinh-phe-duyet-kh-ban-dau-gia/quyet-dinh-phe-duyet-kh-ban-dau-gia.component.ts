@@ -19,7 +19,7 @@ import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuye
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-dau-gia',
   templateUrl: './quyet-dinh-phe-duyet-kh-ban-dau-gia.component.html',
@@ -77,7 +77,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
+  isView: boolean = false;
   // selectedTab: string = 'phe-duyet';
 
   constructor(
@@ -89,6 +89,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
     public qdPheDuyetKhBanDauGiaService: QuyetDinhPheDuyetKHBDGService,
+    public globals: Globals
   ) { }
 
   async ngOnInit() {
@@ -130,11 +131,13 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   insert() {
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
-  detail(data) {
+  detail(isView: boolean, id: number) {
     this.isDetail = true;
-    this.selectedId = data.id;
+    this.selectedId = id;
+    this.isView = isView;
   }
 
   delete(data?) {
@@ -464,5 +467,10 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
         });
       }
     }
+  }
+  redirectToChiTiet(isView: boolean, id: number) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 }

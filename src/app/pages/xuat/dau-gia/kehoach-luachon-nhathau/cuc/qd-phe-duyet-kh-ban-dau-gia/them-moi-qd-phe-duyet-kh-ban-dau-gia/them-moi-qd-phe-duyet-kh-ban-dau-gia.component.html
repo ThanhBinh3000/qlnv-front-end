@@ -159,7 +159,7 @@
                   File đính kèm
                 </nz-form-label>
                 <nz-form-control>
-                  <file-list></file-list>
+                  <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -183,7 +183,7 @@
               <th>Số đơn vị tài sản</th>
               <th>Giá khởi điểm (đồng)</th>
               <th>Khoản tiền đặt trước (đồng)</th>
-              <th [width]="30">Hành động</th>
+              <th [width]="30" *ngIf="!isView">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -196,7 +196,7 @@
               <td>{{ data.soLuongDvTaiSan }}</td>
               <td>{{ data.giaKhoiDiem | number: '1.0-1' }}</td>
               <td>{{ data.khoanTienDatTruoc | number: '1.0-1' }}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="openDialogDeXuat(data)">
                   <i class="fa fa-pencil"></i>
                 </a>
