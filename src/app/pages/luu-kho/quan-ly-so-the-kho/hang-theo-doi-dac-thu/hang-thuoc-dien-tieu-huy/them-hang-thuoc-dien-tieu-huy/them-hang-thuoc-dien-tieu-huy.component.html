@@ -12,7 +12,17 @@
                 <nz-form-item nz-col nzSpan="9" class="form-item">
                     <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
                     <nz-form-control>
-                        <input type="text" nz-input formControlName="tenDonvi" readonly />
+                        <nz-input-group id="ten-don-vi">
+                            <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)"
+                                [nzShowArrow]="false">
+                                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
+                                </nz-option>
+                            </nz-select>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </nz-input-group>
                     </nz-form-control>
                 </nz-form-item>
 
@@ -61,7 +71,7 @@
         <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
                 <tr>
-                    <th class="text-center" style="width: 5%;">STT</th>
+                    <th class="text-center" style="width: 45px;">STT</th>
                     <th style="width: 10%;">Loại hàng hoá</th>
                     <th style="width: 10%;">Chủng loại hàng hoá</th>
                     <th style="width: 10%;">Điểm kho</th>
@@ -188,7 +198,7 @@
             <tbody>
                 <tr *ngFor="let data of editRowTable.data; let idx = index">
                     <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
-                        <td>{{ idx + 1 }}</td>
+                        <td style=" text-align: center;">{{ idx + 1 }}</td>
                         <td>{{ data.loaiHang }}</td>
                         <td>{{ data.chungLoaiHang }}</td>
                         <td>{{ data.diemKho }}</td>
