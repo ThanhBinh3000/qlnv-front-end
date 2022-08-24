@@ -278,7 +278,11 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
 
     async themMoiItem() {
         if (!this.rowItem.idLoKho) {
-            this.notification.error(MESSAGE.ERROR_NOT_EMPTY, 'Vui lòng chọn lô kho.');
+            this.notification.error(MESSAGE.FORM_REQUIRED_ERROR, 'Vui lòng chọn lô kho.');
+            return;
+        }
+        if (this.rowItem.soLuongTon > this.rowItem.soLuongThanhLy) {
+            this.notification.error(MESSAGE.ERROR, 'Không được phép nhập Số lượng thanh lý lớn hơn số lượng tồn kho');
             return;
         }
         const newItem = {
