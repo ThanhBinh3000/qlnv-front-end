@@ -33,7 +33,7 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
     soQd: null,
     loaiVthh: null,
     ngayTongHop: null,
-    namKhoach: dayjs().get('year'),
+    namKhoach: '',
     trichYeu: null,
     tuNgayTongHop: null,
     denNgayTongHOp: null,
@@ -262,8 +262,8 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
       trichYeu: this.searchFilter.trichYeu,
       trangThai: '02',
       maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.pageSize,
-      pageSize: this.page,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -325,14 +325,16 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          ngayKyTuNgay: this.searchFilter.ngayTongHop ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
-          ngayKyDenNgay: this.searchFilter.ngayTongHop ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
-          soKeHoach: this.searchFilter.soQd,
-          loaiVatTuHangHoa: this.searchFilter.loaiVthh,
-          namKeHoach: this.searchFilter.namKhoach,
-          trichYeu: this.searchFilter.trichYeu,
-          maDvis: this.userInfo.MA_DVI,
-          paggingReq: null,
+          ngayKyTuNgay: null,
+          ngayKyDenNgay: null,
+          soKeHoach: null,
+          loaiVatTuHangHoa: null,
+          namKeHoach: null,
+          trichYeu: null,
+          trangThai: null,
+          maDvis: null,
+          pageNumber: this.page,
+          pageSize: this.pageSize,
         };
         this.deXuatKeHoachBanDauGiaService
           .exportList(body)

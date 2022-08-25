@@ -94,10 +94,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
   async ngOnInit() {
-
-    console.log(this.khBanDauGia);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maKeHoach = '/' + this.userInfo.MA_TR;
@@ -119,7 +118,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.khBanDauGia);
     this.formData = this.fb.group({
       id: [
         {
@@ -476,8 +474,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           this.phanLoTaiSanList = [...this.phanLoTaiSanList, phanLoTaiSan];
         });
       });
-      console.log(this.formData.value.ngayKy);
-      console.log(this.formData.value.ngayLapKeHoach);
       let body = {
         capDv: null,
         diaDiemGiaoNhanList: this.diaDiemGiaoNhanList,
@@ -522,7 +518,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .value,
         thongBaoKhBdg: this.formData.get('thongBaoKhBdg').value,
         tieuChuanChatLuong: this.formData.get('tieuChuanChatLuong').value,
-        trangThai: null,
+        trangThai: '00',
         trichYeu: this.formData.get('trichYeu').value,
         ghiChu: this.formData.get('ghiChu').value,
       }
@@ -584,7 +580,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.khBanDauGia = res.data;
-          console.log(res.data);
           this.initForm();
           const ddGiaoNhans = res.data?.diaDiemGiaoNhanList;
           ddGiaoNhans.forEach((ddgn) => {
@@ -669,9 +664,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.spinner.show();
         try {
           const id = await this.save(true);
+
           let body = {
-            id: id,
-            trangThaiId: this.globals.prop.LANH_DAO_DUYET,
+            id: this.idInput,
+            trangThaiId: '00',
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
@@ -680,9 +676,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             case '01':
               body.trangThaiId = '02';
               break;
-            case '09':
-              body.trangThaiId = '02';
-              break;
+
           }
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -750,7 +744,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
-    console.log(trangThai);
     switch (trangThai) {
       case '00': {
         this.titleStatus = 'Dự thảo';
