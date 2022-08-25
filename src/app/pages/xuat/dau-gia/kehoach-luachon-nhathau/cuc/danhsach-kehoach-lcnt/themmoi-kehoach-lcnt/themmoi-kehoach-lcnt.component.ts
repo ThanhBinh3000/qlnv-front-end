@@ -668,14 +668,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
           let body = {
             id: this.idInput,
-            trangThaiId: '00',
+            trangThaiId: this.globals.prop.NHAP_CHO_DUYET_TP,
           };
           switch (this.khBanDauGia.trangThai) {
-            case '00':
-              body.trangThaiId = '01';
+            case this.globals.prop.NHAP_DU_THAO:
+              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_TP;
               break;
-            case '01':
-              body.trangThaiId = '02';
+            case this.globals.prop.NHAP_CHO_DUYET_TP:
+              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
+              break;
+            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
+              body.trangThaiId = this.globals.prop.NHAP_BAN_HANH;
               break;
           }
 
@@ -716,15 +719,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThaiId: this.globals.prop.TU_CHOI,
+            trangThaiId: this.globals.prop.NHAP_TU_CHOI_TP,
           };
           switch (this.khBanDauGia.trangThai) {
-            case '01':
-              body.trangThaiId = '03';
+            case this.globals.prop.NHAP_CHO_DUYET_TP:
+              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_TP;
               break;
-
-            case '09':
-              body.trangThaiId = '12';
+            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
+              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
               break;
           }
 
@@ -748,41 +750,36 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
     switch (trangThai) {
-      case '00': {
+      case this.globals.prop.NHAP_DU_THAO: {
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '03': {
+      case this.globals.prop.NHAP_TU_CHOI_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - TP';
         break;
       }
-      case '01': {
+      case this.globals.prop.NHAP_CHO_DUYET_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - TP';
         break;
       }
-      case '09': {
+      case this.globals.prop.NHAP_CHO_DUYET_LD_CUC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_baocao2';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - LĐ Cục';
         break;
       }
-      case '12': {
+      case this.globals.prop.NHAP_TU_CHOI_LD_CUC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - LĐ Cục';
         break;
       }
-      case '02': {
+      case this.globals.prop.NHAP_BAN_HANH: {
         this.titleStatus = 'Đã duyệt';
-        this.styleStatus = 'da-ban-hanh';
-        break;
-      }
-      case '05': {
-        this.titleStatus = 'Tổng hợp';
         this.styleStatus = 'da-ban-hanh';
         break;
       }
