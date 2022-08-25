@@ -94,7 +94,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
@@ -519,7 +520,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .value,
         thongBaoKhBdg: this.formData.get('thongBaoKhBdg').value,
         tieuChuanChatLuong: this.formData.get('tieuChuanChatLuong').value,
-        trangThai: null,
+        trangThai: '00',
         trichYeu: this.formData.get('trichYeu').value,
         ghiChu: this.formData.get('ghiChu').value,
       }
@@ -664,26 +665,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.spinner.show();
         try {
           const id = await this.save(true);
+
           let body = {
-            id: id,
-            trangThaiId: this.globals.prop.LANH_DAO_DUYET,
+            id: this.idInput,
+            trangThaiId: '00',
           };
           switch (this.khBanDauGia.trangThai) {
             case '00':
               body.trangThaiId = '01';
               break;
             case '01':
-              body.trangThaiId = '02';
-              break;
-
-            case '09':
-            case '01':
-              body.trangThaiId = '02';
-              break;
-            case '01':
-              body.trangThaiId = '02';
-              break;
-            case '09':
               body.trangThaiId = '02';
               break;
           }
