@@ -1,22 +1,24 @@
-import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import dayjs from "dayjs";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {LIST_VAT_TU_HANG_HOA} from "src/app/constants/config";
-import {MESSAGE} from "src/app/constants/message";
-import {UserLogin} from "src/app/models/userlogin";
-import {HelperService} from "src/app/services/helper.service";
-import {UserService} from "src/app/services/user.service";
-import {Globals} from "src/app/shared/globals";
-import {STATUS} from "src/app/constants/status";
-import {QuyetDinhGiaCuaBtcService} from "src/app/services/quyetDinhGiaCuaBtc.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-
-import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
-import {DanhMucTieuChuanService} from "src/app/services/danhMucTieuChuan.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { LIST_VAT_TU_HANG_HOA } from "src/app/constants/config";
+import { MESSAGE } from "src/app/constants/message";
+import { UserLogin } from "src/app/models/userlogin";
+import { HelperService } from "src/app/services/helper.service";
+import { UserService } from "src/app/services/user.service";
+import { Globals } from "src/app/shared/globals";
+import { STATUS } from "src/app/constants/status";
+import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
+import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
+import {
+  DialogToTrinhTongHopComponent
+} from "../../../../../../../components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -55,6 +57,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   dataTable: any[] = [];
   isErrorUnique = false;
   thueVat: number;
+  thongTinToTrinh: any = {};
 
 
   constructor(
@@ -78,6 +81,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         soToTrinh: [null],
+        thongTinToTrinh: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
         loaiGia: [null],
@@ -101,7 +105,8 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.loadToTrinhDeXuat(),
       this.maQd = "/QD-BTC",
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      //this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      this.onChangeSoToTrinh(this.thongTinToTrinh.id),
       this.loadTiLeThue()
     ]);
     this.spinner.hide();
@@ -111,7 +116,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -126,6 +130,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
+      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -234,7 +239,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -302,7 +306,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
       //chung loai hang hoa
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
       this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
@@ -321,7 +325,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           let tmp = [];
-          tmp.push({"id": res.data.id, "tenQchuan": res.data.tenQchuan});
+          tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
           this.dsTieuChuanCl = tmp;
         }
       }
@@ -336,7 +340,9 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       } else {
         this.arrThongTinGia = [];
       }
+      this.formData.controls["thongTinToTrinh"].setValue(curToTrinh.soToTrinh);
     }
+
   }
 
   async onChangeLoaiVthh(event) {
@@ -358,7 +364,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
     // check a property of c, the Control this validator is attached to
     if (this.isErrorUnique) {
-      return {"uniqueError": true};
+      return { "uniqueError": true };
     }
     return null;
 
@@ -375,6 +381,28 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     } else if (type === 1) {
       this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
     }
+  }
+
+  openDialogToTrinh() {
+    let modalQD = this.modal.create({
+      nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
+      nzContent: DialogToTrinhTongHopComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '700px',
+      nzFooter: null
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.formData.patchValue({
+          soToTrinh: data.id ? data.id : null,
+          thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null
+        });
+        this.thongTinToTrinh = data;
+        this.onChangeSoToTrinh(data.id);
+        this.spinner.hide();
+      }
+    });
   }
 }
 
