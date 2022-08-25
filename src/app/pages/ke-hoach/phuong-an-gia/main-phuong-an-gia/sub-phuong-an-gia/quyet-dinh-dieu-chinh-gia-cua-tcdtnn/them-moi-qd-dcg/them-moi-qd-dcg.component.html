@@ -30,22 +30,14 @@
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="20">
               <div nz-col [nzSpan]="3">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true">Năm kế hoạch
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)"
-                                [nzDisabled]="isView" nzAllowClear="true">
-                                <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
-                                </nz-option>
-                            </nz-select>
-                            <ng-template #error let-control>
-                                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">Năm kế hoạch
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <input nz-input [value]="namNay" formControlName="namKeHoach" [readonly]="true" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
               <div nz-col [nzSpan]="4">
                     <nz-form-item class="form-item">
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số quyết định
