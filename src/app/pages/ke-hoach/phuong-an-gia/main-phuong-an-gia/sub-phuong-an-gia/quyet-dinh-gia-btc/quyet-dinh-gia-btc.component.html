@@ -19,7 +19,7 @@
               <nz-form-label nzFor="so-qd">Số quyết định</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="so-qd">
-                  <input type="text" nz-input formControlName="soQd" />
+                  <input type="text" nz-input formControlName="soQd"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -29,7 +29,7 @@
               <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="trich-yeu">
-                  <input type="text" nz-input formControlName="trichYeu" />
+                  <input type="text" nz-input formControlName="trichYeu"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -100,7 +100,7 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                     (input)="filterInTable('soQd',filterTable.soQd)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <!--                                <i nz-icon nzType="search"></i>-->
@@ -109,7 +109,7 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
+                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -118,7 +118,7 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -127,7 +127,7 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
+                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -135,8 +135,8 @@
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                     (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -144,8 +144,8 @@
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiGia"
-                     (input)="filterInTable('loaiGia',filterTable.loaiGia)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
+                     (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -154,7 +154,7 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                     (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+                     (input)="filterInTable('trangThai',filterTable.trangThai)" size="small"/>
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="search"></i>
@@ -174,8 +174,8 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.loaiGia }}</td>
-          <td>{{ data.loaiVthh }}</td>
+          <td>{{ data.tenLoaiGia }}</td>
+          <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="viewDetail(data.id, true,data.trangThai)">
@@ -210,10 +210,12 @@
   </div>
 </ng-container>
 <ng-template #LtView>
-  <app-them-quyet-dinh-gia-btc-lt *ngIf="pagType === 'LT';else VtView" [isView]="isViewDetail" [pagType]="pagType" [noEdit]="noEdit" [idInput]="idSelected" (onClose)="onClose()">
+  <app-them-quyet-dinh-gia-btc-lt *ngIf="pagType === 'LT';else VtView" [isView]="isViewDetail" [pagType]="pagType"
+                                  [noEdit]="noEdit" [idInput]="idSelected" (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-lt>
 </ng-template>
 <ng-template #VtView>
-  <app-them-quyet-dinh-gia-btc-vt [isView]="isViewDetail" [pagType]="pagType" [noEdit]="noEdit" [idInput]="idSelected" (onClose)="onClose()">
+  <app-them-quyet-dinh-gia-btc-vt [isView]="isViewDetail" [pagType]="pagType" [noEdit]="noEdit" [idInput]="idSelected"
+                                  (onClose)="onClose()">
   </app-them-quyet-dinh-gia-btc-vt>
 </ng-template>

@@ -1,0 +1,96 @@
+<nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+  <thead>
+  <tr>
+    <th rowspan="2" style="width: 2%;">STT</th>
+    <th rowspan="2" *ngIf="isTableKetQua">Tên đơn vị báo giá</th>
+    <th rowspan="2" *ngIf="!isTableKetQua">Tên đơn vị thẩm định</th>
+    <th colspan="2">Đơn  giá chưa VAT (đồng)</th>
+    <th colspan="2">Đơn giá có VAT (đồng)</th>
+    <th *ngIf="isTableKetQua">Thời hạn </th>
+    <th >Ghi chú</th>
+    <th>File đính kèm</th>
+    <th style="width: 5%;">Hành động</th>
+  </tr>
+  <tr>
+    <td>Phao tròn kiểu thứ nhất</td>
+    <td>Phao tròn kiểu thứ hai</td>
+    <td>Phao tròn kiểu thứ nhất</td>
+    <td>Phao tròn kiểu thứ hai</td>
+  </tr>
+
+  <tr>
+    <th class="text-center"> </th>
+    <th>
+      <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+    </th>
+    <th>
+      <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th>
+      <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th>
+      <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th>
+      <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th *ngIf="isTableKetQua">
+      <input type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input />
+    </th>
+    <th >
+      <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
+    </th>
+    <th>
+      <nz-form-control>
+        <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+          <input placeholder="Chọn file" [(ngModel)]="rowItem.fileDinhKem.fileName" nz-input disabled />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i class="icon htvbdh_tcdt_tep"></i>
+          <input class="input-file" (change)="getNameFile($event)" type="file" />
+        </ng-template>
+      </nz-form-control>
+    </th>
+    <th class="text-left">
+      <a>
+        <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
+      </a>
+      <a>
+        <i class="icon  htvbdh_nhap-lai1 "></i>
+      </a>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of dataTable; let idx = index">
+    <td class="text-center">{{ idx + 1 }}</td>
+    <td>{{ data.tenDviBaoGia }}</td>
+    <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
+    <td>{{data.donGia }}</td>
+    <td>{{data.donGiaVat }}</td>
+    <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
+    <td>{{data.fileDinhKem?.fileName }}</td>
+    <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>
+    <td style="text-align: left; white-space: nowrap;">
+      <a (click)="downloadFile(data.fileDinhKem)">
+        <i class="icon htvbdh_tcdt_import "></i>
+      </a>
+      <a>
+        <i class="fa fa-pencil"></i>
+      </a>
+      <a>
+        <i class="fa fa-trash-o do"></i>
+      </a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>

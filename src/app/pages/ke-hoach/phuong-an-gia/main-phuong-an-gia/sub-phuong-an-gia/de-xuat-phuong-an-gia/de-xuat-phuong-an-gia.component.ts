@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-de-xuat-phuong-an-gia',
   templateUrl: './de-xuat-phuong-an-gia.component.html',
@@ -47,6 +48,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    private danhMucService: DanhMucService
   ) {
     this.formData = this.fb.group({
       soDeXuat: [null],
@@ -71,7 +73,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     soDeXuat: '',
     ngayKy: '',
     trichYeu: '',
-    quyetDinhChiTieu: '',
+    qdCtKhNam: '',
     namKeHoach: '',
     loaiHangHoa: '',
     loaiGia: '',
@@ -81,9 +83,23 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.loadDsNam();
     this.search();
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
+    if (this.pagType == 'LT') {
+      this.listVthh = LIST_VAT_TU_HANG_HOA;
+    }
+    if (this.pagType == 'VT') {
+      await this.loadDsVthh();
+    }
   }
-
+  async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.listVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+        this.listVthh = res.data
+    }
+  }
   initForm(): void {
   }
 
@@ -192,10 +208,12 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayKy[0];
         body.denNgay = body.ngayKy[1];
+        body.pagType = this.pagType
+        body.type = this.type
         this.deXuatPAGService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-bo-tai-chinh-giao-bo-nganh.xlsx'),
+            saveAs(blob, 'de-xuat-phuong-an-gia.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

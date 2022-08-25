@@ -29,7 +29,7 @@
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="2">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
             </nz-form-label>
@@ -63,7 +63,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-ky">Ngày ký
             </nz-form-label>
@@ -78,7 +78,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày hiệu lực
             </nz-form-label>
@@ -101,22 +101,13 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="soToTrinh" [nzDisabled]="noEdit" nzAllowClear="true"
                          (ngModelChange)="onChangeSoToTrinh($event)">
-                <nz-option *ngFor="let p of dsToTrinhDeXuat" [nzValue]="p.id" [nzLabel]="p.id+'-'+p.noiDung">
+                <nz-option *ngFor="let p of dsToTrinhDeXuat" [nzValue]="p.id" [nzLabel]="p.id+'-'+p.soDeXuat">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                   </ng-container>
                 </ng-template>
               </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
-            </nz-form-label>
-            <nz-form-control>
-              <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input [readonly]="noEdit"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -127,23 +118,6 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
                 <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                  </ng-container>
-                </ng-template>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Chủng loại hàng
-              hóa
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="cloaiVthh" [nzDisabled]="true" nzAllowClear="true">
-                <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -169,20 +143,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="tieu-chuan-cl">Tiêu chuẩn chất
-              lượng
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="tieuChuanCl" [nzDisabled]="true" nzAllowClear="true">
-                <nz-option *ngFor="let p of dsTieuChuanCl" [nzValue]="p.id" [nzLabel]="p.tenQchuan">
-                </nz-option>
-                <ng-template #error let-control>
-                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                  </ng-container>
-                </ng-template>
-              </nz-select>
+            <nz-form-control>
+              <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input [readonly]="noEdit"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -199,8 +165,10 @@
               <thead>
               <tr>
                 <th style="width: 2%">STT</th>
-                <th style="width: 30%">Đơn vị</th>
+                <th style="width: 30%">Chủng loại hàng hóa</th>
+                <th style="width: 10%">Tiêu chuẩn chất lượng</th>
                 <th style="width: 10%">Số lượng</th>
+                <th style="width: 10%">Đơn vị tính</th>
                 <th style="width: 10%">Đơn giá chưa VAT (đồng/kg)</th>
                 <th style="width: 10%">Đơn giá có VAT(đồng/kg)</th>
                 <th style="width: 10%">Đơn giá QĐ chưa VAT (đồng/kg)</th>
@@ -212,17 +180,19 @@
               <tr *ngFor="let data of arrThongTinGia; let idx = index">
                 <td class="text-center">{{idx + 1}}</td>
                 <!--                 <td>{{ data.maDvi }}</td>-->
-                <td>{{ data.tenDvi }}</td>
-                <td>{{ data.soLuong }}</td>
-                <td>{{ data.giaDn }}</td>
-                <td>{{ data.giaDnVat }}</td>
+                <td>{{ data.tenCloaiVthh }}</td>
+                <td>{{ data.tieuChuanCl }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{ data.donViTinh }}</td>
+                <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN'  }}</td>
+                <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN'  }}</td>
                 <td>
                   <nz-input-group>
                     <nz-input-number nz-input
                                      [ngModelOptions]="{standalone: true}"
                                      [(ngModel)]="arrThongTinGia[idx].giaQd"
                                      [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     [nzDisabled]="noEdit">
+                                     [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,0)">
                     </nz-input-number>
                   </nz-input-group>
                 </td>
@@ -232,7 +202,7 @@
                                      [ngModelOptions]="{standalone: true}"
                                      [(ngModel)]="arrThongTinGia[idx].giaQdVat"
                                      [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     [nzDisabled]="noEdit">
+                                     [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,1)">
                     </nz-input-number>
                   </nz-input-group>
                 </td>
