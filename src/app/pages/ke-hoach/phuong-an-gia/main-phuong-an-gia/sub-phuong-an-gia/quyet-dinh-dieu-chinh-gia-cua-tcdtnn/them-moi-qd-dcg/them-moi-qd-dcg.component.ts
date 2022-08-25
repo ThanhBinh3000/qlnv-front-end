@@ -61,6 +61,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     ])
   }
 
+
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
       this.dsNam.push({
