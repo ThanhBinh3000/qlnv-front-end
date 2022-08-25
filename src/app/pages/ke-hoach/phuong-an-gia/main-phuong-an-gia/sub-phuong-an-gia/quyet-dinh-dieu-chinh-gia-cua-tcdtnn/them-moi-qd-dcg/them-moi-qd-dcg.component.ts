@@ -22,6 +22,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   @Input('isView') isView: boolean;
   @Input() idInput: number;
   @Input() loaiVthh: string;
+  @Input() type: string;
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   userInfo: UserLogin;
@@ -81,22 +82,51 @@ export class ThemMoiQdDcgComponent implements OnInit {
     }
   }
 
-  chonSoToTrinh() {
-    // let data = this.loaiVthh;
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Số tờ trình đề xuất của Vụ kế hoạch',
-      nzContent: DialogSoToTrinhPagComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      console.log(data.soToTrinh)
-      // this.formData.value.soTtrinh = data.soToTrinh;
-      console.log(data);
-    });
+  chonSoToTrinh(page: string) {
+    if (page == 'stt') {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Số tờ trình đề xuất của Vụ kế hoạch',
+        nzContent: DialogSoToTrinhPagComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          pagtype: this.loaiVthh,
+          type: this.type,
+          loai: page
+        },
+      });
+      modalTuChoi.afterClose.subscribe(async (data) => {
+        if (data != null) {
+          this.formData.patchValue({
+            soTtrinh: data.soToTrinh
+          })
+        }
+      });
+    }
+    if (page == 'sqd') {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Số quyết định giá của TCDTNN',
+        nzContent: DialogSoToTrinhPagComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          pagtype: this.loaiVthh,
+          type: this.type,
+          loai: page
+        },
+      });
+      modalTuChoi.afterClose.subscribe(async (data) => {
+        if (data != null) {
+          this.formData.patchValue({
+            soQdGoc: data.soQd
+          })
+        }
+      });
+    }
   }
 
   quayLai() {

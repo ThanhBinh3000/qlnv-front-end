@@ -16,6 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   @Input() pagType: string;
+  @Input() type: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;

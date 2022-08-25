@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MESSAGE} from "../../../constants/message";
 import {QuyetDinhGiaCuaBtcService} from "../../../services/quyetDinhGiaCuaBtc.service";
 import {NzModalRef} from "ng-zorro-antd/modal";
@@ -6,6 +6,8 @@ import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {NgxSpinnerService} from "ngx-spinner";
 import {QuanLyHopDongNhapXuatService} from "../../../services/quanLyHopDongNhapXuat.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
+import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {STATUS} from "../../../constants/status";
 
 @Component({
   selector: 'app-dialog-so-to-trinh-pag',
@@ -13,7 +15,11 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
   styleUrls: ['./dialog-so-to-trinh-pag.component.scss']
 })
 export class DialogSoToTrinhPagComponent implements OnInit {
+  @Input() pagtype: string;
+  @Input() type: string;
+  @Input() loai: string;
   dsToTrinhDeXuat: any[] = [];
+  dsQD: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -24,26 +30,35 @@ export class DialogSoToTrinhPagComponent implements OnInit {
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
 
   }
 
   async ngOnInit() {
     await Promise.all([
-      this.loadToTrinhDeXuat()
+      this.loadToTrinhDeXuat(),
+      this.findSoQd()
     ]);
   }
 
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhTongHop({});
+    let body =
+    {
+      "paggingReq": {
+      "limit": 20,
+        "page": 0
+    },
+      "type": this.type,
+      "loaiHh" : this.pagtype
+    }
+    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDcTcdtnn({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }
-    console.log(this.dsToTrinhDeXuat)
   }
 
   handleOk(item: any) {
@@ -56,8 +71,27 @@ export class DialogSoToTrinhPagComponent implements OnInit {
     }
   }
 
-  handleCancel() {
-    this._modalRef.close();
+  async findSoQd() {
+    try {
+      this.spinner.show();
+      let body = {
+        "pagType": this.pagtype,
+        "paggingReq": {
+          "limit": 20,
+          "page": 0
+        },
+        "trangThai": STATUS.DA_DUYET_LDV
+      }
+      let res = await this.quyetDinhGiaTCDTNNService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsQD = res.data.content
+      }
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+    }
+    console.log(this.dsQD)
+    console.log(this.pagtype)
   }
 
   async search() {
@@ -82,7 +116,7 @@ export class DialogSoToTrinhPagComponent implements OnInit {
       "trangThai": "02",
       "tuNgayKy": ""
     }
-    let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
+    let res = await this.quyetDinhGiaCuaBtcService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
@@ -101,31 +135,10 @@ export class DialogSoToTrinhPagComponent implements OnInit {
     }
   }
 
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+
+
+  handleCancel() {
+    this._modalRef.close();
   }
 
   selectToTrinh(toTrinh: any) {

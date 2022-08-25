@@ -90,7 +90,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Số quyết định giá của TCDTNN
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh()">
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('sqd')">
                                 <input nz-input formControlName="soQdGoc" [readonly]="true" />
                             </nz-input-group>
                             <ng-template #error let-control>
@@ -105,7 +105,7 @@
                   <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số đề xuất
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh()">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('stt')">
                       <input nz-input formControlName="soTtrinh" [readonly]="true" />
 
                     </nz-input-group>
@@ -241,7 +241,7 @@
             <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số tờ trình đề xuất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh()" >
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('stt')" >
                 <input nz-input formControlName="soTtrinh" [readonly]="true" />
 
               </nz-input-group>
@@ -253,7 +253,7 @@
             <nz-form-label  nzRequired [nzNoColon]="true" [nzNoColon]="true">Số quyết định giá của TCDTNN
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoToTrinh('sqd')">
                 <input nz-input formControlName="soQdGoc" [readonly]="true" />
               </nz-input-group>
               <ng-template #error let-control>
