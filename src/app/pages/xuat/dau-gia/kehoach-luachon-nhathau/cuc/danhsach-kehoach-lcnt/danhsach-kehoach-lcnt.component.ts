@@ -163,7 +163,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       pageSize: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
-    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

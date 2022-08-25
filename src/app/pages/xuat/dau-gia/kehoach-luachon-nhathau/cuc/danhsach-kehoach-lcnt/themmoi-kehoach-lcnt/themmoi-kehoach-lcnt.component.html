@@ -21,7 +21,7 @@
         </button>
         <button
           *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == '00' || khBanDauGia.trangThai == '03' || khBanDauGia.trangThai == '12')"
-          type="button" class="btn btn-sub" (click)="guiDuyet()">
+          type="button" class="btn btn-sub" (click)="guiDuyet()" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
