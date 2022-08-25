@@ -683,7 +683,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
