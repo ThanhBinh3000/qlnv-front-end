@@ -614,10 +614,15 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-            if (capDviUser == 2) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.TAO_BAO_CAO_SUCCESS);
-            } else if (capDviUser == 1) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+            debugger
+            if (this.trangThaiBanGhi == '1') {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            } else {
+              if (capDviUser == 2) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.TAO_BAO_CAO_SUCCESS);
+              } else if (capDviUser == 1) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+              }
             }
             this.router.navigate([
               MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
