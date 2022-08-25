@@ -15,7 +15,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./quyet-dinh-dieu-chinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
-  @Input() pagType: String;
+  @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;

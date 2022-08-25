@@ -4,6 +4,13 @@ import dayjs from 'dayjs';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {
+  DialogDanhSachHangHoaComponent
+} from "../../../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {
+  DialogSoToTrinhPagComponent
+} from "../../../../../../../components/dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -13,19 +20,20 @@ import { Globals } from 'src/app/shared/globals';
 export class ThemMoiQdDcgComponent implements OnInit {
 
   @Input('isView') isView: boolean;
-  @Input()
-  idInput: number;
+  @Input() idInput: number;
+  @Input() loaiVthh: string;
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
-
   userInfo: UserLogin;
   maQd: String;
   dsNam: any[] = [];
   dataTable: any[] = [];
   namNay: number;
+  soToTrinh: any
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
+    private modal: NzModalService,
     private userService: UserService
   ) {
     this.formData = this.fb.group(
@@ -71,6 +79,24 @@ export class ThemMoiQdDcgComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
+  }
+
+  chonSoToTrinh() {
+    // let data = this.loaiVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Số tờ trình đề xuất của Vụ kế hoạch',
+      nzContent: DialogSoToTrinhPagComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      console.log(data.soToTrinh)
+      // this.formData.value.soTtrinh = data.soToTrinh;
+      console.log(data);
+    });
   }
 
   quayLai() {
