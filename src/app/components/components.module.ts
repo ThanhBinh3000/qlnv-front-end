@@ -139,7 +139,7 @@ import { DialogNhomQuyenComponent } from './dialog/dialog-nhom-quyen/dialog-nhom
 import { DialogThemQuyenComponent } from './dialog/dialog-them-quyen/dialog-them-quyen.component';
 import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
-
+import { DialogToTrinhTongHopComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component';
 @NgModule({
   declarations: [
     //components
@@ -230,7 +230,8 @@ import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog
     DialogNhomQuyenComponent,
     DialogThemQuyenComponent,
     DialogChiTietGiaoDichHangTrongKhoComponent,
-    DialogDdiemDeHangComponent
+    DialogDdiemDeHangComponent,
+    DialogToTrinhTongHopComponent
   ],
   imports: [
     CommonModule,
