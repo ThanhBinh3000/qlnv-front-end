@@ -10,7 +10,7 @@ import {HelperService} from "src/app/services/helper.service";
 import {UserService} from "src/app/services/user.service";
 import {Globals} from "src/app/shared/globals";
 import {STATUS} from "src/app/constants/status";
-import {QuyetDinhGiaCuaBtcService} from "src/app/services/quyetDinhGiaCuaBtc.service";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {DanhMucService} from "src/app/services/danhmuc.service";
 import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
