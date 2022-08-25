@@ -55,17 +55,17 @@
   </nz-card>
 
   <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-table nzTitle="Danh sách hàng bị hỏng cần bảo hành" #basicTable class="nowrap" [nzData]="dataTable"
+    <nz-table nzTitle="Danh sách hàng bị hỏng cần bảo hành" #basicTable class="nowrap" [nzData]="listTable"
       [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
         <tr>
-          <th class="text-center" style="width: 5%;">STT</th>
+          <th class="text-center" style="width: 2.5%;">STT</th>
           <th style="width: 10%;">Loại hàng hoá</th>
           <th style="width: 10%;">Chủng loại hàng hoá</th>
           <th style="width: 10%;">Điểm kho</th>
           <th style="width: 10%;">Nhà kho</th>
           <th style="width: 10%;">Ngăn kho</th>
-          <th style="width: 10%;">Ngăn lô</th>
+          <th style="width: 10%;">Lô kho</th>
           <th style="width: 10%;">Số lượng tồn</th>
           <th style="width: 10%;">Số lượng cần bảo hành</th>
           <th style="width: 5%;">Đơn vị tính</th>
@@ -173,7 +173,7 @@
       <tbody>
         <!-- <tr *ngFor="let data of dataTable; let idx = index"> -->
         <tr *ngFor="let data of listTable; let idx = index">
-          <td>{{ (page -1)*pageSize+ idx + 1 }}</td>
+          <td class="text-center">{{ (page -1)*pageSize+ idx + 1 }}</td>
           <td>{{ data.tenLoaiHangHoa }}</td>
           <td>{{ data.tenChungLoaiHangHoa }}</td>
           <td>{{ data.tenDiemKho }}</td>

@@ -72,9 +72,9 @@
             <th width="130px">Hành động</th>
           </tr>
           <tr class="search-table">
-            <td *ngIf="userService.isChiCuc()"></td>
-            <td></td>
-            <td>
+            <th *ngIf="userService.isChiCuc()"></th>
+            <th></th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
                   (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
@@ -82,8 +82,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQuyetDinhNhap',filterTable.soQd)" size="small" />
@@ -91,8 +91,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayBatDauNhap"
                   (input)="filterInTable('ngayBatDauNhap',filterTable.ngayBatDauNhap)" size="small" />
@@ -100,8 +100,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
                   (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
@@ -109,8 +109,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
                   (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
@@ -118,8 +118,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganLo"
                   (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" size="small" />
@@ -127,8 +127,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                   (input)="filterInTable('noiDung',filterTable.trangThai)" size="small" />
@@ -136,8 +136,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td>
+            </th>
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.trangThai)" size="small" />
@@ -145,8 +145,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </td>
-            <td></td>
+            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

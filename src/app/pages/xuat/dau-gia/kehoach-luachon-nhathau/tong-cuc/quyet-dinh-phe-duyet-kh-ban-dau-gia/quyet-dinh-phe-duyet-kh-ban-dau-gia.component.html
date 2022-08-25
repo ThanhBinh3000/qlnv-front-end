@@ -141,14 +141,14 @@
                     <td>{{ data.loaiHangHoa }}</td>
                     <td>{{ data.trangThai }}</td>
                     <td class="text-left">
-                      <a (click)="detail(data)">
+                      <a (click)="detail(true ,data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai == '00' || data.trangThai == '03') && userService.isTongCuc()"
-                        (click)="detail(data)">
+                      <a *ngIf="userService.isTongCuc()" (click)="detail(false,data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="delete(data)">
+                      <a *ngIf="data.trangThai==globals.prop.NHAP_BAN_HANH_29 && userService.isTongCuc()"
+                        (click)="delete(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -194,6 +194,7 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-them-moi-qd-phe-duyet-kh-ban-dau-gia [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-them-moi-qd-phe-duyet-kh-ban-dau-gia [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()"
+    [isView]="isView">
   </app-them-moi-qd-phe-duyet-kh-ban-dau-gia>
 </div>

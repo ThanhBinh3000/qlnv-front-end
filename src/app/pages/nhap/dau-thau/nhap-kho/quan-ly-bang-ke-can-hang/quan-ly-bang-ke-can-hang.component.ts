@@ -155,6 +155,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       ngayNhap: '',
       soHopDong: '',
     };
+    this.search()
   }
 
   xoaItem(item: any) {
