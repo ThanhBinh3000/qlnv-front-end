@@ -359,6 +359,7 @@ export class HangHongCanBaoHanhComponent implements OnInit {
                 ...this.listLoaiHangHoa,
                 item
               ];
+              this.onChangeLoaiHHAutoComplete('')
             }
             else {
               this.listLoaiHangHoa = [
@@ -384,8 +385,6 @@ export class HangHongCanBaoHanhComponent implements OnInit {
         .map((item) => item.ten);
       let data = this.listLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maLoaiHang.toString().toLowerCase());
 
-      console.log(data);
-
       if (data && data.child.length > 0 && data !== undefined) {
         this.listChungLoaiHangHoa = data.child;
         this.dsChungLoaiHangHoaDataSource = this.listChungLoaiHangHoa.map((item => item.ten));
@@ -403,7 +402,6 @@ export class HangHongCanBaoHanhComponent implements OnInit {
 
   onChangeChungLoaiHHAutoComplete(value: any) {
     if (value) {
-      console.log(this.listChungLoaiHangHoa);
       let data = this.listChungLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maChungLoaiHangHoa.toString().toLowerCase())
       if (data !== undefined) {
         this.searchInTable.maChungLoaiHangHoa = data.ma

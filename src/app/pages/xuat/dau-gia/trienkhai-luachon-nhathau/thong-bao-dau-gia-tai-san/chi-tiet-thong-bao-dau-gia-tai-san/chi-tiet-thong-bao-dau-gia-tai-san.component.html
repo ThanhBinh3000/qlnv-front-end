@@ -4,9 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <a class="btn btn-sub" (click)="apDungChinhSua()">
-      <i class="icon htvbdh_checkfile2"></i>
-      <span>Áp dụng chỉnh sửa</span>
+    <a class="btn btn-sub" (click)="pheDuyet()" *ngIf="id && id > 0">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Ban hành</span>
     </a>
     <button class="btn btn-main" *ngIf="thongBaoBanDauGia.trangThai == globals.prop.NHAP_DU_THAO && !isView"
       (click)="save(false)">

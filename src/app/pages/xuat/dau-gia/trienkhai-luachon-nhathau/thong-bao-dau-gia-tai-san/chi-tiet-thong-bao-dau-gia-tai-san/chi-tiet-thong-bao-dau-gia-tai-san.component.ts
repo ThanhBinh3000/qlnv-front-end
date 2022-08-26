@@ -60,7 +60,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
@@ -68,7 +67,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     private fb: FormBuilder,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     private danhMucService: DanhMucService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     public qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKHBDGService,
     private helperService: HelperService,
   ) {
@@ -446,7 +444,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-          if (phanLoTaiSans[i].chiCuc && phanLoTaiSans[j].chiCuc && (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc)) {
+          if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].maChiCuc === phanLoTaiSans[j].maChiCuc) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
             diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
@@ -649,7 +647,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -683,10 +681,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -725,7 +723,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {

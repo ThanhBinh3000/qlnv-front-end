@@ -94,10 +94,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
   async ngOnInit() {
-
-    console.log(this.khBanDauGia);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maKeHoach = '/' + this.userInfo.MA_TR;
@@ -119,7 +118,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.khBanDauGia);
     this.formData = this.fb.group({
       id: [
         {
@@ -406,10 +404,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
       },
     });
+
     modalGT.afterClose.subscribe((res) => {
       if (!res) {
         return;
       }
+
       this.checkExistBangPhanLo(res);
       this.diaDiemGiaoNhanList = [];
       this.bangPhanBoList.forEach((phanLo) => {
@@ -476,8 +476,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           this.phanLoTaiSanList = [...this.phanLoTaiSanList, phanLoTaiSan];
         });
       });
-      console.log(this.formData.value.ngayKy);
-      console.log(this.formData.value.ngayLapKeHoach);
       let body = {
         capDv: null,
         diaDiemGiaoNhanList: this.diaDiemGiaoNhanList,
@@ -522,7 +520,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           .value,
         thongBaoKhBdg: this.formData.get('thongBaoKhBdg').value,
         tieuChuanChatLuong: this.formData.get('tieuChuanChatLuong').value,
-        trangThai: null,
+        trangThai: '00',
         trichYeu: this.formData.get('trichYeu').value,
         ghiChu: this.formData.get('ghiChu').value,
       }
@@ -571,7 +569,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.loaiVthhInput) {
         this.listHangHoa = res.data;
-        this.listHangHoa = this.listHangHoa.filter((hh) => hh.ma != '02');
       } else {
         this.listHangHoa = res.data?.filter((x) => x.ma == this.loaiVthhInput);
       }
@@ -584,7 +581,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.khBanDauGia = res.data;
-          console.log(res.data);
           this.initForm();
           const ddGiaoNhans = res.data?.diaDiemGiaoNhanList;
           ddGiaoNhans.forEach((ddgn) => {
@@ -669,21 +665,23 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.spinner.show();
         try {
           const id = await this.save(true);
+
           let body = {
-            id: id,
-            trangThaiId: this.globals.prop.LANH_DAO_DUYET,
+            id: this.idInput,
+            trangThaiId: this.globals.prop.NHAP_CHO_DUYET_TP,
           };
           switch (this.khBanDauGia.trangThai) {
-            case '00':
-              body.trangThaiId = '01';
+            case this.globals.prop.NHAP_DU_THAO:
+              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_TP;
               break;
-            case '01':
-              body.trangThaiId = '02';
+            case this.globals.prop.NHAP_CHO_DUYET_TP:
+              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
               break;
-            case '09':
-              body.trangThaiId = '02';
+            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
+              body.trangThaiId = this.globals.prop.NHAP_BAN_HANH;
               break;
           }
+
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -721,16 +719,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThaiId: this.globals.prop.TU_CHOI,
+            trangThaiId: this.globals.prop.NHAP_TU_CHOI_TP,
           };
           switch (this.khBanDauGia.trangThai) {
-            case '01':
-              body.trangThaiId = '03';
+            case this.globals.prop.NHAP_CHO_DUYET_TP:
+              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_TP;
               break;
-            case '09':
-              body.trangThaiId = '12';
+            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
+              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
               break;
           }
+
           const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
@@ -750,43 +749,37 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   setTitle() {
     let trangThai = this.khBanDauGia.trangThai;
-    console.log(trangThai);
     switch (trangThai) {
-      case '00': {
+      case this.globals.prop.NHAP_DU_THAO: {
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '03': {
+      case this.globals.prop.NHAP_TU_CHOI_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - TP';
         break;
       }
-      case '01': {
+      case this.globals.prop.NHAP_CHO_DUYET_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - TP';
         break;
       }
-      case '09': {
+      case this.globals.prop.NHAP_CHO_DUYET_LD_CUC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_baocao2';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - LĐ Cục';
         break;
       }
-      case '12': {
+      case this.globals.prop.NHAP_TU_CHOI_LD_CUC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - LĐ Cục';
         break;
       }
-      case '02': {
+      case this.globals.prop.NHAP_BAN_HANH: {
         this.titleStatus = 'Đã duyệt';
-        this.styleStatus = 'da-ban-hanh';
-        break;
-      }
-      case '05': {
-        this.titleStatus = 'Tổng hợp';
         this.styleStatus = 'da-ban-hanh';
         break;
       }

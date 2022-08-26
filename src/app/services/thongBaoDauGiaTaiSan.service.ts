@@ -70,8 +70,8 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/status`;
-    return this.httpClient.put(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/trang-thai?id=${body.id}&trangThaiId=${body.trangThai}`;
+    return this.httpClient.put(url, null).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
