@@ -20,13 +20,13 @@ import { DialogQuyetDinhGiaCuaTcdtnnComponent } from 'src/app/components/dialog/
   styleUrls: ['./them-moi-qd-gia-tcdtnn.component.scss']
 })
 export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
+
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
-
   dsVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dsTieuChuanCl: any[] = [];
@@ -34,20 +34,17 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
   dsLoaiGia: any[] = [];
   dsToTrinhDeXuat: any[] = [];
   arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia>;
-  thongTinToTrinh: any = {};
-
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
-
   userInfo: UserLogin;
   soDeXuat: string;
-
-
   maQd: string;
   dataTable: any[] = [];
   isErrorUnique = false;
   thueVat: number;
+  radioValue: string;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -71,7 +68,6 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         loaiGia: [null],
         trichYeu: [null],
         trangThai: ['00'],
-        thongTinToTrinh: [null],
         ghiChu: [null],
         loaiVthh: [null],
         cloaiVthh: [],
@@ -92,8 +88,6 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
       this.loadToTrinhDeXuat(),
       this.maQd = "/QD-BTC",
       this.getDataDetail(this.idInput),
-      //this.onChangeNamQd(this.formData.get("namKeHoach").value),
-      this.onChangeSoToTrinh(this.thongTinToTrinh.id),
       this.loadTiLeThue()
     ]);
     this.spinner.hide();
@@ -107,11 +101,12 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         id: data.id,
         namKeHoach: data.namKeHoach,
         soQd: data.soQd.split("/")[0],
-        loaiHangHoa: data.loaiHangHoa,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
-        tchuanCluong: data.tieuChuanCl,
+        tchuanCluong: data.tchuanCluong,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
@@ -162,7 +157,7 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: '29',
           };
           let res = await this.quyetDinhGiaTCDTNNService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -186,29 +181,47 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
 
   async save() {
     this.spinner.show();
+    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value);
       this.spinner.hide();
       return;
     }
-    let body = this.formData.value;
-    body.pagType = this.pagType;
-    let res;
-    if (this.idInput > 0) {
-      res = await this.quyetDinhGiaTCDTNNService.update(body);
-    } else {
-      res = await this.quyetDinhGiaTCDTNNService.create(body);
+    let currentRow = this.formData.value;
+    let currentLine = currentRow.thongTinGia;
+    if (currentLine) {
+      currentLine.forEach(item => {
+        if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
+          err = true;
+          item.giaQd = 0;
+          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+        }
+        if (currentRow.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
+          err = true;
+          item.giaQd = 0;
+          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+        }
+      })
     }
-    if (res.msg == MESSAGE.SUCCESS) {
+    if (!err) {
+      let body = this.formData.value;
+      body.pagType = this.pagType;
+      let res;
       if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        res = await this.quyetDinhGiaTCDTNNService.update(body);
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        res = await this.quyetDinhGiaTCDTNNService.create(body);
       }
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
     this.spinner.hide();
   }
@@ -236,9 +249,9 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
       this.dsToTrinhDeXuat = res.data;
     }
   }
+
   async onChangeSoToTrinh(event) {
-    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.id == event);
-    console.log(curToTrinh)
+    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
     if (curToTrinh) {
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
@@ -263,15 +276,15 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
       this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
       this.arrThongTinGia = [];
       res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
-      console.log(res.data + ' 1')
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.arrThongTinGia = res.data.pagChiTiets;
         this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
       } else {
         this.arrThongTinGia = [];
       }
-      this.formData.controls["thongTinToTrinh"].setValue(curToTrinh.soToTrinh);
+      this.radioValue = curToTrinh.soToTrinh;
     }
+
   }
 
   async onChangeLoaiVthh(event) {
@@ -297,6 +310,16 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
   }
 
   async calculateVAT(index: number, type: number) {
+    let currentRow = this.formData.value;
+    let currentLine = this.arrThongTinGia[index];
+    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
+      this.arrThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+    }
+    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      this.arrThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+    }
     if (type === 0) {
       this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
     } else if (type === 1) {
@@ -305,24 +328,31 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
   }
 
   openDialogToTrinh() {
-    let modalQD = this.modal.create({
-      nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-      nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '700px',
-      nzFooter: null
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.formData.patchValue({
-          soToTrinh: data.id ? data.id : null,
-          thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null
-        });
-        this.thongTinToTrinh = data;
-        this.onChangeSoToTrinh(data.id);
-        this.spinner.hide();
-      }
-    });
+    let radioValue = this.radioValue;
+    if (!this.noEdit) {
+      let modalQD = this.modal.create({
+        nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
+        nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzComponentParams: {
+          radioValue
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+          this.formData.patchValue({
+            soToTrinh: data,
+          });
+          this.onChangeSoToTrinh(data);
+          this.radioValue = data;
+          this.spinner.hide();
+        }
+      });
+    }
   }
 }
+
+
