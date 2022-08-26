@@ -21,40 +21,20 @@ const routes: Routes = [
           import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
       },
       {
-        path: MAIN_ROUTES.nhapKhac,
-        loadChildren: () =>
-          import('../../pages/nhap-khac/nhap-khac.module').then((m) => m.NhapKhacModule),
-      },
-      {
         path: MAIN_ROUTES.xuat,
         loadChildren: () =>
           import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
-      },
-      {
-        path: MAIN_ROUTES.xuatKhac,
-        loadChildren: () =>
-          import('../../pages/xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
       },
       {
         path: MAIN_ROUTES.dinhMucNhapXuat,
         loadChildren: () =>
           import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
       },
-      // {
-      //   path: MAIN_ROUTES.muaHang,
-      //   loadChildren: () =>
-      //     import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
-      // },
       {
         path: MAIN_ROUTES.luuKho,
         loadChildren: () =>
           import('../../pages/luu-kho/luu-kho.module').then((m) => m.LuuKhoModule),
       },
-      // {
-      //   path: MAIN_ROUTES.banHang,
-      //   loadChildren: () =>
-      //     import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
-      // },
       {
         path: MAIN_ROUTES.khknBaoQuan,
         loadChildren: () =>
@@ -86,13 +66,6 @@ const routes: Routes = [
             (m) => m.QuanTriHeThongNewModule,
           ),
       },
-      // {
-      //   path: MAIN_ROUTES.qlkhVonPhi,
-      //   loadChildren: () =>
-      //     import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(
-      //       (m) => m.QuanLyKeHoachVonPhiModule,
-      //     ),
-      // },
       {
         path: MAIN_ROUTES.capVon,
         loadChildren: () =>

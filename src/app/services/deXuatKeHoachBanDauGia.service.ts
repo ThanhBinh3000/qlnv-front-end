@@ -38,6 +38,13 @@ export class DeXuatKeHoachBanDauGiaService extends BaseService {
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
       url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+
+    if (body.page != null || body.page != undefined)
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.page - 1)) + '&';
+    if (body.pageLimit)
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageLimit) + '&';
+
+
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }

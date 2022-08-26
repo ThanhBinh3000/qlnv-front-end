@@ -188,7 +188,7 @@
                             <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+                            <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
@@ -214,6 +214,7 @@
     </div>
 </ng-container>
 <ng-template #templateThemmoi>
-    <app-them-moi-qd-gia-tcdtnn [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    <app-them-moi-qd-gia-tcdtnn [isView]="isViewDetail" [pagType]="pagType" [idInput]="idSelected"
+        (onClose)="onClose()">
     </app-them-moi-qd-gia-tcdtnn>
 </ng-template>

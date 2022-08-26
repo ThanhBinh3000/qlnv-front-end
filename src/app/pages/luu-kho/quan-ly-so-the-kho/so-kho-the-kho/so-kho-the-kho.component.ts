@@ -167,7 +167,6 @@ export class SoKhoTheKhoComponent implements OnInit {
       let data = this.listLoaiHangHoa.find(item => item.ma === id)
       let temp = []
       if (data != undefined) {
-        console.log(data);
         this.dataTableAll.forEach(item => {
           if (item.loaiHang.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
             temp.push(item)
@@ -230,8 +229,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      console.log(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;

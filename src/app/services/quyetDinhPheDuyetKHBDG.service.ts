@@ -69,9 +69,13 @@ export class QuyetDinhPheDuyetKHBDGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia/${id}`;
     return this.httpClient.get(url).toPromise();
   }
+  getPhuLuc(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia/phu-luc?bhTongHopDeXuatId=${id}`;
+    return this.httpClient.get(url).toPromise();
+  }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia/trang-thai`;
     return this.httpClient.put(url, body).toPromise();
   }
 
