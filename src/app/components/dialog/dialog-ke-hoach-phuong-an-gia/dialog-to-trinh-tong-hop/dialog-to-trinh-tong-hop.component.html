@@ -1,6 +1,6 @@
 <div class="input-group-search">
   <input type="text" nz-input placeholder="Nhập số quyết định" [(ngModel)]="text"/>
-  <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
+<!--  <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>-->
 </div>
 <nz-radio-group [(ngModel)]="radioValue">
   <ng-container *ngFor="let data of dsToTrinhDeXuat">
@@ -10,7 +10,7 @@
           <label>{{data.soToTrinh}}</label>
         </td>
         <td>
-          <label nz-radio [nzValue]="data"></label>
+          <label nz-radio [nzValue]="data.soToTrinh"></label>
         </td>
       </tr>
     </nz-table>
