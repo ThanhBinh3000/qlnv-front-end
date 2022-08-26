@@ -35,10 +35,9 @@ export class QuyetDinhGiaCuaBtcService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
-  loadToTrinhDcTcdtnn(body: any) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/qd-gia-tcdtnn/list-to-trinh`;
+  dsToTrinh(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/ds-tt-dx`;
     return this.httpClient.post<any>(url, body).toPromise();
-
   }
 
 

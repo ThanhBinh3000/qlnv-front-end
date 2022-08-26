@@ -40,7 +40,7 @@ export class PhuongPhapXacDinhGia {
 
 export class ThongTinGia {
   donGia: number;
-  donGiaVat :  number;
+  donGiaVat:  number;
   id: number;
   maDvi: string;
   qdDcTcdtnnId: number;

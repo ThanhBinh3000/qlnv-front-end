@@ -1,13 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MESSAGE} from "../../../constants/message";
-import {QuyetDinhGiaCuaBtcService} from "../../../services/quyetDinhGiaCuaBtc.service";
 import {NzModalRef} from "ng-zorro-antd/modal";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {NgxSpinnerService} from "ngx-spinner";
-import {QuanLyHopDongNhapXuatService} from "../../../services/quanLyHopDongNhapXuat.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {STATUS} from "../../../constants/status";
+import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-dialog-so-to-trinh-pag',
@@ -46,16 +45,13 @@ export class DialogSoToTrinhPagComponent implements OnInit {
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let body =
-    {
-      "paggingReq": {
-      "limit": 20,
-        "page": 0
-    },
+    let body = {
       "type": this.type,
-      "loaiHh" : this.pagtype
+      "pagType" : this.pagtype,
+      "trangThaiTt" : STATUS.DA_DUYET_LDV
     }
-    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDcTcdtnn({});
+    console.log(body.pagType);
+    let res = await this.quyetDinhGiaCuaBtcService.dsToTrinh(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }
@@ -75,23 +71,17 @@ export class DialogSoToTrinhPagComponent implements OnInit {
     try {
       this.spinner.show();
       let body = {
-        "pagType": this.pagtype,
-        "paggingReq": {
-          "limit": 20,
-          "page": 0
-        },
-        "trangThai": STATUS.DA_DUYET_LDV
+        "trangThai": STATUS.BAN_HANH,
+        "pagType": this.loai
       }
-      let res = await this.quyetDinhGiaTCDTNNService.search(body);
+      let res = await this.quyetDinhGiaTCDTNNService.dsSoQd(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.dsQD = res.data.content
+        this.dsQD = res.data
       }
       this.spinner.hide();
     } catch (e) {
       this.spinner.hide();
     }
-    console.log(this.dsQD)
-    console.log(this.pagtype)
   }
 
   async search() {
