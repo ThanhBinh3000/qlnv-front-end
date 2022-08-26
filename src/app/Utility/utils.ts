@@ -1046,7 +1046,7 @@ export function getNumberValue(num): number {
     if (!num) {
         return 0;
     }
-    return Number(num);
+    return Number(num.toFixed(4));
 }
 
 export function sumNumber(num: any): number {

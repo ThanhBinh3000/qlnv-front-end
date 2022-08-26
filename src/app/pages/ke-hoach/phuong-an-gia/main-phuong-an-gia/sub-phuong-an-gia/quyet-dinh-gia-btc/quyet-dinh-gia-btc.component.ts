@@ -9,7 +9,7 @@ import {MESSAGE} from "src/app/constants/message";
 import {UserService} from "src/app/services/user.service";
 import {cloneDeep} from "lodash";
 import {saveAs} from "file-saver";
-import {QuyetDinhGiaCuaBtcService} from "src/app/services/quyetDinhGiaCuaBtc.service";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {STATUS} from "../../../../../../constants/status";
 
 @Component({
