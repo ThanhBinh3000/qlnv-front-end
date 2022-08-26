@@ -92,7 +92,7 @@
               </nz-form-control>
               </th>
             <th class="text-center ">
-              <nz-select style="width:  164px;" [nzDisabled]="isView" [(ngModel)]="filterTable.chungLoaiHangHoa"
+              <nz-select style="width:  164px;" [(ngModel)]="filterTable.chungLoaiHangHoa"
                 (ngModelChange)="onChangeChungLoaiHH($event)">
                 <nz-option *ngFor="let item of dsChungLoaiHangHoa" nzValue="{{item.ma|| ''}}" nzLabel="{{item.ten ||''}}">
                 </nz-option>
@@ -149,8 +149,8 @@
             <td>{{ data.nhaKho }}</td>
             <td>{{ data.nganKho }}</td>
             <td>{{ data.loKho }}</td>
-            <td>{{ data.ngayNhapKho}}</td>
-            <td>{{ data.ngayHetHanLuuKho}}</td>
+            <td class="text-center">{{ data.ngayNhapKho }}</td>
+            <td class="text-center">{{ data.ngayHetHanLuuKho}}</td>
             <td class="text-center">{{ data.soLuong }}</td>
             <td class="text-center">{{ data.donViTinh }}</td>
             </tr>
