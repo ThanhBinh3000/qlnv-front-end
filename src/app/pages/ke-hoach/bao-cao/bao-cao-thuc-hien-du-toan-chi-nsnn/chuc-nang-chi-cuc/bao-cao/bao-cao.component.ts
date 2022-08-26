@@ -174,7 +174,7 @@ export class BaoCaoComponent implements OnInit {
 			this.baoCao.namBcao = Number(this.routerActive.snapshot.paramMap.get('nam'));
 			this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang'));
 			this.baoCao.nguoiTao = userName;
-			this.baoCao.ngayTao = new Date().toDateString();
+			this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
 			this.baoCao.trangThai = "1";
 
 		} else {
