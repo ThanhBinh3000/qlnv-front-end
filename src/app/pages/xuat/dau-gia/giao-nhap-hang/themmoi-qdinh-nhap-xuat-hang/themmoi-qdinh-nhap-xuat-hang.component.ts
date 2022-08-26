@@ -31,27 +31,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   @Input() isViewDetail: boolean;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   formData: FormGroup;
-  // chiTietQDGiaoNhapXuatHang: any = [];
-  // taiLieuDinhKemList: any[] = [];
-  // datePickerConfig = DATEPICKER_CONFIG;
-  // type: string = '';
-  // dataQDNhapXuat;
-  // optionsDonVi: any[] = [];
-  // optionsFullDonVi: any[] = [];
-  // optionsFullHangHoa: any[] = [];
-  // optionsHangHoa: any[] = [];
   userInfo: UserLogin;
   routerUrl: string;
-  // quyetDinhNhapXuatDetailCreate: DetailQuyetDinhNhapXuat;
-  // dsQuyetDinhNhapXuatDetailClone: Array<DetailQuyetDinhNhapXuat> = [];
-  // isAddQdNhapXuat: boolean = false;
   isChiTiet: boolean = false;
 
   loaiVthh: string;
-  // loaiStr: string;
-  // maVthh: string;
-  // idVthh: number;
-  // routerVthh: string;
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -60,6 +44,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   chiTietQds: Array<Cts>;
   hopDongList: any[] = [];
   listFileDinhKem: Array<FileDinhKem> = [];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -72,10 +57,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("view: ", this.isView);
-
     this.userInfo = this.userService.getUserLogin();
     this.routerUrl = this.router.url;
+    this.qdGiaoNhiemVuXuatHang.trangThai = this.globals.prop.NHAP_DU_THAO;
     this.initForm();
     if (this.id > 0) {
       this.loadThongTinQdNhapXuatHang(this.id);
@@ -182,7 +166,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        isXuat: true
+      },
     });
     modalQD.afterClose.subscribe((hopDongs) => {
       if (hopDongs) {

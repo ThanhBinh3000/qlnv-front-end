@@ -1,32 +1,41 @@
 .action-top {
-    padding-right: 50px;
+  padding-right: 50px;
+}
+
+.chi-tieu__body {
+  .flex-card.ant-card {
+    border: 1px solid #ececec !important;
+    background: transparent;
+    box-shadow: unset;
+    margin-bottom: 0px !important;
+    margin-top: 11px !important;
+    border-radius: 6px;
   }
-  .chi-tieu__body {
-    .flex-card.ant-card {
-      border: 1px solid #ececec !important;
-      background: transparent;
-      box-shadow: unset;
-      margin-bottom: 0px !important;
-      margin-top: 11px !important;
-      border-radius: 6px;
-    }
+}
+
+.table__body {
+  margin: 12px 0px 0px 0px !important;
+  overflow: scroll;
+}
+
+.tep {
+  cursor: pointer;
+  //position: absolute;
+  top: 4px;
+  height: 20px;
+  left: 695px;
+  color: #2196f3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    margin-left: 5px;
   }
-  .table__body {
-    margin: 12px 0px 0px 0px !important;
-    overflow: scroll;
-  }
-  
-  .tep {
-    cursor: pointer;
-    //position: absolute;
-    top: 4px;
-    height: 20px;
-    left: 695px;
-    color: #2196f3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    span {
-      margin-left: 5px;
-    }
-  }
+}
+
+td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

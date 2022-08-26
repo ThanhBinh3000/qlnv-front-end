@@ -33,7 +33,7 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
     soQd: null,
     loaiVthh: null,
     ngayTongHop: null,
-    namKhoach: dayjs().get('year'),
+    namKhoach: '',
     trichYeu: null,
     tuNgayTongHop: null,
     denNgayTongHOp: null,
@@ -236,6 +236,15 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
     this.startValue = null;
     this.endValue = null;
     this.selectHang = { ten: '' };
+    this.searchFilter = {
+      soQd: null,
+      loaiVthh: null,
+      ngayTongHop: null,
+      namKhoach: null,
+      trichYeu: null,
+      tuNgayTongHop: null,
+      denNgayTongHOp: null,
+    };
   }
 
   async selectTabData(tab: string) {
@@ -262,8 +271,8 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
       trichYeu: this.searchFilter.trichYeu,
       trangThai: '02',
       maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.pageSize,
-      pageSize: this.page,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -331,7 +340,7 @@ export class QdPheDuyetKhBanDauGiaComponent implements OnInit {
           loaiVatTuHangHoa: this.searchFilter.loaiVthh,
           namKeHoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
-          maDvis: this.userInfo.MA_DVI,
+          maDvis: [this.userInfo.MA_DVI],
           paggingReq: null,
         };
         this.deXuatKeHoachBanDauGiaService

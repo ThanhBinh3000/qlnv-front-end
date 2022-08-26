@@ -42,7 +42,7 @@ export class ItemData {
 @Component({
     selector: 'app-tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam',
     templateUrl: './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.component.html',
-    styleUrls: ['./tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.component.scss']
+    styleUrls: ['../bao-cao/bao-cao.component.scss']
 })
 export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements OnInit {
     @Input() data;

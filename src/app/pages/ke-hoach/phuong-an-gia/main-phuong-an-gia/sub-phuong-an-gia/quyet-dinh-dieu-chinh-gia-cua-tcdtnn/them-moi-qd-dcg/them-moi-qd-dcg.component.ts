@@ -22,6 +22,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   maQd: String;
   dsNam: any[] = [];
   dataTable: any[] = [];
+  namNay: number;
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
@@ -50,6 +51,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.namNay = dayjs().get('year');
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
@@ -60,6 +62,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       // this.onChangeNamQd(this.formData.get('namKeHoach').value),
     ])
   }
+
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {

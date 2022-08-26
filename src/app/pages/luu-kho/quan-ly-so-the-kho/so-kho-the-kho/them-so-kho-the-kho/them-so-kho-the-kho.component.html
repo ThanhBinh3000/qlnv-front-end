@@ -11,7 +11,6 @@
         </div>
       </div>
     </div>
-
     <div class="btn-group" *ngIf="isTaoTheKho || idInput ">
       <button type="button" class="btn btn-sub" (click)="huy()">
         <i class="fa fa-arrow-left"></i>
@@ -31,13 +30,11 @@
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-
       <button type="button" class="btn btn-sub" (click)="luuVaDuyet()" *ngIf="!isDetail() && userService.isChiCuc()"
         [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-
       <button type="button" class="btn btn-sub xanh" (click)="luu(false)" [disabled]="!formData.valid"
         *ngIf="!isDetail() && userService.isChiCuc()">
         <i class="fa fa-save"></i>

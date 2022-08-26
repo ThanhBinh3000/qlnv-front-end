@@ -198,18 +198,19 @@
                         [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">1</td>
-                    <td>576/KH-CDTVP</td>
-                    <td>00/00/2022</td>
-                    <td>Bán đấu giá</td>
-                    <td>00/00/2022</td>
-                    <td>576/QĐ-TCDT</td>
-                    <td>123/TB-CDTVP</td>
-                    <td>Bỏ phiếu trực tiếp</td>
-                    <td>Trả giá lên</td>
-                    <td>Áo phao</td>
-                    <td>2022</td>
-                    <td>123/TB</td>
-                    <td>789/BB</td>
+                    <td>{{data.soQuyetDinh}}</td>
+                    <td>{{data.ngayKy}}</td>
+                    <td>{{data.trichYeu}}</td>
+                    <td>{{data.ngayToChuc}}</td>
+                    <td>{{data.soQdPheDuyetKhBdg}}</td>
+                    <td>{{data.maThongBaoBdg}}</td>
+                    <td>{{data.hinhThucDauGia}}</td>
+                    <td>{{data.phuongThucDauGia}}</td>
+                    <td>{{data.tenVatTuCha}}</td>
+                    <td>{{data.nam}}</td>
+                    <td>{{data.thongBaoBdgKtId}}</td>
+                    <td>{{data.soBienBanBdg}}</td>
+                    <td>{{data.trangThaiDuyet}}</td>
                     <td nzRight>
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>

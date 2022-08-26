@@ -583,6 +583,10 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
+    if (!this.congVan) {
+      this.notification.warning(MESSAGE.WARNING, 'Chưa nhập file công văn')
+      return
+    }
     if (mcn == Utils.TT_BC_2) {
       let check = true;
       this.lstDieuChinhs.forEach(item => {
@@ -800,9 +804,7 @@ export class GiaoNhiemVuComponent implements OnInit {
   }
 
   xemChiTiet(id: string) {
-    this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu-/' + id,
-    ])
+    window.open(MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu-/' + id, '_blank');
   }
 
   getStatusName(trangThai: string) {
@@ -939,7 +941,6 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.lstDieuChinhs.forEach(data => {
       const lstCtietTemp: any[] = [];
       data.lstCtietDchinh?.forEach(item => {
-        debugger
         lstCtietTemp.push({
           ...item,
           id: null,
