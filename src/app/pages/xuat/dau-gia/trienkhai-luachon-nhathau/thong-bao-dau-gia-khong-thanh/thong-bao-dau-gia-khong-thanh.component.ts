@@ -13,11 +13,11 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-thong-bao-dau-gia-khong-thanh',
   templateUrl: './thong-bao-dau-gia-khong-thanh.component.html',
-  styleUrls: ['./thong-bao-dau-gia-khong-thanh.component.scss']
+  styleUrls: ['./thong-bao-dau-gia-khong-thanh.component.scss'],
 })
 export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
   @Input() typeVthh: string;
@@ -70,7 +70,8 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
-  ) { }
+    public globals: Globals,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -118,10 +119,10 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -131,29 +132,33 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   async search() {
     let body = {
-      "maDonVi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.typeVthh,
-      "maNganKho": null,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
-        ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0
-        ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
+      maDonVi: this.userInfo.MA_DVI,
+      maVatTuCha: this.typeVthh,
+      maNganKho: null,
+      ngayKiemTraDenNgay:
+        this.searchFilter.ngayBienBan &&
+        this.searchFilter.ngayBienBan.length > 1
+          ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
+          : null,
+      ngayKiemTraTuNgay:
+        this.searchFilter.ngayBienBan &&
+        this.searchFilter.ngayBienBan.length > 0
+          ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
+          : null,
+      ngayLapPhieu: null,
+      orderBy: null,
+      orderDirection: null,
+      paggingReq: {
+        limit: this.pageSize,
+        orderBy: null,
+        orderType: null,
+        page: this.page - 1,
       },
-      "soBienBan": this.searchFilter.soBienBan,
-      "soQd": this.searchFilter.soQuyetDinhNhap,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
+      soBienBan: this.searchFilter.soBienBan,
+      soQd: this.searchFilter.soQuyetDinhNhap,
+      str: null,
+      tenNguoiGiao: null,
+      trangThai: null,
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -223,18 +228,20 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            this.spinner.hide();
-          });
+          this.quanLyPhieuKiemTraChatLuongHangService
+            .deleteData(item.id)
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -260,24 +267,28 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
-            ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0
-            ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayLapPhieu": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQd": this.searchFilter.soQuyetDinhNhap,
-          "str": null,
-          "tenNguoiGiao": null,
-          "trangThai": null
+          maDonVi: this.userInfo.MA_DVI,
+          maHangHoa: this.typeVthh,
+          maNganKho: null,
+          ngayKiemTraDenNgay:
+            this.searchFilter.ngayBienBan &&
+            this.searchFilter.ngayBienBan.length > 1
+              ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
+              : null,
+          ngayKiemTraTuNgay:
+            this.searchFilter.ngayBienBan &&
+            this.searchFilter.ngayBienBan.length > 0
+              ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
+              : null,
+          ngayLapPhieu: null,
+          orderBy: null,
+          orderDirection: null,
+          paggingReq: null,
+          soBienBan: this.searchFilter.soBienBan,
+          soQd: this.searchFilter.soQuyetDinhNhap,
+          str: null,
+          tenNguoiGiao: null,
+          trangThai: null,
         };
         this.quanLyPhieuKiemTraChatLuongHangService
           .exportList(body)
@@ -316,9 +327,15 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            let res =
+              await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({
+                ids: dataDelete,
+              });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -331,9 +348,11 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -343,14 +362,16 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
+            -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -362,10 +383,8 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       ketLuan: '',
       soQuyetDinhNhap: '',
       soBienBan: '',
-    }
+    };
   }
 
-  print() {
-
-  }
+  print() {}
 }
