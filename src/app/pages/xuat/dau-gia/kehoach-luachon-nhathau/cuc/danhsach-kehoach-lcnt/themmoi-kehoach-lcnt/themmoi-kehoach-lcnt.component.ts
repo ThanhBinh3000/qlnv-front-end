@@ -27,6 +27,7 @@ import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBan
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 import {
@@ -779,7 +780,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         break;
       }
       case this.globals.prop.NHAP_BAN_HANH: {
-        this.titleStatus = 'Đã duyệt';
+        this.titleStatus = 'Ban hành';
         this.styleStatus = 'da-ban-hanh';
         break;
       }
@@ -829,15 +830,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === this.globals.prop.DU_THAO ||
-      trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      trangThai === this.globals.prop.TU_CHOI ||
-      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === this.globals.prop.BAN_HANH) {
-      return 'da-ban-hanh';
-    }
+    return thongTinTrangThaiNhap(trangThai);
   }
 }

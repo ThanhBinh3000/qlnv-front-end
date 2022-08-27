@@ -67,8 +67,6 @@
                     <th width="">Trạng thái</th>
                     <th width="90px">Hành động</th>
                   </tr>
-                </thead>
-                <tbody>
                   <tr class="search-table">
                     <th></th>
                     <th></th>
@@ -90,8 +88,8 @@
                         <i nz-icon nzType="search"></i>
                       </ng-template>
                     </th>
-                      <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                    <th>
+                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayLapKeHoach"
                           (input)="filterInTable('ngayLapKeHoach',filterTable.ngayLapKeHoach)" size="small" />
                       </nz-input-group>
@@ -166,10 +164,12 @@
                     </th>
                     <th></th>
                   </tr>
+                </thead>
+                <tbody>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != '00'"></label>
+                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{ data.soKeHoach }}</td>
@@ -186,11 +186,12 @@
                       <a (click)="detail(data, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' || data.trangThai=='12') && userService.isCuc()"
+                      <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_CUC) && userService.isCuc()"
                         (click)="detail(data, false)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00' && userService.isCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isCuc()"
+                        (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

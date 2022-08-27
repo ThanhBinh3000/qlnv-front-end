@@ -5,20 +5,15 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
 import {
   LOAI_HANG_DTQG,
   LOAI_QUYET_DINH,
-  PAGE_SIZE_DEFAULT,
+  PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { UserService } from 'src/app/services/user.service';
-import {
-  convertTenVthh,
-  convertTrangThai,
-} from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -90,10 +85,9 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.getTitleVthh();
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
@@ -112,53 +106,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    console.log(this.typeVthh);
-
-    this.loaiVthh = convertTenVthh(this.typeVthh);
-    if (this.typeVthh == 'thoc') {
-      this.maVthh = '0101';
-      this.routerVthh = 'thoc';
-    } else if (this.typeVthh == 'gao') {
-      this.maVthh = '0102';
-      this.routerVthh = 'gao';
-    } else if (this.typeVthh == 'muoi') {
-      this.maVthh = '04';
-      this.routerVthh = 'muoi';
-    } else if (this.typeVthh == 'vat-tu') {
-      this.maVthh = null;
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
-  openDialogHopDong() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin căn cứ trên hợp đồng',
-      nzContent: DialogCanCuHopDongComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.soHd = data.soHdong;
-      }
-    });
-  }
-
-  onInput(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
-    } else {
-      this.options = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
   redirectToThongTin(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
@@ -170,6 +117,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     this.getCount.emit();
     await this.search();
   }
+
   clearFilter() {
     this.searchFilter = {
       namXuat: '',
@@ -181,8 +129,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   async search() {
-    console.log(this.typeVthh);
-
     this.spinner.show();
     let body = {
       namXuat: this.searchFilter.namXuat ?? null,
@@ -245,10 +191,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -308,7 +250,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         this.quyetDinhGiaoNvXuatHangService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-xuat-hang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -321,43 +263,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  duyet(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id,
-            lyDoTuChoi: null,
-            trangThai: '02',
-          };
-          let res = await this.quyetDinhGiaoNvXuatHangService.updateStatus(
-            body,
-          );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.search();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  chiTietQuyetDinh(isView: boolean, id: number) {}
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -392,6 +297,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       tenNgan: '',
     };
   }
+
   updateSingleChecked(): void {
     if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
@@ -403,12 +309,13 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.indeterminate = true;
     }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -421,6 +328,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       }
     }
   }
+
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {

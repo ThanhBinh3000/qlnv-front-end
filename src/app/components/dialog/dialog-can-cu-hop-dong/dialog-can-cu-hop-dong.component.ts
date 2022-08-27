@@ -13,7 +13,6 @@ import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhap
   styleUrls: ['./dialog-can-cu-hop-dong.component.scss'],
 })
 export class DialogCanCuHopDongComponent implements OnInit {
-  @Input() isXuat: boolean = false;
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
   page: number = 1;
@@ -24,6 +23,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
   hopDongList: any[] = [];
   data: any[] = [];
   dataVthh: string;
+  isXuat: boolean = false;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -48,31 +48,6 @@ export class DialogCanCuHopDongComponent implements OnInit {
   async showListHd() {
     if (this.isXuat) {
       let body = {
-        "loaiVthh": this.dataVthh,
-        "pageable": {
-          "offset": 0,
-          "pageNumber": 0,
-          "pageSize": 0,
-          "paged": true,
-          "sort": {
-            "empty": true,
-            "sorted": true,
-            "unsorted": true
-          },
-          "unpaged": true
-        },
-        "paggingReq": {
-          "limit": 10,
-          "orderBy": "string",
-          "orderType": "string",
-          "page": 0
-        }
-      }
-      let res = await this.quanLyHopDongNhapXuatService.danhSachHopDong(body);
-      this.dataTable = res.data;
-    }
-    else {
-      let body = {
         "loaiVthh": this.dataVthh ?? '',
         "paggingReq": {
           limit: 10,
@@ -80,6 +55,23 @@ export class DialogCanCuHopDongComponent implements OnInit {
         }
       };
       let res = await this.hopDongXuatHang.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+    else {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "trangThai": "02",
+        "paggingReq": {
+          limit: 10,
+          page: 0,
+        }
+      }
+      let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -117,22 +109,13 @@ export class DialogCanCuHopDongComponent implements OnInit {
     let res: any;
     if (this.isXuat) {
       let body = {
-        "denNgayKy": "",
-        "loaiVthh": "",
-        "maDvi": "",
-        "maDviB": "",
-        "orderBy": "",
-        "orderDirection": "",
+        "loaiVthh": this.dataVthh ?? '',
         "paggingReq": {
           "limit": this.pageSize,
-          "orderBy": "",
-          "orderType": "",
           "page": this.page - 1
         },
         "soHd": this.text,
-        "str": "",
         "trangThai": "02",
-        "tuNgayKy": ""
       }
       res = await this.quanLyHopDongNhapXuatService.timKiem(body);
     }
