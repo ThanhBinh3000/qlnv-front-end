@@ -14,7 +14,7 @@ import { QuanLyChatLuongLuuKhoService } from 'src/app/services/quanLyChatLuongLu
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-hang-thuoc-dien-tieu-huy',
   templateUrl: './hang-thuoc-dien-tieu-huy.component.html',
@@ -71,6 +71,7 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     private readonly notification: NzNotificationService,
     private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
     private modal: NzModalService,
+    private globals: Globals,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -114,6 +115,7 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
       this.dataTable = res.data?.content;
       console.log(this.dataTable)
       this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertTrangThai();
     }
   }
 
@@ -123,6 +125,14 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     this.detail.tenDvi = this.userInfo.TEN_DVI;
     await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
     await this.traCuuDsHangTieuHuy();
+  }
+
+  convertTrangThai() {
+    this.dataTable.forEach((item, idx) => {
+      if (item.trangThaiXuLy === this.globals.prop.NHAP_CHUA_TONG_HOP) {
+        this.dataTable[idx].trangThaiXuLy = 'Chưa xử lý';
+      }
+    })
   }
 
   async loadDsTong() {
