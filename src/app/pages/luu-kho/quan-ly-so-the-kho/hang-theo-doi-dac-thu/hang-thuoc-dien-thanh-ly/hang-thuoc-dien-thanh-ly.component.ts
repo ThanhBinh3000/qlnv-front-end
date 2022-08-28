@@ -39,6 +39,9 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     dsLoaiHangHoa = [];
     dsLoaiHangHoaDataSource = [];
 
+    listLoaiHangHoa: any[] = [];
+    listChungLoaiHangHoa: any[] = [];
+
     searchInTable: any = {
         maDanhSach: null,
         donVi: null,
@@ -61,7 +64,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
 
     constructor(
         private readonly fb: FormBuilder,
-        private readonly userService: UserService,
+        public userService: UserService,
         private readonly donviService: DonviService,
         private readonly danhMucService: DanhMucService,
         private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
@@ -84,11 +87,11 @@ export class HangThuocDienThanhLyComponent implements OnInit {
 
     initForm(): void {
         this.formData = this.fb.group({
-            idDonVi: [null],
-            tenDonVi: [null],
-            tenHangHoa: [null],
-            loaiHangHoa: [null],
-            ngayTao: [null],
+            "maDvi": [null],
+            "tenDVi": [null],
+            "loaiHang": [null],
+            "maChungLoaiHang": [null],
+            "ngayTao": [[]]
         });
     }
 
@@ -105,8 +108,8 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         const body = {
             denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
             tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
-            maDonVi: "", // this.detail.maDvi
-            maVTHH: "",
+            maDonVi: this.formData.controls.maDvi?.value ? this.formData.controls.maDvi.value : null,
+            maVTHH: this.formData.value.maChungLoaiHang ?? this.formData.value.loaiHang,
             paggingReq: {
                 limit: this.pageSize,
                 orderBy: "",
@@ -145,15 +148,34 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     }
 
     async loaiVTHHGetAll() {
-        let res = await this.danhMucService.loadDanhMucHangHoaAsync();
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.dsLoaiHangHoa = res.data;
-            this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+        try {
+            await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+                if (hangHoa.msg == MESSAGE.SUCCESS) {
+                    hangHoa.data.forEach((item) => {
+                        if (item.cap === "1" && item.ma != '01') {
+                            this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+                        }
+                        else {
+                            this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+                        }
+                    })
+                }
+            })
+        } catch (error) {
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
 
+    async changeLoaiHangHoa(id: any) {
+        if (id && id > 0) {
+            let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+            this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+        }
+
+    }
+
     onChangeAutoComplete(e: Event) {
-        debugger
         const value = (e.target as HTMLInputElement).value;
         if (value) {
             this.dsDonViDataSource = this.dsDonVi
@@ -188,14 +210,8 @@ export class HangThuocDienThanhLyComponent implements OnInit {
                 const body = {
                     denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
                     tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
-                    maDonVi: "", // this.detail.maDvi
-                    maVTHH: "",
-                    paggingReq: {
-                        limit: this.pageSize,
-                        orderBy: "",
-                        orderType: "",
-                        page: this.page - 1,
-                    },
+                    maDonVi: this.formData.controls.maDvi?.value ? this.formData.controls.maDvi.value : null,
+                    maVTHH: this.formData.value.maChungLoaiHang ?? this.formData.value.loaiHang,
                 }
                 this.quanlyChatLuongService
                     .exportList(body)
@@ -378,13 +394,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
             this.dataTable = [];
             let temp = [];
             if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (key == 'trangThaiXuLy') {
-                    this.dsTrangThai.map(item => {
-                        if (item.id.toString() == value) {
-                            value = item.giaTri;
-                        }
-                    })
-                } else if (key === 'ngayTao') {
+                if (key === 'ngayTao') {
                     const date = new Date(value);
                     value = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + date.getDate();
                 } else if (key === 'tenDonvi') {
