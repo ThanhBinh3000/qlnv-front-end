@@ -6,7 +6,8 @@
       <nz-form-control nz-col [nzSpan]="24">
         <nz-select [(ngModel)]="diaDiemNhapKho.maDvi" [ngModelOptions]="{standalone: true}"
           (ngModelChange)="changeChiCuc()">
-          <nz-option *ngFor="let chiCuc of chiCucList" [nzValue]="chiCuc.maDvi" [nzLabel]="chiCuc.tenDvi"></nz-option>
+          <nz-option *ngFor="let chiCuc of chiCucList" [nzValue]="chiCuc.maDvi" [nzLabel]="chiCuc.tenDvi">
+          </nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>
@@ -109,7 +110,7 @@
       <td>
         <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.chungLoaiHh"
           (ngModelChange)="changeChungLoaiHang(chiTietDiemNhapKhoCreate.chungLoaiHh)" class="w-150">
-          <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+          <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
           </nz-option>
         </nz-select>
       </td>
@@ -119,19 +120,19 @@
       <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
       <td>
         <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
-          [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho" class="w-150">
+          [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho" class="w-150" (ngModelChange)="calcGiaKhoiDiem()">
         </nz-input-number>
       </td>
       <td>
         <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.donGiaChuaVAT"
-          [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150">
+          [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150" (ngModelChange)="calcGiaKhoiDiem()">
         </nz-input-number>
       </td>
       <td>
-        {{calcGiaKhoiDiem()}}
+        {{giaKhoiDiem}}
       </td>
       <td>
-        {{calcSoTienDatTruoc()}}
+        {{soTienDatTruocPhuLuc}}
       </td>
       <td class="text-center">
         <a (click)="addDiaDiem()">
@@ -148,7 +149,7 @@
         <td>{{data.tenDiemKho}}</td>
         <td>{{data.tenNhaKho}} </td>
         <td>{{data.tenNganKho}}</td>
-        <td>{{data.tenNganLo}}</td>
+        <td>{{data.tenLoKho}}</td>
         <td>{{data.tenChungLoaiHh}}</td>
         <td>{{data.maDonViTaiSan}}</td>
         <td>{{data.tonKho}}</td>
@@ -208,7 +209,7 @@
         <td>{{dsChiTietDiemNhapKhoClone[i].tonKho}}</td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="dsChiTietDiemNhapKhoClone[i].soLuong"
-            [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" class="w-150">
+            [nzMin]="0" [nzMax]="dsChiTietDiemNhapKhoClone[i].tonKho" class="w-150">
           </nz-input-number>
         </td>
         <td>
@@ -243,8 +244,9 @@
       <td></td>
       <td></td>
       <td>
-        {{calcSoLuong()}}
+        {{soLuong}}
       </td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -257,6 +259,7 @@
       <th style="width: 35px">STT</th>
       <th style="width: 5%">Chi cục</th>
       <th style="width: 5%">Điểm kho</th>
+      <th style="width: 5%">Nhà kho</th>
       <th style="width: 5%">Ngăn kho</th>
       <th style="width: 5%">Lô kho</th>
       <th style="width: 10%">Chủng loại hàng hoá</th>
@@ -274,19 +277,21 @@
         <td [nzExpand]="expandSet.has(item.idVirtual)" (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
           style="width: 35px"></td>
         <td colspan="6">{{ item.tenDonVi }}</td>
+        <td></td>
         <td>{{item.soLuong}}</td>
         <td></td>
         <td></td>
-        <td>{{item.giaKhoiDiem}}</td>
-        <td>{{item.soTienDatTruoc}}</td>
+        <td>{{diaDiemNhapKho.tongGiaKhoiDiem}}</td>
+        <td>{{diaDiemNhapKho.tongKhoanTienDatTruoc}}</td>
       </tr>
       <ng-container *ngIf="expandSet.has(item.idVirtual)">
         <tr *ngFor="let chiTiet of item.chiTietDiaDiems">
           <td nzWidtd="35px"></td>
           <td></td>
           <td>{{chiTiet.tenDiemKho}}</td>
+          <td>{{chiTiet.tenNhaKho}}</td>
           <td>{{chiTiet.tenNganKho}}</td>
-          <td>{{chiTiet.tenNganLo}}</td>
+          <td>{{chiTiet.tenLoKho}}</td>
           <td>{{chiTiet.tenChungLoaiHh}}</td>
           <td>{{chiTiet.maDonViTaiSan}}</td>
           <td>{{chiTiet.soLuong}}</td>
@@ -309,10 +314,10 @@
         <!-- <i aria-hidden="true" class="fa fa-sign-out"></i> -->
         Hủy bỏ
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active">
+      <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light active">
         <i class="icon htvbdh_checkfile2"></i>
         Áp dụng chỉnh sửa
-      </button>
+      </button> -->
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu

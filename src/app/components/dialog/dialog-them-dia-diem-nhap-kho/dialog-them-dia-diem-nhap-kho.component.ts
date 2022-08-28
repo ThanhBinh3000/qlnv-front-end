@@ -20,7 +20,8 @@ export class DiaDiemNhapKho {
   soLuong: number;
   soLuongTheoChiTieu: number;
   slDaLenKHBan: number;
-  khoanTienDatTruoc: number;
+  tongKhoanTienDatTruoc: string;
+  tongGiaKhoiDiem: string;
   donViTinh: string;
   chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho>;
   constructor(chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho> = []) {
@@ -35,7 +36,7 @@ export class ChiTietDiaDiemNhapKho {
   tenDiemKho: string;
   tenNhaKho: string;
   tenNganKho: string;
-  tenNganLo: string;
+  tenLoKho: string;
   chungLoaiHh: string;
   tenChungLoaiHh: string;
   donViTinh: string;
@@ -213,9 +214,9 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     let nganLo = this.listNganLo.find(x => x.key == maNganLo);
     if (nganLo) {
       if (isEdit) {
-        this.dsChiTietDiemNhapKhoClone[index].tenNganLo = nganLo.title;
+        this.dsChiTietDiemNhapKhoClone[index].tenLoKho = nganLo.title;
       } else {
-        this.chiTietDiemNhapKhoCreate.tenNganLo = nganLo.title;
+        this.chiTietDiemNhapKhoCreate.tenLoKho = nganLo.title;
       }
       this.bodyGetTonKho.maLokho = nganLo.key
       if (this.bodyGetTonKho.chungLoaiHH) {
