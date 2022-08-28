@@ -443,6 +443,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     });
   }
   checkExistBangPhanLo(data: any) {
+
     if (this.bangPhanBoList) {
       let indexExist = this.bangPhanBoList.findIndex(
         (x) => x.maDvi == data.maDvi,
@@ -616,10 +617,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
                 chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
                 chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
                 chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
-                chiTietDiaDiem.tenNganLo = phanLoTaiSans[i].tenLoKho;
+                chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
                 chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
                 chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
-                chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].tenChungLoaiHh;
                 chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
                 chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
                 chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
