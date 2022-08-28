@@ -144,11 +144,11 @@
                       <a (click)="detail(true ,data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="data.trangThai !== globals.prop.NHAP_BAN_HANH_29 && userService.isTongCuc()"
+                      <a *ngIf="data.trangThai !== globals.prop.NHAP_BAN_HANH && userService.isTongCuc()"
                         (click)="detail(false,data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai !== globals.prop.NHAP_BAN_HANH_29 && userService.isTongCuc()"
+                      <a *ngIf="data.trangThai !== globals.prop.NHAP_BAN_HANH && userService.isTongCuc()"
                         (click)="delete(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>

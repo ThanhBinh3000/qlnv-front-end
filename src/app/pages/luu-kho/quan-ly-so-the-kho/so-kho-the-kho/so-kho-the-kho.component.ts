@@ -31,7 +31,6 @@ export class SoKhoTheKhoComponent implements OnInit {
   formData: FormGroup;
 
   isAddNew = false;
-  isView: boolean = true
 
   allChecked = false;
   indeterminate = false;
@@ -44,7 +43,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     nam: dayjs().get('year'),
     maDvi: "",
     tenDVi: "",
-    loaiHH: "",
+    loaiHang: "",
     maChungLoaiHang: "",
     ngayTao: ""
   }
@@ -53,7 +52,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     nam: null,
     tuNgay: null,
     denNgay: null,
-    loaiHH: null,
+    loaiHang: null,
     maChungLoaiHang: null,
     ngayTao: null,
     donVi: null,
@@ -155,11 +154,12 @@ export class SoKhoTheKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.loaiHH);
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
+
   }
   onChangeLoaiHH(id: any) {
     if (id && id !== '') {
@@ -167,18 +167,14 @@ export class SoKhoTheKhoComponent implements OnInit {
       let data = this.listLoaiHangHoa.find(item => item.ma === id)
       let temp = []
       if (data != undefined) {
-        console.log(data);
         this.dataTableAll.forEach(item => {
           if (item.loaiHang.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
             temp.push(item)
           }
         })
-        this.isView = false
         this.dataTable = [...temp]
         if (this.dataTable.length > 0 && data.child.length > 0) {
           this.listChungLoaiHangHoa = data.child
-        } else {
-          this.isView = true
         }
       }
     }
@@ -208,7 +204,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     let body = {
       "denNgay": "",
       "limit": this.pageSize, // cái này bằng 10 : PAGE_SIZE_DEFAULT
-      "loaiHH": this.formData.value.loaiHH,
+      "loaiHH": this.formData.value.loaiHang,
       "maChungLoaiHang": this.formData.value.maChungLoaiHang,
       "maDvi": (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) ? this.detail.maDvi : this.formData.value.maDvi,
       "nam": this.formData.value.nam,
@@ -230,8 +226,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         this.dataTable.forEach(item => item.checked = false)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      console.log(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -296,7 +290,6 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   clearFilter() {
     this.formData.reset()
-    this.isView = true
     this.filterTable = {
       nam: null,
       tuNgay: null,

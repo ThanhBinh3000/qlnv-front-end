@@ -123,7 +123,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -163,7 +163,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       pageSize: this.pageSize,
     };
     let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
-    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -171,7 +170,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.tenTrangThai = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);

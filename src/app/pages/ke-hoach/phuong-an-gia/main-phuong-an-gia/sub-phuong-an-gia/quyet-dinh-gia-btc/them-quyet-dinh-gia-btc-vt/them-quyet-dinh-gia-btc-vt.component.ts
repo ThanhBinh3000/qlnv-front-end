@@ -1,21 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { LIST_VAT_TU_HANG_HOA } from "src/app/constants/config";
-import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { HelperService } from "src/app/services/helper.service";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
-import { STATUS } from "src/app/constants/status";
-import { QuyetDinhGiaCuaBtcService } from "src/app/services/quyetDinhGiaCuaBtc.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { TongHopPhuongAnGiaService } from "src/app/services/tong-hop-phuong-an-gia.service";
-import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
-import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {MESSAGE} from "src/app/constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {HelperService} from "src/app/services/helper.service";
+import {UserService} from "src/app/services/user.service";
+import {Globals} from "src/app/shared/globals";
+import {STATUS} from "src/app/constants/status";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
+import {DanhMucTieuChuanService} from "src/app/services/danhMucTieuChuan.service";
+import {
+  DialogToTrinhDeXuatComponent
+} from "../../../../../../../components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-vt",
@@ -53,6 +55,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   isErrorUnique = false;
+  thueVat: number;
+  radioValue: string;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -65,7 +69,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService
+    private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
     this.formData = this.fb.group(
       {
@@ -98,7 +102,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.loadToTrinhDeXuat(),
       this.maQd = "/QD-BTC",
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get("namKeHoach").value)
+      // this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      this.loadTiLeThue()
     ]);
     this.spinner.hide();
   }
@@ -107,12 +112,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
         soQd: data.soQd.split("/")[0],
-        loaiHangHoa: data.loaiHangHoa,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
@@ -122,6 +127,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
+      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -149,6 +155,15 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         value: dayjs().get("year") - i,
         text: dayjs().get("year") - i
       });
+    }
+  }
+
+  async loadTiLeThue() {
+    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.thueVat = res.data[0].giaTri;
+    } else {
+      this.thueVat = 10;
     }
   }
 
@@ -231,28 +246,50 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async save() {
     this.spinner.show();
+    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
-    let body = this.formData.value;
-    body.soQd = body.soQd + this.maQd;
-    let res;
-    if (this.idInput > 0) {
-      res = await this.quyetDinhGiaCuaBtcService.update(body);
-    } else {
-      res = await this.quyetDinhGiaCuaBtcService.create(body);
+    let currentRow = this.formData.value;
+    let currentLine = currentRow.thongTinGia;
+    if (currentLine) {
+      currentLine.forEach(item => {
+        //gia mua toi da
+        if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
+          err = true;
+          item.giaQd = 0;
+          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+        }
+        //gia ban toi thieu
+        if (currentRow.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
+          err = true;
+          item.giaQd = 0;
+          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+        }
+      })
     }
-    if (res.msg == MESSAGE.SUCCESS) {
+    if (!err) {
+      let body = this.formData.value;
+      body.soQd = body.soQd + this.maQd;
+      body.pagType = this.pagType;
+      let res;
       if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        res = await this.quyetDinhGiaCuaBtcService.update(body);
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        res = await this.quyetDinhGiaCuaBtcService.create(body);
       }
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
     this.spinner.hide();
   }
@@ -282,7 +319,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   }
 
   async onChangeSoToTrinh(event) {
-    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.id == event);
+    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soDeXuat == event);
     if (curToTrinh) {
       //loai hh
       let res = await this.danhMucService.loadDanhMucHangChiTiet(curToTrinh.loaiVthh);
@@ -297,7 +334,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
       //chung loai hang hoa
-      res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
+      res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
       this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
@@ -309,18 +346,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       //loai gia
       this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
 
-      //tieu chuan chat luong
-      /*      res = await this.danhMucTieuChuanService.getDetailByMaHh(curToTrinh.loaiVthh);
-            this.dsTieuChuanCl = [];
-            if (res.msg == MESSAGE.SUCCESS) {
-              if (res.data) {
-                let tmp = [];
-                tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
-                this.dsTieuChuanCl = tmp;
-              }
-            }
-            this.formData.controls["tieuChuanCl"].setValue(this.dsTieuChuanCl[0].id);*/
-
       //thong tin gia
       this.arrThongTinGia = [];
       res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
@@ -331,6 +356,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         this.arrThongTinGia = [];
       }
     }
+
+    this.radioValue = curToTrinh.soDeXuat;
   }
 
   async onChangeLoaiVthh(event) {
@@ -345,6 +372,54 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async calculateVAT(index: number, type: number) {
+    let currentRow = this.formData.value;
+    let currentLine = this.arrThongTinGia[index];
+    //gia mua toi da
+    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
+      this.arrThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+    }
+    //gia ban toi thieu
+    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      this.arrThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+    }
+    //0:gia>vat 1:vat>gia
+    if (type === 0) {
+      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
+    } else if (type === 1) {
+      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
+    }
+  }
+
+  openDialogToTrinh() {
+    let radioValue = this.radioValue;
+    if (!this.noEdit) {
+      let modalQD = this.modal.create({
+        nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
+        nzContent: DialogToTrinhDeXuatComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzComponentParams: {
+          radioValue
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+          this.formData.patchValue({
+            soToTrinh: data,
+          });
+          this.onChangeSoToTrinh(data);
+          this.radioValue = data;
+          this.spinner.hide();
+        }
+      });
     }
   }
 }

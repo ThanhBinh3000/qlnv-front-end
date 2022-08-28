@@ -17,10 +17,6 @@
           <nz-form-item nz-col nzSpan="6" class="form-item">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <!-- <nz-select formControlName="maLoaiHang" (ngModelChange)="changeLoaiHangHoa()">
-              <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-              </nz-option>
-              </nz-select> -->
               <nz-input-group id="ten-don-vi">
                 <input type="text" nz-input formControlName="maLoaiHang" [nzAutocomplete]="loaiHHAuto"
                   (ngModelChange)="onChangeLoaiHHAutoComplete($event)" />
@@ -31,10 +27,6 @@
           <nz-form-item nz-col nzSpan="6" class="form-item">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <!-- <nz-select formControlName="maChungLoaiHang">
-              <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
-              </nz-option>
-              </nz-select> -->
               <nz-input-group id="ten-don-vi">
                 <input type="text" nz-input formControlName="maChungLoaiHang" [nzAutocomplete]="cloaiHHAuto"
                   (ngModelChange)="onChangeChungLoaiHHAutoComplete($event)" />
@@ -102,7 +94,7 @@
               </nz-form-control>
             </th>
             <th class="text-center ">
-              <nz-select style="width:  164px;" [nzDisabled]="isView" [(ngModel)]="filterTable.chungLoaiHangHoa"
+              <nz-select style="width:  164px;" [(ngModel)]="filterTable.chungLoaiHangHoa"
                 (ngModelChange)="onChangeChungLoaiHH($event)">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma|| ''}}"
                   nzLabel="{{item.ten ||''}}">
@@ -134,12 +126,12 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayNhapKho"
+              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayNhapKho"
                 (ngModelChange)="filterInTable('ngayNhapKho',filterTable.ngayNhapKho,true)">
               </nz-date-picker>
             </th>
             <th>
-              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayHetHanBaoHanh"
+              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayHetHanBaoHanh"
                 (ngModelChange)="filterInTable('ngayHetHanBaoHanh',filterTable.ngayHetHanBaoHanh,true)">
               </nz-date-picker>
             </th>
@@ -160,8 +152,8 @@
             <td>{{ data.nhaKho }}</td>
             <td>{{ data.nganKho }}</td>
             <td>{{ data.loKho }}</td>
-            <td>{{ data.ngayNhapKho | date: 'dd/MM/YYYY'}}</td>
-            <td>{{ data.ngayHetHanBaoHanh | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center">{{ data.ngayNhapKho | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center">{{ data.ngayHetHanBaoHanh | date: 'dd/MM/YYYY'}}</td>
             <td class="text-center">{{ data.soLuong }}</td>
             <td class="text-center">{{ data.donViTinh }}</td>
           </tr>

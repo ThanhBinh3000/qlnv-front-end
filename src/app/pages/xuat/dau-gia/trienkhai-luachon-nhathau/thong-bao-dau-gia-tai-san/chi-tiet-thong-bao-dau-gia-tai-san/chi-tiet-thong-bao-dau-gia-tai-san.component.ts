@@ -60,7 +60,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
@@ -68,7 +67,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     private fb: FormBuilder,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     private danhMucService: DanhMucService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     public qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKHBDGService,
     private helperService: HelperService,
   ) {
@@ -95,10 +93,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         },
         [],
       ],
-      loaiHangHoa: [
+      loaiVthh: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.loaiHangHoa
+            ? this.thongBaoBanDauGia.maVatTuCha
             : null,
           disabled: this.isView ? true : false
         },
@@ -161,7 +159,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanDangKyThamGiaDauGia: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanDangKyThamGiaDauGia
+            ? [this.thongBaoBanDauGia.thoiHanDangKyThamGiaDauGiaTuNgay, this.thongBaoBanDauGia.thoiGianToChucDauGiaDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -215,7 +213,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanToChucXemTaiSan: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanToChucXemTaiSan
+            ? [this.thongBaoBanDauGia.thoiHanToChucXemTaiSanTuNgay, this.thongBaoBanDauGia.thoiHanToChucXemTaiSanDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -242,7 +240,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiHanNopTienDatTruoc: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiHanNopTienDatTruoc
+            ? [this.thongBaoBanDauGia.thoiHanNopTienDatTruocTuNgay, this.thongBaoBanDauGia.thoiHanNopTienDatTruocDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -305,7 +303,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       thoiGianToChucDauGia: [
         {
           value: this.thongBaoBanDauGia
-            ? this.thongBaoBanDauGia.thoiGianToChucDauGia
+            ? [this.thongBaoBanDauGia.thoiGianToChucDauGiaTuNgay, this.thongBaoBanDauGia.thoiGianToChucDauGiaDenNgay]
             : null,
           disabled: this.isView ? true : false
         },
@@ -364,10 +362,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       this.thongBaoBanDauGia.maDonVi = this.userInfo.MA_DVI;
       this.thongBaoBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
       this.thongBaoBanDauGia.namKeHoach = this.yearNow;
-      this.thongBaoBanDauGia.loaiHangHoa = this.typeVthh;
+      this.thongBaoBanDauGia.loaiVthh = this.typeVthh;
       this.formData.patchValue({
         namKeHoach: this.yearNow,
-        loaiHangHoa: this.thongBaoBanDauGia.loaiHangHoa,
+        loaiVthh: this.thongBaoBanDauGia.loaiVthh,
       });
       await this.loadChiTiet(this.id);
       await Promise.all([
@@ -382,6 +380,12 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     }
   }
 
+  isDisableField() {
+    if (this.thongBaoBanDauGia && (this.thongBaoBanDauGia.trangThai != this.globals.prop.NHAP_DU_THAO)) {
+      return true;
+    }
+  }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -392,7 +396,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
 
   async loadQuyetDinhPheDuyetKHBDG() {
     let body = {
-      loaiVthh: this.thongBaoBanDauGia.loaiHangHoa,
+      loaiVthh: this.thongBaoBanDauGia.loaiVthh,
       namKhoach: this.thongBaoBanDauGia.namKeHoach,
       paggingReq: {
         limit: 1000,
@@ -411,11 +415,11 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
   async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (!this.thongBaoBanDauGia.loaiHangHoa) {
+      if (!this.thongBaoBanDauGia.loaiVthh) {
         this.listHangHoa = res.data;
       }
       else {
-        this.listHangHoa = res.data?.filter(x => x.ma == this.thongBaoBanDauGia.loaiHangHoa);
+        this.listHangHoa = res.data?.filter(x => x.ma == this.thongBaoBanDauGia.loaiVthh);
       };
     }
   }
@@ -440,7 +444,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-          if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc) {
+          if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].maChiCuc === phanLoTaiSans[j].maChiCuc) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
             diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
@@ -550,6 +554,9 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.thongBaoBanDauGia = res.data;
+          if (this.thongBaoBanDauGia && this.thongBaoBanDauGia.fileDinhKems) {
+            this.listFileDinhKem = this.thongBaoBanDauGia.fileDinhKems;
+          }
           this.initForm();
           this.changeSoQuyetDinh();
         }
@@ -571,6 +578,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         ...body,
         // "capDonVi": this.formData.get("capDonVi").value,
         "fileDinhKems": this.listFileDinhKem,
+        "maVatTuCha": this.formData.get("loaiVthh") ? this.formData.get("loaiVthh").value : null,
         "id": this.formData.get("id") ? this.formData.get("id").value : null,
         // "maDonVi": this.formData.get("maDonVi").value,
         "taiSanIdList": this.taiSanIdList,
@@ -639,7 +647,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -673,10 +681,10 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -715,7 +723,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.thongBanDauGiaTaiSanService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {

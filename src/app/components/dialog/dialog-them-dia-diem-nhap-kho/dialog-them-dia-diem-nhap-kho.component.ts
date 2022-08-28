@@ -414,7 +414,7 @@ export class DialogThemDiaDiemNhapKhoComponent implements OnInit {
     let body = {
       namKeHoach: dayjs().year(),
       maDvis: this.userInfo.MA_DVI,
-      pageNumber: 0,
+      pageNumber: 1,
       pageSize: 1000,
       trangThai: "02",
     };

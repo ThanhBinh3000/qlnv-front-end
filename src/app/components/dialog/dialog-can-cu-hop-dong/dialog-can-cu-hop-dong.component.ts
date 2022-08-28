@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service';
 
 @Component({
@@ -22,11 +23,13 @@ export class DialogCanCuHopDongComponent implements OnInit {
   hopDongList: any[] = [];
   data: any[] = [];
   dataVthh: string;
+  isXuat: boolean = false;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private notification: NzNotificationService,
+    private hopDongXuatHang: HopDongXuatHangService,
   ) { }
 
   async ngOnInit() {
@@ -43,29 +46,39 @@ export class DialogCanCuHopDongComponent implements OnInit {
   }
 
   async showListHd() {
-    let body = {
-      "loaiVthh": this.dataVthh,
-      "pageable": {
-        "offset": 0,
-        "pageNumber": 0,
-        "pageSize": 0,
-        "paged": true,
-        "sort": {
-          "empty": true,
-          "sorted": true,
-          "unsorted": true
-        },
-        "unpaged": true
-      },
-      "paggingReq": {
-        "limit": 20,
-        "orderBy": "string",
-        "orderType": "string",
-        "page": 0
+    if (this.isXuat) {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          limit: 10,
+          page: 0,
+        }
+      };
+      let res = await this.hopDongXuatHang.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-    let res = await this.quanLyHopDongNhapXuatService.danhSachHopDong(body);
-    this.dataTable = res.data;
+    else {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "trangThai": "02",
+        "paggingReq": {
+          limit: 10,
+          page: 0,
+        }
+      }
+      let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
   }
 
   handleOk(item: any) {
@@ -93,27 +106,30 @@ export class DialogCanCuHopDongComponent implements OnInit {
   async search() {
     this.dataTable = [];
     this.totalRecord = 0;
-
-    let body = {
-      "denNgayKy": "",
-      "loaiVthh": "",
-      "maDvi": "",
-      "maDviB": "",
-      "orderBy": "",
-      "orderDirection": "",
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": "",
-        "orderType": "",
-        "page": this.page - 1
-      },
-      "soHd": this.text,
-      "str": "",
-      "trangThai": "02",
-      "tuNgayKy": ""
+    let res: any;
+    if (this.isXuat) {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          "limit": this.pageSize,
+          "page": this.page - 1
+        },
+        "soHd": this.text,
+        "trangThai": "02",
+      }
+      res = await this.quanLyHopDongNhapXuatService.timKiem(body);
     }
-    let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
+    else {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
+      };
+      res = await this.hopDongXuatHang.search(body);
+    }
+    if (res && res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;

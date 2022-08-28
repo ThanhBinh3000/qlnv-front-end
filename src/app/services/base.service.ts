@@ -13,7 +13,7 @@ export abstract class BaseService {
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
-  // local = 'http://localhost:9898'
+  local = 'http://192.168.5.184:3333/phuong-an-gia/tong-hop/'
 
   getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;

@@ -2,7 +2,8 @@
     <thead>
         <tr>
             <th style="width: 2%;">STT</th>
-            <th>Tên đơn vị thẩm định</th>
+            <th *ngIf="isTableKetQua">Tên đơn vị thẩm định</th>
+            <th>Tên đơn vị báo giá</th>
             <th *ngIf="isTableKetQua">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
             <th>Đơn giá chưa VAT (đồng/kg)</th>
             <th *ngIf="isVat">Đơn giá có VAT (đồng/kg)</th>
