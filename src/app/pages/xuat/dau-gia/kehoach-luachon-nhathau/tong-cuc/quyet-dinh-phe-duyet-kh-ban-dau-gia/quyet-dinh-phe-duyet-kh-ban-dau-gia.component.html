@@ -56,8 +56,6 @@
                     <th>Trạng thái</th>
                     <th width="60px">Hành động</th>
                   </tr>
-                </thead>
-                <tbody>
                   <tr class="search-table">
                     <th></th>
                     <th></th>
@@ -126,12 +124,13 @@
                     </th>
                     <th></th>
                   </tr>
-
+                </thead>
+                <tbody>
                   <tr *ngFor="let data of basicTable.data; let i = index">
-                    <th width="45px">
+                    <td width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
-                    </th>
+                    </td>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{ data.soQuyetDinh }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
@@ -176,7 +175,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button type="button" class="btn btn-do" *ngIf="userService.isTongCuc()" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
@@ -184,7 +183,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="insert()">
+            <button type="button" class="btn btn-main" *ngIf="userService.isTongCuc()" (click)="insert()">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
               <span>Tạo quyết định</span>
             </button>

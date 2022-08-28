@@ -117,8 +117,8 @@
                     </th>
                     <th>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiHangHoa"
-                          (input)="filterInTable('tenLoaiHangHoa',filterTable.tenLoaiHangHoa)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHangHoa"
+                          (input)="filterInTable('tenHangHoa',filterTable.tenHangHoa)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -177,7 +177,7 @@
                     <td>{{ data.ngayLapKeHoach | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.trichYeu }}</td>
-                    <td>{{ data.tenLoaiHangHoa }}</td>
+                    <td>{{ data.tenHangHoa }}</td>
                     <td>{{ data.soQuyetDinhGiaoChiTieu }}</td>
                     <td>{{ data.soQuyetDinhPheDuyet }}</td>
                     <td>{{ data.namKeHoach }}</td>
