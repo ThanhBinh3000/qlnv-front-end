@@ -11,6 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { saveAs } from 'file-saver';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
     selector: 'app-them-hang-thuoc-dien-tieu-huy',
@@ -19,7 +20,6 @@ import { UserLogin } from 'src/app/models/userlogin';
 })
 export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     @Input('dsTong') dsTong;
-    @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
     @Input('editList') editList: boolean;
     @Input('detail') detail: boolean;
     @Input('dataEditList') dataEditList: any;
@@ -59,6 +59,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
     dsNganKho = [];
     dsChungLoaiHangHoa = [];
     dsLoKho = [];
+    dsLoaiHangHoa = [];
     userInfo: UserLogin;
     @Output('close') onClose = new EventEmitter<any>();
 
@@ -69,11 +70,12 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         private notification: NzNotificationService,
         private readonly spinner: NgxSpinnerService,
         public userService: UserService,
+        private danhMucService: DanhMucService,
     ) { }
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         this.userInfo = this.userService.getUserLogin();
-        this.initData();
+        await this.initData();
         this.initForm();
     }
 
@@ -107,8 +109,8 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         }
     }
 
-    initData() {
-        this.loadDsTong();
+    async initData() {
+        await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
     }
 
     onChangeLoaiVthh(event) {
@@ -123,6 +125,26 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
         const chungLoai = this.dsChungLoaiHangHoa.filter(item => item.ma == event)
         if (chungLoai) {
             this.rowItem.donVi = chungLoai[0].maDviTinh;
+        }
+    }
+
+    async loaiVTHHGetAll() {
+        try {
+            await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+                if (hangHoa.msg == MESSAGE.SUCCESS) {
+                    hangHoa.data.forEach((item) => {
+                        if (item.cap === "1" && item.ma != '01') {
+                            this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
+                        }
+                        else {
+                            this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
+                        }
+                    })
+                }
+            })
+        } catch (error) {
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
 
