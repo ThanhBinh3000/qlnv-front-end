@@ -25,4 +25,8 @@ export class QuyetDinhGiaTCDTNNService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/chi-tiet/${id}`;
     return this.httpClient.get<any>(url).toPromise();
   }
+  dsSoQd(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/qd-gia-tcdtnn/list-qd-tcdtnn`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }
