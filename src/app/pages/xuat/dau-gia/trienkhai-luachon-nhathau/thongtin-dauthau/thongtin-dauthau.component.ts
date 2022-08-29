@@ -5,7 +5,13 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {
+  DATEPICKER_CONFIG,
+  LEVEL,
+  LIST_VAT_TU_HANG_HOA,
+  LOAI_HANG_DTQG,
+  PAGE_SIZE_DEFAULT,
+} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
@@ -14,15 +20,18 @@ import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
-
+import {
+  convertTrangThai,
+  convertTrangThaiGt,
+  convertVthhToId,
+} from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-thongtin-dauthau',
   templateUrl: './thongtin-dauthau.component.html',
-  styleUrls: ['./thongtin-dauthau.component.scss']
+  styleUrls: ['./thongtin-dauthau.component.scss'],
 })
 export class ThongtinDauthauComponent implements OnInit {
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -34,11 +43,12 @@ export class ThongtinDauthauComponent implements OnInit {
     public userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
+    public globals: Globals,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
-    })
+    });
   }
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
@@ -52,7 +62,7 @@ export class ThongtinDauthauComponent implements OnInit {
     ngayQd: '',
     loaiVthh: '',
     maDvi: '',
-    trichYeu: ''
+    trichYeu: '',
   };
   filterTable: any = {
     goiThau: '',
@@ -84,7 +94,6 @@ export class ThongtinDauthauComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
 
-
   async ngOnInit() {
     this.spinner.show();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
@@ -100,16 +109,15 @@ export class ThongtinDauthauComponent implements OnInit {
       }
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
   getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
+    let loatVthh = this.router.url.split('/')[4];
     this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
@@ -131,8 +139,8 @@ export class ThongtinDauthauComponent implements OnInit {
         page: this.page - 1,
       },
       soQdPd: this.searchFilter.soQdPd,
-      maDvi: this.searchFilter.maDvi
-    }
+      maDvi: this.searchFilter.maDvi,
+    };
     let res = await this.dauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -143,7 +151,7 @@ export class ThongtinDauthauComponent implements OnInit {
           item.statusConvert = this.statusGoiThau(item.trangThai);
         });
       }
-      this.dataTableAll = cloneDeep(this.dataTable)
+      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -151,7 +159,7 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai
+    body.trangThai = trangThai;
     return this.danhSachDauThauService.search(body);
   }
 
@@ -161,8 +169,7 @@ export class ThongtinDauthauComponent implements OnInit {
       this.tabSelected = tab;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -201,7 +208,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 
   clearFilter() {
@@ -224,16 +231,15 @@ export class ThongtinDauthauComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": item.id,
-            "maDvi": ""
-          }
+            id: item.id,
+            maDvi: '',
+          };
           this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -286,7 +292,7 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   dateChange() {
-    this.helperService.formatDate()
+    this.helperService.formatDate();
   }
 
   filterInTable(key: string, value: string) {
@@ -295,14 +301,19 @@ export class ThongtinDauthauComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key] &&
+            item[key]
+              .toString()
+              .toLowerCase()
+              .indexOf(value.toString().toLowerCase()) != -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -318,7 +329,6 @@ export class ThongtinDauthauComponent implements OnInit {
       tenCloaiVthh: '',
       thanhGiaGoiThau: '',
       statusConvert: '',
-    }
+    };
   }
-
 }

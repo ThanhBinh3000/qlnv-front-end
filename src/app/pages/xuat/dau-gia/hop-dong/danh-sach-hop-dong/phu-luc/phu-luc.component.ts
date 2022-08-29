@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
-
+import { Globals } from 'src/app/shared/globals';
 import { DialogThongTinPhuLucHopDongMuaComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -16,7 +16,7 @@ import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHop
 @Component({
   selector: 'app-phu-luc',
   templateUrl: './phu-luc.component.html',
-  styleUrls: ['./phu-luc.component.scss']
+  styleUrls: ['./phu-luc.component.scss'],
 })
 export class PhuLucComponent implements OnInit {
   @Input() idPhuLuc: number;
@@ -36,28 +36,27 @@ export class PhuLucComponent implements OnInit {
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService
+    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
+    public globals: Globals,
   ) {
-    this.formPhuLuc = this.fb.group(
-      {
-        loaiVthh: [null],
-        cloaiVthh: [null],
-        soPluc: [null],
-        ngayKy: [null],
-        ngayHluc: [null],
-        veViec: [null],
-        soHd: [null],
-        tenHd: [null],
-        tuNgayHlucTrc: [null],
-        denNgayHlucTrc: [null],
-        tuNgayHlucDc: [null],
-        denNgayHlucDc: [null],
-        tgianThienHdTrc: [null],
-        tgianThienHdDc: [null],
-        noiDung: [null],
-        ghiChu: [null]
-      }
-    );
+    this.formPhuLuc = this.fb.group({
+      loaiVthh: [null],
+      cloaiVthh: [null],
+      soPluc: [null],
+      ngayKy: [null],
+      ngayHluc: [null],
+      veViec: [null],
+      soHd: [null],
+      tenHd: [null],
+      tuNgayHlucTrc: [null],
+      denNgayHlucTrc: [null],
+      tuNgayHlucDc: [null],
+      denNgayHlucDc: [null],
+      tgianThienHdTrc: [null],
+      tgianThienHdDc: [null],
+      noiDung: [null],
+      ghiChu: [null],
+    });
   }
 
   ngOnInit() {
@@ -71,10 +70,10 @@ export class PhuLucComponent implements OnInit {
         denNgayHlucTrc: this.detailHopDong.denNgayHluc ?? null,
         tuNgayHlucTrc: this.detailHopDong.tuNgayHluc ?? null,
         tgianThienHdTrc: this.detailHopDong.soNgayThien ?? null,
-      })
+      });
     }
     if (!!this.idPhuLuc) {
-      this.loadPhuLuc(this.idPhuLuc)
+      this.loadPhuLuc(this.idPhuLuc);
     }
   }
 
@@ -95,8 +94,8 @@ export class PhuLucComponent implements OnInit {
             denNgayHlucDc: data.denNgayHlucDc ?? null,
             tgianThienHdDc: data.tgianThienHdDc ?? null,
             noiDung: data.noiDung ?? null,
-            ghiChu: data.ghiChu ?? null
-          })
+            ghiChu: data.ghiChu ?? null,
+          });
         }
       }
     }
@@ -112,7 +111,7 @@ export class PhuLucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {},
     });
-    modal.afterClose.subscribe((res) => { });
+    modal.afterClose.subscribe((res) => {});
   }
 
   back() {
@@ -151,7 +150,7 @@ export class PhuLucComponent implements OnInit {
   }
 
   deleteTaiLieu(index: number) {
-    this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index)
+    this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index);
   }
 
   async save() {
@@ -164,21 +163,15 @@ export class PhuLucComponent implements OnInit {
         body.fileDinhKems = this.fileDinhKem;
         if (this.idPhuLuc > 0) {
           body.id = this.idPhuLuc;
-          let res = await this.thongTinPhuLucHopDongService.update(
-            body,
-          );
+          let res = await this.thongTinPhuLucHopDongService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.UPDATE_SUCCESS)
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         } else {
-          let res = await this.thongTinPhuLucHopDongService.create(
-            body,
-          );
+          let res = await this.thongTinPhuLucHopDongService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
@@ -198,8 +191,7 @@ export class PhuLucComponent implements OnInit {
   validateGhiChu() {
     if (this.formPhuLuc.value.ghiChu && this.formPhuLuc.value.ghiChu != '') {
       this.errorGhiChu = false;
-    }
-    else {
+    } else {
       this.errorGhiChu = true;
     }
   }

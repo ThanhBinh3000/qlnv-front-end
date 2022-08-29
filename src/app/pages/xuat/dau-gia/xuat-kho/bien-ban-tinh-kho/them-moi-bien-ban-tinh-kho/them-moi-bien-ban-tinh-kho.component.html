@@ -15,19 +15,20 @@
       <i class="icon htvbdh_dakyduyet"></i>
       <span>Duyệt</span>
     </button>
-    <a class="btn btn-sub" (click)="tuChoi()" *ngIf="detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC && isView">
+    <button class="btn btn-sub" (click)="tuChoi()"
+      *ngIf="detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC && isView">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
-    </a>
-    <button class="btn btn-main" (click)="save(false)"
+    </button>
+    <button class="btn btn-main btn-sub xanh" (click)="save(false)"
       *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
-    <a class="btn btn-sub" (click)="back()">
+    <button class="btn btn-sub" (click)="back()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay về</span>
-    </a>
+    </button>
   </div>
 </nz-affix>
 <div class="bg-trang">
