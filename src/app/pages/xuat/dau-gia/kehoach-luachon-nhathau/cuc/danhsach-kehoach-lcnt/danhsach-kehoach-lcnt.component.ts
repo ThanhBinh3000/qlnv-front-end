@@ -54,7 +54,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     ngayLapKeHoach: '',
     ngayKy: '',
     trichYeu: '',
-    tenLoaiHangHoa: '',
+    tenHangHoa: '',
     soQuyetDinhGiaoChiTieu: '',
     soQuyetDinhPheDuyet: '',
     namKeHoach: '',
@@ -123,7 +123,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -170,7 +170,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.tenTrangThai = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -412,7 +411,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       ngayLapKeHoach: '',
       ngayKy: '',
       trichYeu: '',
-      tenLoaiHangHoa: '',
+      tenHangHoa: '',
       soQuyetDinhGiaoChiTieu: '',
       soQuyetDinhPheDuyet: '',
       namKeHoach: '',
