@@ -107,7 +107,7 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"
+              <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="searchInTable.ngayTao"
                 (ngModelChange)="filterInTable('ngayTao',searchInTable.ngayTao,true)" class="search__input">
               </nz-date-picker>
             </th>

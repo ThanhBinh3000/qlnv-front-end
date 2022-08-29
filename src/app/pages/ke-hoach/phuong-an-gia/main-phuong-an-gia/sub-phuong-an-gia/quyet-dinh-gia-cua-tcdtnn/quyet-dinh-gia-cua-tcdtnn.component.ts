@@ -10,12 +10,14 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
   styleUrls: ['./quyet-dinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
+  dataEditTtg: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
   @Input() pagType: string;
   @Output()
   getCount = new EventEmitter<any>();

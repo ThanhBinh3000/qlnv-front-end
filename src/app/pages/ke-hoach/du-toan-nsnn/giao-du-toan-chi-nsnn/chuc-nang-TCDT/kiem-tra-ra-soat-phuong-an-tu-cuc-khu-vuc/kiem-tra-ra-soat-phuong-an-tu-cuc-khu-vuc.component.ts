@@ -33,6 +33,10 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   listBcaoKqua: any[] = [];
   trangThais: any = TRANG_THAI_GIAO_DU_TOAN;                          // danh muc loai bao cao
   trangThai!: string;
+  pages = {
+    size: 10,
+    page: 1,
+  }
   searchFilter = {
     maPhanGiao: '2',
     maLoai: '1',
@@ -47,8 +51,8 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     thangBcao: '',
     dotBcao: '',
     paggingReq: {
-      limit: 10,
-      page: 1
+      limit: this.pages.size,
+      page: this.pages.page
     },
     str: '',
     donVi: '',
@@ -66,6 +70,8 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
       tenDm: 'Giao, diều chỉnh dự toán'
     }
   ];
+
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -78,7 +84,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show()
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
@@ -98,7 +104,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
       }
     );
     this.listBcaoKqua = []
-    this.onSubmit();
+    await this.onSubmit();
     this.spinner.hide();
   }
 
@@ -117,6 +123,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     }
     await this.quanLyVonPhiService.timBaoCaoGiao(this.searchFilter).toPromise().then(res => {
       if (res.statusCode == 0) {
+        console.log(res);
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
           e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);

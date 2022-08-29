@@ -62,4 +62,12 @@
   .text-blue {
     color: #2196F3;
   }
+
+  .button-action {
+    top: 115px !important;
+
+    .tab-menu {
+      background-color: none !important;
+    }
+  }
 }

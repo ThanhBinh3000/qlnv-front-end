@@ -238,9 +238,16 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   clearFilter() {
-    this.startValue = null;
-    this.endValue = null;
-    this.selectHang = { ten: '' };
+    this.searchFilter = {
+      soQd: null,
+      loaiVthh: null,
+      ngayKy: null,
+      namKhoach: dayjs().get('year'),
+      trichYeu: null,
+      tuNgayKy: null,
+      denNgayKy: null,
+    }
+    this.search();
   }
 
   async selectTabData(tab: string) {
@@ -329,24 +336,27 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          denNgayQd: this.endValue
-            ? dayjs(this.endValue).format('DD/MM/YYYY')
+          ngayKyTuNgay: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
             : null,
-          loaiVthh: this.selectHang.ma ?? '00',
+          ngayKyDenNgay: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
-          paggingReq: null,
-          soQd: this.searchFilter.soQd,
-          str: null,
-          tuNgayQd: this.startValue
-            ? dayjs(this.startValue).format('DD/MM/YYYY')
-            : null,
+          trichYeu: this.searchFilter.trichYeu,
+          soQuyetDinh: this.searchFilter.soQd,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
         };
         this.qdPheDuyetKhBanDauGiaService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(
               blob,
-              'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx',
+              'danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia.xlsx',
             ),
           );
         this.spinner.hide();
@@ -379,13 +389,14 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.qdPheDuyetKhBanDauGiaService.deleteMultiple({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.allChecked = false;
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

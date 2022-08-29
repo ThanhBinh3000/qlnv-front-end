@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of basicTable.data; let i = index">
+            <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDviNhan)}}</td>
               <td>{{ item.maPa }}</td>
@@ -69,10 +69,9 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page"
-                [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit"
-                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
-                (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>

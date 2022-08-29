@@ -14,7 +14,7 @@ import { QuanLyChatLuongLuuKhoService } from 'src/app/services/quanLyChatLuongLu
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-hang-thuoc-dien-tieu-huy',
   templateUrl: './hang-thuoc-dien-tieu-huy.component.html',
@@ -42,6 +42,9 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
   dsLoaiHangHoa = [];
   dsLoaiHangHoaDataSource = [];
 
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+
   searchInTable: any = {
     maDanhSach: null,
     donVi: null,
@@ -64,13 +67,14 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly userService: UserService,
+    public userService: UserService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
     private readonly notification: NzNotificationService,
     private readonly quanlyChatLuongService: QuanLyChatLuongLuuKhoService,
     private modal: NzModalService,
+    private globals: Globals,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -87,24 +91,21 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      tenDonVi: [null],
-      tenHangHoa: [null],
-      loaiHangHoa: [null],
-      ngayTao: [null],
+      "maDvi": [null],
+      "tenDVi": [null],
+      "loaiHang": [null],
+      "maChungLoaiHang": [null],
+      "ngayTao": [[]]
     });
   }
 
   async traCuuDsHangTieuHuy() {
     const body = {
-      tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
       denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
+      tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
+      maDonVi: this.formData.controls.maDvi?.value ? this.formData.controls.maDvi.value : null,
+      maVTHH: this.formData.value.maChungLoaiHang ?? this.formData.value.loaiHang,
       limit: this.pageSize,
-      maDonVi: null, // this.detail.maDvi
-      maDs: null,
-      maVTHH: null,
-      orderBy: "string",
-      orderType: "string",
       page: this.page - 1,
     }
     const res = await this.quanlyChatLuongService.hangTieuHuytraCuu(body);
@@ -114,6 +115,7 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
       this.dataTable = res.data?.content;
       console.log(this.dataTable)
       this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertTrangThai();
     }
   }
 
@@ -123,6 +125,14 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
     this.detail.tenDvi = this.userInfo.TEN_DVI;
     await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
     await this.traCuuDsHangTieuHuy();
+  }
+
+  convertTrangThai() {
+    this.dataTable.forEach((item, idx) => {
+      if (item.trangThaiXuLy === this.globals.prop.NHAP_CHUA_TONG_HOP) {
+        this.dataTable[idx].trangThaiXuLy = 'Chưa xử lý';
+      }
+    })
   }
 
   async loadDsTong() {
@@ -142,11 +152,31 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    let res = await this.danhMucService.loadDanhMucHangHoaAsync();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiHangHoa = res.data;
-      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+            }
+            else {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
+
   }
 
   onChangeAutoComplete(e) {
@@ -188,13 +218,8 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
         const body = {
           denNgay: this.formData.controls.ngayTao.value ? this.formData.controls.ngayTao.value[1] : '',
           tuNgay: this.formData.controls.ngayTao?.value ? this.formData.controls.ngayTao.value[0] : '',
-          "chungLoaiHH": "",
-          "maDonVi": "",
-          "maDs": "",
-          "maVTHH": "",
-          "orderBy": "",
-          "orderType": "",
-          "tenDonVi": "",
+          maDonVi: this.formData.controls.maDvi?.value ? this.formData.controls.maDvi.value : null,
+          maVTHH: this.formData.value.maChungLoaiHang ?? this.formData.value.loaiHang,
         }
         this.quanlyChatLuongService
           .hangTieuHuyExportList(body)
