@@ -305,7 +305,7 @@ export class ThemHangThuocDienTieuHuyComponent implements OnInit {
             this.notification.error(MESSAGE.FORM_REQUIRED_ERROR, 'Vui lòng chọn lô kho.');
             return;
         }
-        if (this.rowItem.soLuongTon > this.rowItem.soLuongTieuHuy) {
+        if (this.rowItem.soLuongTieuHuy > this.rowItem.soLuongTon) {
             this.notification.error(MESSAGE.ERROR, 'Không được phép nhập Số lượng thanh lý lớn hơn số lượng tồn kho');
             return;
         }
