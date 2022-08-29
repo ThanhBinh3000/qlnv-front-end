@@ -70,18 +70,18 @@
 
                     <td>{{ displayValue(data.ncauNamN2) }}</td>
 
-                    <td [hidden]="status">
+                    <td nzWidth="2%" [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
-                    <td [hidden]="status">
+                    <td nzWidth="2%" [hidden]="status">
                         <ng-container *ngIf="!getLowStatus(data.stt)">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="status">
+                    <td nzWidth="2%" [hidden]="status">
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                     </td>
-                    <td [hidden]="status">
+                    <td nzWidth="2%" [hidden]="status">
                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                             (ngModelChange)="updateChecked(data.id)"></label>
                     </td>

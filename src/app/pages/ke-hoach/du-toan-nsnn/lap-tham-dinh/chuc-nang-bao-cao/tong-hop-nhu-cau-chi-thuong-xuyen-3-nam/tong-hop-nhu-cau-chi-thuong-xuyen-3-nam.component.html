@@ -70,10 +70,10 @@
                 <th>8</th>
                 <th>9</th>
                 <th>10=9-8</th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
             </tr>
             <tr>
                 <th></th>
@@ -241,7 +241,7 @@
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
-                    <td>
+                    <td [hidden]="status">
                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                     </td>
                     <td [hidden]="status">
