@@ -38,4 +38,14 @@ export class PhuongPhapXacDinhGia {
   tongChiPhi?: number = 0;
 }
 
+export class ThongTinGia {
+  donGia: number;
+  donGiaVat:  number;
+  id: number;
+  maDvi: string;
+  qdDcTcdtnnId: number;
+  soLuong: 0;
+  tenDvi: string
+}
+
 

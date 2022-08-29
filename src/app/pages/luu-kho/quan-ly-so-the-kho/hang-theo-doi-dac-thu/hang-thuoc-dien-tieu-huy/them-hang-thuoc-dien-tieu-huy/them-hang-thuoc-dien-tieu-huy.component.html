@@ -13,9 +13,9 @@
                     <nz-form-label nzFor="ten-don-vi">Tên đơn vị</nz-form-label>
                     <nz-form-control>
                         <nz-input-group id="ten-don-vi">
-                            <nz-select formControlName="idDonVi" (ngModelChange)="onChangeDonVi($event)" [nzShowArrow]="false">
+                            <nz-select nzDisabled formControlName="maDvi" (ngModelChange)="onChangeDonVi($event)" [nzShowArrow]="false">
                                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                                <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
+                                <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDonVi">
                                 </nz-option>
                             </nz-select>
                             <ng-template #suffixIconSearch>

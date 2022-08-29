@@ -43,10 +43,9 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
     ngayHetHanLuuKho: null,
   };
 
-  isView: boolean = true;
-  detail: any = {}
-  dsTong: any = []
-  dsDonVi: any = []
+  detail: any = {};
+  dsTong: any = [];
+  dsDonVi: any = [];
   dsLoaiHangHoa: any[] = [];
   dsChungLoaiHangHoa: any[] = [];
   dsLoaiHangHoaDataSource = [];
@@ -148,12 +147,9 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
             temp.push(item)
           }
         })
-        this.isView = false
         this.dataTable = [...temp]
         if (this.dataTable.length > 0 && data.child.length > 0) {
           this.dsChungLoaiHangHoa = data.child
-        } else {
-          this.isView = true
         }
       }
     }
@@ -247,7 +243,7 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         if (date) {
           this.dataTableAll.forEach((item) => {
-            if (item[key] && item[key].toString().toLowerCase() == dayjs(value).format('DD/MM/YYYY')) {
+            if (item[key] && dayjs(item[key].toString().toLowerCase()).format('dd/MM/YYYY') == dayjs(value).format('dd/MM/YYYY')) {
               temp.push(item)
             }
           });
@@ -292,7 +288,6 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
   }
   clearFilter() {
     this.formData.reset();
-    this.isView = true
     this.filterTable = {
       tenDonVi: null,
       loaiHangHoa: null,
@@ -317,10 +312,17 @@ export class HangSapHetHanLuuKhoComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show()
       try {
-        let body = this.formData.value;
-        if (body.ngayTao != null) {
-          body.tuNgay = body.ngayTao[0]
-          body.denNgay = body.ngayTao[1]
+        let body = {
+          "maChungLoaiHang": this.dataSearch.maChungLoaiHang,
+          "maDonVi": this.formData.value.maDonVi,
+          "maLoaiHang": this.dataSearch.maLoaiHang,
+          "tenDonVi": "",
+          "paggingReq": {
+            "limit": this.pageSize,
+            "orderBy": "",
+            "orderType": "",
+            "page": this.page - 1,
+          }
         }
         this.hangSapHetHanLkChuaXuatKhoService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-hh-het-han-lk-chua-kh-xuat-kho.xlsx')
