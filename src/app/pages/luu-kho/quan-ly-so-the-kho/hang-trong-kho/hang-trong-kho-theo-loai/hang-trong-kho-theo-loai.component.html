@@ -199,12 +199,12 @@
                     </td>
                     <td>{{ item.loaiHH }}</td>
                     <td>{{ item.chungLoaiHH}}</td>
-                    <td style="text-align: center;">{{ item.tonKhoDauKy }}</td>
-                    <td style="text-align: center;">{{ item.nhapTrongKy }}</td>
-                    <td style="text-align: center;">{{ item.xuatTrongKy}}</td>
-                    <td style="text-align: center;">{{ item.tonKhoCuoiKy }}</td>
-                    <td style="text-align: center;">{{ item.donViTinh }}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">{{ item.tonKhoDauKy }}</td>
+                    <td class="text-center">{{ item.nhapTrongKy }}</td>
+                    <td class="text-center">{{ item.xuatTrongKy}}</td>
+                    <td class="text-center">{{ item.tonKhoCuoiKy }}</td>
+                    <td class="text-center">{{ item.donViTinh }}</td>
+                    <td class="text-center">
                       <a (click)="viewDetail(data)" *ngIf="item.loaiHH && item.chungLoaiHH">
                         <i class="fa fa-eye"></i>
                       </a>

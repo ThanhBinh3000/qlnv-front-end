@@ -337,24 +337,24 @@ export class HangTrongKhoTheoLoaiComponent implements OnInit {
       this.spinner.show()
       try {
         let body = {
-          "loaiHH": "",
-          "chungLoaiHH": "",
-          "tuNgay": "",
-          "denNgay": "",
-          "maCuc": "",
-          "maChiCuc": "",
-          "maDiemKho": "",
-          "maNhaKho": "",
-          "maNganKho": "",
-          "maLokho": "",
+          "loaiHH": this.formData.value.idLoaiHH,
+          "chungLoaiHH": this.formData.value.idChungLoaiHH,
+          "tuNgay": '',
+          "denNgay": '',
+          "maCuc": this.formData.value.idCuc,
+          "maChiCuc": this.formData.value.idChiCuc,
+          "maDiemKho": this.formData.value.idDiemKho,
+          "maNhaKho": this.formData.value.idNhaKho,
+          "maNganKho": this.formData.value.idNganKho,
+          "maLokho": this.formData.value.idLoKho,
           "paggingReq": {
-            "limit": 10,
-            "page": 0
+            "limit": this.pageSize,
+            "page": this.page - 1,
           }
         }
-        if (this.formData.value.ngayTao != null) {
-          body.tuNgay = this.formData.value.ngayTao[0]
-          body.denNgay = this.formData.value.ngayTao[1]
+        if (this.formData.value.ngay != null) {
+          body.tuNgay = this.formData.value.ngay[0]
+          body.denNgay = this.formData.value.ngay[1]
         }
         this.quanLyHangTrongKhoService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-hang-trong-kho.xlsx')
