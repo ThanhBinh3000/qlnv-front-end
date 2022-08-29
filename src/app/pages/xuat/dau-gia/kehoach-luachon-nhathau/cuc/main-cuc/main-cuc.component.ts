@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-main-cuc',
   templateUrl: './main-cuc.component.html',
@@ -8,7 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MainCucComponent implements OnInit {
 
   @Input() loaiVthh: string;
-  constructor() { }
+  constructor(
+    public globals:Globals
+  ) { }
 
   ngOnInit(): void {
   }
