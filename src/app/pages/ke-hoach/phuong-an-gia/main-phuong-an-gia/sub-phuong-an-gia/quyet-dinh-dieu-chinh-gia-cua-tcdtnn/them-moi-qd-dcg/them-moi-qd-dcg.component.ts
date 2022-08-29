@@ -40,6 +40,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   soToTrinh: any
   soQdDc: any
   listThongTinGia: any[] = [];
+  detail: any
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
@@ -75,6 +76,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   themDataTable() {
     this.dataTable.forEach(item => {
       this.rowItemL.donGia = item.donGia;
+      this.rowItemL.id = item.id;
       this.rowItemL.donGiaVat = item.donGiaVat;
       this.rowItemL.maDvi = item.maDvi;
       this.rowItemL.soLuong = item.soLuong;
@@ -255,6 +257,9 @@ export class ThemMoiQdDcgComponent implements OnInit {
     body.soQd = body.soQd + this.maQd
     let res
     if (this.idInput > 0) {
+        body.loaiVthh = this.detail.loaiVthh
+        body.cloaiVthh = this.detail.cloaiVthh
+        body.loaiGia = this.detail.loaiGia
       res = await this.service.update(body);
     } else {
       res = await this.service.create(body);
@@ -297,6 +302,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
         maDvi: data.maDvi,
         capDvi: data.capDvi
       })
+      this.detail = data;
     }
   }
 

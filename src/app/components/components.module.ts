@@ -143,6 +143,7 @@ import { DialogToTrinhTongHopComponent } from './dialog/dialog-ke-hoach-phuong-a
 import { DialogQuyetDinhGiaCuaTcdtnnComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
 import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
 
+import { DialogToTrinhDeXuatComponent} from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
 @NgModule({
   declarations: [
     //components
@@ -237,6 +238,7 @@ import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dia
     DialogSoToTrinhPagComponent,
     DialogDdiemDeHangComponent,
     DialogToTrinhTongHopComponent,
+    DialogToTrinhDeXuatComponent,
     DialogQuyetDinhGiaCuaTcdtnnComponent
   ],
   imports: [
