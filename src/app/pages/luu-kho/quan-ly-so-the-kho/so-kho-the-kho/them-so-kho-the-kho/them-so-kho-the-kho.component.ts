@@ -494,7 +494,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_KE_TOAN,
           };
 
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
@@ -530,10 +530,12 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
+          if (this.isStatus == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+            body.trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
+          }
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
-
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.huy();
@@ -568,10 +570,12 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_KE_TOAN,
           };
+          if (this.isStatus == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+            body.trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC;
+          }
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
-
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.huy();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
@@ -62,12 +62,16 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
 
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia`;
-    return this.httpClient.delete(url, body).toPromise();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: body
+    }
+    return this.httpClient.delete(url, httpOptions).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/status`;
-    return this.httpClient.put(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/trang-thai?id=${body.id}&trangThaiId=${body.trangThai}`;
+    return this.httpClient.put(url, null).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {

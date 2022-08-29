@@ -575,7 +575,9 @@ export class PhuLucIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
+            // if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
 
+            // }
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
@@ -594,10 +596,8 @@ export class PhuLucIComponent implements OnInit {
             item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
             item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(index + 1, 0, item);
-            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                this.sum(stt);
-                this.updateEditCache();
-            }
+            this.sum(stt);
+            this.updateEditCache();
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }

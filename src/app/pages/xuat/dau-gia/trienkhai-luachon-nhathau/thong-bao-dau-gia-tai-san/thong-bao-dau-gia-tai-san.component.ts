@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-thong-bao-dau-gia-tai-san',
@@ -48,6 +49,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  listHangHoa: any[] = [];
 
   userInfo: UserLogin;
   isDetail: boolean = false;
@@ -59,11 +61,14 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
-    soBienBan: '',
+    qdPheDuyetKhbdg: '',
+    maThongBao: '',
+    thoiGianToChucDauGiaTuNgay: '',
+    trichYeu: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    loaiHangHoa: '',
+    namKeHoach: '',
   };
 
   constructor(
@@ -75,6 +80,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
     public userService: UserService,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     public globals: Globals,
+    private danhMucService: DanhMucService,
   ) { }
 
   async ngOnInit() {
@@ -95,11 +101,24 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
         });
       }
       await this.search();
+      await this.loaiVTHHGetAll();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (!this.typeVthh) {
+        this.listHangHoa = res.data;
+      }
+      else {
+        this.listHangHoa = res.data?.filter(x => x.ma == this.typeVthh);
+      };
     }
   }
 
@@ -136,25 +155,19 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
 
   async search() {
     let body = {
-      "namKeHoach": this.searchFilter.namKeHoach,
-      "maVatTuCha": this.searchFilter.maVatTuCha,
-      "maDvis": this.searchFilter.maDvis,
-      "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG,
       "maThongBaoBDG": this.searchFilter.maThongBaoBDG,
-      "trichYeu": this.searchFilter.trichYeu,
+      "maVatTuCha": this.searchFilter.maVatTuCha,
+      "namKeHoach": this.searchFilter.namKeHoach,
+      "ngayToChucBDGDenNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
+        ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
+        : null,
       "ngayToChucBDGTuNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
         ? dayjs(this.searchFilter.ngayToChuc[0]).format('YYYY-MM-DD')
         : null,
-      "ngayToChucBDGDenNgay": this.searchFilter.maThongBaoBDG && this.searchFilter.ngayToChuc.length > 0
-        ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
-        : null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
-        "page": this.page - 1
-      },
-      "trangThai": null
+      "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG,
+      "trichYeu": this.searchFilter.trichYeu,
+      "pageSize": this.pageSize,
+      "pageNumber": this.page
     };
     let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -264,30 +277,22 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "namKeHoach": this.searchFilter.namKeHoach,
-          "maVatTuCha": this.searchFilter.maVatTuCha,
-          "maDvis": this.searchFilter.maDvis,
-          "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG,
-          "maThongBaoBDG": this.searchFilter.maThongBaoBDG,
-          "trichYeu": null,
+          "maThongBaoBDG": this.searchFilter.maThongBaoBDG && this.searchFilter.maThongBaoBDG != "" ? this.searchFilter.maThongBaoBDG : null,
+          "maVatTuCha": this.searchFilter.maVatTuCha && this.searchFilter.maVatTuCha != "" ? this.searchFilter.maVatTuCha : null,
+          "namKeHoach": this.searchFilter.namKeHoach && this.searchFilter.namKeHoach != "" ? this.searchFilter.namKeHoach : null,
+          "ngayToChucBDGDenNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
+            ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
+            : null,
           "ngayToChucBDGTuNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
             ? dayjs(this.searchFilter.ngayToChuc[0]).format('YYYY-MM-DD')
             : null,
-          "ngayToChucBDGDenNgay": this.searchFilter.maThongBaoBDG && this.searchFilter.ngayToChuc.length > 0
-            ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
-            : null,
-          "paggingReq": {
-            "limit": this.pageSize,
-            "orderBy": null,
-            "orderType": null,
-            "page": this.page - 1
-          },
-          "trangThai": null
+          "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG && this.searchFilter.soQuyetDinhPheDuyetKHBDG != "" ? this.searchFilter.soQuyetDinhPheDuyetKHBDG : null,
+          "trichYeu": this.searchFilter.trichYeu && this.searchFilter.trichYeu != "" ? this.searchFilter.trichYeu : null,
         };
         this.thongBanDauGiaTaiSanService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'danh-sach-thong-bao-ban-dau-gia-tai-san.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -362,11 +367,14 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
-      soBienBan: '',
+      qdPheDuyetKhbdg: '',
+      maThongBao: '',
+      thoiGianToChucDauGiaTuNgay: '',
+      trichYeu: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      loaiHangHoa: '',
+      namKeHoach: '',
     }
   }
 

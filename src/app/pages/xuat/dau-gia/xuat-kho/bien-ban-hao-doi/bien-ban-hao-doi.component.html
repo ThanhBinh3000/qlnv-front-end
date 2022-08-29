@@ -179,15 +179,16 @@
             </nz-tab>
           </nz-tabset>
           <div class="action-giao-chi-tieu">
-            <button type="button" class="btn btn-do">
+            <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
-              <span>Xoá</span>
+              <span>Xóa</span>
             </button>
-            <button type="button" class="btn btn-sub">
+            <button type="button" class="btn btn-sub" (click)="export()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+              *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -199,5 +200,5 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-bien-ban-hao-doi [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-  [typeVthh]="typeVthh"></app-thong-tin-bien-ban-hao-doi>
+    [typeVthh]="typeVthh"></app-thong-tin-bien-ban-hao-doi>
 </div>
