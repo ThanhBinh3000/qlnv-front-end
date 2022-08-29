@@ -61,6 +61,7 @@ export class HangThuocDienThanhLyComponent implements OnInit {
     isUpdate: boolean = false;
     editList: boolean = false;
     isAddNew = false;
+    isShowUpdate: boolean = true;
 
     constructor(
         private readonly fb: FormBuilder,
@@ -71,7 +72,8 @@ export class HangThuocDienThanhLyComponent implements OnInit {
         private readonly spinner: NgxSpinnerService,
         private readonly notification: NzNotificationService,
         private modal: NzModalService,
-    ) { }
+    ) {
+    }
 
     async ngOnInit(): Promise<void> {
         try {
@@ -97,6 +99,9 @@ export class HangThuocDienThanhLyComponent implements OnInit {
 
     async initData() {
         this.userInfo = this.userService.getUserLogin();
+        if (this.userInfo.sub == 'cuc') {
+            this.isShowUpdate = false;
+        }
         this.detail.maDvi = this.userInfo.MA_DVI;
         this.detail.tenDvi = this.userInfo.TEN_DVI;
         await this.traCuuDsHangThanhLy();
