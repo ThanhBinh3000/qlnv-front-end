@@ -13,8 +13,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../../../Utility/utils";
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC_CHI } from './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.constant';
 
 export class ItemData {
@@ -100,6 +100,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     thuyetMinh: string;
     lyDoTuChoi: string;
     maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     trangThaiPhuLuc: string;
     //trang thai cac nut
@@ -137,6 +138,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        if (!this.maDviTien) {
+            this.maDviTien = '3';
+        }
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -835,6 +840,25 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.ncauChiTongSo = exchangeMoney(item.ncauChiTongSo, this.maDviTien, this.moneyUnit);
+            item.ncauChiTrongDoChiCs = exchangeMoney(item.ncauChiTrongDoChiCs, this.maDviTien, this.moneyUnit);
+            item.ncauChiTrongDoChiMoi = exchangeMoney(item.ncauChiTrongDoChiMoi, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaDtuPtrien = exchangeMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaChiCs1 = exchangeMoney(item.ncauChiChiaRaChiCs1, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaChiMoi1 = exchangeMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaChiTx = exchangeMoney(item.ncauChiChiaRaChiTx, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaChiCs2 = exchangeMoney(item.ncauChiChiaRaChiCs2, this.maDviTien, this.moneyUnit);
+            item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
     }
 
 }

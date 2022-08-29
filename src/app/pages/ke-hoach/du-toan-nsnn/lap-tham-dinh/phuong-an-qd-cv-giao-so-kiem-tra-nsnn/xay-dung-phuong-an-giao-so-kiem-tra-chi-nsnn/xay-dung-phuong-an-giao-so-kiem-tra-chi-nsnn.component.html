@@ -114,7 +114,8 @@
 								<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 									<div nz-col class="gutter-row" [nzSpan]="3">
 										<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-											[(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+											[(ngModel)]="moneyUnit" [class]="moneyUnit ?'' : 'input-error-validate' "
+											(ngModelChange)="changeMoney()">
 											<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
 												[nzLabel]="item.tenDm"></nz-option>
 										</nz-select>
@@ -194,7 +195,8 @@
 											<td *ngFor="let item of lstDvi">
 												<div *ngFor="let e of editCache[data.id].data.listCtietDvi">
 													<div *ngIf="e.maBcao == item.maBcao">
-														<nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
+														<nz-input-number class="search__input" nzSize="small"
+															[nzFormatter]="formatter" [nzPrecision]="4"
 															[(ngModel)]="e.soTranChi"
 															[class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
 															(ngModelChange)="changeModel(data.id)">
@@ -304,7 +306,8 @@
 							<span>Thêm</span>
 						</button>
 					</ng-container>
-					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo">
+					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
+						[hidden]="statusGiaoToanBo">
 						<span>Giao toàn bộ</span>
 					</button>
 					<!-- <button type="button" class="btn btn-sub">
