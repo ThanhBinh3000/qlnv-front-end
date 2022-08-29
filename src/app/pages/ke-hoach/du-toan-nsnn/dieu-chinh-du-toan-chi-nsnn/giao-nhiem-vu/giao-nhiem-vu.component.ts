@@ -143,7 +143,6 @@ export class GiaoNhiemVuComponent implements OnInit {
   statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
   statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
   statusBtnLD = true;                        // trang thai an/hien nut lanh dao
-  statusBtnGuiDVCT = true;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT = true;                      // trang thai nut don vi cap tren
   statusBtnCopy = true;                      // trang thai copy
   statusBtnPrint = true;                     // trang thai print
@@ -335,15 +334,14 @@ export class GiaoNhiemVuComponent implements OnInit {
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
-      this.checkParent = true;
+    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+      checkParent = true;
     }
     const utils = new Utils();
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
     this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
     this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
     this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
