@@ -7,7 +7,9 @@
             <div class="search__body" nz-row [nzGutter]="[18, 12]">
               <div nz-col nzSpan="2">
                 <label class="search__label">Năm xuất</label>
-                <input [(ngModel)]="searchFilter.namXuat" nz-input nzSize="small" />
+                <nz-select [(ngModel)]="searchFilter.namXuat">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
               </div>
               <div nz-col nzSpan="3">
                 <label class="search__label">Số quyết định</label>
@@ -53,8 +55,6 @@
                       <th width="120px">Trạng thái </th>
                       <th width="130px">Hành động</th>
                     </tr>
-                  </thead>
-                  <tbody>
                     <tr class="search-table">
                       <th></th>
                       <th></th>
@@ -103,13 +103,15 @@
                           <i nz-icon nzType="search"></i>
                         </ng-template>
                       </th>
-                      <td></td>
+                      <th></th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr *ngFor="let data of basicTable.data; let i = index">
-                      <th width="45px">
+                      <td width="45px">
                         <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                           [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
-                      </th>
+                      </td>
                       <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                       <td>{{ data.soQuyetDinh }}</td>
                       <td>{{ data.trichYeu }}</td>

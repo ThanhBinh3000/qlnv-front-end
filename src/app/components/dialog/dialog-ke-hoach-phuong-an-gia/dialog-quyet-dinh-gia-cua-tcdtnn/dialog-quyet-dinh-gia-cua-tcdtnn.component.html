@@ -1,18 +1,24 @@
-<div class="input-group-search">
-    <input type="text" nz-input placeholder="Nhập số quyết định" [(ngModel)]="text" />
-    <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
-</div>
 <nz-radio-group [(ngModel)]="radioValue">
-    <ng-container *ngFor="let data of dsToTrinhDeXuat">
+    <ng-container>
         <nz-table>
-            <tr>
-                <td class="label-name">
-                    <label>{{data.soToTrinh}}</label>
-                </td>
-                <td>
-                    <label nz-radio [nzValue]="data"></label>
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th [width]="35">STT</th>
+                    <th>Số Tờ trình</th>
+                    <th>Chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of dsToTrinhDeXuat;  let i = index" class="editable-row">
+                    <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                    <td class="label-name">
+                        <label>{{data.soToTrinh}}</label>
+                    </td>
+                    <td>
+                        <label nz-radio [nzValue]="data.soToTrinh"></label>
+                    </td>
+                </tr>
+            </tbody>
         </nz-table>
     </ng-container>
 </nz-radio-group>

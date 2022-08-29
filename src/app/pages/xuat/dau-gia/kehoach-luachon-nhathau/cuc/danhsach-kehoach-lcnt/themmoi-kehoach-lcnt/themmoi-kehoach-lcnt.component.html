@@ -111,7 +111,7 @@
           <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
             <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeLoaiHangHoa()">
-              <nz-option *ngFor="let p of listHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+              <nz-option *ngFor="let p of listHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
             <ng-template #loaiVthhError let-control>
               <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
