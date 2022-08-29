@@ -23,4 +23,5 @@ export const MESSAGEVALIDATE = {
   EXIST_CONTRACT: "Hợp đồng không tồn tại",
   LOCAL_EXIST: "Địa phương nhận đã tồn tại",
   NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",
+  EXIST_MONEY: "Vui lòng chọn đơn vị tiền",
 };

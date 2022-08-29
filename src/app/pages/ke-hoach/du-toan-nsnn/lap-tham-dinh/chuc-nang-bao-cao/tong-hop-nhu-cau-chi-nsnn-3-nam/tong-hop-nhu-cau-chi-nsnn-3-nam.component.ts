@@ -13,8 +13,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "../../../../../../Utility/utils";
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "src/app/Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-nsnn-3-nam.constant';
 
 export class ItemData {
@@ -58,6 +58,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     maBieuMau = "13";
     thuyetMinh: string;
     maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     initItem: ItemData = {
         id: null,
@@ -113,6 +114,10 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        if (!this.maDviTien) {
+            this.maDviTien = '3';
+        }
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -845,5 +850,26 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.namHienHanhDtoan = exchangeMoney(item.namHienHanhDtoan, this.maDviTien, this.moneyUnit);
+            item.namHienHanhUocThien = exchangeMoney(item.namHienHanhUocThien, this.maDviTien, this.moneyUnit);
+            item.tranChiN = exchangeMoney(item.tranChiN, this.maDviTien, this.moneyUnit);
+            item.ncauChiN = exchangeMoney(item.ncauChiN, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN = exchangeMoney(item.clechTranChiVsNcauChiN, this.maDviTien, this.moneyUnit);
+            item.tranChiN1 = exchangeMoney(item.tranChiN1, this.maDviTien, this.moneyUnit);
+            item.ncauChiN1 = exchangeMoney(item.ncauChiN1, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN1 = exchangeMoney(item.clechTranChiVsNcauChiN1, this.maDviTien, this.moneyUnit);
+            item.tranChiN2 = exchangeMoney(item.tranChiN2, this.maDviTien, this.moneyUnit);
+            item.ncauChiN2 = exchangeMoney(item.ncauChiN2, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN2 = exchangeMoney(item.clechTranChiVsNcauChiN2, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
     }
 }

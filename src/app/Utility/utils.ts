@@ -1015,6 +1015,15 @@ export const DON_VI_TIEN = [
   },
 ]
 
+export function exchangeMoney(value: number, oldMoneyUnit: string, newMoneyUnit: string): number {
+    const oldUnit = (parseInt(oldMoneyUnit, 10) - 1) * 3;
+    const newUnit = (parseInt(newMoneyUnit, 10) - 1) * 3;
+    if (!value && value !== 0) {
+        return null;
+    }
+    return value * Math.pow(10, oldUnit - newUnit);
+}
+
 export function divMoney(value, maDonViTien): number {
   const donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
   if (!value && value != 0) {

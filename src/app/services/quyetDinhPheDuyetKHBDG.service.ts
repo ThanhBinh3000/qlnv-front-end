@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
@@ -63,7 +63,11 @@ export class QuyetDinhPheDuyetKHBDGService extends BaseService {
   }
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia`;
-    return this.httpClient.delete(url, body).toPromise();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: body
+    }
+    return this.httpClient.delete(url, httpOptions).toPromise();
   }
   chiTiet(id: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-ke-hoach-ban-dau-gia/${id}`;
