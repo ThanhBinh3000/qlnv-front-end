@@ -265,6 +265,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
+
       lastest: 0,
       paggingReq: {
         limit: this.pageSize,
@@ -340,7 +341,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
-        }
+          lastest: 0,
+        };
         this.quyetDinhPheDuyetKeHoachLCNTService
           .exportList(body)
           .subscribe((blob) =>

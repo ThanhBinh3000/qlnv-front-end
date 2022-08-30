@@ -12,13 +12,13 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
-        <div nz-col nzSpan="5">
-          <label class="search__label">Ngày quyết định</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
         <div nz-col nzSpan="11">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" placeholder="Nhập nội dung" nz-input [(ngModel)]="searchFilter.trichYeu" />
+        </div>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Ngày quyết định</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -64,7 +64,7 @@
             </th>
             <th width="60px">STT</th>
             <th>Số quyết định</th>
-            <th>Ngày QĐ</th>
+            <th>Ngày quyết định</th>
             <th>Trích yếu</th>
             <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th *ngIf="userService.isTongCuc()">Mã tờ trình</th>

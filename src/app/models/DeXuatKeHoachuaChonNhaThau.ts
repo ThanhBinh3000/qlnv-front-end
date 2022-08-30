@@ -107,6 +107,7 @@ export class DanhSachGoiThau {
   soLuongTheoChiTieu: number;
   thanhTien: string;
   bangChu: string;
+  giaTriDamBao: string
   idVirtual?: number;
   isEdit: boolean;
   children?: DanhSachGoiThau[];

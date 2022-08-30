@@ -39,6 +39,7 @@ interface ItemData {
   donGia: string;
   thanhTien: string;
   bangChu: string;
+  giaTriDamBao: string;
 }
 
 export interface TreeNodeInterface {
@@ -54,6 +55,7 @@ export interface TreeNodeInterface {
   donGia?: number;
   thanhTien?: string;
   bangChu?: string;
+  giaTriDamBao?: string;
   name: string;
   age?: number;
   level?: number;
@@ -115,12 +117,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
-
   userInfo: UserLogin;
-
   maTrinh: string = '';
 
   addModelBaoGia: any = {
@@ -132,17 +131,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     taiLieu: [],
   };
 
-
   taiLieuDinhKemList: any[] = [];
-
-
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   allChecked = false;
   indeterminate = false;
-
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -197,7 +191,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     );
     this.loaiVTHHGetAll();
   }
-
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
@@ -444,7 +437,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   xoaFile(item) {
-
   }
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
@@ -471,6 +463,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
       const dsGoiThauDialog = new DanhSachGoiThau();
       dsGoiThauDialog.bangChu = res.value.bangChu;
+      dsGoiThauDialog.giaTriDamBao = res.value.giaTriDamBao;
       dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
       dsGoiThauDialog.maDvi = res.value.maDvi;
       dsGoiThauDialog.tenDvi = res.value.tenDvi;
@@ -550,7 +543,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-
   async nguonVonGetAll() {
     this.listNguonVon = [];
     let res = await this.danhMucService.nguonVonGetAll();
@@ -605,7 +597,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
-
 
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
@@ -835,7 +826,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
     }
   }
-
 
   taiLieuDinhKem(type?: string) {
     const modal = this.modal.create({
@@ -1129,7 +1119,5 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   xoaItem(data: any) {
-
   }
-
 }
