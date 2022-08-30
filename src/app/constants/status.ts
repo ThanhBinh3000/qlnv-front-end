@@ -30,6 +30,7 @@ export enum STATUS {
   DA_BAN_HANH_QD = '28',
   BAN_HANH = '29',
   CHUA_TAO_TT = '31',
+  DA_TAO_TT = '32',
 }
 
 export enum LoaiTaiLieu {

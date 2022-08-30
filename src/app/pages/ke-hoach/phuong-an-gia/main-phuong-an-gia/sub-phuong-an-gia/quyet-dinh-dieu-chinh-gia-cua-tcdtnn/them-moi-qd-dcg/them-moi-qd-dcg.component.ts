@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
@@ -16,7 +16,9 @@ import {ThongTinChungPag, ThongTinGia} from "../../../../../../../models/DeXuatP
 import {NgxSpinnerService} from "ngx-spinner";
 import {HelperService} from "../../../../../../../services/helper.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
-import {QuyetDinhDcPagTcdtnnService} from "../../../../../../../services/quyet-dinh-dc-pag-tcdtnn.service";
+import {
+  QuyetDinhDieuChinhGiaTCDTNNService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -38,9 +40,12 @@ export class ThemMoiQdDcgComponent implements OnInit {
   dataTable: any[] = [];
   namNay: number;
   soToTrinh: any
-  soQdDc: any
+  soQdGia: any
+  soQdDc: any;
   listThongTinGia: any[] = [];
-  detail: any
+  detail: any;
+  radioValue: string;
+
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
@@ -49,7 +54,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     private helperService: HelperService,
     private notification: NzNotificationService,
     private userService: UserService,
-    private service: QuyetDinhDcPagTcdtnnService
+    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService
   ) {
     this.formData = this.fb.group(
       {
@@ -68,22 +73,27 @@ export class ThemMoiQdDcgComponent implements OnInit {
         cloaiVthh: [],
         tchuanCluong: [null],
         maDvi: [null],
-        capDvi: [null]
+        capDvi: [null],
+        tenLoaiGia: [null],
+        tenLoaiVthh: [null],
+        tenCloaiVthh: [null]
       }
     );
   }
 
   themDataTable() {
-    this.dataTable.forEach(item => {
-      this.rowItemL.donGia = item.donGia;
-      this.rowItemL.id = item.id;
-      this.rowItemL.donGiaVat = item.donGiaVat;
-      this.rowItemL.maDvi = item.maDvi;
-      this.rowItemL.soLuong = item.soLuong;
-      this.rowItemL.tenDvi = item.tenDvi;
-      this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
-      this.rowItemL = new ThongTinGia();
-    })
+    if (this.dataTable) {
+      this.dataTable.forEach(item => {
+        this.rowItemL.donGia = item.donGia;
+        this.rowItemL.id = item.id;
+        this.rowItemL.donGiaVat = item.donGiaVat;
+        this.rowItemL.maDvi = item.maDvi;
+        this.rowItemL.soLuong = item.soLuong;
+        this.rowItemL.tenDvi = item.tenDvi;
+        this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
+        this.rowItemL = new ThongTinGia();
+      })
+    }
   }
 
   async ngOnInit() {
@@ -92,7 +102,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.getDataDetail(this.idInput),
-      this.maQd = "/" + this.userInfo.MA_QD,
+      this.maQd = "/QĐ-TCDTNN"
     ])
     console.log(this.isView)
   }
@@ -118,24 +128,27 @@ export class ThemMoiQdDcgComponent implements OnInit {
   }
 
   chonSoToTrinh(page: string) {
-    if (page == 'stt') {
-      const modalTuChoi = this.modal.create({
-        nzTitle: 'Số tờ trình đề xuất của Vụ kế hoạch',
+    if (page == 'STT') {
+      let radioValue = this.soToTrinh;
+      let modalDanhSachTT = this.modal.create({
+        nzTitle: this.loaiVthh == 'LT' ? 'Số tờ trình đề xuất của Vụ kế hoạch' : 'Danh sách số đề xuất phương án giá',
         nzContent: DialogSoToTrinhPagComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
           pagtype: this.loaiVthh,
           type: this.type,
-          loai: page
+          loai: page,
+          radioValue
         },
       });
-      modalTuChoi.afterClose.subscribe(async (data) => {
+      modalDanhSachTT.afterClose.subscribe(async (data) => {
+        console.log(JSON.stringify(data) + "1111111");
         if (data != null) {
-          this.soToTrinh = data;
-          this.dataTable = data.pagChiTiets;
+          this.soToTrinh = data.soToTrinh;
+          this.dataTable = data.thongTinGia;
           this.listThongTinGia = []
           this.themDataTable();
           this.updateEditCache();
@@ -144,44 +157,53 @@ export class ThemMoiQdDcgComponent implements OnInit {
             loaiVthh: data.loaiVthh,
             cloaiVthh: data.cloaiVthh,
             loaiGia: data.loaiGia,
+            tenLoaiVthh: data.tenLoaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            tenLoaiGia: data.tenLoaiGia,
             tchuanCluong: data.tchuanCluong
           })
         }
       });
-    }
-    if (page == 'sqd') {
-      const modalTuChoi = this.modal.create({
+    } else if (page == 'SQD') {
+      let radioValue = this.soQdGia;
+      let modalQD = this.modal.create({
         nzTitle: 'Số quyết định giá của TCDTNN',
         nzContent: DialogSoToTrinhPagComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '900px',
+        nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
           pagtype: this.loaiVthh,
           type: this.type,
-          loai: page
+          loai: page,
+          radioValue
         },
       });
-      modalTuChoi.afterClose.subscribe(async (data) => {
-          if (data != null) {
-            this.soQdDc = data;
+      modalQD.afterClose.subscribe(async (data) => {
+        console.log(JSON.stringify(data) + "2222222222");
+        if (data != null) {
+          this.soQdGia = data.soQd
+          this.soQdDc = data;
+          this.formData.patchValue({
+            soQdgTcdtnn: data.soQd,
+          })
+          if (this.soToTrinh == null) {
+            this.dataTable = data.thongTinGia;
+            this.listThongTinGia = []
+            this.themDataTable();
+            this.updateEditCache();
             this.formData.patchValue({
-              soQdgTcdtnn: data.soQd,
+              loaiVthh: data.loaiVthh,
+              cloaiVthh: data.cloaiVthh,
+              loaiGia: data.loaiGia,
+              tenLoaiVthh: data.tenLoaiVthh,
+              tenCloaiVthh: data.tenCloaiVthh,
+              tenLoaiGia: data.tenLoaiGia,
+              tchuanCluong: data.tchuanCluong
             })
-            if (this.soToTrinh == null) {
-              this.dataTable = data.pagChiTiets;
-              this.listThongTinGia = []
-              this.themDataTable();
-              this.updateEditCache();
-              this.formData.patchValue({
-                loaiVthh: data.loaiVthh,
-                cloaiVthh: data.cloaiVthh,
-                loaiGia: data.loaiGia,
-                tchuanCluong: data.tchuanCluong
-              })
-            }
           }
+        }
       });
     }
   }
@@ -201,8 +223,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-            this.listThongTinGia.splice(index, 1);
-            this.updateEditCache();
+          this.listThongTinGia.splice(index, 1);
+          this.updateEditCache();
         } catch (e) {
           console.log('error', e);
         }
@@ -211,16 +233,15 @@ export class ThemMoiQdDcgComponent implements OnInit {
   }
 
   updateEditCache(): void {
-      if (this.listThongTinGia) {
-        this.listThongTinGia.forEach((item) => {
-          this.dataEditDcg[item.id] = {
-            edit: false,
-            data: {...item},
-          };
-        });
-      }
+    if (this.listThongTinGia) {
+      this.listThongTinGia.forEach((item) => {
+        this.dataEditDcg[item.id] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
   }
-
 
 
   quayLai() {
@@ -243,8 +264,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
     if (this.idInput === undefined) {
       if (this.soToTrinh == null) {
         this.formData.patchValue({
-          capDvi:this.soToTrinh.capDvi,
-          maDvi : this.soToTrinh.maDvi
+          capDvi: this.soToTrinh.capDvi,
+          maDvi: this.soToTrinh.maDvi
         })
       } else {
         this.formData.patchValue({
@@ -256,13 +277,14 @@ export class ThemMoiQdDcgComponent implements OnInit {
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
+    console.log(JSON.stringify("---------" + body));
     if (this.idInput > 0) {
-        body.loaiVthh = this.detail.loaiVthh
-        body.cloaiVthh = this.detail.cloaiVthh
-        body.loaiGia = this.detail.loaiGia
-      res = await this.service.update(body);
+      /* body.loaiVthh = this.detail.loaiVthh
+       body.cloaiVthh = this.detail.cloaiVthh
+       body.loaiGia = this.detail.loaiGia*/
+      res = await this.quyetDinhDieuChinhGiaTCDTNNService.update(body);
     } else {
-      res = await this.service.create(body);
+      res = await this.quyetDinhDieuChinhGiaTCDTNNService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -279,7 +301,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.service.getDetail(id);
+      let res = await this.quyetDinhDieuChinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
       this.dataTable = data.khPagQdDcTcdtnnCTiets;
       this.themDataTable();
@@ -292,15 +314,18 @@ export class ThemMoiQdDcgComponent implements OnInit {
         soQdgTcdtnn: data.soQdgTcdtnn,
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
-        loaiGia: data.tenLoaiGia,
+        loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        loaiVthh: data.tenLoaiVthh,
-        cloaiVthh: data.tenCloaiVthh,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
         tchuanCluong: data.tchuanCluong,
         maDvi: data.maDvi,
-        capDvi: data.capDvi
+        capDvi: data.capDvi,
+        tenLoaiVthh: data.tenLoaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        tenLoaiGia: data.tenLoaiGia
       })
       this.detail = data;
     }
@@ -310,5 +335,6 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   }
 
-
+  async calculateVAT(index: number, type: number) {
+  }
 }

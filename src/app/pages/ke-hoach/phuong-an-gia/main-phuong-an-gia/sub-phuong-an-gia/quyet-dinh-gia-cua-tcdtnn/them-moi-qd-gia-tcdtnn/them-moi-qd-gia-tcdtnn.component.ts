@@ -22,8 +22,10 @@ import { DialogQuyetDinhGiaCuaTcdtnnComponent } from 'src/app/components/dialog/
 export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
 
   @Input("pagType") pagType: string;
+  @Input("type") type: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
@@ -338,6 +340,8 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
+          pagtype: this.pagType,
+          type: this.type,
           radioValue
         },
       });
