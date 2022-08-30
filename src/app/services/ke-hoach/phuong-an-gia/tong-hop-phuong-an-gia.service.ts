@@ -18,4 +18,15 @@ export class TongHopPhuongAnGiaService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop`;
     return this.httpClient.post(url, body).toPromise();
   }
+
+  loadToTrinhDeXuat(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/ds-tt-dx`;
+    return this.httpClient.post<any>(url, body).toPromise();
+
+  }
+  loadQuyetDinhGia(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/qd-gia-tcdtnn/list-qd-tcdtnn`;
+    return this.httpClient.post<any>(url, body).toPromise();
+
+  }
 }

@@ -19,6 +19,7 @@ import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   dataEditTtg: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
   @Input() pagType: string;
+  @Input() type: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -185,6 +186,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayKy[0];
         body.denNgay = body.ngayKy[1];
+        body.pagType = this.pagType;
         this.quyetDinhGiaTCDTNNService
           .export(body)
           .subscribe((blob) =>

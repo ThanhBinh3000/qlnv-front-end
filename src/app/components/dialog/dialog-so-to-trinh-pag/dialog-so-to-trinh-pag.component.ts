@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MESSAGE} from "../../../constants/message";
 import {NzModalRef} from "ng-zorro-antd/modal";
-import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
+import {PAGE_SIZE_DEFAULT, TYPE_PAG} from "../../../constants/config";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {STATUS} from "../../../constants/status";
-import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {TongHopPhuongAnGiaService} from "../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 @Component({
   selector: 'app-dialog-so-to-trinh-pag',
@@ -25,12 +25,14 @@ export class DialogSoToTrinhPagComponent implements OnInit {
   dataTable: any[] = [];
   text: string = "";
   data: any[] = [];
+  radioValue: any;
+
   constructor(
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
   ) {
 
   }
@@ -38,34 +40,80 @@ export class DialogSoToTrinhPagComponent implements OnInit {
   async ngOnInit() {
     await Promise.all([
       this.loadToTrinhDeXuat(),
-      this.findSoQd()
+      //this.findSoQd()
     ]);
   }
 
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let body = {
-      "type": this.type,
-      "pagType" : this.pagtype,
-      "trangThaiTt" : STATUS.DA_DUYET_LDV
+
+    if (this.pagtype == 'LT' && this.loai == 'STT') {
+      let body = {
+        "type": this.type,
+        "pagType": this.pagtype,
+        "dsTrangThai": [STATUS.DA_DUYET_LDV, STATUS.DA_TAO_TT]
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsToTrinhDeXuat = res.data;
+      }
+    } else if (this.pagtype == 'VT' && this.loai == 'STT') {
+      let body = {
+        "type": this.type,
+        "pagType": this.pagtype,
+        "dsTrangThai": [STATUS.DA_DUYET_LDC]
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsToTrinhDeXuat = res.data;
+      }
+    } else if (this.pagtype == 'LT' && this.loai == 'SQD') {
+      let body = {
+        "pagType": this.pagtype,
+        "trangThai": STATUS.BAN_HANH
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadQuyetDinhGia(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsToTrinhDeXuat = res.data;
+      }
+    } else if (this.pagtype == 'VT' && this.loai == 'SQD') {
+      let body = {
+        "pagType": this.pagtype,
+        "trangThai": STATUS.BAN_HANH
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadQuyetDinhGia(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsToTrinhDeXuat = res.data;
+      }
     }
-    console.log(body.pagType);
-    let res = await this.quyetDinhGiaCuaBtcService.dsToTrinh(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsToTrinhDeXuat = res.data;
-    }
+
   }
 
-  handleOk(item: any) {
-    if (item.checked) {
-      if (this.dsToTrinhDeXuat.findIndex(tt => tt.id == item.id) == -1) {
-        this.dsToTrinhDeXuat.push(item);
-      }
-    } else {
-      this.dsToTrinhDeXuat = this.dsToTrinhDeXuat.filter(tt => tt.id !== item.id);
+  handleOk() {
+    let result;
+    if (this.loai == 'STT') {
+      result = this.dsToTrinhDeXuat.find(element => element.soToTrinh == this.radioValue);
     }
+    if (this.loai == 'SQD') {
+      result = this.dsToTrinhDeXuat.find(element => element.soQd == this.radioValue);
+    }
+    this._modalRef.close(result);
   }
+
+  onCancel() {
+    this._modalRef.close();
+  }
+
+  /*  handleOk(item: any) {
+      if (item.checked) {
+        if (this.dsToTrinhDeXuat.findIndex(tt => tt.id == item.id) == -1) {
+          this.dsToTrinhDeXuat.push(item);
+        }
+      } else {
+        this.dsToTrinhDeXuat = this.dsToTrinhDeXuat.filter(tt => tt.id !== item.id);
+      }
+    }*/
 
   async findSoQd() {
     try {
@@ -85,46 +133,7 @@ export class DialogSoToTrinhPagComponent implements OnInit {
   }
 
   async search() {
-    this.dataTable = [];
-    this.totalRecord = 0;
-
-    let body = {
-      "denNgayKy": "",
-      "loaiVthh": "",
-      "maDvi": "",
-      "maDviB": "",
-      "orderBy": "",
-      "orderDirection": "",
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": "",
-        "orderType": "",
-        "page": this.page - 1
-      },
-      "soHd": this.text,
-      "str": "",
-      "trangThai": "02",
-      "tuNgayKy": ""
-    }
-    let res = await this.quyetDinhGiaCuaBtcService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-        this.dataTable.forEach(hd => {
-          this.data.forEach(dt => {
-            if (dt.id == hd.id) {
-              hd.checked = true;
-            }
-          });
-        })
-      }
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
   }
-
 
 
   handleCancel() {

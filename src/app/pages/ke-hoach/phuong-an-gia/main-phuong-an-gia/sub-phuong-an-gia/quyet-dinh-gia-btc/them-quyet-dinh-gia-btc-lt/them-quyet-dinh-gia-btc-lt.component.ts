@@ -26,6 +26,7 @@ import {
   styleUrls: ["./them-quyet-dinh-gia-btc-lt.component.scss"]
 })
 export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
+  @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
