@@ -35,7 +35,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     namKhoach: dayjs().get('year'),
     trichYeu: null,
     tuNgayQd: null,
-    denNgayQd: null
+    denNgayQd: null,
+    soGthau: null,
+    tongTien: null,
   };
   filterTable: any = {
     soQd: '',
@@ -44,6 +46,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     idThHdr: '',
     namKhoach: '',
     tenVthh: '',
+    soGthau: '',
+    tongTien: '',
   };
   dataTableAll: any[] = [];
   isDetail: boolean = false;
@@ -235,6 +239,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.searchFilter.soQd = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.ngayQd = null;
+    this.searchFilter.soGthau = null;
+    this.searchFilter.tongTien = null;
 
   }
 
@@ -265,7 +271,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
-
+      tongTien: this.searchFilter.tongTien,
+      soGthau: this.searchFilter.soGthau,
       lastest: 0,
       paggingReq: {
         limit: this.pageSize,
@@ -341,6 +348,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
+          tongTien: this.searchFilter.tongTien,
+          soGthau: this.searchFilter.soGthau,
           lastest: 0,
         };
         this.quyetDinhPheDuyetKeHoachLCNTService
@@ -427,6 +436,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       idThHdr: '',
       namKhoach: '',
       tenVthh: '',
+      tongTien: '',
+      soGthau: '',
     }
   }
 
