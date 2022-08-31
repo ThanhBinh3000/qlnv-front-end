@@ -825,6 +825,10 @@ export class TienThuaComponent implements OnInit {
         this.ttGui.ttChoDviHuong = exchangeMoney(this.ttGui.ttChoDviHuong, this.maDviTien, this.moneyUnit);
         this.ttGui.nopThue = exchangeMoney(this.ttGui.nopThue, this.maDviTien, this.moneyUnit);
 
+        this.ttGuiCache.soTien = this.ttGui.soTien;
+        this.ttGuiCache.ttChoDviHuong = this.ttGui.ttChoDviHuong;
+        this.ttGuiCache.nopThue = this.ttGui.nopThue;
+
         this.maDviTien = this.moneyUnit;
     }
 

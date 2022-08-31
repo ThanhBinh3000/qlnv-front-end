@@ -778,6 +778,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

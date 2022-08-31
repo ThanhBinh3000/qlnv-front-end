@@ -17,6 +17,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { BAO_CAO_DOT, BAO_CAO_NAM, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NOT_OK, OK, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, NOI_DUNG, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
 
 export class ItemDanhSach {
@@ -1334,23 +1335,8 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	viewDetail(id) {
-		const modalIn = this.modal.create({
-			nzTitle: 'Báo cáo từ đơn vị cấp dưới',
-			nzContent: BaoCaoComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '1200px',
-			nzFooter: [
-				{
-					label: 'Đóng',
-					shape: 'round',
-					onClick: () => this.modal.closeAll()
-				},
-			],
-			nzComponentParams: {
-				idDialog: id
-			},
-		});
+		const url = MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_BAO_CAO + '/' + BAO_CAO_KET_QUA + '/bao-cao/' + id;
+		window.open(url, '_blank');
 	}
 
 	// call chi tiet bao cao
