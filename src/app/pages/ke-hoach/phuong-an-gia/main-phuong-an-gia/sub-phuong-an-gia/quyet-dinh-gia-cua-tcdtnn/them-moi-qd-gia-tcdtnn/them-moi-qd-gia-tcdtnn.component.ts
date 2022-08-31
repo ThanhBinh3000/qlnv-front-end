@@ -340,8 +340,6 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          pagtype: this.pagType,
-          type: this.type,
           radioValue
         },
       });
@@ -349,7 +347,9 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             soToTrinh: data,
+            // thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null
           });
+          // this.thongTinToTrinh = data;
           this.onChangeSoToTrinh(data);
           this.radioValue = data;
           this.spinner.hide();

@@ -13,7 +13,7 @@
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Tên chi cục </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
         <nz-form-control>
           <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)" [nzDisabled]='selectedChiCuc'>
             <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
@@ -35,7 +35,7 @@
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
         <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
           [nzSize]="'small'" (input)="calculatorThanhTien()">
         </nz-input-number>
@@ -43,7 +43,7 @@
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
         <input nz-input formControlName="thanhTien" readonly />
       </nz-form-item>
     </div>
