@@ -816,6 +816,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
             item.ncauNamN2 = exchangeMoney(item.ncauNamN2, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

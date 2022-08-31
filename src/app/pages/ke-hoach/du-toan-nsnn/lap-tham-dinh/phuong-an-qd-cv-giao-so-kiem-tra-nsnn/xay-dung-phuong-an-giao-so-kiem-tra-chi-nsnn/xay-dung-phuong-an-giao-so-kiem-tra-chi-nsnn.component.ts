@@ -1325,5 +1325,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 }

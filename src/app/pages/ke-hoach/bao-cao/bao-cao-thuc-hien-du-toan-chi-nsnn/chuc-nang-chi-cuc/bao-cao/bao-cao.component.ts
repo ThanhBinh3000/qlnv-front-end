@@ -12,11 +12,13 @@ import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dial
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { MAIN_ROUTE_DU_TOAN } from 'src/app/pages/ke-hoach/du-toan-nsnn/dieu-chinh-du-toan-chi-nsnn/dieu-chinh-du-toan-chi-nsnn.constant';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { KHOAN_MUC, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
+import { BAO_CAO_THUC_HIEN, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
 import { PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
 	id!: string;
@@ -804,23 +806,8 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	viewDetail(id) {
-		const modalIn = this.modal.create({
-			nzTitle: 'Danh sách phụ lục',
-			nzContent: BaoCaoComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '1200px',
-			nzFooter: [
-				{
-					label: 'Đóng',
-					shape: 'round',
-					onClick: () => this.modal.closeAll()
-				},
-			],
-			nzComponentParams: {
-				idDialog: id
-			},
-		});
+		const url = MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_BAO_CAO + '/' + BAO_CAO_THUC_HIEN + '/bao-cao/' + id;
+		window.open(url, '_blank');
 	}
 
 

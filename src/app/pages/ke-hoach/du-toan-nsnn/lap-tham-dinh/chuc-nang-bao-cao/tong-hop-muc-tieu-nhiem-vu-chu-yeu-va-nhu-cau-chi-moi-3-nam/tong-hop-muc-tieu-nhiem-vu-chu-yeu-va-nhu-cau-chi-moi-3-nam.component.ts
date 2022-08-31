@@ -859,6 +859,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
             item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

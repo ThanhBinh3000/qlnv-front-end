@@ -929,6 +929,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
             item.clechTranChiVsNcauChiN2 = exchangeMoney(item.clechTranChiVsNcauChiN2, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

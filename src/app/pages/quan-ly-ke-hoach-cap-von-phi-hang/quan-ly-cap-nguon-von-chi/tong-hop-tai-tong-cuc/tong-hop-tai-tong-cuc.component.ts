@@ -823,6 +823,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             item.tcGiaoVonHoanUngNam = exchangeMoney(item.tcGiaoVonHoanUngNam, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

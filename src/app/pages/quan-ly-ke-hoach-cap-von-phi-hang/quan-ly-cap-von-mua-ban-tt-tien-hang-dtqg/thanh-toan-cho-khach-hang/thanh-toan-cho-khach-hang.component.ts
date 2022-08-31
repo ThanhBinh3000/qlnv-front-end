@@ -630,6 +630,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             return;
         }
         this.ttGui.soTien = exchangeMoney(this.ttGui.soTien, this.maDviTien, this.moneyUnit);
+        this.ttGuiCache.soTien = this.ttGui.soTien;
         this.maDviTien = this.moneyUnit;
     }
 }

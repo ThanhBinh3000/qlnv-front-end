@@ -1079,6 +1079,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             item.nguonKhac = exchangeMoney(item.nguonKhac, this.maDviTien, this.moneyUnit);
         })
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

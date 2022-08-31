@@ -845,5 +845,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.tongTien = exchangeMoney(this.tongTien, this.maDviTien, this.moneyUnit);
         this.kphiDaCap = exchangeMoney(this.kphiDaCap, this.maDviTien, this.moneyUnit);
         this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 }
