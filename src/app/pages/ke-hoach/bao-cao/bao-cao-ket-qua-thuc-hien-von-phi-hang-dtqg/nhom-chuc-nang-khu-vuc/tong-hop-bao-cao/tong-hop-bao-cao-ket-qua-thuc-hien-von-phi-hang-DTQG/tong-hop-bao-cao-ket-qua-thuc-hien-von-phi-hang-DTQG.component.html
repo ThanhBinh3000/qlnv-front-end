@@ -8,13 +8,13 @@
 						<label class="search__label">Năm báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
 							[(ngModel)]="searchFilter.namBcao"
-							[class]="searchFilter.namBcao ?'' : 'input-error-validate' "></nz-input-number>
+							[class]="statusNew || searchFilter.namBcao ?'' : 'input-error-validate' "></nz-input-number>
 					</div>
 					<div nz-col nzSpan="3">
 						<label class="search__label">Đợt báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1"
 							[(ngModel)]="searchFilter.dotBcao"
-							[class]="(!searchFilter.dotBcao && searchFilter.maLoaiBcao == '1')? 'input-error-validate' : '' ">
+							[class]="!statusNew && (!searchFilter.dotBcao && searchFilter.maLoaiBcao == '1')? 'input-error-validate' : '' ">
 						</nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
@@ -30,7 +30,7 @@
 						<label class="search__label">Loại báo cáo</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
 							[(ngModel)]="searchFilter.maLoaiBcao"
-							[class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
+							[class]="statusNew || searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
 							<nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
 						</nz-select>
 					</div>

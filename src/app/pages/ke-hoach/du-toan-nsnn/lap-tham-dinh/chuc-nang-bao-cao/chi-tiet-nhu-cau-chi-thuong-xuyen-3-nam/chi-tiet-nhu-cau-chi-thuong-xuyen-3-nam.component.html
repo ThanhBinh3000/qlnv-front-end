@@ -11,8 +11,8 @@
                 </div>
             </ng-container>
             <ng-template #templateName>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                    [class]="maDviTien ?'' : 'input-error-validate' ">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="moneyUnit"
+                    [class]="moneyUnit ?'' : 'input-error-validate' " (ngModelChange)="changeMoney()">
                     <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
@@ -53,10 +53,10 @@
                 <th>{{displayValue(total.ncauNamDtoanN)}}</th>
                 <th>{{displayValue(total.ncauNamN1)}}</th>
                 <th>{{displayValue(total.ncauNamN2)}}</th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
-                <th [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
+                <th nzWidth="2.5%" [hidden]="status"></th>
             </tr>
             <tr>
                 <th></th>
@@ -129,26 +129,26 @@
                         </div>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-                            [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
+                            [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
                             [class]="(editCache[data.id].data.thNamHienHanhN1 || editCache[data.id].data.thNamHienHanhN1 ===0) && editCache[data.id].data.thNamHienHanhN1 >= 0 ?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-                            [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
+                            [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
                             [class]="(editCache[data.id].data.ncauNamDtoanN || editCache[data.id].data.ncauNamDtoanN ===0) && editCache[data.id].data.ncauNamDtoanN >= 0 ?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-                            [(ngModel)]="editCache[data.id].data.ncauNamN1"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
+                            [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.ncauNamN1"
                             [class]="(editCache[data.id].data.ncauNamN1 || editCache[data.id].data.ncauNamN1 ===0) && editCache[data.id].data.ncauNamN1 >= 0 ?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter" [nzPrecision]="4"
-                            [(ngModel)]="editCache[data.id].data.ncauNamN2"
+                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
+                            [nzPrecision]="4" [(ngModel)]="editCache[data.id].data.ncauNamN2"
                             [class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) && editCache[data.id].data.ncauNamN2 >= 0 ?'' : 'input-error-validate'">
                         </nz-input-number>
                     </td>

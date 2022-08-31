@@ -13,8 +13,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../../../Utility/utils";
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-thuong-xuyen-3-nam.constant';
 
 export class ItemData {
@@ -124,6 +124,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     trangThaiPhuLuc: string;
     thuyetMinh: string;
     maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     //trang thai cac nut
     status = false;
@@ -161,6 +162,10 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        if (!this.maDviTien) {
+            this.maDviTien = '3';
+        }
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -413,6 +418,9 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
             const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -901,6 +909,26 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
+            item.tranChiN = exchangeMoney(item.tranChiN, this.maDviTien, this.moneyUnit);
+            item.ncauChiN = exchangeMoney(item.ncauChiN, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN = exchangeMoney(item.clechTranChiVsNcauChiN, this.maDviTien, this.moneyUnit);
+            item.tranChiN1 = exchangeMoney(item.tranChiN1, this.maDviTien, this.moneyUnit);
+            item.ncauChiN1 = exchangeMoney(item.ncauChiN1, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN1 = exchangeMoney(item.clechTranChiVsNcauChiN1, this.maDviTien, this.moneyUnit);
+            item.tranChiN2 = exchangeMoney(item.tranChiN2, this.maDviTien, this.moneyUnit);
+            item.ncauChiN2 = exchangeMoney(item.ncauChiN2, this.maDviTien, this.moneyUnit);
+            item.clechTranChiVsNcauChiN2 = exchangeMoney(item.clechTranChiVsNcauChiN2, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
     }
 
 }

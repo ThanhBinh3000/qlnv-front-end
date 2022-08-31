@@ -139,7 +139,7 @@ export class BaoCao04axComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu, 0);
+        await this.addListVatTu(this.listVattu);
         this.lstCTietBaoCaoTemp[0]?.listCtiet.filter(el => {
             if (el.loaiMatHang == 0) {
                 el.colName = this.lstVatTuFull.find(e => e.id == el.maVtu)?.ten;
@@ -156,7 +156,7 @@ export class BaoCao04axComponent implements OnInit {
                     maNdungChi: element.id,
                     maVtu: element.id,
                     level: element.level,
-                    stt: element.ghiChu,
+                    stt: element.ma,
                     header: '4ax-B',
                     listCtiet: [],
                     id: uuid.v4() + "FE",
@@ -207,19 +207,39 @@ export class BaoCao04axComponent implements OnInit {
         }
     }
 
-    addListVatTu(listVattu, idCha) {
-        listVattu.forEach(item => {
-            item = {
-                ...item,
-                tenDm: item.ten,
-                level: Number(item.cap) - 1,
-                idCha: idCha,
+    addListVatTu(listVattu) {
+        listVattu.forEach(data => {
+            switch (data.ma) {
+                case '04':
+                    data.child.forEach(item => {
+                        this.lstVatTuFull.push({
+                            ...item,
+                            tenDm: item.ten,
+                        })
+                    })
+                    break;
+                case '01':
+                    data.child.forEach(item => {
+                        this.lstVatTuFull.push({
+                            ...item,
+                            tenDm: item.ten,
+                        })
+                    })
+                    break;
+                case '02':
+                    data.child.forEach(item => {
+                        item.child.forEach(e => {
+                            this.lstVatTuFull.push({
+                                ...e,
+                                tenDm: e.ten,
+                            })
+                        })
+                    })
+                    break;
+                default:
+                    break;
             }
-            this.lstVatTuFull.push(item);
-            if (item.child) {
-                this.addListVatTu(item.child, item.id);
-            }
-        });
+        })
     }
 
     // action print
@@ -253,7 +273,7 @@ export class BaoCao04axComponent implements OnInit {
                 xau = String.fromCharCode(k + 96).toUpperCase();
             }
             if (n == 1) {
-                k = k - 3;
+                k = k - 4;
                 for (let i = 0; i < this.soLaMa.length; i++) {
                     while (k >= this.soLaMa[i].gTri) {
                         xau += this.soLaMa[i].kyTu;
@@ -298,6 +318,9 @@ export class BaoCao04axComponent implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         const baoCao = this.lstCtietBcao4ax;
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
@@ -791,14 +814,14 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
-        const baoCao = this.lstCtietBcao4ax;
-        const index: number = baoCao.findIndex(e => this.getHead(e.stt) == str);
-        if (index == -1) {
-            return false;
-        }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
-        const maNdung = baoCao.find(e => e.stt == str)?.maNdungChi;
+        const maNdung = this.lstCtietBcao4ax.find(e => e.stt == str)?.maNdungChi;
         if (this.getRoleCalculate(maNdung) == '7') {
+            return true;
+        }
+        //kiem tra xem cos ton tai ban ghi level con ko
+        const index: number = this.lstCtietBcao4ax.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
             return false;
         }
         return true;
@@ -895,19 +918,18 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     deleteCol(maVtu: string) {
-
-        const baoCao = this.lstCtietBcao4ax;
-        baoCao.forEach(data => {
+        this.lstCtietBcao4ax.forEach(data => {
             data.listCtiet = data.listCtiet.filter(e => e.maVtu != maVtu);
         })
+        this.updateEditCache();
         this.listColTemp = this.listColTemp.filter(e => e.maVtu != maVtu);
         this.tinhTong2();
     }
 
     tinhTong2() {
-        let tonglstChitietVtuTrongDot = 0;
-        let tonglstChitietVtuLuyke = 0;
-        this.lstCTietBaoCaoTemp.forEach(e => {
+        this.lstCtietBcao4ax.forEach(e => {
+            let tonglstChitietVtuTrongDot = 0;
+            let tonglstChitietVtuLuyke = 0;
             e.listCtiet.forEach(el => {
                 if (el.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += el.sl;

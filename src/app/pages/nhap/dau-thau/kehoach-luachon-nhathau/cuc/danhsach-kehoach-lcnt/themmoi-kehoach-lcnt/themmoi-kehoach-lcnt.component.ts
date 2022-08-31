@@ -42,6 +42,7 @@ interface ItemData {
   donGia: string;
   thanhTien: string;
   bangChu: string;
+  giaTriDamBao: string;
 }
 
 export interface TreeNodeInterface {
@@ -57,6 +58,7 @@ export interface TreeNodeInterface {
   donGia?: number;
   thanhTien?: string;
   bangChu?: string;
+  giaTriDamBao?: string;
   name: string;
   age?: number;
   level?: number;
@@ -116,12 +118,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
-
   userInfo: UserLogin;
-
   maTrinh: string = '';
 
   addModelBaoGia: any = {
@@ -135,13 +134,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   taiLieuDinhKemList: any[] = [];
 
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   allChecked = false;
   indeterminate = false;
-
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -439,7 +437,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     });
   }
 
-  xoaFile(item) {}
+  xoaFile(item) {
+
+  }
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
     if (!this.formData.get('loaiVthh').value) {
@@ -465,6 +465,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
       const dsGoiThauDialog = new DanhSachGoiThau();
       dsGoiThauDialog.bangChu = res.value.bangChu;
+      dsGoiThauDialog.giaTriDamBao = res.value.giaTriDamBao;
       dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
       dsGoiThauDialog.maDvi = res.value.maDvi;
       dsGoiThauDialog.tenDvi = res.value.tenDvi;
@@ -1150,5 +1151,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     });
   }
 
-  xoaItem(data: any) {}
+  xoaItem(data: any) {
+
+  }
+
 }

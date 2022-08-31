@@ -70,12 +70,14 @@
                 {{maPa}}
               </td>
               <td>
-                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="namPa"
-                  [class]="namPa && namPa < 3000 && namPa > 999 ?'' : 'input-error-validate' ">
-                </nz-input-number>
+                <!-- <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="namPa"
+                  [hidden]="status" [class]="namPa && namPa < 3000 && namPa > 999 ?'' : 'input-error-validate' ">
+                </nz-input-number> -->
+                {{namPa}}
               </td>
               <td>
-                <nz-date-picker class="search__input" [(ngModel)]="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <!-- <nz-date-picker class="search__input" [(ngModel)]="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker> -->
+                {{ngayTao}}
               </td>
             </tr>
           </tbody>

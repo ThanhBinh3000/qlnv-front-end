@@ -5,6 +5,7 @@ export const LINH_VUC = [
     idCha: 0,
     level: 0,
   },
+  // ============================================
   {
     id: 1000,
     tenDm: "Nhập",
@@ -61,7 +62,7 @@ export const LINH_VUC = [
   },
   {
     id: 1008,
-    tenDm: "Xuồng cao tốc( xuồng cứu nạn)",
+    tenDm: "Xuồng cao tốc",
     idCha: 1000,
     level: 2,
   },
@@ -235,7 +236,7 @@ export const LINH_VUC = [
   },
   {
     id: 2008,
-    tenDm: "Xuồng cao tốc( xuồng cứu nạn)",
+    tenDm: "Xuồng cao tốc",
     idCha: 2000,
     level: 2,
   },
@@ -407,7 +408,7 @@ export const LINH_VUC = [
   },
   {
     id: 3008,
-    tenDm: "Xuồng cao tốc( xuồng cứu nạn)",
+    tenDm: "Xuồng cao tốc",
     idCha: 3000,
     level: 2,
   },
@@ -451,25 +452,25 @@ export const LINH_VUC = [
   {
     id: 30011,
     tenDm: "Nhà bạt thường loại 16,5 m2",
-    idCha: 20010,
+    idCha: 30010,
     level: 3,
   },
   {
     id: 30012,
     tenDm: "Nhà bạt thường loại 24.75 m2",
-    idCha: 20010,
+    idCha: 30010,
     level: 3,
   },
   {
     id: 30013,
     tenDm: "Nhà bạt thường loại 24,5 m2",
-    idCha: 20010,
+    idCha: 30010,
     level: 3,
   },
   {
     id: 20014,
     tenDm: "Nhà bạt thường loại 60 m2",
-    idCha: 20010,
+    idCha: 30010,
     level: 3,
   },
 
@@ -520,6 +521,188 @@ export const LINH_VUC = [
     id: 30054,
     tenDm: "Nhà bạt nhẹ 60 m2",
     idCha: 30050,
+    level: 3,
+  },
+
+
+
+
+
+
+
+
+
+
+  // ====================================
+  {
+    id: 4000,
+    tenDm: "VTTB",
+    idCha: 1,
+    level: 1,
+  },
+  {
+    id: 4001,
+    tenDm: "thóc đóng bao",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4002,
+    tenDm: "thóc đổ rời",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4003,
+    tenDm: "Thóc xuất gia công",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4004,
+    tenDm: "gạo đóng bao",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4005,
+    tenDm: "Phao bè",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4006,
+    tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 4007,
+    tenDm: "Máy phát điện 136-150 KVA",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40071,
+    tenDm: "Máy phát điện 30KVA",
+    idCha: 4000,
+    level: 3,
+  },
+  {
+    id: 4008,
+    tenDm: "Xuồng cao tốc",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40081,
+    tenDm: "Loại DT4",
+    idCha: 4008,
+    level: 3,
+  },
+  {
+    id: 40082,
+    tenDm: "Loại DT3",
+    idCha: 4008,
+    level: 3,
+  },
+  {
+    id: 40083,
+    tenDm: "Loại DT2",
+    idCha: 4008,
+    level: 3,
+  },
+  {
+    id: 40084,
+    tenDm: "Loại DT1",
+    idCha: 4008,
+    level: 3,
+  },
+  {
+    id: 4009,
+    tenDm: "Thiết bị khoan cắt",
+    idCha: 4000,
+    level: 2,
+  },
+  // ===================
+  {
+    id: 40010,
+    tenDm: "Nhà bạt các loại",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40011,
+    tenDm: "Nhà bạt thường loại 16,5 m2",
+    idCha: 40010,
+    level: 3,
+  },
+  {
+    id: 40012,
+    tenDm: "Nhà bạt thường loại 24.75 m2",
+    idCha: 40010,
+    level: 3,
+  },
+  {
+    id: 40013,
+    tenDm: "Nhà bạt thường loại 24,5 m2",
+    idCha: 40010,
+    level: 3,
+  },
+  {
+    id: 20014,
+    tenDm: "Nhà bạt thường loại 60 m2",
+    idCha: 40010,
+    level: 3,
+  },
+
+  {
+    id: 40020,
+    tenDm: "Phao áo cứu sinh",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40030,
+    tenDm: "Phao tròn cứu sinh",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40040,
+    tenDm: "Bè nhẹ cứu sinh",
+    idCha: 4000,
+    level: 2,
+  },
+  // =============
+  {
+    id: 40050,
+    tenDm: "Nhà bạt các loại",
+    idCha: 4000,
+    level: 2,
+  },
+  {
+    id: 40051,
+    tenDm: "Nhà bạt nhẹ 16,5 m2",
+    idCha: 40050,
+    level: 3,
+  },
+  {
+    id: 40052,
+    tenDm: "Nhà bạt nhẹ 24.75 m2",
+    idCha: 40050,
+    level: 3,
+  },
+  {
+    id: 40053,
+    tenDm: "Nhà bạt nhẹ 24,5 m2",
+    idCha: 40050,
+    level: 3,
+  },
+  {
+    id: 40054,
+    tenDm: "Nhà bạt nhẹ 60 m2",
+    idCha: 40050,
     level: 3,
   },
   //==============

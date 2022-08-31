@@ -5,7 +5,9 @@ import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogNhomQuyenComponent } from 'src/app/components/dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
 import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
 import { DialogQuyenComponent } from 'src/app/components/dialog/dialog-quyen/dialog-quyen.component';
 import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
@@ -13,6 +15,8 @@ import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-t
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { QlNhomQuyenService } from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
+import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyen.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
@@ -35,14 +39,11 @@ export interface TreeNodeInterface {
 export class QuanLyQuyenComponent implements OnInit {
   @Input() typeVthh: string;
 
-  qdTCDT: string = MESSAGE.QD_TCDT;
 
   formData: FormGroup;
 
-  danhMucList: any[];
 
   setOfCheckedId = new Set<number>();
-
 
   searchFilter = {
     ma: '',
@@ -60,7 +61,7 @@ export class QuanLyQuyenComponent implements OnInit {
   endValue: Date | null = null;
 
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 20;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
@@ -85,50 +86,50 @@ export class QuanLyQuyenComponent implements OnInit {
     ngaySua: '',
   };
 
-
-  listOfMapData: TreeNodeInterface[] = [
-    {
-      key: `1`,
-      name: 'Kế hoạch, vốn và dự toán NSNN',
-      children: [
-        {
-          key: `1-1`,
-          name: 'Giao kế hoạch và dự toán',
-          children: [
-            {
-              key: `1-2-1`,
-              name: 'Giao kế hoạch và vốn đầu năm',
-              children: [
-                {
-                  key: `1-2-1-1`,
-                  name: 'Quyết định',
-                  children: [
-                    {
-                      key: `1-2-1-1-1`,
-                      name: 'Thêm mới TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-2`,
-                      name: 'Xem TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-3`,
-                      name: 'Xóa TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-4`,
-                      name: 'Sửa TTCP',
-                    },
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-      ]
-    }
+  listOfMapData: any[] = [
+    // {
+    //   key: `1`,
+    //   name: 'Kế hoạch, vốn và dự toán NSNN',
+    //   children: [
+    //     {
+    //       key: `1-1`,
+    //       name: 'Giao kế hoạch và dự toán',
+    //       children: [
+    //         {
+    //           key: `1-2-1`,
+    //           name: 'Giao kế hoạch và vốn đầu năm',
+    //           children: [
+    //             {
+    //               key: `1-2-1-1`,
+    //               name: 'Quyết định',
+    //               children: [
+    //                 {
+    //                   key: `1-2-1-1-1`,
+    //                   name: 'Thêm mới TTCP',
+    //                 },
+    //                 {
+    //                   key: `1-2-1-1-2`,
+    //                   name: 'Xem TTCP',
+    //                 },
+    //                 {
+    //                   key: `1-2-1-1-3`,
+    //                   name: 'Xóa TTCP',
+    //                 },
+    //                 {
+    //                   key: `1-2-1-1-4`,
+    //                   name: 'Sửa TTCP',
+    //                 },
+    //               ]
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     },
+    //   ]
+    // }
   ];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+  listDataSelected: any[] = [];
   constructor(
     private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -136,7 +137,9 @@ export class QuanLyQuyenComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-    private router: Router
+    private router: Router,
+    private qlNhomQuyenService: QlNhomQuyenService,
+    private qlQuyenNSDService: QlQuyenNSDService
   ) {
     this.formData = this.fb.group({
       ma: [null],
@@ -149,19 +152,33 @@ export class QuanLyQuyenComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.userInfo = this.userService.getUserLogin();
-      this.listOfMapData.forEach(item => {
-        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-      });
-      if (this.userInfo) {
-        this.qdTCDT = this.userInfo.MA_QD;
-      }
+      await Promise.all([
+        this.userInfo = this.userService.getUserLogin(),
+        this.getListDataTree(),
+      ]);
+
+
       await this.search();
     } catch (e) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async getListDataTree() {
+    let body = {
+
+    }
+    let dataTree = await this.qlQuyenNSDService.getAll(body);
+    if (dataTree.msg == MESSAGE.SUCCESS) {
+      this.listOfMapData = dataTree.data;
+      this.listOfMapData.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      })
+    }
+  }
+
+
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
     if (!$event) {
       if (data.children) {
@@ -180,15 +197,17 @@ export class QuanLyQuyenComponent implements OnInit {
     const stack: TreeNodeInterface[] = [];
     const array: TreeNodeInterface[] = [];
     const hashMap = {};
-    stack.push({ ...root, level: 0, expand: false });
+    stack.push({ ...root, level: 0, expand: true });
 
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
-      if (node.children) {
+      if (node.children.length > 0) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: node.level! + 1 == 1 ? true : false, parent: node });
         }
+      } else {
+        delete node.children
       }
     }
 
@@ -201,6 +220,7 @@ export class QuanLyQuyenComponent implements OnInit {
       array.push(node);
     }
   }
+
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
       this.updateCheckedSet(item.id, checked);
@@ -228,8 +248,6 @@ export class QuanLyQuyenComponent implements OnInit {
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
-    console.log(this.setOfCheckedId
-    )
   }
 
   updateAllChecked(): void {
@@ -249,6 +267,18 @@ export class QuanLyQuyenComponent implements OnInit {
     }
   }
 
+  async showDetail($event, id: number) {
+    this.spinner.show();
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow')
+    let res = await this.qlNhomQuyenService.getDetail(id);
+    this.selectedId = id;
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDataSelected = res.data.listPermission;
+    }
+    this.spinner.hide();
+  }
+
   updateSingleChecked(): void {
     if (this.dataTable.every(item => !item.checked)) {
       this.allChecked = false;
@@ -259,33 +289,6 @@ export class QuanLyQuyenComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
-  }
-
-  async search() {
-    this.spinner.show();
-    let body = this.formData.value;
-    body.paggingReq = {
-      limit: this.pageSize,
-      page: this.page - 1,
-    }
-    let res = await this.dmDungCungService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-
-    } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -356,23 +359,31 @@ export class QuanLyQuyenComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = isView;
-  }
-
-  async showList() {
-    this.isDetail = false;
-    await this.search();
-  }
-
-  export() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+  async search() {
+    this.spinner.show();
+    let body = this.formData.value;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
     }
+    let res = await this.qlNhomQuyenService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 
   deleteSelect() {
@@ -431,88 +442,12 @@ export class QuanLyQuyenComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
-    console.log(this.dataTableAll)
   }
 
-  print() {
-
-  }
-
-  exportData() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        let body = this.formData.value;
-        this.dmDungCungService
-          .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-danh-muc-dung-chung.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
-  them(data?: any, isView?: boolean) {
-    let modalTuChoi;
-    // if (data == null && isView == false) {
-    modalTuChoi = this.modal.create({
-      nzTitle: 'Sửa thông tin cán bộ',
-      nzContent: DialogThongTinCanBoComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        isView: isView,
-      },
-    });
-    // }
-    // if (data != null && isView == true) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chi tiết danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
-    // if (data != null && isView == false) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chỉnh sửa danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
-    modalTuChoi.afterClose.subscribe((data) => {
-      this.search();
-    })
-  }
-  themQuyen(data?: any, isView?: boolean) {
+  themNhomQuyen(data?: any, isView?: boolean) {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Quyền',
-      nzContent: DialogQuyenComponent,
+      nzTitle: 'Thêm mới nhóm quyền',
+      nzContent: DialogNhomQuyenComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -525,21 +460,6 @@ export class QuanLyQuyenComponent implements OnInit {
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
     })
-  }
-
-  openPhanQuyen() {
-    let modalPhanQuyen;
-    // if (data == null && isView == false) {
-    modalPhanQuyen = this.modal.create({
-      nzTitle: 'Phân quyền',
-      nzContent: DialogPhanQuyenComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1300px',
-      nzFooter: null,
-      nzComponentParams: {
-      },
-    });
   }
 
   xoaNhieu() {
@@ -580,6 +500,100 @@ export class QuanLyQuyenComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  isCheckedData(idSelected): boolean {
+    let dataFilter = this.listDataSelected.filter(data => data == idSelected);
+    if (dataFilter.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkData(itemSelected) {
+    let dataFilter = this.listDataSelected.filter(data => data == itemSelected.id);
+    if (dataFilter.length > 0) {
+      this.removeItem(itemSelected)
+    } else {
+      this.pushItem(itemSelected);
+    }
+  }
+
+  pushItem(itemSelected) {
+    // has parent
+    if (!!itemSelected.parent) {
+      // check exis data id parent
+      let dataFilter = this.listDataSelected.filter(data => data == itemSelected.parent.id);
+      if (dataFilter.length == 0) {
+        this.listDataSelected.push(itemSelected.parent.id);
+      }
+    }
+    // has children
+    if (!!itemSelected.children) {
+      this.listDataSelected.push(itemSelected.id);
+      this.pushChildren(itemSelected.children)
+    } else {
+      this.listDataSelected.push(itemSelected.id);
+    }
+  }
+
+  pushChildren(itemSelected: []) {
+    itemSelected.forEach(element => {
+      this.pushItem(element)
+    });
+  }
+
+  removeItem(itemSelected) {
+    // has children property
+    if (!!itemSelected.children) {
+      this.listDataSelected = this.listDataSelected.filter(data => data != itemSelected.id);
+      this.removeChildren(itemSelected.children)
+    } else {
+      this.listDataSelected = this.listDataSelected.filter(data => data != itemSelected.id);
+    }
+    // has parent property
+    if (!!itemSelected.parent) {
+      let listChilren = []
+      itemSelected.parent.children.forEach(item => listChilren.push(item.id));
+      let intersection = this.listDataSelected.filter(x => listChilren.includes(x));
+      if (intersection.length == 0) {
+        this.listDataSelected = this.listDataSelected.filter(data => data != itemSelected.parent.id)
+        this.removeItem(itemSelected.parent);
+      }
+    }
+  }
+
+  removeChildren(itemSelected: []) {
+    itemSelected.forEach(element => {
+      this.removeItem(element)
+    });
+  }
+
+  async savePermission() {
+    this.spinner.show();
+    if (!this.selectedId) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng lựa chọn nhóm quyền cần cập nhật")
+      this.spinner.hide();
+      return
+    }
+    if (this.listDataSelected.length == 0) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn quyền");
+      this.spinner.hide();
+      return;
+    }
+    let body = {
+      id: this.selectedId,
+      listPermission: this.listDataSelected,
+      savePermission: true
+    }
+    let res = await this.qlNhomQuyenService.update(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS)
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.error)
+    }
+    this.spinner.hide();
   }
 }
 

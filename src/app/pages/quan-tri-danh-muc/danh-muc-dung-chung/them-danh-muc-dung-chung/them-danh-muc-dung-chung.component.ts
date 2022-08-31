@@ -1,20 +1,15 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { STATUS_USER } from 'src/app/constants/config';
 import { HelperService } from 'src/app/services/helper.service';
-import { UserLogin } from 'src/app/models/userlogin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { SelectionModel } from '@angular/cdk/collections';
-import { FlatTreeControl } from '@angular/cdk/tree';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
-import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { QlTShethongService } from 'src/app/services/quantri-nguoidung/qlTshethong.service';
 
 
