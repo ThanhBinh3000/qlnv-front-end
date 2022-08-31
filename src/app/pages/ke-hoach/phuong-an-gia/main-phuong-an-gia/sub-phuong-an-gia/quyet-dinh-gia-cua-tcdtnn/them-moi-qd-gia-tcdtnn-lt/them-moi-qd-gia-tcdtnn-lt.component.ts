@@ -1,30 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import dayjs from "dayjs";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {MESSAGE} from "src/app/constants/message";
-import {UserLogin} from "src/app/models/userlogin";
-import {HelperService} from "src/app/services/helper.service";
-import {UserService} from "src/app/services/user.service";
-import {Globals} from "src/app/shared/globals";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import dayjs from 'dayjs';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuyetDinhGiaBtcThongTinGia} from 'src/app/models/QuyetDinhBtcThongTinGia';
 import {STATUS} from "src/app/constants/status";
-import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {QuyetDinhGiaBtcThongTinGia} from "src/app/models/QuyetDinhBtcThongTinGia";
-import {DanhMucTieuChuanService} from "src/app/services/danhMucTieuChuan.service";
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/danhMucTieuChuan.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {
-  DialogToTrinhDeXuatComponent
-} from "../../../../../../../components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
+  DialogQuyetDinhGiaCuaTcdtnnComponent
+} from 'src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
+import {
+  TongHopPhuongAnGiaService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 @Component({
-  selector: "app-them-quyet-dinh-gia-btc-vt",
-  templateUrl: "./them-quyet-dinh-gia-btc-vt.component.html",
-  styleUrls: ["./them-quyet-dinh-gia-btc-vt.component.scss"]
+  selector: 'app-them-moi-qd-gia-tcdtnn-lt',
+  templateUrl: './them-moi-qd-gia-tcdtnn-lt.component.html',
+  styleUrls: ['./them-moi-qd-gia-tcdtnn-lt.component.scss']
 })
-export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
+export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
@@ -66,11 +68,11 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private helperService: HelperService,
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private danhMucTieuChuanService: DanhMucTieuChuanService
   ) {
     this.formData = this.fb.group(
       {
@@ -83,7 +85,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         loaiVthh: [null],
         cloaiVthh: [null],
         loaiGia: [null],
-        tieuChuanCl: [null],
+        tchuanCluong: [null],
         trichYeu: [null],
         trangThai: ["00"],
         ghiChu: [null],
@@ -101,9 +103,10 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
-      this.maQd = "/QD-BTC",
+      this.maQd = "/QD-TCDT",
       this.getDataDetail(this.idInput),
-      // this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      //this.onChangeNamQd(this.formData.get("namKeHoach").value),
+      //this.onChangeSoToTrinh(this.thongTinToTrinh.id),
       this.loadTiLeThue()
     ]);
     this.spinner.hide();
@@ -111,7 +114,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
+      let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
@@ -122,31 +125,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
-        tieuChuanCl: data.tieuChuanCl,
+        tchuanCluong: data.tchuanCluong,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
       this.onChangeSoToTrinh(data.soToTrinh)
-    }
-  }
-
-  async onChangeNamQd(namKeHoach) {
-    let body = {
-      namKeHoach: namKeHoach,
-      trangThai: "11"
-    };
-    let res = await this.quyetDinhGiaCuaBtcService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      // const data = res.data.content;
-      // if (data) {
-      //   let detail = await this.quyetDinhGiaCuaBtcService.getDetail(data[0].id);
-      //   if (detail.msg == MESSAGE.SUCCESS) {
-      //     this.dsBoNganh = detail.data.listBoNganh;
-      //   }
-      // }
-      // console.log(this.dsBoNganh)
+      //this.onChangeLoaiVthh(data.loaiVthh);
     }
   }
 
@@ -166,31 +152,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     } else {
       this.thueVat = 10;
     }
-  }
-
-  openFile(event) {
-    // if (!this.isView) {
-    //   let item = {
-    //     id: new Date().getTime(),
-    //     text: event.name,
-    //   };
-    //   if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-    //     this.uploadFileService
-    //       .uploadFile(event.file, event.name)
-    //       .then((resUpload) => {
-    //         if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-    //           this.deXuatDieuChinh.fileDinhKemReqs = [];
-    //         }
-    //         const fileDinhKem = new FileDinhKem();
-    //         fileDinhKem.fileName = resUpload.filename;
-    //         fileDinhKem.fileSize = resUpload.size;
-    //         fileDinhKem.fileUrl = resUpload.url;
-    //         fileDinhKem.idVirtual = item.id;
-    //         this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-    //         this.taiLieuDinhKemList.push(item);
-    //       });
-    //   }
-    // }
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
@@ -226,7 +187,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
             trangThai: STATUS.BAN_HANH
           };
           let res =
-            await this.quyetDinhGiaCuaBtcService.approve(
+            await this.quyetDinhGiaTCDTNNService.approve(
               body
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -237,7 +198,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log("error: ", e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -253,6 +213,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+
     let currentRow = this.formData.value;
     let currentLine = currentRow.thongTinGia;
     if (currentLine) {
@@ -277,9 +238,9 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       body.pagType = this.pagType;
       let res;
       if (this.idInput > 0) {
-        res = await this.quyetDinhGiaCuaBtcService.update(body);
+        res = await this.quyetDinhGiaTCDTNNService.update(body);
       } else {
-        res = await this.quyetDinhGiaCuaBtcService.create(body);
+        res = await this.quyetDinhGiaTCDTNNService.create(body);
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (this.idInput > 0) {
@@ -307,39 +268,45 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     this.dsVthh = [];
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsVthh = res.data;
+      this.dsVthh = res.data.filter(item => item.ma != "02");
     }
   }
 
+  /*async loadToTrinhDeXuat() {
+    this.dsToTrinhDeXuat = [];
+    let res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHop({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsToTrinhDeXuat = res.data;
+    }
+  }*/
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDeXuat({});
+    let body = {
+      "type": this.type,
+      "pagType": this.pagType,
+      "dsTrangThai": [STATUS.DA_DUYET_LDV, STATUS.DA_TAO_TT]
+    }
+    let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }
   }
 
+
   async onChangeSoToTrinh(event) {
-    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soDeXuat == event);
+    let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
+    console.log(curToTrinh + "-----")
     if (curToTrinh) {
       //loai hh
-      let res = await this.danhMucService.loadDanhMucHangChiTiet(curToTrinh.loaiVthh);
-      this.dsVthh = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          let tmp = [];
-          tmp.push(res.data);
-          this.dsVthh = tmp;
-        }
-      }
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
       //chung loai hang hoa
-      res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({"str": curToTrinh.loaiVthh});
       this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
+          console.log(this.dsCloaiVthh);
         }
       }
       this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
@@ -347,18 +314,30 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       //loai gia
       this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
 
+      //tieu chuan chat luong
+      res = await this.danhMucTieuChuanService.getDetailByMaHh(curToTrinh.loaiVthh);
+      this.dsTieuChuanCl = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          let tmp = [];
+          tmp.push({"id": res.data.id, "tenQchuan": res.data.tenQchuan});
+          this.dsTieuChuanCl = tmp;
+        }
+      }
+      this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
+
       //thong tin gia
       this.arrThongTinGia = [];
-      res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDeXuatThongTinGia(curToTrinh.id);
+      res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.arrThongTinGia = res.data;
+        this.arrThongTinGia = res.data.pagChiTiets;
         this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
       } else {
         this.arrThongTinGia = [];
       }
+      this.radioValue = curToTrinh.soToTrinh;
     }
 
-    this.radioValue = curToTrinh.soDeXuat;
   }
 
   async onChangeLoaiVthh(event) {
@@ -402,28 +381,28 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     if (!this.noEdit) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
-        nzContent: DialogToTrinhDeXuatComponent,
+        nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          radioValue,
-          type: this.type
+          pagtype: this.pagType,
+          type: this.type,
+          radioValue
         },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
           this.formData.patchValue({
-            soToTrinh: data,
+            soToTrinh: data.soToTrinh,
+            // thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null
           });
-          this.onChangeSoToTrinh(data);
-          this.radioValue = data;
+          // this.thongTinToTrinh = data;
+          this.onChangeSoToTrinh(data.soToTrinh);
           this.spinner.hide();
         }
       });
     }
   }
 }
-
-

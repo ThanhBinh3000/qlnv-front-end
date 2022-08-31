@@ -59,8 +59,6 @@ export class DialogQuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       result = this.dsToTrinhDeXuat.find(element => element.soToTrinh == this.radioValue);
     }
     if (this.pagtype == 'VT') {
-      console.log(JSON.stringify(this.dsToTrinhDeXuat));
-      console.log(this.radioValue);
       result = this.dsToTrinhDeXuat.find(element => element.soDeXuat == this.radioValue);
     }
     this._modalRef.close(result);
