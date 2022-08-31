@@ -13,8 +13,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, fixedNumber, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, fixedNumber, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constant';
 
 
@@ -73,6 +73,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
     namHienHanh: number;
     maBieuMau = "14";
     maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     thuyetMinh: string;
     //trang thai cac nut
@@ -110,6 +111,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        if (!this.maDviTien) {
+            this.maDviTien = '3';
+        }
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -341,6 +346,9 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
             const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -794,6 +802,20 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
+            item.ncauNamDtoanN = exchangeMoney(item.ncauNamDtoanN, this.maDviTien, this.moneyUnit);
+            item.ncauNamN1 = exchangeMoney(item.ncauNamN1, this.maDviTien, this.moneyUnit);
+            item.ncauNamN2 = exchangeMoney(item.ncauNamN2, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
     }
 
 }

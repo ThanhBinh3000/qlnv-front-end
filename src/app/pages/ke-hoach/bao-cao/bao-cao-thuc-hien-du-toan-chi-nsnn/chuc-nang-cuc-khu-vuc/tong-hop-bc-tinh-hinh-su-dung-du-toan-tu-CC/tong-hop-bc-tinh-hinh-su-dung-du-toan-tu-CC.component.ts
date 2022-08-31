@@ -47,6 +47,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
 	donViTaos: any = [];
 	baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
+	statusNew = true;
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
@@ -87,6 +88,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 	}
 
 	async onSubmit() {
+		this.statusNew = true;
 		this.spinner.show();
 		await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
 			if (res.statusCode == 0) {
@@ -124,6 +126,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
 	// tong hop bao cao tu cap duoi
 	tongHop() {
+		this.statusNew = false;
 		// let request = {
 		//   dotBcao: null,
 		//   maLoaiBcao: this.searchFilter.maLoaiBcao,

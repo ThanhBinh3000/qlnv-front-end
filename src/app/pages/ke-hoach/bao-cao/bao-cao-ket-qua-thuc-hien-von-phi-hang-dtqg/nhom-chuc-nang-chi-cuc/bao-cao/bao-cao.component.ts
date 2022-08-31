@@ -809,6 +809,7 @@ export class BaoCaoComponent implements OnInit {
 				status: this.status,
 				idBaoCao: this.baoCao.id,
 				luyKes: this.luyKes,
+				namBcao: this.baoCao.namBcao,
 			}
 			this.tabs = [];
 			this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
@@ -833,7 +834,7 @@ export class BaoCaoComponent implements OnInit {
 			this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
 			this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
 		}
-		this.closeTab();
+		// this.closeTab();
 	}
 
 	// getStatusButtonOk() {

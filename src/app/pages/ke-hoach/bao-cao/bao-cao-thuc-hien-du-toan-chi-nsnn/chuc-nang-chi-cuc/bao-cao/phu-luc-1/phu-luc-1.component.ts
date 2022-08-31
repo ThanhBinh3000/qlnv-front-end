@@ -470,6 +470,9 @@ export class PhuLucIComponent implements OnInit {
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
             const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -572,7 +575,9 @@ export class PhuLucIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
+            // if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
 
+            // }
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
@@ -591,10 +596,8 @@ export class PhuLucIComponent implements OnInit {
             item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
             item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(index + 1, 0, item);
-            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                this.sum(stt);
-                this.updateEditCache();
-            }
+            this.sum(stt);
+            this.updateEditCache();
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }

@@ -117,7 +117,6 @@ export class PhuLuc3Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstDchinh.push({
         ...item,
-        khoachQdGiaoNvu: divMoney(item.khoachQdGiaoNvu, this.maDviTien),
         tdiemBcaoDtoan: divMoney(item.tdiemBcaoDtoan, this.maDviTien),
         dkienThienDtoan: divMoney(item.dkienThienDtoan, this.maDviTien),
         dtoanThieuNtruoc: divMoney(item.dtoanThieuNtruoc, this.maDviTien),
@@ -333,11 +332,9 @@ export class PhuLuc3Component implements OnInit {
     if (
       this.editCache[id].data.dkienThienDtoan < 0 ||
       this.editCache[id].data.dkienThienLuong < 0 ||
-      // this.editCache[id].data.dtoanDchinh < 0 ||
       this.editCache[id].data.dtoanLke < 0 ||
       this.editCache[id].data.dtoanThieuNtruoc < 0 ||
       this.editCache[id].data.khoachLuong < 0 ||
-      // this.editCache[id].data.khoachQdGiaoNvu < 0 ||
       this.editCache[id].data.tdiemBcaoDtoan < 0 ||
       this.editCache[id].data.tdiemBcaoLuong < 0 ||
       this.editCache[id].data.tongNcauDtoanN < 0
@@ -393,14 +390,13 @@ export class PhuLuc3Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstDchinh.forEach(item => {
-      const khoachQdGiaoNvu = mulMoney(item.khoachQdGiaoNvu, this.maDviTien)
       const tdiemBcaoDtoan = mulMoney(item.tdiemBcaoDtoan, this.maDviTien)
       const dkienThienDtoan = mulMoney(item.dkienThienDtoan, this.maDviTien)
       const dtoanThieuNtruoc = mulMoney(item.dtoanThieuNtruoc, this.maDviTien)
       const tongNcauDtoanN = item.tongNcauDtoanN
       const dtoanLke = mulMoney(item.dtoanLke, this.maDviTien)
       const dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien)
-      if (khoachQdGiaoNvu > MONEY_LIMIT || tdiemBcaoDtoan > MONEY_LIMIT ||
+      if (tdiemBcaoDtoan > MONEY_LIMIT ||
         dkienThienDtoan > MONEY_LIMIT || dtoanThieuNtruoc > MONEY_LIMIT || tongNcauDtoanN > MONEY_LIMIT || dtoanLke > MONEY_LIMIT || dtoanDchinh > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
@@ -408,7 +404,6 @@ export class PhuLuc3Component implements OnInit {
       }
       lstCtietBcaoTemp.push({
         ...item,
-        khoachQdGiaoNvu: khoachQdGiaoNvu,
         tdiemBcaoDtoan: tdiemBcaoDtoan,
         dkienThienDtoan: dkienThienDtoan,
         dtoanThieuNtruoc: dtoanThieuNtruoc,

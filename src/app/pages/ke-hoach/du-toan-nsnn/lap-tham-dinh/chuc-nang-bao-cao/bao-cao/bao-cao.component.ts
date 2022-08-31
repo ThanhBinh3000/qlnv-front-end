@@ -1,5 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
@@ -162,7 +162,6 @@ export class BaoCaoComponent implements OnInit {
 		});
 		this.fileList = [];
 	}
-
 
 	constructor(private router: Router,
 		private routerActive: ActivatedRoute,
