@@ -14,15 +14,17 @@ import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBan
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertTrangThaiGt } from 'src/app/shared/commonFunction';
-
+import {
+  convertTrangThai,
+  convertTrangThaiGt,
+} from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-bien-ban-ban-dau-gia',
   templateUrl: './bien-ban-ban-dau-gia.component.html',
-  styleUrls: ['./bien-ban-ban-dau-gia.component.scss']
+  styleUrls: ['./bien-ban-ban-dau-gia.component.scss'],
 })
 export class BienBanBanDauGiaComponent implements OnInit {
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -30,10 +32,9 @@ export class BienBanBanDauGiaComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
-    private danhMucService: DanhMucService
-  ) {
-
-  }
+    private danhMucService: DanhMucService,
+    public globals: Globals,
+  ) {}
 
   listNam: any[] = [];
   yearNow: number = 0;
@@ -85,13 +86,12 @@ export class BienBanBanDauGiaComponent implements OnInit {
           value: this.yearNow - i,
           text: this.yearNow - i,
         });
-      };
+      }
       this.getListVthh();
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -117,10 +117,10 @@ export class BienBanBanDauGiaComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -132,7 +132,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
+        res.data.forEach((element) => {
           element.count = 0;
           this.listVthh.push(element);
         });
@@ -188,7 +188,6 @@ export class BienBanBanDauGiaComponent implements OnInit {
     }
   }
 
-
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -221,7 +220,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 
   xoaItem(item: any) {
@@ -236,22 +235,23 @@ export class BienBanBanDauGiaComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBienBanBanDauGiaService.deleteData(item.id).then(async (res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            await this.search();
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
+          this.quanLyBienBanBanDauGiaService
+            .deleteData(item.id)
+            .then(async (res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              await this.search();
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -322,9 +322,14 @@ export class BienBanBanDauGiaComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBienBanBanDauGiaService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBienBanBanDauGiaService.deleteMultiple({
+              ids: dataDelete,
+            });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -337,9 +342,11 @@ export class BienBanBanDauGiaComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -349,14 +356,19 @@ export class BienBanBanDauGiaComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key] &&
+            item[key]
+              .toString()
+              .toLowerCase()
+              .indexOf(value.toString().toLowerCase()) != -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -374,6 +386,6 @@ export class BienBanBanDauGiaComponent implements OnInit {
       tenHdong: '',
       tgianThienHd: '',
       statusConvert: '',
-    }
+    };
   }
 }

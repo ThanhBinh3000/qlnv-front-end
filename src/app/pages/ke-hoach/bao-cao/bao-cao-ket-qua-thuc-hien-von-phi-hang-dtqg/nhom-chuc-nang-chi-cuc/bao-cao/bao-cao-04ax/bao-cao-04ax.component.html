@@ -118,22 +118,22 @@
 						</ng-container>
 					</ng-container>
 					<td>{{item.ghiChu}}</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<ng-container *ngIf="!getLowStatus(item.stt)">
 							<ng-container *ngIf="item.stt != '0.1.2'">
 								<i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
 							</ng-container>
 						</ng-container>
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<i class="fa fa-plus" (click)="addLine(item.id)"></i>
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
 								(ngModelChange)="updateChecked(item.id)"></label>
@@ -177,20 +177,20 @@
 						<input type="text" class="search__input" nz-input
 							[(ngModel)]="editCache[item.id].data.ghiChu" />
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
-					<td>
+					<td nzWidth="2.5%">
 						<a (click)="saveEdit(item.id)" class="save" style="margin-right:15px">Lưu</a>
 						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 							(nzOnConfirm)="cancelEdit(item.id)" class="save">Hủy</a>
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<i class="fa fa-plus" (click)="addLine(item.id)"></i>
 					</td>
-					<td [hidden]="status">
+					<td nzWidth="2.5%" [hidden]="status">
 						<ng-container *ngIf="item.level > 2">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
 								(ngModelChange)="updateChecked(item.id)"></label>

@@ -427,20 +427,6 @@ export class PhuLuc7Component implements OnInit {
     const chiSo: any = str.split('.');
     const n: number = chiSo.length - 1;
     const k: number = parseInt(chiSo[n], 10);
-    // if (n == 0) {
-    //   for (var i = 0; i < this.soLaMa.length; i++) {
-    //     while (k >= this.soLaMa[i].gTri) {
-    //       xau += this.soLaMa[i].kyTu;
-    //       k -= this.soLaMa[i].gTri;
-    //     }
-    //   }
-    // };
-    // if (n == 0) {
-    //   xau = chiSo[n];
-    // };
-    // if (n == 2) {
-    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    // };
     if (n == 0) {
       xau = String.fromCharCode(k + 96).toUpperCase();
     }
@@ -476,6 +462,9 @@ export class PhuLuc7Component implements OnInit {
   }
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
   replaceIndex(lstIndex: number[], heSo: number) {
+    if (heSo == -1) {
+      lstIndex.reverse();
+    }
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();

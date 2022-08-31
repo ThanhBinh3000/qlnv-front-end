@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
@@ -61,6 +61,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     ngayPheDuyet: string;
     trangThai: string;
     maDviTien: string;
+    moneyUnit: string;
     maDviTao: string;
     thuyetMinh: string;
     newDate = new Date();
@@ -151,6 +152,8 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
+            this.maDviTien = '3';
+            this.moneyUnit = this.maDviTien;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
                 this.maCvUvTren = obj?.maCvUv;
@@ -762,6 +765,19 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.tongSoTien = exchangeMoney(item.tongSoTien, this.maDviTien, this.moneyUnit);
+            item.nopThue = exchangeMoney(item.nopThue, this.maDviTien, this.moneyUnit);
+            item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
     }
 
 }

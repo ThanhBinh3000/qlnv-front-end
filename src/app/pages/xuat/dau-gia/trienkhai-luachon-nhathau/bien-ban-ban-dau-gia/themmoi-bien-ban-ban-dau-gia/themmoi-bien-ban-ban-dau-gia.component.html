@@ -1,347 +1,321 @@
-<nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
-    <div class="btn-group">
-        <a class="btn btn-sub" (click)="back()">
-            <i class="fa fa-arrow-left"></i>
-            <span>Quay lại</span>
-        </a>
-        <button class="btn btn-sub"
-            *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC|| id == 0) && !isView"
-            (click)="guiDuyet()">
-            <i class="icon htvbdh_checkfile2"></i>
-            <span>Hoàn thành cập nhật</span>
-        </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light"
-            *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC|| id == 0) && !isView"
-            (click)="save(false)">
-            <i class="icon  htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-        </button>
-    </div>
-
-
-</nz-affix>
-<div class="bg-trang">
-    <div class="header">
-        <div class="header-text">
-            <div class="title-chi-tieu">
-                <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
-                    Dự Thảo
-                </span>
-                <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
-                <span class="title-form">BIÊN BẢN BÁN ĐẦU GIÁ</span>
+<div class="luong-thuc__danh-sach">
+    <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
+        <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel" aria-labelledby="banhanh-tab">
+                <div class="trai">
+                </div>
+                <div class="canphai phai">
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+                        <i class="fa fa-arrow-left"></i>
+                        <span>Quay lại</span>
+                    </a>
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="guiDuyet()">
+                        <i class="icon htvbdh_checkfile2"></i>
+                        <span>Hoàn thành cập nhật</span>
+                    </button>
+                    <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView" (click)="save(false)">
+                        <i class="icon  htvbdh_tcdt_save"></i>
+                        <span>Lưu</span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="title-chi-tieu">
-        <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
-            Dự Thảo
-        </span>
-        <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
-        <span class="title-form">BIÊN BẢN BÁN ĐẦU GIÁ</span>
-    </div>
-    <nz-card nzTitle="" class="flex-card p-lr16">
-        <div class="search__body" nz-row [nzGutter]="[18, 6]">
-            <div nz-col nzSpan="2">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Năm kế hoạch
-                    </nz-form-label>
-                    <nz-select [(ngModel)]="detail.nam"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView">
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                        </nz-option>
-                    </nz-select>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Số biên bản
-                    </nz-form-label>
-                    <input nz-input [(ngModel)]="detail.soBienBan" disabled />
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="15">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Trích yếu
-                    </nz-form-label>
-                    <input nz-input [(ngModel)]="detail.trichYeu"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Ngày ký biên bản
-                    </nz-form-label>
-                    <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView"
-                        nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy">
-                    </nz-date-picker>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Loại hàng
-                    </nz-form-label>
-                    <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="detail.loaiVthh" nzAllowClear>
-                        <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                        </nz-option>
-                    </nz-select>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Mã thông báo bán đấu giá
-                    </nz-form-label>
-                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.maThongBaoBDG"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Đơn vị thông báo
-                    </nz-form-label>
-                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Ngày tổ chức bán đấu giá
-                    </nz-form-label>
-                    <nz-date-picker class="search__input" [nzDisabledDate]="" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
-                        nzPlaceHolder="Nhập theo giờ" [(ngModel)]="detail.thoiGianGiaoNhan"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView">
-                    </nz-date-picker>
-                </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                        Địa điểm đấu giá
-                    </nz-form-label>
-                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                </nz-form-item>
+    </nz-affix>
+    <div class="contentBor bien-ban-ban-dau-gia__body">
+        <div class="contentDetail">
+            <div class="main-content">
+                <div class="title-chi-tieu">
+                    <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+                        Dự Thảo
+                    </span>
+                    <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+                    <span class="title-form">BIÊN BẢN BÁN ĐẦU GIÁ</span>
+                </div>
+                <nz-card nzTitle="" class="flex-card p-lr16">
+                    <div class="search__body" nz-row [nzGutter]="[18, 6]">
+                        <div nz-col nzSpan="2">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Năm kế hoạch
+                                </nz-form-label>
+                                <nz-select [(ngModel)]="detail.nam" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="4">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Số biên bản
+                                </nz-form-label>
+                                <input nz-input [(ngModel)]="detail.soBienBan" disabled />
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="15">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Trích yếu
+                                </nz-form-label>
+                                <input nz-input [(ngModel)]="detail.trichYeu" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="3">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Ngày ký biên bản
+                                </nz-form-label>
+                                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy">
+                                </nz-date-picker>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="4">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Loại hàng
+                                </nz-form-label>
+                                <nz-select nzPlaceHolder="Chọn hàng hóa" [(ngModel)]="detail.loaiVthh" nzAllowClear>
+                                    <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="4">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Mã thông báo bán đấu giá
+                                </nz-form-label>
+                                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.maThongBaoBDG" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Đơn vị thông báo
+                                </nz-form-label>
+                                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.donviThongBao" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Ngày tổ chức bán đấu giá
+                                </nz-form-label>
+                                <nz-date-picker class="search__input" [nzDisabledDate]="" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="Nhập theo giờ" [(ngModel)]="detail.ngayToChucBDG" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView">
+                                </nz-date-picker>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Địa điểm đấu giá
+                                </nz-form-label>
+                                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.diaDiemDauGia" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </nz-card>
+                <div class="flex-card p-lr16 pd-10">
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
+                                THÀNH PHẦN THAM DỰ
+                            </nz-form-label>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                                Khách mời chứng kiến
+                            </nz-form-label>
+                        </nz-form-item>
+                    </div>
+                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                        <thead>
+                            <tr>
+                                <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
+                                <th rowSpan="2" class="text-center">Chức vụ </th>
+                                <th rowSpan="2" class="text-center">Nơi công tác</th>
+                                <th colSpan="2" class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td class="text-center">
+                                    <a>
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                                Đấu giá viên
+                            </nz-form-label>
+                        </nz-form-item>
+                    </div>
+                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                        <thead>
+                            <tr>
+                                <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
+                                <th rowSpan="2" class="text-center">Chức vụ </th>
+                                <th rowSpan="2" class="text-center">Nơi công tác</th>
+                                <th colSpan="2" class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td class="text-center">
+                                    <a>
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                                Người/Tổ chức tham gia đấu giá
+                            </nz-form-label>
+                        </nz-form-item>
+                    </div>
+                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                        <thead>
+                            <tr>
+                                <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên/Tên tổ chức </th>
+                                <th rowSpan="2" class="text-center"> Mã số thuế/CMTND/CCCD/Hộ chiếu </th>
+                                <th rowSpan="2" class="text-center">Địa chỉ</th>
+                                <th colSpan="2" class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td>
+                                    <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang" [disabled]="detail.trangThai == '01' || detail.trangThai == '02' || detail.trangThai == '04' || isView" />
+                                </td>
+                                <td class="text-center">
+                                    <a>
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                                Thông tin biên bản bán đấu giá
+                            </nz-form-label>
+                        </nz-form-item>
+                    </div>
+                    <nz-table #nzTable [nzData]="listOfData" class="mt-16">
+                        <thead>
+                            <tr>
+                                <th nzWidth="60px">STT</th>
+                                <th>Chi cục</th>
+                                <th>Điểm kho</th>
+                                <th>Ngăn kho</th>
+                                <th>Lô kho</th>
+                                <th>Chủng loại hàng hóa</th>
+                                <th>Mã đơn vị tài sản</th>
+                                <th>Số lượng</th>
+                                <th>Đơn vị tính</th>
+                                <th>Đơn giá chưa VAT(đồng)</th>
+                                <th>Giá khởi điểm (đồng)</th>
+                                <th>Số tiền đặt trước (đồng)</th>
+                                <th>Số lần trả giá</th>
+                                <th>Đơn giá cao nhất (đồng)</th>
+                                <th>Thành tiền (đồng)</th>
+                                <th>Tổ chức/người trả giá cao nhất</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of nzTable.data">
+                                <tr>
+                                    <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.address }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.age }}</td>
+                                    <td>{{ data.address }}</td>
+                                </tr>
+                                <ng-container>
+                                    <tr *ngIf="expandSet.has(data.id)">
+                                        <td nzWidtd="60px">STT</td>
+                                        <td>Chi cục</td>
+                                        <td>Điểm kho</td>
+                                        <td>Ngăn kho</td>
+                                        <td>Lô kho</td>
+                                        <td>Chủng loại hàng hóa</td>
+                                        <td>Mã đơn vị tài sản</td>
+                                        <td>Số lượng</td>
+                                        <td>Đơn vị tính</td>
+                                        <td>Đơn giá chưa VAT(đồng)</td>
+                                        <td>Giá khởi điểm (đồng)</td>
+                                        <td>Số tiền đặt trước (đồng)</td>
+                                        <td>Số lượng</td>
+                                        <td>Đơn vị tính</td>
+                                        <td>Đơn giá chưa VAT(đồng)</td>
+                                        <td>Giá khởi điểm (đồng)</td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+                </div>
             </div>
         </div>
-    </nz-card>
-    <div class="flex-card p-lr16 pd-10">
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
-                    THÀNH PHẦN THAM DỰ
-                </nz-form-label>
-            </nz-form-item>
-        </div>
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                    Khách mời chứng kiến
-                </nz-form-label>
-            </nz-form-item>
-        </div>
-        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-            [nzData]="detail?.hangHoaList">
-            <thead>
-                <tr>
-                    <th rowSpan="2" width="60px" class="text-center">STT</th>
-                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
-                    <th rowSpan="2" class="text-center">Chức vụ </th>
-                    <th rowSpan="2" class="text-center">Nơi công tác</th>
-                    <th colSpan="2" class="text-center">Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td class="text-center">
-                        <a>
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a>
-                            <i class="fa fa-trash-o do"></i>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                    Đấu giá viên
-                </nz-form-label>
-            </nz-form-item>
-        </div>
-        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-            [nzData]="detail?.hangHoaList">
-            <thead>
-                <tr>
-                    <th rowSpan="2" width="60px" class="text-center">STT</th>
-                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
-                    <th rowSpan="2" class="text-center">Chức vụ </th>
-                    <th rowSpan="2" class="text-center">Nơi công tác</th>
-                    <th colSpan="2" class="text-center">Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td class="text-center">
-                        <a>
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a>
-                            <i class="fa fa-trash-o do"></i>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                    Người/Tổ chức tham gia đấu giá
-                </nz-form-label>
-            </nz-form-item>
-        </div>
-        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-            [nzData]="detail?.hangHoaList">
-            <thead>
-                <tr>
-                    <th rowSpan="2" width="60px" class="text-center">STT</th>
-                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên/Tên tổ chức </th>
-                    <th rowSpan="2" class="text-center"> Mã số thuế/CMTND/CCCD/Hộ chiếu </th>
-                    <th rowSpan="2" class="text-center">Địa chỉ</th>
-                    <th colSpan="2" class="text-center">Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td>
-                        <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.nguoiGiaoHang"
-                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_TP|| detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC|| isView" />
-                    </td>
-                    <td class="text-center">
-                        <a>
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a>
-                            <i class="fa fa-trash-o do"></i>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
-        <div nz-col nzSpan="24">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                    Thông tin biên bản bán đấu giá
-                </nz-form-label>
-            </nz-form-item>
-        </div>
-        <nz-table #nzTable [nzData]="listOfData" class="mt-16">
-            <thead>
-                <tr>
-                    <th nzWidth="60px">STT</th>
-                    <th>Chi cục</th>
-                    <th>Điểm kho</th>
-                    <th>Ngăn kho</th>
-                    <th>Lô kho</th>
-                    <th>Chủng loại hàng hóa</th>
-                    <th>Mã đơn vị tài sản</th>
-                    <th>Số lượng</th>
-                    <th>Đơn vị tính</th>
-                    <th>Đơn giá chưa VAT(đồng)</th>
-                    <th>Giá khởi điểm (đồng)</th>
-                    <th>Số tiền đặt trước (đồng)</th>
-                    <th>Số lần trả giá</th>
-                    <th>Đơn giá cao nhất (đồng)</th>
-                    <th>Thành tiền (đồng)</th>
-                    <th>Tổ chức/người trả giá cao nhất</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngFor="let data of nzTable.data">
-                    <tr>
-                        <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.address }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.age }}</td>
-                        <td>{{ data.address }}</td>
-                    </tr>
-                    <ng-container>
-                        <tr *ngIf="expandSet.has(data.id)">
-                            <td nzWidtd="60px">STT</td>
-                            <td>Chi cục</td>
-                            <td>Điểm kho</td>
-                            <td>Ngăn kho</td>
-                            <td>Lô kho</td>
-                            <td>Chủng loại hàng hóa</td>
-                            <td>Mã đơn vị tài sản</td>
-                            <td>Số lượng</td>
-                            <td>Đơn vị tính</td>
-                            <td>Đơn giá chưa VAT(đồng)</td>
-                            <td>Giá khởi điểm (đồng)</td>
-                            <td>Số tiền đặt trước (đồng)</td>
-                            <td>Số lượng</td>
-                            <td>Đơn vị tính</td>
-                            <td>Đơn giá chưa VAT(đồng)</td>
-                            <td>Giá khởi điểm (đồng)</td>
-                        </tr>
-                    </ng-container>
-                </ng-container>
-            </tbody>
-        </nz-table>
     </div>
 </div>

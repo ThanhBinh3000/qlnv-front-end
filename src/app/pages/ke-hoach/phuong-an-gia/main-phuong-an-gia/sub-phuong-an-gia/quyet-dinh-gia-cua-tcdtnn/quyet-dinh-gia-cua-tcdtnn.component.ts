@@ -10,13 +10,16 @@ import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
   styleUrls: ['./quyet-dinh-gia-cua-tcdtnn.component.scss']
 })
 export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
+  dataEditTtg: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
   @Input() pagType: string;
+  @Input() type: string;
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
@@ -183,6 +186,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayKy[0];
         body.denNgay = body.ngayKy[1];
+        body.pagType = this.pagType;
         this.quyetDinhGiaTCDTNNService
           .export(body)
           .subscribe((blob) =>

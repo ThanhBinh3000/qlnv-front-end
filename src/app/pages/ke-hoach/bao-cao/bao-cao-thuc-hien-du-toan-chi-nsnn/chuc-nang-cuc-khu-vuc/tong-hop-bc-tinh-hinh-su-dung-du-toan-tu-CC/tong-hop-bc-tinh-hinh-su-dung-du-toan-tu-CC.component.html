@@ -8,13 +8,13 @@
 						<label class="search__label">Năm báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
 							[(ngModel)]="searchFilter.namBcao"
-							[class]="searchFilter.namBcao ?'' : 'input-error-validate' "></nz-input-number>
+							[class]="statusNew || searchFilter.namBcao ?'' : 'input-error-validate' "></nz-input-number>
 					</div>
 					<div nz-col nzSpan="3">
 						<label class="search__label">Tháng báo cáo</label>
 						<nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
 							[(ngModel)]="searchFilter.thangBcao"
-							[class]="((searchFilter.thangBcao && searchFilter.maLoaiBcao == '526') || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
+							[class]="statusNew || ((searchFilter.thangBcao && (searchFilter.maLoaiBcao == '526' || searchFilter.maLoaiBcao == '528')) || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
 						</nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
@@ -30,7 +30,7 @@
 						<label class="search__label">Loại báo cáo</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
 							[(ngModel)]="searchFilter.maLoaiBcao"
-							[class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
+							[class]="statusNew || searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
 							<nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
 						</nz-select>
 					</div>
@@ -43,15 +43,15 @@
 				<nz-table nzBordered #basicTable [nzData]="listBcaoKqua" class="nowrap">
 					<thead>
 						<tr>
-							<th nzWidth="60px">STT</th>
-							<th nzWidth="300px">Đơn vị lập</th>
-							<th nzWidth="130px">Mã báo cáo</th>
-							<th nzWidth="100px">Báo cáo năm</th>
-							<th nzWidth="100px">Báo cáo tháng</th>
-							<th nzWidth="230px">Ngày trình duyệt<br><span>(Ngày đơn vị cấp dưới gửi báo cáo)</span></th>
-							<th nzWidth="230px">Ngày duyệt<br><span>(Ngày cục khu vực kiểm tra đánh giá báo cáo)</span>
+							<th>STT</th>
+							<th>Đơn vị lập</th>
+							<th>Mã báo cáo</th>
+							<th>Báo cáo năm</th>
+							<th>Báo cáo tháng</th>
+							<th>Ngày trình duyệt<br><span>(Ngày đơn vị cấp dưới gửi báo cáo)</span></th>
+							<th>Ngày duyệt<br><span>(Ngày cục khu vực kiểm tra đánh giá báo cáo)</span>
 							</th>
-							<th nzWidth="150px" class="text-center">Trạng thái<br><span>(Cục khu vực đánh giá)</span>
+							<th class="text-center">Trạng thái<br><span>(Cục khu vực đánh giá)</span>
 							</th>
 							<th>Xem</th>
 						</tr>
