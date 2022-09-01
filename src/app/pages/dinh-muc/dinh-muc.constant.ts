@@ -5,7 +5,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dinhmuc2',
         title: 'Định mức phí',
-        url: `/dau-thau`,
+        url: `/dinh-muc-phi-bao-quan`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
         hasTab: true,
@@ -13,7 +13,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dinhmucdungcu',
         title: 'Định Mức trang bị công cụ dụng cụ',
-        url: `/mua-truc-tiep`,
+        url: `/dinh-muc-trang-bi-cong-cu`,
         dropdown: 'mua-truc-tiep',
         idHover: 'muatructiep',
         hasTab: true,
@@ -21,7 +21,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_congcudungcu',
         title: 'Màng PVC và công cụ dụng cụ',
-        url: `/hop-dong`,
+        url: `/mang-pvc-cong-cu-dung-cu`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,
@@ -29,7 +29,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dungcuchuyendung',
         title: 'Máy móc thiết bị chuyên dùng',
-        url: `/hop-dong`,
+        url: `/may-moc-thiet-bi`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,
@@ -37,7 +37,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_kiemtrachatluong',
         title: 'Bảo hiểm',
-        url: `/hop-dong`,
+        url: `/bao-hiem`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,

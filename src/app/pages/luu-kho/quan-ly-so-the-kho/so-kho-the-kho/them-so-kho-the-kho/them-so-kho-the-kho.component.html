@@ -4,8 +4,8 @@
       <div class="text-container">
         <div class="title-chi-tieu">
           <span *ngIf="idInput"
-            [ngClass]="isStatus === globals.prop.BAN_HANH ? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
-            {{convertTrangThai(isStatus)}}</span>
+            [ngClass]="isStatus === globals.prop.NHAP_DA_DUYET_LD_CHI_CUC ? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
+            {{detail.tenTrangThai}}</span>
           <span *ngIf="!idInput"></span>
           <span>Tạo thẻ kho</span>
         </div>
@@ -20,23 +20,23 @@
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="pheDuyet()"
-        *ngIf="isStatus === globals.prop.LANH_DAO_DUYET && userService.isCuc()">
-        <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
-      </button>
       <button type="button" class="btn btn-sub btn-xoa" (click)="tuChoi()"
-        *ngIf="isStatus === globals.prop.LANH_DAO_DUYET && userService.isCuc()">
+        *ngIf="isStatus === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()" *ngIf="!isDetail() && userService.isChiCuc()"
-        [disabled]="!formData.valid">
+      <button type="button" class="btn btn-sub" (click)="pheDuyet()"
+        *ngIf="isStatus === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC">
+        <i class="icon htvbdh_dakyduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button type="button" class="btn btn-sub" (click)="luuVaDuyet()"
+        *ngIf="isStatus === globals.prop.NHAP_DU_THAO && !isDetail()" [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh" (click)="luu(false)" [disabled]="!formData.valid"
-        *ngIf="!isDetail() && userService.isChiCuc()">
+        *ngIf="isStatus === globals.prop.NHAP_DU_THAO && !isDetail()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
