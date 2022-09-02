@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DinhMucPhiBaoQuanComponent } from './dinh-muc-phi-bao-quan/dinh-muc-phi-bao-quan.component';
 import { DinhMucComponent } from './dinh-muc.component';
 
 const routes: Routes = [
@@ -14,10 +15,7 @@ const routes: Routes = [
             },
             {
                 path: 'dinh-muc-phi-bao-quan',
-                loadChildren: () =>
-                    import(
-                        '../dinh-muc/dinh-muc-phi-bao-quan/dinh-muc-phi-bao-quan.module'
-                    ).then((m) => m.DinhMucPhiBaoQuanModule),
+                component: DinhMucPhiBaoQuanComponent
             },
             {
                 path: 'dinh-muc-trang-bi-cong-cu',

@@ -1,3 +1,35 @@
-<p>
-  dinh-muc-trang-bi-cong-cu works!
-</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dinhmuctrangbi')">
+      Định mức trang bị
+    </li>
+    <li nz-menu-item (click)="selectTab('dexuat')">
+      Đề xuất nhu cầu của các cục
+    </li>
+    <li nz-menu-item (click)="selectTab('tonghopdexuat')">
+      Tổng hợp đề xuất nhu cầu của các cục
+    </li>
+    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')">
+      Quyết định mua sắm
+    </li>
+    <li nz-menu-item (click)="selectTab('hopdong')">
+      Hợp đồng
+    </li>
+    <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
+      Biên bản giao nhận
+    </li>
+    <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
+      Hiện trạng máy móc, thiết bị
+    </li>
+  </ul>
+</nz-affix>
+
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'dinhmuctrangbi'">
+      <app-dinh-muc-trang-bi></app-dinh-muc-trang-bi>
+    </ng-container>
+  </div>
+</div>
