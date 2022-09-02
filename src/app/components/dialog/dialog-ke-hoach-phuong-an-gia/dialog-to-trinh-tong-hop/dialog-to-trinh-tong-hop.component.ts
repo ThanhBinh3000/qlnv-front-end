@@ -155,7 +155,7 @@ export class DialogToTrinhTongHopComponent implements OnInit {
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhTongHop({});
+    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhTongHop({"type":this.type});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }

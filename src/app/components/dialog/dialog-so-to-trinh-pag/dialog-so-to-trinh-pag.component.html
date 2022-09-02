@@ -7,11 +7,13 @@
     <nz-table>
       <tr>
         <td class="label-name">
-          <label *ngIf="loai=='STT'">{{data.soToTrinh}}</label>
+          <label *ngIf="loai=='STT' && pagtype=='LT'">{{data.soToTrinh}}</label>
+          <label *ngIf="loai=='STT' && pagtype=='VT'">{{data.soDeXuat}}</label>
           <label *ngIf="loai=='SQD'">{{data.soQd}}</label>
         </td>
         <td>
-          <label *ngIf="loai=='STT'" nz-radio [nzValue]="data.soToTrinh"></label>
+          <label *ngIf="loai=='STT' && pagtype=='LT'" nz-radio [nzValue]="data.soToTrinh"></label>
+          <label *ngIf="loai=='STT' && pagtype=='VT'" nz-radio [nzValue]="data.soDeXuat"></label>
           <label *ngIf="loai=='SQD'" nz-radio [nzValue]="data.soQd"></label>
         </td>
       </tr>
