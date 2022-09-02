@@ -1,11 +1,11 @@
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const DINH_MUC_MAIN_ROUTE = 'nhap';
+export const MAIN_ROUTE_DINH_MUC = 'dinh-muc-nhap-xuat';
 export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dinhmuc2',
         title: 'Định mức phí',
-        url: `/dinh-muc-phi-bao-quan`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-phi-bao-quan`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
         hasTab: true,
@@ -13,7 +13,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dinhmucdungcu',
         title: 'Định Mức trang bị công cụ dụng cụ',
-        url: `/dinh-muc-trang-bi-cong-cu`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-trang-bi-cong-cu`,
         dropdown: 'mua-truc-tiep',
         idHover: 'muatructiep',
         hasTab: true,
@@ -21,7 +21,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_congcudungcu',
         title: 'Màng PVC và công cụ dụng cụ',
-        url: `/mang-pvc-cong-cu-dung-cu`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/mang-pvc-cong-cu-dung-cu`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,
@@ -29,7 +29,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dungcuchuyendung',
         title: 'Máy móc thiết bị chuyên dùng',
-        url: `/may-moc-thiet-bi`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/may-moc-thiet-bi`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,
@@ -37,7 +37,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_kiemtrachatluong',
         title: 'Bảo hiểm',
-        url: `/bao-hiem`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/bao-hiem`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
         hasTab: false,
@@ -45,7 +45,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_baocao2',
         title: 'Báo cáo',
-        url: `/bao-cao`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/bao-cao`,
         dropdown: 'bao-cao',
         idHover: 'bao-cao',
         hasTab: false,

@@ -10,6 +10,8 @@ export class MangPvcCongCuDungCuComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log("mang pwc");
+
   }
 
 }

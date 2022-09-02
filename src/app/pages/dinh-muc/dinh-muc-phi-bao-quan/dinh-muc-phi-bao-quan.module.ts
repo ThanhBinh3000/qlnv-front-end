@@ -1,13 +1,13 @@
 import { ComponentsModule } from './../../../components/components.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MangPvcCongCuDungCuComponent } from './mang-pvc-cong-cu-dung-cu.component';
+import { DinhMucPhiBaoQuanComponent } from './dinh-muc-phi-bao-quan.component';
 
 @NgModule({
-  declarations: [MangPvcCongCuDungCuComponent],
+  declarations: [DinhMucPhiBaoQuanComponent],
   imports: [
     CommonModule,
-    ComponentsModule
+    ComponentsModule,
   ],
 })
-export class MangPvcCongCuDungCuModule { }
+export class DinhMucPhiBaoQuanModule { }

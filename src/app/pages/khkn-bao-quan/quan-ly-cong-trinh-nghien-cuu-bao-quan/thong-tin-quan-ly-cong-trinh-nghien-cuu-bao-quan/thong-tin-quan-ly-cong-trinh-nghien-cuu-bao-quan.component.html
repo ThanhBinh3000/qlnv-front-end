@@ -1,3 +1,47 @@
-<p>
-  thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan works!
-</p>
+<div class="bg-trang">
+  <div class="header">
+    <div class="header-text d-flex align-items-center justify-content-between">
+      <div class="title-chi-tieu">
+        <span class="du-thao-va-lanh-dao-duyet">
+          Dự Thảo
+        </span>
+        <!-- <span *ngIf="khBanDauGia.id" [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span> -->
+        <span>Công trình nghiên cứu</span>
+      </div>
+      <div class="buttons">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button class="btn btn-main">
+          <i class="icon  htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <nz-affix [nzOffsetTop]="98" class="level2">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab(0)">
+        Thông tin chung
+      </li>
+      <li nz-menu-item (click)="selectTab(1)">
+        Tiến độ thực hiện
+      </li>
+      <li nz-menu-item (click)="selectTab(2)">
+        Nghiệm thu thanh lý
+      </li>
+    </ul>
+  </nz-affix>
+  <ng-container *ngIf="tabSelected == 0">
+    <app-thong-tin-chung></app-thong-tin-chung>
+  </ng-container>
+  <ng-container *ngIf="tabSelected == 1">
+    <app-tien-do-thuc-hien></app-tien-do-thuc-hien>
+  </ng-container>
+  <ng-container *ngIf="tabSelected == 2">
+    <app-nghiem-thu-thanh-ly></app-nghiem-thu-thanh-ly>
+  </ng-container>
+
+
+</div>
