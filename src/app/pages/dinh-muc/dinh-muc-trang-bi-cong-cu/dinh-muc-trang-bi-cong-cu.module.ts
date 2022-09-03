@@ -4,6 +4,7 @@ import { ComponentsModule } from './../../../components/components.module';
 import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { ThongTinBienBanGiaoNhanComponent } from './bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { DanhSachDinhMucTrangBiCongCuComponent } from './danh-sach-dinh-muc-trang-bi-cong-cu/danh-sach-dinh-muc-trang-bi-cong-cu.component';
+import { ThongTinDinhMucTrangBiCongCuComponent } from './danh-sach-dinh-muc-trang-bi-cong-cu/thong-tin-dinh-muc-trang-bi-cong-cu/thong-tin-dinh-muc-trang-bi-cong-cu.component';
 import { DeXuatNhuCauCuaCacCucComponent } from './de-xuat-nhu-cau-cua-cac-cuc/de-xuat-nhu-cau-cua-cac-cuc.component';
 import { ThongTinDeXuatNhuCauCuaCacCucComponent } from './de-xuat-nhu-cau-cua-cac-cuc/thong-tin-de-xuat-nhu-cau-cua-cac-cuc/thong-tin-de-xuat-nhu-cau-cua-cac-cuc.component';
 import { DinhMucTrangBiCongCuRoutingModule } from './dinh-muc-trang-bi-cong-cu-routing.module';
@@ -29,6 +30,7 @@ import { TongHopDeXuatNhuCauCuaCacCucComponent } from './tong-hop-de-xuat-nhu-ca
     DeXuatNhuCauCuaCacCucComponent,
     ThongTinDeXuatNhuCauCuaCacCucComponent,
     DanhSachDinhMucTrangBiCongCuComponent,
+    ThongTinDinhMucTrangBiCongCuComponent,
     HienTrangMayMocThietBiComponent,
     BienBanGiaoNhanComponent,
     ThongTinBienBanGiaoNhanComponent,
