@@ -24,6 +24,7 @@ import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import { TreeTableService } from 'src/app/services/tree-table.service';
 
 interface DonviLienQuanModel {
   id: number;
@@ -89,6 +90,14 @@ export class ThongTinHopDongMuaSamComponent implements OnInit {
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
   diaDiemNhapListCuc = [];
   donGiaCore: number = 0;
+
+  editCache: { [key: string]: { edit: boolean; data: any } } = {};
+  dataTable: any[] = [];
+  itemRow: any = {};
+
+  dataDiemDiemNhapHang: any[] = [];
+  mapOfExpandedData: { [key: string]: any[] } = {};
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -105,7 +114,8 @@ export class ThongTinHopDongMuaSamComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
-    private _modalService: NzModalService
+    private _modalService: NzModalService,
+    public treeTableService: TreeTableService<any>,
   ) {
     this.formDetailHopDong = this.fb.group(
       {
@@ -425,7 +435,6 @@ export class ThongTinHopDongMuaSamComponent implements OnInit {
       let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
           tenVthh: data.tenVthh ?? null,
@@ -438,7 +447,8 @@ export class ThongTinHopDongMuaSamComponent implements OnInit {
         this.onChangeDvlq(data.idNhaThau);
         this.diaDiemNhapListCuc = data.diaDiemNhapList;
         this.diaDiemNhapListCuc.forEach(element => {
-          delete element.id
+          delete element.id;
+          this.mapOfExpandedData[element.id] = this.treeTableService.convertTreeToList(element, 'id');
         });
         if (this.userService.isTongCuc()) {
           this.formDetailHopDong.patchValue({
@@ -531,6 +541,67 @@ export class ThongTinHopDongMuaSamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       },
+    });
+  }
+
+  updateEditCache(): void {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(item => {
+        this.editCache[item.stt] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
+  }
+
+  cancelEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.editCache[stt] = {
+      data: { ...this.dataTable[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    Object.assign(this.dataTable[index], this.editCache[stt].data);
+    this.editCache[stt].edit = false;
+  }
+
+  addRow() {
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    this.sortTableId();
+    let item = cloneDeep(this.itemRow);
+    item.stt = this.dataTable.length + 1;
+    item.thanhTien = (item.soLuong ?? 0) * (item.donGia ?? 0);
+    this.dataTable = [
+      ...this.dataTable,
+      item,
+    ]
+    this.updateEditCache();
+    this.clearItemRow();
+  }
+
+  clearItemRow() {
+    this.itemRow = {};
+  }
+
+  deleteRow(data: any) {
+    this.dataTable = this.dataTable.filter(x => x.stt != data.stt);
+    this.sortTableId();
+    this.updateEditCache();
+  }
+
+  editRow(stt: number) {
+    this.editCache[stt].edit = true;
+  }
+
+  sortTableId() {
+    this.dataTable.forEach((lt, i) => {
+      lt.stt = i + 1;
     });
   }
 }

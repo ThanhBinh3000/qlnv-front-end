@@ -12,6 +12,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHopDong.service';
+import { TreeTableService } from 'src/app/services/tree-table.service';
 
 @Component({
   selector: 'app-phu-luc-hop-dong-mua-sam',
@@ -29,6 +30,10 @@ export class PhuLucHopDongMuaSamComponent implements OnInit {
   formPhuLuc: FormGroup;
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
+
+  dataDiemDiemNhapHang: any[] = [];
+  mapOfExpandedData: { [key: string]: any[] } = {};
+
   constructor(
     private modal: NzModalService,
     public userService: UserService,
@@ -38,6 +43,7 @@ export class PhuLucHopDongMuaSamComponent implements OnInit {
     private notification: NzNotificationService,
     private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
     public globals: Globals,
+    public treeTableService: TreeTableService<any>,
   ) {
     this.formPhuLuc = this.fb.group({
       loaiVthh: [null],
