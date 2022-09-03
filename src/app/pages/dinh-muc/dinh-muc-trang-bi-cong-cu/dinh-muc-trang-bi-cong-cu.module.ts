@@ -9,6 +9,8 @@ import { DinhMucTrangBiCongCuRoutingModule } from './dinh-muc-trang-bi-cong-cu-r
 import { DeXuatNhuCauCuaCacCucComponent } from './de-xuat-nhu-cau-cua-cac-cuc/de-xuat-nhu-cau-cua-cac-cuc.component';
 import { ThongTinDeXuatNhuCauCuaCacCucComponent } from './de-xuat-nhu-cau-cua-cac-cuc/thong-tin-de-xuat-nhu-cau-cua-cac-cuc/thong-tin-de-xuat-nhu-cau-cua-cac-cuc.component';
 import { ThongTinTongHopDeXuatNhuCauCuaCacCucComponent } from './tong-hop-de-xuat-nhu-cau-cua-cac-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-cua-cac-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-cua-cac-cuc.component';
+import { QuyetDinhMuaSamComponent } from './quyet-dinh-mua-sam/quyet-dinh-mua-sam.component';
+import { ThongTinQuyetDinhMuaSamComponent } from './quyet-dinh-mua-sam/thong-tin-quyet-dinh-mua-sam/thong-tin-quyet-dinh-mua-sam.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { ThongTinTongHopDeXuatNhuCauCuaCacCucComponent } from './tong-hop-de-xua
     DeXuatNhuCauCuaCacCucComponent,
     ThongTinDeXuatNhuCauCuaCacCucComponent,
     TongHopDeXuatNhuCauCuaCacCucComponent,
-    ThongTinTongHopDeXuatNhuCauCuaCacCucComponent
+    ThongTinTongHopDeXuatNhuCauCuaCacCucComponent,
+    QuyetDinhMuaSamComponent,
+    ThongTinQuyetDinhMuaSamComponent
   ],
   imports: [
     CommonModule,

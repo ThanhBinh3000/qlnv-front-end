@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == globals.prop.DU_THAO ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
           {{ formData.value.trangThai == globals.prop.DU_THAO ? 'Dự Thảo' : 'Ban Hành' }}
         </span>
-        <span>Tổng hợp đề xuất nhu cầu của các cục</span>
+        <span>Quyết định mua sắm máy móc, thiết bị chuyên dùng</span>
       </div>
       <div class="btn-group th-de-xuat">
         <button type="button" class="btn btn-sub" (click)="back()">
@@ -46,7 +46,7 @@
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                Số tổng hợp
+                Số quyết định
               </nz-form-label>
               <nz-input-group nzAddOnAfter="/KH - CDTVT">
                 <input type="text" nz-input />
@@ -64,7 +64,7 @@
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                Ngày tổng hợp
+                Ngày ký
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd">
               </nz-date-picker>
@@ -72,7 +72,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Căn cứ đề xuất các Cục </nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Số tổng hợp </nz-form-label>
               <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input nz-input [readonly]="true" />
               </nz-input-group>

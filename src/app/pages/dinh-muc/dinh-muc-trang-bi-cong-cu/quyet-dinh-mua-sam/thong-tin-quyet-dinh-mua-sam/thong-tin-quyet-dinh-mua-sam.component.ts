@@ -32,11 +32,11 @@ export interface TreeNodeInterface {
 }
 
 @Component({
-  selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-cua-cac-cuc',
-  templateUrl: './thong-tin-tong-hop-de-xuat-nhu-cau-cua-cac-cuc.component.html',
-  styleUrls: ['./thong-tin-tong-hop-de-xuat-nhu-cau-cua-cac-cuc.component.scss']
+  selector: 'app-thong-tin-quyet-dinh-mua-sam',
+  templateUrl: './thong-tin-quyet-dinh-mua-sam.component.html',
+  styleUrls: ['./thong-tin-quyet-dinh-mua-sam.component.scss']
 })
-export class ThongTinTongHopDeXuatNhuCauCuaCacCucComponent implements OnInit {
+export class ThongTinQuyetDinhMuaSamComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
