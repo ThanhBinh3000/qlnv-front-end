@@ -24,8 +24,17 @@
 
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'dexuatchicuc'">
+      <app-de-xuat-nhu-cau-chi-cuc></app-de-xuat-nhu-cau-chi-cuc>
+    </ng-container>
     <ng-container *ngIf="tabSelected == 'hopdongmuasam'">
       <app-hop-dong-mua-sam></app-hop-dong-mua-sam>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'bienbangiaonhan'">
+      <app-bien-ban-giao-nhan></app-bien-ban-giao-nhan>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'hientrangmaymoc'">
+      <app-hien-trang-may-moc-thiet-bi></app-hien-trang-may-moc-thiet-bi>
     </ng-container>
   </div>
 </div>
