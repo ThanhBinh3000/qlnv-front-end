@@ -28,6 +28,9 @@ export class MangPvcCongCuDungCuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.userService.isChiCuc()) {
+      this.tabSelected = 'dexuatnhucau';
+    }
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
