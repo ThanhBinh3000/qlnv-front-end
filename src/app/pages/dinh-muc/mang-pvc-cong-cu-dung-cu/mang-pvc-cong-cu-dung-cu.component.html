@@ -1,3 +1,31 @@
-<p>
-  mang-pvc-cong-cu-dung-cu works!
-</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dexuatchicuc')">
+      Đề xuất nhu cầu của Chi cục
+    </li>
+    <li nz-menu-item (click)="selectTab('dexuatcuc')">
+      Đề xuất nhu cầu của các cục
+    </li>
+    <li nz-menu-item (click)="selectTab('tonghopdexuat')">
+      Tổng hợp đề xuất nhu cầu của các cục
+    </li>
+    <li nz-menu-item (click)="selectTab('hopdongmuasam')">
+      Hợp đồng mua sắm
+    </li>
+    <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
+      Biên bản giao nhận
+    </li>
+    <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
+      Hiện trạng công cụ dụng cụ
+    </li>
+  </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'hopdongmuasam'">
+      <app-hop-dong-mua-sam></app-hop-dong-mua-sam>
+    </ng-container>
+  </div>
+</div>
