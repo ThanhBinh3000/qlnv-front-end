@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -13,7 +14,8 @@ export class DinhMucTrangBiCongCuComponent implements OnInit {
   currentUrl: string;
   constructor(
     private readonly router: Router,
-    public globals: Globals
+    public userService: UserService,
+    public globals: Globals,
   ) { }
 
   ngOnDestroy(): void {
