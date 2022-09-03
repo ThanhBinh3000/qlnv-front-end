@@ -5,12 +5,14 @@ import { MangPvcCongCuDungCuComponent } from './mang-pvc-cong-cu-dung-cu.compone
 import { MangPvcCongCuDungCuRoutingModule } from './mang-pvc-cong-cu-dung-cu-routing.module';
 import { HopDongMuaSamComponent } from './hop-dong-mua-sam/hop-dong-mua-sam.component';
 import { ThongTinHopDongMuaSamComponent } from './hop-dong-mua-sam/thong-tin-hop-dong-mua-sam/thong-tin-hop-dong-mua-sam.component';
+import { PhuLucHopDongMuaSamComponent } from './hop-dong-mua-sam/phu-luc-hop-dong-mua-sam/phu-luc-hop-dong-mua-sam.component';
 
 @NgModule({
   declarations: [
     MangPvcCongCuDungCuComponent,
     HopDongMuaSamComponent,
     ThongTinHopDongMuaSamComponent,
+    PhuLucHopDongMuaSamComponent,
   ],
   imports: [
     CommonModule,
