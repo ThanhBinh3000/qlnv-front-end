@@ -2,19 +2,15 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="3">
           <label class="search__label">Số hợp đồng</label>
           <input class="search__input" nz-input [(ngModel)]="soHd" placeholder="Số hợp đồng" />
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <label class="search__label">Tên hợp đồng</label>
           <input class="search__input" nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
         </div>
-        <div nz-col nzSpan="6">
-          <label class="search__label">Nhà cung cấp</label>
-          <input class="search__input" nz-input placeholder="Nhà cung cấp" [(ngModel)]="nhaCungCap" />
-        </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký</label>
           <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
@@ -44,7 +40,7 @@
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm mới</span>
+          <span>Thêm hợp đồng</span>
         </button>
       </div>
     </div>
@@ -58,13 +54,12 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="60px">STT</th>
-            <th width="130px">Số HĐ</th>
+            <th width="130px">Số hợp đồng</th>
             <th width="175px">Tên hợp đồng</th>
             <th width="175px">Ngày ký</th>
             <th width="175px">Loại hàng hóa</th>
-            <th width="175px">Chủng loại hàng hóa</th>
-            <th width="175px">Chủ đầu tư</th>
-            <th width="175px">Nhà cung cấp</th>
+            <th width="300px">Bên bán</th>
+            <th width="300px">Bên mua</th>
             <th width="175px">Giá trị hợp đồng</th>
             <th width="175px">Trạng thái</th>
             <th width="90px" class="text-right">Hành động</th>
@@ -110,15 +105,6 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiVthh"
-                  (input)="filterInTable('chungLoaiVthh',filterTable.chungLoaiVthh)" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chuDauTu"
                   (input)="filterInTable('chuDauTu',filterTable.chuDauTu)" />
               </nz-input-group>
@@ -149,7 +135,6 @@
           </tr>
         </thead>
         <tbody>
-
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
@@ -160,7 +145,6 @@
             <td>{{ data.tenHd }}</td>
             <td>{{ data.ngayKy }}</td>
             <td>{{ data.tenVthh }}</td>
-            <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenDvi }}</td>
             <td>{{ data.tenNthau }}</td>
             <td>{{ data.gtriHdSauVat }}</td>
