@@ -1,18 +1,27 @@
-<ng-container *ngIf="userService.isTongCuc()">
+<ng-container>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab('dinhmuctrangbi')">
+      <li nz-menu-item nzSelected (click)="selectTab('dexuatbaohiemcuc')" *ngIf="userService.isTongCuc()">
         Đề xuất nhu cầu bảo hiểm Cục
       </li>
-      <li nz-menu-item (click)="selectTab('tonghopdexuatnhucaubaohiem')">
+      <li nz-menu-item (click)="selectTab('tonghopdexuatnhucaubaohiem')" *ngIf="userService.isTongCuc()">
         Tổng hợp đề xuất nhu cầu bảo hiểm Cục
       </li>
-      <li nz-menu-item (click)="selectTab('tonghopdexuat')">
+      <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
         Quyết định phê duyệt
       </li>
-      <li nz-menu-item (click)="selectTab('tonghopgiatribaohiem')">
+      <li nz-menu-item (click)="selectTab('tonghopgiatribaohiem')" *ngIf="userService.isTongCuc()">
         Tổng hợp giá trị bảo hiểm đến 31/12
+      </li>
+      <li nz-menu-item nzSelected (click)="selectTab('dexuatbaohiemchicuc')" *ngIf="userService.isCuc()">
+        Đề xuất nhu cầu bảo hiểm của Chi cục
+      </li>
+      <li nz-menu-item (click)="selectTab('tonghopdexuatnhucaubaohiemchicuc')" *ngIf="userService.isCuc()">
+        Tổng hợp đề xuất nhu cầu bảo hiểm của Chi cục
+      </li>
+      <li nz-menu-item nzSelected (click)="selectTab('dexuatbaohiem')" *ngIf="userService.isChiCuc()">
+        Đề xuất nhu cầu bảo hiểm
       </li>
     </ul>
   </nz-affix>
@@ -21,6 +30,9 @@
     <div class="contentDetail">
       <ng-container *ngIf="tabSelected == 'tonghopdexuatnhucaubaohiem'">
         <app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'tonghopdexuatnhucaubaohiemchicuc'">
+        <app-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc>
       </ng-container>
       <ng-container *ngIf="tabSelected == 'tonghopgiatribaohiem'">
         <app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc>
