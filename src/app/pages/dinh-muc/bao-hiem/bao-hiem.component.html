@@ -11,7 +11,7 @@
       <li nz-menu-item (click)="selectTab('tonghopdexuat')">
         Quyết định phê duyệt
       </li>
-      <li nz-menu-item (click)="selectTab('quyetdinhmuasam')">
+      <li nz-menu-item (click)="selectTab('tonghopgiatribaohiem')">
         Tổng hợp giá trị bảo hiểm đến 31/12
       </li>
     </ul>
@@ -20,6 +20,9 @@
   <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
       <ng-container *ngIf="tabSelected == 'tonghopdexuatnhucaubaohiem'">
+        <app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'tonghopgiatribaohiem'">
         <app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc>
       </ng-container>
     </div>
