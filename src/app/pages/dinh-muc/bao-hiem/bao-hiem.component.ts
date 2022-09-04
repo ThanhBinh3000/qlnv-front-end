@@ -23,14 +23,17 @@ export class BaoHiemComponent implements OnInit {
     this.$routerChange.unsubscribe();
   }
 
-  tabSelected = 'dexuatchicuc';
+  tabSelected = 'dexuatbaohiemcuc';
   selectTab(tab) {
     this.tabSelected = tab;
   }
 
   ngOnInit(): void {
-    if (this.userService.isChiCuc()) {
-      this.tabSelected = 'dexuatnhucau';
+    if (this.userService.isCuc()) {
+      this.tabSelected = 'dexuatbaohiemchicuc';
+    }
+    else if (this.userService.isChiCuc()) {
+      this.tabSelected = 'dexuatbaohiem';
     }
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
