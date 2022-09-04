@@ -8,12 +8,16 @@ import { DeXuatNhuCauComponent } from './de-xuat-nhu-cau/de-xuat-nhu-cau.compone
 import { ThongTinDeXuatNhuCauComponent } from './de-xuat-nhu-cau/thong-tin-de-xuat-nhu-cau/thong-tin-de-xuat-nhu-cau.component';
 import { MangPvcCongCuDungCuRoutingModule } from './mang-pvc-cong-cu-dung-cu-routing.module';
 import { MangPvcCongCuDungCuComponent } from './mang-pvc-cong-cu-dung-cu.component';
+import { ThongTinTongHopDeXuatNhuCauChiCucComponent } from './tong-hop-de-xuat-nhu-cau-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc.component';
+import { TongHopDeXuatNhuCauChiCucComponent } from './tong-hop-de-xuat-nhu-cau-chi-cuc/tong-hop-de-xuat-nhu-cau-chi-cuc.component';
 
 @NgModule({
   declarations: [
     MangPvcCongCuDungCuComponent,
     DeXuatNhuCauComponent,
     ThongTinDeXuatNhuCauComponent,
+    TongHopDeXuatNhuCauChiCucComponent,
+    ThongTinTongHopDeXuatNhuCauChiCucComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +30,7 @@ import { MangPvcCongCuDungCuComponent } from './mang-pvc-cong-cu-dung-cu.compone
   exports: [
     MangPvcCongCuDungCuComponent,
     DeXuatNhuCauComponent,
+    TongHopDeXuatNhuCauChiCucComponent,
   ]
 })
 export class MangPvcCongCuDungCuModule { }
