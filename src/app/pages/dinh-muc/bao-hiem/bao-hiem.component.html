@@ -1,3 +1,27 @@
-<p>
-  bao-hiem works!
-</p>
+<ng-container *ngIf="userService.isTongCuc()">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab('dinhmuctrangbi')">
+        Đề xuất nhu cầu bảo hiểm Cục
+      </li>
+      <li nz-menu-item (click)="selectTab('tonghopdexuatnhucaubaohiem')">
+        Tổng hợp đề xuất nhu cầu bảo hiểm Cục
+      </li>
+      <li nz-menu-item (click)="selectTab('tonghopdexuat')">
+        Quyết định phê duyệt
+      </li>
+      <li nz-menu-item (click)="selectTab('quyetdinhmuasam')">
+        Tổng hợp giá trị bảo hiểm đến 31/12
+      </li>
+    </ul>
+  </nz-affix>
+
+  <div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+      <ng-container *ngIf="tabSelected == 'tonghopdexuatnhucaubaohiem'">
+        <app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc></app-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
