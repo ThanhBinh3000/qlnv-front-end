@@ -20,6 +20,7 @@ import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nh
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-dieuchinh',
@@ -151,7 +152,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '03',
+            trangThai: STATUS.TU_CHOI_LDV,
           };
           const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -625,19 +626,23 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
-      case '00':
-      case '03': {
-        trangThai = '01';
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case '01': {
-        trangThai = '02';
-        mesg = 'Văn bản sẵn sàng duyệt ?'
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case '02': {
-        trangThai = '11';
+      case STATUS.TU_CHOI_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
+        trangThai = STATUS.BAN_HANH;
         mesg = 'Văn bản sẵn sàng ban hành ?'
         break;
       }
