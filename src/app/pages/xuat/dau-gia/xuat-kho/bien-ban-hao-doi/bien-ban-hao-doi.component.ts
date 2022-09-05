@@ -17,6 +17,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { Globals } from 'src/app/shared/globals';
 // cần thay đổi services khi có
 @Component({
   selector: 'app-bien-ban-hao-doi',
@@ -71,7 +72,8 @@ export class BienBanHaoDoiComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private modal: NzModalService,
-  ) {}
+    public globals: Globals
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -265,7 +267,7 @@ export class BienBanHaoDoiComponent implements OnInit {
     let body = {
       denngayBienBan:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 1
+          this.searchFilter.ngayBienBan.length > 1
           ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
           : null,
       maDvi: this.userInfo.MA_DVI,
@@ -279,7 +281,7 @@ export class BienBanHaoDoiComponent implements OnInit {
       trangThai: null,
       tungayBienBan:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 0
+          this.searchFilter.ngayBienBan.length > 0
           ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
           : null,
     };
@@ -295,6 +297,8 @@ export class BienBanHaoDoiComponent implements OnInit {
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
@@ -306,7 +310,7 @@ export class BienBanHaoDoiComponent implements OnInit {
         let body = {
           denngayBienBan:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 1
+              this.searchFilter.ngayBienBan.length > 1
               ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
               : null,
           maDvi: this.userInfo.MA_DVI,
@@ -319,7 +323,7 @@ export class BienBanHaoDoiComponent implements OnInit {
           trangThai: null,
           tungayBienBan:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 0
+              this.searchFilter.ngayBienBan.length > 0
               ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
               : null,
         };

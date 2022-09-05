@@ -223,6 +223,7 @@ export class BienBanTinhKhoComponent implements OnInit {
     this.search();
   }
 
+
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
@@ -365,27 +366,34 @@ export class BienBanTinhKhoComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+      this.dataTable = [...this.dataTable, ...temp]
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinhNhap: '',
+      soQuyetDinhXuat: '',
       soBienBan: '',
       ngayBienBan: '',
       tenDiemKho: '',

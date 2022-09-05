@@ -43,6 +43,7 @@
         <span
           *ngIf="detail.trangThai !== globals.prop.NHAP_DU_THAO && detail.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC"
           [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+
         <span>Biên bản tịnh kho</span>
       </div>
     </div>
@@ -54,33 +55,35 @@
           <nz-form-label [nzNoColon]="true">
             Số quyết định
           </nz-form-label>
-          <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+          <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()" required
             [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
             <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
             </nz-option>
           </nz-select>
         </nz-form-item>
       </div>
+
+      <!-- Chưa get được -->
       <div nz-col nzSpan="3">
         <nz-form-item class="form-item">
           <nz-form-label [nzNoColon]="true">
             Loại hàng hoá
           </nz-form-label>
-          <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+          <nz-select [(ngModel)]="typeVthh" (ngModelChange)="changeLoaiHangHoa($event)" required
             [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
-            <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
-            </nz-option>
+            <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
           </nz-select>
         </nz-form-item>
       </div>
+      <!-- Chưa get được  -->
       <div nz-col nzSpan="6">
         <nz-form-item class="form-item">
           <nz-form-label [nzNoColon]="true">
             Chủng loại hàng hoá
           </nz-form-label>
-          <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh()"
+          <nz-select [(ngModel)]="detail.qdgnvnxId"
             [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
-            <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+            <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
             </nz-option>
           </nz-select>
         </nz-form-item>
@@ -167,8 +170,7 @@
           </nz-form-label>
           <nz-input-group>
             <input nz-input [(ngModel)]="detail.soLuongNhap" placeholder="Tự tính"
-              [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView"
-              disabled="" />
+              [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView" />
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -178,7 +180,7 @@
             Số lượng xuất
           </nz-form-label>
           <nz-input-group>
-            <input nz-input [(ngModel)]="detail.soLuongNhap"
+            <input nz-input [(ngModel)]="detail.soLuongXuat"
               [disabled]="detail.trangThai === globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_TP || detail.trangThai === globals.prop.NHAP_TU_CHOI_LD_CUC || isView" />
           </nz-input-group>
         </nz-form-item>
@@ -189,7 +191,7 @@
             Số lượng còn lại theo sổ sách
           </nz-form-label>
           <nz-input-group>
-            <input nz-input [value]="detail.soLuongNhap - detail.soLuongXuat" disabled />
+            <input nz-input [value]="detail.soLuongNhap - detail.soLuongXuat ||''" disabled />
           </nz-input-group>
         </nz-form-item>
       </div>
