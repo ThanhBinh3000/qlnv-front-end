@@ -84,7 +84,11 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-
+      this.detail.trangThai = "00";
+      this.userInfo = this.userService.getUserLogin();
+      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+      this.detail.tenDvi = this.userInfo.TEN_DVI;
+      this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.initData(),
         this.loadDiemKho(),
