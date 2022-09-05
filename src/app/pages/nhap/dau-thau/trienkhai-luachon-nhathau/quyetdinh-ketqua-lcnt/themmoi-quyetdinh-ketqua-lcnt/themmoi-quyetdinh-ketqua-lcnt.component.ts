@@ -22,6 +22,7 @@ import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DauThauService } from 'src/app/services/dauThau.service';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -288,7 +289,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: STATUS.BAN_HANH,
           };
           const res = await this.quyetDinhPheDuyetKetQuaLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -308,7 +309,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   async chiTiet(data) {
-    console.log(data);
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(data.idGt);
     const modalTuChoi = this.modal.create({
       nzTitle: 'Thông tin gói thầu',

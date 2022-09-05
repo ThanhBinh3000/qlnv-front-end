@@ -363,7 +363,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     if (trangThaiLuu == '02') {
       this.helperService.markFormGroupTouched(this.formGoiThau);
       if (this.formGoiThau.invalid) {
-        console.log(this.formGoiThau.value)
         return;
       }
     }
