@@ -172,12 +172,12 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     );
   }
 
-  async getDataDetail(id) {
-    if (id > 0) {
-      let res = await this.quanLySoKhoTheKhoService.chiTiet(id);
-      const data = res.data
-    }
-  }
+  // async getDataDetail(id) {
+  //   if (id > 0) {
+  //     let res = await this.quanLySoKhoTheKhoService.chiTiet(id);
+  //     const data = res.data
+  //   }
+  // }
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);

@@ -89,6 +89,7 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       this.detail.tenDvi = this.userInfo.TEN_DVI;
       this.detail.maDvi = this.userInfo.MA_DVI;
+
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
