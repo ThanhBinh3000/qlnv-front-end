@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,10 +7,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-thuong-xuyen-3-nam.constant';
 
 export class ItemData {
@@ -136,17 +130,10 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
@@ -802,16 +789,16 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].thNamHienHanhN1 += item.thNamHienHanhN1;
-                    this.lstCtietBcao[index].tranChiN += item.tranChiN;
-                    this.lstCtietBcao[index].ncauChiN += item.ncauChiN;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
-                    this.lstCtietBcao[index].tranChiN1 += item.tranChiN1;
-                    this.lstCtietBcao[index].ncauChiN1 += item.ncauChiN1;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
-                    this.lstCtietBcao[index].tranChiN2 += item.tranChiN2;
-                    this.lstCtietBcao[index].ncauChiN2 += item.ncauChiN2;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+                    this.lstCtietBcao[index].thNamHienHanhN1 = sumNumber([this.lstCtietBcao[index].thNamHienHanhN1, item.thNamHienHanhN1]);
+                    this.lstCtietBcao[index].tranChiN = sumNumber([this.lstCtietBcao[index].tranChiN, item.tranChiN]);
+                    this.lstCtietBcao[index].ncauChiN = sumNumber([this.lstCtietBcao[index].ncauChiN, item.ncauChiN]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
+                    this.lstCtietBcao[index].tranChiN1 = sumNumber([this.lstCtietBcao[index].tranChiN1, item.tranChiN1]);
+                    this.lstCtietBcao[index].ncauChiN1 = sumNumber([this.lstCtietBcao[index].ncauChiN1, item.ncauChiN1]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
+                    this.lstCtietBcao[index].tranChiN2 = sumNumber([this.lstCtietBcao[index].tranChiN2, item.tranChiN2]);
+                    this.lstCtietBcao[index].ncauChiN2 = sumNumber([this.lstCtietBcao[index].ncauChiN2, item.ncauChiN2]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
                 }
             })
             stt = this.getHead(stt);
@@ -843,50 +830,50 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.chiMoi.clechTranChiVsNcauChiN2 = 0;
         this.lstCtietBcao.forEach(item => {
             if (this.getLoai(item.maNdung) == 1) {
-                this.chiTx.thNamHienHanhN1 += item.thNamHienHanhN1;
-                this.chiTx.tranChiN += item.tranChiN;
-                this.chiTx.ncauChiN += item.ncauChiN;
-                this.chiTx.clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
-                this.chiTx.tranChiN1 += item.tranChiN1;
-                this.chiTx.ncauChiN1 += item.ncauChiN1;
-                this.chiTx.clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
-                this.chiTx.tranChiN2 += item.tranChiN2;
-                this.chiTx.ncauChiN2 += item.ncauChiN2;
-                this.chiTx.clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+                this.chiTx.thNamHienHanhN1 = sumNumber([this.chiTx.thNamHienHanhN1, item.thNamHienHanhN1]);
+                this.chiTx.tranChiN = sumNumber([this.chiTx.tranChiN, item.tranChiN]);
+                this.chiTx.ncauChiN = sumNumber([this.chiTx.ncauChiN, item.ncauChiN]);
+                this.chiTx.clechTranChiVsNcauChiN = sumNumber([this.chiTx.clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
+                this.chiTx.tranChiN1 = sumNumber([this.chiTx.tranChiN1, item.tranChiN1]);
+                this.chiTx.ncauChiN1 = sumNumber([this.chiTx.ncauChiN1, item.ncauChiN1]);
+                this.chiTx.clechTranChiVsNcauChiN1 = sumNumber([this.chiTx.clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
+                this.chiTx.tranChiN2 = sumNumber([this.chiTx.tranChiN2, item.tranChiN2]);
+                this.chiTx.ncauChiN2 = sumNumber([this.chiTx.ncauChiN2, item.ncauChiN2]);
+                this.chiTx.clechTranChiVsNcauChiN2 = sumNumber([this.chiTx.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
             }
 
             if (this.getLoai(item.maNdung) == 2) {
-                this.chiMoi.thNamHienHanhN1 += item.thNamHienHanhN1;
-                this.chiMoi.tranChiN += item.tranChiN;
-                this.chiMoi.ncauChiN += item.ncauChiN;
-                this.chiMoi.clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
-                this.chiMoi.tranChiN1 += item.tranChiN1;
-                this.chiMoi.ncauChiN1 += item.ncauChiN1;
-                this.chiMoi.clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
-                this.chiMoi.tranChiN2 += item.tranChiN2;
-                this.chiMoi.ncauChiN2 += item.ncauChiN2;
-                this.chiMoi.clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+                this.chiMoi.thNamHienHanhN1 = sumNumber([this.chiMoi.thNamHienHanhN1, item.thNamHienHanhN1]);
+                this.chiMoi.tranChiN = sumNumber([this.chiMoi.tranChiN, item.tranChiN]);
+                this.chiMoi.ncauChiN = sumNumber([this.chiMoi.ncauChiN, item.ncauChiN]);
+                this.chiMoi.clechTranChiVsNcauChiN = sumNumber([this.chiMoi.clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
+                this.chiMoi.tranChiN1 = sumNumber([this.chiMoi.tranChiN1, item.tranChiN1]);
+                this.chiMoi.ncauChiN1 = sumNumber([this.chiMoi.ncauChiN1, item.ncauChiN1]);
+                this.chiMoi.clechTranChiVsNcauChiN1 = sumNumber([this.chiMoi.clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
+                this.chiMoi.tranChiN2 = sumNumber([this.chiMoi.tranChiN2, item.tranChiN2]);
+                this.chiMoi.ncauChiN2 = sumNumber([this.chiMoi.ncauChiN2, item.ncauChiN2]);
+                this.chiMoi.clechTranChiVsNcauChiN2 = sumNumber([this.chiMoi.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
             }
         })
-        this.total.thNamHienHanhN1 = this.chiTx.thNamHienHanhN1 + this.chiMoi.thNamHienHanhN1;
-        this.total.tranChiN = this.chiTx.tranChiN + this.chiMoi.tranChiN;
-        this.total.ncauChiN = this.chiTx.ncauChiN + this.chiMoi.ncauChiN;
-        this.total.clechTranChiVsNcauChiN = this.chiTx.clechTranChiVsNcauChiN + this.chiMoi.clechTranChiVsNcauChiN;
-        this.total.tranChiN1 = this.chiTx.tranChiN1 + this.chiMoi.tranChiN1;
-        this.total.ncauChiN1 = this.chiTx.ncauChiN1 + this.chiMoi.ncauChiN1;
-        this.total.clechTranChiVsNcauChiN1 = this.chiTx.clechTranChiVsNcauChiN1 + this.chiMoi.clechTranChiVsNcauChiN1;
-        this.total.tranChiN2 = this.chiTx.tranChiN2 + this.chiMoi.tranChiN2;
-        this.total.ncauChiN2 = this.chiTx.ncauChiN2 + this.chiMoi.ncauChiN2;
-        this.total.clechTranChiVsNcauChiN2 = this.chiTx.clechTranChiVsNcauChiN2 + this.chiMoi.clechTranChiVsNcauChiN2;
+        this.total.thNamHienHanhN1 = sumNumber([this.chiTx.thNamHienHanhN1, this.chiMoi.thNamHienHanhN1]);
+        this.total.tranChiN = sumNumber([this.chiTx.tranChiN, this.chiMoi.tranChiN]);
+        this.total.ncauChiN = sumNumber([this.chiTx.ncauChiN, this.chiMoi.ncauChiN]);
+        this.total.clechTranChiVsNcauChiN = sumNumber([this.chiTx.clechTranChiVsNcauChiN, this.chiMoi.clechTranChiVsNcauChiN]);
+        this.total.tranChiN1 = sumNumber([this.chiTx.tranChiN1, this.chiMoi.tranChiN1]);
+        this.total.ncauChiN1 = sumNumber([this.chiTx.ncauChiN1, this.chiMoi.ncauChiN1]);
+        this.total.clechTranChiVsNcauChiN1 = sumNumber([this.chiTx.clechTranChiVsNcauChiN1, this.chiMoi.clechTranChiVsNcauChiN1]);
+        this.total.tranChiN2 = sumNumber([this.chiTx.tranChiN2, this.chiMoi.tranChiN2]);
+        this.total.ncauChiN2 = sumNumber([this.chiTx.ncauChiN2, this.chiMoi.ncauChiN2]);
+        this.total.clechTranChiVsNcauChiN2 = sumNumber([this.chiTx.clechTranChiVsNcauChiN2, this.chiMoi.clechTranChiVsNcauChiN2]);
     }
 
 
 
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN = Number(this.editCache[id].data.ncauChiN) - Number(this.editCache[id].data.tranChiN);
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = Number(this.editCache[id].data.ncauChiN1) - Number(this.editCache[id].data.tranChiN1);
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = Number(this.editCache[id].data.ncauChiN2) - Number(this.editCache[id].data.tranChiN2);
+        this.editCache[id].data.clechTranChiVsNcauChiN = sumNumber([this.editCache[id].data.ncauChiN, -this.editCache[id].data.tranChiN]);
+        this.editCache[id].data.clechTranChiVsNcauChiN1 = sumNumber([this.editCache[id].data.ncauChiN1, -this.editCache[id].data.tranChiN1]);
+        this.editCache[id].data.clechTranChiVsNcauChiN2 = sumNumber([this.editCache[id].data.ncauChiN2, -this.editCache[id].data.tranChiN2]);
     }
 
     doPrint() {

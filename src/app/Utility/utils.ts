@@ -276,7 +276,7 @@ export class Utils {
 
   //role copy
   public btnRoleExport = {
-    "status": ['6', '9'],
+    "status": ['6', '7', '9'],
     "role": ['KH_VP_BC_KQTH_EX']
   }
 
@@ -1016,12 +1016,12 @@ export const DON_VI_TIEN = [
 ]
 
 export function exchangeMoney(value: number, oldMoneyUnit: string, newMoneyUnit: string): number {
-    const oldUnit = (parseInt(oldMoneyUnit, 10) - 1) * 3;
-    const newUnit = (parseInt(newMoneyUnit, 10) - 1) * 3;
-    if (!value && value !== 0) {
-        return null;
-    }
-    return value * Math.pow(10, oldUnit - newUnit);
+  const oldUnit = (parseInt(oldMoneyUnit, 10) - 1) * 3;
+  const newUnit = (parseInt(newMoneyUnit, 10) - 1) * 3;
+  if (!value && value !== 0) {
+    return null;
+  }
+  return value * Math.pow(10, oldUnit - newUnit);
 }
 
 export function divMoney(value, maDonViTien): number {
@@ -1463,32 +1463,6 @@ export function displayNumber(num: number): string {
   } else {
     displayValue = dau + separateNumber(real) + '.' + separateNumber(imaginary);
   }
-  // let nho = '';
-  // num = Math.abs(num);
-  // let str: string = num.toString();
-  // let real!: number;
-  // let imaginary!: number;
-
-  // if (str.indexOf('.') >= 0) {
-  //     str = num.toFixed(4);
-  //     real = parseInt(str.split('.')[0], 10);
-  //     let imaTemp = str.split('.')[1];
-  //     while (imaTemp.startsWith('0')) {
-  //         nho = nho + 0;
-  //         imaTemp = imaTemp.slice(1);
-  //     }
-  //     imaginary = parseInt(imaTemp, 10);
-  //     while (imaginary % 10 == 0) {
-  //         imaginary = Math.floor(imaginary / 10);
-  //     }
-  // } else {
-  //     real = num;
-  // }
-  // if (!imaginary) {
-  //     displayValue = dau + separateNumber(real);
-  // } else {
-  //     displayValue = dau + separateNumber(real) + '.' + nho + separateNumber(imaginary);
-  // }
   return displayValue;
 }
 
@@ -1510,26 +1484,4 @@ export function separateNumber(str: string): string {
   }
   return displayValue;
 }
-
-// export function separateNumber(num: number): string {
-//     let displayValue!: string;
-//     if (num == 0) {
-//         displayValue = '0';
-//     }
-//     while (num > 0) {
-//         let val = (num % 1000).toString();
-//         num = Math.floor(num / 1000);
-//         if (num > 0) {
-//             while (val.length < 3) {
-//                 val = '0' + val;
-//             }
-//         }
-//         if (!displayValue) {
-//             displayValue = val;
-//         } else {
-//             displayValue = val + ',' + displayValue;
-//         }
-//     }
-//     return displayValue;
-// }
 

@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, Utils } from "src/app/Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber, Utils } from "src/app/Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-nsnn-3-nam.constant';
 
 export class ItemData {
@@ -88,17 +88,10 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
@@ -793,41 +786,31 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].namHienHanhDtoan += item.namHienHanhDtoan;
-                    this.lstCtietBcao[index].namHienHanhUocThien += item.namHienHanhUocThien;
-                    this.lstCtietBcao[index].tranChiN += item.tranChiN;
-                    this.lstCtietBcao[index].ncauChiN += item.ncauChiN;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN += item.clechTranChiVsNcauChiN;
-                    this.lstCtietBcao[index].tranChiN1 += item.tranChiN1;
-                    this.lstCtietBcao[index].ncauChiN1 += item.ncauChiN1;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 += item.clechTranChiVsNcauChiN1;
-                    this.lstCtietBcao[index].tranChiN2 += item.tranChiN2;
-                    this.lstCtietBcao[index].ncauChiN2 += item.ncauChiN2;
-                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 += item.clechTranChiVsNcauChiN2;
+                    this.lstCtietBcao[index].namHienHanhDtoan = sumNumber([this.lstCtietBcao[index].namHienHanhDtoan, item.namHienHanhDtoan]);
+                    this.lstCtietBcao[index].namHienHanhUocThien = sumNumber([this.lstCtietBcao[index].namHienHanhUocThien, item.namHienHanhUocThien]);
+                    this.lstCtietBcao[index].tranChiN = sumNumber([this.lstCtietBcao[index].tranChiN, item.tranChiN]);
+                    this.lstCtietBcao[index].ncauChiN = sumNumber([this.lstCtietBcao[index].ncauChiN, item.ncauChiN]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN, item.clechTranChiVsNcauChiN]);
+                    this.lstCtietBcao[index].tranChiN1 = sumNumber([this.lstCtietBcao[index].tranChiN1, item.tranChiN1]);
+                    this.lstCtietBcao[index].ncauChiN1 = sumNumber([this.lstCtietBcao[index].ncauChiN1, item.ncauChiN1]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN1 = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN1, item.clechTranChiVsNcauChiN1]);
+                    this.lstCtietBcao[index].tranChiN2 = sumNumber([this.lstCtietBcao[index].tranChiN2, item.tranChiN2]);
+                    this.lstCtietBcao[index].ncauChiN2 = sumNumber([this.lstCtietBcao[index].ncauChiN2, item.ncauChiN2]);
+                    this.lstCtietBcao[index].clechTranChiVsNcauChiN2 = sumNumber([this.lstCtietBcao[index].clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
 
                 }
             })
-
-            if (!this.lstCtietBcao[index].namHienHanhUocThien) {
-                this.lstCtietBcao[index].ssanhNcauNVoiN1 = 0 / 0;
-            } else {
-                this.lstCtietBcao[index].ssanhNcauNVoiN1 = Number((this.lstCtietBcao[index].ncauChiN / this.lstCtietBcao[index].namHienHanhUocThien).toFixed(Utils.ROUND));
-            }
+            this.lstCtietBcao[index].ssanhNcauNVoiN1 = divNumber(this.lstCtietBcao[index].ncauChiN, this.lstCtietBcao[index].namHienHanhUocThien);
             stt = this.getHead(stt);
         }
     }
 
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN = Number(this.editCache[id].data.tranChiN) - Number(this.editCache[id].data.ncauChiN);
-
-        if (!this.editCache[id].data.namHienHanhUocThien) {
-            this.editCache[id].data.ssanhNcauNVoiN1 = 0 / 0;
-        } else {
-            this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN / this.editCache[id].data.namHienHanhUocThien).toFixed(Utils.ROUND));
-        }
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = Number(this.editCache[id].data.tranChiN1) - Number(this.editCache[id].data.ncauChiN1);
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = Number(this.editCache[id].data.tranChiN2) - Number(this.editCache[id].data.ncauChiN2);
+        this.editCache[id].data.clechTranChiVsNcauChiN = sumNumber([this.editCache[id].data.tranChiN, -this.editCache[id].data.ncauChiN]);
+        this.editCache[id].data.ssanhNcauNVoiN1 = divNumber(this.editCache[id].data.ncauChiN, this.editCache[id].data.namHienHanhUocThien);
+        this.editCache[id].data.clechTranChiVsNcauChiN1 = sumNumber([this.editCache[id].data.tranChiN1, -this.editCache[id].data.ncauChiN1]);
+        this.editCache[id].data.clechTranChiVsNcauChiN2 = sumNumber([this.editCache[id].data.tranChiN2, -this.editCache[id].data.ncauChiN2]);
     }
 
     doPrint() {
