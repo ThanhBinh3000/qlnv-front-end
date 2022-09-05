@@ -31,7 +31,15 @@
               <i class="fa fa-trash-o do"></i>
               Xóa
             </button>
-            <button nz-button class="btn btn-sub xanh-nhat" (click)="update()">
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData">
+              <i class="icon htvbdh_bosungfile"></i>
+              Sửa
+            </button>
+            <button nz-button class="btn btn-sub" (click)="showEdit(false)" *ngIf="isEditData">
+              <i class="fa fa-times"></i>
+              Hủy bỏ
+            </button>
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="isEditData">
               <i class="fa fa-save"></i>
               Lưu
             </button>
@@ -45,7 +53,7 @@
                 <nz-form-control>
                   <nz-tree-select #nzTreeSelectComponent [nzNodes]="nodes" [nzDefaultExpandAll]="true"
                     [nzDropdownMatchSelectWidth]="true" nzShowSearch nzVirtualHeight="300px"
-                    nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha">
+                    nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha" nzDisabled>
                   </nz-tree-select>
                 </nz-form-control>
               </nz-form-item>
@@ -55,7 +63,8 @@
                 <nz-form-label nzRequired>Mã đơn vị cấp trên</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input readonly formControlName="maDviCha" />
+                    <input nz-input readonly [(ngModel)]="detailDonVi.value.maDviCha"
+                      [ngModelOptions]="{standalone: true}" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -65,33 +74,33 @@
                 <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
                 <nz-form-control>
                   <nz-input-group nzErrorTip="Tên đơn vị là bắt buộc!">
-                    <input nz-input formControlName="tenDvi" />
+                    <input nz-input formControlName="tenDvi" [readonly]="!isEditData" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
               <nz-form-item>
-                <nz-form-label>Mã đơn vị</nz-form-label>
-                <input nz-input formControlName="maDvi" [readonly]="true" />
+                <nz-form-label nzRequired>Mã đơn vị</nz-form-label>
+                <input nz-input formControlName="maDvi" [readonly]="!isEditData" />
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
               <nz-form-item>
                 <nz-form-label>Địa chỉ</nz-form-label>
-                <input nz-input formControlName="diaChi" />
+                <input nz-input formControlName="diaChi" [readonly]="!isEditData" />
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label>SĐT</nz-form-label>
-                <input nz-input formControlName="sdt" />
+                <input nz-input formControlName="sdt" [readonly]="!isEditData" />
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label>Fax</nz-form-label>
-                <input nz-input formControlName="fax" />
+                <input nz-input formControlName="fax" [readonly]="!isEditData" />
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
@@ -99,20 +108,21 @@
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label>Trạng thái</nz-form-label>
-                <label nz-checkbox formControlName="trangThai">Hoạt động/Không hoạt động</label>
+                <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động/Không hoạt
+                  động</label>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label></nz-form-label>
-                <label nz-checkbox formControlName="trangThai">Có mạng lưới kho</label>
+                <label nz-checkbox nzDisabled formControlName="type">Là phòng ban</label>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
               <nz-form-item>
                 <nz-form-label>Ghi chú</nz-form-label>
                 <nz-form-control>
-                  <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
+                  <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="!isEditData"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

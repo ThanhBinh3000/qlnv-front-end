@@ -77,7 +77,12 @@ export class NewDonViComponent implements OnInit {
     }
     let body = this.formDonVi.value;
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.MLK : LOAI_DON_VI.PB
+    if (this.levelNode == 2) {
+      body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : null;
+    }
+    if (this.levelNode > 2) {
+      body.type = LOAI_DON_VI.PB
+    }
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

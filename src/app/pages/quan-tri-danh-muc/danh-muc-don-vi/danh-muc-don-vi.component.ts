@@ -34,6 +34,9 @@ export class DanhMucDonViComponent implements OnInit {
   defaultExpandedKeys: any = [];
   nodeSelected: any = []
   detailDonVi: FormGroup;
+  levelNode: number = 0;
+  isEditData: boolean = false;
+
   constructor(
     private router: Router,
     private donviService: DonviService,
@@ -44,20 +47,16 @@ export class DanhMucDonViComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {
     this.detailDonVi = this.formBuilder.group({
+      id: [''],
+      maDviCha: [''],
       tenDvi: ['', Validators.required],
       maDvi: [''],
-      maQhns: [''],
       diaChi: [''],
-      ghiChu: [''],
-      maDviCha: [''],
-      trangThai: [''],
-      maQd: [''],
-      maTr: [''],
-      maKhqlh: [''],
-      maKtbq: [''],
-      maTckt: [''],
       fax: [''],
-      sdt: ['']
+      sdt: [''],
+      trangThai: [''],
+      type: [],
+      ghiChu: [''],
     })
   }
 
@@ -96,7 +95,6 @@ export class DanhMucDonViComponent implements OnInit {
 
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
-
       this.nodeSelected = event.node.origin.id;
       this.parentNodeSelected = event?.parentNode?.origin
       this.showDetailDonVi(event.node.origin.id)
@@ -109,25 +107,28 @@ export class DanhMucDonViComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.nodeDetail = res.data;
           // gán giá trị vào form
+          this.levelNode = +res.data.capDvi;
           this.detailDonVi.patchValue({
+            id: res.data.id,
+            maDviCha: res.data.maDviCha,
             tenDvi: res.data.tenDvi,
             maDvi: res.data.maDvi,
-            maQhns: res.data.maQhns,
             diaChi: res.data.diaChi,
+            sdt: res.data.sdt,
+            fax: res.data.fax,
+            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
+            type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
-            maDviCha: res.data.maDviCha,
-            trangThai: res.data.trangThai === TrangThaiHoatDong.HOAT_DONG,
-            maQd: res.data.maQd,
-            maTr: res.data.maTr,
-            maKhqlh: res.data.maKhqlh,
-            maKtbq: res.data.maKtbq,
-            maTckt: res.data.maTckt
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
       })
     }
+  }
+
+  showEdit(editData: boolean) {
+    this.isEditData = editData
   }
 
   update() {
@@ -137,8 +138,8 @@ export class DanhMucDonViComponent implements OnInit {
     }
     let body = {
       ...this.detailDonVi.value,
-      id: this.nodeSelected,
       trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
+      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
     };
     this._modalService.confirm({
       nzClosable: false,
@@ -152,7 +153,8 @@ export class DanhMucDonViComponent implements OnInit {
         this.donviService.update(body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.layTatCaDonViTheoTree(this.nodeSelected);
+            this.isEditData = false;
+            this.ngOnInit();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
