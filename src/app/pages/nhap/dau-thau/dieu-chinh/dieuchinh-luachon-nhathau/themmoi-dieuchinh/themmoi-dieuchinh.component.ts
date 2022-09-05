@@ -71,6 +71,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       tenVthh: ['', [Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
+      moTaHangHoa: [''],
       trangThai: ['00'],
       tchuanCluong: [''],
     });
@@ -187,6 +188,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           tenVthh: data.tenVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
+          moTaHangHoa: data.moTaHangHoa,
           loaiHdong: data.loaiHdong,
           pthucLcnt: data.pthucLcnt,
           hthucLcnt: data.hthucLcnt,
@@ -236,6 +238,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           tenVthh: data.tenVthh ?? null,
           cLoaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
+          moTaHangHoa: data.moTaHangHoa ?? null,
           loaiHdong: data.loaiHdong ?? null,
           hthucLcnt: data.hthucLcnt ?? null,
           pthucLcnt: data.pthucLcnt ?? null,
@@ -703,6 +706,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       this.formData.controls["tgianNhang"].setValidators([Validators.required]);
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     }
   }
 
