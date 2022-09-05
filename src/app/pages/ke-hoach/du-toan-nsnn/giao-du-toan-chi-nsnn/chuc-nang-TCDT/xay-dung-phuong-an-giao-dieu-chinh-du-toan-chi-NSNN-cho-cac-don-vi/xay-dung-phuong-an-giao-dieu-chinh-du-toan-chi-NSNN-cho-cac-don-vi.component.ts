@@ -10,6 +10,7 @@ import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { DialogTongHopGiaoComponent } from 'src/app/components/dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -689,7 +690,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   // xem chi tiết bản ghi
   xemChiTiet(id: string) {
     this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
+      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
     ])
   }
 
@@ -742,10 +743,21 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
-          this.router.navigate([
-            MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
-          ])
+          // this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+          // this.router.navigate([
+          //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+          // ])
+          const modalCopy = this.modal.create({
+            nzTitle: MESSAGE.ALERT,
+            nzContent: DialogTongHopGiaoComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              maBcao: data.data.maPa
+            },
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

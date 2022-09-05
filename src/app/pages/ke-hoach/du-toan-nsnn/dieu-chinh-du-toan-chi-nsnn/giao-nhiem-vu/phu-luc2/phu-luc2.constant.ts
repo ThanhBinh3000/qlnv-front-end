@@ -56,25 +56,25 @@ export const LINH_VUC = [
   {
     id: 2210,
     tenDm: "Loại DT4",
-    idCha: 2200,
+    idCha: 2300,
     level: 3,
   },
   {
     id: 2220,
     tenDm: "Loại DT3",
-    idCha: 2200,
+    idCha: 2300,
     level: 3,
   },
   {
     id: 2230,
     tenDm: "Loại DT2",
-    idCha: 2200,
+    idCha: 2300,
     level: 3,
   },
   {
     id: 2240,
     tenDm: "Loại DT1",
-    idCha: 2200,
+    idCha: 2300,
     level: 3,
   },
   {

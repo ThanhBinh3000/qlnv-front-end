@@ -59,50 +59,50 @@
 
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
-    <div class="main-content" id="tablePrint">
-      <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-        <nz-table #basicTable class="nowrap">
-          <thead>
-            <tr>
-              <th>Mã báo cáo</th>
-              <th>Quyết toán năm</th>
-              <th>Số công văn</th>
-              <th>Ngày lập</th>
-              <th>Ngày trình duyệt</th>
-              <th>Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
-              <th>Ngày phê duyệt<br>(Lãnh đạo duyệt)
-              </th>
-              <th width>Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{maBcao}}</td>
-              <td>{{namQtoan}}</td>
-              <td>
-                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
-                  <button nz-button>
-                    <i nz-icon nzType="upload"></i>
-                    Select File
-                  </button>
-                </nz-upload>
-                <div class="tep__sqd" (click)="downloadFileCv()">
-                  <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
-                  <span>{{congVan?.fileName}}</span>
-                </div>
-              </td>
-              <td>{{ngayTao}}</td>
-              <td>{{ngayTrinh}}</td>
-              <td>{{ngayDuyet}}</td>
-              <td>{{ngayPheDuyet}}</td>
-              <td>
-                {{getStatusName(trangThaiBaoCao)}}
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-card>
 
+    <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+      <nz-table #basicTable class="nowrap">
+        <thead>
+          <tr>
+            <th>Mã báo cáo</th>
+            <th>Quyết toán năm</th>
+            <th>Số công văn</th>
+            <th>Ngày lập</th>
+            <th>Ngày trình duyệt</th>
+            <th>Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
+            <th>Ngày phê duyệt<br>(Lãnh đạo duyệt)
+            </th>
+            <th width>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{maBcao}}</td>
+            <td>{{namQtoan}}</td>
+            <td>
+              <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                <button nz-button>
+                  <i nz-icon nzType="upload"></i>
+                  Select File
+                </button>
+              </nz-upload>
+              <div class="tep__sqd" (click)="downloadFileCv()">
+                <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                <span>{{congVan?.fileName}}</span>
+              </div>
+            </td>
+            <td>{{ngayTao}}</td>
+            <td>{{ngayTrinh}}</td>
+            <td>{{ngayDuyet}}</td>
+            <td>{{ngayPheDuyet}}</td>
+            <td>
+              {{getStatusName(trangThaiBaoCao)}}
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+    <div class="main-content" id="tablePrint">
       <nz-card nzTitle="Tạo mới báo cáo quyết toán vốn, phí hàng DTQG" class="mt16 flex-card p-lr16">
         <ng-container *ngIf="status;else templateName">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -312,6 +312,7 @@
           </div>
         </div>
       </nz-card>
+
       <div class="action">
         <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
           <i class="fa fa-trash-o"></i>
