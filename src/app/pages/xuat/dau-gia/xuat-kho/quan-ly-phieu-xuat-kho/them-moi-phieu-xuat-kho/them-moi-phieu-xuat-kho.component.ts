@@ -21,6 +21,8 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -36,6 +38,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
   userInfo: UserLogin;
   detail: any = {};
+  formData: FormGroup;
   idNhapHang: number = 0;
   detailGiaoNhap: any = {};
 
@@ -48,6 +51,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
   listSoQuyetDinh: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
+  chungTuKemTheo: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -68,15 +72,20 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+    private fb: FormBuilder,
   ) { }
 
   async ngOnInit() {
-    this.spinner.show();
+    // this.spinner.show();
+    this.initForm();
+    console.log('diem ');
+
     try {
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
+      console.log('diem kho');
       await Promise.all([
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
@@ -90,6 +99,38 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  initForm(): void {
+    // file đính kèm chưa làm
+
+    this.formData = this.fb.group({
+      soQuyetDinhXuat: [null],
+      donVi: [null],
+      maQHNS: [null],
+      soPhieuXuatKho: [null],
+      soPhieuKiemNghiemChatLuong: [null],
+      nguoiNhanHang: [null],
+      boPhan: [null],
+      ngayTaoPhieu: [new Date()],
+      thoiGianXuatHang: [null],
+      maDiemKho: [null],
+      maNhaKho: [null],
+      maNganKho: [null],
+      maLoKho: [null],
+      lyDoXuatKho: [null],
+      tongSoTien: [null],
+      ghiChu: [null]
+    })
+
+    this.formData.patchValue({
+      // donVi: this.userInfo.TEN_DVI,
+      // maQHNS: this.userInfo.MA_DVI,
+      donVi: "123",
+      maQHNS: '456',
+    })
+
+    this.formData.controls['maQHNS'].disable();
   }
 
   async loadSoQuyetDinh() {
@@ -124,6 +165,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     }
   }
 
+  // change Số phiểu kiểm nghiệm chất lượng /HSKT
   changePhieuKiemTra() {
     let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.detail.phieuKtClId);
     if (phieuKt && phieuKt.length > 0) {
@@ -340,7 +382,8 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
   }
 
   changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
+
+    let diemKho = this.listDiemKho.filter(x => x.maDvi == this.formData.value.maDiemKho);
     if (!fromChiTiet) {
       this.detail.maNhaKho = null;
     }
@@ -350,10 +393,12 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
         this.changeNhaKho(fromChiTiet);
       }
     }
+
+    console.log(this.listNhaKho);
   }
 
   changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
+    let nhaKho = this.listNhaKho.filter(x => x.maDvi == this.formData.value.maNhaKho);
     if (nhaKho && nhaKho.length > 0) {
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
@@ -363,7 +408,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
   }
 
   changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
+    let nganKho = this.listNganKho.filter(x => x.maDvi == this.formData.value.maNganKho);
     if (nganKho && nganKho.length > 0) {
       this.listNganLo = nganKho[0].children;
     }
@@ -379,7 +424,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.spinner.show();
+        // this.spinner.show();
         try {
           await this.save(true);
           let body = {
@@ -417,7 +462,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.spinner.show();
+        // this.spinner.show();
         try {
           let body = {
             id: this.id,
@@ -454,7 +499,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.spinner.show();
+        // this.spinner.show();
         try {
           let body = {
             id: this.id,
@@ -493,7 +538,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.spinner.show();
+        // this.spinner.show();
         try {
           let body = {
             id: this.id,
@@ -540,7 +585,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
   }
 
   async save(isOther: boolean) {
-    this.spinner.show();
+    // this.spinner.show();
     try {
       let body = {
         "bbNghiemThuKlId": this.detail.soQdNvuNhang,
@@ -572,6 +617,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       };
 
       console.log(body);
+      console.log(this.formData.value);
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
           body,
@@ -666,7 +712,6 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     }
   }
   thongTinTrangThai(trangThai: string): string {
-
     if (
       trangThai === '00' ||
       trangThai === '01' ||
