@@ -159,7 +159,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
-      tgDuKienTcbdg: [[null, null], [Validators.required]],
+      tgDuKienTcbdg: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ghiChu: [null],
     });
   }
@@ -243,7 +243,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyTuNgay, dataDetail.ngayKyDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
-      tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [null, null],
+      tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ghiChu: dataDetail ? dataDetail.ghiChu : null,
     });
   }
@@ -455,7 +455,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           this.quayLai();
         }
       }
-      this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -520,20 +519,19 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   }
 
   async loadThongTinDeXuatKeHoachLuaChonNhaThau(id: number) {
-    await this.tongHopDeXuatKHBanDauGiaService
-      .chiTiet(id)
-      .then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.detail = res.data;
-          this.initForm(res.data);
-          this.listOfData = this.detail.chiTietList;
-        }
-      })
-      .catch((e) => {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      });
+    try {
+      let res = await this.tongHopDeXuatKHBanDauGiaService.chiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detail = res.data;
+        this.initForm(res.data);
+        this.listOfData = this.detail.chiTietList;
+      }
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   convertTienTobangChu(tien: number): string {
@@ -576,7 +574,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          this.save(true);
+          await this.save(true);
           let body = {
             id: this.formData.get('id').value,
             lyDo: null,

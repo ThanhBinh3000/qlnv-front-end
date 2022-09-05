@@ -31,6 +31,7 @@ export class DialogQuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   capDonVi: number;
   dsToTrinhDeXuat: any[] = [];
   radioValue: any;
+  pagtype: string;
 
   constructor(
     private _modalRef: NzModalRef,
