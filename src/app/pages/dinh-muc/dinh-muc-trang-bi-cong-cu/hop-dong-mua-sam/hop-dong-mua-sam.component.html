@@ -1,0 +1,16 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('hopdongphuluc')">
+      Hợp đồng/Phụ lục hợp đồng
+    </li>
+  </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'hopdongphuluc'">
+      <app-danh-sach-hop-dong-mua-sam></app-danh-sach-hop-dong-mua-sam>
+    </ng-container>
+  </div>
+</div>

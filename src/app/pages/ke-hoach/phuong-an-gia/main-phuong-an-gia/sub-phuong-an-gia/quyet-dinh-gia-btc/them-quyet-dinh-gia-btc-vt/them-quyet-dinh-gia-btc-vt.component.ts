@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -25,6 +25,7 @@ import {
   styleUrls: ["./them-quyet-dinh-gia-btc-vt.component.scss"]
 })
 export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
+  @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
@@ -407,7 +408,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          radioValue
+          radioValue,
+          type: this.type
         },
       });
       modalQD.afterClose.subscribe((data) => {

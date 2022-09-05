@@ -14,12 +14,14 @@
                             <i class="fa fa-arrow-left"></i>
                             <span>Quay lại</span>
                         </button>
-                        <button *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                        <button
+                            *ngIf="formGoiThau.value.trangThai == globals.prop.NHAP_DU_THAO || formGoiThau.value.trangThai == '01'"
                             type="button" class="btn btn-sub" (click)="save('02')">
                             <i class="icon htvbdh_checkfile2"></i>
                             <span>Hoàn thành cập nhật</span>
                         </button>
-                        <button *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                        <button
+                            *ngIf="formGoiThau.value.trangThai == globals.prop.NHAP_DU_THAO || formGoiThau.value.trangThai == '01'"
                             class="btn btn-main btn-sm waves-effect waves-light" (click)="save('01')">
                             <i class="icon htvbdh_tcdt_save"></i>
                             <span>Lưu</span>
@@ -252,7 +254,7 @@
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianDthau"
                                                 nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
-                                                [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
+                                                [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP ">
                                             </nz-date-picker>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -266,7 +268,7 @@
                                         <nz-input-group>
                                             <nz-date-picker class="search__input" formControlName="tgianMthau"
                                                 nzFormat="HH:mm:ss dd/MM/yyyy" [nzShowTime]="true"
-                                                [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01' ">
+                                                [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP  ">
                                             </nz-date-picker>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -293,7 +295,7 @@
                                     </thead>
                                     <tbody>
                                         <tr
-                                            *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'">
+                                            *ngIf="formGoiThau.value.trangThai == globals.prop.NHAP_DU_THAO || formGoiThau.value.trangThai == '01'">
                                             <td></td>
                                             <td>
                                                 <nz-select [(ngModel)]="itemRow.idNhaThau"
@@ -345,11 +347,11 @@
                                                 <td>{{editCache[i].data.sdt}}
                                                 </td>
                                                 <td class="text-center">
-                                                    <a *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                                                    <a *ngIf="formGoiThau.value.trangThai == globals.prop.NHAP_DU_THAO || formGoiThau.value.trangThai == '01'"
                                                         (click)="saveEdit(i)" class="save">
                                                         <i class="icon htvbdh_tcdt_save"></i>
                                                     </a>
-                                                    <a *ngIf="formGoiThau.value.trangThai == '00' || formGoiThau.value.trangThai == '01'"
+                                                    <a *ngIf="formGoiThau.value.trangThai == globals.prop.NHAP_DU_THAO || formGoiThau.value.trangThai == '01'"
                                                         (click)="cancelEdit(i)">
                                                         <i class="fa fa-ban do"></i>
                                                     </a>
@@ -373,7 +375,7 @@
                                                     <nz-date-picker formControlName="ngayKyBban" class="search__input"
                                                         nzFormat="dd/MM/yyyy"
                                                         nzPlaceHolder="Ngày ký biên bản thương thảo"
-                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
+                                                        [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP ">
                                                     </nz-date-picker>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -385,7 +387,7 @@
                                                 </nz-form-label>
                                                 <nz-form-control>
                                                     <nz-select formControlName="idNhaThau"
-                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
+                                                        [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP ">
                                                         <nz-option *ngFor="let p of listNthauNopHs"
                                                             [nzValue]="p.idNhaThau" [nzLabel]="p.tenDvi">
                                                         </nz-option>
@@ -404,7 +406,7 @@
                                                     <nz-input-number (change)="calendarGia()"
                                                         formControlName="donGiaTrcVat" nz-input [nzMin]="1"
                                                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                                        [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
+                                                        [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP ">
                                                     </nz-input-number>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -418,7 +420,7 @@
                                                         <nz-input-number (change)="calendarGia()" formControlName="vat"
                                                             nz-input [nzMin]="1" [nzMax]="100" [nzStep]="1"
                                                             [nzSize]="'small'"
-                                                            [nzDisabled]="formGoiThau.value.trangThai != '00' && formGoiThau.value.trangThai != '01'">
+                                                            [nzDisabled]="formGoiThau.value.trangThai != globals.prop.NHAP_DU_THAO && formGoiThau.value.trangThai != globals.prop.NHAP_CHO_DUYET_TP ">
                                                         </nz-input-number>
                                                     </nz-input-group>
                                                 </nz-form-control>

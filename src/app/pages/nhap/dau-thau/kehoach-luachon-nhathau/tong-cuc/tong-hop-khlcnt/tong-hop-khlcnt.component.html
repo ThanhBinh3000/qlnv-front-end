@@ -42,7 +42,6 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
       <h3>Thông tin tổng hợp kế hoạch lựa chọn nhà thầu </h3>
       <div class="buttons">
@@ -60,10 +59,9 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-        [nzShowPagination]="false">
+        [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
             <th width="45px">

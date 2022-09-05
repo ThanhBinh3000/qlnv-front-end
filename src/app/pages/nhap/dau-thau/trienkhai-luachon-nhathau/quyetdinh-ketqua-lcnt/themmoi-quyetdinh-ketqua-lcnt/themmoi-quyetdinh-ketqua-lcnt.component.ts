@@ -37,6 +37,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
   formData: FormGroup;
+  taiLieuDinhKemList: any[] = [];
   formThongTinChung: FormGroup;
   listOfData: DanhSachGoiThau[] = [];
   cacheData: DanhSachGoiThau[] = [];
@@ -196,10 +197,12 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         lyDoHuy: dataDetail ? dataDetail.lyDoHuy : null,
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
       })
+      this.taiLieuDinhKemList = dataDetail.fileDinhkems;
     }
   }
 
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
@@ -207,6 +210,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.detailList = this.dataTableGoiThau;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -223,6 +227,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  deleteTaiLieuDinhKemTag(data: any) {
+    if (!this.isViewDetail) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
+      );
     }
   }
 

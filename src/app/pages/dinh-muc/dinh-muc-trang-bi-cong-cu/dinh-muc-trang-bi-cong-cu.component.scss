@@ -1,0 +1,12 @@
+@import '../../../../assets/scss/tab-content.scss';
+
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active {
+    .tab-link {
+        color: #fff;
+    }
+}
+
+.tab-link {
+    font-size: 11px;
+    color: #444;
+}

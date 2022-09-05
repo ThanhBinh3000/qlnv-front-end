@@ -62,7 +62,7 @@
         <div class="group-button">
             <h3>Danh sách quyết định giá của TCDTNN</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+                <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xoá</span>
                 </button>
@@ -70,7 +70,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
+                <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub xanh" (click)="themMoi()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
