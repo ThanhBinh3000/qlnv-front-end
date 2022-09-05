@@ -26,6 +26,7 @@ import { environment } from 'src/environments/environment';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
+import {STATUS} from "../../../../../../constants/status";
 
 
 interface ItemData {
@@ -382,17 +383,33 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         try {
           let body = {
             id: this.formData.get('id').value,
-            trangThai: ''
+            trangThai: '',
           };
-          switch (this.formData.get('trangThai').value) {
-            case '00':
-            case '03': {
-              body.trangThai = '01';
-              break;
+          if (this.formData.get('loaiVthh').value.startsWith('02')) {
+            switch (this.formData.get('trangThai').value) {
+              case STATUS.DU_THAO: {
+                body.trangThai = STATUS.CHO_DUYET_LDV;
+                break;
+              }
+              case STATUS.CHO_DUYET_LDV: {
+                body.trangThai = STATUS.DA_DUYET_LDV;
+                break;
+              }
+              case STATUS.TU_CHOI_LDV: {
+                body.trangThai = STATUS.DA_DUYET_LDV;
+                break;
+              }
+              case STATUS.DA_DUYET_LDV : {
+                body.trangThai = STATUS.BAN_HANH;
+                break;
+              }
             }
-            case '01': {
-              body.trangThai = '02';
-              break;
+          } else {
+            switch (this.formData.get('trangThai').value) {
+              case STATUS.CHUA_TONG_HOP: {
+                body.trangThai = STATUS.DA_TONG_HOP;
+                break;
+              }
             }
           }
           // this.save()
