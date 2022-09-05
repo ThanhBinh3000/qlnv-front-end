@@ -60,7 +60,8 @@ export class BaoCao02Component implements OnInit {
     lstCTietBaoCaoTemp: ItemDataMau02[] = [];
 
     thuyetMinh: string;
-    maDviTien = '1';
+    maDviTien: string;
+    moneyUnit: string;
     tuNgay: any;
     denNgay: any;
     listIdDelete = "";
@@ -127,7 +128,8 @@ export class BaoCao02Component implements OnInit {
         );
         ///////////////////////////////////////////////////////////////
         this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
+        this.moneyUnit = this.maDviTien;
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;

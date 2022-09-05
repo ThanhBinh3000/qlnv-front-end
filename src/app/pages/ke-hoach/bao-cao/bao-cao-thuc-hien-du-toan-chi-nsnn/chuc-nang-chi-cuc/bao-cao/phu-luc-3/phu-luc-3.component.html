@@ -9,8 +9,8 @@
             </div>
         </ng-container>
         <ng-template #templateName>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                [class]="maDviTien ?'' : 'input-error-validate' ">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="moneyUnit"
+                [class]="moneyUnit ?'' : 'input-error-validate' " (ngModelChange)="changeMoney()">
                 <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>

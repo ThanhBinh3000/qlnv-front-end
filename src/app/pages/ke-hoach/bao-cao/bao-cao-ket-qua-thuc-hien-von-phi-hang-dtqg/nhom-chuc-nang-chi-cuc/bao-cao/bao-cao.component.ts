@@ -874,6 +874,7 @@ export class BaoCaoComponent implements OnInit {
 		let checkParent = false;
 		let checkChirld = false;
 		const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+		const capDvi = this.donVis.find(e => e.maDvi == this.userInfor.dvql)?.capDvi;
 		if (dVi && dVi.maDvi == this.userInfor.dvql) {
 			checkChirld = true;
 		}
@@ -898,7 +899,7 @@ export class BaoCaoComponent implements OnInit {
 		} else {
 			this.statusBtnFinish = true;
 		}
-		this.statusBtnExport = utils.getRoleExport(trangThaiBaoCao, true, roleNguoiTao);
+		this.statusBtnExport = utils.getRoleExport(trangThaiBaoCao, capDvi == Utils.TONG_CUC, roleNguoiTao);
 	}
 
 	updateSingleChecked() {

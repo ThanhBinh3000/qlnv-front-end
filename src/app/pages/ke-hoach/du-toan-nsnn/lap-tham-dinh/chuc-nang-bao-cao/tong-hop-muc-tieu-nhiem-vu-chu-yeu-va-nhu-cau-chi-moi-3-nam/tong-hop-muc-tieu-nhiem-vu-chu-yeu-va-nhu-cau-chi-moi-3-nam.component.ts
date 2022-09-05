@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,10 +7,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC_CHI } from './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.constant';
 
 export class ItemData {
@@ -112,17 +106,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
@@ -749,11 +736,11 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     changeModel(id: string): void {
-        this.editCache[id].data.ncauChiChiaRaDtuPtrien = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1);
-        this.editCache[id].data.ncauChiChiaRaChiTx = Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
-        this.editCache[id].data.ncauChiTrongDoChiCs = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2);
-        this.editCache[id].data.ncauChiTrongDoChiMoi = Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
-        this.editCache[id].data.ncauChiTongSo = Number(this.editCache[id].data.ncauChiTrongDoChiCs) + Number(this.editCache[id].data.ncauChiTrongDoChiMoi);
+        this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
+        this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+        this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
+        this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+        this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
     }
 
     getLowStatus(str: string) {
@@ -779,15 +766,15 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].ncauChiTongSo += item.ncauChiTongSo;
-                    this.lstCtietBcao[index].ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
-                    this.lstCtietBcao[index].ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
-                    this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+                    this.lstCtietBcao[index].ncauChiTongSo = sumNumber([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
+                    this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
+                    this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
+                    this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
                 }
             })
             stt = this.getHead(stt);
@@ -807,15 +794,15 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.total.ncauChiChiaRaChiMoi2 = 0;
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.total.ncauChiTongSo += item.ncauChiTongSo;
-                this.total.ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
-                this.total.ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
-                this.total.ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
-                this.total.ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
-                this.total.ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
-                this.total.ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
-                this.total.ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
-                this.total.ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+                this.total.ncauChiTongSo = sumNumber([this.total.ncauChiTongSo, item.ncauChiTongSo]);
+                this.total.ncauChiTrongDoChiCs = sumNumber([this.total.ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
+                this.total.ncauChiTrongDoChiMoi = sumNumber([this.total.ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
+                this.total.ncauChiChiaRaDtuPtrien = sumNumber([this.total.ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
+                this.total.ncauChiChiaRaChiCs1 = sumNumber([this.total.ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
+                this.total.ncauChiChiaRaChiMoi1 = sumNumber([this.total.ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
+                this.total.ncauChiChiaRaChiTx = sumNumber([this.total.ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
+                this.total.ncauChiChiaRaChiCs2 = sumNumber([this.total.ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
+                this.total.ncauChiChiaRaChiMoi2 = sumNumber([this.total.ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
             }
         })
     }

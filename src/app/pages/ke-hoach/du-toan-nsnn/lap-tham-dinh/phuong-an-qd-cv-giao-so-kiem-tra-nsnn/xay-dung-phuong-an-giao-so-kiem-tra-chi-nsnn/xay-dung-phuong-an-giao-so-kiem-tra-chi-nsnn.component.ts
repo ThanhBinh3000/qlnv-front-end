@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
@@ -1164,12 +1164,12 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 if (this.getHead(item.stt) == stt) {
                     item.listCtietDvi.forEach(e => {
                         const ind = this.lstCtietBcao[index].listCtietDvi.findIndex(i => i.maBcao == e.maBcao);
-                        this.lstCtietBcao[index].listCtietDvi[ind].soTranChi += e.soTranChi;
+                        this.lstCtietBcao[index].listCtietDvi[ind].soTranChi = sumNumber([this.lstCtietBcao[index].listCtietDvi[ind].soTranChi, e.soTranChi]);
                     })
                 }
             })
             this.lstCtietBcao[index].listCtietDvi.forEach(item => {
-                this.lstCtietBcao[index].tongSo += item.soTranChi;
+                this.lstCtietBcao[index].tongSo = sumNumber([this.lstCtietBcao[index].tongSo, item.soTranChi]);
             })
             stt = this.getHead(stt);
         }
@@ -1178,7 +1178,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     changeModel(id: string) {
         this.editCache[id].data.tongSo = 0;
         this.editCache[id].data.listCtietDvi.forEach(item => {
-            this.editCache[id].data.tongSo += item.soTranChi;
+            this.editCache[id].data.tongSo = sumNumber([this.editCache[id].data.tongSo, item.soTranChi]);
         })
     }
 
