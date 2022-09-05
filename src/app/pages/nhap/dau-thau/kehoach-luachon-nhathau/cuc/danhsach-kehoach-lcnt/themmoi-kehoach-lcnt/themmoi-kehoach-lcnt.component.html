@@ -60,7 +60,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
                 <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
@@ -137,17 +137,17 @@
         </div>
       </div>
       <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
-              Căn cứ
+              Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <!-- <div nz-col nzSpan="12">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               File đính kèm khác
@@ -156,7 +156,7 @@
               <file-list></file-list>
             </div>
           </nz-form-item>
-        </div>
+        </div> -->
       </div>
     </form>
   </nz-card>
@@ -441,16 +441,17 @@
       <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
         <thead>
           <tr>
-            <th [width]="218">Chi cục</th>
-            <th>Tên gói thầu</th>
-            <th>Điểm kho</th>
-            <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
-            <th>Đã lên kế hoạch mua</th>
-            <th>Số lượng tấn</th>
-            <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
-            <th>Thành tiền</th>
-            <th>Bằng chữ</th>
-            <th [width]="90" *ngIf="userService.isCuc()">Thao tác</th>
+            <th style="width: 5%;">Chi cục</th>
+            <th style="width: 5%;">Tên gói thầu</th>
+            <th style="width: 7%;">Địa điểm nhập kho</th>
+            <th style="width: 12%;">Số lượng theo chỉ tiêu theo kế hoạch</th>
+            <th style="width: 7%;">Đã lên kế hoạch mua</th>
+            <th style="width: 5%;">Số lượng (Tấn)</th>
+            <th style="width: 12%;">Đơn giá đã bao gồm VAT (đồng/kg)</th>
+            <th style="width: 7%;">Thành tiền</th>
+            <th style="width: 10%;">Bằng chữ</th>
+            <th style="width: 9%;"> Giá trị bảo đảm dự thầu (%)</th>
+            <th style="width: 5%;" *ngIf="userService.isCuc()">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -464,6 +465,7 @@
             <td>{{item.donGia}}</td>
             <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
             <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
+            <td>{{ item.giaTriDamBao }}</td>
             <td class="text-right" *ngIf="userService.isCuc()">
               <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
                 (click)="themMoiGoiThau(item,i)">

@@ -149,7 +149,7 @@ export class DialogToTrinhDeXuatComponent implements OnInit {
 
   async loadToTrinhDeXuat() {
     this.dsToTrinhDeXuat = [];
-    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDeXuat({});
+    let res = await this.quyetDinhGiaCuaBtcService.loadToTrinhDeXuat({"type":this.type});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsToTrinhDeXuat = res.data;
     }

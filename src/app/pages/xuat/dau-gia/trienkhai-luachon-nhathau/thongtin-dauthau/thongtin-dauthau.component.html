@@ -166,7 +166,7 @@
                       <a (click)="redirectToChiTiet(data.idGt)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="data.trangThai == '00' || data.trangThai == '01'"
+                      <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_CHO_DUYET_TP"
                         (click)="redirectToChiTiet(data.idGt)">
                         <i class="icon htvbdh_soanthao"></i>
                       </a>

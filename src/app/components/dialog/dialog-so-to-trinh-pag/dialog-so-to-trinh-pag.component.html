@@ -1,95 +1,39 @@
 <div class="input-group-search">
-  <input type="text" nz-input placeholder="Nhập số tờ trình" [(ngModel)]="text" />
-  <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
+  <input type="text" nz-input placeholder="Nhập số quyết định" [(ngModel)]="text"/>
+  <!--  <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>-->
 </div>
-<nz-card *ngIf="loai=='stt'" nzTitle="Danh sách số tờ trình" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
-  <nz-table nzBordered #basicTable [nzData]="dsToTrinhDeXuat" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
-    <tr>
-      <th [width]="35">STT</th>
-      <th>Số tờ trình</th>
-      <th class="text-center">Chọn</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dsToTrinhDeXuat; let i = index" class="editable-row">
-      <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-      <td>{{data.soToTrinh}}</td>
-      <td style="text-align: center">
-        <div>
-          <i nz-icon nzType="plus" class="abcd" nzTheme="outline" nzColo (click)="selectToTrinh(data)"></i>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </nz-table>
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between">
-      <div class="trai">
-      </div>
-<!--      <div class="canphai">-->
-<!--        &lt;!&ndash; begin phân trang  &ndash;&gt;-->
-<!--        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger-->
-<!--                       [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"-->
-<!--                       (nzPageSizeChange)="changePageSize($event)">-->
-<!--          <ng-template #rangeTemplate let-range="range" let-total>-->
-<!--            {{ range[0] }}-{{ range[1] }} of {{ total }} items-->
-<!--          </ng-template>-->
-<!--        </nz-pagination>-->
-<!--        &lt;!&ndash; end phân trang  &ndash;&gt;-->
-<!--      </div>-->
-    </div>
-  </div>
-</nz-card>
-<nz-card *ngIf="loai=='sqd'" nzTitle="Danh sách số quyết định giá của TCDTNN" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
-  <nz-table nzBordered #basicTable [nzData]="dsToTrinhDeXuat" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
-    <tr>
-      <th [width]="35">STT</th>
-      <th>Số quyết định giá của TCDTNN</th>
-      <th class="text-center">Chọn</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dsQD; let i = index" class="editable-row">
-      <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-      <td>{{data.soQd}}</td>
-      <td style="text-align: center">
-        <div>
-          <i nz-icon nzType="plus" class="abcd" nzTheme="outline" nzColo (click)="selectToTrinh(data)"></i>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </nz-table>
-  <div class="tab-content tab-menu" id="myTabContent1">
-    <div class="tab-pane fade show active justify-content-between">
-      <div class="trai">
-      </div>
-      <div class="canphai">
-        <!-- begin phân trang  -->
-<!--        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger-->
-<!--                       [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"-->
-<!--                       (nzPageSizeChange)="changePageSize($event)">-->
-<!--          <ng-template #rangeTemplate let-range="range" let-total>-->
-<!--            {{ range[0] }}-{{ range[1] }} of {{ total }} items-->
-<!--          </ng-template>-->
-<!--        </nz-pagination>-->
-        <!-- end phân trang  -->
-      </div>
-    </div>
-  </div>
-</nz-card>
+<nz-radio-group [(ngModel)]="radioValue">
+  <ng-container *ngFor="let data of dsToTrinhDeXuat">
+    <nz-table>
+      <tr>
+        <td class="label-name">
+          <label *ngIf="loai=='STT' && pagtype=='LT'">{{data.soToTrinh}}</label>
+          <label *ngIf="loai=='STT' && pagtype=='VT'">{{data.soDeXuat}}</label>
+          <label *ngIf="loai=='SQD'">{{data.soQd}}</label>
+        </td>
+        <td>
+          <label *ngIf="loai=='STT' && pagtype=='LT'" nz-radio [nzValue]="data.soToTrinh"></label>
+          <label *ngIf="loai=='STT' && pagtype=='VT'" nz-radio [nzValue]="data.soDeXuat"></label>
+          <label *ngIf="loai=='SQD'" nz-radio [nzValue]="data.soQd"></label>
+        </td>
+      </tr>
+    </nz-table>
+  </ng-container>
+</nz-radio-group>
+<div></div>
 <div class="modal-footer">
-
-    <div class="nut">
-      <div class="cantrai">
-      </div>
-      <div class="canphai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleCancel()">
-          <i nz-icon nzType="close" class="icon-close"></i>
-          Đóng
-        </a>
-      </div>
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="onCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
     </div>
   </div>
+</div>

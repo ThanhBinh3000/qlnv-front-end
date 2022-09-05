@@ -12,13 +12,13 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
-        <div nz-col nzSpan="5">
-          <label class="search__label">Ngày quyết định</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
         <div nz-col nzSpan="11">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" placeholder="Nhập nội dung" nz-input [(ngModel)]="searchFilter.trichYeu" />
+        </div>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Ngày quyết định</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -62,17 +62,19 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th width="60px">STT</th>
-            <th>Số quyết định</th>
-            <th>Ngày QĐ</th>
-            <th>Trích yếu</th>
+            <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 10%;">Số quyết định</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
+            <th class="text-center" style="width: 35%;">Trích yếu</th>
             <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th *ngIf="userService.isTongCuc()">Mã tờ trình</th>
-            <th>Năm kế hoạch</th>
-            <th>Loại hàng hóa</th>
-            <th>Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 8%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+            <th class="text-center" style="width: 10%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 8%;">Số gói thầu</th>
+            <th class="text-center" style="width: 9%;">Tổng tiền (đồng)</th>
             <th *ngIf="userService.isTongCuc()">Trạng thái</th>
-            <th width="60px">Hành động</th>
+            <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -114,7 +116,7 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th *ngIf="userService.isTongCuc()">
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                   (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
@@ -123,7 +125,7 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th *ngIf="userService.isTongCuc()">
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
                   (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
@@ -132,10 +134,28 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th *ngIf="userService.isTongCuc()">
+            <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
-                  (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthau"
+                  (input)="filterInTable('soGthau',filterTable.soGthau)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
+                  (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -161,6 +181,8 @@
             <td>{{data.namKhoach}}</td>
             <td>{{data.tenVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
+            <td>{{data.soGthau}}</td>
+            <td>{{data.tongTien}}</td>
             <td *ngIf="userService.isTongCuc()">{{ convertTrangThaiTable(data.trangThai) }}</td>
             <td class="text-left">
               <a (click)="detail(data)">

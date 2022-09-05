@@ -39,6 +39,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   yearNow: number = 0;
 
   searchFilter = {
+    soQdPdKhlcnt: '',
     soQdinh: '',
     namKhoach: dayjs().get('year'),
     ngayTongHop: '',
@@ -47,7 +48,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    ngayQd: '',
+    ngayTongHop: '',
     trichYeu: '',
     tenGthau: '',
     statusGT: '',
@@ -116,6 +117,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
@@ -177,10 +179,12 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   clearFilter() {
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.trichYeu = null;
+    this.searchFilter.loaiVthh = null;
+    this.searchFilter.ngayTongHop = null;
+    this.searchFilter.soQdPdKhlcnt = null;
+    this.search();
   }
 
   xoaItem(item: any) {
@@ -241,6 +245,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
           denNgayTao: this.searchFilter.ngayTongHop
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,
+          soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
           soQdinh: this.searchFilter.soQdinh,
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach
@@ -283,7 +288,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
-      ngayQd: '',
+      ngayTongHop: '',
       trichYeu: '',
       tenGthau: '',
       statusGT: '',

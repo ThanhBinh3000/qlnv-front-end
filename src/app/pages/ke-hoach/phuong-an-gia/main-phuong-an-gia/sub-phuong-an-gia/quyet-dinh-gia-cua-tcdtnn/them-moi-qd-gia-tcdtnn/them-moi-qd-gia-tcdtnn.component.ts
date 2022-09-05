@@ -22,8 +22,10 @@ import { DialogQuyetDinhGiaCuaTcdtnnComponent } from 'src/app/components/dialog/
 export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
 
   @Input("pagType") pagType: string;
+  @Input("type") type: string;
   @Input("isView") isView: boolean;
   @Input("noEdit") noEdit: boolean;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
@@ -345,7 +347,9 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             soToTrinh: data,
+            // thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null
           });
+          // this.thongTinToTrinh = data;
           this.onChangeSoToTrinh(data);
           this.radioValue = data;
           this.spinner.hide();

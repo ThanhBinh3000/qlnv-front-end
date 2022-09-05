@@ -1,0 +1,122 @@
+<div class="bg-trang">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
+            nzBordered>
+            <thead>
+                <tr>
+                    <th width="45px" rowspan="3">
+                        <label nz-checkbox></label>
+                    </th>
+                    <th rowspan="3">STT</th>
+                    <th rowspan="3">Nội dung</th>
+                    <th rowspan="3">Sản phẩm</th>
+                    <th rowspan="3">Từ ngày</th>
+                    <th rowspan="3">Đến ngày</th>
+                    <th rowspan="3">Người thực hiện</th>
+                    <th rowspan="3">Trạng thái</th>
+                    <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="userService.isTongCuc()">
+                        <a>
+                            <i class="icon htvbdh_dau-cong"></i>
+                        </a>
+                        <a>
+                            <i class="fa fa-refresh"></i>
+                        </a>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td width="45px">
+                        <label nz-checkbox></label>
+                    </td>
+                    <td>1</td>
+                    <td>DT.2000.01</td>
+                    <td></td>
+                    <td>10/10/2022</td>
+                    <td>10/10/2022</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>Hoàn thành</td>
+                    <td *ngIf="userService.isTongCuc()">
+                        <a>
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a>
+                            <i class="fa fa-trash-o do"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu">
+            <div class="tab-pane fade show active justify-content-between">
+                <div class="trai"></div>
+                <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                        (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                        </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                </div>
+            </div>
+        </div>
+    </nz-card>
+</div>
