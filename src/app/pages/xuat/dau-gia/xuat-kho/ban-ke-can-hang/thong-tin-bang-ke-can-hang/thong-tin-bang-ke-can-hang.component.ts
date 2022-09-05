@@ -33,8 +33,8 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output('close') onClose = new EventEmitter<any>();
+
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -89,8 +89,8 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       this.detail.tenDvi = this.userInfo.TEN_DVI;
       this.detail.maDvi = this.userInfo.MA_DVI;
-
       await Promise.all([
+        this.initData(),
         this.loadDiemKho(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadThuKho(),
@@ -108,7 +108,12 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  initData(): void {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    this.detail.maDvi = this.userInfo.MA_DVI;
+  }
   selectHangHoa() {
     let data = this.typeVthh;
     const modalTuChoi = this.modal.create({
@@ -277,9 +282,12 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
       "veViec": null
     }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -745,7 +753,9 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
   }
 
   back() {
-    this.showListEvent.emit();
+    this.onClose.emit();
+
+    // this.showListEvent.emit();
   }
 
   async save(isOther: boolean) {
@@ -813,21 +823,22 @@ export class ThongTinBangKeCanHangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  print() {
-
-  }
-
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    // if (
+    //   trangThai === '00' ||
+    //   trangThai === '01' ||
+    //   trangThai === '04' ||
+    //   trangThai === '03'
+    // ) {
+    //   return 'du-thao-va-lanh-dao-duyet';
+    // } else if (trangThai === '02') {
+    //   return 'da-ban-hanh';
+    // }
+
+    if (trangThai === '02') {
       return 'da-ban-hanh';
+    } else {
+      return 'du-thao-va-lanh-dao-duyet';
     }
   }
 
