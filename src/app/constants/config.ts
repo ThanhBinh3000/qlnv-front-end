@@ -214,7 +214,7 @@ export const LIST_VAT_TU_HANG_HOA = [
     title: 'Vật tư'
   }
 ]
-export const STATUS_DA_DUYET = "19";
+export const STATUS_DA_DUYET = "29";
 
 export const TYPE_PAG = {
   GIA_MUA_TOI_DA: 'GMTDBTT',

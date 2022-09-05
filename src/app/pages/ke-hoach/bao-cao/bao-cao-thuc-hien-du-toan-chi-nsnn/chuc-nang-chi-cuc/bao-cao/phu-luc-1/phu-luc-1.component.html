@@ -9,8 +9,8 @@
             </div>
         </ng-container>
         <ng-template #templateName>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                [class]="maDviTien ?'' : 'input-error-validate' ">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="moneyUnit"
+                [class]="moneyUnit ?'' : 'input-error-validate' " (ngModelChange)="changeMoney()">
                 <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>
@@ -47,10 +47,10 @@
                 thời gian
                 chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm)
             </th>
-            <th class="th" rowspan="4" [hidden]="status" nzRight></th>
-            <th class="th" rowspan="4" [hidden]="status" nzRight></th>
-            <th class="th" rowspan="4" [hidden]="status" nzRight></th>
-            <th class="th" rowspan="4" [hidden]="status" nzRight>
+            <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+            <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+            <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+            <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight>
                 <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                 </label>
             </th>

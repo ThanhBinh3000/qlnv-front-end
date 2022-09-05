@@ -181,7 +181,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
             chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
             chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
-            chiTietDiaDiem.tenNganLo = phanLoTaiSans[i].tenLoKho;
+            chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
             chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
             chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
             chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].chungLoaiHh;

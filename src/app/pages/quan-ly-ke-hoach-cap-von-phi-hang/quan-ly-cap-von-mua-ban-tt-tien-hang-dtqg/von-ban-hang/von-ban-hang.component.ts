@@ -14,7 +14,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -74,6 +74,7 @@ export class VonBanHangComponent implements OnInit {
     trangThaiCha = "1";
     newDate = new Date();
     maDviTien: string;
+    moneyUnit: string;
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
@@ -169,6 +170,8 @@ export class VonBanHangComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
+            this.maDviTien = '3';
+            this.moneyUnit = this.maDviTien;
             this.statusBtnParent = true;
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -751,6 +754,22 @@ export class VonBanHangComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.ttGui.soTien = exchangeMoney(this.ttGui.soTien, this.maDviTien, this.moneyUnit);
+        this.ttGui.ttChoDviHuong = exchangeMoney(this.ttGui.ttChoDviHuong, this.maDviTien, this.moneyUnit);
+        this.ttGui.nopThue = exchangeMoney(this.ttGui.nopThue, this.maDviTien, this.moneyUnit);
+
+        this.ttGuiCache.soTien = this.ttGui.soTien;
+        this.ttGuiCache.ttChoDviHuong = this.ttGui.ttChoDviHuong;
+        this.ttGuiCache.nopThue = this.ttGui.nopThue;
+
+        this.maDviTien = this.moneyUnit;
     }
 
 }

@@ -15,7 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../../Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../../Utility/utils";
 import { NOI_DUNG_PL2 } from '../bao-cao.constant';
 
 
@@ -68,7 +68,8 @@ export class PhuLucIIComponent implements OnInit {
     namHienHanh: number;
     maPhuLuc: string;
     thuyetMinh: string;
-    maDviTien = '1';
+    maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     initItem: ItemData = new ItemData();
@@ -102,13 +103,14 @@ export class PhuLucIIComponent implements OnInit {
         this.id = this.data?.id;
         this.idBcao = this.data.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -814,6 +816,29 @@ export class PhuLucIIComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.dtoanSdungNamTcong = exchangeMoney(item.dtoanSdungNamTcong, this.maDviTien, this.moneyUnit);
+            item.dtoanSdungNamNguonNsnn = exchangeMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien, this.moneyUnit);
+            item.dtoanSdungNamNguonSn = exchangeMoney(item.dtoanSdungNamNguonSn, this.maDviTien, this.moneyUnit);
+            item.dtoanSdungNamNguonQuy = exchangeMoney(item.dtoanSdungNamNguonQuy, this.maDviTien, this.moneyUnit);
+            item.giaiNganThangTcong = exchangeMoney(item.giaiNganThangTcong, this.maDviTien, this.moneyUnit);
+            item.giaiNganThangNguonNsnn = exchangeMoney(item.giaiNganThangNguonNsnn, this.maDviTien, this.moneyUnit);
+            item.giaiNganThangNguonSn = exchangeMoney(item.giaiNganThangNguonSn, this.maDviTien, this.moneyUnit);
+            item.giaiNganThangNguonQuy = exchangeMoney(item.giaiNganThangNguonQuy, this.maDviTien, this.moneyUnit);
+            item.luyKeGiaiNganTcong = exchangeMoney(item.luyKeGiaiNganTcong, this.maDviTien, this.moneyUnit);
+            item.luyKeGiaiNganNguonNsnn = exchangeMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien, this.moneyUnit);
+            item.luyKeGiaiNganNguonSn = exchangeMoney(item.luyKeGiaiNganNguonSn, this.maDviTien, this.moneyUnit);
+            item.luyKeGiaiNganNguonQuy = exchangeMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

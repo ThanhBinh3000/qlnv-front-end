@@ -14,7 +14,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
@@ -58,6 +58,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     trangThaiBanGhi = '1';
     newDate = new Date();
     maDviTien: string;
+    moneyUnit: string;
     thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
@@ -157,6 +158,8 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         } else {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
+            this.maDviTien = '3';
+            this.moneyUnit = this.maDviTien;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
                 this.maBaoCao = obj?.maBcao;
@@ -926,17 +929,17 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].nguonKhac += item.nguonKhac;
-                    this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
+                    this.lstCtietBcao[index].nguonKhac = sumNumber([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]);
+                    this.lstCtietBcao[index].nguonNsnn = sumNumber([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]);
                 }
             })
-            this.lstCtietBcao[index].tongSo = this.lstCtietBcao[index].nguonKhac + this.lstCtietBcao[index].nguonNsnn;
+            this.lstCtietBcao[index].tongSo = sumNumber([this.lstCtietBcao[index].nguonKhac, this.lstCtietBcao[index].nguonNsnn]);
             stt = this.getHead(stt);
         }
     }
 
     changeModel(id: string) {
-        this.editCache[id].data.tongSo = Number(this.editCache[id].data.nguonNsnn) + Number(this.editCache[id].data.nguonKhac);
+        this.editCache[id].data.tongSo = sumNumber([this.editCache[id].data.nguonNsnn, this.editCache[id].data.nguonKhac]);
     }
     close() {
         this.router.navigate([
@@ -1063,6 +1066,20 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.tongSo = exchangeMoney(item.tongSo, this.maDviTien, this.moneyUnit);
+            item.nguonNsnn = exchangeMoney(item.nguonNsnn, this.maDviTien, this.moneyUnit);
+            item.nguonKhac = exchangeMoney(item.nguonKhac, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

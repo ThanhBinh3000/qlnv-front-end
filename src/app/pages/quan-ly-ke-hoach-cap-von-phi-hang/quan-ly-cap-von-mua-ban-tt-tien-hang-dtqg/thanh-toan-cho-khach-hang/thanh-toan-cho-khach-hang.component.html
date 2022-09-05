@@ -93,7 +93,8 @@
                             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                 <div nz-col class="gutter-row" [nzSpan]="3">
                                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                        [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+                                        [(ngModel)]="moneyUnit" [class]="moneyUnit ?'' : 'input-error-validate' "
+                                        (ngModelChange)="changeMoney()">
                                         <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
                                             [nzLabel]="item.tenDm"></nz-option>
                                     </nz-select>
@@ -128,18 +129,19 @@
 
                                     <ng-template #editTemplate>
                                         <td>
-                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" 
-                                            [class]="ttGuiCache.noiDung ?'' : 'input-error-validate' "/>
+                                            <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung"
+                                                [class]="ttGuiCache.noiDung ?'' : 'input-error-validate' " />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" [nzFormatter]="formatter" [nzPrecision]="4"
+                                            <nz-input-number class="search__input" [nzFormatter]="formatter"
+                                                [nzPrecision]="4"
                                                 [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.soTien">
                                             </nz-input-number>
                                         </td>
                                         <td>
                                             <nz-date-picker class="search__input" [(ngModel)]="ttGuiCache.ngayThanhToan"
-                                                nzFormat="dd/MM/yyyy" 
+                                                nzFormat="dd/MM/yyyy"
                                                 [class]="ttGuiCache.ngayThanhToan ?'' : 'input-error-validate' ">
                                             </nz-date-picker>
                                         </td>

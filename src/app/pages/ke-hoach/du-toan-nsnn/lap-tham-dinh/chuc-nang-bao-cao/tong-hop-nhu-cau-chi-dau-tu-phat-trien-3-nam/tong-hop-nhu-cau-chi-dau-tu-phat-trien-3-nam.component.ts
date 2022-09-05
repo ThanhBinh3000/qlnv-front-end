@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,10 +7,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, fixedNumber, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../Utility/utils";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constant';
 
 
@@ -73,6 +67,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
     namHienHanh: number;
     maBieuMau = "14";
     maDviTien: string;
+    moneyUnit: string;
     listIdDelete = "";
     thuyetMinh: string;
     //trang thai cac nut
@@ -84,17 +79,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
@@ -110,6 +98,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        if (!this.maDviTien) {
+            this.maDviTien = '3';
+        }
+        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -752,10 +744,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].thNamHienHanhN1 += item.thNamHienHanhN1;
-                    this.lstCtietBcao[index].ncauNamDtoanN += item.ncauNamDtoanN;
-                    this.lstCtietBcao[index].ncauNamN1 += item.ncauNamN1;
-                    this.lstCtietBcao[index].ncauNamN2 += item.ncauNamN2;
+                    this.lstCtietBcao[index].thNamHienHanhN1 = sumNumber([this.lstCtietBcao[index].thNamHienHanhN1, item.thNamHienHanhN1]);
+                    this.lstCtietBcao[index].ncauNamDtoanN = sumNumber([this.lstCtietBcao[index].ncauNamDtoanN, item.ncauNamDtoanN]);
+                    this.lstCtietBcao[index].ncauNamN1 = sumNumber([this.lstCtietBcao[index].ncauNamN1, item.ncauNamN1]);
+                    this.lstCtietBcao[index].ncauNamN2 = sumNumber([this.lstCtietBcao[index].ncauNamN2, item.ncauNamN2]);
                 }
             })
             stt = this.getHead(stt);
@@ -797,6 +789,21 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.moneyUnit) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.lstCtietBcao.forEach(item => {
+            item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
+            item.ncauNamDtoanN = exchangeMoney(item.ncauNamDtoanN, this.maDviTien, this.moneyUnit);
+            item.ncauNamN1 = exchangeMoney(item.ncauNamN1, this.maDviTien, this.moneyUnit);
+            item.ncauNamN2 = exchangeMoney(item.ncauNamN2, this.maDviTien, this.moneyUnit);
+        })
+        this.maDviTien = this.moneyUnit;
+        this.updateEditCache();
     }
 
 }

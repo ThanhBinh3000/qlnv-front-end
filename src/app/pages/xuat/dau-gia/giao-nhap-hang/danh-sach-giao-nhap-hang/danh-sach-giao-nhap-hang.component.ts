@@ -5,18 +5,20 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {
+  LOAI_HANG_DTQG,
+  LOAI_QUYET_DINH,
+  PAGE_SIZE_DEFAULT
+} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
-
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
   templateUrl: './danh-sach-giao-nhap-hang.component.html',
-  styleUrls: ['./danh-sach-giao-nhap-hang.component.scss']
+  styleUrls: ['./danh-sach-giao-nhap-hang.component.scss'],
 })
 export class DanhSachGiaoNhapHangComponent implements OnInit {
   @Input()
@@ -52,7 +54,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     namXuat: '',
     soQd: '',
     trichYeu: '',
-    ngayKy: ''
+    ngayKy: '',
   };
   listNam: any[] = [];
   routerUrl: string;
@@ -82,11 +84,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-  ) {
-  }
+    public globals: Globals,
+  ) { }
 
   async ngOnInit() {
-    this.getTitleVthh();
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
@@ -105,53 +106,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    console.log(this.typeVthh);
-
-    this.loaiVthh = convertTenVthh(this.typeVthh);
-    if (this.typeVthh == 'thoc') {
-      this.maVthh = "0101";
-      this.routerVthh = 'thoc';
-    } else if (this.typeVthh == 'gao') {
-      this.maVthh = "0102";
-      this.routerVthh = 'gao';
-    } else if (this.typeVthh == 'muoi') {
-      this.maVthh = "04";
-      this.routerVthh = 'muoi';
-    } else if (this.typeVthh == 'vat-tu') {
-      this.maVthh = null;
-      this.routerVthh = 'vat-tu';
-    }
-  }
-
-  openDialogHopDong() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin căn cứ trên hợp đồng',
-      nzContent: DialogCanCuHopDongComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.soHd = data.soHdong;
-      }
-    });
-  }
-
-  onInput(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
-    } else {
-      this.options = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
   redirectToThongTin(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
@@ -161,36 +115,37 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   async showList() {
     this.isDetail = false;
     this.getCount.emit();
-    await this.search()
+    await this.search();
   }
+
   clearFilter() {
     this.searchFilter = {
       namXuat: '',
       soQd: '',
       trichYeu: '',
-      ngayKy: ''
-    }
+      ngayKy: '',
+    };
     this.search();
   }
 
   async search() {
-    console.log(this.typeVthh);
-
     this.spinner.show();
     let body = {
-      "namXuat": this.searchFilter.namXuat ?? null,
-      "soQuyetDinh": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-      "trichyeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-      "ngayKyTu": this.searchFilter.ngayKy
+      namXuat: this.searchFilter.namXuat ?? null,
+      soQuyetDinh: this.searchFilter.soQd
+        ? this.searchFilter.soQd.trim()
+        : null,
+      trichyeu: this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+      ngayKyTu: this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
         : null,
-      "ngayKyDen": this.searchFilter.ngayKy
+      ngayKyDen: this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": this.typeVthh,
-      "pageable.pageSize": this.pageSize,
-      "pageable.pageNumber": this.page,
-    }
+      loaiVthh: this.typeVthh,
+      'pageable.pageSize': this.pageSize,
+      'pageable.pageNumber': this.page,
+    };
     let res = await this.quyetDinhGiaoNvXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -236,10 +191,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -252,19 +203,21 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaoNvXuatHangService.deleteData(item.id).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
-              this.getCount.emit();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            this.spinner.hide();
-          });
+          this.quyetDinhGiaoNvXuatHangService
+            .deleteData(item.id)
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+                this.getCount.emit();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -279,21 +232,25 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "namXuat": this.searchFilter.namXuat ?? null,
-          "soQuyetDinh": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-          "trichyeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-          "ngayKyTu": this.searchFilter.ngayKy
+          namXuat: this.searchFilter.namXuat ?? null,
+          soQuyetDinh: this.searchFilter.soQd
+            ? this.searchFilter.soQd.trim()
+            : null,
+          trichyeu: this.searchFilter.trichYeu
+            ? this.searchFilter.trichYeu
+            : null,
+          ngayKyTu: this.searchFilter.ngayKy
             ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
             : null,
-          "ngayKyDen": this.searchFilter.ngayKy
+          ngayKyDen: this.searchFilter.ngayKy
             ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
             : null,
-          "loaiVthh": this.typeVthh ?? null,
-        }
+          loaiVthh: this.typeVthh ?? null,
+        };
         this.quyetDinhGiaoNvXuatHangService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-xuat-hang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -306,57 +263,25 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     }
   }
 
-  duyet(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id,
-            lyDoTuChoi: null,
-            trangThai: '02',
-          };
-          let res = await this.quyetDinhGiaoNvXuatHangService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.search();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  chiTietQuyetDinh(isView: boolean, id: number) {
-
-  }
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          if (
+            item[key] &&
+            item[key]
+              .toString()
+              .toLowerCase()
+              .indexOf(value.toString().toLowerCase()) != -1
+          ) {
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -370,25 +295,27 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       tenKho: '',
       tenLo: '',
       tenNgan: '',
-    }
+    };
   }
+
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
       this.indeterminate = true;
     }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -401,6 +328,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       }
     }
   }
+
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -422,9 +350,14 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaoNvXuatHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quyetDinhGiaoNvXuatHangService.deleteMultiple({
+              ids: dataDelete,
+            });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
               this.getCount.emit();
               this.allChecked = false;
@@ -439,9 +372,11 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 }

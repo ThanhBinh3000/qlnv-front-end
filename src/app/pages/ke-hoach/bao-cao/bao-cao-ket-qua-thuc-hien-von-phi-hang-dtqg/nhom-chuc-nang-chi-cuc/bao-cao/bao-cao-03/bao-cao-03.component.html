@@ -84,16 +84,16 @@
 				<th>7=2*5</th>
 				<th>8=7-6</th>
 				<th>D</th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td><b>I</b></td>
-				<td><b>Xuất bản</b></td>
+				<td><b>Xuất bán</b></td>
 				<td></td>
 				<td>{{soLuongKhoachXb}}</td>
 				<td>{{soLuongTteXb}}</td>
@@ -224,11 +224,10 @@
 					</td>
 					<td>
 						<a (click)="saveEdit(item.id,'31')" class="save" style="margin-right:15px">Lưu</a>
-						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-							(nzOnConfirm)="cancelEdit(item.id,'31')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'31')"></i>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+							(nzOnConfirm)="cancelEdit(item.id,'31')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
 						<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -368,11 +367,10 @@
 					</td>
 					<td>
 						<a (click)="saveEdit(item.id,'32')" class="save" style="margin-right:15px">Lưu</a>
-						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-							(nzOnConfirm)="cancelEdit(item.id,'32')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'32')"></i>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+							(nzOnConfirm)="cancelEdit(item.id,'32')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
 						<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -512,11 +510,10 @@
 					</td>
 					<td>
 						<a (click)="saveEdit(item.id,'33')" class="save" style="margin-right:15px">Lưu</a>
-						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-							(nzOnConfirm)="cancelEdit(item.id,'33')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'33')"></i>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+							(nzOnConfirm)="cancelEdit(item.id,'33')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
 						<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"

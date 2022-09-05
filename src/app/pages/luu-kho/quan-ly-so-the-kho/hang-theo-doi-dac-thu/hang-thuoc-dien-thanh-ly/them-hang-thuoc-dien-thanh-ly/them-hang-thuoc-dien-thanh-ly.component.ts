@@ -21,7 +21,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ThemHangThuocDienThanhLyComponent implements OnInit {
     @Input('dsTong') dsTong;
-    @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
     @Input('editList') editList: boolean;
     @Input('detail') detail: boolean;
     @Input('dataEditList') dataEditList: any;
@@ -60,6 +59,8 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     dsNganKhoDataSource = [];
     dsChungLoaiHangHoa = [];
     dsLoKho = [];
+    listLoaiHangHoa = [];
+    dsLoaiHangHoa = [];
     userInfo: UserLogin;
     @Output('close') onClose = new EventEmitter<any>();
 
@@ -74,17 +75,17 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
         public userService: UserService,
     ) { }
 
-    ngOnInit() {
-        this.initData();
-        this.initForm();
+    async ngOnInit(): Promise<void> {
         this.userInfo = this.userService.getUserLogin();
+        await this.initData();
+        this.initForm();
     }
 
     initForm(): void {
         if (this.detail) {
             const donvi = this.dsDonVi.find((item) => item.tenDvi == this.dataEditList.tenDonvi)
             this.formData = this.fb.group({
-                idDonVi: [{ value: donvi ? donvi.id : null, disabled: this.editList }],
+                tenDonvi: [{ value: donvi ? donvi.tenDvi : null, disabled: this.editList }],
                 maDvi: [{ value: donvi ? donvi.maDvi : null, disabled: this.editList }],
                 idDanhSach: [{ value: this.dataEditList.maDanhSach, disabled: this.editList }],
                 ngayTao: [{ value: this.dataEditList.ngayTao, disabled: this.editList }],
@@ -110,8 +111,8 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
         }
     }
 
-    initData() {
-        this.loadDsTong();
+    async initData() {
+        await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
     }
 
     onChangeLoaiVthh(event) {
@@ -139,6 +140,26 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
             this.dsNganKho = this.dsTong[DANH_MUC_LEVEL.NGAN_KHO];
             this.dsNganKhoDataSource = this.dsNganKho.map((item) => item.tenDvi);
+        }
+    }
+
+    async loaiVTHHGetAll() {
+        try {
+            await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+                if (hangHoa.msg == MESSAGE.SUCCESS) {
+                    hangHoa.data.forEach((item) => {
+                        if (item.cap === "1" && item.ma != '01') {
+                            this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
+                        }
+                        else {
+                            this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
+                        }
+                    })
+                }
+            })
+        } catch (error) {
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
 
@@ -223,7 +244,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     async luu() {
         const body = {
             "id": this.detail ? this.dataEditList.id : null,
-            "maDonVi": this.formData.controls.maDvi.value,
+            "maDonVi": this.formData.value.maDvi ? this.formData.value.maDvi : null,
             "ds": [],
         }
         this.dataTable.map((data: any) => {
@@ -245,6 +266,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
             }
             body.ds.push(objDS)
         })
+
         var res: any
         try {
             if (this.detail) {

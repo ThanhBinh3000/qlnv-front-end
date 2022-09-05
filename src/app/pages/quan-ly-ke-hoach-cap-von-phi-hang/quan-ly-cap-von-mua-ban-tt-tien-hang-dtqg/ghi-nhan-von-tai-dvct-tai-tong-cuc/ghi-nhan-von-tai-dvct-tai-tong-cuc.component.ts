@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -65,6 +65,7 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
     trangThaiBanGhi = "1";
     newDate = new Date();
     maDviTien: string;
+    moneyUnit: string;
     thuyetMinh: string;
     //danh muc
     donVis: any[] = [];
@@ -155,6 +156,8 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
         } else {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
+            this.maDviTien = '3';
+            this.moneyUnit = this.maDviTien;
             await this.dataSource.currentData.subscribe(obj => {
                 this.loaiVon = obj?.loaiCap;
                 this.soLenhChiTien = obj?.soLenhChiTien;
@@ -625,6 +628,16 @@ export class GhiNhanVonTaiDvctTaiTongCucComponent implements OnInit {
 
     displayValue(num: number): string {
         return displayNumber(num);
+    }
+
+    changeMoney() {
+        if (!this.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+            return;
+        }
+        this.ttGui.soTien = exchangeMoney(this.ttGui.soTien, this.maDviTien, this.moneyUnit);
+        this.ttGuiCache.soTien = this.ttGui.soTien;
+        this.maDviTien = this.moneyUnit;
     }
 
 }

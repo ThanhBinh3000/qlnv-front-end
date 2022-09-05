@@ -915,9 +915,9 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     tinhTong2() {
-        let tonglstChitietVtuTrongDot = 0;
-        let tonglstChitietVtuLuyke = 0;
         this.lstCtietBcao4an.forEach(e => {
+            let tonglstChitietVtuTrongDot = 0;
+            let tonglstChitietVtuLuyke = 0;
             e.listCtiet.forEach(el => {
                 if (el.loaiMatHang == '0') {
                     tonglstChitietVtuTrongDot += el.sl;
