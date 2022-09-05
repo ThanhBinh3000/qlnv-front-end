@@ -262,25 +262,34 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   setTitle() {
     let trangThai = this.formData.get('trangThai').value
     switch (trangThai) {
-      case '00': {
+      case STATUS.DU_THAO: {
         this.titleStatus = 'DỰ THẢO';
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
         this.titleButtonDuyet = 'Gửi duyệt';
         break;
       }
-      case '11': {
+      case STATUS.BAN_HANH: {
         this.titleStatus = 'BAN HÀNH';
         this.styleStatus = 'da-ban-hanh'
-        break
+        break;
       }
     }
   }
 
   pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO: {
+          trangThai = STATUS.BAN_HANH;
+        msg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành ?',
+      nzContent: msg,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -291,8 +300,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: STATUS.BAN_HANH,
+            trangThai: trangThai,
           };
+
           const res = await this.quyetDinhPheDuyetKetQuaLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);

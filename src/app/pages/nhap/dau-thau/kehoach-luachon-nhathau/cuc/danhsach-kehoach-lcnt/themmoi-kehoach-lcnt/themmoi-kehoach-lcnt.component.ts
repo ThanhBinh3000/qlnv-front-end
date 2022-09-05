@@ -674,7 +674,23 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           } else {
             switch (this.formData.get('trangThai').value) {
               case STATUS.DU_THAO: {
-                body.trangThai = STATUS.BAN_HANH;
+                body.trangThai = STATUS.CHO_DUYET_TP;
+                break;
+              }
+              case STATUS.CHO_DUYET_TP: {
+                body.trangThai = STATUS.CHO_DUYET_LDC;
+                break;
+              }
+              case STATUS.CHO_DUYET_LDC: {
+                body.trangThai = STATUS.DA_DUYET_LDC;
+                break;
+              }
+              case STATUS.TU_CHOI_TP: {
+                body.trangThai = STATUS.CHO_DUYET_LDC;
+                break;
+              }
+              case STATUS.TU_CHOI_LDC: {
+                body.trangThai = STATUS.DA_DUYET_LDC;
                 break;
               }
             }
@@ -719,12 +735,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             trangThai: '',
           };
           switch (this.formData.get('trangThai').value) {
-            case '01': {
-              body.trangThai = '03';
+            case STATUS.CHO_DUYET_TP: {
+              body.trangThai = STATUS.TU_CHOI_TP;
               break;
             }
-            case '09': {
-              body.trangThai = '12';
+            case STATUS.CHO_DUYET_LDC: {
+              body.trangThai = STATUS.TU_CHOI_LDC;
               break;
             }
           }
@@ -748,40 +764,40 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   async setTitle() {
     let trangThai = this.formData.get('trangThai').value;
     switch (trangThai) {
-      case '00': {
+      case STATUS.DU_THAO: {
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '03': {
+      case STATUS.TU_CHOI_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - TP';
         break;
       }
-      case '01': {
+      case STATUS.CHO_DUYET_TP: {
         this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - TP';
         break;
       }
-      case '09': {
+      case STATUS.CHO_DUYET_LDC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_baocao2';
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - LĐ Cục';
         break;
       }
-      case '12': {
+      case STATUS.TU_CHOI_LDC: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet';
         this.titleButtonDuyet = 'Lưu và gửi duyệt';
         this.titleStatus = 'Từ chối - LĐ Cục';
         break;
       }
-      case '02': {
+      case STATUS.DA_DUYET_LDC: {
         this.titleStatus = 'Đã duyệt';
         this.styleStatus = 'da-ban-hanh';
         break;
       }
-      case '05': {
+      case STATUS.BAN_HANH: {
         this.titleStatus = 'Tổng hợp';
         this.styleStatus = 'da-ban-hanh';
         break;

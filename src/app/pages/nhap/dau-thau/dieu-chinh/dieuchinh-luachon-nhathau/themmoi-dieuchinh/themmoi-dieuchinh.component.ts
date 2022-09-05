@@ -215,7 +215,6 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     } else {
       this.firstInitUpdate = false;
     }
-    console.log(this.danhsachDx);
     this.setTitle();
   }
 
@@ -503,33 +502,32 @@ export class ThemMoiDieuChinhComponent implements OnInit {
   titleStatus: string;
   setTitle() {
     let trangThai = this.formData.get('trangThai').value
-    console.log(trangThai);
     switch (trangThai) {
-      case '00': {
+      case STATUS.DU_THAO: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
         this.titleButtonDuyet = 'Gửi duyệt';
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '03': {
+      case STATUS.TU_CHOI_LDV: {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
         this.titleButtonDuyet = 'Gửi duyệt';
         this.titleStatus = 'Từ chối - LĐ Vụ';
         break;
       }
-      case '01': {
+      case STATUS.CHO_DUYET_LDV: {
         this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
         this.titleButtonDuyet = 'Duyệt';
         this.titleStatus = 'Chờ duyệt - LĐ Vụ';
         break
       }
-      case '02': {
+      case STATUS.DA_DUYET_LDV: {
         this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
         this.titleButtonDuyet = 'Ban hành';
         this.titleStatus = 'Đã duyệt';
         break
       }
-      case '11': {
+      case STATUS.BAN_HANH: {
         this.titleStatus = 'Ban hành';
         break
       }
