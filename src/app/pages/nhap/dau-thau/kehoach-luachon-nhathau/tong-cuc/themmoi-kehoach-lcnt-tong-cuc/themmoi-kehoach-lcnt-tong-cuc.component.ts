@@ -210,6 +210,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo);
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({

@@ -74,11 +74,10 @@ export class DialogPhanQuyenComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.getDmList(),
       this.search(),
       this.getListDataTree(),
-      this.bindingData(this.dataEdit)
     ])
+    this.bindingData(this.dataEdit)
     this.listOfMapData.forEach(item => {
       this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
     });
@@ -145,7 +144,6 @@ export class DialogPhanQuyenComponent implements OnInit {
     if (dataEdit) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          console.log(dataEdit.listRoles, item, dataEdit.listRoles.includes(item.id));
           dataEdit.listRoles.includes(item.id) ? item.checked = true : item.checked = false;
         });
       }
@@ -187,10 +185,6 @@ export class DialogPhanQuyenComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async getDmList() {
-    let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
-    this.danhMucList = data.data;
-  }
 
   handleCancel() {
     this._modalRef.destroy();

@@ -1,0 +1,131 @@
+<div class="bg-trang">
+  <div class="header">
+    <div class="header-text d-flex align-items-center justify-content-between">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == globals.prop.DU_THAO ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+          {{ formData.value.trangThai == globals.prop.DU_THAO ? 'Dự Thảo' : 'Ban Hành' }}
+        </span>
+        <span>Tổng hợp đề xuất nhu cầu của các chi cục</span>
+      </div>
+      <div class="btn-group th-de-xuat">
+        <button type="button" class="btn btn-sub" (click)="back()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button type="button" class="btn btn-sub">
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
+        </button>
+        <button class="btn btn-sub">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Đã ký</span>
+        </button>
+        <button (click)="save(false)" class="btn btn-main btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <nz-card class="mt16 flex-card p-lr16">
+    <form nz-form [formGroup]="formData" class="mt-16">
+      <nz-card class="flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Năm kế hoạch
+              </nz-form-label>
+              <input type="text" nz-input />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Số công văn
+              </nz-form-label>
+              <nz-input-group nzAddOnAfter="/CDTVP-KTBQ">
+                <input type="text" nz-input />
+              </nz-input-group>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Trích yếu
+              </nz-form-label>
+              <input nz-input placeholder="tự động sinh số biên bản" />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Ngày ký
+              </nz-form-label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd">
+              </nz-date-picker>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+      <nz-card class="flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 6]">
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Căn cứ đề xuất các Chi cục </nz-form-label>
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input [readonly]="true" />
+              </nz-input-group>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+    </form>
+    <h3 class="text-uppercase">thông tin nhập xuất theo kế hoạch</h3>
+
+
+    <h3 class="text-uppercase">bảng đề xuất</h3>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered class="nowrap"
+        [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th width="60px">STT</th>
+            <th width="250px">Nội dung</th>
+            <th width="200px">Đơn vị tính</th>
+            <th width="200px">Số lượng tồn</th>
+            <th width="200px">Số lượng sử dụng lại</th>
+            <th width="200px">Số lượng cần</th>
+            <th width="200px">Nhu cầu</th>
+            <th width="200px">Đề nghị</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of expandTable.data">
+            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+              <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                  {{ item.name }}
+                </td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.address }}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </nz-card>
+</div>

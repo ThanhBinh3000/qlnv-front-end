@@ -20,32 +20,35 @@
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table id="table-ql-nhom-quyen" #rowSelectionTable class="nowrap" [nzData]="dataTable"
-          [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '200px' }">
+          [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
           <thead>
             <tr>
-              <th width="45px" [nzChecked]="false"></th>
-              <th width="50px">STT</th>
-              <th width="300px">Nhóm quyền</th>
-              <th width="161px">Trạng thái</th>
-              <th width="161px">Ghi chú</th>
-              <th width="80px" [nzRight]="true"></th>
+              <th nzWidth="35px" [nzChecked]="false"></th>
+              <th nzWidth="35px">STT</th>
+              <th nzWidth="300px">Tên nhóm quyền</th>
+              <th nzWidth="80px">Trạng thái</th>
+              <th nzWidth="160px">Ghi chú</th>
+              <th nzWidth="70px">Hành động</th>
             </tr>
             <tr class="search-table">
               <th></th>
               <th></th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="ma  " />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.name" />
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="ma  " />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.status" />
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.ghiChu" />
                 </nz-input-group>
               </th>
               <th [nzRight]="true"></th>
@@ -58,9 +61,12 @@
               <td [nzChecked]="false"></td>
               <td class="text-center">{{idx + 1}}</td>
               <td>{{data.name}}</td>
-              <td>{{data.status}}</td>
+              <td>{{data.tenTrangThai}}</td>
               <td>{{data.ghiChu}}</td>
-              <td [nzRight]="true">
+              <td>
+                <a (click)="themNhomQuyen(data)">
+                  <i class="fa fa-eye"></i>
+                </a>
                 <a (click)="themNhomQuyen(data)">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -99,6 +105,16 @@
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered>
+          <thead>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchFilter"
+                  (input)="filterInTable(searchFilter)" size="small" />
+              </nz-input-group>
+            </th>
+            <td width="45px">
+            </td>
+          </thead>
           <tbody>
             <ng-container *ngFor="let data of listOfMapData">
               <ng-container *ngFor="let item of mapOfExpandedData[data.key]">

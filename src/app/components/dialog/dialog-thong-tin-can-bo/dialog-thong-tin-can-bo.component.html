@@ -30,7 +30,7 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="8" *ngIf="!formData.value.id">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu </nz-form-label>
         <nz-form-control [nzErrorTip]="error">

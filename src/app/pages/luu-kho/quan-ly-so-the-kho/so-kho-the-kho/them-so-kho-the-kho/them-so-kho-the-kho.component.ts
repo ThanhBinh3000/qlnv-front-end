@@ -99,6 +99,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.tenDvi = this.userInfo.TEN_DVI;
       this.detail.tenTrangThai = 'Dự thảo';
+      this.isStatus = this.globals.prop.NHAP_DU_THAO;
       await Promise.all([
         this.initForm(),
         this.loadDiemKho(),
@@ -108,8 +109,6 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
 
       if (this.idInput) {
         this.loadChiTiet();
-      } else {
-        this.isStatus = this.globals.prop.NHAP_DU_THAO;
       }
       this.spinner.hide();
     } catch (e) {
@@ -123,6 +122,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
     this.isTaoTheKho = true;
     let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
     this.dsChiTiet = res.data;
+    this.detail = res.data;
+    this.isStatus = this.detail.trangThai;
 
     this.formData.patchValue({
       nam: res.data.nam,
@@ -494,7 +495,7 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: id,
             lyDo: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_KE_TOAN,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
 
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
@@ -530,11 +531,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
           };
-          if (this.isStatus == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-            body.trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
-          }
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
@@ -570,11 +568,8 @@ export class ThemSoKhoTheKhoComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_KE_TOAN,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
-          if (this.isStatus == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-            body.trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC;
-          }
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
