@@ -7,7 +7,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DonviService } from 'src/app/services/donvi.service';
-import { TrangThaiHoatDong } from 'src/app/constants/status';
+import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
 
 
 @Component({
@@ -29,6 +29,7 @@ export class NewDonViComponent implements OnInit {
   selectedNode: any;
   optionList: string[] = [];
   cureentNodeParent: any
+  levelNode: number = 0;
 
   dataDetail: any;
   constructor(
@@ -38,60 +39,36 @@ export class NewDonViComponent implements OnInit {
     private donviService: DonviService,
     private modal: NzModalRef
   ) {
-    // lấy thêm loại đơn vị
-    this.enumToSelectList()
+    this.formDonVi = this.fb.group({
+      maDviCha: [''],
+      tenDvi: ['', Validators.required],
+      maDvi: ['', Validators.required],
+      diaChi: [''],
+      sdt: [''],
+      fax: [''],
+      trangThai: [true],
+      type: [true],
+      ghiChu: [''],
+    })
+    this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
+      console.log(value.length / 2);
+      let node = this.treeSelect.getTreeNodeByKey(value);
+      this.levelNode = node.level
+    });
   }
 
   ngOnInit(): void {
-    this.initForm();
-    // if (this.data || this.dataDetail) {
-    //   this.donviService.TimTheoId(this.data?.id == undefined ? this.dataDetail.id : this.data.id).then((res: ResponseData) => {
-    //     if (res.success) {
-    //       this.data = res.data
-    //       // api chuyển sang int hoặc string để chùng nhau
-    //       this.data.type = this.data.type.toString();
-    //       this.initForm();
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, res.error);
-    //     }
-    //   })
-    // }
 
-    // if (this.nodesTree) {
-    //   this.searchDVi()
-    // }
   }
 
 
   enumToSelectList() {
-    // this.helperService.EnumToSelectList("kieuphongban").then((res: ResponseData) => {
-    //   if (res.success) {
-    //     this.nodesTreeTypeDonVi = res.data
-    //   }
-    // })
-  }
 
-  initForm() {
-    this.formDonVi = this.fb.group({
-      tenDvi: ['', Validators.required],
-      maDvi: [],
-      maQhns: [''],
-      diaChi: [''],
-      ghiChu : [''],
-      maDviCha: [''],
-      trangThai: true,
-      maQd: [''],
-      maTr: [''],
-      maKhqlh: [''],
-      maKtbq: [''],
-      maTckt: [''],
-    })
   }
 
   handleCancel(): void {
     this.modal.destroy();
   }
-
 
   add() {
     this.helperService.markFormGroupTouched(this.formDonVi);
@@ -99,7 +76,8 @@ export class NewDonViComponent implements OnInit {
       return;
     }
     let body = this.formDonVi.value;
-    body.trangThai = body.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+    body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
+    body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.MLK : LOAI_DON_VI.PB
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -107,13 +85,12 @@ export class NewDonViComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    })
-    .catch((e) => {
+    }).catch((e) => {
       console.error('error: ', e);
       this.notification.error(
         MESSAGE.ERROR,
         e.error.errors[0].defaultMessage,
       );
-    })
+    });
   }
 }

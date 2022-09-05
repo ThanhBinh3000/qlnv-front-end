@@ -11,7 +11,7 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     id: 2,
-    icon: 'htvbdh_tcdt_icon-common',
+    icon: 'htvbdh_tcdt_phan-quyen',
     title: 'Quản lý quyền/ nhóm quyền',
     url: `/${NHAP_MAIN_ROUTE}/quan-ly-quyen`,
     dropdown: 'quan-ly-quyen',

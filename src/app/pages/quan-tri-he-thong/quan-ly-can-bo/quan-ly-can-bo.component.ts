@@ -2,14 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -36,14 +33,6 @@ export class QuanLyCanBoComponent implements OnInit {
   setOfCheckedId = new Set<number>();
 
 
-  searchFilter = {
-    ma: '',
-    maCha: '',
-    giaTri: '',
-    ghiChu: '',
-    loai: ''
-  };
-
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
@@ -55,7 +44,6 @@ export class QuanLyCanBoComponent implements OnInit {
   pageSize: number = 20;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  dataTableAll: any[] = [];
 
   userInfo: UserLogin;
   isDetail: boolean = false;
@@ -65,18 +53,6 @@ export class QuanLyCanBoComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
-  filterTable: any = {
-    loai: '',
-    ma: '',
-    giaTri: '',
-    trangThai: '',
-    nguoiTao: '',
-    ngayTao: '',
-    nguoiSua: '',
-    ngaySua: '',
-  };
-
 
   constructor(
     private readonly fb: FormBuilder,
@@ -90,11 +66,7 @@ export class QuanLyCanBoComponent implements OnInit {
     private donViService: DonviService
   ) {
     this.formData = this.fb.group({
-      ma: [null],
-      maCha: [null],
-      giaTri: [null],
-      ghiChu: [null],
-      loai: [null]
+
     });
   }
 
@@ -138,8 +110,6 @@ export class QuanLyCanBoComponent implements OnInit {
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
-    console.log(this.setOfCheckedId
-    )
   }
 
   updateAllChecked(): void {
@@ -188,8 +158,6 @@ export class QuanLyCanBoComponent implements OnInit {
           item.checked = false;
         });
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -227,10 +195,6 @@ export class QuanLyCanBoComponent implements OnInit {
   clearFilter() {
     this.formData.reset()
     this.search();
-  }
-
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
@@ -313,28 +277,6 @@ export class QuanLyCanBoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
-  }
-
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-    console.log(this.dataTableAll)
-  }
-
-  print() {
-
   }
 
   exportData() {

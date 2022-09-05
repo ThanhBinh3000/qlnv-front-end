@@ -7,7 +7,7 @@
     <a class="d-flex align-items-center justify-content-between" *ngFor="let route of routes, let i = index"
       (click)="routerNavigate(route)" [ngClass]="route.isSelected ? 'is-selected' : ''">
       <span>
-        <i class="icon htvbdh_tree mr-2 icon-menu"></i>
+        <i class="icon {{route.icon}} mr-2 icon-menu"></i>
         <span>{{route.title}}</span>
       </span>
     </a>

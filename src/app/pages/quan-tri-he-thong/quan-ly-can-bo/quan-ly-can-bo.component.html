@@ -39,51 +39,47 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.fullName"
-                (input)="filterInTable('loai',filterTable.loai)" />
+                (input)="search()" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.ma"
-                (input)="filterInTable('ma',filterTable.ma)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.username"
+                (input)="search()" />
             </nz-input-group>
 
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.giaTri"
-                (input)="filterInTable('giaTri',filterTable.giaTri)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.email"
+                (input)="search()" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.phoneNo"
+                (input)="search()" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.dvql" (input)="search()" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.position"
+                (input)="search()" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.status"
+                (input)="search()" />
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" />
-            </nz-input-group>
+
           </th>
           <ng-template #suffixTemplateInfo>
             <i nz-icon nzType="search"></i>

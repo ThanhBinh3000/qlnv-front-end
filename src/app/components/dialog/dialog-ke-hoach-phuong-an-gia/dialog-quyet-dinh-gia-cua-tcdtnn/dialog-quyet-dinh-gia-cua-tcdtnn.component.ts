@@ -1,12 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalRef} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import {STATUS} from "../../../../constants/status";
-import {TongHopPhuongAnGiaService} from "../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { STATUS } from "../../../../constants/status";
+import { TongHopPhuongAnGiaService } from "../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 @Component({
   selector: 'app-dialog-quyet-dinh-gia-cua-tcdtnn',
@@ -31,7 +31,7 @@ export class DialogQuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   capDonVi: number;
   dsToTrinhDeXuat: any[] = [];
   radioValue: any;
-  pagtype: string;
+  // pagtype: string;
 
   constructor(
     private _modalRef: NzModalRef,

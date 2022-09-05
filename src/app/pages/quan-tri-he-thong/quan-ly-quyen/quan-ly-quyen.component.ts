@@ -1,18 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogNhomQuyenComponent } from 'src/app/components/dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
-import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogQuyenComponent } from 'src/app/components/dialog/dialog-quyen/dialog-quyen.component';
-import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
-import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QlNhomQuyenService } from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
@@ -37,21 +30,11 @@ export interface TreeNodeInterface {
   styleUrls: ['./quan-ly-quyen.component.scss'],
 })
 export class QuanLyQuyenComponent implements OnInit {
-  @Input() typeVthh: string;
-
 
   formData: FormGroup;
 
-
   setOfCheckedId = new Set<number>();
 
-  searchFilter = {
-    ma: '',
-    maCha: '',
-    giaTri: '',
-    ghiChu: '',
-    loai: ''
-  };
 
   optionsDonVi: any[] = [];
   options: any[] = [];
@@ -75,61 +58,11 @@ export class QuanLyQuyenComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  filterTable: any = {
-    loai: '',
-    ma: '',
-    giaTri: '',
-    trangThai: '',
-    nguoiTao: '',
-    ngayTao: '',
-    nguoiSua: '',
-    ngaySua: '',
-  };
-
   listOfMapData: any[] = [
-    // {
-    //   key: `1`,
-    //   name: 'Kế hoạch, vốn và dự toán NSNN',
-    //   children: [
-    //     {
-    //       key: `1-1`,
-    //       name: 'Giao kế hoạch và dự toán',
-    //       children: [
-    //         {
-    //           key: `1-2-1`,
-    //           name: 'Giao kế hoạch và vốn đầu năm',
-    //           children: [
-    //             {
-    //               key: `1-2-1-1`,
-    //               name: 'Quyết định',
-    //               children: [
-    //                 {
-    //                   key: `1-2-1-1-1`,
-    //                   name: 'Thêm mới TTCP',
-    //                 },
-    //                 {
-    //                   key: `1-2-1-1-2`,
-    //                   name: 'Xem TTCP',
-    //                 },
-    //                 {
-    //                   key: `1-2-1-1-3`,
-    //                   name: 'Xóa TTCP',
-    //                 },
-    //                 {
-    //                   key: `1-2-1-1-4`,
-    //                   name: 'Sửa TTCP',
-    //                 },
-    //               ]
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     },
-    //   ]
-    // }
   ];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   listDataSelected: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -137,16 +70,10 @@ export class QuanLyQuyenComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-    private router: Router,
     private qlNhomQuyenService: QlNhomQuyenService,
     private qlQuyenNSDService: QlQuyenNSDService
   ) {
     this.formData = this.fb.group({
-      ma: [null],
-      maCha: [null],
-      giaTri: [null],
-      ghiChu: [null],
-      loai: [null]
     });
   }
 
@@ -175,6 +102,7 @@ export class QuanLyQuyenComponent implements OnInit {
       this.listOfMapData.forEach(item => {
         this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
       })
+      this.dataTableAll = cloneDeep(this.listOfMapData);
     }
   }
 
@@ -376,7 +304,7 @@ export class QuanLyQuyenComponent implements OnInit {
           item.checked = false;
         });
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      // this.dataTableAll = cloneDeep(this.dataTable);
 
     } else {
       this.dataTable = [];
@@ -427,21 +355,27 @@ export class QuanLyQuyenComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  searchFilter: string;
+  filterInTable(value) {
     if (value && value != '') {
-      this.dataTable = [];
+      this.listOfMapData = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+          console.log(item);
+          if (item['name'].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
             temp.push(item)
           }
         });
       }
-      this.dataTable = [...this.dataTable, ...temp];
+      this.listOfMapData = [...this.listOfMapData, ...temp];
     } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
+      this.listOfMapData = cloneDeep(this.dataTableAll);
     }
+    console.log(this.listOfMapData);
+    this.listOfMapData.forEach(item => {
+      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    })
   }
 
   themNhomQuyen(data?: any, isView?: boolean) {
@@ -595,6 +529,7 @@ export class QuanLyQuyenComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
 }
 
 

@@ -45,6 +45,7 @@
               <td class="text-center">{{idx + 1}}</td>
               <td>{{data.name}}</td>
               <td>{{data.ghiChu}}</td>
+              <td>{{data.status}}</td>
             </tr>
           </tbody>
         </nz-table>
@@ -66,7 +67,7 @@
     </div>
     <div nz-col [nzSpan]="14">
       <span class="title-phan-quyen">Các quyền truy cập</span>
-      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card scroll-modal ">
         <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered>
           <tbody>
             <ng-container *ngFor="let data of listOfMapData">
