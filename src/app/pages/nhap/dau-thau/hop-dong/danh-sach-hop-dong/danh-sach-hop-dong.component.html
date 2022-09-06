@@ -11,7 +11,7 @@
           <input class="search__input" nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Nhà cung cấp</label>
+          <label class="search__label">Đơn vị mua</label>
           <input class="search__input" nz-input placeholder="Nhà cung cấp" [(ngModel)]="nhaCungCap" />
         </div>
         <div nz-col nzSpan="6">
@@ -30,9 +30,8 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
-      <h3>Danh sách hợp đồng mua</h3>
+      <h3> DANH SÁCH HỢP ĐỒNG MUA </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
@@ -48,7 +47,6 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
@@ -58,13 +56,13 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="60px">STT</th>
-            <th width="130px">Số HĐ</th>
+            <th width="130px">Số hợp đồng</th>
             <th width="175px">Tên hợp đồng</th>
             <th width="175px">Ngày ký</th>
             <th width="175px">Loại hàng hóa</th>
             <th width="175px">Chủng loại hàng hóa</th>
-            <th width="175px">Chủ đầu tư</th>
-            <th width="175px">Nhà cung cấp</th>
+            <th width="180px">Bên bán</th>
+            <th width="180px">Bên mua</th>
             <th width="175px">Giá trị hợp đồng</th>
             <th width="175px">Trạng thái</th>
             <th width="90px" class="text-right">Hành động</th>
@@ -149,7 +147,6 @@
           </tr>
         </thead>
         <tbody>
-
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
