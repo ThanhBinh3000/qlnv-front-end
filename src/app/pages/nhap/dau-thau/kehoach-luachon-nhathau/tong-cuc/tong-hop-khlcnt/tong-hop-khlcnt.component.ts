@@ -9,12 +9,9 @@ import { Subject } from 'rxjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import * as dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { FormBuilder } from '@angular/forms';
-import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
@@ -40,6 +37,7 @@ export class TongHopKhlcntComponent implements OnInit {
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
+
   tabSelected: string = 'phuong-an-tong-hop';
   listNam: any[] = [];
   yearNow: number = 0;
@@ -67,6 +65,7 @@ export class TongHopKhlcntComponent implements OnInit {
     tenNguonVon: '',
     trangThai: '',
   }
+
   dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -77,7 +76,6 @@ export class TongHopKhlcntComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
-
   allChecked = false;
   indeterminate = false;
 
@@ -100,37 +98,6 @@ export class TongHopKhlcntComponent implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    }
-  }
-
-  updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {
-      this.indeterminate = true;
     }
   }
 
@@ -212,6 +179,7 @@ export class TongHopKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -245,7 +213,6 @@ export class TongHopKhlcntComponent implements OnInit {
       this.searchFilter.tenCloaiVthh = data.ten
       this.searchFilter.loaiVthh = data.parent.ma
       this.searchFilter.tenVthh = data.parent.ten
-
       // this.searchFilter.patchValue({
       //   maVtu: null,
       //   tenVtu: null,
@@ -281,6 +248,9 @@ export class TongHopKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -318,7 +288,6 @@ export class TongHopKhlcntComponent implements OnInit {
     }
     return tongSL;
   }
-
 
   getTenDviTable(maDvi: string) {
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
@@ -463,6 +432,7 @@ export class TongHopKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -497,4 +467,34 @@ export class TongHopKhlcntComponent implements OnInit {
     }
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
 }

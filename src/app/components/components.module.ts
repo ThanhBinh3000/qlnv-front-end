@@ -145,6 +145,8 @@ import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an
 import { DialogTongHopGiaoComponent } from './dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
 import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
 
+import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
+import { TemplateErrorComponent } from './template-error/template-error.component';
 @NgModule({
   declarations: [
     //components
@@ -241,7 +243,7 @@ import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dia
     DialogToTrinhTongHopComponent,
     DialogToTrinhDeXuatComponent,
     DialogQuyetDinhGiaCuaTcdtnnComponent,
-    DialogTongHopGiaoComponent
+    TemplateErrorComponent
   ],
   imports: [
     CommonModule,
@@ -358,7 +360,8 @@ import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dia
     MultipleTagComponent,
     NzPopconfirmModule,
     FileListComponent,
-    NzResultModule
+    NzResultModule,
+    TemplateErrorComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

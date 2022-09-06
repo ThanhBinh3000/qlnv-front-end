@@ -11,8 +11,8 @@
 			</ng-container>
 			<ng-template #templateName5>
 				<label class="search__label">Đơn vị</label>
-				<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-					[class]="maDviTien ?'' : 'input-error-validate' ">
+				<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="moneyUnit"
+					[class]="moneyUnit ?'' : 'input-error-validate' " (ngModelChange)="changeMoney()">
 					<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
 				</nz-select>
 			</ng-template>
@@ -80,7 +80,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let item of lstCtietBcao4an; let i = index">
+			<tr *ngFor="let item of lstCtietBcao; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate4anB">
 					<td [nzIndentSize]="item.level * 8">
 						{{getChiMuc(item.stt)}}

@@ -48,7 +48,7 @@
             Số biên bản lấy mẫu
           </nz-form-label>
           <nz-select [(ngModel)]="bienBanLayMau.bbLayMauId" (ngModelChange)="changeBienBanMau()"
-            [disabled]="bienBanLayMau.trangThai == '01' || bienBanLayMau.trangThai == '02' || bienBanLayMau.trangThai == '04' || isView">
+            [disabled]="bienBanLayMau.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanLayMau.trangThai == globals.prop.NHAP_TU_CHOI_TP || bienBanLayMau.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
             <nz-option *ngFor="let item of listBienBanLayMau" [nzValue]="item.id" [nzLabel]="item.soBienBan">
             </nz-option>
           </nz-select>

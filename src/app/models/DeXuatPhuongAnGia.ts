@@ -45,7 +45,11 @@ export class ThongTinGia {
   maDvi: string;
   qdDcTcdtnnId: number;
   soLuong: 0;
-  tenDvi: string
+  tenDvi: string;
+  donGiaBtc: number;
+  donGiaBtcVat: number;
+  giaQd: number;
+  giaQdVat: number;
 }
 
 

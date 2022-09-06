@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
-import {QuyetDinhDcPagTcdtnnService} from "../../../../../../services/quyet-dinh-dc-pag-tcdtnn.service";
+import {QuyetDinhDieuChinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -37,8 +37,6 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
 
-
-
   isViewDetail: boolean;
   idSelected: number = 0;
   constructor(private readonly fb: FormBuilder,
@@ -46,7 +44,7 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
-    private service: QuyetDinhDcPagTcdtnnService
+    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService
   ) {
     this.formData = this.fb.group({
       namKeHoach: [null],
@@ -105,7 +103,7 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
       page: this.page - 1,
 
     }
-    let res = await this.service.search(body);
+    let res = await this.quyetDinhDieuChinhGiaTCDTNNService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -180,7 +178,7 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
           body.ngayKyDen = body.ngayKy[1];
         }
         body.pagType = this.pagType
-        this.service
+        this.quyetDinhDieuChinhGiaTCDTNNService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chinh-gia-tcdtnn.xlsx'),
@@ -283,7 +281,7 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.service.delete({ id: item.id }).then((res) => {
+          this.quyetDinhDieuChinhGiaTCDTNNService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

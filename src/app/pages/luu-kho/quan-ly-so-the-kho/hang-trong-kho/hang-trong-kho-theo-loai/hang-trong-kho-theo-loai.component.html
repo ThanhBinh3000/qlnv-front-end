@@ -42,7 +42,8 @@
                   <nz-input-group *ngIf="!userService.isTongCuc()" id="cuc">
                     <input type="text" nz-input formControlName="idCuc" />
                   </nz-input-group>
-                  <nz-select *ngIf="userService.isTongCuc()" formControlName="idCuc" id="cuc" (ngModelChange)="onChangeCuc($event)">
+                  <nz-select *ngIf="userService.isTongCuc()" formControlName="idCuc" id="cuc"
+                    (ngModelChange)="onChangeCuc($event)">
                     <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                     <nz-option nzValue="{{item.id}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
                     </nz-option>
@@ -199,7 +200,7 @@
                     </td>
                     <td>{{ item.loaiHH }}</td>
                     <td>{{ item.chungLoaiHH}}</td>
-                    <td class="text-center">{{ item.tonKhoDauKy }}</td>
+                    <td class="text-center">{{ item.tonKhoDauKy }}</td>...
                     <td class="text-center">{{ item.nhapTrongKy }}</td>
                     <td class="text-center">{{ item.xuatTrongKy}}</td>
                     <td class="text-center">{{ item.tonKhoCuoiKy }}</td>
