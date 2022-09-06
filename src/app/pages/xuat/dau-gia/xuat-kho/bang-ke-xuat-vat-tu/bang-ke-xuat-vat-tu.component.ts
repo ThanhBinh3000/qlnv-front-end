@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
@@ -10,8 +9,10 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
 @Component({
   selector: 'app-bang-ke-xuat-vat-tu',
   templateUrl: './bang-ke-xuat-vat-tu.component.html',
@@ -20,16 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 export class BangKeXuatVatTuComponent implements OnInit {
   @Input() typeVthh: string;
 
-  searchFilter = {
-    soQuyetDinh: '',
-    soBangKe: '',
-    ngayTaoBangKe: '',
-  };
-
-  listDiemKho: any[] = [];
-  listNhaKho: any[] = [];
-  listNganLo: any[] = [];
-
+  formSearch: FormGroup;
   userInfo: UserLogin;
 
   dataTable: any[] = [];
@@ -45,24 +37,27 @@ export class BangKeXuatVatTuComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
   filterTable: any = {
-    soQuyetDinhNhap: '',
     soBangKe: '',
-    ngayTaoBangKe: '',
+    soQuyetDinhXuat: '',
+    soPhieuXuat: '',
+    ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
-    tenNganLo: '',
-  };
+    tenNganKho: '',
+    tenLoKho: '',
+    tenTrangThai: '',
+  };;
 
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private notification: NzNotificationService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    public globals: Globals,
+    private fb: FormBuilder,
+
   ) { }
 
   async ngOnInit() {
@@ -73,8 +68,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
       }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNganLo(),
+        this.initForm(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -84,6 +78,13 @@ export class BangKeXuatVatTuComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+  initForm(): void {
+    this.formSearch = this.fb.group({
+      soQuyetDinhXuat: [null],
+      soBangKe: [null],
+      ngayTaoBangKe: [null],
+    })
   }
 
   updateAllChecked(): void {
@@ -120,16 +121,18 @@ export class BangKeXuatVatTuComponent implements OnInit {
   async search() {
     let param = {
       "capDvis": '3',
-      "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
-      "soQdNhap": this.searchFilter.soQuyetDinh,
+      "ngayTaoBangKeDen": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 1 ? dayjs(this.formSearch.value.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
+      "soQdNhap": this.formSearch.value.soQuyetDinh,
       "maDvis": [this.userInfo.MA_DVI],
       "loaiVthh": this.isTatCa ? null : this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
-      "soBangKe": this.searchFilter.soBangKe,
-      "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
+      "soBangKe": this.formSearch.value.soBangKe,
+      "ngayTaoBangKeTu": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 0 ? dayjs(this.formSearch.value.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
     }
     let res = await this.quanLyBangKeVatTuService.timKiem(param);
+    console.log(res.data.content);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -148,11 +151,19 @@ export class BangKeXuatVatTuComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soQuyetDinh: '',
-      soBangKe: '',
-      ngayTaoBangKe: '',
+    this.formSearch.reset()
+    this.filterTable = {
+      soBangKe: null,
+      soQuyetDinhXuat: null,
+      soPhieuXuat: null,
+      ngayNhapKho: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      tenTrangThai: null,
     };
+    this.search()
   }
 
   xoaItem(item: any) {
@@ -216,61 +227,6 @@ export class BangKeXuatVatTuComponent implements OnInit {
     }
   }
 
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
@@ -287,13 +243,13 @@ export class BangKeXuatVatTuComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "ngayTaoBangKeDen": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 1 ? dayjs(this.formSearch.value.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
+          "soQdNhap": this.formSearch.value.soQuyetDinh,
           "maDvis": [this.userInfo.MA_DVI],
           "loaiVthh": this.isTatCa ? null : this.typeVthh,
           "paggingReq": null,
-          "soBangKe": this.searchFilter.soBangKe,
-          "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
+          "soBangKe": this.formSearch.value.soBangKe,
+          "ngayTaoBangKeTu": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 0 ? dayjs(this.formSearch.value.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
         }
         this.quanLyBangKeVatTuService
           .exportList(body)
@@ -352,38 +308,34 @@ export class BangKeXuatVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && dayjs(item[key].toString().toLowerCase()).format('dd/MM/YYYY') == dayjs(value).format('dd/MM/YYYY')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+      this.dataTable = [...this.dataTable, ...temp]
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soBangKe: '',
-      ngayTaoBangKe: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganLo: '',
-    }
-  }
-
-  print() {
-
+  onClose() {
+    this.isDetail = false;
+    this.search();
   }
 
 }

@@ -49,3 +49,9 @@ export enum TrangThaiHoatDong {
   HOAT_DONG = "01",
   KHONG_HOAT_DONG = "00"
 }
+
+
+export enum LOAI_DON_VI {
+  MLK = "MLK",
+  PB = "PB"
+}

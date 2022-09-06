@@ -2,16 +2,15 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component';
 import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
@@ -27,18 +26,12 @@ export class QuanLyCanBoComponent implements OnInit {
 
   formData: FormGroup;
 
+  data: any;
+
   danhMucList: any[];
 
   setOfCheckedId = new Set<number>();
 
-
-  searchFilter = {
-    ma: '',
-    maCha: '',
-    giaTri: '',
-    ghiChu: '',
-    loai: ''
-  };
 
   optionsDonVi: any[] = [];
   options: any[] = [];
@@ -48,10 +41,9 @@ export class QuanLyCanBoComponent implements OnInit {
   endValue: Date | null = null;
 
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 20;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  dataTableAll: any[] = [];
 
   userInfo: UserLogin;
   isDetail: boolean = false;
@@ -62,33 +54,19 @@ export class QuanLyCanBoComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  filterTable: any = {
-    loai: '',
-    ma: '',
-    giaTri: '',
-    trangThai: '',
-    nguoiTao: '',
-    ngayTao: '',
-    nguoiSua: '',
-    ngaySua: '',
-  };
-
-
   constructor(
     private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private dmDungCungService: DanhMucDungChungService,
+    private qlNsdService: QlNguoiSuDungService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-    private router: Router
+    private router: Router,
+    private donViService: DonviService
   ) {
     this.formData = this.fb.group({
-      ma: [null],
-      maCha: [null],
-      giaTri: [null],
-      ghiChu: [null],
-      loai: [null]
+
     });
   }
 
@@ -132,8 +110,6 @@ export class QuanLyCanBoComponent implements OnInit {
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
-    console.log(this.setOfCheckedId
-    )
   }
 
   updateAllChecked(): void {
@@ -172,7 +148,7 @@ export class QuanLyCanBoComponent implements OnInit {
       limit: this.pageSize,
       page: this.page - 1,
     }
-    let res = await this.dmDungCungService.search(body);
+    let res = await this.qlNsdService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -182,8 +158,6 @@ export class QuanLyCanBoComponent implements OnInit {
           item.checked = false;
         });
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -223,10 +197,6 @@ export class QuanLyCanBoComponent implements OnInit {
     this.search();
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -258,17 +228,6 @@ export class QuanLyCanBoComponent implements OnInit {
         }
       },
     });
-  }
-
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = isView;
-  }
-
-  async showList() {
-    this.isDetail = false;
-    await this.search();
   }
 
   export() {
@@ -320,28 +279,6 @@ export class QuanLyCanBoComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-    console.log(this.dataTableAll)
-  }
-
-  print() {
-
-  }
-
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -364,10 +301,8 @@ export class QuanLyCanBoComponent implements OnInit {
   }
 
   them(data?: any, isView?: boolean) {
-    let modalTuChoi;
-    // if (data == null && isView == false) {
-    modalTuChoi = this.modal.create({
-      nzTitle: 'Sửa thông tin cán bộ',
+    let modal = this.modal.create({
+      nzTitle: data ? 'Thông tin cán bộ' : 'Thêm mới thông tin cán bộ',
       nzContent: DialogThongTinCanBoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -378,45 +313,56 @@ export class QuanLyCanBoComponent implements OnInit {
         isView: isView,
       },
     });
-    // }
-    // if (data != null && isView == true) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chi tiết danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
-    // if (data != null && isView == false) {
-    //   modalTuChoi = this.modal.create({
-    //     nzTitle: 'Chỉnh sửa danh mục dùng chung',
-    //     nzContent: DialogThemDanhMucDungChungComponent,
-    //     nzMaskClosable: false,
-    //     nzClosable: false,
-    //     nzWidth: '900px',
-    //     nzFooter: null,
-    //     nzComponentParams: {
-    //       dataEdit: data,
-    //       isView: isView,
-    //     },
-    //   });
-    // }
-
-    modalTuChoi.afterClose.subscribe((data) => {
+    modal.afterClose.subscribe((data) => {
       this.search();
     })
   }
 
-  openPhanQuyen() {
+  async laytatcadonvi() {
+    this.spinner.show();
+    try {
+      let res = await this.donViService.layTatCaDonVi();
+      this.optionsDonVi = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        for (let i = 0; i < res.data.length; i++) {
+          var item = {
+            ...res.data[i],
+            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+          };
+          this.optionsDonVi.push(item);
+          // nếu dữ liệu detail có 
+          if (this.data) {
+            if (res.data[i].maDvi == this.data.dvql) {
+              this.data.dvql = res.data[i].maDvi + ' - ' + res.data[i].tenDvi
+              // this.initForm()
+            }
+          }
+        }
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  onInput(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.options = [];
+    } else {
+      this.options = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  openPhanQuyen(data) {
     let modalPhanQuyen;
-    // if (data == null && isView == false) {
     modalPhanQuyen = this.modal.create({
       nzTitle: 'Phân quyền',
       nzContent: DialogPhanQuyenComponent,
@@ -425,6 +371,7 @@ export class QuanLyCanBoComponent implements OnInit {
       nzWidth: '1300px',
       nzFooter: null,
       nzComponentParams: {
+        dataEdit: data
       },
     });
   }
@@ -468,6 +415,7 @@ export class QuanLyCanBoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+
 }
 
 

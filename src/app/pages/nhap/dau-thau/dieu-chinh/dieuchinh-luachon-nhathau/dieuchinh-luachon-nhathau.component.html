@@ -12,13 +12,13 @@
           <label class="search__label">Số QĐ điều chỉnh KH LCNT</label>
           <input [(ngModel)]="searchFilter.soQdinh" class="search__input" nz-input />
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày ký</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
         <div nz-col nzSpan="12">
           <label class="search__label">Trích yếu</label>
           <input [(ngModel)]="searchFilter.trichYeu" class="search__input" nz-input />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày ký</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -34,7 +34,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách quyết điều chỉnh KH LCNT</h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
@@ -61,10 +61,10 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="60px">STT</th>
-            <th width="130px">Số QĐ điều chỉnh KH LCNT</th>
+            <th width="130px">Số quyết định điều chỉnh KH LCNT</th>
             <th>Ngày ký</th>
             <th>Trích yếu</th>
-            <th class="text-center">Số QĐ phê duyệt KH LCNT</th>
+            <th class="text-center">Số QĐ duyệt KHLCNT</th>
             <th class="text-center">Năm kế hoạch</th>
             <th class="text-center">Loại hàng hóa</th>
             <th class="text-center">Trạng thái</th>
