@@ -24,7 +24,14 @@
       padding: 0px !important;
     }
   }
+
+  table {
+    background: #fff;
+  }
 }
+
+
+
 
 .canphai {
   button.btn.btn-outline-grey {
@@ -53,4 +60,11 @@
 .phan-he-option {
   width: 78%;
   margin-bottom: 12px;
+}
+
+
+.selectedRow {
+  td {
+    background: #d8dcfe !important;
+  }
 }

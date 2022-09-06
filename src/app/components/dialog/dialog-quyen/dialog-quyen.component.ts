@@ -63,7 +63,6 @@ export class DialogQuyenComponent implements OnInit {
         return;
       }
       let body = this.formData.value;
-      console.log(this.formData.value)
       let res
       if (this.dataEdit != null) {
         res = await this.dmService.update(body);

@@ -445,7 +445,12 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   // đóng
   close() {
-    this.location.back();
+    // const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+    // if (capDviUser == Utils.TONG_CUC) {
+    this.router.navigate([
+      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi/'
+    ]);
+    // }
   };
 
   // in
@@ -614,10 +619,14 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-            if (capDviUser == 2) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.TAO_BAO_CAO_SUCCESS);
-            } else if (capDviUser == 1) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+            if (this.trangThaiBanGhi == '1') {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            } else {
+              if (capDviUser == 2) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.TAO_BAO_CAO_SUCCESS);
+              } else if (capDviUser == 1) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
+              }
             }
             this.router.navigate([
               MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
@@ -767,6 +776,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
         ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
         this.status = true;
+        this.statusBtnTongHop = true;
+        this.statusGiaoToanBo = true;
       } else {
         this.status = false;
       }
@@ -808,12 +819,12 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.statusBtnGiao = true;
       this.statusGiaoToanBo = true;
     }
-
-    if (userRole == 'C_KH_VP_NV_TVQT' && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false) {
+    if (userRole == 'C_KH_VP_NV_TVQT' && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
       this.statusBtnGuiDVCT = true;
+      this.statusGiaoToanBo = true;
     }
 
   }
@@ -881,6 +892,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
     } else if (this.maPaCha.includes('BTC')) {
       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+    } else {
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+    }
+    if (capDviUser == Utils.CUC_KHU_VUC) {
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
     } else {
       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
     }
@@ -1579,12 +1595,12 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         if (this.getHead(item.stt) == stt) {
           item.lstCtietDvis.forEach(e => {
             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-            this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += e.soTranChi;
+            this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
           })
         }
       });
       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        this.lstCtietBcao[index].tongCong += item.soTranChi;
+        this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
       })
       stt = this.getHead(stt);
     };
@@ -1597,7 +1613,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
         this.lstCtietBcao[index].tongCong = 0
-        this.lstCtietBcao[index].tongCong += item.soTranChi;
+        this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
       })
     })
   };

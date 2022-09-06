@@ -64,7 +64,7 @@
               <th width="150px">Ngày tạo</th>
               <th width="150px">Năm phương án</th>
               <th width="150px">Hành động </th>
-              <th nzWidth="60px" [hidden]="!status">
+              <th nzWidth="60px" [hidden]="status">
                 <ng-container *ngIf="checkAll(); else xoa">
                   <button type="button" class="btn btn-main" (click)="updateAllCheck()">
                     <span>Tất cả</span>
@@ -99,11 +99,12 @@
                   Xem
                 </button>
                 <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"
+                  [hidden]="status">
                   <span>Xóa</span>
                 </button>
               </td>
-              <td [hidden]="!status">
+              <td [hidden]="status">
                 <ng-container *ngIf="checkDeleteReport(item)">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (ngModelChange)="changeListIdDelete(item.id)"></label>
@@ -132,7 +133,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
+        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="status">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

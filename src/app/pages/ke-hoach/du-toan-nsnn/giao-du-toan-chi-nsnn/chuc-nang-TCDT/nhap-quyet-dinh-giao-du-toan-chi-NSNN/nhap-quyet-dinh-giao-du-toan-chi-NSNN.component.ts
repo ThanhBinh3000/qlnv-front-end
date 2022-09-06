@@ -184,10 +184,10 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-      this.ngayTao = this.newDate.toISOString().slice(0, 16);
+      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+
       this.spinner.show();
       await this.dataSource.currentData.subscribe(obj => {
-        this.maPa = obj?.maPa;
         this.namPa = obj?.namPa;
       })
       this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
@@ -204,7 +204,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-      this.namPa = this.newDate.getFullYear();
+      // this.namPa = this.newDate.getFullYear();
       this.spinner.hide()
     }
     this.getStatusButton();
@@ -361,7 +361,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.maPa = data.data.maPa;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
-          this.ngayTao = data.data.ngayTao
+          this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);

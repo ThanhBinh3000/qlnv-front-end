@@ -4,14 +4,13 @@
       <nz-form-item>
         <nz-form-label nzRequired>Đơn vị quản lý</nz-form-label>
         <nz-form-control nzErrorTip="Đơn vị quản lý là bắt buộc!">
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-            <input placeholder="Đơn vị" nz-input formControlName="dvql" (input)="onInput($event)"
-              [nzAutocomplete]="auto" />
+          <nz-input-group nzSize="large">
+            <input nz-input formControlName="dvql" (input)="onInput($event)" [nzAutocomplete]="auto" />
           </nz-input-group>
         </nz-form-control>
-        <ng-template #suffixIcon>
+        <!-- <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
-        </ng-template>
+        </ng-template> -->
         <nz-autocomplete #auto>
           <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
           </nz-auto-option>

@@ -1,11 +1,9 @@
-<form nz-form [formGroup]="formData" class="form__dm-dung-chung">
-  <div nz-row [nzGutter]="[16, 24]">
-    <div nz-col [nzSpan]="14">
-      <div class="title-action d-flex align-items-center justify-content-between mt-16">
-        <div class="title-phan-quyen">
-          Quản lý quyền chức năng
-        </div>
-        <div class="action-quyen">
+<div class="bg-trang">
+  <div nz-row [nzGutter]="[24]">
+    <div nz-col [nzSpan]="16">
+      <div class="group-button">
+        <h3>Quản lý nhóm quyền</h3>
+        <div class="buttons">
           <button type="button" class="btn btn-do">
             <i class="fa fa-trash-o do"></i>
             <span>Xóa</span>
@@ -14,124 +12,68 @@
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Tải về</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="themQuyen()">
+          <button type="button" class="btn btn-main" (click)="themNhomQuyen()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-
         </div>
       </div>
-      <div class="border-pq">
-        <div class="d-flex align-items-center">
-          <span class="title-phan-he">
-            Phân hệ chức năng
-          </span>
-          <nz-select formControlName="trangThai" [nzDisabled]="isView" class="phan-he-option">
-            <nz-option nzValue="01" nzLabel="Hoạt động"></nz-option>
-            <nz-option nzValue="00" nzLabel="Không hoạt động"></nz-option>
-          </nz-select>
-        </div>
-        <nz-table #rowSelectionTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-          [nzScroll]="{ x: '200px' }">
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table id="table-ql-nhom-quyen" #rowSelectionTable class="nowrap" [nzData]="dataTable"
+          [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
           <thead>
             <tr>
-              <th width="45px" [nzChecked]="false"></th>
-              <th width="60px">STT</th>
-              <th width="161px">Tên quyền</th>
-              <th width="161px">Ghi chú</th>
-              <th width="161px">Trạng thái</th>
-              <th width="161px">Người tạo</th>
-              <th width="161px">Ngày tạo</th>
-              <th width="161px">Người sửa</th>
-              <th width="161px">Ngày sửa</th>
-              <th width="110px" [nzRight]="true"></th>
+              <th nzWidth="35px" [nzChecked]="false"></th>
+              <th nzWidth="35px">STT</th>
+              <th nzWidth="300px">Tên nhóm quyền</th>
+              <th nzWidth="80px">Trạng thái</th>
+              <th nzWidth="160px">Ghi chú</th>
+              <th nzWidth="70px">Hành động</th>
             </tr>
-          </thead>
-          <tbody>
             <tr class="search-table">
               <th></th>
               <th></th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="loai" />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.name" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="ma  " />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.status" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.ghiChu" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th [nzRight]="true"></th>
-            </tr>
-            <tr>
-              <td [nzChecked]="false">
-              </td>
-              <td class="text-center">1</td>
-              <td>Tên quyền ABC</td>
-              <td></td>
-              <td>Kích hoạt</td>
-              <td></td>
-              <td>17/02/2022</td>
-              <td></td>
-              <td>17/02/2022</td>
-              <td [nzRight]="true">
-                <a>
-                  <i class="icon htvbdh_tcdt_import"></i>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="showDetail($event,data.id)">
+              <td [nzChecked]="false"></td>
+              <td class="text-center">{{idx + 1}}</td>
+              <td>{{data.name}}</td>
+              <td>{{data.tenTrangThai}}</td>
+              <td>{{data.ghiChu}}</td>
+              <td>
+                <a (click)="themNhomQuyen(data)">
+                  <i class="fa fa-eye"></i>
                 </a>
-                <a>
+                <a (click)="themNhomQuyen(data)">
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a>
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
-
             </tr>
           </tbody>
         </nz-table>
@@ -151,35 +93,45 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </nz-card>
     </div>
-    <div nz-col [nzSpan]="10">
-      <div class="d-flex align-items-center justify-content-between mt-16">
-        <span class="title-phan-quyen">Các quyền truy cập</span>
-        <button type="button" class="btn btn-main">
+    <div nz-col [nzSpan]="8">
+      <div class="group-button">
+        <h3>Danh sách các quyền</h3>
+        <button type="button" class="btn btn-main" (click)="savePermission()">
           <i class="fa fa-save"></i>
           <span>Lưu</span>
         </button>
       </div>
-      <div class="border-pq">
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered>
+          <thead>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchFilter"
+                  (input)="filterInTable(searchFilter)" size="small" />
+              </nz-input-group>
+            </th>
+            <td width="45px">
+            </td>
+          </thead>
           <tbody>
-            <ng-container *ngFor="let data of expandTable.data">
+            <ng-container *ngFor="let data of listOfMapData">
               <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
                 <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
                   <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
                     (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
                     {{ item.name }}
                   </td>
-                  <td [nzChecked]="false" [width]="50" class="text-right">
+                  <td width="45px" class="text-right">
+                    <label nz-checkbox [ngModel]="isCheckedData(item.key)" (ngModelChange)="checkData(item)"></label>
                   </td>
                 </tr>
               </ng-container>
             </ng-container>
           </tbody>
         </nz-table>
-      </div>
+      </nz-card>
     </div>
   </div>
-</form>
+</div>

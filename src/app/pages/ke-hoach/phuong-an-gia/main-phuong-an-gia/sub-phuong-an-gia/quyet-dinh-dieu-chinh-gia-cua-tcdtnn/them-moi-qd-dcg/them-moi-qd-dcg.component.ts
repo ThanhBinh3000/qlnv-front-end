@@ -90,6 +90,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
         this.rowItemL.maDvi = item.maDvi;
         this.rowItemL.soLuong = item.soLuong;
         this.rowItemL.tenDvi = item.tenDvi;
+        this.rowItemL.giaQd = item.giaQd;
+        this.rowItemL.giaQdVat = item.giaQdVat;
         this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
         this.rowItemL = new ThongTinGia();
       })
@@ -163,6 +165,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
             tchuanCluong: data.tchuanCluong
           })
         }
+        console.log(this.listThongTinGia)
       });
     } else if (page == 'SQD') {
       let radioValue = this.soQdGia;
@@ -188,7 +191,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
           this.formData.patchValue({
             soQdgTcdtnn: data.soQd,
           })
-          if (this.soToTrinh == null) {
+          if (!this.soToTrinh) {
             this.dataTable = data.thongTinGia;
             this.listThongTinGia = []
             this.themDataTable();
@@ -203,6 +206,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
               tchuanCluong: data.tchuanCluong
             })
           }
+          console.log(this.listThongTinGia)
         }
       });
     }
@@ -277,7 +281,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
-    console.log(JSON.stringify("---------" + body));
+    console.log("---------" +JSON.stringify( body));
     if (this.idInput > 0) {
       /* body.loaiVthh = this.detail.loaiVthh
        body.cloaiVthh = this.detail.cloaiVthh
@@ -309,7 +313,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd,
+        soQd: data.soQd.split("/")[0],
         soToTrinhDx: data.soToTrinhDx,
         soQdgTcdtnn: data.soQdgTcdtnn,
         ngayKy: data.ngayKy,

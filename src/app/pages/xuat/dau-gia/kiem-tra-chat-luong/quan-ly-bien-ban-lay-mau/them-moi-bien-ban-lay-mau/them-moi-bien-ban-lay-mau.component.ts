@@ -28,6 +28,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -42,7 +43,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  bienBanLayMau: any;
+  formData: FormGroup;
+
+  detail: any;
   routerUrl: string;
   userInfo: UserLogin;
   detailHopDong: any = {};
@@ -93,16 +96,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private donViService: DonviService,
-  ) {}
+    private fb: FormBuilder,
+  ) { }
 
   async ngOnInit() {
     this.routerUrl = this.router.url;
     this.userInfo = this.userService.getUserLogin();
     this.newObjectBienBanLayMau();
-    this.bienBanLayMau.maDvi = this.userInfo.MA_DVI;
-    this.bienBanLayMau.tenDvi = this.userInfo.TEN_DVI;
-    this.bienBanLayMau.maVatTuCha = this.typeVthh;
-    this.bienBanLayMau.trangThai = this.globals.prop.DU_THAO;
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    this.detail.maVatTuCha = this.typeVthh;
+    this.detail.trangThai = this.globals.prop.DU_THAO;
+    this.initForm();
     await Promise.all([
       this.loadPhuongPhapLayMau(),
       this.loadSoQuyetDinh(),
@@ -116,59 +121,136 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     }
   }
 
+  initForm(): void {
+    this.formData = this.fb.group({
+      "soBienBan": [null],
+      "ngayLayMau": [null],
+      "maDiemKho": [null],
+      "maNhaKho": [null],
+      "maNganKho": [null],
+      "maNganLo": [null]
+    })
+  }
+
+  // async loadDiemKho() {
+  //   let body = {
+  //     maDviCha: this.detail.maDvi,
+  //     trangThai: '01',
+  //   };
+  //   this.listDiemKho = [];
+  //   const res = await this.donViService.getTreeAll(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     if (res.data && res.data.length > 0) {
+  //       res.data.forEach((element) => {
+  //         if (element && element.capDvi == '3' && element.children) {
+  //           this.listDiemKho = [...this.listDiemKho, ...element.children];
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
+
+  // changeDiemKho(fromChiTiet: boolean) {
+  //   let diemKho = this.listDiemKho.filter(
+  //     (x) => x.key == this.detail.maDiemKho,
+  //   );
+  //   this.detail.maNhaKho = null;
+  //   if (diemKho && diemKho.length > 0) {
+  //     this.listNhaKho = diemKho[0].children;
+  //     if (fromChiTiet) {
+  //       this.changeNhaKho(fromChiTiet);
+  //     }
+  //   }
+  // }
+
+  // changeNhaKho(fromChiTiet: boolean) {
+  //   let nhaKho = this.listNhaKho.filter(
+  //     (x) => x.key == this.detail.maNhaKho,
+  //   );
+  //   if (nhaKho && nhaKho.length > 0) {
+  //     this.listNganKho = nhaKho[0].children;
+  //     if (fromChiTiet) {
+  //       this.changeNganKho();
+  //     }
+  //   }
+  // }
+
+  // changeNganKho() {
+  //   let nganKho = this.listNganKho.filter(
+  //     (x) => x.key == this.detail.maNganKho,
+  //   );
+  //   if (nganKho && nganKho.length > 0) {
+  //     this.listNganLo = nganKho[0].children;
+  //   }
+  // }
+
+
   async loadDiemKho() {
     let body = {
-      maDviCha: this.bienBanLayMau.maDvi,
+      maDviCha: this.detail.maDvi,
       trangThai: '01',
-    };
-    this.listDiemKho = [];
+    }
     const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        res.data.forEach((element) => {
+        res.data.forEach(element => {
           if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = [...this.listDiemKho, ...element.children];
+            this.listDiemKho = [
+              ...this.listDiemKho,
+              ...element.children
+            ]
           }
         });
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+
+    console.log(this.listDiemKho);
   }
 
   changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(
-      (x) => x.key == this.bienBanLayMau.maDiemKho,
-    );
-    this.bienBanLayMau.maNhaKho = null;
+
+    let diemKho = this.listDiemKho.filter(x => x.maDvi == this.formData.value.maDiemKho);
+    // if (!fromChiTiet) {
+    //   this.detail.maNhaKho = null;
+    // }
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       if (fromChiTiet) {
         this.changeNhaKho(fromChiTiet);
       }
     }
+    console.log(this.listNhaKho);
+
   }
 
   changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(
-      (x) => x.key == this.bienBanLayMau.maNhaKho,
-    );
+    let nhaKho = this.listNhaKho.filter(x => x.maDvi == this.formData.value.maNhaKho);
     if (nhaKho && nhaKho.length > 0) {
       this.listNganKho = nhaKho[0].children;
       if (fromChiTiet) {
         this.changeNganKho();
       }
     }
+    console.log(this.listNganKho);
+
   }
 
   changeNganKho() {
-    let nganKho = this.listNganKho.filter(
-      (x) => x.key == this.bienBanLayMau.maNganKho,
-    );
+    let nganKho = this.listNganKho.filter(x => x.maDvi == this.formData.value.maNganKho);
     if (nganKho && nganKho.length > 0) {
       this.listNganLo = nganKho[0].children;
     }
+    console.log(this.listNganLo);
+    console.log(this.formData.value);
+
   }
+
+
+
 
   selectHangHoa() {
     let data = '02';
@@ -190,26 +272,26 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async bindingDataHangHoa(data) {
     if (data.loaiHang == 'M' || data.loaiHang == 'LT') {
-      this.bienBanLayMau.maVatTuCha = data.parent.ma;
-      this.bienBanLayMau.tenVatTuCha = data.parent.ten;
-      this.bienBanLayMau.maVatTu = data.ma;
-      this.bienBanLayMau.tenVatTu = data.ten;
-      this.bienBanLayMau.donViTinh = data.maDviTinh;
+      this.detail.maVatTuCha = data.parent.ma;
+      this.detail.tenVatTuCha = data.parent.ten;
+      this.detail.maVatTu = data.ma;
+      this.detail.tenVatTu = data.ten;
+      this.detail.donViTinh = data.maDviTinh;
     }
     if (data.loaiHang == 'VT') {
       if (data.cap == '3') {
-        this.bienBanLayMau.maVatTuCha = data.parent.parent.ma;
-        this.bienBanLayMau.tenVatTuCha = data.parent.parent.ten;
-        this.bienBanLayMau.maVatTu = data.parent.ma;
-        this.bienBanLayMau.tenVatTu = data.parent.ten;
-        this.bienBanLayMau.donViTinh = data.parent.maDviTinh;
+        this.detail.maVatTuCha = data.parent.parent.ma;
+        this.detail.tenVatTuCha = data.parent.parent.ten;
+        this.detail.maVatTu = data.parent.ma;
+        this.detail.tenVatTu = data.parent.ten;
+        this.detail.donViTinh = data.parent.maDviTinh;
       }
       if (data.cap == '2') {
-        this.bienBanLayMau.maVatTuCha = data.parent.ma;
-        this.bienBanLayMau.tenVatTuCha = data.parent.ten;
-        this.bienBanLayMau.maVatTu = data.ma;
-        this.bienBanLayMau.tenVatTu = data.ten;
-        this.bienBanLayMau.donViTinh = data.maDviTinh;
+        this.detail.maVatTuCha = data.parent.ma;
+        this.detail.tenVatTuCha = data.parent.ten;
+        this.detail.maVatTu = data.ma;
+        this.detail.tenVatTu = data.ten;
+        this.detail.donViTinh = data.maDviTinh;
       }
     }
   }
@@ -220,7 +302,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       if (res.data && res.data.length > 0) {
         if (this.isTatCa) {
           this.listHangHoa = res.data;
-          this.bienBanLayMau.maVatTuCha = this.listHangHoa[0].ma;
+          this.detail.maVatTuCha = this.listHangHoa[0].ma;
         } else {
           this.listHangHoa = res.data.filter((x) => x.ma == this.typeVthh);
         }
@@ -310,7 +392,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async changeSoQuyetDinh() {
     let quyetDinh = this.listSoQuyetDinh.filter(
-      (x) => x.id == this.bienBanLayMau.qdgnvnxId,
+      (x) => x.id == this.detail.qdgnvnxId,
     );
     if (quyetDinh && quyetDinh.length > 0) {
       this.detailGiaoNhap = quyetDinh[0];
@@ -319,42 +401,42 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   newObjectBienBanLayMau() {
-    this.bienBanLayMau = new BienBanLayMau();
+    this.detail = new BienBanLayMau();
   }
 
   isAction(): boolean {
     return (
-      this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO || !this.isView
+      this.detail.trangThai === this.globals.prop.DU_THAO || !this.isView
     );
   }
 
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
     let body = {
-      bbNhapDayKhoId: this.bienBanLayMau.bbNhapDayKhoId,
+      bbNhapDayKhoId: this.detail.bbNhapDayKhoId,
       chiTiets: this.listDaiDien,
-      chiTieuKiemTra: this.bienBanLayMau.chiTieuKiemTra,
-      diaDiemLayMau: this.bienBanLayMau.diaDiemLayMau,
-      donViCungCap: this.bienBanLayMau.donViCungCap,
-      hopDongId: this.bienBanLayMau.hopDongId,
+      chiTieuKiemTra: this.detail.chiTieuKiemTra,
+      diaDiemLayMau: this.detail.diaDiemLayMau,
+      donViCungCap: this.detail.donViCungCap,
+      hopDongId: this.detail.hopDongId,
       id: this.id,
-      ketQuaNiemPhong: this.bienBanLayMau.ketQuaNiemPhong,
+      ketQuaNiemPhong: this.detail.ketQuaNiemPhong,
       maDiemKho: null,
       maNganKho: null,
       maNganLo: null,
       maNhaKho: null,
       maVatTu: null,
-      maVatTuCha: this.bienBanLayMau.maVatTuCha,
-      ngayHopDong: this.bienBanLayMau.ngayHopDong
-        ? dayjs(this.bienBanLayMau.ngayHopDong).format('YYYY-MM-DD')
+      maVatTuCha: this.detail.maVatTuCha,
+      ngayHopDong: this.detail.ngayHopDong
+        ? dayjs(this.detail.ngayHopDong).format('YYYY-MM-DD')
         : null,
-      ngayLayMau: this.bienBanLayMau.ngayLayMau
-        ? dayjs(this.bienBanLayMau.ngayLayMau).format('YYYY-MM-DD')
+      ngayLayMau: this.detail.ngayLayMau
+        ? dayjs(this.detail.ngayLayMau).format('YYYY-MM-DD')
         : null,
-      ppLayMau: this.bienBanLayMau.ppLayMau,
-      qdgnvnxId: this.bienBanLayMau.qdgnvnxId,
-      soBienBan: this.bienBanLayMau.soBienBan,
-      soLuongMau: this.bienBanLayMau.soLuongMau,
+      ppLayMau: this.detail.ppLayMau,
+      qdgnvnxId: this.detail.qdgnvnxId,
+      soBienBan: this.detail.soBienBan,
+      soLuongMau: this.detail.soLuongMau,
     };
     if (this.id > 0) {
       this.bienBanLayMauService
@@ -588,12 +670,12 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
-        this.bienBanLayMau.canCu = this.detailHopDong.canCu;
-        this.bienBanLayMau.ngayHopDong = this.detailHopDong.ngayKy;
-        this.bienBanLayMau.hopDongId = this.detailHopDong.id;
-        this.bienBanLayMau.soHopDong = this.detailHopDong.soHd;
-        this.bienBanLayMau.tenDonViCCHang = this.detailHopDong.tenDvi;
-        this.bienBanLayMau.soLuongMau = this.detailHopDong.soLuong;
+        this.detail.canCu = this.detailHopDong.canCu;
+        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
+        this.detail.hopDongId = this.detailHopDong.id;
+        this.detail.soHopDong = this.detailHopDong.soHd;
+        this.detail.tenDonViCCHang = this.detailHopDong.tenDvi;
+        this.detail.soLuongMau = this.detailHopDong.soLuong;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -618,14 +700,14 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   async loadBienbanLayMau() {
     let res = await this.bienBanLayMauService.loadChiTiet(this.id);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.bienBanLayMau = res.data;
-      this.bienBanLayMau.ppLayMau = +res.data.ppLayMau;
+      this.detail = res.data;
+      this.detail.ppLayMau = +res.data.ppLayMau;
       if (
-        this.bienBanLayMau.chiTiets &&
-        this.bienBanLayMau.chiTiets.length > 0
+        this.detail.chiTiets &&
+        this.detail.chiTiets.length > 0
       ) {
         this.listDaiDien = [];
-        this.bienBanLayMau.chiTiets.forEach((element, index) => {
+        this.detail.chiTiets.forEach((element, index) => {
           let item = {
             ...element,
             idTemp: new Date().getTime() + index,
@@ -640,7 +722,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    console.log(trangThai);
     if (
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.LANH_DAO_DUYET ||

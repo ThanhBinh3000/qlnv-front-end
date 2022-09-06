@@ -19,6 +19,13 @@
 }
 
 .btn.btn-sub {
+  &.xanh-nhat {
+    background-color: #EAF3F3;
+    color: #4E5484;
+    border-color: #4E5484;
+
+  }
+
   background: #f8f9fa;
   padding: 0 10px;
   border-radius: 0px;

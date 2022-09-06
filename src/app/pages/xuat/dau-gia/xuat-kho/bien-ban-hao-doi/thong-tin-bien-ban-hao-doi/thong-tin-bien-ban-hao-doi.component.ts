@@ -18,6 +18,8 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+
 @Component({
   selector: 'app-thong-tin-bien-ban-hao-doi',
   templateUrl: './thong-tin-bien-ban-hao-doi.component.html',
@@ -164,7 +166,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
     try {
       this.create.dvt = "Tấn";
       this.userInfo = this.userService.getUserLogin();
-      this.detail.trangThai = "00";
+      this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
       this.detail.chiTiets = [];
@@ -178,6 +180,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(this.detail.trangThai)
   }
 
   async loadSoQuyetDinh() {
@@ -499,8 +502,10 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   thongTinTrangThai(trangThai: string): string {
+    return thongTinTrangThaiNhap(trangThai);
+  }
+  /* thongTinTrangThai(trangThai: string): string {
     if (
       trangThai === '00' ||
       trangThai === '01' ||
@@ -511,7 +516,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
     }
-  }
+  } */
 
   print() {
 

@@ -131,7 +131,8 @@
 									<div nz-col class="gutter-row" [nzSpan]="3">
 										<!-- <div class="inner-box">Đơn vị: -->
 										<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-											[(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+											[(ngModel)]="moneyUnit" [class]="moneyUnit ?'' : 'input-error-validate' "
+											(ngModelChange)="changeMoney()">
 											<nz-option *ngFor="let item of dviTiens" [nzValue]="item.id"
 												[nzLabel]="item.tenDm"></nz-option>
 										</nz-select>

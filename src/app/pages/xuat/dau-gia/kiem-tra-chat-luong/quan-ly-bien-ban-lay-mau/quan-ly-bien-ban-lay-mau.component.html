@@ -1,34 +1,65 @@
 <div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
-      <div class="main-content bg-trang">
-        <nz-card class="mt16 flex-card p-lr16">
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Số biên bản</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBienBan" />
+      <div class="main-content ">
+        <!-- bg-trang -->
+        <nz-card class="flex-card p-lr16">
+          <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="bien-ban-lay-mau">
+            <div class="search__body" nz-row [nzGutter]="[0, 6]">
+              <div nz-col nzSpan="6">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Số biên bản
+                  </nz-form-label>
+                  <nz-input-group>
+                    <input type="text" nz-input formControlName="soBienBan" />
+                  </nz-input-group>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="6">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Ngày lấy mẫu
+                  </nz-form-label>
+                  <nz-input-group>
+                    <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
+                    </nz-range-picker>
+                  </nz-input-group>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="6">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Điểm kho
+                  </nz-form-label>
+                  <nz-input-group>
+                    <input type="text" nz-input formControlName="maDiemKho" />
+                  </nz-input-group>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="3">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Nhà kho
+                  </nz-form-label>
+                  <nz-input-group>
+                    <input type="text" nz-input formControlName="maNhaKho" />
+                  </nz-input-group>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="3">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Ngăn lô
+                  </nz-form-label>
+                  <nz-input-group>
+                    <input type="text" nz-input formControlName="maNganLo" />
+                  </nz-input-group>
+                </nz-form-item>
+              </div>
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Ngày lấy mẫu</label>
-              <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
-              </nz-range-picker>
-            </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Điểm kho</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
-            </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Nhà kho</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
-            </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Ngăn lô</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinhNhap" />
-            </div>
-          </div>
+          </form>
+
           <div class="cangiua group-button-search">
             <button nz-button class="search__button--clear" (click)="clearFilter()">
               <i class="icon  htvbdh_nhap-lai1"></i>
@@ -76,13 +107,17 @@
                       </ng-template>
                     </td>
                     <td>
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                      <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLayMau"
+                        (input)="filterInTable('ngayLayMau',filterTable.ngayLayMau)" class="search__input">
+                      </nz-date-picker>
+
+                      <!-- <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayLayMau"
                           (input)="filterInTable('ngayLayMau',filterTable.ngayLayMau)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
-                      </ng-template>
+                      </ng-template> -->
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
