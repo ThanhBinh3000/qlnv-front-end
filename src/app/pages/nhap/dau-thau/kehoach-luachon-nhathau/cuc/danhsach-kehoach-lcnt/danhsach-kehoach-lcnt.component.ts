@@ -11,12 +11,12 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { UserService } from 'src/app/services/user.service';
 import { saveAs } from 'file-saver';
 
-
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
   templateUrl: './danhsach-kehoach-lcnt.component.html',
   styleUrls: ['./danhsach-kehoach-lcnt.component.scss']
 })
+
 export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
@@ -31,10 +31,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
+
   searchFilter = {
     soDx: '',
     namKh: dayjs().get('year'),
@@ -42,6 +42,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     loaiVthh: '',
     trichYeu: ''
   };
+
   filterTable: any = {
     soDxuat: '',
     ngayKy: '',
@@ -53,18 +54,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     soGoiThau: '',
     statusConvert: '',
   };
+
   dataTableAll: any[] = [];
   listVthh: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   userInfo: UserLogin;
   selectedId: number = 0;
-
   isVatTu: boolean = false;
-
   allChecked = false;
   indeterminate = false;
 
@@ -218,6 +217,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
+    this.searchFilter.loaiVthh = null;
     this.search();
     console.log(this.searchFilter);
   }
@@ -338,13 +338,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.danhSachDauThauService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

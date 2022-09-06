@@ -161,7 +161,7 @@
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
-                    File đính kèm
+                    Căn cứ pháp lý
                   </nz-form-label>
                   <div class="list-file">
                     <file-list></file-list>
@@ -191,6 +191,19 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"> Tên người đại diện </nz-form-label>
+                  <input [readonly]="isView" nz-input placeholder="Tên người đại diện"
+                    formControlName="tenNguoiDdien" />
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"> Chức vụ </nz-form-label>
+                  <input [readonly]="isView" nz-input placeholder="Chức vụ" formControlName="chucVu" />
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="6">
+                <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số điện thoại </nz-form-label>
                   <input [readonly]="isView" nz-input placeholder="Số điện thoại" formControlName="sdt" />
                 </nz-form-item>
@@ -202,19 +215,6 @@
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
-              </div>
-              <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tên người đại diện </nz-form-label>
-                  <input [readonly]="isView" nz-input placeholder="Tên người đại diện"
-                    formControlName="tenNguoiDdien" />
-                </nz-form-item>
-              </div>
-              <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chức vụ </nz-form-label>
-                  <input [readonly]="isView" nz-input placeholder="Chức vụ" formControlName="chucVu" />
-                </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
               </div>
@@ -247,6 +247,20 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"> Tên người đại diện </nz-form-label>
+                  <input nz-input placeholder="Tên người đại diện" [(ngModel)]="dvLQuan.nguoiDdien"
+                    [ngModelOptions]="{standalone: true}" readonly />
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"> Chức vụ </nz-form-label>
+                  <input nz-input placeholder="Chức vụ" [(ngModel)]="dvLQuan.chucVu"
+                    [ngModelOptions]="{standalone: true}" readonly />
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="6">
+                <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số điện thoại </nz-form-label>
                   <input nz-input placeholder="Số điện thoại" [(ngModel)]="dvLQuan.sdt"
                     [ngModelOptions]="{standalone: true}" readonly />
@@ -260,20 +274,6 @@
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
-              </div>
-              <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tên người đại diện </nz-form-label>
-                  <input nz-input placeholder="Tên người đại diện" [(ngModel)]="dvLQuan.nguoiDdien"
-                    [ngModelOptions]="{standalone: true}" readonly />
-                </nz-form-item>
-              </div>
-              <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chức vụ </nz-form-label>
-                  <input nz-input placeholder="Chức vụ" [(ngModel)]="dvLQuan.chucVu"
-                    [ngModelOptions]="{standalone: true}" readonly />
-                </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
               </div>
@@ -331,10 +331,10 @@
                   </tbody>
                 </nz-table>
               </ng-container>
-
             </nz-card>
           </nz-tab>
-          <ng-container *ngIf="detail.trangThai == '02'">
+          <!-- <ng-container *ngIf="detail.trangThai == '02'"> -->
+          <ng-container>
             <nz-tab [nzTitle]="'Danh sách phụ lục hợp đồng'" class="ds-goi-thau__container"
               (nzClick)="tabSelected = 'phu-luc'">
               <nz-card class="mt16 flex-card p-lr16">
