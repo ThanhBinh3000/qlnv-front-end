@@ -50,7 +50,7 @@
 	<nz-table nzBordered class="table__body">
 		<thead>
 			<tr>
-				<th rowspan="2" nzWidth="35px">STT</th>
+				<th rowspan="2" nzWidth="100px">STT</th>
 				<th rowspan="2" nzWidth="200px">Tên vật tư, hàng hóa</th>
 				<th rowspan="2">DVT</th>
 				<th colspan="4">Kế hoạch</th>
@@ -83,10 +83,10 @@
 				<th>6</th>
 				<th>7=5*6</th>
 				<th>D</th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
-				<th [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
+				<th nzWidth="2%" [hidden]="status"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -113,7 +113,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao021; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate01">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -156,7 +156,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate01>
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -217,11 +217,10 @@
 					</td>
 					<td>
 						<a (click)="saveEdit(item.id,'21')" class="save" style="margin-right:15px">Lưu</a>
+					</td>
+					<td>
 						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
 							(nzOnConfirm)="cancelEdit(item.id,'21')" class="save">Hủy</a>
-					</td>
-					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'21')"></i>
 					</td>
 					<td [hidden]="status">
 						<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -252,7 +251,7 @@
 			</tr>
 			<tr *ngFor="let item of lstCtietBcao022; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate02">
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -295,7 +294,7 @@
 					</td>
 				</ng-container>
 				<ng-template #editTemplate02>
-					<td [nzIndentSize]="item.level * 8">
+					<td [nzIndentSize]="(item.level+1) * 8">
 						{{getChiMuc(item.stt,'1')}}
 					</td>
 					<td>
@@ -356,11 +355,10 @@
 					</td>
 					<td>
 						<a (click)="saveEdit(item.id,'22')" class="save" style="margin-right:15px">Lưu</a>
-						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-							(nzOnConfirm)="cancelEdit(item.id,'22')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
-						<i class="fa fa-plus" (click)="addLine(item.id,'22')"></i>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+							(nzOnConfirm)="cancelEdit(item.id,'22')" class="save">Hủy</a>
 					</td>
 					<td [hidden]="status">
 						<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"

@@ -9,16 +9,8 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Số quyết định phê duyệt KHLCNT</label>
-          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày quyết định</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
-        <div nz-col nzSpan="3">
           <label class="search__label">Loại hàng hóa </label>
-          <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh">
+          <nz-select [(ngModel)]="searchFilter.loaiVthh">
             <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
@@ -26,9 +18,17 @@
           <label class="search__label">Đơn vị</label>
           <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.maDvi" />
         </div>
+        <div nz-col nzSpan="3">
+          <label class="search__label">Quyết định duyệt KHLCNT</label>
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
+        </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày quyết định</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -42,27 +42,29 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
-      <h3>Danh sách các gói thầu</h3>
+      <h3>DANH SÁCH CÁC GÓI THẦU</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
+          <span>Xuất file</span>
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-        [nzShowPagination]="false">
+        [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
+            <th width="40px">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                [nzIndeterminate]="indeterminate"></label>
+            </th>
             <th width="30px">STT</th>
             <th>Tên gói thầu</th>
-            <th>Đơn vị</th>
+            <th *ngIf="userService.isTongCuc()">Đơn vị</th>
             <th>Số QĐ PDKHLCNT</th>
-            <th>Ngày QĐ</th>
+            <th>Ngày quyết định</th>
             <th>Trích yếu</th>
             <th>Loại hàng hóa</th>
             <th>Chủng loại hàng hóa</th>
@@ -74,14 +76,14 @@
             <th></th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.goiThau"
-                  (input)="filterInTable('goiThau',filterTable.goiThau)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenGthau"
+                  (input)="filterInTable('tenGthau',filterTable.tenGthau)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th>
+            <th *ngIf="userService.isTongCuc()">
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
                   (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
@@ -157,11 +159,14 @@
           </tr>
         </thead>
         <tbody>
-
           <tr *ngFor="let data of basicTable.data; let i = index">
+            <td width="45px">
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                [nzDisabled]="data.trangThai != '00'"></label>
+            </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.tenGthau }}</td>
-            <td>{{ data.tenDvi }}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
             <td>{{ data.soQdPdKhlcnt }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>

@@ -33,14 +33,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
-
-
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
   formData: FormGroup;
+  taiLieuDinhKemList: any[] = [];
   formThongTinChung: FormGroup;
   listOfData: DanhSachGoiThau[] = [];
   cacheData: DanhSachGoiThau[] = [];
-  fileDinhKem: Array<FileDinhKem> = [];
+  // fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
@@ -54,7 +53,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   ktDiemKho: any;
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
   fileList: any[] = [];
-
   editId: string | null = null;
   tabSelected: string = 'thongTinChung';
   listPhuongThucDauThau: any[] = [];
@@ -64,11 +62,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   dataTableGoiThau: any[] = [];
-
   listQdPdKhlcnt: any[] = [];
   maQd: string = '';
-
-
   chiTietThongTinDXKHLCNT: ThongTinDeXuatKeHoachLuaChonNhaThau = new ThongTinDeXuatKeHoachLuaChonNhaThau();
   thongTinChungDXKHLCNT: ThongTinChung = new ThongTinChung();
   listOfMapData: VatTu[];
@@ -77,14 +72,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   selectHang: any = { ten: '' };
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   thongTinDXKHLCNTInput: ThongTinDeXuatKeHoachLuaChonNhaThauInput = new ThongTinDeXuatKeHoachLuaChonNhaThauInput();
-
-
-
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
-
   userInfo: UserLogin;
-
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -105,6 +95,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     private ttinDauThauService: DauThauService,
 
   ) {
+
     this.formData = this.fb.group(
       {
         id: [],
@@ -121,7 +112,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ngayQdPdKhlcnt: [null,],
         idGoiThau: [null,],
         ghiChu: [null,],
-        trungThau: [true],
+        trungThau: ['1'],
         trangThai: ['00'],
         maDvi: [],
         tenDviTthau: [],
@@ -196,10 +187,12 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         lyDoHuy: dataDetail ? dataDetail.lyDoHuy : null,
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
       })
+      this.taiLieuDinhKemList = dataDetail.fileDinhKems;
     }
   }
 
   async save() {
+    console.log(this.taiLieuDinhKemList)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
@@ -207,6 +200,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.detailList = this.dataTableGoiThau;
+    body.fileDinhKems = this.taiLieuDinhKemList;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -223,6 +217,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  deleteTaiLieuDinhKemTag(data: any) {
+    if (!this.isViewDetail) {
+      this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
+        (x) => x.id !== data.id,
+      );
     }
   }
 

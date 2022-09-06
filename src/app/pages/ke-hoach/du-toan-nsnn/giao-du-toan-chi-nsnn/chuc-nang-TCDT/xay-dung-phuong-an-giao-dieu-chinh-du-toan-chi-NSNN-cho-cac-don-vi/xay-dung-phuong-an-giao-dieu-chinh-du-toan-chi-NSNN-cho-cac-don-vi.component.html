@@ -20,7 +20,7 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi đơn vị cấp trên</span>
         </button>
-        <button class="btn btn-main" (click)="tongHop()" [hidden]="checkSumUp">
+        <button class="btn btn-main" (click)="tongHop()" [hidden]="statusBtnTongHop">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Tổng hợp</span>
         </button>
@@ -91,7 +91,9 @@
                 </div>
               </td>
               <td>
-                {{maPaCha}}
+                <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
+                  {{maPaCha}}
+                </a>
               </td>
               <td>{{maPa}}</td>
               <td>{{namPa}}</td>

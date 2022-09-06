@@ -14,7 +14,11 @@ export class PhieuNhapKhoTamGuiService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'PhieuNhapKhoTam', '');
   }
-
+  // fake load Chi tiet
+  loadChiTiet(id: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/bang-ke-vt/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.PHIEU_NHAP_KHO_TAM_GUI}?`;
     if (body.maDvi)

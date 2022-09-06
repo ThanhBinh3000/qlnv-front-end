@@ -68,9 +68,9 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     this.searchFilter.namPa = new Date().getFullYear()
     if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
       ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
-      this.status = false;
-    } else {
       this.status = true;
+    } else {
+      this.status = false;
     }
     this.userRole = this.userInfo?.roles[0].code;
     this.onSubmit()
@@ -155,9 +155,14 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async taoMoi() {
-    this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC',
-    ]);
+    const request = {
+      namPa: this.searchFilter.namPa
+    }
+    this.dataSource.changeData(request),
+
+      this.router.navigate([
+        MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC',
+      ]);
   }
 
   xemChiTiet(id: string) {

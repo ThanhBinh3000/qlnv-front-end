@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
+import {STATUS} from "../../../../../../constants/status";
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
@@ -23,6 +24,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   @Output()
   getCount = new EventEmitter<any>();
   isAddNew = false;
+  noEdit = false;
   formData: FormGroup;
   toDay = new Date();
   allChecked = false;
@@ -207,6 +209,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     this.idSelected = 0;
     this.isViewDetail = false;
     this.isAddNew = true;
+    this.noEdit = false;
   }
 
   async onClose() {
@@ -270,10 +273,17 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     }
   }
 
-  viewDetail(id: number, isViewDetail: boolean) {
+  viewDetail(id: number, isViewDetail: boolean,trangThai: string) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
+    if (trangThai == STATUS.BAN_HANH) {
+      this.noEdit = true;
+    } else if (trangThai == STATUS.DU_THAO && isViewDetail) {
+      this.noEdit = true;
+    } else if (trangThai == STATUS.DU_THAO && !isViewDetail) {
+      this.noEdit = false;
+    }
   }
 
   xoaItem(item: any) {

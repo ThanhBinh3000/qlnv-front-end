@@ -8,7 +8,13 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
+          <label class="search__label">Loại hàng hóa </label>
+          <nz-select [(ngModel)]="searchFilter.loaiVthh">
+            <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="3">
           <label class="search__label">Số tờ trình</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
         </div>
@@ -34,9 +40,8 @@
         </div>
       </div>
     </nz-card>
-
     <div class="group-button">
-      <h3>Danh sách đề xuất lựa chọn nhà thầu</h3>
+      <h3>DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
@@ -52,8 +57,6 @@
         </button>
       </div>
     </div>
-
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
         [nzShowPagination]="false" nzBordered>
@@ -63,17 +66,17 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th width="60px" class="text-center">STT</th>
-            <th width="">Số tờ trình</th>
-            <th *ngIf="userService.isTongCuc()" width="">Đơn vị</th>
-            <th width="">Ngày đề xuất</th>
-            <th width="">Trích yếu</th>
-            <th width="">Số QĐ giao chỉ tiêu</th>
-            <th width="">Năm kế hoạch</th>
-            <th width="">Hàng hóa</th>
-            <th *ngIf="userService.isCuc()" width="">Chủng loại hàng hóa</th>
-            <th width="">Số gói thầu</th>
-            <th width="">Trạng thái của đề xuất</th>
+            <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 7%;">Số tờ trình</th>
+            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 7%;">Đơn vị</th>
+            <th class="text-center" style="width: 7%;">Ngày ký</th>
+            <th class="text-center" style="width: 25%;">Trích yếu</th>
+            <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
+            <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
+            <th *ngIf="userService.isCuc()" class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 5%;">Số gói thầu</th>
+            <th class="text-center" style="width: 7%;">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -90,7 +93,8 @@
             </th>
             <th *ngIf="userService.isTongCuc()">
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                  (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>

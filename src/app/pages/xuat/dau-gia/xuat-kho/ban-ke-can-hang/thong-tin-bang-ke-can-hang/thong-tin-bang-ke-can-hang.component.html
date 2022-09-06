@@ -34,7 +34,7 @@
   <div class="header">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+        <span *ngIf="!id" class="du-thao-va-lanh-dao-duyet">
           Dự Thảo
         </span>
         <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
@@ -47,7 +47,7 @@
     <div class="search__body" nz-row [nzGutter]="[ 18,6]">
       <div nz-col nzSpan="3">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Số quyết định xuất
           </nz-form-label>
           <nz-select [(ngModel)]="detail.qdgnvnxId" (ngModelChange)="changeSoQuyetDinh(false)"
@@ -59,7 +59,7 @@
       </div>
       <div nz-col nzSpan="3">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Số phiếu xuất kho
           </nz-form-label>
           <nz-select [(ngModel)]="detail.qlPhieuNhapKhoLtId" (ngModelChange)="changePhieuNhapKho()"
@@ -96,7 +96,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Họ tên thủ kho
           </nz-form-label>
           <nz-select [(ngModel)]="detail.thuKho"
@@ -108,7 +108,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Điểm kho
           </nz-form-label>
 
@@ -121,7 +121,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Nhà Kho
           </nz-form-label>
           <nz-select [(ngModel)]="detail.maNhaKho" (ngModelChange)="changeNhaKho(false)"
@@ -133,7 +133,7 @@
       </div>
       <div nz-col nzSpan="3">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Ngăn kho
           </nz-form-label>
           <nz-select [(ngModel)]="detail.maNganKho" (ngModelChange)="changeNganKho()"
@@ -145,7 +145,7 @@
       </div>
       <div nz-col nzSpan="3">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Lô Kho
           </nz-form-label>
           <nz-select [(ngModel)]="detail.maNganLo"
@@ -157,7 +157,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Địa điểm
           </nz-form-label>
           <input nz-input placeholder="Nhập địa điểm" [(ngModel)]="detail.diaDiem"
@@ -166,7 +166,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Đơn vị tính
           </nz-form-label>
           <nz-select [(ngModel)]="detail.donViTinh"
@@ -178,7 +178,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Tên người nhận
           </nz-form-label>
           <input nz-input placeholder="Nhập" [(ngModel)]="detail.tenNguoiGiaoHang"
@@ -187,7 +187,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Địa chỉ người nhận
           </nz-form-label>
           <input nz-input placeholder="Nhập" [(ngModel)]="detail.diaChiNguoiGiao"
@@ -208,7 +208,7 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
+          <nz-form-label [nzNoColon]="true" nzRequired="">
             Ngày nhập
           </nz-form-label>
           <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
@@ -315,29 +315,33 @@
         </tr>
       </tbody>
     </nz-table>
-    <div class="summary-table-data comment-last" nz-row [nzGutter]="[18, 6]">
+    <div class="summary-table-data comment-last pd-10" nz-row [nzGutter]="[18, 6]">
       <div nz-col nzSpan="24">
         <div nz-row>
-          <div nz-col nzSpan="4" class="text-summary">
-            Tổng trọng lượng kể cả bao bì
+          <div nz-col nzSpan="12">
+            <div nz-col nzSpan="24" class="text-summary">
+              <h3> Tổng trọng lượng kể cả bao bì </h3>
+            </div>
+              <div nz-col nzSpan="24" class="bg-gray  text-money text-specical-money">
+                {{ caculatorSoLuongCaBi() | number: '1.0-1'}}
+              </div>
           </div>
-          <div nz-col nzSpan="8" class="bg-gray text-center text-money text-specical-money">
-            {{ caculatorSoLuongCaBi() | number: '1.0-1' }}
-          </div>
-          <div nz-col nzSpan="4" class="text-summary text-right pd-r-6">
-            Tổng trọng lượng bao bì
-          </div>
-          <div nz-col nzSpan="8" class="bg-gray text-center text-money text-specical-money">
-            {{ caculatorSoLuongBaoBi() | number: '1.0-1' }}
+          <div nz-col nzSpan="12">
+            <div nz-col nzSpan="24" class="text-summary">
+              <h3>Tổng trọng lượng bao bì</h3>
+            </div>
+            <div nz-col nzSpan="24" class="bg-gray  text-money text-specical-money">
+              {{ caculatorSoLuongBaoBi() | number: '1.0-1' }}
+            </div>
           </div>
         </div>
       </div>
       <div nz-col nzSpan="24">
         <div nz-row>
-          <div nz-col nzSpan="6" class="text-summary">
-            Tổng trọng lượng hàng đã trừ bì viết bằng số
+          <div nz-col nzSpan="24" class="text-summary">
+            <h3>Tổng trọng lượng hàng đã trừ bì viết bằng số </h3>
           </div>
-          <div nz-col nzSpan="18" class="bg-gray text-money text-specical-money">
+          <div nz-col nzSpan="24" class="bg-gray text-money text-specical-money">
             {{ (caculatorSoLuongCaBi() - caculatorSoLuongBaoBi()) | number: '1.0-1' }}
           </div>
         </div>

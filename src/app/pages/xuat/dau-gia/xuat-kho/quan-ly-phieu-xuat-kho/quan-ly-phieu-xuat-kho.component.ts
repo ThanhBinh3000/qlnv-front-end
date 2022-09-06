@@ -1,6 +1,7 @@
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -24,47 +25,43 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
   styleUrls: ['./quan-ly-phieu-xuat-kho.component.scss']
 })
 export class QuanLyPhieuXuatKhoComponent implements OnInit {
- @Input() typeVthh: string;
+  @Input() typeVthh: string;
 
- // các input search
-  searchFilter = {
-    soQuyetDinh: '',
-    soPhieu: '',
-    ngayXuatKho: '',
-    soHopDong:''
-  };
-// lấy data vào bảng
+  // các input search
+  formData: FormGroup;
+
+  // lấy data vào bảng
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
-  listLoKho:any[]=[];
-// user : quyền và một số data
+  listLoKho: any[] = [];
+  // user : quyền và một số data
   userInfo: UserLogin;
-// phân trang trong table
+  // phân trang trong table
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-// check view
+  // check view
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  isTatCa : boolean =false;
-// check all trong table
+  isTatCa: boolean = false;
+  // check all trong table
   allChecked = false;
   indeterminate = false;
-// chức năng search trong table
+  // chức năng search trong table
   filterTable: any = {
-    soPhieu: '',
+    soPhieuXuat: '',
     soQuyetDinhXuat: '',
-    soHopDong:'',
+    soHopDong: '',
     ngayXuatKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganKho: '',
-    tenLoKho:'',
-    trangThai:''
+    tenLoKho: '',
+    trangThai: ''
   };
 
   constructor(
@@ -76,15 +73,17 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private modal: NzModalService,
+    private fb: FormBuilder,
   ) { }
 
   async ngOnInit() {
-    this.spinner.show();
+    // this.spinner.show();
+    this.initForm();
     try {
       this.userInfo = this.userService.getUserLogin();
-       if (!this.typeVthh || this.typeVthh == '') {
-         this.isTatCa = true;
-       }
+      if (!this.typeVthh || this.typeVthh == '') {
+        this.isTatCa = true;
+      }
       await Promise.all([
         // this.loadDiemKho(),
         // this.loadNganLo(),
@@ -96,6 +95,15 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  initForm(): void {
+    this.formData = this.fb.group({
+      "soQuyetDinhXuat": [null],
+      "soPhieuXuat": [null],
+      "ngayXuatKho": [null],
+      "soHopDong": [null]
+    })
   }
 
   async loadDiemKho() {
@@ -198,7 +206,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   }
 
   async changePageIndex(event) {
-    this.spinner.show();
+    // this.spinner.show();
     try {
       this.page = event;
       await this.search();
@@ -211,7 +219,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   }
 
   async changePageSize(event) {
-    this.spinner.show();
+    // this.spinner.show();
     try {
       this.pageSize = event;
       await this.search();
@@ -223,13 +231,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
     }
   }
 
+
   clearFilter() {
-    this.searchFilter = {
-      soPhieu: '',
-      ngayXuatKho: '',
-      soQuyetDinh: '',
-      soHopDong:''
-    };
+    this.formData.reset();
     this.search();
   }
 
@@ -247,7 +251,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.spinner.show();
+        // this.spinner.show();
         try {
           this.quanLyPhieuNhapKhoService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
@@ -273,19 +277,20 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
   async search() {
     // cần thay đổi cái key-name đúng nếu có services
     let body = {
-      "denNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 1 ? dayjs(this.searchFilter.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
+      "denNgayXuatKho": this.formData.value.ngayXuatKho && this.formData.value.ngayXuatKho.length > 1 ? dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
       "maDvi": this.userInfo.MA_DVI,
       "loaiVthh": this.typeVthh,
       "orderBy": null,
       "orderDirection": null,
       "pageNumber": this.page,
       "pageSize": this.pageSize,
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQdNhap": this.searchFilter.soQuyetDinh,
+      "soPhieu": this.formData.value.soPhieuXuat,
+      "soQdNhap": this.formData.value.soQuyetDinhXuat,
       "str": null,
       "trangThai": null,
-      "tuNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 0 ? dayjs(this.searchFilter.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
+      "tuNgayXuatKho": this.formData.value.ngayXuatKho && this.formData.value.ngayXuatKho.length > 0 ? dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
     };
+
     let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -304,21 +309,19 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
 
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
-      this.spinner.show();
+      // this.spinner.show();
       try {
-        let body =
-        {
-          "denNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 1 ? dayjs(this.searchFilter.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
+        let body = {
+          "denNgayXuatKho": this.formData.value.ngayXuatKho && this.formData.value.ngayXuatKho.length > 1 ? dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
           "maDvi": this.userInfo.MA_DVI,
           "orderBy": null,
           "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "soPhieu": this.formData.value.soPhieuXuat,
+          "soQdNhap": this.formData.value.soQuyetDinhXuat,
           "str": null,
           "trangThai": null,
-          "tuNgayXuatKho": this.searchFilter.ngayXuatKho && this.searchFilter.ngayXuatKho.length > 0 ? dayjs(this.searchFilter.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
-        }
+          "tuNgayXuatKho": this.formData.value.ngayXuatKho && this.formData.value.ngayXuatKho.length > 0 ? dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
+        };
         this.quanLyPhieuNhapKhoService
           .exportList(body)
           .subscribe((blob) =>
@@ -354,7 +357,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
         nzOkDanger: true,
         nzWidth: 310,
         nzOnOk: async () => {
-          this.spinner.show();
+          // this.spinner.show();
           try {
             let res = await this.quanLyPhieuNhapKhoService.deleteMultiple({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {

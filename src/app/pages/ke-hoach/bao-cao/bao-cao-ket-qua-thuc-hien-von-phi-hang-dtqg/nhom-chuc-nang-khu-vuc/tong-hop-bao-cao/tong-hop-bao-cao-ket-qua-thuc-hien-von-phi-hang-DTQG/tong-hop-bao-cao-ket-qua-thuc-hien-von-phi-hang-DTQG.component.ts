@@ -44,6 +44,8 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
 	};
 
+	statusNew = true;
+
 	donViTaos: any = [];
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 	constructor(
@@ -80,6 +82,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 	}
 
 	async onSubmit() {
+		this.statusNew = true;
 		this.spinner.show();
 		await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
 			if (res.statusCode == 0) {
@@ -116,6 +119,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
 	// tong hop bao cao tu cap duoi
 	tongHop() {
+		this.statusNew = false;
 		if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.dotBcao && this.searchFilter.maLoaiBcao == '1')) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
