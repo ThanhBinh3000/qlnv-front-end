@@ -16,6 +16,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'quan-ly-bien-ban-lay-mau',
@@ -49,6 +51,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   routerVthh: string;
 
   userInfo: UserLogin;
+  formData: FormGroup;
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -82,12 +85,14 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
+    private fb: FormBuilder,
 
   ) { }
 
   async ngOnInit() {
     this.routerUrl = this.router.url;
     this.spinner.show();
+    this.initForm();
     try {
       if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
@@ -100,6 +105,16 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  initForm(): void {
+    this.formData = this.fb.group({
+      "soBienBan": [null],
+      "ngayLayMau": [null],
+      "maDiemKho": [null],
+      "maNhaKho": [null],
+      "maNganLo": [null]
+    })
   }
 
   updateAllChecked(): void {
@@ -134,7 +149,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
+    // this.spinner.show();
+    console.log(this.formData.value);
     let body = {
       "capDvis": '3',
       "maDvis": this.userInfo.MA_DVI,
@@ -147,7 +163,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       pageSize: this.pageSize,
     };
     try {
-      let res = await this.bienBanLayMauService.timKiem(body);
+      let res: any;
+      // let res = await this.bienBanLayMauService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
