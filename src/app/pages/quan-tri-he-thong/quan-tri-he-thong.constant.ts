@@ -11,22 +11,22 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     id: 2,
-    icon: 'htvbdh_tcdt_icon-common',
-    title: 'Quản lý quyền',
+    icon: 'htvbdh_tcdt_phan-quyen',
+    title: 'Quản lý quyền/ nhóm quyền',
     url: `/${NHAP_MAIN_ROUTE}/quan-ly-quyen`,
     dropdown: 'quan-ly-quyen',
     idHover: 'quan-ly-quyen',
     isSelected: false
   },
-  {
-    id: 3,
-    icon: 'htvbdh_tcdt_icon-common',
-    title: 'Quản lý nhóm quyền',
-    url: `/${NHAP_MAIN_ROUTE}/quan-ly-nhom-quyen`,
-    dropdown: 'quan-ly-nhom-quyen',
-    idHover: 'quan-ly-nhom-quyen',
-    isSelected: false
-  },
+  // {
+  //   id: 3,
+  //   icon: 'htvbdh_tcdt_icon-common',
+  //   title: 'Quản lý nhóm quyền',
+  //   url: `/${NHAP_MAIN_ROUTE}/quan-ly-nhom-quyen`,
+  //   dropdown: 'quan-ly-nhom-quyen',
+  //   idHover: 'quan-ly-nhom-quyen',
+  //   isSelected: false
+  // },
   {
     id: 4,
     icon: 'htvbdh_tcdt_icon-common',

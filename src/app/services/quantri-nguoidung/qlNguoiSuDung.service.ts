@@ -11,7 +11,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 export class QlNguoiSuDungService extends BaseService {
   gateway: string = '/qlnv-system'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'user', '');
+    super(httpClient, 'user', '/qlnv-system');
   }
 
   findList(body) {
@@ -19,10 +19,10 @@ export class QlNguoiSuDungService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  create(body) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/create`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
+  // create(body) {
+  //   const url = `${environment.SERVICE_API}${this.gateway}/user/create`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
 
   activequyen(body) {
     const url = `${environment.SERVICE_API}${this.gateway}/user/active-quyen`;
@@ -34,10 +34,11 @@ export class QlNguoiSuDungService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  update(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/update`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
+  // update(body: any) {
+  //   const url = `${environment.SERVICE_API}${this.gateway}/user/update`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
+
   updateStatus(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/user/updateStatus`;
     return this.httpClient.post<any>(url, body).toPromise();

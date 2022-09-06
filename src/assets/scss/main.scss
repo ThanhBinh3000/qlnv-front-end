@@ -248,6 +248,13 @@ th {
   }
 }
 
+.scroll-modal {
+  .ant-card-body {
+    overflow: auto;
+    max-height: calc(80vh - 50px);
+  }
+}
+
 .ant-timeline.ant-timeline-label .ant-timeline-item-label {
   // width: 128px !important;
   width: 98px !important;

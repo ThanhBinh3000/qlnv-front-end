@@ -51,7 +51,7 @@ export class ThongtinDauthauComponent implements OnInit {
   };
   filterTable: any = {
     goiThau: '',
-    tenDvi: '',
+    // tenDvi: '',
     soQdPdKhlcnt: '',
     ngayQd: '',
     trichYeu: '',
@@ -293,7 +293,7 @@ export class ThongtinDauthauComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       goiThau: '',
-      tenDvi: '',
+      // tenDvi: '',
       soQdPdKhlcnt: '',
       ngayQd: '',
       trichYeu: '',

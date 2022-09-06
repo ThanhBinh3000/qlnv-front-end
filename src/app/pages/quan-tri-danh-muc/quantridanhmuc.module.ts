@@ -9,12 +9,16 @@ import { QuanTriDanhMucRoutingModule } from './quantridanhmuc-routing.module';
 import { QuanTriDanhMucComponent } from './quantridanhmuc.component';
 import { DanhMucDungChungComponent } from './danh-muc-dung-chung/danh-muc-dung-chung.component';
 import { ThemDanhMucDungChungComponent } from './danh-muc-dung-chung/them-danh-muc-dung-chung/them-danh-muc-dung-chung.component';
+import { DanhMucDonViComponent } from './danh-muc-don-vi/danh-muc-don-vi.component';
+import { NewDonViComponent } from './danh-muc-don-vi/new-don-vi/new-don-vi.component';
 
 @NgModule({
   declarations: [
     QuanTriDanhMucComponent,
     DanhMucDungChungComponent,
-    ThemDanhMucDungChungComponent
+    ThemDanhMucDungChungComponent,
+    DanhMucDonViComponent,
+    NewDonViComponent,
   ],
   imports: [CommonModule, QuanTriDanhMucRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 
