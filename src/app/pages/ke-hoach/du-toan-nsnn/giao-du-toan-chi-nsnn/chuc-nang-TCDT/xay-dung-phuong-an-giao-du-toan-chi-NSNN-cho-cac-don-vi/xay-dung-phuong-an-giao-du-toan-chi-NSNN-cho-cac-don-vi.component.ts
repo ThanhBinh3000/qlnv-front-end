@@ -291,7 +291,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.lstDviTrucThuoc = data.data?.lstGiaoDtoanTrucThuocs;
           }
           this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true) {
+          const dViUser = this.userInfo?.dvql
+          if (this.checkSumUp == true && dViUser == this.maDonViTao) {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
