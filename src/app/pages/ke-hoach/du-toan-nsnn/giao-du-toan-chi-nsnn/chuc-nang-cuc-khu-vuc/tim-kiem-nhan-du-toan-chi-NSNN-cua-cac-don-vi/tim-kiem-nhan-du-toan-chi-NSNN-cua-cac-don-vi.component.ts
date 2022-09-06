@@ -36,6 +36,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
+    loaiTimKiem: '1',
     maPhanGiao: '2',
     maLoai: '1',
     namGiao: null,
