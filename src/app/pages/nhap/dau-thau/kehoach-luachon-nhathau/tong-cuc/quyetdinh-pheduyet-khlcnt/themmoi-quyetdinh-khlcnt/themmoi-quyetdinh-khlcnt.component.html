@@ -27,7 +27,6 @@
     </button>
   </div>
 </nz-affix>
-
 <div class="bg-trang" *ngIf="userService.isTongCuc()">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
@@ -36,7 +35,7 @@
           <span [ngClass]="styleStatus">
             {{ titleStatus }}
           </span>
-          <span>QUYẾT ĐỊNH PHÊ DUYỆT Kế hoạch lựa chọn nhà thầu</span>
+          <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU </span>
         </div>
       </div>
     </div>
@@ -100,7 +99,7 @@
         </div>
         <div nz-col [nzSpan]="isVatTu ? 6 : 3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
@@ -113,7 +112,7 @@
         </div>
         <div nz-col [nzSpan]="3" *ngIf="!isVatTu">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh"
@@ -159,7 +158,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Trích yếu
             </nz-form-label>
             <nz-form-control>
@@ -168,7 +167,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <!-- <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Tiêu chuẩn kỹ thuật
@@ -177,11 +176,11 @@
               <input nz-input formControlName="tchuanCluong" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
-        </div>
+        </div> -->
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              File đính kèm
+              Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
               <file-list></file-list>
@@ -192,6 +191,15 @@
       <br />
     </form>
   </nz-card>
+  <div class="header">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span>
+        </span>
+        <span> THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KHLCNT </span>
+      </div>
+    </div>
+  </div>
   <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
     <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" *ngIf="!isVatTu">
       <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
@@ -219,7 +227,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
-                    Phương thức đấu thầu
+                    Phương thức lựa chọn nhà thầu
                   </nz-form-label>
                   <nz-select formControlName="pthucLcnt" nzDisabled="true">
                     <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -321,7 +329,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">
-                    Phương thức đấu thầu
+                    Phương thức lựa chọn nhà thầu
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="pthucLcntErr">
                     <nz-select formControlName="pthucLcnt"
@@ -415,7 +423,6 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-
               <div nz-col [nzSpan]="12"></div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item class="display-block">
@@ -537,7 +544,7 @@
   </nz-tabset>
   <form nzLayout="vertical" nz-form [formGroup]="formData">
     <nz-form-item>
-      <nz-form-label nzRequired [nzNoColon]="true">
+      <nz-form-label [nzNoColon]="true">
         Ghi chú
       </nz-form-label>
       <nz-form-control [nzErrorTip]="ghiChuErr">
@@ -550,7 +557,6 @@
     </nz-form-item>
   </form>
 </div>
-
 <div class="bg-trang" *ngIf="userService.isCuc()">
   <div class="contentDetail">
     <div class="main-content">
@@ -790,7 +796,7 @@
           </form>
           <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16 mb-16">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">
+              <nz-form-label [nzNoColon]="true">
                 Ghi chú
               </nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError" [nzValidatingTip]="soQDError">

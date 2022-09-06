@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DauThauService } from 'src/app/services/dauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-thongtin-dauthau',
   templateUrl: './thongtin-dauthau.component.html',
@@ -49,9 +49,10 @@ export class ThongtinDauthauComponent implements OnInit {
     maDvi: '',
     trichYeu: ''
   };
+
   filterTable: any = {
-    goiThau: '',
-    // tenDvi: '',
+    tenGthau: '',
+    tenDvi: '',
     soQdPdKhlcnt: '',
     ngayQd: '',
     trichYeu: '',
@@ -60,25 +61,24 @@ export class ThongtinDauthauComponent implements OnInit {
     thanhGiaGoiThau: '',
     statusConvert: '',
   };
+
   dataTableAll: any[] = [];
   listVthh: any[] = [];
-
+  allChecked = false;
+  indeterminate = false;
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-
 
   async ngOnInit() {
     this.spinner.show();
@@ -130,16 +130,18 @@ export class ThongtinDauthauComponent implements OnInit {
     let res = await this.dauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
       if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
         this.dataTable.forEach((item) => {
           item.checked = false;
           item.statusConvert = this.statusGoiThau(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable)
-      this.totalRecord = data.totalElements;
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
@@ -272,6 +274,37 @@ export class ThongtinDauthauComponent implements OnInit {
     this.helperService.formatDate()
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every((item) => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every((item) => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -292,8 +325,8 @@ export class ThongtinDauthauComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      goiThau: '',
-      // tenDvi: '',
+      tenGthau: '',
+      tenDvi: '',
       soQdPdKhlcnt: '',
       ngayQd: '',
       trichYeu: '',
@@ -303,5 +336,4 @@ export class ThongtinDauthauComponent implements OnInit {
       statusConvert: '',
     }
   }
-
 }
