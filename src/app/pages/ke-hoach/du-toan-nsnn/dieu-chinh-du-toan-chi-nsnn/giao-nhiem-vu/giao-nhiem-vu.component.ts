@@ -935,10 +935,11 @@ export class GiaoNhiemVuComponent implements OnInit {
         return;
       }
     );
+    debugger
     const lstDieuChinhTemps: any[] = [];
     this.lstDieuChinhs.forEach(data => {
       const lstCtietTemp: any[] = [];
-      data.lstCtietDchinh?.forEach(item => {
+      data.lstCtietDchinh.forEach(item => {
         lstCtietTemp.push({
           ...item,
           id: null,
@@ -947,7 +948,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       lstDieuChinhTemps.push({
         ...data,
         giaoCho: this.userInfo?.username,
-        lstCtietDieuChinhs: lstCtietTemp,
+        lstCtietDchinh: lstCtietTemp,
         id: null,
       })
     })
@@ -975,7 +976,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       tongHopTuIds: tongHopTuIds,
     };
 
-    this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetDieuChinhService1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
