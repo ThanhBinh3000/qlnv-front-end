@@ -1,7 +1,8 @@
-import { saveAs } from 'file-saver';
+import { BienBanBanDauGia } from './../../../../../../models/BienBanBanDauGia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,15 +14,13 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
 
 @Component({
     selector: 'app-themmoi-bien-ban-ban-dau-gia',
@@ -57,6 +56,8 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     create: any = {};
     editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
     expandSet = new Set<number>();
+    formData: FormGroup;
+    bienBanBanDauGia: BienBanBanDauGia = new BienBanBanDauGia();
     onExpandChange(id: number, checked: boolean): void {
         if (checked) {
             this.expandSet.add(id);
@@ -95,27 +96,22 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         private donViService: DonviService,
         private danhMucService: DanhMucService,
         private notification: NzNotificationService,
-        private router: Router,
-        private routerActive: ActivatedRoute,
         private modal: NzModalService,
         private userService: UserService,
-        private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
         private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
         private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
         public globals: Globals,
         private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
         private uploadFileService: UploadFileService,
         private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+        private fb: FormBuilder,
     ) { }
 
     async ngOnInit() {
         this.spinner.show();
         try {
-            this.create.dvt = "Tấn";
-            this.detail.trangThai = "00";
             this.userInfo = this.userService.getUserLogin();
-            this.detail.maDvi = this.userInfo.MA_DVI;
-
+            this.bienBanBanDauGia.nam = dayjs().year();
             this.yearNow = dayjs().get('year');
             for (let i = -3; i < 23; i++) {
                 this.listNam.push({
@@ -131,7 +127,10 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 this.loadSoQuyetDinh(),
                 this.getListVthh(),
             ]);
-            await this.loadChiTiet(this.id);
+            this.initForm();
+            if (this.id > 0) {
+                await this.loadChiTiet(this.id);
+            }
             this.spinner.hide();
         } catch (e) {
             console.log('error: ', e);
@@ -139,6 +138,83 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
+
+
+    initForm() {
+        this.formData = this.fb.group({
+            id: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.id : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            namKeHoach: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.nam : null,
+                    disabled: true,
+                },
+                [],
+            ],
+            soBienBan: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.soBienBan : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            trichYeu: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.trichYeu : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            ngayKy: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.ngayKy : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            loaiVthh: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.loaiVthh : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            thongBaoBdgId: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.thongBaoBdgId : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            donViThongBao: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.donViThongBao : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            ngayToChuc: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.ngayToChuc : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+            diaDiem: [
+                {
+                    value: this.bienBanBanDauGia ? this.bienBanBanDauGia.diaDiem : null,
+                    disabled: this.isView ? true : false,
+                },
+                [],
+            ],
+        });
+    }
+
 
     async getListVthh() {
         let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -601,64 +677,46 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
     async save(isOther: boolean) {
         this.spinner.show();
-        try {
-            debugger
-            let body = {
-                "cts": [
-                    {
-                        "chucVu": "string",
-                        "hoTen": "string",
-                        "id": 0,
-                        "loaiTptg": "string",
-                        "noiCongTac": "string",
-                        "stt": 0
-                    }
-                ],
-                "diaDiem": this.detail.diaDiemDauGia,
-                "donViThongBao": this.detail.donviThongBao,
-                "loaiVthh": this.detail.loaiVthh,
-                "maVatTuCha": this.detail.loaiVthh,
-                "nam": this.detail.nam,
-                "ngayKy": this.detail.ngayKy,
-                "ngayToChuc": this.detail.ngayToChucBDG,
-                "soBienBan": this.detail.soBienBan,
-                "thongBaoBdgId": null,
-                "trichYeu": this.detail.trichYeu,
-            };
-            if (this.id > 0) {
-                let res = await this.quanLyBienBanBanDauGiaService.sua(
-                    body,
-                );
-                if (res.msg == MESSAGE.SUCCESS) {
-                    if (!isOther) {
-                        this.notification.success(
-                            MESSAGE.SUCCESS,
-                            MESSAGE.UPDATE_SUCCESS,
-                        );
-                        this.back();
-                    }
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res.msg);
-                }
-            } else {
-                let res = await this.quanLyBienBanBanDauGiaService.them(
-                    body,
-                );
-                if (res.msg == MESSAGE.SUCCESS) {
-                    if (!isOther) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        this.back();
-                    }
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res.msg);
-                }
-            }
-            this.spinner.hide();
-        } catch (e) {
-            console.log('error: ', e);
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
+        console.log("this.formData.value: ", this.formData.value);
+
+        // try {
+        //     let body = {
+
+        //     };
+        //     if (this.id > 0) {
+        //         let res = await this.quanLyBienBanBanDauGiaService.sua(
+        //             body,
+        //         );
+        //         if (res.msg == MESSAGE.SUCCESS) {
+        //             if (!isOther) {
+        //                 this.notification.success(
+        //                     MESSAGE.SUCCESS,
+        //                     MESSAGE.UPDATE_SUCCESS,
+        //                 );
+        //                 this.back();
+        //             }
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res.msg);
+        //         }
+        //     } else {
+        //         let res = await this.quanLyBienBanBanDauGiaService.them(
+        //             body,
+        //         );
+        //         if (res.msg == MESSAGE.SUCCESS) {
+        //             if (!isOther) {
+        //                 this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        //                 this.back();
+        //             }
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, res.msg);
+        //         }
+        //     }
+        //     this.spinner.hide();
+        // } catch (e) {
+        //     console.log('error: ', e);
+        //     this.spinner.hide();
+        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        // }
     }
 
     print() {
