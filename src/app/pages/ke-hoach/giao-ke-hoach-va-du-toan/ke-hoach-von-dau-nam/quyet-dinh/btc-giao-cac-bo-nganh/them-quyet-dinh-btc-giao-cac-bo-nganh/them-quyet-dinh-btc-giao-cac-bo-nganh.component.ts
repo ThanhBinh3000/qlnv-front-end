@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
@@ -46,6 +47,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public userService: UserService,
     public globals: Globals,
+    private danhMucService: DanhMucService,
     private helperService: HelperService,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
@@ -70,9 +72,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.getListBoNganh(),
       this.maQd = '/QĐ-BTC',
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get('namQd').value),
+      // this.onChangeNamQd(this.formData.get('namQd').value),
     ])
     this.spinner.hide();
   }
@@ -109,11 +112,20 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       const data = res.data.content;
       if (data) {
         let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
+        console.log('haaaaaaaaa:'+ data[0].id)
         if (detail.msg == MESSAGE.SUCCESS) {
           this.dsBoNganh = detail.data.listBoNganh;
         }
       }
       console.log(this.dsBoNganh)
+    }
+  }
+
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsBoNganh = res.data;
     }
   }
 
@@ -204,11 +216,11 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   async save() {
-    console.log(this.taiLieuDinhKemList)
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      console.log(this.formData.value)
+    if (!this.formData.valid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      console.log(this.formData.controls)
       this.spinner.hide();
       return;
     }

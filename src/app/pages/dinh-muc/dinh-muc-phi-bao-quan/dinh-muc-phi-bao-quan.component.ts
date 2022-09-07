@@ -66,8 +66,8 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   listHangHoa: any[] = [];
-  listLoaiDinhMuc: any[] = [{"ma": "DM1", "giaTri": "Định mức số 1"}, {"ma": "DM2", "giaTri": "Định mức số 2"}];
-  listLoaiBaoQuan: any[] = [{"ma": "BQ1", "giaTri": "Bảo quản 1"}, {"ma": "BQ2", "giaTri": "Bảo quản 2"}];
+  listLoaiDinhMuc: any[] =[];
+  listLoaiBaoQuan: any[] = [];
   listTrangThai: any[] = [{"ma": "00", "giaTri": "Không hoạt động"}, {"ma": "01", "giaTri": "Hoạt động"}];
   listDmDinhMuc: any[] = [{
     "ma": "001",
@@ -154,8 +154,9 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      await this.search();
+      await this.getAllLoaiDinhMuc();
       await this.loaiVTHHGetAll();
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       this.spinner.hide();
@@ -174,6 +175,17 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       ;
     }
   }
+
+  async getAllLoaiDinhMuc() {
+    let resLoaiDinhMuc = await this.danhMucService.danhMucChungGetAll('LOAI_DINH_MUC');
+    if (resLoaiDinhMuc.msg == MESSAGE.SUCCESS) {
+        this.listLoaiDinhMuc = resLoaiDinhMuc.data;
+    }
+    let resLoaiHinhBaoQuan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+    if (resLoaiHinhBaoQuan.msg == MESSAGE.SUCCESS) {
+      this.listLoaiBaoQuan = resLoaiHinhBaoQuan.data;
+    }
+   }
 
   changeDm(attr): void {
     let item;

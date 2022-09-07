@@ -11,9 +11,6 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Loại hàng hóa</label>
-          <!--        <nz-select [(ngModel)]="searchFilter.loaiVthh">-->
-          <!--          <nz-option *ngFor="let p of listHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
-          <!--        </nz-select>-->
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()" id="dsds">
             <input class="search__input" (click)="selectHangHoa()" [readonly]="true" nz-input
                    [(ngModel)]="searchFilter.tenLoaiVthh"
@@ -30,7 +27,7 @@
         <div nz-col nzSpan="6">
           <label class="search__label"> Loại định mức </label>
           <nz-input-group id="loai-dm">
-            <nz-select [(ngModel)]="searchFilter.loaiDinhMuc">
+            <nz-select [(ngModel)]="searchFilter.loaiDinhMuc" nzAllowClear="true">
               <nz-option *ngFor="let p of listLoaiDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </nz-input-group>
@@ -38,7 +35,7 @@
         <div nz-col nzSpan="6">
           <label class="search__label"> Loại hình bảo quản </label>
           <nz-input-group id="ten-loai-bq">
-            <nz-select [(ngModel)]="searchFilter.loaiBaoQuan">
+            <nz-select [(ngModel)]="searchFilter.loaiBaoQuan" nzAllowClear="true">
               <nz-option *ngFor="let p of listLoaiBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </nz-input-group>
@@ -46,7 +43,7 @@
         <div nz-col nzSpan="3">
           <label class="search__label"> Trạng thái </label>
           <nz-input-group id="trang-thai">
-            <nz-select [(ngModel)]="searchFilter.trangThai">
+            <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear="true">
               <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </nz-input-group>
@@ -206,7 +203,6 @@
                 </ng-container>
               </ng-template>
             </nz-form-control>
-            <!--            <input type="text" [(ngModel)]="rowItem.ngayHieuLuc" nz-input/>-->
           </th>
           <th>
             <nz-select [(ngModel)]="rowItem.trangThai" [nzDisabled]="isView" nzAllowClear="true">
