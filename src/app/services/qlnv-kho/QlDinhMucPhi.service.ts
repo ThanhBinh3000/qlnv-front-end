@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class QlDinhMucPhiService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dinh-muc-phi', '');
+    super(httpClient, 'dinh-muc-phi', '/qlnv-kho');
   }
 
 }
