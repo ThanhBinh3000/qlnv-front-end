@@ -13,7 +13,7 @@ export class MangLuoiKhoService extends BaseService {
     }
 
     getDetailByMa(body) {
-        const url = `${environment.LOCAL}/mlk/info-mlk`;
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/info-mlk`;
         return this._httpClient.post<any>(url, body).toPromise();
     }
 }
