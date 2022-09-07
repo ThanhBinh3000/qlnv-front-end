@@ -544,17 +544,17 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+        trangThai = STATUS.BAN_HANH;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.BAN_HANH;
+        trangThai = STATUS.DA_DUYET_LDC;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.TU_CHOI_LDC: {
-        trangThai = STATUS.BAN_HANH;
+        trangThai = STATUS.DA_DUYET_LDC;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }

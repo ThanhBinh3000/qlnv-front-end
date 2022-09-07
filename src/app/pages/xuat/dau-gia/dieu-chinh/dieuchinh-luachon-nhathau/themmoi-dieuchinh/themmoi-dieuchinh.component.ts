@@ -18,6 +18,7 @@ import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-dieuchinh',
@@ -497,7 +498,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: STATUS,
           };
           let res =
             await this.dauThauGoiThauService.updateStatus(

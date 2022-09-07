@@ -23,7 +23,7 @@
       <span>Từ chối</span>
     </button>
     <button *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.NHAP_DU_THAO && !isDetail() &&  typeVthh != '02'"
-      [disabled]="!formData.valid" type="button" class="btn btn-sub">
+      [disabled]="!formData.valid" type="button" class="btn btn-sub" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Ban hành</span>
     </button>

@@ -86,6 +86,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+
   }
 
   updateAllChecked(): void {
@@ -155,6 +156,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+    console.log(this.dataTable)
   }
 
   async changePageIndex(event) {

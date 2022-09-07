@@ -299,12 +299,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-
-  chiTietDxCuc(data?) {
-    this.isDetailDxCuc = true;
-    this.idDeXuat = data;
-  }
-
   showList() {
     this.isDetailDxCuc = false;
   }
