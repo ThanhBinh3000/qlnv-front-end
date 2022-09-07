@@ -11,6 +11,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -149,7 +150,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: STATUS.BAN_HANH
           };
           let res = await this.quyetDinhTtcpService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
