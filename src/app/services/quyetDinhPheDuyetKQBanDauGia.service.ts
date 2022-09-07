@@ -83,7 +83,7 @@ export class QuyetDinhPheDuyetKQBanDauGiaService extends BaseService {
   }
 
   listData(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/qd-phe-duyet-kqbdg/listData`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-kqbdg/listData`;
     return this.httpClient.post(url, body).toPromise();
   }
 }
