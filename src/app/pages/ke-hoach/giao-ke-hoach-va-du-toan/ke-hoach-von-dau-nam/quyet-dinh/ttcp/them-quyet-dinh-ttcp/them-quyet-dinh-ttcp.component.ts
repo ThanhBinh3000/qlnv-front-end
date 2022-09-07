@@ -1,16 +1,18 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Globals } from 'src/app/shared/globals';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from 'src/app/services/user.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { HelperService } from 'src/app/services/helper.service';
+import {
+  DialogChiTietKeHoachGiaoBoNganhComponent
+} from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Globals} from 'src/app/shared/globals';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {UserService} from 'src/app/services/user.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {HelperService} from 'src/app/services/helper.service';
 import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
@@ -127,9 +129,11 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) {}
+  downloadFileKeHoach(event) {
+  }
 
-  xoaItem(id: number) {}
+  xoaItem(id: number) {
+  }
 
   quayLai() {
     this.onClose.emit();
@@ -148,7 +152,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.get('id').value,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };
@@ -172,8 +176,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
   }
 
-  async save() {
-    console.log(this.taiLieuDinhKemList);
+  async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -200,19 +203,28 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       res = await this.quyetDinhTtcpService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isGuiDuyet) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.pheDuyet();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       }
-      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
 
-  exportData() {}
+  exportData() {
+  }
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
