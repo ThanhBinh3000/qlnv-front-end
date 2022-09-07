@@ -189,9 +189,9 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.get('id').value,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: STATUS.BAN_HANH,
           };
           let res =
             await this.quyetDinhBtcNganhService.approve(
@@ -213,7 +213,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     });
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
@@ -236,12 +236,20 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       res = await this.quyetDinhBtcNganhService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isGuiDuyet) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       }
-      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
