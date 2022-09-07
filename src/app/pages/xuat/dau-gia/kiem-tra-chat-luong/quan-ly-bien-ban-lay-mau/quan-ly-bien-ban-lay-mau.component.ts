@@ -323,16 +323,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = isView;
-  }
-
-  async showList() {
-    this.isDetail = false;
-    await this.search()
-  }
 
   export() {
     if (this.totalRecord > 0) {
@@ -426,18 +416,14 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     }
   }
 
+  redirectToChiTiet(isView: boolean, id: number) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soBienBan: '',
-      ngayLayMau: '',
-      soHopDong: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganKho: '',
-      tenNganLo: '',
-      tenTrangThai: '',
-    }
+  async showList() {
+    this.isDetail = false;
+    await this.search()
   }
 }
