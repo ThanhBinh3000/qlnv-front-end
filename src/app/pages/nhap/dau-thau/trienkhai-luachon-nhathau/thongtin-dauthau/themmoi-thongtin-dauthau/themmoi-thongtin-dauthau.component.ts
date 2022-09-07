@@ -18,6 +18,7 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhP
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
@@ -360,10 +361,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   pipe = new DatePipe('en-US');
 
   async save(trangThaiLuu) {
-    if (trangThaiLuu == '02') {
+    if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
       this.helperService.markFormGroupTouched(this.formGoiThau);
       if (this.formGoiThau.invalid) {
-        console.log(this.formGoiThau.value)
         return;
       }
     }

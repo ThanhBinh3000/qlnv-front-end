@@ -22,6 +22,7 @@ import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeL
 import * as dayjs from 'dayjs';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -507,11 +508,36 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_KE_TOAN;
-    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN) {
-      trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
-    } else if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
+    let trangThai = ''
+    switch (this.detail.trangThai) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TK;
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+      }
+      case STATUS.TU_CHOI_TK: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case STATUS.TU_CHOI_KT: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
+      case STATUS.TU_CHOI_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
     }
     this.modal.confirm({
       nzClosable: false,
