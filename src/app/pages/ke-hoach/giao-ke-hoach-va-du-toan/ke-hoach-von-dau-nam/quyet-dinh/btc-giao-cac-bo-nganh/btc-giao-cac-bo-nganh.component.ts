@@ -33,8 +33,8 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    namQd: '',
     ngayQd: '',
+    tenBoNganh: '',
     trichYeu: '',
     tenTrangThai: '',
   };
