@@ -31,6 +31,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-dau-gia',
@@ -702,7 +703,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThai: '29',
+            trangThai: STATUS.BAN_HANH,
           };
           let res = await this.qdPheDuyetKhBanDauGiaService.updateStatus(
             body,
