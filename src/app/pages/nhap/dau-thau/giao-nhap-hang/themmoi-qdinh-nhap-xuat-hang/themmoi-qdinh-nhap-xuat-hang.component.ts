@@ -25,6 +25,7 @@ import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
@@ -539,9 +540,24 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
-    if (this.quyetDinhNhapXuat.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
-      trangThai = this.globals.prop.NHAP_BAN_HANH;
+    let trangThai = ''
+    let mesg = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.BAN_HANH;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.TU_CHOI_LDC: {
+        trangThai = STATUS.BAN_HANH;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
     }
     this.modal.confirm({
       nzClosable: false,

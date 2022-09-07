@@ -33,6 +33,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, convertVthhToId } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
+import {STATUS} from "../../../../../../../constants/status";
 
 
 @Component({
@@ -596,8 +597,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     } else {
       switch (this.formData.get('trangThai').value) {
-        case '00': {
-          trangThai = '11';
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.BAN_HANH;
           mesg = 'Văn bản sẵn sàng ban hành ?'
           break;
         }
