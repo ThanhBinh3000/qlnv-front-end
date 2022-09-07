@@ -1073,6 +1073,13 @@ export function sumNumber(num: any): number {
   return tong;
 }
 
+export function mulNumber(num1: number, num2: number) {
+  if ((!num1 && num1 !== 0) || (!num2 && num2 !== 0)) {
+    return null;
+  }
+  return num1 * num2;
+}
+
 export function divNumber(num1, num2): number {
   if ((!num1 && num1 !== 0) &&
     (!num2 && num2 !== 0)) {

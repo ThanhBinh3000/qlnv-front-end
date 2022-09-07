@@ -1533,6 +1533,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   // thêm nhiều cột
   addAllCol() {
+    const obj = {
+      danhSachDonVi: this.lstDviChon,
+      multi: true,
+    }
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách đơn vị',
       nzContent: DialogLuaChonThemDonViComponent,
@@ -1541,7 +1545,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       nzWidth: '65%',
       nzFooter: null,
       nzComponentParams: {
-        danhSachDonVi: this.lstDviChon
+        obj: obj
       },
     });
     modalIn.afterClose.subscribe((res) => {

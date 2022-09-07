@@ -76,7 +76,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let item of lstCtietBcao4b; let i = index">
+			<tr *ngFor="let item of lstCtietBcao; let i = index">
 				<ng-container *ngIf="!editCache[item.id].edit; else editTemplate4bB">
 					<td [nzIndentSize]="item.level * 8">
 						{{getChiMuc(item.stt)}}
