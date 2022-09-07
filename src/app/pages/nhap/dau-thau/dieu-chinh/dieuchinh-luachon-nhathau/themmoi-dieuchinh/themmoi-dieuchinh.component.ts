@@ -342,6 +342,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
         }]
       });
     }
+    this.spinner.hide();
   }
 
   async onChangeSoQdGoc($event) {

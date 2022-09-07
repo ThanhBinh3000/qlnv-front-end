@@ -4754,6 +4754,13 @@ th {
     display: flex;
   }
 
+  h2 {
+    margin-bottom: 0;
+    font-size: 18px;
+    align-items: center;
+    display: flex;
+  }
+
 
   .buttons {
     .btn-xoa {
@@ -4768,6 +4775,17 @@ th {
     color: #fff;
   }
 
+}
+
+tfoot {
+  tr {
+    background-color: #F8F9FA;
+  }
+
+  // .xanh {
+  //   color: #8BC34C !important;
+  //   background-color: #F8F9FA !important;
+  // }
 }
 
 .ant-card-body,
