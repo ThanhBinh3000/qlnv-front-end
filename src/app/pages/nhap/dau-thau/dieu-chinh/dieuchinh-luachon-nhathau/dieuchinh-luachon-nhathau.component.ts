@@ -1,11 +1,10 @@
 import {
   Component,
   Input,
-  OnChanges,
   OnInit,
-  SimpleChanges,
 } from '@angular/core';
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,12 +12,12 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
   templateUrl: './dieuchinh-luachon-nhathau.component.html',
@@ -32,17 +31,30 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
+
   searchFilter = {
-    soQdinh: '',
+    soQd: '',
     namKh: dayjs().get('year'),
     ngayQd: '',
     loaiVthh: '',
     trichYeu: '',
+    soGoiThau: '',
+  };
+
+  filterTable: any = {
+    soQd: '',
+    ngayQd: '',
+    trichYeu: '',
+    soQdGoc: '',
+    namKhoach: '',
+    tenVthh: '',
+    soGoiThau: '',
+    trangThai: '',
   };
 
   allChecked = false;
   indeterminate = false;
-
+  dataTableAll: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -58,7 +70,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     public userService: UserService,
     private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -83,6 +95,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   async search() {
+    this.spinner.show();
     let body = {
       tuNgayTao: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
@@ -90,9 +103,11 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       denNgayTao: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      soQdinh: this.searchFilter.soQdinh,
+      soQd: this.searchFilter.soQd,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKh,
+      soGoiThau: this.searchFilter.soGoiThau,
+      trichYeu: this.searchFilter.trichYeu,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -103,11 +118,18 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       let data = res.data;
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   searchDanhSachDauThau(body, trangThai) {
@@ -187,11 +209,12 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQdinh: '',
+      soQd: '',
       namKh: dayjs().get('year'),
       ngayQd: '',
       loaiVthh: '',
       trichYeu: '',
+      soGoiThau: '',
     };
     // this.namKeHoach = null;
     // this.loaiVthh = null;
@@ -230,35 +253,65 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayTao: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayTao: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
+            : null,
+          soQd: this.searchFilter.soQd,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKhoach: this.searchFilter.namKh,
+          soGoiThau: this.searchFilter.soGoiThau,
+        };
+        this.dieuChinhQuyetDinhPdKhlcntService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
+
+  clearFilterTable() {
+    this.filterTable = {
+      soQd: '',
+      ngayQd: '',
+      trichYeu: '',
+      soQdGoc: '',
+      namKhoach: '',
+      tenVthh: '',
+      soGoiThau: '',
+      trangThai: '',
+    };
   }
 }

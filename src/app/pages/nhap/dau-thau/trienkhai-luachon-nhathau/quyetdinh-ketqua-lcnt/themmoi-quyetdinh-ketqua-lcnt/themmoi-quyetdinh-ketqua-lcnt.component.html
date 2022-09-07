@@ -91,7 +91,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              Số quyết định phê duyệt KQLCNT
+              Số QĐ duyệt KQLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
               <nz-input-group nzAddOnAfter="{{maQd}}">
@@ -108,7 +108,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt KQLCNT
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày QĐ duyệt KQLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
               <nz-input-group>
@@ -152,7 +152,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số Quyết định phê duyệt KHLCNT
+            <nz-form-label nzRequired [nzNoColon]="true"> Số Quyết định duyệt KHLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
               <nz-select [nzDisabled]="formData.value.trangThai !== '00'" nzAllowClear formControlName="soQdPdKhlcnt"
@@ -169,8 +169,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kế hoạch lựa
-              chọn nhà thầu
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định duyệt KHLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
               <nz-input-group>
