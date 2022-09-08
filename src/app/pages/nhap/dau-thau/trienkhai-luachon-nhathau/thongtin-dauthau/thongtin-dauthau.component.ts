@@ -15,6 +15,7 @@ import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -40,7 +41,7 @@ export class ThongtinDauthauComponent implements OnInit {
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-
+  STATUS = STATUS
   searchFilter = {
     namKhoach: dayjs().get('year'),
     soQd: '',
