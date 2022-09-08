@@ -10,6 +10,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UserService } from 'src/app/services/user.service';
 import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
@@ -42,6 +43,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     loaiVthh: '',
     trichYeu: ''
   };
+
+  STATUS = STATUS
 
   filterTable: any = {
     soDxuat: '',
@@ -133,11 +136,15 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
+      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
+    if (this.userService.isCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
+    }
     let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

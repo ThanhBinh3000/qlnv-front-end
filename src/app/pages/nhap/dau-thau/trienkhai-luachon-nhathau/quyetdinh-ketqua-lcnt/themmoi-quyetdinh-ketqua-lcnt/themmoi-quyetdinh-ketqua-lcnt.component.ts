@@ -394,6 +394,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       cloaiVthh: this.formData.get('cloaiVthh').value,
       trangThai: STATUS.BAN_HANH,
       lastest: 1,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,

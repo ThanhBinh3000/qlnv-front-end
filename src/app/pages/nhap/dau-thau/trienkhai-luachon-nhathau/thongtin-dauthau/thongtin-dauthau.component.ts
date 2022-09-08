@@ -125,9 +125,11 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      maDvi: this.userInfo.MA_DVI,
       soQd: this.searchFilter.soQd,
-      maDvi: this.searchFilter.maDvi
     }
+    // if (this.userService.isCuc()) {
+    // }
     let res = await this.dauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
