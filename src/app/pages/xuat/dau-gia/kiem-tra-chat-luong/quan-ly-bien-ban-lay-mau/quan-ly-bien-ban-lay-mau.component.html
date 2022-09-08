@@ -32,10 +32,10 @@
                   <nz-form-label [nzNoColon]="true">
                     Điểm kho
                   </nz-form-label>
-                    <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
-                      <nz-option *ngFor="let item of dsDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
-                      </nz-option>
-                    </nz-select>
+                  <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
+                    <nz-option *ngFor="let item of dsDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-item>
               </div>
               <div nz-col nzSpan="4">
@@ -43,32 +43,32 @@
                   <nz-form-label [nzNoColon]="true">
                     Nhà kho
                   </nz-form-label>
-                    <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
-                      <nz-option *ngFor="let item of dsNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
-                      </nz-option>
-                    </nz-select>
-                    </nz-form-item>
-                    </div>
-                    <div nz-col nzSpan="4">
-                      <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true">
-                          Ngăn kho
-                          </nz-form-label>
-                        <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
-                          <nz-option *ngFor="let item of dsNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
-                          </nz-option>
-                        </nz-select>
-                        </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="4">
-                          <nz-form-item class="form-item">
-                            <nz-form-label [nzNoColon]="true">
-                              Lô Kho
-                            </nz-form-label>
-                            <nz-select formControlName="maNganLo">
-                              <nz-option *ngFor="let item of dsLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
-                              </nz-option>
-                            </nz-select>
+                  <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
+                    <nz-option *ngFor="let item of dsNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Ngăn kho
+                  </nz-form-label>
+                  <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
+                    <nz-option *ngFor="let item of dsNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true">
+                    Lô Kho
+                  </nz-form-label>
+                  <nz-select formControlName="maNganLo">
+                    <nz-option *ngFor="let item of dsLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-item>
               </div>
             </div>
@@ -122,7 +122,7 @@
                     </td>
                     <td>
                       <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLayMau"
-                        (input)="filterInTable('ngayLayMau',filterTable.ngayLayMau)" >
+                        (input)="filterInTable('ngayLayMau',filterTable.ngayLayMau)">
                       </nz-date-picker>
                     </td>
                     <td>
@@ -179,7 +179,7 @@
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{data.soBienBan}}</td>
-                    <td>{{data.ngayLayMau | date : 'dd/MM/yyyy"'}}</td>
+                    <td>{{data.ngayLayMau | date : 'dd/MM/yyyy'}}</td>
                     <td>{{data.tenDiemKho}}</td>
                     <td>{{data.tenNhaKho}}</td>
                     <td>{{data.tenNganKho}}</td>
@@ -218,7 +218,7 @@
               </div>
             </nz-tab>
           </nz-tabset>
-          <div class="action-giao-chi-tieu" *ngIf="userService.isChiCuc()">
+          <div class="action-giao-chi-tieu">
             <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>

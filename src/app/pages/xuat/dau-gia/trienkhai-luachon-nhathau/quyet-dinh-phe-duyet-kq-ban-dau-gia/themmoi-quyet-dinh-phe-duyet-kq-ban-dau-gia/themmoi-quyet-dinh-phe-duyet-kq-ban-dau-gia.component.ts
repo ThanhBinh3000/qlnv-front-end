@@ -199,7 +199,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   isDisableField() {
     if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC
-      || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET || this.detail.trangThai == this.globals.prop.NHAP_BAN_HANH)) {
+      || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CUC)) {
       return true;
     }
   }
@@ -339,7 +339,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CUC,
           };
           if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
-            body.trangThai = this.globals.prop.NHAP_BAN_HANH;
+            body.trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CUC;
           }
           let res =
             await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(

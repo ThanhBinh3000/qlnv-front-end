@@ -145,7 +145,7 @@
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{ data.soBienBan }}</td>
                     <td>{{ data.soQd }}</td>
-                    <td>{{ data.ngayLapPhieu }}</td>
+                    <td>{{ data.ngayLapPhieu | date : 'dd/MM/yyyy' }}</td>
                     <td>{{ data.diemKho }}</td>
                     <td>{{ data.nhaKho }}</td>
                     <td>{{ data.nganKho }}</td>
@@ -184,7 +184,6 @@
               </div>
             </nz-tab>
           </nz-tabset>
-
           <div class="action-giao-chi-tieu">
             <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
@@ -194,7 +193,8 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+              *ngIf="userService.isChiCuc()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

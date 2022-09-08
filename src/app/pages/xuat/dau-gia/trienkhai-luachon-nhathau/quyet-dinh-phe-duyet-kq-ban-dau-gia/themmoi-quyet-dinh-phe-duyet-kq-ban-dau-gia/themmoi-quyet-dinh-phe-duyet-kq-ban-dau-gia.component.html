@@ -90,7 +90,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col>
                             <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate"
-                                nzFormat="yyyy-MM-dd" [disabled]="isDisableField() || isView"
+                                nzFormat="yyyy-MM-dd" [nzDisabled]="isDisableField() || isView"
                                 nzPlaceHolder="Ngày nhập kho" formControlName="ngayHieuLuc">
                             </nz-date-picker>
                         </nz-form-control>
@@ -103,7 +103,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col>
                             <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate"
-                                nzFormat="yyyy-MM-dd" [disabled]="isDisableField() || isView"
+                                nzFormat="yyyy-MM-dd" [nzDisabled]="isDisableField() || isView"
                                 nzPlaceHolder="Ngày nhập kho" formControlName="ngayKy">
                             </nz-date-picker>
                         </nz-form-control>
@@ -116,7 +116,7 @@
                             Mã thông báo bán đấu giá
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="maBDGError">
-                            <nz-select formControlName="thongBaoBdgId" [disabled]="isDisableField() || isView"
+                            <nz-select formControlName="thongBaoBdgId" [nzDisabled]="isDisableField() || isView"
                                 (ngModelChange)="onChangeThongBaoBanDauGia($event)">
                                 <nz-option *ngFor="let p of listThongBaoBDG" [nzValue]="p.id" [nzLabel]="p.maThongBao">
                                 </nz-option>
@@ -134,7 +134,7 @@
                             Số biên bản bán đấu giá/số thông báo bán đấu giá không thành
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="soBBBDGError">
-                            <nz-select formControlName="idBienBanBDG" [disabled]="isDisableField() || isView"
+                            <nz-select formControlName="idBienBanBDG" [nzDisabled]="isDisableField() || isView"
                                 (ngModelChange)="onChangeBienBan($event)">
                                 <nz-option *ngFor="let p of listBienBanBDG" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                 </nz-option>
@@ -149,7 +149,7 @@
                 <div nz-col nzSpan="6"></div>
                 <div nz-col nzSpan="24" class="text-summary">File đính kèm khác</div>
                 <div nz-col nzSpan="24">
-                    <file-list [data]="listFileDinhKem"></file-list>
+                    <file-list [data]="listFileDinhKem" [disabled]="isDisableField() || isView"></file-list>
                 </div>
             </div>
         </nz-card>
