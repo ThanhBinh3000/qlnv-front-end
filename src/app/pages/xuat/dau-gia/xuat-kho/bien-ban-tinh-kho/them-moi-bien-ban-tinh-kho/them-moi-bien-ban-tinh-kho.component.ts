@@ -244,11 +244,13 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
   // }
 
 
+
   async loadChiTiet(id: number) {
     let idItem = 81;
     if (idItem > 0) {
       let res = await this.quanLyBienBanTinhKhoService.loadChiTiet(idItem);
       console.log(res);
+
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.formData.patchValue({
@@ -608,10 +610,7 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       this.listDaiDien = newListDaiDien
     }
   }
-
-
 }
-
 
 interface DaiDienChiCuc {
   stt: number;
