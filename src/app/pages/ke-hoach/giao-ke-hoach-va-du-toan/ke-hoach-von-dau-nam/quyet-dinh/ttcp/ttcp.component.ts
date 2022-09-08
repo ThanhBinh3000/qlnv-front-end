@@ -27,7 +27,7 @@ export class TtcpComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   getCount = new EventEmitter<any>();
-  dsNam: string[] = [];
+  dsNam: any[] = [];
   searchInTable: any = {
     soQd: '',
     namQd: dayjs().get('year'),
@@ -60,8 +60,8 @@ export class TtcpComponent implements OnInit {
     private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      namQd: [null],
-      soQd: [null],
+      namQd: [dayjs().get('year')],
+      soQd: [],
       ngayQd: [[]],
       trichYeu: [null],
     });
@@ -73,7 +73,6 @@ export class TtcpComponent implements OnInit {
   }
 
   initForm(): void {
-
   }
 
   initData() {
@@ -83,19 +82,22 @@ export class TtcpComponent implements OnInit {
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+      this.dsNam.push({
+        value: thisYear - i,
+        text: thisYear - i,
+      });
     }
   }
 
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
     this.spinner.show();
     let body = this.formData.value;
+    console.log(body);
     if (body.ngayQd != null) {
       body.ngayQdTu = body.ngayQd[0];
       body.ngayQdDen = body.ngayQd[1];

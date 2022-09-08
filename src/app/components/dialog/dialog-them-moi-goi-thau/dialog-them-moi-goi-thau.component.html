@@ -67,10 +67,9 @@
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
         <nz-input-group>
-          <nz-date-picker class="search__input" formControlName="tgianBdauThien" nzFormat="dd/MM/yyyy"
-                         >
+          <nz-date-picker class="search__input" formControlName="tgianBdauThien" nzFormat="dd/MM/yyyy">
           </nz-date-picker>
         </nz-input-group>
       </nz-form-item>
@@ -88,7 +87,7 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
         <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-          [nzStep]="1" [nzSize]="'small'" >
+          [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isReadOnly">
         </nz-input-number>
       </nz-form-item>
     </div>

@@ -26,7 +26,7 @@ import { environment } from 'src/environments/environment';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 
 interface ItemData {
@@ -79,6 +79,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   searchFilter = {
     soDeXuat: '',
   };
+
+  STATUS = STATUS;
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
 
@@ -189,7 +191,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         namKhoach: [, [Validators.required]],
         loaiVthh: [this.loaiVthh, [Validators.required]],
         ngayKy: [null, [Validators.required]],
-        trangThai: [''],
+        trangThai: [],
         maDvi: [],
         tenDuAn: [null, [Validators.required]],
         tenDvi: [null],
@@ -198,6 +200,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         dienGiai: [null],
         tchuanCluong: [null],
         tgianThienHd: [null, [Validators.required]],
+        tenTrangThai: [],
+        lyDoTuChoi: [],
       }
     );
     this.formData.controls['nguonVon'].valueChanges.subscribe(value => {
@@ -240,7 +244,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         loaiVthh: dataDetail ? dataDetail.loaiVthh : this.loaiVthh,
         // tenVthh: dataDetail ? dataDetail.tenVthh : null,
         ngayKy: dataDetail ? dataDetail.ngayKy : null,
-        trangThai: dataDetail ? dataDetail.trangThai : '00',
+        trangThai: dataDetail ? dataDetail.trangThai : STATUS.DU_THAO,
         maDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
         // cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
         // tenCloaiVthh: dataDetail ? dataDetail.tenCloaiVthh : null,
@@ -262,13 +266,15 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
         tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
         dienGiai: dataDetail ? dataDetail.dienGiai : null,
+        tenTrangThai: dataDetail ? dataDetail.tenTrangThai : 'Dự Thảo',
+        lyDoTuChoi: dataDetail ? dataDetail.ldoTuchoi : null
       }
     );
     if (dataDetail) {
       this.fileDinhKem = dataDetail.fileDinhKems
       this.dataGoiThau = dataDetail.dsGtDtlList
     }
-    this.setTitle();
+    // this.setTitle();
   }
 
   async save(isGuiDuyet?) {
@@ -388,20 +394,13 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
           };
           if (this.formData.get('loaiVthh').value.startsWith('02')) {
             switch (this.formData.get('trangThai').value) {
+              case STATUS.TU_CHOI_LDV:
               case STATUS.DU_THAO: {
                 body.trangThai = STATUS.CHO_DUYET_LDV;
                 break;
               }
               case STATUS.CHO_DUYET_LDV: {
                 body.trangThai = STATUS.DA_DUYET_LDV;
-                break;
-              }
-              case STATUS.TU_CHOI_LDV: {
-                body.trangThai = STATUS.DA_DUYET_LDV;
-                break;
-              }
-              case STATUS.DA_DUYET_LDV : {
-                body.trangThai = STATUS.BAN_HANH;
                 break;
               }
             }
@@ -413,7 +412,6 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
               }
             }
           }
-          // this.save()
           let res = await this.dxuatKhLcntVatTuService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, body.trangThai == '01' ? MESSAGE.GUI_DUYET_SUCCESS : MESSAGE.PHE_DUYET_SUCCESS);
@@ -448,19 +446,9 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: ''
+            trangThai: STATUS.TU_CHOI_LDV
           };
-          switch (this.formData.get('trangThai').value) {
-            case '01': {
-              body.trangThai = '03';
-              break;
-            }
-            case '09': {
-              body.trangThai = '12';
-              break;
-            }
-          }
-          const res = await this.dauThauService.updateStatus(body);
+          const res = await this.dxuatKhLcntVatTuService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();
@@ -477,46 +465,46 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     });
   }
 
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    switch (trangThai) {
-      case '00': {
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Lưu và gửi duyệt';
-        this.titleStatus = 'Dự thảo';
-        break;
-      }
-      case '03': {
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Lưu và gửi duyệt';
-        this.titleStatus = 'Từ chối - TP';
-        break;
-      }
-      case '01': {
-        this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-        this.titleButtonDuyet = 'Duyệt';
-        this.titleStatus = 'Chờ duyệt - TP';
-        break
-      }
-      case '09': {
-        this.iconButtonDuyet = 'htvbdh_tcdt_baocao2'
-        this.titleButtonDuyet = 'Duyệt';
-        this.titleStatus = 'Chờ duyệt - LĐ Cục';
-        break
-      }
-      case '12': {
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Lưu và gửi duyệt';
-        this.titleStatus = 'Từ chối - LĐ Cục';
-        break;
-      }
-      case '02': {
-        this.titleStatus = 'Đã duyệt';
-        this.styleStatus = 'da-ban-hanh'
-        break
-      }
-    }
-  }
+  // setTitle() {
+  //   let trangThai = this.formData.get('trangThai').value
+  //   switch (trangThai) {
+  //     case '00': {
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Lưu và gửi duyệt';
+  //       this.titleStatus = 'Dự thảo';
+  //       break;
+  //     }
+  //     case '03': {
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Lưu và gửi duyệt';
+  //       this.titleStatus = 'Từ chối - TP';
+  //       break;
+  //     }
+  //     case '01': {
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
+  //       this.titleButtonDuyet = 'Duyệt';
+  //       this.titleStatus = 'Chờ duyệt - TP';
+  //       break
+  //     }
+  //     case '09': {
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_baocao2'
+  //       this.titleButtonDuyet = 'Duyệt';
+  //       this.titleStatus = 'Chờ duyệt - LĐ Cục';
+  //       break
+  //     }
+  //     case '12': {
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Lưu và gửi duyệt';
+  //       this.titleStatus = 'Từ chối - LĐ Cục';
+  //       break;
+  //     }
+  //     case '02': {
+  //       this.titleStatus = 'Đã duyệt';
+  //       this.styleStatus = 'da-ban-hanh'
+  //       break
+  //     }
+  //   }
+  // }
 
   export() {
     const workbook = XLSX.utils.book_new();
