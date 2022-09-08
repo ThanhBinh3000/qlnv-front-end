@@ -81,8 +81,21 @@
                 <nz-tabset nzType="card" class="tab__container">
                     <nz-tab [nzTitle]="'Thông tin nơi gửi'">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div nz-col class="gutter-row" [nzSpan]="3">
-                                Đơn vị: {{getMaDviTien()}}
+                            <div nz-col [nzSpan]="1">
+                                Đơn vị:
+                            </div>
+                            <div nz-col [nzSpan]="2">
+                                <ng-container *ngIf="!editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị"
+                                        (ngModelChange)="editMoneyUnit=false">
+                                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </ng-template>
                             </div>
                         </div>
                         <nz-table nzBordered class="table__body">
@@ -161,8 +174,8 @@
                                 </div>
                                 <div nz-col nzSpan="6">
                                     <label class="search__label">Tài khoản nhận</label>
-                                    <nz-input-number class="search__input"
-                                        nzSize="small" [(ngModel)]="ttNhan.taiKhoanNhan"
+                                    <nz-input-number class="search__input" nzSize="small"
+                                        [(ngModel)]="ttNhan.taiKhoanNhan"
                                         [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' ">
                                     </nz-input-number>
                                 </div>

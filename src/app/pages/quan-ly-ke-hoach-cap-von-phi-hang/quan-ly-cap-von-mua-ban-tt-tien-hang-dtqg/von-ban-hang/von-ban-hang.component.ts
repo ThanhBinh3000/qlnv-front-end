@@ -14,7 +14,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -74,7 +74,6 @@ export class VonBanHangComponent implements OnInit {
     trangThaiCha = "1";
     newDate = new Date();
     maDviTien: string;
-    moneyUnit: string;
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM_CON;
@@ -95,7 +94,8 @@ export class VonBanHangComponent implements OnInit {
     statusBtnCopy: boolean;
     statusBtnParent: boolean;
     allChecked = false;
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    editMoneyUnit = false;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {
@@ -170,8 +170,7 @@ export class VonBanHangComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
-            this.maDviTien = '3';
-            this.moneyUnit = this.maDviTien;
+            this.maDviTien = '1';
             this.statusBtnParent = true;
             this.maDviTao = this.userInfo?.dvql;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -380,9 +379,9 @@ export class VonBanHangComponent implements OnInit {
                     this.ttGui.tuTk = data.data.tuTk;
                     this.ttGui.maNguonNs = data.data.maNguonNs;
                     this.ttGui.nienDoNs = data.data.nienDoNs;
-                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
-                    this.ttGui.nopThue = divMoney(data.data.nopThue, this.maDviTien);
-                    this.ttGui.ttChoDviHuong = divMoney(data.data.ttChoDviHuong, this.maDviTien);
+                    this.ttGui.soTien = data.data.soTien;
+                    this.ttGui.nopThue = data.data.nopThue;
+                    this.ttGui.ttChoDviHuong = data.data.ttChoDviHuong;
                     this.ttGui.soTienBangChu = data.data.soTienBangChu;
                     this.ttGui.thuyetMinh = data.data.thuyetMinh;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
@@ -482,12 +481,8 @@ export class VonBanHangComponent implements OnInit {
             return;
         }
 
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         // gui du lieu trinh duyet len server
-        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
+        if (this.ttGui.soTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -533,9 +528,9 @@ export class VonBanHangComponent implements OnInit {
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
             nienDoNs: this.ttGui.nienDoNs,
-            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
-            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
-            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
+            soTien: this.ttGui.soTien,
+            nopThue: this.ttGui.nopThue,
+            ttChoDviHuong: this.ttGui.ttChoDviHuong,
             soTienBangChu: this.ttGui.soTienBangChu,
             tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: this.trangThaiBanGhi,
@@ -643,19 +638,7 @@ export class VonBanHangComponent implements OnInit {
     }
 
     changeModel() {
-        let nopThue = 0;
-        let ttChoDviHuong = 0;
-        if (this.ttGuiCache.nopThue) {
-            nopThue = Number(this.ttGuiCache.nopThue);
-        }
-        if (this.ttGuiCache.ttChoDviHuong) {
-            ttChoDviHuong = Number(this.ttGuiCache.ttChoDviHuong);
-        }
-        this.ttGuiCache.soTien = nopThue + ttChoDviHuong;
-    }
-
-    getMaDviTien() {
-        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+        this.ttGuiCache.soTien = sumNumber([this.ttGuiCache.nopThue, this.ttGuiCache.ttChoDviHuong]);
     }
 
     async doCopy() {
@@ -687,12 +670,8 @@ export class VonBanHangComponent implements OnInit {
             return;
         }
 
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         // gui du lieu trinh duyet len server
-        if (mulMoney(this.ttGui.soTien, this.maDviTien) > MONEY_LIMIT) {
+        if (this.ttGui.soTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
@@ -706,7 +685,7 @@ export class VonBanHangComponent implements OnInit {
             listIdDeleteFileNhans: [],
             maLoai: "2",
             maDvi: this.maDviTao,
-            maDviTien: this.maDviTien,
+            maDviTien: '1',
             maNopTienVon: maCvUvNew,
             ngayLap: this.ngayLapTemp,
             ngayNhan: null,
@@ -714,9 +693,9 @@ export class VonBanHangComponent implements OnInit {
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
             nienDoNs: this.ttGui.nienDoNs,
-            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
-            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
-            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
+            soTien: this.ttGui.soTien,
+            nopThue: this.ttGui.nopThue,
+            ttChoDviHuong: this.ttGui.ttChoDviHuong,
             soTienBangChu: this.ttGui.soTienBangChu,
             tkNhan: "",
             trangThai: "1",
@@ -753,23 +732,28 @@ export class VonBanHangComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.ttGui.soTien = exchangeMoney(this.ttGui.soTien, this.maDviTien, this.moneyUnit);
-        this.ttGui.ttChoDviHuong = exchangeMoney(this.ttGui.ttChoDviHuong, this.maDviTien, this.moneyUnit);
-        this.ttGui.nopThue = exchangeMoney(this.ttGui.nopThue, this.maDviTien, this.moneyUnit);
-
-        this.ttGuiCache.soTien = this.ttGui.soTien;
-        this.ttGuiCache.ttChoDviHuong = this.ttGui.ttChoDviHuong;
-        this.ttGuiCache.nopThue = this.ttGui.nopThue;
-
-        this.maDviTien = this.moneyUnit;
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.ttGui.soTien = exchangeMoney(this.ttGui.soTien, this.maDviTien, this.moneyUnit);
+    //     this.ttGui.ttChoDviHuong = exchangeMoney(this.ttGui.ttChoDviHuong, this.maDviTien, this.moneyUnit);
+    //     this.ttGui.nopThue = exchangeMoney(this.ttGui.nopThue, this.maDviTien, this.moneyUnit);
+
+    //     this.ttGuiCache.soTien = this.ttGui.soTien;
+    //     this.ttGuiCache.ttChoDviHuong = this.ttGui.ttChoDviHuong;
+    //     this.ttGuiCache.nopThue = this.ttGui.nopThue;
+
+    //     this.maDviTien = this.moneyUnit;
+    // }
 
 }

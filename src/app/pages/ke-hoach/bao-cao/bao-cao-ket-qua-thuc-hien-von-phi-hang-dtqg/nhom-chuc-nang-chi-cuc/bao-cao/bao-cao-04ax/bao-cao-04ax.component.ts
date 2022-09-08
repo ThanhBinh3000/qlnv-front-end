@@ -10,7 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -62,7 +62,6 @@ export class BaoCao04axComponent implements OnInit {
     id: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     tuNgay: any;
     denNgay: any;
     namBcao: number;
@@ -76,8 +75,9 @@ export class BaoCao04axComponent implements OnInit {
     statusBtnOk: boolean;
     statusBtnExport: boolean;
     allChecked = false;
+    editMoneyUnit = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -92,8 +92,7 @@ export class BaoCao04axComponent implements OnInit {
         this.spinner.show();
         //lay thong tin chung cho bao cao 04an
         this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
-        this.moneyUnit = this.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -102,14 +101,6 @@ export class BaoCao04axComponent implements OnInit {
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '6')?.lstCtietBcaos;
-        //tinh toan lai du liwu trong bang theo don vi tien 
-        this.lstCtietBcao.forEach(item => {
-            item.trongDotTcong = divMoney(item.trongDotTcong, this.maDviTien);
-            item.luyKeTcong = divMoney(item.luyKeTcong, this.maDviTien);
-            item.listCtiet.forEach(e => {
-                e.sl = divMoney(e.sl, this.maDviTien);
-            })
-        })
         //lay danh muc noi dung chi
         await this.danhMucService.dMNoiDungChi04a().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -349,15 +340,10 @@ export class BaoCao04axComponent implements OnInit {
         //tinh lai tien va check do lon cua tien
         let checkMoneyRange = true;
         baoCaoChiTietTemp.lstCtietBcaos.forEach(item => {
-            item.trongDotTcong = mulMoney(item.trongDotTcong, this.maDviTien);
-            item.luyKeTcong = mulMoney(item.luyKeTcong, this.maDviTien);
             if (item.trongDotTcong > MONEY_LIMIT || item.luyKeTcong > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
-            item.listCtiet.forEach(e => {
-                e.sl = mulMoney(e.sl, this.maDviTien);
-            })
 
         })
         if (!checkMoneyRange) {
@@ -520,7 +506,7 @@ export class BaoCao04axComponent implements OnInit {
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
-            let data: vatTu[] = [];
+            const data: vatTu[] = [];
             item.listCtiet.forEach(e => {
                 data.push({ ...e });
             })
@@ -1138,23 +1124,28 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.trongDotTcong = exchangeMoney(item.trongDotTcong, this.maDviTien, this.moneyUnit);
-            item.luyKeTcong = exchangeMoney(item.luyKeTcong, this.maDviTien, this.moneyUnit);
-            item.listCtiet.forEach(e => {
-                e.sl = exchangeMoney(e.sl, this.maDviTien, this.moneyUnit);
-            })
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.trongDotTcong = exchangeMoney(item.trongDotTcong, this.maDviTien, this.moneyUnit);
+    //         item.luyKeTcong = exchangeMoney(item.luyKeTcong, this.maDviTien, this.moneyUnit);
+    //         item.listCtiet.forEach(e => {
+    //             e.sl = exchangeMoney(e.sl, this.maDviTien, this.moneyUnit);
+    //         })
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

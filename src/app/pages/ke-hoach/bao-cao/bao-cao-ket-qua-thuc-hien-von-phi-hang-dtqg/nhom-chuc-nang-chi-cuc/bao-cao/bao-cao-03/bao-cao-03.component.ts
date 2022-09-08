@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from "src/app/Utility/utils";
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from "src/app/Utility/utils";
 import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { DatePipe } from '@angular/common';
@@ -74,7 +74,9 @@ export class BaoCao03Component implements OnInit {
     statusBtnOk: boolean;
     statusBtnExport: boolean;
     allChecked = false;
+    editMoneyUnit = false;
     editCache: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
+
     soLuongKhoachXb = null;
     soLuongTteXb = null;
     dgGiaKhoachXb = null;
@@ -99,7 +101,8 @@ export class BaoCao03Component implements OnInit {
     ttGiaHtoanXk = null;
     ttGiaBanTteXk = null;
     ttClechGiaTteVaGiaHtoanXk = null;
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -111,7 +114,6 @@ export class BaoCao03Component implements OnInit {
     }
 
     async ngOnInit() {
-        console.log(this.displayValue(-120));
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -138,7 +140,7 @@ export class BaoCao03Component implements OnInit {
         );
         ///////////////////////////////////////////////////////////////
         this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -147,15 +149,6 @@ export class BaoCao03Component implements OnInit {
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
-        //chia tien
-        this.lstCTietBaoCaoTemp.forEach(item => {
-            item.dgGiaKhoach = divMoney(item.dgGiaKhoach, this.maDviTien);
-            item.dgGiaBanTthieu = divMoney(item.dgGiaBanTthieu, this.maDviTien);
-            item.dgGiaBanTte = divMoney(item.dgGiaBanTte, this.maDviTien);
-            item.ttGiaHtoan = divMoney(item.ttGiaHtoan, this.maDviTien);
-            item.ttGiaBanTte = divMoney(item.ttGiaBanTte, this.maDviTien);
-            item.ttClechGiaTteVaGiaHtoan = divMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien);
-        })
         // 03
         await this.lstCTietBaoCaoTemp?.filter(async el => {
             switch (el.header) {
@@ -861,10 +854,8 @@ export class BaoCao03Component implements OnInit {
             return;
         }
 
-        let checkPersonReport = true;
         // validate nguoi thuc hien bao cao
         if (!baoCaoChiTietTemp.nguoiBcao) {
-            checkPersonReport = false;
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);
             return;
         }
@@ -915,12 +906,6 @@ export class BaoCao03Component implements OnInit {
         lstCTietBCao.forEach(item => {
             this.lstCTietBaoCaoTemp.push({
                 ...item,
-                dgGiaKhoach: mulMoney(item.dgGiaKhoach, this.maDviTien),
-                dgGiaBanTthieu: mulMoney(item.dgGiaBanTthieu, this.maDviTien),
-                dgGiaBanTte: mulMoney(item.dgGiaBanTte, this.maDviTien),
-                ttGiaHtoan: mulMoney(item.ttGiaHtoan, this.maDviTien),
-                ttGiaBanTte: mulMoney(item.ttGiaBanTte, this.maDviTien),
-                ttClechGiaTteVaGiaHtoan: mulMoney(item.ttClechGiaTteVaGiaHtoan, this.maDviTien),
             })
         })
     }
@@ -1046,6 +1031,11 @@ export class BaoCao03Component implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
+    }
+
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 }

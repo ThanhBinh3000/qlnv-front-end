@@ -7,7 +7,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam.constant';
 
@@ -44,7 +44,6 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     maBieuMau: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     // initItem: ItemData = new ItemData();
@@ -96,10 +95,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    editMoneyUnit = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -113,23 +113,15 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        if (!this.maDviTien) {
-            this.maDviTien = '3';
-        }
-        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                thNamHienHanhN1: divMoney(item.thNamHienHanhN1, this.maDviTien),
-                ncauNamDtoanN: divMoney(item.ncauNamDtoanN, this.maDviTien),
-                ncauNamN1: divMoney(item.ncauNamN1, this.maDviTien),
-                ncauNamN2: divMoney(item.ncauNamN2, this.maDviTien),
                 checked: false,
             })
         })
@@ -175,10 +167,6 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
         this.lstCtietBcao.forEach(element => {
@@ -194,28 +182,21 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            const thNamHienHanhN1 = mulMoney(item.thNamHienHanhN1, this.maDviTien);
-            const ncauNamDtoanN = mulMoney(item.ncauNamDtoanN, this.maDviTien);
-            const ncauNamN1 = mulMoney(item.ncauNamN1, this.maDviTien);
-            const ncauNamN2 = mulMoney(item.ncauNamN2, this.maDviTien);
-            if (thNamHienHanhN1 > MONEY_LIMIT || ncauNamDtoanN > MONEY_LIMIT ||
-                ncauNamN1 > MONEY_LIMIT || ncauNamN2 > MONEY_LIMIT) {
+            if (item.thNamHienHanhN1 > MONEY_LIMIT || item.ncauNamDtoanN > MONEY_LIMIT ||
+                item.ncauNamN1 > MONEY_LIMIT || item.ncauNamN2 > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                thNamHienHanhN1: thNamHienHanhN1,
-                ncauNamDtoanN: ncauNamDtoanN,
-                ncauNamN1: ncauNamN1,
-                ncauNamN2: ncauNamN2,
             })
         })
 
-        if (!checkMoneyRange == true) {
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
+
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
@@ -817,22 +798,27 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
-            item.ncauNamDtoanN = exchangeMoney(item.ncauNamDtoanN, this.maDviTien, this.moneyUnit);
-            item.ncauNamN1 = exchangeMoney(item.ncauNamN1, this.maDviTien, this.moneyUnit);
-            item.ncauNamN2 = exchangeMoney(item.ncauNamN2, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
+    //         item.ncauNamDtoanN = exchangeMoney(item.ncauNamDtoanN, this.maDviTien, this.moneyUnit);
+    //         item.ncauNamN1 = exchangeMoney(item.ncauNamN1, this.maDviTien, this.moneyUnit);
+    //         item.ncauNamN2 = exchangeMoney(item.ncauNamN2, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

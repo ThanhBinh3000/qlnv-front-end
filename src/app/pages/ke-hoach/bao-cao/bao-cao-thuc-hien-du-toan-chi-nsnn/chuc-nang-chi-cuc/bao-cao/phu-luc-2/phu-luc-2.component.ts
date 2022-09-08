@@ -1,9 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import * as fileSaver from 'file-saver';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,10 +8,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../../../services/danhMucHDV.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "../../../../../../../Utility/utils";
 import { NOI_DUNG_PL2 } from '../bao-cao.constant';
 
 
@@ -69,7 +63,6 @@ export class PhuLucIIComponent implements OnInit {
     maPhuLuc: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     initItem: ItemData = new ItemData();
@@ -78,22 +71,16 @@ export class PhuLucIIComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    editMoneyUnit = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
@@ -103,30 +90,16 @@ export class PhuLucIIComponent implements OnInit {
         this.id = this.data?.id;
         this.idBcao = this.data.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
-        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                dtoanSdungNamTcong: divMoney(item.dtoanSdungNamTcong, this.maDviTien),
-                dtoanSdungNamNguonNsnn: divMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien),
-                dtoanSdungNamNguonSn: divMoney(item.dtoanSdungNamNguonSn, this.maDviTien),
-                dtoanSdungNamNguonQuy: divMoney(item.dtoanSdungNamNguonQuy, this.maDviTien),
-                giaiNganThangTcong: divMoney(item.giaiNganThangTcong, this.maDviTien),
-                giaiNganThangNguonNsnn: divMoney(item.giaiNganThangNguonNsnn, this.maDviTien),
-                giaiNganThangNguonSn: divMoney(item.giaiNganThangNguonSn, this.maDviTien),
-                giaiNganThangNguonQuy: divMoney(item.giaiNganThangNguonQuy, this.maDviTien),
-                luyKeGiaiNganTcong: divMoney(item.luyKeGiaiNganTcong, this.maDviTien),
-                luyKeGiaiNganNguonNsnn: divMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien),
-                luyKeGiaiNganNguonSn: divMoney(item.luyKeGiaiNganNguonSn, this.maDviTien),
-                luyKeGiaiNganNguonQuy: divMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien),
-
                 //chua co tinh ty le
                 checked: false,
             })
@@ -159,11 +132,6 @@ export class PhuLucIIComponent implements OnInit {
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        //check da nhap ma don vi tien chua?
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //check xem tat ca cac dong du lieu da luu chua?
         this.lstCtietBcao.forEach(element => {
             if (this.editCache[element.id].edit === true) {
@@ -178,39 +146,15 @@ export class PhuLucIIComponent implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            const dtoanSdungNamTcong = mulMoney(item.dtoanSdungNamTcong, this.maDviTien);
-            const dtoanSdungNamNguonNsnn = mulMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien);
-            const dtoanSdungNamNguonSn = mulMoney(item.dtoanSdungNamNguonSn, this.maDviTien);
-            const dtoanSdungNamNguonQuy = mulMoney(item.dtoanSdungNamNguonQuy, this.maDviTien);
-            const giaiNganThangTcong = mulMoney(item.giaiNganThangTcong, this.maDviTien);
-            const giaiNganThangNguonNsnn = mulMoney(item.giaiNganThangNguonNsnn, this.maDviTien);
-            const giaiNganThangNguonSn = mulMoney(item.giaiNganThangNguonSn, this.maDviTien);
-            const giaiNganThangNguonQuy = mulMoney(item.giaiNganThangNguonQuy, this.maDviTien);
-            const luyKeGiaiNganTcong = mulMoney(item.luyKeGiaiNganTcong, this.maDviTien);
-            const luyKeGiaiNganNguonNsnn = mulMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien);
-            const luyKeGiaiNganNguonSn = mulMoney(item.luyKeGiaiNganNguonSn, this.maDviTien);
-            const luyKeGiaiNganNguonQuy = mulMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien);
-            if (dtoanSdungNamTcong > MONEY_LIMIT || dtoanSdungNamNguonNsnn > MONEY_LIMIT || dtoanSdungNamNguonSn > MONEY_LIMIT ||
-                dtoanSdungNamNguonQuy > MONEY_LIMIT || giaiNganThangTcong > MONEY_LIMIT || giaiNganThangNguonNsnn > MONEY_LIMIT ||
-                giaiNganThangNguonSn > MONEY_LIMIT || giaiNganThangNguonQuy > MONEY_LIMIT || luyKeGiaiNganTcong > MONEY_LIMIT ||
-                luyKeGiaiNganNguonNsnn > MONEY_LIMIT || luyKeGiaiNganNguonSn > MONEY_LIMIT || luyKeGiaiNganNguonQuy > MONEY_LIMIT) {
+            if (item.dtoanSdungNamTcong > MONEY_LIMIT || item.dtoanSdungNamNguonNsnn > MONEY_LIMIT || item.dtoanSdungNamNguonSn > MONEY_LIMIT ||
+                item.dtoanSdungNamNguonQuy > MONEY_LIMIT || item.giaiNganThangTcong > MONEY_LIMIT || item.giaiNganThangNguonNsnn > MONEY_LIMIT ||
+                item.giaiNganThangNguonSn > MONEY_LIMIT || item.giaiNganThangNguonQuy > MONEY_LIMIT || item.luyKeGiaiNganTcong > MONEY_LIMIT ||
+                item.luyKeGiaiNganNguonNsnn > MONEY_LIMIT || item.luyKeGiaiNganNguonSn > MONEY_LIMIT || item.luyKeGiaiNganNguonQuy > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                dtoanSdungNamTcong: dtoanSdungNamTcong,
-                dtoanSdungNamNguonNsnn: dtoanSdungNamNguonNsnn,
-                dtoanSdungNamNguonSn: dtoanSdungNamNguonSn,
-                dtoanSdungNamNguonQuy: dtoanSdungNamNguonQuy,
-                giaiNganThangTcong: giaiNganThangTcong,
-                giaiNganThangNguonNsnn: giaiNganThangNguonNsnn,
-                giaiNganThangNguonSn: giaiNganThangNguonSn,
-                giaiNganThangNguonQuy: giaiNganThangNguonQuy,
-                luyKeGiaiNganTcong: luyKeGiaiNganTcong,
-                luyKeGiaiNganNguonNsnn: luyKeGiaiNganNguonNsnn,
-                luyKeGiaiNganNguonSn: luyKeGiaiNganNguonSn,
-                luyKeGiaiNganNguonQuy: luyKeGiaiNganNguonQuy,
             })
         })
 
@@ -815,30 +759,35 @@ export class PhuLucIIComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.dtoanSdungNamTcong = exchangeMoney(item.dtoanSdungNamTcong, this.maDviTien, this.moneyUnit);
-            item.dtoanSdungNamNguonNsnn = exchangeMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien, this.moneyUnit);
-            item.dtoanSdungNamNguonSn = exchangeMoney(item.dtoanSdungNamNguonSn, this.maDviTien, this.moneyUnit);
-            item.dtoanSdungNamNguonQuy = exchangeMoney(item.dtoanSdungNamNguonQuy, this.maDviTien, this.moneyUnit);
-            item.giaiNganThangTcong = exchangeMoney(item.giaiNganThangTcong, this.maDviTien, this.moneyUnit);
-            item.giaiNganThangNguonNsnn = exchangeMoney(item.giaiNganThangNguonNsnn, this.maDviTien, this.moneyUnit);
-            item.giaiNganThangNguonSn = exchangeMoney(item.giaiNganThangNguonSn, this.maDviTien, this.moneyUnit);
-            item.giaiNganThangNguonQuy = exchangeMoney(item.giaiNganThangNguonQuy, this.maDviTien, this.moneyUnit);
-            item.luyKeGiaiNganTcong = exchangeMoney(item.luyKeGiaiNganTcong, this.maDviTien, this.moneyUnit);
-            item.luyKeGiaiNganNguonNsnn = exchangeMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien, this.moneyUnit);
-            item.luyKeGiaiNganNguonSn = exchangeMoney(item.luyKeGiaiNganNguonSn, this.maDviTien, this.moneyUnit);
-            item.luyKeGiaiNganNguonQuy = exchangeMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.dtoanSdungNamTcong = exchangeMoney(item.dtoanSdungNamTcong, this.maDviTien, this.moneyUnit);
+    //         item.dtoanSdungNamNguonNsnn = exchangeMoney(item.dtoanSdungNamNguonNsnn, this.maDviTien, this.moneyUnit);
+    //         item.dtoanSdungNamNguonSn = exchangeMoney(item.dtoanSdungNamNguonSn, this.maDviTien, this.moneyUnit);
+    //         item.dtoanSdungNamNguonQuy = exchangeMoney(item.dtoanSdungNamNguonQuy, this.maDviTien, this.moneyUnit);
+    //         item.giaiNganThangTcong = exchangeMoney(item.giaiNganThangTcong, this.maDviTien, this.moneyUnit);
+    //         item.giaiNganThangNguonNsnn = exchangeMoney(item.giaiNganThangNguonNsnn, this.maDviTien, this.moneyUnit);
+    //         item.giaiNganThangNguonSn = exchangeMoney(item.giaiNganThangNguonSn, this.maDviTien, this.moneyUnit);
+    //         item.giaiNganThangNguonQuy = exchangeMoney(item.giaiNganThangNguonQuy, this.maDviTien, this.moneyUnit);
+    //         item.luyKeGiaiNganTcong = exchangeMoney(item.luyKeGiaiNganTcong, this.maDviTien, this.moneyUnit);
+    //         item.luyKeGiaiNganNguonNsnn = exchangeMoney(item.luyKeGiaiNganNguonNsnn, this.maDviTien, this.moneyUnit);
+    //         item.luyKeGiaiNganNguonSn = exchangeMoney(item.luyKeGiaiNganNguonSn, this.maDviTien, this.moneyUnit);
+    //         item.luyKeGiaiNganNguonQuy = exchangeMoney(item.luyKeGiaiNganNguonQuy, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }
