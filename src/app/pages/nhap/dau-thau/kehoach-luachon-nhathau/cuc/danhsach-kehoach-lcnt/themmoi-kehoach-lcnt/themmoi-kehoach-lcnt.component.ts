@@ -32,7 +32,7 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 
 interface ItemData {
   id: string;
@@ -668,7 +668,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
                 body.trangThai = STATUS.DA_DUYET_LDV;
                 break;
               }
-              case STATUS.DA_DUYET_LDV : {
+              case STATUS.DA_DUYET_LDV: {
                 body.trangThai = STATUS.BAN_HANH;
                 break;
               }

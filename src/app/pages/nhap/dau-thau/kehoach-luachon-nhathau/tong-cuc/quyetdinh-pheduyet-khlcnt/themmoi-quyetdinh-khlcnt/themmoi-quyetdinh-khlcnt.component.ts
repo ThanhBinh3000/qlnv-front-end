@@ -33,7 +33,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, convertVthhToId } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 
 
 @Component({
@@ -363,7 +363,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async danhSachTongHopGetAll() {
     this.spinner.show();
     let body = {
-      trangThai: "00",
+      trangThai: STATUS.CHUA_TAO_QD,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value
@@ -372,7 +372,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (body.loaiVthh.startsWith("02")) {
       let bodySearchVt = {
         loaiVthh: body.loaiVthh,
-        trangThai: "02"
+        trangThai: STATUS.DA_DUYET_LDV,
+        trangThaiTh: STATUS.CHUA_TAO_QD
       }
       res = await this.dauThauService.search(bodySearchVt);
     } else {
