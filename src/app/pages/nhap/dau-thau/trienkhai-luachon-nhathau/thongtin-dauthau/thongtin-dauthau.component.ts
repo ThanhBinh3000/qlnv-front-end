@@ -15,6 +15,7 @@ import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -279,8 +280,8 @@ export class ThongtinDauthauComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
-            item.checked = true;
+          if (item.trangThai !== STATUS.TRUNG_THAU) {
+              item.checked = true;
           }
         });
       }
