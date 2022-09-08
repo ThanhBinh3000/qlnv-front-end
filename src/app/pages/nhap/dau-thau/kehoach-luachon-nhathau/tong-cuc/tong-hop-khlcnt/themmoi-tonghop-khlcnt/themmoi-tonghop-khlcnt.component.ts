@@ -43,9 +43,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   isDetailDxCuc: boolean = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
-
   isTongHop: boolean = false;
-
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   i = 0;
@@ -54,15 +52,12 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
   listNam: any[] = [];
   yearNow: number = 0;
-
   idDeXuat: number = 0;
-
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
-
   idPA: number = 0;
   tabSelected: string = 'thongTinChung';
   selectedId: number = 0;
@@ -259,6 +254,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
+        this.isTongHop = false;
       }
       this.spinner.hide();
     } catch (e) {

@@ -52,7 +52,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     tenVthh: '',
     tenCloaiVthh: '',
     soGoiThau: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
 
   dataTableAll: any[] = [];
@@ -145,7 +145,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.statusConvert = this.convertTrangThai(item.trangThai);
+          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -261,31 +261,31 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     });
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Dự thảo'
-      }
-      case '03': {
-        return 'Từ chối - TP'
-      }
-      case '12': {
-        return 'Từ chối - LĐ Cục'
-      }
-      case '01': {
-        return 'Chờ duyệt - TP'
-      }
-      case '09': {
-        return 'Chờ duyệt - LĐ Cục'
-      }
-      case '02': {
-        return 'Đã duyệt'
-      }
-      case '05': {
-        return 'Tổng hợp'
-      }
-    }
-  }
+  // convertTrangThai(status: string) {
+  //   switch (status) {
+  //     case '00': {
+  //       return 'Dự thảo'
+  //     }
+  //     case '03': {
+  //       return 'Từ chối - TP'
+  //     }
+  //     case '12': {
+  //       return 'Từ chối - LĐ Cục'
+  //     }
+  //     case '01': {
+  //       return 'Chờ duyệt - TP'
+  //     }
+  //     case '09': {
+  //       return 'Chờ duyệt - LĐ Cục'
+  //     }
+  //     case '02': {
+  //       return 'Đã duyệt'
+  //     }
+  //     case '05': {
+  //       return 'Tổng hợp'
+  //     }
+  //   }
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -389,7 +389,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       tenVthh: '',
       tenCloaiVthh: '',
       soGoiThau: '',
-      statusConvert: '',
+      tenTrangThai: '',
     }
   }
 }

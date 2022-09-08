@@ -117,7 +117,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
           <div class="tong-hop-button group-button-search">
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
@@ -129,7 +129,7 @@
       </div>
     </form>
   </nz-card>
-  <div class="tab-padding-10">
+  <div class="tab-padding-10" *ngIf="isTongHop">
     <nz-tabset nzType="card">
       <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" (nzClick)="tabSelected = 'thongTinChung'">
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">

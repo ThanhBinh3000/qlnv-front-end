@@ -13,6 +13,7 @@ import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -84,7 +85,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhBtcNganhService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -102,25 +102,23 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
   }
 
-  async onChangeNamQd(namQd) {
-    let body = {
-      namQd: namQd,
-      trangThai: "11"
-    }
-    let res = await this.quyetDinhTtcpService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-      if (data) {
-        let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
-        console.log('haaaaaaaaa:'+ data[0].id)
-        if (detail.msg == MESSAGE.SUCCESS) {
-          this.dsBoNganh = detail.data.listBoNganh;
-        }
-      }
-      console.log(this.dsBoNganh)
-    }
-  }
-
+  // async onChangeNamQd(namQd) {
+  //   let body = {
+  //     namQd: namQd,
+  //     trangThai: STATUS.BAN_HANH
+  //   }
+  //   let res = await this.quyetDinhTtcpService.search(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     const data = res.data.content;
+  //     if (data && data.size > 0) {
+  //       let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
+  //       if (detail.msg == MESSAGE.SUCCESS) {
+  //         this.dsBoNganh = detail.data.listBoNganh;
+  //       }
+  //     }
+  //   }
+  // }
+  //
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
@@ -191,9 +189,9 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.get('id').value,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: STATUS.BAN_HANH,
           };
           let res =
             await this.quyetDinhBtcNganhService.approve(
@@ -215,7 +213,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     });
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
@@ -238,12 +236,20 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       res = await this.quyetDinhBtcNganhService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isGuiDuyet) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       }
-      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

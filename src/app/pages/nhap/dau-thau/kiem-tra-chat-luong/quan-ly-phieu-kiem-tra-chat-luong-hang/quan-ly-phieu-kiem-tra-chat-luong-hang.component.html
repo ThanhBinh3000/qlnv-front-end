@@ -16,7 +16,7 @@
           <label class="search__label">Ngày lập phiếu</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="12">
           <label class="search__label">Kết quả đánh giá</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.ketLuan" />
         </div>
@@ -34,7 +34,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách phiếu kiểm tra chất lượng hàng dự trữ quốc gia </h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
