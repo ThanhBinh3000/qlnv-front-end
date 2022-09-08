@@ -88,10 +88,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = 0; i < 20; i++) {
       this.dsNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
+        value: dayjs().get('year')+ i,
+        text: dayjs().get('year') + i,
       });
     }
   }

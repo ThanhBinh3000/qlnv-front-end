@@ -196,7 +196,7 @@
   </nz-card>
   <nz-tabset nzType="card" class="tab__container tab-level-3" [nzTabBarExtraContent]="tableCard1">
     <nz-tab [nzTitle]="'DANH SÁCH GÓI THẦU'" class="tt-chung__container">
-      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataGoiThau" [nzFrontPagination]="false"
+      <nz-table #basicTable class="nowrap table__container-tt" id="danh-sach-goi-thau-mini" [nzData]="dataGoiThau" [nzFrontPagination]="false"
         [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
@@ -268,7 +268,7 @@
       <i class="fa fa-trash-o do"></i>
       <span>Xóa</span>
     </button>
-    <button type="button" class="btn btn-sub">
+    <button type="button" class="btn btn-sub" (click)="exportChild()">
       <i class="icon htvbdh_chuyen-xu-ly"></i>
       <span>Xuất file</span>
     </button>

@@ -565,6 +565,23 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       XLSX.writeFile(workbook, 'can-cu-xac-dinh.xlsx');
     }
   }
+  exportChild() {
+    const workbook = XLSX.utils.book_new();
+    const tableDanhSachGoiThau = document
+      .getElementById('danh-sach-goi-thau-mini')
+      .getElementsByTagName('table');
+    if (tableDanhSachGoiThau && tableDanhSachGoiThau.length > 0) {
+      let sheetLuongThuc = XLSX.utils.table_to_sheet(tableDanhSachGoiThau[0]);
+      sheetLuongThuc['!cols'] = [];
+      sheetLuongThuc['!cols'][11] = { hidden: true };
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetLuongThuc,
+        'Danh sách đấu thầu',
+      );
+      XLSX.writeFile(workbook, 'danh-sach-goi-thau.xlsx');
+    }
+  }
 
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
 
@@ -747,7 +764,8 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         data: data,
-        loaiVthh: this.formData.get('loaiVthh').value
+        loaiVthh: this.formData.get('loaiVthh').value,
+        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
       },
     });
     modal.afterClose.subscribe((res) => {
