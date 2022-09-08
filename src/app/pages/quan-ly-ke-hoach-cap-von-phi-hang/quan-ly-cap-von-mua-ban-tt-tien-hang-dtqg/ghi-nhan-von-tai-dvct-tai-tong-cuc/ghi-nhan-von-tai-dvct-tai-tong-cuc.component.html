@@ -90,25 +90,24 @@
             <div class="tab__container">
                 <nz-tabset nzType="card" class="tab__container">
                     <nz-tab [nzTitle]="'Thông tin nơi gửi'">
-                        <ng-container *ngIf="status;else templateName">
-                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                <div nz-col class="gutter-row" [nzSpan]="3">
-                                    Đơn vị: {{getMaDviTien()}}
-                                </div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col [nzSpan]="1">
+                                Đơn vị:
                             </div>
-                        </ng-container>
-                        <ng-template #templateName>
-                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                <div nz-col class="gutter-row" [nzSpan]="3">
-                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                        [(ngModel)]="moneyUnit" [class]="moneyUnit ?'' : 'input-error-validate' "
-                                        (ngModelChange)="changeMoney()">
+                            <div nz-col [nzSpan]="2">
+                                <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                        (ngModelChange)="editMoneyUnit=false">
                                         <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-                                            [nzLabel]="item.tenDm"></nz-option>
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
                                     </nz-select>
-                                </div>
+                                </ng-template>
                             </div>
-                        </ng-template>
+                        </div>
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
@@ -169,7 +168,7 @@
                                         </td>
                                         <td>
                                             <nz-input-number class="search__input" [nzFormatter]="formatter"
-                                                [nzPrecision]="4"
+                                                [nzPrecision]="0"
                                                 [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
                                                 nzSize="small" [(ngModel)]="ttGuiCache.soTien">
                                             </nz-input-number>

@@ -64,7 +64,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     kphiDaCap = 0;
     lyDoTuChoi: string;
     maDviTien: string;
-    moneyUnit: string;
     newDate = new Date();
     //danh muc
     lstCtietBcao: ItemData[] = [];
@@ -99,12 +98,13 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     statusBtnApprove = true;                   // trang thai an/hien nut trinh duyet
     statusBtnLD = true;                        // trang thai an/hien nut lanh dao
     statusBtnCopy = true;                      // trang thai copy
+    editMoneyUnit = false;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -178,8 +178,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
-            this.maDviTien = '3';
-            this.moneyUnit = this.maDviTien;
+            this.maDviTien = '1';
             await this.dataSource.currentData.subscribe(obj => {
                 this.qdChiTieu = obj?.qdChiTieu;
                 this.loaiDn = obj?.loaiDn;
@@ -362,9 +361,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     this.id = data.data.id;
                     this.maDviTien = data.data.maDviTien;
                     this.lstCtietBcao = data.data.dnghiCapvonCtiets;
-                    this.lstCtietBcao.forEach(item => {
-                        item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-                    })
                     this.updateEditCache();
                     this.maDviTao = data.data.maDvi;
                     this.maDeNghi = data.data.maDnghi;
@@ -372,8 +368,8 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     this.canCuGia = data.data.canCuVeGia;
                     this.loaiDn = data.data.loaiDnghi;
                     this.congVan = data.data.congVan;
-                    this.tongTien = divMoney(data.data.tongTien, this.maDviTien);
-                    this.kphiDaCap = divMoney(data.data.kphiDaCap, this.maDviTien);
+                    this.tongTien = data.data.tongTien;
+                    this.kphiDaCap = data.data.kphiDaCap;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -448,8 +444,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien ||
-            (!this.kphiDaCap && this.kphiDaCap !== 0)) {
+        if (!this.kphiDaCap && this.kphiDaCap !== 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -473,7 +468,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
 
-        if (mulMoney(this.tongTien, this.maDviTien) > MONEY_LIMIT) {
+        if (this.tongTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
         }
 
@@ -481,7 +476,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
-                thanhTien: mulMoney(item.thanhTien, this.maDviTien),
             })
         })
         //get list file url
@@ -520,9 +514,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             canCuVeGia: this.canCuGia,
             maDviTien: this.maDviTien,
             soQdChiTieu: this.qdChiTieu,
-            tongTien: mulMoney(this.tongTien, this.maDviTien),
-            kphiDaCap: mulMoney(this.kphiDaCap, this.maDviTien),
-            ycauCapThem: mulMoney(this.tongTien - this.kphiDaCap, this.maDviTien),
+            tongTien: this.tongTien,
+            kphiDaCap: this.kphiDaCap,
+            ycauCapThem: this.tongTien - this.kphiDaCap,
             trangThai: this.trangThai,
             thuyetMinh: this.thuyetMinh,
         }));
@@ -755,8 +749,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             return;
         }
-        if (!this.maDviTien ||
-            (!this.kphiDaCap && this.kphiDaCap !== 0)) {
+        if (!this.kphiDaCap && this.kphiDaCap !== 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -772,7 +765,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
 
-        if (mulMoney(this.tongTien, this.maDviTien) > MONEY_LIMIT) {
+        if (this.tongTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
         }
 
@@ -780,7 +773,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.lstCtietBcao.forEach(item => {
             lstCtietBcaoTemp.push({
                 ...item,
-                thanhTien: mulMoney(item.thanhTien, this.maDviTien),
                 id: null,
             })
         })
@@ -795,11 +787,11 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             maDnghi: maDeNghiNew,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
-            maDviTien: this.maDviTien,
+            maDviTien: '1',
             soQdChiTieu: response.qdChiTieu,
-            tongTien: mulMoney(this.tongTien, this.maDviTien),
-            kphiDaCap: mulMoney(this.kphiDaCap, this.maDviTien),
-            ycauCapThem: mulMoney(this.tongTien - this.kphiDaCap, this.maDviTien),
+            tongTien: this.tongTien,
+            kphiDaCap: this.kphiDaCap,
+            ycauCapThem: this.tongTien - this.kphiDaCap,
             trangThai: "1",
             thuyetMinh: this.thuyetMinh,
         }));
@@ -830,21 +822,26 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.spinner.hide();
     }
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.donGiaMua = exchangeMoney(item.donGiaMua, this.maDviTien, this.moneyUnit);
-            item.thanhTien = exchangeMoney(item.donGiaMua, this.maDviTien, this.moneyUnit);
-        })
-        this.tongTien = exchangeMoney(this.tongTien, this.maDviTien, this.moneyUnit);
-        this.kphiDaCap = exchangeMoney(this.kphiDaCap, this.maDviTien, this.moneyUnit);
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.donGiaMua = exchangeMoney(item.donGiaMua, this.maDviTien, this.moneyUnit);
+    //         item.thanhTien = exchangeMoney(item.donGiaMua, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.tongTien = exchangeMoney(this.tongTien, this.maDviTien, this.moneyUnit);
+    //     this.kphiDaCap = exchangeMoney(this.kphiDaCap, this.maDviTien, this.moneyUnit);
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 }

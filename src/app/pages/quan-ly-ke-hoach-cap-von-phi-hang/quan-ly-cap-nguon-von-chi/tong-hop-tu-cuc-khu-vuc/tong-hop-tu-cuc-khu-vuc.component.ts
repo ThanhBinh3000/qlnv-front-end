@@ -16,7 +16,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from 'uuid';
-import { displayNumber, DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DataService } from 'src/app/services/data.service';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
@@ -144,13 +144,14 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD = true;                        // trang thai an/hien nut lanh dao
     statusBtnCopy = true;                      // trang thai copy
+    editMoneyUnit = false;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
 
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -745,8 +746,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-
+    getMoneyUnit() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
 }

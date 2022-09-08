@@ -10,9 +10,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, MONEY_LIMIT, mulMoney, mulNumber, NOT_OK, OK, sumNumber, Utils } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { LISTBIEUMAUDOT } from '../bao-cao.constant';
 
 export class ItemData {
     bcaoCtietId: string;
@@ -60,7 +59,6 @@ export class BaoCao02Component implements OnInit {
     id: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     tuNgay: any;
     denNgay: any;
     listIdDelete = "";
@@ -72,12 +70,13 @@ export class BaoCao02Component implements OnInit {
     statusBtnOk: boolean;
     statusBtnExport: boolean;
     allChecked = false;
+    editMoneyUnit = false;
 
     dviMua = new ItemData();
     tongCucMua = new ItemData();
     tongDvTc = 0;
 
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -103,8 +102,7 @@ export class BaoCao02Component implements OnInit {
         this.addListVatTu(this.listVattu);
         ///////////////////////////////////////////////////////////////
         this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
-        this.moneyUnit = this.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -118,10 +116,6 @@ export class BaoCao02Component implements OnInit {
             const id = parseInt(item.header, 10) - 21;
             this.lstCtietBcao[id].data.push({
                 ...item,
-                khGiaMuaTd: divMoney(item.khGiaMuaTd, this.maDviTien),
-                khTtien: divMoney(item.khTtien, this.maDviTien),
-                thGiaMuaTd: divMoney(item.thGiaMuaTd, this.maDviTien),
-                thTtien: divMoney(item.thTtien, this.maDviTien),
             })
         })
         this.idPhuLuc.forEach(id => {
@@ -437,10 +431,6 @@ export class BaoCao02Component implements OnInit {
             this.lstCtietBcao[id].data.forEach(item => {
                 lstCTietBaoCaoTemp.push({
                     ...item,
-                    khGiaMuaTd: mulMoney(item.khGiaMuaTd, this.maDviTien),
-                    khTtien: mulMoney(item.khTtien, this.maDviTien),
-                    thGiaMuaTd: mulMoney(item.thGiaMuaTd, this.maDviTien),
-                    thTtien: mulMoney(item.thTtien, this.maDviTien),
                 })
             })
         })
@@ -558,7 +548,12 @@ export class BaoCao02Component implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
+    }
+
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 }
 

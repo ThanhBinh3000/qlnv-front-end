@@ -58,7 +58,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     trangThaiBanGhi = '1';
     newDate = new Date();
     maDviTien: string;
-    moneyUnit: string;
     thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
@@ -76,6 +75,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     statusChinhXac: boolean;
     statusBtnCopy: boolean;
     statusBtnPrint: boolean;
+    editMoneyUnit = false;
     allChecked = false;
     //khac
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
@@ -87,7 +87,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     fileDetail: NzUploadFile;
     //beforeUpload: any;
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -158,8 +158,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         } else {
             this.trangThaiBanGhi = '1';
             this.maDonViTao = this.userInfo?.dvql;
-            this.maDviTien = '3';
-            this.moneyUnit = this.maDviTien;
+            this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
                 this.maBaoCao = obj?.maBcao;
@@ -350,11 +349,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.listFile = [];
                     this.sortByIndex();
                     this.maDviTien = data.data.maDviTien;
-                    this.lstCtietBcao.forEach(item => {
-                        item.tongSo = divMoney(item.tongSo, this.maDviTien);
-                        item.nguonNsnn = divMoney(item.nguonNsnn, this.maDviTien);
-                        item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
-                    })
                     this.maBaoCao = data.data.maBcao;
                     this.namPa = data.data.namPa;
                     this.trangThaiBanGhi = data.data.trangThai;
@@ -427,10 +421,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     // luu
     async save() {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         this.lstCtietBcao.filter(item => {
             if (this.editCache[item.id].edit == true) {
                 checkSaveEdit = false;
@@ -445,15 +435,12 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSo, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSo > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSo: mulMoney(item.tongSo, this.maDviTien),
-                nguonNsnn: mulMoney(item.nguonNsnn, this.maDviTien),
-                nguonKhac: mulMoney(item.nguonKhac, this.maDviTien),
                 listCtietDvi: [],
             })
         })
@@ -1065,21 +1052,26 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.tongSo = exchangeMoney(item.tongSo, this.maDviTien, this.moneyUnit);
-            item.nguonNsnn = exchangeMoney(item.nguonNsnn, this.maDviTien, this.moneyUnit);
-            item.nguonKhac = exchangeMoney(item.nguonKhac, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.tongSo = exchangeMoney(item.tongSo, this.maDviTien, this.moneyUnit);
+    //         item.nguonNsnn = exchangeMoney(item.nguonNsnn, this.maDviTien, this.moneyUnit);
+    //         item.nguonKhac = exchangeMoney(item.nguonKhac, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

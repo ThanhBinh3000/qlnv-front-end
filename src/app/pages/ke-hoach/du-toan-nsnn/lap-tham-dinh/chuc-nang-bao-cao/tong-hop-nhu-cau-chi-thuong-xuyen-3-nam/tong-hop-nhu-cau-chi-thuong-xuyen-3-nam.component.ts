@@ -118,17 +118,17 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     trangThaiPhuLuc: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     listIdDelete = "";
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    editMoneyUnit = false;
 
 
     allChecked = false;                         // check all checkbox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -143,29 +143,15 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        if (!this.maDviTien) {
-            this.maDviTien = '3';
-        }
-        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                thNamHienHanhN1: divMoney(item.thNamHienHanhN1, this.maDviTien),
-                tranChiN: divMoney(item.tranChiN, this.maDviTien),
-                ncauChiN: divMoney(item.ncauChiN, this.maDviTien),
-                clechTranChiVsNcauChiN: divMoney(item.clechTranChiVsNcauChiN, this.maDviTien),
-                tranChiN1: divMoney(item.tranChiN1, this.maDviTien),
-                ncauChiN1: divMoney(item.ncauChiN1, this.maDviTien),
-                clechTranChiVsNcauChiN1: divMoney(item.clechTranChiVsNcauChiN1, this.maDviTien),
-                tranChiN2: divMoney(item.tranChiN2, this.maDviTien),
-                ncauChiN2: divMoney(item.ncauChiN2, this.maDviTien),
-                clechTranChiVsNcauChiN2: divMoney(item.clechTranChiVsNcauChiN2, this.maDviTien),
                 checked: false,
             })
         })
@@ -210,10 +196,6 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
         this.lstCtietBcao.forEach(element => {
@@ -229,41 +211,23 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            const thNamHienHanhN1 = mulMoney(item.thNamHienHanhN1, this.maDviTien);
-            const tranChiN = mulMoney(item.tranChiN, this.maDviTien);
-            const ncauChiN = mulMoney(item.ncauChiN, this.maDviTien);
-            const clechTranChiVsNcauChiN = mulMoney(item.clechTranChiVsNcauChiN, this.maDviTien);
-            const tranChiN1 = mulMoney(item.tranChiN1, this.maDviTien);
-            const ncauChiN1 = mulMoney(item.ncauChiN1, this.maDviTien);
-            const clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.maDviTien);
-            const tranChiN2 = mulMoney(item.tranChiN2, this.maDviTien);
-            const ncauChiN2 = mulMoney(item.ncauChiN2, this.maDviTien);
-            const clechTranChiVsNcauChiN2 = mulMoney(item.clechTranChiVsNcauChiN2, this.maDviTien);
-            if (thNamHienHanhN1 > MONEY_LIMIT || tranChiN > MONEY_LIMIT || ncauChiN > MONEY_LIMIT || clechTranChiVsNcauChiN > MONEY_LIMIT ||
-                tranChiN1 > MONEY_LIMIT || ncauChiN1 > MONEY_LIMIT || clechTranChiVsNcauChiN1 > MONEY_LIMIT ||
-                tranChiN2 > MONEY_LIMIT || ncauChiN2 > MONEY_LIMIT || clechTranChiVsNcauChiN2 > MONEY_LIMIT) {
+            if (item.thNamHienHanhN1 > MONEY_LIMIT || item.tranChiN > MONEY_LIMIT || item.ncauChiN > MONEY_LIMIT || item.clechTranChiVsNcauChiN > MONEY_LIMIT ||
+                item.tranChiN1 > MONEY_LIMIT || item.ncauChiN1 > MONEY_LIMIT || item.clechTranChiVsNcauChiN1 > MONEY_LIMIT ||
+                item.tranChiN2 > MONEY_LIMIT || item.ncauChiN2 > MONEY_LIMIT || item.clechTranChiVsNcauChiN2 > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                thNamHienHanhN1: thNamHienHanhN1,
-                tranChiN: tranChiN,
-                ncauChiN: ncauChiN,
-                clechTranChiVsNcauChiN: clechTranChiVsNcauChiN,
-                tranChiN1: tranChiN1,
-                ncauChiN1: ncauChiN1,
-                clechTranChiVsNcauChiN1: clechTranChiVsNcauChiN1,
-                tranChiN2: tranChiN2,
-                ncauChiN2: ncauChiN2,
-                clechTranChiVsNcauChiN2: clechTranChiVsNcauChiN2,
             })
         })
 
-        if (!checkMoneyRange == true) {
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
+
+
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
@@ -895,28 +859,33 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
-            item.tranChiN = exchangeMoney(item.tranChiN, this.maDviTien, this.moneyUnit);
-            item.ncauChiN = exchangeMoney(item.ncauChiN, this.maDviTien, this.moneyUnit);
-            item.clechTranChiVsNcauChiN = exchangeMoney(item.clechTranChiVsNcauChiN, this.maDviTien, this.moneyUnit);
-            item.tranChiN1 = exchangeMoney(item.tranChiN1, this.maDviTien, this.moneyUnit);
-            item.ncauChiN1 = exchangeMoney(item.ncauChiN1, this.maDviTien, this.moneyUnit);
-            item.clechTranChiVsNcauChiN1 = exchangeMoney(item.clechTranChiVsNcauChiN1, this.maDviTien, this.moneyUnit);
-            item.tranChiN2 = exchangeMoney(item.tranChiN2, this.maDviTien, this.moneyUnit);
-            item.ncauChiN2 = exchangeMoney(item.ncauChiN2, this.maDviTien, this.moneyUnit);
-            item.clechTranChiVsNcauChiN2 = exchangeMoney(item.clechTranChiVsNcauChiN2, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.thNamHienHanhN1 = exchangeMoney(item.thNamHienHanhN1, this.maDviTien, this.moneyUnit);
+    //         item.tranChiN = exchangeMoney(item.tranChiN, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiN = exchangeMoney(item.ncauChiN, this.maDviTien, this.moneyUnit);
+    //         item.clechTranChiVsNcauChiN = exchangeMoney(item.clechTranChiVsNcauChiN, this.maDviTien, this.moneyUnit);
+    //         item.tranChiN1 = exchangeMoney(item.tranChiN1, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiN1 = exchangeMoney(item.ncauChiN1, this.maDviTien, this.moneyUnit);
+    //         item.clechTranChiVsNcauChiN1 = exchangeMoney(item.clechTranChiVsNcauChiN1, this.maDviTien, this.moneyUnit);
+    //         item.tranChiN2 = exchangeMoney(item.tranChiN2, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiN2 = exchangeMoney(item.ncauChiN2, this.maDviTien, this.moneyUnit);
+    //         item.clechTranChiVsNcauChiN2 = exchangeMoney(item.clechTranChiVsNcauChiN2, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }
