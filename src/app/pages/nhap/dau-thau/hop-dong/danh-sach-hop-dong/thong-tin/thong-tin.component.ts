@@ -24,6 +24,7 @@ import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import {STATUS} from "../../../../../../constants/status";
 
 interface DonviLienQuanModel {
   id: number;
@@ -121,6 +122,7 @@ export class ThongTinComponent implements OnInit {
         soNgayThien: [null],
         tgianNkho: [null],
         tenVthh: [null],
+        moTaHangHoa: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
         tenCloaiVthh: [null],
@@ -204,6 +206,7 @@ export class ThongTinComponent implements OnInit {
             tenVthh: this.detail.tenVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
+            moTaHangHoa: this.detail.moTaHangHoa ?? null,
             tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
             tgianNkho: this.detail.tgianNkho ?? null,
             soLuong: this.detail.soLuong ?? null,
@@ -519,14 +522,14 @@ export class ThongTinComponent implements OnInit {
       nzOnOk: async () => {
         const body = {
           id: this.detail.id,
-          trangThai: '02',
+          trangThai: STATUS.DA_KY,
         }
         let res = await this.thongTinHopDong.approve(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
           this.isView = true;
-          this.detail.trangThai = "02";
+          this.detail.trangThai = STATUS.DA_KY;
           this.setTitle();
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {

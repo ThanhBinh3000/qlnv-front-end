@@ -1,25 +1,21 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { TreeTableService } from 'src/app/services/tree-table.service';
-import { DonviService } from '../../../../../services/donvi.service';
-import { DanhMucService } from '../../../../../services/danhmuc.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { isEmpty } from 'lodash';
-import { DANH_MUC_LEVEL } from '../../../luu-kho.constant';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
-import { Globals } from 'src/app/shared/globals';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
+import { DANH_MUC_LEVEL } from './../../../luu-kho.constant';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-
+import { cloneDeep, isEmpty } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import { TreeTableService } from 'src/app/services/tree-table.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 
 @Component({

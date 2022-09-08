@@ -248,6 +248,13 @@ th {
   }
 }
 
+.scroll-modal {
+  .ant-card-body {
+    overflow: auto;
+    max-height: calc(80vh - 50px);
+  }
+}
+
 .ant-timeline.ant-timeline-label .ant-timeline-item-label {
   // width: 128px !important;
   width: 98px !important;
@@ -4747,6 +4754,13 @@ th {
     display: flex;
   }
 
+  h2 {
+    margin-bottom: 0;
+    font-size: 18px;
+    align-items: center;
+    display: flex;
+  }
+
 
   .buttons {
     .btn-xoa {
@@ -4761,6 +4775,17 @@ th {
     color: #fff;
   }
 
+}
+
+tfoot {
+  tr {
+    background-color: #F8F9FA;
+  }
+
+  // .xanh {
+  //   color: #8BC34C !important;
+  //   background-color: #F8F9FA !important;
+  // }
 }
 
 .ant-card-body,

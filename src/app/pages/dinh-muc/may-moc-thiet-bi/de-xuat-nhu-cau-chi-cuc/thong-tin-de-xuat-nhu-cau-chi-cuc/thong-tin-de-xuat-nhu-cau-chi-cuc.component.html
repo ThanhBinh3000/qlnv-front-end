@@ -1,0 +1,225 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="back()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button class="btn btn-sub btn-sm waves-effect waves-light" *ngIf="!isDisableField() && !isView"
+      (click)="guiDuyet()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button class="btn btn-sub btn-sm waves-effect waves-light"
+      *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_THU_KHO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_KE_TOAN || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
+      (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub"
+      *ngIf="bienBanChuanBiKho.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanChuanBiKho.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
+      (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button *ngIf="!isDisableField() && !isView" (click)="save(false)"
+      class="btn btn-main btn-sm waves-effect waves-light">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo
+          </span>
+          <span *ngIf="id > 0"
+            [ngClass]="thongTinTrangThai(bienBanChuanBiKho.trangThai)">{{bienBanChuanBiKho.tenTrangThai}}</span>
+          <span class="title-form">NHẬP ĐỀ XUẤT NHU CẦU máy móc thiết bị chuyên dụng</span>
+        </div>
+      </div>
+    </div>
+    <form nz-form [formGroup]="formData" class="mt-16">
+      <nz-card class="flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Năm kế hoạch
+              </nz-form-label>
+              <nz-select formControlName="soQD" (ngModelChange)="changeSoQuyetDinh(false)"
+                [disabled]="isDisableField() || isView">
+                <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQd">
+                </nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Số công văn
+              </nz-form-label>
+              <input nz-input formControlName="donVi" />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Số quyết định giao chỉ tiêu của Cục
+              </nz-form-label>
+              <input nz-input formControlName="maQHNS" />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Trích yếu
+              </nz-form-label>
+              <input nz-input formControlName="maQHNS" />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Ngày ký
+              </nz-form-label>
+              <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký"
+                formControlName="ngayNghiemThu">
+              </nz-date-picker>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Số lượng gạo nhập theo chỉ tiêu
+              </nz-form-label>
+              <input nz-input formControlName="soBienBan" readonly />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Số lượng thóc nhập theo chỉ tiêu
+              </nz-form-label>
+              <input nz-input formControlName="soBienBan" readonly />
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+    </form>
+  </nz-card>
+  <div class="flex-card p-lr16 pd-10">
+    <div class="title-form-chi-tiet pd-b-16">danh sách dề xuất</div>
+    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
+      [nzData]="dsChiTietChuanBiKhoClone">
+      <thead>
+        <tr>
+          <th rowSpan="2" class="text-center">STT</th>
+          <th rowSpan="2" class="text-center">Tên tài sản</th>
+          <th rowSpan="2" class="text-center">Đơn vị tính</th>
+          <th colSpan="4" class="text-center">Số lượng hiện có đến hết 31/12/2021</th>
+          <th colSpan="3" class="text-center">Tổng nhu cầu</th>
+          <th rowSpan="2" class="text-center">Đáp ứng</th>
+          <th rowSpan="2" class="text-center">Ghi chú</th>
+          <th rowSpan="2" width="140px" class="text-center" *ngIf="!(isDisableField() || isView)">Hành động</th>
+        </tr>
+        <tr>
+          <th class="text-center">Tốt</th>
+          <th class="text-center">Hỏng cần sửa chữa</th>
+          <th class="text-center">Hỏng phải thanh lý</th>
+          <th class="text-center">Tổng số</th>
+          <th class="text-center">Định mức</th>
+          <th class="text-center">Còn thiếu</th>
+          <th class="text-center">Đề xuất trang bị</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!(isDisableField() || isView)">
+          <td></td>
+          <td>
+            <nz-select [(ngModel)]="chiTietChuanBiKhoCreate.donViTinh" class="w-200">
+              <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh" [nzLabel]="item.tenDviTinh">
+              </nz-option>
+            </nz-select>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <label nz-checkbox [(ngModel)]="chiTietChuanBiKhoCreate.noiDung"></label>
+          </td>
+          <td>
+            <input type="text" nz-input [(ngModel)]="chiTietChuanBiKhoCreate.noiDung" />
+          </td>
+          <td>
+            <a (click)="addChiTiet()"
+              [class.disabled]="!chiTietChuanBiKhoCreate.noiDung || !chiTietChuanBiKhoCreate.donViTinh|| chiTietChuanBiKhoCreate.noiDung == '' || chiTietChuanBiKhoCreate.donViTinh == ''">
+              <i class="fa fa-plus"></i>
+            </a>
+            <a (click)="newObjectChiTietChuanBiKho()">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <ng-container *ngIf="!dsChiTietChuanBiKhoClone[i]?.isEdit; else editTemplate">
+            <td class="text-center">{{i+1}}</td>
+            <td>{{data.noiDung}}</td>
+            <td>{{data.donViTinh}}</td>
+            <td>{{data.soLuongTrongNam ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.donGiaTrongNam ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.thanhTienTrongNam ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.tongGiaTri ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.tongGiaTri ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.tongGiaTri ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.tongGiaTri ?? 0 | number: '1.0-1'}}</td>
+            <td>{{data.tongGiaTri ?? 0 | number: '1.0-1'}}</td>
+            <td class="text-right" *ngIf="!(isDisableField() || isView)">
+              <a (click)="startEdit(i)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteData(dsChiTietChuanBiKhoClone[i].idVirtual)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td>{{dsChiTietChuanBiKhoClone[i].donViTinh}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <label nz-checkbox [(ngModel)]="dsChiTietChuanBiKhoClone[i].noiDung"></label>
+            </td>
+            <td>
+              <input type="text" nz-input [(ngModel)]="dsChiTietChuanBiKhoClone[i].noiDung" />
+            </td>
+            <td>
+              <a (click)="saveEdit(i)"
+                [class.disabled]="!dsChiTietChuanBiKhoClone[i].noiDung || !dsChiTietChuanBiKhoClone[i].donViTinh || dsChiTietChuanBiKhoClone[i].noiDung == '' || dsChiTietChuanBiKhoClone[i].donViTinh == ''">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEdit(i)">
+                <i class="fa fa-times do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

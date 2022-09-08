@@ -49,7 +49,7 @@ export class ThongTinGia {
   donGiaBtc: number;
   donGiaBtcVat: number;
   giaQd: number;
-  giaQDVat: number;
+  giaQdVat: number;
 }
 
 

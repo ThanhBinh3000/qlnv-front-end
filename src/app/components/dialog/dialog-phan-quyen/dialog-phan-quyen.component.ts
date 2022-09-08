@@ -12,6 +12,9 @@ import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.s
 import { Router } from "@angular/router";
 import { NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { delay } from 'rxjs/operators';
+import { QlNhomQuyenService } from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
+import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyen.service';
+import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
 
 export interface TreeNodeInterface {
   key: string;
@@ -36,50 +39,12 @@ export class DialogPhanQuyenComponent implements OnInit {
   danhMucList: any[] = [];
   submited: boolean = false;
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 20;
+  dataTable: any[] = [];
+  allChecked = false;
+  indeterminate = false;
 
-  listOfMapData: TreeNodeInterface[] = [
-    {
-      key: `1`,
-      name: 'Kế hoạch, vốn và dự toán NSNN',
-      children: [
-        {
-          key: `1-1`,
-          name: 'Giao kế hoạch và dự toán',
-          children: [
-            {
-              key: `1-2-1`,
-              name: 'Giao kế hoạch và vốn đầu năm',
-              children: [
-                {
-                  key: `1-2-1-1`,
-                  name: 'Quyết định',
-                  children: [
-                    {
-                      key: `1-2-1-1-1`,
-                      name: 'Thêm mới TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-2`,
-                      name: 'Xem TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-3`,
-                      name: 'Xóa TTCP',
-                    },
-                    {
-                      key: `1-2-1-1-4`,
-                      name: 'Sửa TTCP',
-                    },
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-      ]
-    }
-  ];
+  listOfMapData: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
 
   constructor(
@@ -90,7 +55,10 @@ export class DialogPhanQuyenComponent implements OnInit {
     private dmService: DanhMucDungChungService,
     public globals: Globals,
     private helperService: HelperService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private qlNhomQuyenService: QlNhomQuyenService,
+    private qlQuyenNSDService: QlQuyenNSDService,
+    private qlNSDService: QlNguoiSuDungService
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -104,13 +72,30 @@ export class DialogPhanQuyenComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
     await Promise.all([
-      this.getDmList()
+      this.search(),
+      this.getListDataTree(),
     ])
     this.bindingData(this.dataEdit)
     this.listOfMapData.forEach(item => {
       this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
     });
+    this.spinner.hide();
+  }
+
+  async getListDataTree() {
+    let body = {
+
+    }
+    let dataTree = await this.qlQuyenNSDService.getAll(body);
+    if (dataTree.msg == MESSAGE.SUCCESS) {
+      this.listOfMapData = dataTree.data;
+      console.log(this.listOfMapData);
+      this.listOfMapData.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      })
+    }
   }
 
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
@@ -153,59 +138,56 @@ export class DialogPhanQuyenComponent implements OnInit {
     }
   }
 
-
-  async save() {
-    this.submited = true;
-    if (this.formData.valid) {
-      this.spinner.show();
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.spinner.hide();
-        return;
+  async bindingData(dataDt) {
+    let res = await this.qlNSDService.getDetail(dataDt.id);
+    const dataEdit = res.data;
+    if (dataEdit) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          dataEdit.listRoles.includes(item.id) ? item.checked = true : item.checked = false;
+        });
       }
-      let body = this.formData.value;
-      console.log(this.formData.value)
-      let res
-      if (this.dataEdit != null) {
-        res = await this.dmService.update(body);
-      } else {
-        res = await this.dmService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.dataEdit != null) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-      this._modalRef.close(this.formData);
     }
   }
 
-  async getDmList() {
-    let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
-    this.danhMucList = data.data;
+  async save() {
+    this.spinner.show();
+    let dataRoles = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataRoles.push(item.id);
+        }
+      });
+    }
+    if (!this.dataEdit.id) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng lựa chọn người sử dụng")
+      this.spinner.hide();
+      return
+    }
+    if (dataRoles.length == 0) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn quyền");
+      this.spinner.hide();
+      return;
+    }
+    let body = {
+      id: this.dataEdit.id,
+      listRoles: dataRoles,
+      saveRoles: true
+    }
+    let res = await this.qlNSDService.update(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      this._modalRef.close(this.formData);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.error)
+    }
+    this.spinner.hide();
   }
-
 
 
   handleCancel() {
     this._modalRef.destroy();
-  }
-
-  bindingData(dataEdit) {
-    if (dataEdit) {
-      this.formData.get('id').setValue(dataEdit.id);
-      this.formData.get('loai').setValue(dataEdit.loai);
-      this.formData.get('ma').setValue(dataEdit.ma);
-      this.formData.get('maCha').setValue(dataEdit.maCha);
-      this.formData.get('ghiChu').setValue(dataEdit.ghiChu);
-      this.formData.get('trangThai').setValue(dataEdit.trangThai);
-      this.formData.get('giaTri').setValue(dataEdit.giaTri);
-    }
   }
 
   async changePageIndex(event) {
@@ -229,6 +211,82 @@ export class DialogPhanQuyenComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  listDataSelected: any[] = [];
+  isCheckedData(idSelected): boolean {
+    let dataFilter = this.listDataSelected.filter(data => data == idSelected);
+    if (dataFilter.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async showDetail($event, id: number) {
+    this.spinner.show();
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow')
+    let res = await this.qlNhomQuyenService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDataSelected = res.data.listPermission;
+    }
+    this.spinner.hide();
+  }
+
+  async search() {
+    this.spinner.show();
+    let body = this.formData.value;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.qlNhomQuyenService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
+
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = true;
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
     }
   }
 }

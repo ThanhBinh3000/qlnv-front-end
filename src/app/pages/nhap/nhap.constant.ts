@@ -10,14 +10,6 @@ export const VAT_TU = 'vat-tu';
 
 export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
-    icon: 'htvbdh_tcdt_tat_ca',
-    title: 'Tất cả',
-    url: `/all`,
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
-    hasTab: true,
-  },
-  {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Nhập theo phương thức đấu thầu',
     url: `/nhap-theo-ke-hoach`,
@@ -43,7 +35,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
-    title: 'Hợp đồng/Bảng kê, phiếu mua hàng(mua lẻ)',
+    title: 'Hợp đồng/Bảng kê, phiếu mua hàng',
     url: `/${NHAP_MAIN_ROUTE}/hop-dong`,
     dropdown: 'khac',
     idHover: 'khac',

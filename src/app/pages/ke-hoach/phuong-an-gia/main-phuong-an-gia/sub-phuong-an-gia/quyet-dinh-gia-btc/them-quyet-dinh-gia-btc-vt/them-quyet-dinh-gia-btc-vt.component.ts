@@ -408,7 +408,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          radioValue
+          radioValue,
+          type: this.type
         },
       });
       modalQD.afterClose.subscribe((data) => {

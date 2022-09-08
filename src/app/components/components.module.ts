@@ -142,8 +142,10 @@ import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog
 import { DialogToTrinhTongHopComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component';
 import { DialogQuyetDinhGiaCuaTcdtnnComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
 import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
+import { DialogCanCuQdPheDuyetKqdgComponent } from './dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component';
 
-import { DialogToTrinhDeXuatComponent} from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
+import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
+import { TemplateErrorComponent } from './template-error/template-error.component';
 @NgModule({
   declarations: [
     //components
@@ -239,7 +241,9 @@ import { DialogToTrinhDeXuatComponent} from "./dialog/dialog-ke-hoach-phuong-an-
     DialogDdiemDeHangComponent,
     DialogToTrinhTongHopComponent,
     DialogToTrinhDeXuatComponent,
-    DialogQuyetDinhGiaCuaTcdtnnComponent
+    DialogQuyetDinhGiaCuaTcdtnnComponent,
+    DialogCanCuQdPheDuyetKqdgComponent,
+    TemplateErrorComponent
   ],
   imports: [
     CommonModule,
@@ -356,7 +360,8 @@ import { DialogToTrinhDeXuatComponent} from "./dialog/dialog-ke-hoach-phuong-an-
     MultipleTagComponent,
     NzPopconfirmModule,
     FileListComponent,
-    NzResultModule
+    NzResultModule,
+    TemplateErrorComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

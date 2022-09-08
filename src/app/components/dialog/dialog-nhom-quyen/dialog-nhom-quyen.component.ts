@@ -8,6 +8,7 @@ import { Globals } from 'src/app/shared/globals';
 import { HelperService } from "../../../services/helper.service";
 import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
 import { Router } from "@angular/router";
+import { QlNhomQuyenService } from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
 
 @Component({
   selector: 'dialog-nhom-quyen',
@@ -23,72 +24,64 @@ export class DialogNhomQuyenComponent implements OnInit {
   submited: boolean = false;
 
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private dmService: DanhMucDungChungService,
+    private qlNhomQuyenService: QlNhomQuyenService,
     public globals: Globals,
     private helperService: HelperService,
     private notification: NzNotificationService
   ) {
     this.formData = this.fb.group({
       id: [null],
-      loai: [null, [Validators.required]],
-      ma: [null, [Validators.required]],
-      maCha: [null],
-      trangThai: ['01'],
-      giaTri: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      status: ['01', [Validators.required]],
       ghiChu: [null]
     });
   }
 
+  dsTrangThai: any = [
+    {
+      ma: '00',
+      ten: 'Không hoạt động'
+    },
+    {
+      ma: '01',
+      ten: 'Hoạt động'
+    }
+  ]
+
   async ngOnInit() {
-    await Promise.all([
-      this.getDmList()
-    ])
     this.bindingData(this.dataEdit)
-    console.log(this.dataEdit)
-    console.log(this.isView)
-    console.log(this.formData.value)
   }
 
   async save() {
-    this.submited = true;
-    if (this.formData.valid) {
-      this.spinner.show();
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.spinner.hide();
-        return;
-      }
-      let body = this.formData.value;
-      console.log(this.formData.value)
-      let res
-      if (this.dataEdit != null) {
-        res = await this.dmService.update(body);
-      } else {
-        res = await this.dmService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.dataEdit != null) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
       this.spinner.hide();
-      this._modalRef.close(this.formData);
+      return;
     }
+    let body = this.formData.value;
+    body.name = body.name.trim();
+    let res
+    if (this.dataEdit != null) {
+      res = await this.qlNhomQuyenService.update(body);
+    } else {
+      res = await this.qlNhomQuyenService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.dataEdit != null) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this._modalRef.close(this.formData);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
-
-  async getDmList() {
-    let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
-    this.danhMucList = data.data;
-  }
-
 
 
   handleCancel() {
@@ -97,13 +90,12 @@ export class DialogNhomQuyenComponent implements OnInit {
 
   bindingData(dataEdit) {
     if (dataEdit) {
-      this.formData.get('id').setValue(dataEdit.id);
-      this.formData.get('loai').setValue(dataEdit.loai);
-      this.formData.get('ma').setValue(dataEdit.ma);
-      this.formData.get('maCha').setValue(dataEdit.maCha);
-      this.formData.get('ghiChu').setValue(dataEdit.ghiChu);
-      this.formData.get('trangThai').setValue(dataEdit.trangThai);
-      this.formData.get('giaTri').setValue(dataEdit.giaTri);
+      this.formData.patchValue({
+        id: dataEdit.id,
+        status: dataEdit.status,
+        name: dataEdit.name,
+        ghiChu: dataEdit.ghiChu
+      })
     }
   }
 }
