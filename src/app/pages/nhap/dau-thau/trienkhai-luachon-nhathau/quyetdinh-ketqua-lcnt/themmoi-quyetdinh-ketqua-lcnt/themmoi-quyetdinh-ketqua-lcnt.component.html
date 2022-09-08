@@ -4,12 +4,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isViewDetail" type="button" class="btn btn-sub"
-      (click)="pheDuyet()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isViewDetail" type="button"
+      class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'" type="
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO " type="
           button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -21,14 +21,14 @@
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="styleStatus">
-            {{ titleStatus }}
+          <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do' ">
+            {{ formData.value.tenTrangThai }}
           </span>
-          <span>{{userService.isTongCuc() ? 'Thông tin chi tiết các gói thầu' : 'Nhập quyết định' }}</span>
+          <span>Nhập quyết định</span>
         </div>
       </div>
     </div>
-    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="mt-16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="2">
           <nz-form-item>
@@ -78,8 +78,7 @@
             <nz-form-label [nzNoColon]="true">Tên hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group>
-                <input class="search__input"  nz-input formControlName="moTaHangHoa"
-                       />
+                <input class="search__input" nz-input formControlName="moTaHangHoa" />
               </nz-input-group>
               <ng-template #loaiVthhError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
@@ -106,7 +105,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày QĐ duyệt KQLCNT
             </nz-form-label>
@@ -124,7 +123,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực
             </nz-form-label>

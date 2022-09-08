@@ -79,7 +79,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  STATUS = STATUS
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -114,13 +114,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ngayQdPdKhlcnt: [null,],
         idGoiThau: [null,],
         ghiChu: [null,],
-        trungThau: ['1'],
         trangThai: ['00'],
         maDvi: [],
         tenDviTthau: [],
         tgianThienHd: [],
         giaTrungThau: [],
         loaiHdong: [],
+        tenTrangThai: ['Dự thảo'],
         lyDoHuy: ['']
       }
     );
@@ -161,7 +161,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     }
-    this.setTitle();
+    // this.setTitle();
     this.getListQdPdKhlcnt();
     this.spinner.hide();
   }
@@ -249,22 +249,22 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    switch (trangThai) {
-      case STATUS.DU_THAO: {
-        this.titleStatus = 'DỰ THẢO';
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Gửi duyệt';
-        break;
-      }
-      case STATUS.BAN_HANH: {
-        this.titleStatus = 'BAN HÀNH';
-        this.styleStatus = 'da-ban-hanh'
-        break;
-      }
-    }
-  }
+  // setTitle() {
+  //   let trangThai = this.formData.get('trangThai').value
+  //   switch (trangThai) {
+  //     case STATUS.DU_THAO: {
+  //       this.titleStatus = 'DỰ THẢO';
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Gửi duyệt';
+  //       break;
+  //     }
+  //     case STATUS.BAN_HANH: {
+  //       this.titleStatus = 'BAN HÀNH';
+  //       this.styleStatus = 'da-ban-hanh'
+  //       break;
+  //     }
+  //   }
+  // }
 
   pheDuyet() {
     let trangThai = '';
