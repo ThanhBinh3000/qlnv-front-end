@@ -60,7 +60,7 @@ export class ThongtinDauthauComponent implements OnInit {
     tenVthh: '',
     tenCloaiVthh: '',
     thanhGiaGoiThau: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
 
   dataTableAll: any[] = [];
