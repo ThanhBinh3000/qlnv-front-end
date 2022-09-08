@@ -77,6 +77,7 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      console.log("1");
       this.create.dvt = "Tấn";
       this.userInfo = this.userService.getUserLogin();
       this.detail.trangThai = "00";
@@ -84,19 +85,28 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       this.detail.tenDonvi = this.userInfo.TEN_DVI;
       this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
       this.detail.chiTiets = [];
+      console.log("2");
+
 
       this.initForm();
+      console.log("3");
+
       await Promise.all([
         this.loadDiemKho(),
         this.loadSoQuyetDinh(),
         this.loaiVTHHGetAll()
       ]);
+      console.log("4");
+
       await this.loadChiTiet(this.id)
+      console.log("5");
+
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, 'Lỗi tổng ');
     }
   }
 
@@ -149,7 +159,9 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         });
       }
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      // this.notification.error(MESSAGE.ERROR, res.msg);
+      this.notification.error(MESSAGE.ERROR, 'Lỗi điểm kho');
+
     }
   }
 
@@ -191,7 +203,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listSoQuyetDinh = res.data.content;
     } else {
+      console.log('lỗi');
       this.notification.error(MESSAGE.ERROR, res.msg);
+      // this.notification.error(MESSAGE.ERROR, 'Lỗi số quyết định');
+
     }
   }
   async changeSoQuyetDinh() {
@@ -224,7 +239,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       })
     } catch (error) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, 'Lỗi loại hàng hóa');
+      // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   async changeLoaiHangHoa() {
@@ -246,14 +262,18 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
 
 
   async loadChiTiet(id: number) {
-    let idItem = 81;
-    if (idItem > 0) {
-      let res = await this.quanLyBienBanTinhKhoService.loadChiTiet(idItem);
-      console.log(res);
+    if (id > 0) {
+      let res = await this.quanLyBienBanTinhKhoService.loadChiTiet(id);
 
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        let idQD = this.listSoQuyetDinh.filter(item => item.soQuyetDinh === res.data.soQd);
+
+        if (idQD.length > 0) {
+          idQD = idQD[0].id;
+        }
         if (res.data) {
           this.formData.patchValue({
+            soQDId: idQD,
             soQuyetDinh: res.data.soQd,
             maLoaiHangHoa: res.data.loaiHH,
             maChungLoaiHangHoa: res.data.chungLoaiHH,
@@ -336,7 +356,9 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, 'Lỗi đơn vị tính ');
+
+      // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -372,7 +394,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(MESSAGE.ERROR, "Lỗi gửi duyệt");
         }
       },
     });
@@ -409,7 +432,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(MESSAGE.ERROR, "Lỗi phe duyệt");
         }
       },
     });
@@ -446,7 +470,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(MESSAGE.ERROR, "Lỗi hoàn thành");
         }
       },
     });
@@ -485,7 +510,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(MESSAGE.ERROR, "lỗi từ chối");
         }
       }
     });
@@ -530,37 +556,37 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       };
 
 
-      // if (this.id > 0) {
-      //   let res = await this.quanLyBienBanTinhKhoService.chinhSua(
-      //     body,
-      //   );
-      //   if (res.msg == MESSAGE.SUCCESS) {
-      //     if (!isOther) {
-      //       this.notification.success(
-      //         MESSAGE.SUCCESS,
-      //         MESSAGE.UPDATE_SUCCESS,
-      //       );
-      //       this.back();
-      //     }
-      //   } else {
-      //     this.notification.error(MESSAGE.ERROR, res.msg);
-      //   }
-      // } else {
-      let res = await this.quanLyBienBanTinhKhoService.them(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (!isOther) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.back();
+      if (this.id > 0) {
+        let newBody = { ...body, "id": this.id }
+        let res = await this.quanLyBienBanTinhKhoService.sua(newBody);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS,
+            );
+            this.back();
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        let res = await this.quanLyBienBanTinhKhoService.them(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       }
-      // }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      // this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, "Lỗi lưu");
     }
   }
 

@@ -1,6 +1,6 @@
 <nz-affix class="btn-affix" [nzOffsetTop]="43">
   <div class="btn-group">
-    <button class="btn btn-sub" [disabled]="!formData.valid"
+    <button class="btn btn-sub"
       *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView"
       (click)="guiDuyet()">
       <i class="icon htvbdh_trinh"></i>
@@ -20,7 +20,7 @@
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-main btn-sub xanh" (click)="save(false)" [disabled]="formData.valid"
+    <button class="btn btn-main btn-sub xanh" (click)="save(false)"
       *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -62,11 +62,11 @@
               Số quyết định
             </nz-form-label>
 
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="soQuyetDinh" placeholder="Tự động sinh" readonly />
             </nz-input-group>
 
-            <nz-select formControlName="soQDId" (ngModelChange)="changeSoQuyetDinh()" *ngIf="false">
+            <nz-select formControlName="soQDId" (ngModelChange)="changeSoQuyetDinh()" *ngIf="!id">
               <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQuyetDinh">
               </nz-option>
             </nz-select>
@@ -79,10 +79,10 @@
               Loại hàng hoá
             </nz-form-label>
 
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maLoaiHangHoa" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maLoaiHangHoa" (ngModelChange)="changeLoaiHangHoa()" *ngIf="false">
+            <nz-select formControlName="maLoaiHangHoa" (ngModelChange)="changeLoaiHangHoa()" *ngIf="!id">
               <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </nz-form-item>
@@ -93,10 +93,10 @@
             <nz-form-label [nzNoColon]="true">
               Chủng loại hàng hoá
             </nz-form-label>
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maChungLoaiHangHoa" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maChungLoaiHangHoa" *ngIf="false">
+            <nz-select formControlName="maChungLoaiHangHoa" *ngIf="!id">
               <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
@@ -129,10 +129,10 @@
             <nz-form-label [nzNoColon]="true">
               Điểm kho
             </nz-form-label>
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maDiemKho" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maDiemKho" (ngModelChange)="changeDiemKho(false)" *ngIf="false">
+            <nz-select formControlName="maDiemKho" (ngModelChange)="changeDiemKho(false)" *ngIf="!id">
               <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
@@ -145,10 +145,10 @@
             <nz-form-label [nzNoColon]="true">
               Nhà kho
             </nz-form-label>
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maNhaKho" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(false)" *ngIf="false">
+            <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(false)" *ngIf="!id">
               <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
@@ -161,10 +161,10 @@
             <nz-form-label [nzNoColon]="true">
               Ngăn kho
             </nz-form-label>
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maNganKho" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maNganKho" (ngModelChange)="changeNganKho()" *ngIf="false">
+            <nz-select formControlName="maNganKho" (ngModelChange)="changeNganKho()" *ngIf="!id">
               <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
@@ -177,10 +177,10 @@
             <nz-form-label [nzNoColon]="true">
               Lô kho
             </nz-form-label>
-            <nz-input-group>
+            <nz-input-group *ngIf="id">
               <input nz-input formControlName="maLoKho" placeholder="Tự động sinh" readonly />
             </nz-input-group>
-            <nz-select formControlName="maLoKho" (ngModelChange)="changeNganLo()" *ngIf="false">
+            <nz-select formControlName="maLoKho" (ngModelChange)="changeNganLo()" *ngIf="!id">
               <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
