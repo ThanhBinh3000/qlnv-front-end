@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+              <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="namQd" id="nam-qd">
                   <nz-option [nzValue]="item.value" [nzLabel]="item.text" *ngFor="let item of dsNam">
@@ -16,22 +16,11 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
+              <nz-form-label nzFor="so-qd">Số quyết định</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="so-qd">
                   <input type="text" nz-input formControlName="soQd" />
                 </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item class="form-item">
-              <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
-              <nz-form-control>
-                <nz-form-control>
-                  <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
-                  </nz-range-picker>
-                </nz-form-control>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -42,6 +31,17 @@
                 <nz-input-group id="trich-yeu">
                   <input type="text" nz-input formControlName="trichYeu" />
                 </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="ngay-qd">Ngày ký</nz-form-label>
+              <nz-form-control>
+                <nz-form-control>
+                  <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                  </nz-range-picker>
+                </nz-form-control>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -88,8 +88,8 @@
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
             <th class="text-center" style="width: 10%;">Số quyết định</th>
-            <th class="text-center" style="width: 10%;">Năm QĐ</th>
-            <th class="text-center" style="width: 10%;">Ngày QĐ</th>
+            <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center">Trích yếu</th>
             <th class="text-center" style="width: 10%;">Trạng thái</th>
             <th class="text-center" width="width: 5%;">Hành động</th>
