@@ -1,0 +1,60 @@
+{
+  "data": {
+    "content": [
+      {
+        "id": 5,
+        "soQd": "7545/QĐ-CDTVP",
+        "loaiHH": "Thóc tẻ",
+        "chungLoaiHH": "Hạt dài",
+        "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+        "maDvi": "01010201",
+        "diemKho": "Điểm kho Phủ Đức",
+        "nhaKho": "Nhà kho A1",
+        "nganKho": "Ngăn kho A1/1",
+        "loKho": "Lô số 1 Ngăn kho A1/1",
+        "soBienBan": "2/2022/BBTK-CCDTVP",
+        "soLuongNhap": 544,
+        "soLuongXuat": 132,
+        "slConlaiSosach": 1632,
+        "slConlaiXuatcuoi": 1500,
+        "slThuaConlai": 132,
+        "slThieuConlai": 0,
+        "nguyenNhan": "string",
+        "kienNghi": "string",
+        "ngayLapPhieu": "2022-09-07",
+        "trangThai": "00",
+        "tenTrangThai": "Dự Thảo",
+        "trangThaiDuyet": "Dự Thảo",
+        "ds": []
+      }
+    ],
+    "pageable": {
+      "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+      },
+      "pageNumber": 0,
+      "pageSize": 20,
+      "offset": 0,
+      "unpaged": false,
+      "paged": true
+    },
+    "totalElements": 1,
+    "totalPages": 1,
+    "last": true,
+    "first": true,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "numberOfElements": 1,
+    "size": 20,
+    "number": 0,
+    "empty": false
+  },
+  "statusCode": 0,
+  "msg": "Thành công",
+  "included": null
+}
