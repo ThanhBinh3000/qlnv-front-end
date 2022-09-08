@@ -13,7 +13,7 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.idDanhMuc" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
+            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.idDanhMuc" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
               <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
               </nz-option>
             </nz-select>
@@ -21,15 +21,15 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0">
+            <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="text-align: center;">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem()" *ngIf="!isView">
             <i class="fa fa-plus"></i>
           </a>
-          <a (click)="clearData()">
+          <a (click)="clearData()" *ngIf="!isView">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
@@ -40,10 +40,10 @@
           <td>{{ data.noiDung }}</td>
           <td>{{ data.sluongDtoan }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(idx)">
+            <a (click)="editItem(idx)" *ngIf="!isView">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a (click)="xoaItem(idx)" *ngIf="!isView">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
