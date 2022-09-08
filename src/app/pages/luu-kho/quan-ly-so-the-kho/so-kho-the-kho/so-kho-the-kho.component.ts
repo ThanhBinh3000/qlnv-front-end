@@ -17,7 +17,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-
 @Component({
   selector: 'app-so-kho-the-kho',
   templateUrl: './so-kho-the-kho.component.html',

@@ -7,7 +7,9 @@
             <div nz-col nzSpan="3">
               <label class="search__label">Số quyết định xuất</label>
               <input class="search__input" placeholder="Nhập Số quyết định xuất" nz-input
-                [(ngModel)]="searchFilter.soQuyetDinh" />
+                [(ngModel)]="searchFilter.soQuyetDinh" [nzAutocomplete]="soQuyetDinh"
+                (ngModelChange)="onChangeSoQuyetDinhAutoComplete($event)" />
+              <nz-autocomplete #soQuyetDinh [nzDataSource]="dsSoQuyetDinhDataSource"></nz-autocomplete>
             </div>
             <div nz-col nzSpan="3">
               <label class="search__label">Số biên bản</label>
@@ -61,7 +63,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input [(ngModel)]="filterTable.soBienBan"
-                          (input)="filterInTable('soPhieu',filterTable.soBienBan,false)" />
+                          (input)="filterInTable('soBienBan',filterTable.soBienBan,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -70,8 +72,8 @@
                     <!-- Số quyết định xuất -->
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input [(ngModel)]="filterTable.soQuyetDinhXuat"
-                          (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhXuat,false)" />
+                        <input type="text" nz-input [(ngModel)]="filterTable.soQd"
+                          (input)="filterInTable('soQd',filterTable.soQd,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -79,15 +81,15 @@
                     </td>
                     <!-- Ngày biên bản -->
                     <td>
-                      <nz-date-picker [(ngModel)]="filterTable.ngayBienBan"
-                        (ngModelChange)="filterInTable('ngayNhapKho',filterTable.ngayBienBan,true)">
+                      <nz-date-picker [(ngModel)]="filterTable.ngayLapPhieu"
+                        (ngModelChange)="filterInTable('ngayLapPhieu',filterTable.ngayLapPhieu,true)">
                       </nz-date-picker>
                     </td>
                     <!-- Điểm kho -->
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input [(ngModel)]="filterTable.tenDiemKho"
-                          (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho,false)" />
+                        <input type="text" nz-input [(ngModel)]="filterTable.diemKho"
+                          (input)="filterInTable('diemKho',filterTable.diemKho,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -96,8 +98,8 @@
                     <!-- Nhà kho -->
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input [(ngModel)]="filterTable.tenNhaKho"
-                          (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho,false)" />
+                        <input type="text" nz-input [(ngModel)]="filterTable.nhaKho"
+                          (input)="filterInTable('nhaKho',filterTable.nhaKho,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -106,8 +108,8 @@
                     <!-- Ngăn kho -->
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input [(ngModel)]="filterTable.tenNganKho"
-                          (input)="filterInTable('tenNganKho',filterTable.tenNganKho,false)" />
+                        <input type="text" nz-input [(ngModel)]="filterTable.nganKho"
+                          (input)="filterInTable('nganKho',filterTable.nganKho,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -116,8 +118,8 @@
                     <!-- Lô kho -->
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input [(ngModel)]="filterTable.tenLoKho"
-                          (input)="filterInTable('tenNganLo',filterTable.tenLoKho,false)" />
+                        <input type="text" nz-input [(ngModel)]="filterTable.loKho"
+                          (input)="filterInTable('loKho',filterTable.loKho,false)" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -140,15 +142,14 @@
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                         [nzDisabled]="data.trangThai != '00'"></label>
                     </td>
-                    <!--  cần thay đổi data , key-name khi có services : đang lấy của QuanLyPhieuNhapKhoService -->
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                    <td>{{ data.soPhieu }}</td>
-                    <td>{{ data.soQuyetDinhNhap }}</td>
-                    <td>{{ data.ngayNhapKho }}</td>
-                    <td>{{ data.tenDiemKho }}</td>
-                    <td>{{ data.tenNhaKho }}</td>
-                    <td>{{ data.tenNganKho }}</td>
-                    <td>{{ data.tenNganLo }}</td>
+                    <td>{{ data.soBienBan }}</td>
+                    <td>{{ data.soQd }}</td>
+                    <td>{{ data.ngayLapPhieu }}</td>
+                    <td>{{ data.diemKho }}</td>
+                    <td>{{ data.nhaKho }}</td>
+                    <td>{{ data.nganKho }}</td>
+                    <td>{{ data.loKho }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-right">
                       <a (click)="redirectToChiTiet(true, data.id)">
@@ -193,8 +194,7 @@
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-              *ngIf="userService.isChiCuc()">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
