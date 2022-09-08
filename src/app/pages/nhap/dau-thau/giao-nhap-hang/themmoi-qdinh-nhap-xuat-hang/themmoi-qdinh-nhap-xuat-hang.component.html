@@ -57,7 +57,7 @@
         <div nz-col nzSpan="5">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>
-              Số quyết định
+              Số quyết định nhập
             </nz-form-label>
             <nz-input-group nzAddOnAfter="/QĐ-CDTVT">
               <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
@@ -92,12 +92,12 @@
         <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
-              Đơn vị ra QĐ
+              Đơn vị ra quyết định
             </nz-form-label>
             <input nz-input formControlName="donVi" [readonly]="true" />
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>
               Trích yếu
@@ -105,7 +105,7 @@
             <input nz-input formControlName="trichYeu" [readonly]="isDetail()" />
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Tài liệu đính kèm
@@ -121,7 +121,7 @@
     <thead>
       <tr class="header-table-nvnh">
         <th class="text-center">STT</th>
-        <th class="text-center">Chi cục DTNN khu vực</th>
+        <th class="text-center">Chi cục DTNN KV</th>
         <th class="text-center">Mã hàng hóa</th>
         <th class="text-center">Tên hàng hóa</th>
         <th class="text-center">Chủng loại hàng hóa</th>
