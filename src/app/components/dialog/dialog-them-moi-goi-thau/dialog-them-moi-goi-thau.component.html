@@ -38,7 +38,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="donGia" readonly="isReadOnly" />
+        <input nz-input formControlName="donGia" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -68,7 +68,10 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <input nz-input formControlName="tgianBdauThien" readonly="isReadOnly" />
+        <nz-input-group>
+          <nz-date-picker class="search__input" formControlName="tgianBdauThien" nzFormat="dd/MM/yyyy">
+          </nz-date-picker>
+        </nz-input-group>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
