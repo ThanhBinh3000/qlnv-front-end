@@ -4,8 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView && idInput > 0 " type="button" class="btn btn-sub"
-      (click)="pheDuyet()">
+    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub"
+      (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
