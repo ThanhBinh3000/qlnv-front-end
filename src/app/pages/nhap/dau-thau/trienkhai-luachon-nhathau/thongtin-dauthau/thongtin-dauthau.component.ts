@@ -15,6 +15,7 @@ import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -40,7 +41,7 @@ export class ThongtinDauthauComponent implements OnInit {
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-
+  STATUS = STATUS
   searchFilter = {
     namKhoach: dayjs().get('year'),
     soQd: '',
@@ -124,9 +125,11 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      maDvi: this.userInfo.MA_DVI,
       soQd: this.searchFilter.soQd,
-      maDvi: this.searchFilter.maDvi
     }
+    // if (this.userService.isCuc()) {
+    // }
     let res = await this.dauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -279,7 +282,7 @@ export class ThongtinDauthauComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai !== STATUS.TRUNG_THAU) {
             item.checked = true;
           }
         });

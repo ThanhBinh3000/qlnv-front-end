@@ -22,6 +22,7 @@ import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DauThauService } from 'src/app/services/dauThau.service';
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -78,7 +79,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  STATUS = STATUS
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -107,18 +108,19 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         tenVthh: ['',],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
+        moTaHangHoa: [''],
         trichYeu: [null,],
         soQdPdKhlcnt: ['', [Validators.required]],
         ngayQdPdKhlcnt: [null,],
         idGoiThau: [null,],
         ghiChu: [null,],
-        trungThau: ['1'],
         trangThai: ['00'],
         maDvi: [],
         tenDviTthau: [],
         tgianThienHd: [],
         giaTrungThau: [],
         loaiHdong: [],
+        tenTrangThai: ['Dự thảo'],
         lyDoHuy: ['']
       }
     );
@@ -159,7 +161,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     }
-    this.setTitle();
+    // this.setTitle();
     this.getListQdPdKhlcnt();
     this.spinner.hide();
   }
@@ -180,6 +182,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
         tenVthh: dataDetail ? dataDetail.tenVthh : null,
         tenCloaiVthh: dataDetail ? dataDetail.tenCloaiVthh : null,
+        moTaHangHoa: dataDetail ? dataDetail.moTaHangHoa : null,
         ngayQdPdKhlcnt: dataDetail ? dataDetail.ngayQdPdKhlcnt : null,
         idGoiThau: dataDetail ? dataDetail.idGoiThau : null,
         trungThau: dataDetail ? dataDetail.trungThau : null,
@@ -246,28 +249,37 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    switch (trangThai) {
-      case '00': {
-        this.titleStatus = 'DỰ THẢO';
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Gửi duyệt';
-        break;
-      }
-      case '11': {
-        this.titleStatus = 'BAN HÀNH';
-        this.styleStatus = 'da-ban-hanh'
-        break
-      }
-    }
-  }
+  // setTitle() {
+  //   let trangThai = this.formData.get('trangThai').value
+  //   switch (trangThai) {
+  //     case STATUS.DU_THAO: {
+  //       this.titleStatus = 'DỰ THẢO';
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Gửi duyệt';
+  //       break;
+  //     }
+  //     case STATUS.BAN_HANH: {
+  //       this.titleStatus = 'BAN HÀNH';
+  //       this.styleStatus = 'da-ban-hanh'
+  //       break;
+  //     }
+  //   }
+  // }
 
   pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.BAN_HANH;
+        msg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành ?',
+      nzContent: msg,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -278,8 +290,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: '11',
+            trangThai: trangThai,
           };
+
           const res = await this.quyetDinhPheDuyetKetQuaLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -298,7 +311,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   async chiTiet(data) {
-    console.log(data);
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(data.idGt);
     const modalTuChoi = this.modal.create({
       nzTitle: 'Thông tin gói thầu',
@@ -380,8 +392,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       namKhoach: this.formData.get('namKhoach').value,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
-      trangThai: "11",
+      trangThai: STATUS.BAN_HANH,
       lastest: 1,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -396,8 +409,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       namKhoach: this.formData.get('namKhoach').value,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
-      trangThai: "02",
-      soQdPd: event,
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      soQd: event,
       maDvi: this.userInfo.MA_DVI
     };
     const data = this.listQdPdKhlcnt.filter(item => item.soQd == event);

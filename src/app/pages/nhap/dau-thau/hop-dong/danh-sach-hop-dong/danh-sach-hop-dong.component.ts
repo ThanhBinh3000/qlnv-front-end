@@ -79,6 +79,7 @@ export class DanhSachHopDongComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(this.dataTable)
   }
 
   updateAllChecked(): void {

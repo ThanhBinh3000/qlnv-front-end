@@ -89,6 +89,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(
+      this.dataTable
+    )
   }
 
   async search() {
@@ -109,6 +112,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

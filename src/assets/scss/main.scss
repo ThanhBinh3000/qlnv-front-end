@@ -4754,6 +4754,13 @@ th {
     display: flex;
   }
 
+  h2 {
+    margin-bottom: 0;
+    font-size: 18px;
+    align-items: center;
+    display: flex;
+  }
+
 
   .buttons {
     .btn-xoa {
@@ -4768,6 +4775,17 @@ th {
     color: #fff;
   }
 
+}
+
+tfoot {
+  tr {
+    background-color: #F8F9FA;
+  }
+
+  // .xanh {
+  //   color: #8BC34C !important;
+  //   background-color: #F8F9FA !important;
+  // }
 }
 
 .ant-card-body,
@@ -6624,6 +6642,7 @@ td.action.ant-table-cell {
     text-transform: uppercase;
   }
 
+  .status-do,
   .du-thao-va-lanh-dao-duyet {
     color: #ff4d4f;
     font-weight: 500;
@@ -6637,6 +6656,7 @@ td.action.ant-table-cell {
     line-height: 1;
   }
 
+  .status-xanh,
   .da-ban-hanh {
     color: #24e837;
     font-weight: 500;

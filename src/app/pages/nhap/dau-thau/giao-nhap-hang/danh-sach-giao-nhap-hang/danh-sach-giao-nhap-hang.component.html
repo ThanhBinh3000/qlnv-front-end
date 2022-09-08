@@ -13,8 +13,14 @@
           <label class="search__label">Số quyết định</label>
           <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
         </div>
-        <div nz-col nzSpan="12">
-          <label class="search__label">Trích yếu</label>
+        <div nz-col nzSpan="3">
+          <label class="search__label">Loại hàng hóa </label>
+          <nz-select [(ngModel)]="searchFilter.loaiVthh">
+            <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="9">
+          <label class="search__label">Trích yếu quyết định</label>
           <input nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
         <div nz-col nzSpan="5">
@@ -34,9 +40,8 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
-      <h3>Danh sách quyết định giao nhiệm vụ nhập hàng </h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
           <i class="fa fa-trash-o do"></i>
@@ -52,7 +57,6 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
         [nzShowPagination]="false">
@@ -62,13 +66,15 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th class="text-center" width="60px">STT</th>
-            <th>Số quyết định</th>
-            <th>Ngày quyết định</th>
-            <th>Năm nhập</th>
-            <th>Trích yếu quyết định </th>
-            <th>Trạng thái </th>
-            <th>Hành động</th>
+            <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 10%;">Số quyết định</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
+            <th class="text-center" style="width: 8%;">Năm nhập</th>
+            <th class="text-center" style="width: 11%;">Loại hàng hóa</th>
+            <th class="text-center" style="width: 11%;">Chủng loại hành hóa</th>
+            <th class="text-center" style="width: 40%;">Trích yếu quyết định </th>
+            <th class="text-center" style="width: 10%;">Trạng thái </th>
+            <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -102,8 +108,26 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.veViec"
-                  (input)="filterInTable('veViec',filterTable.veViec)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
+                  (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -131,6 +155,8 @@
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayQdinh ? data.ngayQdinh.split(' ')[0] : ''}}</td>
             <td>{{ data.namNhap }}</td>
+            <td>{{ data.tenVthh}}</td>
+            <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
