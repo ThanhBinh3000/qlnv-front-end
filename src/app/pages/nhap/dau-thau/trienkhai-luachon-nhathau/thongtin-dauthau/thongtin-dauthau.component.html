@@ -173,12 +173,12 @@
             <td>{{data.tenVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.thanhGiaGoiThau}}</td>
-            <td>{{ data.trangThai }}</td>
+            <td>{{data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(data.idGt)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == '00' || data.trangThai == '01'" (click)="redirectToChiTiet(data.idGt)">
+              <a *ngIf="data.trangThai != '37'" (click)="redirectToChiTiet(data.idGt)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
