@@ -221,6 +221,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+    console.log(this.dataTable)
   }
 
   exportData() {
