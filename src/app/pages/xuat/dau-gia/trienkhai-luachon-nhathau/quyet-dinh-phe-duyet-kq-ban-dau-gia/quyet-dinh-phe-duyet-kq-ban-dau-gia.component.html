@@ -266,6 +266,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-quyet-dinh-phe-duyet-kq-ban-dau-gia (showListEvent)="showList()">
+  <app-themmoi-quyet-dinh-phe-duyet-kq-ban-dau-gia (showListEvent)="showList()" [id]="selectedId"
+    [isView]="isViewDetail">
   </app-themmoi-quyet-dinh-phe-duyet-kq-ban-dau-gia>
 </div>

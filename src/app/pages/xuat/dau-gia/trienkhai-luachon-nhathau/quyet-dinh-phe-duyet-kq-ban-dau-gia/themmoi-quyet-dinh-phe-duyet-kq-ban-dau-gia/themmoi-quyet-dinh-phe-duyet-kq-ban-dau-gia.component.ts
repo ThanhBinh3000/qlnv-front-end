@@ -428,7 +428,10 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       let body = this.formData.value;
       body = {
         ...body,
-        // "bienBanBdgId": 0,
+        "tbBdgKtId": null,
+        "maTbBdgKt": null,
+        "soBbBdg": null,
+        "bbBdgId": null,
         "cts": this.cts,
         "fileDinhKemReqs": this.listFileDinhKem,
         "id": this.id,
