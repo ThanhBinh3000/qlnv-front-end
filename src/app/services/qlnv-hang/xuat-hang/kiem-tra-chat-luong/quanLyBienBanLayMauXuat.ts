@@ -16,7 +16,7 @@ export class QuanLyBienBanLayMauXuatService extends BaseService {
   }
 
   search(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/search`
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/search?`
     if (body.soBienBan)
       url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
     if (body.capDvis)

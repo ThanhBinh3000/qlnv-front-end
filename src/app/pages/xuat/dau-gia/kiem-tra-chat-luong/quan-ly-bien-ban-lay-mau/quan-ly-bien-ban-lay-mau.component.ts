@@ -30,7 +30,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
 
-
   loaiVthh: string;
 
   userInfo: UserLogin;
@@ -84,9 +83,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
       }
-
-      Promise.all([this.initData(),])
-      // await this.search();
+      await this.initData()
+      Promise.all([, this.search()])
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -99,10 +97,10 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.formData = this.fb.group({
       soBienBan: [null],
       ngayLayMau: [null],
-      diemKho: [null],
-      nhaKho: [null],
-      nganKho: [null],
-      loKho: [null],
+      maDiemKho: [null],
+      maNhaKho: [null],
+      maNganKho: [null],
+      maNganLo: [null],
     })
   }
 
@@ -110,6 +108,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
+    this.detail.capDvi = this.userInfo.CAP_DVI;
     await this.loadDsTong()
 
   }
@@ -141,9 +140,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   onChangeDiemKho(id) {
     const dsDiemKho = this.dsDiemKho.find((item) => item.maDvi === id);
-    this.formData.get('nhaKho').setValue(null);
-    this.formData.get('nganKho').setValue(null);
-    this.formData.get('loKho').setValue(null);
+    this.formData.get('maNhaKho').setValue(null);
+    this.formData.get('maNganKho').setValue(null);
+    this.formData.get('maNganLo').setValue(null);
     if (dsDiemKho) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, dsDiemKho),
@@ -155,8 +154,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
   onChangeNhaKho(id) {
     const nhaKho = this.dsNhaKho.find((item) => item.maDvi === id);
-    this.formData.get('nganKho').setValue(null);
-    this.formData.get('loKho').setValue(null);
+    this.formData.get('maNganKho').setValue(null);
+    this.formData.get('maNganLo').setValue(null);
     if (nhaKho) {
       const result = { ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho), };
       this.dsNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
@@ -167,7 +166,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   onChangeNganKho(id) {
     const nganKho = this.dsNganKho.find((item) => item.maDvi === id);
-    this.formData.get('loKho').setValue(null);
+    this.formData.get('maNganLo').setValue(null);
     if (nganKho) {
       const result = {
         ...this.donviService.layDsPhanTuCon(this.dsTong, nganKho),
@@ -214,18 +213,25 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.spinner.show();
     console.log(this.formData.value);
     let body = {
-      // "capDvis": '3',
-      // "maDvis": this.userInfo.MA_DVI,
-      // "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      // soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap ?? null,
-      // soBienBan: this.searchFilter.soBienBan ?? null,
-      // ngayLayMauTu: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
-      // ngayLayMauDen: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
-      // pageNumber: this.page,
-      // pageSize: this.pageSize,
+      "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
+      "capDvis": this.detail.capDvi,
+      "maDvis": this.detail.maDvi,
+      "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
+      "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
+      "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,
+      "maNganLo": this.formData.value.maNganLo ? this.formData.value.maNganLo : null,
+      "ngayLayMauDenNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY') : null,
+      "ngayLayMauTuNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY') : null,
+      "paggingReq": {
+        "pageNumber": this.page,
+        "pageSize": this.pageSize,
+      }
+
     };
     try {
       let res = await this.bienBanLayMauXuatService.search(body);
+      console.log(res.data.content);
+
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -329,22 +335,24 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          // "maDvi": this.userInfo.MA_DVI,
-          // "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-          // "ngayLayMauDen": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
-          // "ngayLayMauTu": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
-          // "orderBy": null,
-          // "orderDirection": null,
-          // "paggingReq": null,
-          // "soBienBan": this.searchFilter.soBienBan,
-          // "soQuyetDinhNhap": this.searchFilter.soQuyetDinhNhap,
-          // "str": null,
-          // "trangThai": null
+          "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
+          "capDvis": this.detail.capDvi,
+          "maDvis": this.detail.maDvi,
+          "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
+          "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
+          "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,
+          "maNganLo": this.formData.value.maNganLo ? this.formData.value.maNganLo : null,
+          "ngayLayMauDenNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY') : null,
+          "ngayLayMauTuNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY') : null,
+          "paggingReq": {
+            "pageNumber": this.page,
+            "pageSize": this.pageSize,
+          }
         };
         this.bienBanLayMauXuatService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-lay-mau.xlsx'),
+            saveAs(blob, 'danh-sach-xuat-bien-ban-lay-mau.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -401,7 +409,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   filterInTable(key: string, value: string | Date) {
     if (value instanceof Date) {
-      value = dayjs(value).format('DD-MM-YYYY');
+      value = dayjs(value).format('dd/MM/yyyy"');
     }
 
     if (value && value != '') {
