@@ -97,6 +97,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   isVatTu: boolean = false;
   dataNguonVon: any = {};
 
+  STATUS = STATUS
+
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -130,13 +132,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianDthau: [''],
       tgianMthau: [''],
       tgianNhang: [''],
-      ghiChu: ['', [Validators.required]],
+      ghiChu: [''],
       loaiVthh: ['', [Validators.required]],
       tenVthh: ['', [Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      trangThai: [''],
-      tchuanCluong: ['']
+      trangThai: [STATUS.DU_THAO],
+      tchuanCluong: [''],
+      tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: ['']
     })
     this.formThongTinDX = this.fb.group({
       hthucLcnt: [''],
@@ -550,7 +554,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '03',
+            trangThai: STATUS.TU_CHOI_LDV,
           };
           const res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -586,12 +590,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         }
         case STATUS.CHO_DUYET_LDV: {
           trangThai = STATUS.DA_DUYET_LDV;
-          mesg = 'Bạn có muốn gửi duyệt ?'
+          mesg = 'Văn bản sẵn sàng duyệt ?'
           break;
         }
-        case STATUS.TU_CHOI_LDV: {
-          trangThai = STATUS.DA_DUYET_LDV;
-          mesg = 'Văn bản sẵn sàng duyệt ?'
+        case STATUS.DA_DUYET_LDV: {
+          trangThai = STATUS.BAN_HANH;
+          mesg = 'Văn bản sẵn sàng ban hành ?'
           break;
         }
       }
@@ -737,7 +741,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         namKhoach: data.namKhoach,
         ghiChu: data.ghiChu,
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
+        trichYeu: data.trichYeu,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.ldoTuchoi
       })
       if (this.isVatTu) {
         this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
@@ -758,7 +764,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         ]
       }
     };
-    this.setTitle();
+    // this.setTitle();
   }
 
   taiLieuDinhKem(type?: string) {
