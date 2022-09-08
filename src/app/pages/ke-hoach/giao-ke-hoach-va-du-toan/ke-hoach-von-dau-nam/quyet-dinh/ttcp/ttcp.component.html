@@ -8,7 +8,7 @@
               <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="namQd" id="nam-qd">
-                  <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
+                  <nz-option [nzValue]="item.value" [nzLabel]="item.text" *ngFor="let item of dsNam">
                   </nz-option>
                 </nz-select>
               </nz-form-control>

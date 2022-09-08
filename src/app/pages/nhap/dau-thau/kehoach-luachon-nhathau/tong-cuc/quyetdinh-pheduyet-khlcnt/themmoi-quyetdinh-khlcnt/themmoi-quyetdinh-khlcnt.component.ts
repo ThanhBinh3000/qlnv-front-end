@@ -583,8 +583,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     // Vật tư
     if (this.formData.get('loaiVthh').value.startsWith('02')) {
       switch (this.formData.get('trangThai').value) {
-        case STATUS.DU_THAO:
-        case STATUS.TU_CHOI_LDV: {
+        case STATUS.DU_THAO: {
           trangThai = STATUS.CHO_DUYET_LDV;
           mesg = 'Bạn có muốn gửi duyệt ?'
           break;

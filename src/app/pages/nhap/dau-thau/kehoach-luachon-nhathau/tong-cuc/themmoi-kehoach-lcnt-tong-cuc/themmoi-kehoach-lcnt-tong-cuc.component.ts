@@ -189,7 +189,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         trichYeu: [null],
         ghiChu: [null, [Validators.required]],
         namKhoach: [, [Validators.required]],
-        loaiVthh: [, [Validators.required]],
+        loaiVthh: [this.loaiVthh, [Validators.required]],
         ngayKy: [null, [Validators.required]],
         trangThai: [],
         maDvi: [],

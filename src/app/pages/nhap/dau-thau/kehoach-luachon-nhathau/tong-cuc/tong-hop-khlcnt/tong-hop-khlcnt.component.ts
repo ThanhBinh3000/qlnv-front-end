@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -346,10 +347,10 @@ export class TongHopKhlcntComponent implements OnInit {
       case '00': {
         return 'Chưa tạo QĐ'
       }
-      case '01': {
+      case '24': {
         return 'Đã dự thảo QĐ'
       }
-      case '02': {
+      case '25': {
         return 'Đã ban hành QĐ'
       }
     }

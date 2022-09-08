@@ -88,8 +88,8 @@
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
             <th class="text-center" style="width: 10%;">Số quyết định</th>
-            <th class="text-center" style="width: 10%;">Năm QĐ</th>
-            <th class="text-center" style="width: 10%;">Ngày QĐ</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
+            <th class="text-center" style="width: 10%;">Bộ ngành</th>
             <th class="text-center">Trích yếu</th>
             <!-- <th style="width: 10%;">Tài liệu đính kèm</th> -->
             <th class="text-center" style="width: 10%;">Trạng thái</th>
@@ -131,8 +131,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"
-                  (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
+                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -140,8 +140,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBoNganh"
+                       (input)="filterInTable('namQd',filterTable.tenBoNganh)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -178,8 +178,8 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.namQd }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tenBoNganh }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td style="text-align: left; white-space: nowrap;">
