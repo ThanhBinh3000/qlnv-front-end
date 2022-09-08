@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && formData.value.id > 0" type="button" class="btn btn-sub"
+    <button *ngIf="formData.value.trangThai == '00' && !isViewDetail" type="button" class="btn btn-sub"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Ban hành</span>

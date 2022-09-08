@@ -594,43 +594,43 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
             this.diaDiemGiaoNhanList.push(ddGiaoNhan);
           });
           const phanLoTaiSans = res.data?.phanLoTaiSanList;
-
-          for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
-            for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-              if (
-                phanLoTaiSans.length == 1 ||
-                phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc
-              ) {
-                const diaDiemNhapKho = new DiaDiemNhapKho();
-                diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
-                diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
-                diaDiemNhapKho.slDaLenKHBan = phanLoTaiSans[i].slDaLenKHBan;
-                diaDiemNhapKho.soLuong = phanLoTaiSans[i].soLuong;
-                const chiTietDiaDiem = new ChiTietDiaDiemNhapKho();
-                chiTietDiaDiem.tonKho = phanLoTaiSans[i].tonKho;
-                chiTietDiaDiem.giaKhoiDiem = phanLoTaiSans[i].giaKhoiDiem;
-                chiTietDiaDiem.soTienDatTruoc = phanLoTaiSans[i].soTienDatTruoc;
-                chiTietDiaDiem.maDiemKho = phanLoTaiSans[i].maDiemKho;
-                chiTietDiaDiem.tenDiemKho = phanLoTaiSans[i].tenDiemKho;
-                chiTietDiaDiem.maNhaKho = phanLoTaiSans[i].maNhaKho;
-                chiTietDiaDiem.tenNhaKho = phanLoTaiSans[i].tenNhaKho;
-                chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
-                chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
-                chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
-                chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
-                chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
-                chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
-                chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].tenChungLoaiHh;
-                chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
-                chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
-                chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
-                chiTietDiaDiem.idVirtual = phanLoTaiSans[i].id;
-                diaDiemNhapKho.chiTietDiaDiems.push(chiTietDiaDiem);
-                this.bangPhanBoList.push(diaDiemNhapKho);
+          if (phanLoTaiSans != null) {
+            for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
+              for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
+                if (
+                  phanLoTaiSans.length == 1 ||
+                  phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc
+                ) {
+                  const diaDiemNhapKho = new DiaDiemNhapKho();
+                  diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
+                  diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
+                  diaDiemNhapKho.slDaLenKHBan = phanLoTaiSans[i].slDaLenKHBan;
+                  diaDiemNhapKho.soLuong = phanLoTaiSans[i].soLuong;
+                  const chiTietDiaDiem = new ChiTietDiaDiemNhapKho();
+                  chiTietDiaDiem.tonKho = phanLoTaiSans[i].tonKho;
+                  chiTietDiaDiem.giaKhoiDiem = phanLoTaiSans[i].giaKhoiDiem;
+                  chiTietDiaDiem.soTienDatTruoc = phanLoTaiSans[i].soTienDatTruoc;
+                  chiTietDiaDiem.maDiemKho = phanLoTaiSans[i].maDiemKho;
+                  chiTietDiaDiem.tenDiemKho = phanLoTaiSans[i].tenDiemKho;
+                  chiTietDiaDiem.maNhaKho = phanLoTaiSans[i].maNhaKho;
+                  chiTietDiaDiem.tenNhaKho = phanLoTaiSans[i].tenNhaKho;
+                  chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
+                  chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
+                  chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
+                  chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
+                  chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                  chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
+                  chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].tenChungLoaiHh;
+                  chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
+                  chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
+                  chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
+                  chiTietDiaDiem.idVirtual = phanLoTaiSans[i].id;
+                  diaDiemNhapKho.chiTietDiaDiems.push(chiTietDiaDiem);
+                  this.bangPhanBoList.push(diaDiemNhapKho);
+                }
               }
             }
           }
-
           let thoiGianDk = [];
           thoiGianDk.push(this.khBanDauGia.tgDkTcTuNgay);
           thoiGianDk.push(this.khBanDauGia.tgDkTcDenNgay);
@@ -666,8 +666,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          const id = await this.save(true);
-
           let body = {
             id: this.idInput,
             trangThaiId: this.globals.prop.NHAP_CHO_DUYET_TP,
