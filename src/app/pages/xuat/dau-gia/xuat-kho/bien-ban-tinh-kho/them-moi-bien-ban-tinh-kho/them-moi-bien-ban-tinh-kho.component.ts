@@ -608,9 +608,6 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
   }
 
 
-}
-
-
 interface DaiDienChiCuc {
   stt: number;
   daiDien: string;
