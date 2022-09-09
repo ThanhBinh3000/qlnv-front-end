@@ -229,7 +229,7 @@ export class ThongTinComponent implements OnInit {
             })
           }
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
-          await this.getListGoiThau(this.detail.id);
+          await this.getListGoiThau(this.detail.canCuId);
         }
       }
     }
@@ -419,6 +419,7 @@ export class ThongTinComponent implements OnInit {
           soLuong: null,
           donGiaVat: null,
         })
+        this.diaDiemNhapListCuc = [];
         await this.getListGoiThau(data.id);
       }
     });

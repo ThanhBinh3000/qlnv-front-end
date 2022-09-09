@@ -6,6 +6,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import * as dayjs from 'dayjs';
+import {STATUS} from "../../../constants/status";
 
 @Component({
   selector: 'dialog-can-cu-kqlcnt',
@@ -65,7 +66,7 @@ export class DialogCanCuKQLCNTComponent implements OnInit {
       },
       "soQd": this.text,
       "str": null,
-      "trangThai": null,
+      "trangThai": STATUS.BAN_HANH,
       "tuNgayQd": null
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getAll(body);
