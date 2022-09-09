@@ -289,9 +289,9 @@ export class ThongTinComponent implements OnInit {
     this.detailChuDauTu.ma = this.detail.maDvi;
   }
 
-  async save(isOther: boolean) {
+  async save(isKy?) {
     let body = this.formDetailHopDong.value;
-    console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
+    // console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
     this.spinner.show();
     try {
       if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
@@ -312,29 +312,34 @@ export class ThongTinComponent implements OnInit {
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
         if (this.id > 0) {
           body.id = this.id;
-          let res = await this.thongTinHopDong.update(
-            body,
-          );
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
+            let res = await this.thongTinHopDong.update(
+              body,
+            );
+            if (res.msg == MESSAGE.SUCCESS) {
+              if(isKy){
+                this.approve(this.id);
+              }else{
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.UPDATE_SUCCESS,
+                );
+              }
               this.back();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
             }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
         } else {
           let res = await this.thongTinHopDong.create(
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            console.log(res.data);
+            if(isKy){
+              this.approve(res.data.id);
+              }else{
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              }
               this.back();
-            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -510,7 +515,7 @@ export class ThongTinComponent implements OnInit {
     }
   }
 
-  approve() {
+  approve(id?) {
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -521,7 +526,7 @@ export class ThongTinComponent implements OnInit {
       nzWidth: 365,
       nzOnOk: async () => {
         const body = {
-          id: this.detail.id,
+          id: id ? id : this.detail.id,
           trangThai: STATUS.DA_KY,
         }
         let res = await this.thongTinHopDong.approve(
