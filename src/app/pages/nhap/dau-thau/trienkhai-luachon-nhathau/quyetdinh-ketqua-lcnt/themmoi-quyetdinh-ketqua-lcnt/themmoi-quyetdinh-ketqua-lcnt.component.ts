@@ -191,6 +191,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
       })
       this.taiLieuDinhKemList = dataDetail.fileDinhKems;
+      this.dataTableGoiThau = dataDetail.hhQdPduyetKqlcntDtlList;
     }
   }
 
@@ -424,6 +425,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
           tenCloaiVthh: data[0].tenCloaiVthh
         });
       }
+    } else {
+      this.formData.patchValue({
+        loaiVthh: data[0].loaiVthh,
+      });
     }
     let res = await this.ttinDauThauService.getAll(body);
     this.listGoiThau = res.data;
