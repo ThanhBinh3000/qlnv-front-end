@@ -228,7 +228,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.search();
-    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
@@ -369,12 +368,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+          console.log(item[key])
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });

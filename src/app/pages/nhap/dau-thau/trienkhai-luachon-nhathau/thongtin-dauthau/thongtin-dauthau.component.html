@@ -74,6 +74,7 @@
           </tr>
           <tr class="search-table">
             <th></th>
+            <th></th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenGthau"
@@ -170,7 +171,7 @@
             <td>{{ data.soQdPdKhlcnt }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{data.tenVthh}}</td>
+            <td>{{data.tenLoaiVthh }}</td>
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.thanhGiaGoiThau | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{ data.tenTrangThai }}</td>

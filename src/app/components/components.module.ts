@@ -146,6 +146,7 @@ import { DialogCanCuQdPheDuyetKqdgComponent } from './dialog/dialog-can-cu-qd-ph
 
 import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
 import { TemplateErrorComponent } from './template-error/template-error.component';
+import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/dialog-table-selection.component';
 @NgModule({
   declarations: [
     //components
@@ -243,7 +244,8 @@ import { TemplateErrorComponent } from './template-error/template-error.componen
     DialogToTrinhDeXuatComponent,
     DialogQuyetDinhGiaCuaTcdtnnComponent,
     DialogCanCuQdPheDuyetKqdgComponent,
-    TemplateErrorComponent
+    TemplateErrorComponent,
+    DialogTableSelectionComponent
   ],
   imports: [
     CommonModule,
@@ -361,7 +363,8 @@ import { TemplateErrorComponent } from './template-error/template-error.componen
     NzPopconfirmModule,
     FileListComponent,
     NzResultModule,
-    TemplateErrorComponent
+    TemplateErrorComponent,
+    DialogTableSelectionComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
