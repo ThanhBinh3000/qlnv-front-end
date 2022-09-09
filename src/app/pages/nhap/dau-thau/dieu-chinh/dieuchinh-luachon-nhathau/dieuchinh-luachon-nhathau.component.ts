@@ -112,6 +112,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

@@ -10,6 +10,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UserService } from 'src/app/services/user.service';
 import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
@@ -42,6 +43,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     loaiVthh: '',
     trichYeu: ''
   };
+
+  STATUS = STATUS
 
   filterTable: any = {
     soDxuat: '',
@@ -133,11 +136,15 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
+      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
+    if (this.userService.isCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
+    }
     let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -221,7 +228,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.search();
-    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
@@ -362,12 +368,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+          console.log(item[key])
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
