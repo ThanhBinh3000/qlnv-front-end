@@ -22,7 +22,7 @@ import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DauThauService } from 'src/app/services/dauThau.service';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -79,7 +79,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  STATUS = STATUS
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -114,13 +114,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ngayQdPdKhlcnt: [null,],
         idGoiThau: [null,],
         ghiChu: [null,],
-        trungThau: ['1'],
         trangThai: ['00'],
         maDvi: [],
         tenDviTthau: [],
         tgianThienHd: [],
         giaTrungThau: [],
         loaiHdong: [],
+        tenTrangThai: ['Dự thảo'],
         lyDoHuy: ['']
       }
     );
@@ -161,7 +161,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     }
-    this.setTitle();
+    // this.setTitle();
     this.getListQdPdKhlcnt();
     this.spinner.hide();
   }
@@ -249,29 +249,29 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    switch (trangThai) {
-      case STATUS.DU_THAO: {
-        this.titleStatus = 'DỰ THẢO';
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Gửi duyệt';
-        break;
-      }
-      case STATUS.BAN_HANH: {
-        this.titleStatus = 'BAN HÀNH';
-        this.styleStatus = 'da-ban-hanh'
-        break;
-      }
-    }
-  }
+  // setTitle() {
+  //   let trangThai = this.formData.get('trangThai').value
+  //   switch (trangThai) {
+  //     case STATUS.DU_THAO: {
+  //       this.titleStatus = 'DỰ THẢO';
+  //       this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+  //       this.titleButtonDuyet = 'Gửi duyệt';
+  //       break;
+  //     }
+  //     case STATUS.BAN_HANH: {
+  //       this.titleStatus = 'BAN HÀNH';
+  //       this.styleStatus = 'da-ban-hanh'
+  //       break;
+  //     }
+  //   }
+  // }
 
   pheDuyet() {
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
-          trangThai = STATUS.BAN_HANH;
+        trangThai = STATUS.BAN_HANH;
         msg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
@@ -392,8 +392,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       namKhoach: this.formData.get('namKhoach').value,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
-      trangThai: "11",
+      trangThai: STATUS.BAN_HANH,
       lastest: 1,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -408,8 +409,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       namKhoach: this.formData.get('namKhoach').value,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
-      trangThai: "02",
-      soQdPd: event,
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      soQd: event,
       maDvi: this.userInfo.MA_DVI
     };
     const data = this.listQdPdKhlcnt.filter(item => item.soQd == event);

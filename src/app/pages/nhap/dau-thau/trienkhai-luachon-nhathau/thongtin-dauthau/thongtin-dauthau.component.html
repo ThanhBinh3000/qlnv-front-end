@@ -173,13 +173,14 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{data.tenVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
-            <td>{{data.thanhGiaGoiThau}}</td>
-            <td>{{data.tenTrangThai }}</td>
+            <td>{{data.thanhGiaGoiThau | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(data.idGt)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai != '37'" (click)="redirectToChiTiet(data.idGt)">
+              <a *ngIf="data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT"
+                (click)="redirectToChiTiet(data.idGt)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>

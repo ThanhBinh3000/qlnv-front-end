@@ -126,7 +126,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
-      trichYeu: this.searchFilter.trichYeu
+      trichYeu: this.searchFilter.trichYeu,
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
