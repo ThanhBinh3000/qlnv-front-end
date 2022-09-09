@@ -121,7 +121,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         giaTrungThau: [],
         loaiHdong: [],
         tenTrangThai: ['Dự thảo'],
-        lyDoHuy: ['']
+        lyDoHuy: [''],
       }
     );
   }
