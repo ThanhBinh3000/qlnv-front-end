@@ -108,9 +108,8 @@
                       </ng-template>
                     </td>
                     <td>
-                      <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy"
-                        [(ngModel)]="filterTable.ngayXuatKho"
-                        (input)="filterInTable('ngayXuatKho',filterTable.ngayXuatKho)" class="search__input">
+                      <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.xuatKho"
+                        (input)="filterInTable('xuatKho',filterTable.xuatKho)" class="search__input">
                       </nz-date-picker>
                     </td>
                     <td>
@@ -170,7 +169,7 @@
                     <td>{{ data.spXuatKho }}</td>
                     <td>{{ data.tenSqdx }}</td>
                     <td>{{ data.soHd }}</td>
-                    <td>{{ data.ngayNhapKho }}</td>
+                    <td>{{ data.xuatKho | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.tenDiemkho }}</td>
                     <td>{{ data.tenNhakho }}</td>
                     <td>{{ data.tenNgankho }}</td>
