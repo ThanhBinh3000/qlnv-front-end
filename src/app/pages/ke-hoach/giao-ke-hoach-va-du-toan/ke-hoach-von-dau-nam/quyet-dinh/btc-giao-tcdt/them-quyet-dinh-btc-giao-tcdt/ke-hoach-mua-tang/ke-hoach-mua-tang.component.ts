@@ -69,6 +69,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
 
   themMoiItem() {
+    this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache();
@@ -92,7 +93,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
 
   calcularTongTien() {
-    this.rowItem.tongTien = +this.rowItem.soLuong * +this.rowItem.donGia;
+    this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia;
   }
 
   luuEdit(index: number): void {

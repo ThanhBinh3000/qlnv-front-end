@@ -78,8 +78,7 @@
             <nz-form-label [nzNoColon]="true">Tên hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group>
-                <input class="search__input"  nz-input formControlName="moTaHangHoa"
-                       />
+                <input class="search__input" nz-input formControlName="moTaHangHoa" />
               </nz-input-group>
               <ng-template #loaiVthhError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
@@ -108,7 +107,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày QĐ duyệt KQLCNT
+            <nz-form-label [nzNoColon]="true"> Ngày QĐ duyệt KQLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
               <nz-input-group>
@@ -227,7 +226,7 @@
               <input [(ngModel)]="data.lyDoHuy" *ngIf="data.trungThau == 0" class="search__input" nz-input
                 [ngModelOptions]="{standalone: true}" />
             </td>
-            <td>{{ data.tenVthh }}</td>
+            <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.thanhGiaGoiThau }}</td>
             <td>{{ data.tgianThienHd }}</td>

@@ -7,7 +7,7 @@
             <nz-form-item class="form-item">
               <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="namQd" id="nam-qd">
+                <nz-select formControlName="namQd" id="nam-qd" nzAllowClear>
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                   </nz-option>
                 </nz-select>
@@ -179,7 +179,7 @@
               <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

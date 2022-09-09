@@ -101,12 +101,12 @@
               </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
                   (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+              <ng-template #suffixTemplateInfo123>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
@@ -199,15 +199,10 @@
               <a (click)="detail(data)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="userService.isTongCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV )"
-                (click)="detail(data)">
+              <a *ngIf="(data.trangThai=='00' || data.trangThai=='02' || data.trangThai=='04')" (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC )"
-                (click)="detail(data)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
