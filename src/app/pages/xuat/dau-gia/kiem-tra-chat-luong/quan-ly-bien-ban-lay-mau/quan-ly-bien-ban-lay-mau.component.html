@@ -114,7 +114,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
-                          (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
+                          (ngModelChange)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -122,13 +122,13 @@
                     </td>
                     <td>
                       <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLayMau"
-                        (input)="filterInTable('ngayLayMau',filterTable.ngayLayMau)">
+                        (ngModelChange)="filterInTable('ngayLayMau',filterTable.ngayLayMau)">
                       </nz-date-picker>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                          (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
+                          (ngModelChange)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -137,7 +137,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
-                          (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
+                          (ngModelChange)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -146,7 +146,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganKho"
-                          (input)="filterInTable('tenNganKho',filterTable.tenNganKho)" size="small" />
+                          (ngModelChange)="filterInTable('tenNganKho',filterTable.tenNganKho)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -155,7 +155,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
-                          (input)="filterInTable('tenNganLo',filterTable.tenLoKho)" size="small" />
+                          (ngModelChange)="filterInTable('tenNganLo',filterTable.tenLoKho)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -164,7 +164,7 @@
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                          (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                          (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
                         <i nz-icon nzType="search"></i>
@@ -189,11 +189,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03') && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThaiId=='00' || data.trangThaiId=='03') && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThaiId=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

@@ -405,8 +405,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   filterInTable(key: string, value: string | Date) {
     if (value instanceof Date) {
-      value = dayjs(value).format('dd/MM/yyyy"');
+      value = dayjs(value).format('YYYY-MM-DD');
     }
+    console.log(value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>
