@@ -230,8 +230,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     };
     try {
       let res = await this.bienBanLayMauXuatService.search(body);
-      console.log(res.data.content);
-
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -405,8 +403,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   filterInTable(key: string, value: string | Date) {
     if (value instanceof Date) {
-      value = dayjs(value).format('dd/MM/yyyy"');
+      value = dayjs(value).format('YYYY-MM-DD');
     }
+    console.log(value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>
