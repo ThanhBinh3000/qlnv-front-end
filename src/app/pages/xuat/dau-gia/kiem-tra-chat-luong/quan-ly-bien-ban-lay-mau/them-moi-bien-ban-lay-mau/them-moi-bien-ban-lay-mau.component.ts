@@ -350,8 +350,51 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
     this.listDaiDien = this.listDaiDien.filter((item) => item.idTemp != 1)
+    // let body = {
+    //   "capDvi": this.detail.capDvi,
+    //   "chiTietList": [
+    //     ...this.listDaiDien
+    //   ],
+    //   "chiTieuKiemTra": this.formData.value.chiTieuKT,
+    //   "diaDiemLayMau": this.formData.value.diaDiemLayMau,
+    //   "donViKiemNghiem": this.formData.value.donViKN,
+    //   "fileDinhKems": [
+    //     {
+    //       "dataId": 0,
+    //       "fileName": "",
+    //       "fileSize": "",
+    //       "fileUrl": "",
+    //       "id": 0,
+    //       "noiDung": ""
+    //     }
+    //   ],
+    //   "id": 0,
+    //   "ketQuaNiemPhong": this.formData.value.kQNiemPhongMau,
+    //   "loaiVthh": this.formData.value.loaiHang,
+    //   "lyDoTuChoi": "",
+    //   "maDiemKho": this.formData.value.maDiemKho,
+    //   "maDvi": this.detail.maDvi,
+    //   "maNganKho": this.formData.value.maNganKho,
+    //   "maNganLo": this.formData.value.maNganLo,
+    //   "maNhaKho": this.formData.value.maNhaKho,
+    //   "maVatTu": this.formData.value.chungLoaiHang,
+    //   "maVatTuCha": "",
+    //   "nam": 0,
+    //   "ngayGuiDuyet": "",
+    //   "ngayLayMau": this.formData.value.ngayLayMau,
+    //   "ngayPduyet": "",
+    //   "nguoiGuiDuyetId": 0,
+    //   "nguoiPduyetId": 0,
+    //   "ppLayMau": this.formData.value.ppLayMau,
+    //   "qdgnvxId": 0,
+    //   "so": 0,
+    //   "soBienBan": this.formData.value.soBienBan,
+    //   "soLuongMau": 0,
+    //   "trangThai": "00"
+    // }
+
     let body = {
-      "capDvi": this.detail.capDvi,
+      "capDvi": "",
       "chiTietList": [
         ...this.listDaiDien
       ],
@@ -360,7 +403,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "donViKiemNghiem": this.formData.value.donViKN,
       "fileDinhKems": [
         {
-          "dataId": 0,
+          "dataId": 1,
           "fileName": "",
           "fileSize": "",
           "fileUrl": "",
@@ -370,29 +413,24 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       ],
       "id": 0,
       "ketQuaNiemPhong": this.formData.value.kQNiemPhongMau,
-      "loaiVthh": this.formData.value.loaiHang,
-      "lyDoTuChoi": "",
       "maDiemKho": this.formData.value.maDiemKho,
-      "maDvi": this.detail.maDvi,
       "maNganKho": this.formData.value.maNganKho,
-      "maNganLo": this.formData.value.maNganLo,
-      "maNhaKho": this.formData.value.maNhaKho,
+      "maNhaKho": "010102010101",
       "maVatTu": this.formData.value.chungLoaiHang,
-      "maVatTuCha": "",
-      "nam": 0,
-      "ngayGuiDuyet": "",
+      "maVatTuCha": "04",
+      "nam": 2022,
+      "ngayGuiDuyet": null,
       "ngayLayMau": this.formData.value.ngayLayMau,
-      "ngayPduyet": "",
-      "nguoiGuiDuyetId": 0,
-      "nguoiPduyetId": 0,
+      "ngayPduyet": null,
+      "nguoiGuiDuyetId": null,
+      "nguoiPduyetId": null,
       "ppLayMau": this.formData.value.ppLayMau,
-      "qdgnvxId": 0,
+      "qdgnvxId": null,
       "so": 0,
       "soBienBan": this.formData.value.soBienBan,
       "soLuongMau": 0,
       "trangThai": "00"
     }
-
 
     console.log(body);
 
