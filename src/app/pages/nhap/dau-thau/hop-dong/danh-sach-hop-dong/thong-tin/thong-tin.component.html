@@ -4,8 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn btn-sub btn-sm waves-effect waves-light" (click)="approve()"
-      *ngIf="(detail.trangThai == '00' && id > 0) && !isView">
+    <button  type="button" class="btn btn-sub" (click)="save(true)"
+      *ngIf="(detail.trangThai == '00') && !isView">
       <i class="icon htvbdh_trinh"></i>
       <span>Ký</span>
     </button>
