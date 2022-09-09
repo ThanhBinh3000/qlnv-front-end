@@ -15,6 +15,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
@@ -92,6 +93,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     public qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKHBDGService,
+    private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
     private fb: FormBuilder,
   ) {
     this.formData = this.fb.group({
@@ -102,7 +104,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       ngayHieuLuc: [null, []],
       ngayKy: [null, []],
       thongBaoBdgId: [null, [Validators.required]],
-      idBienBanBDG: [null, []],
+      idBienBanBDG: [null, [Validators.required]],
       ghiChu: [null, []],
     });
   }
@@ -116,7 +118,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       ngayHieuLuc: this.detail ? this.detail.ngayHieuLuc : null,
       ngayKy: this.detail ? this.detail.ngayKy : null,
       thongBaoBdgId: this.detail ? this.detail.thongBaoBdgId : null,
-      idBienBanBDG: this.detail ? this.detail.idBienBanBDG : null,
+      idBienBanBDG: this.idBienBanBDG ?? null,
       ghiChu: this.detail ? this.detail.ghiChu : null,
     });
   }
@@ -129,6 +131,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       this.detail.tenTrangThai = "Dự thảo";
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.maVatTuCha = this.typeVthh;
       this.yearNow = dayjs().get('year');
       this.detail.nam = this.yearNow;
       this.maQd = this.userInfo.MA_QD;
@@ -141,6 +144,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       await Promise.all([
         this.loaiHangDTQGGetAll(),
         this.loadThongBaoBanDauGia(),
+        this.loadKhongThanhBienBan(),
       ]);
       await this.loadChiTiet(this.id);
       this.initForm();
@@ -228,7 +232,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   async loadThongBaoBanDauGia() {
     let body = {
-      "maVatTuCha": this.typeVthh,
+      "maVatTuCha": this.detail.maVatTuCha,
       "maDvis": this.detail.maDvi,
       "paggingReq": {
         "limit": 1000,
@@ -254,7 +258,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         if (res.data) {
           let resQuyetDinh = await this.qdPheDuyetKhBanDauGia.chiTiet(res.data.qdPheDuyetKhBdgId);
           if (resQuyetDinh.msg == MESSAGE.SUCCESS) {
-            this.typeVthh = resQuyetDinh.data.maVatTuCha;
+            this.detail.maVatTuCha = resQuyetDinh.data.maVatTuCha;
             let phanLoTaiSans = resQuyetDinh.data.thongTinTaiSanCucs;
             this.getPhanLoTaiSan(phanLoTaiSans);
           } else {
@@ -265,8 +269,50 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     }
   }
 
-  onChangeBienBan(id) {
+  async loadKhongThanhBienBan() {
+    this.listBienBanBDG = [];
+    let bodyBB = {
+      loaiVthh: this.detail.maVatTuCha,
+      maDvis: this.detail.maDvi,
+      pageSize: 1000,
+      pageNumber: 1,
+    };
+    let resBB = await this.quanLyBienBanBanDauGiaService.timKiem(bodyBB);
+    if (resBB.msg == MESSAGE.SUCCESS) {
+      let data = resBB.data;
+      if (data.content && data.content.length > 0) {
+        data.content.forEach(element => {
+          let item = {
+            id: element.id,
+            text: element.soBienBan,
+            loai: 'bienban'
+          }
+          this.listBienBanBDG.push(item);
+        });
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, resBB.msg);
+    }
+  }
 
+  onChangeBienBan(id) {
+    if (id) {
+      let bienBans = this.listBienBanBDG.filter(x => x.id === id);
+      if (bienBans && bienBans.length > 0) {
+        if (bienBans[0].loai === 'bienban') {
+          this.detail.soBienBanBdg = bienBans[0].text;
+          this.detail.bienBanBdgId = bienBans[0].id;
+          this.detail.maThongBaoBdgKt = null;
+          this.detail.thongBaoBdgKtId = null;
+        }
+        else {
+          this.detail.soBienBanBdg = null;
+          this.detail.bienBanBdgId = null;
+          this.detail.maThongBaoBdgKt = bienBans[0].text;
+          this.detail.thongBaoBdgKtId = bienBans[0].id;
+        }
+      }
+    }
   }
 
   async loadChiTiet(id) {
@@ -275,6 +321,11 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
+          if (this.detail.thongBaoBdgKtId) {
+            this.idBienBanBDG = this.detail.thongBaoBdgKtId;
+          } else if (this.detail.bienBanBdgId) {
+            this.idBienBanBDG = this.detail.bienBanBdgId;
+          }
         }
       }
     }
@@ -428,15 +479,15 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       let body = this.formData.value;
       body = {
         ...body,
-        "tbBdgKtId": null,
-        "maTbBdgKt": null,
-        "soBbBdg": null,
-        "bbBdgId": null,
+        "thongBaoBdgKtId": this.detail.thongBaoBdgKtId,
+        "maThongBaoBdgKt": this.detail.maThongBaoBdgKt,
+        "soBienBanBdg": this.detail.soBienBanBdg,
+        "bienBanBdgId": this.detail.bienBanBdgId,
         "cts": this.cts,
         "fileDinhKemReqs": this.listFileDinhKem,
         "id": this.id,
-        "loaiVthh": this.typeVthh,
-        "maVatTuCha": this.typeVthh,
+        "loaiVthh": this.detail.maVatTuCha,
+        "maVatTuCha": this.detail.maVatTuCha,
       };
       if (this.id > 0) {
         let res = await this.quyetDinhPheDuyetKQBanDauGiaService.sua(

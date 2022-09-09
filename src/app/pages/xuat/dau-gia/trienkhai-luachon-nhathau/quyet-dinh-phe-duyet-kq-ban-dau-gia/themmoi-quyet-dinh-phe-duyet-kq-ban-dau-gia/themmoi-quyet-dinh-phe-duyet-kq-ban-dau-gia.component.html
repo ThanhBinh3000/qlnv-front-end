@@ -136,7 +136,7 @@
                         <nz-form-control nz-col [nzErrorTip]="soBBBDGError">
                             <nz-select formControlName="idBienBanBDG" [nzDisabled]="isDisableField() || isView"
                                 (ngModelChange)="onChangeBienBan($event)">
-                                <nz-option *ngFor="let p of listBienBanBDG" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                <nz-option *ngFor="let p of listBienBanBDG" [nzValue]="p.id" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>
                             <ng-template #soBBBDGError let-control>
