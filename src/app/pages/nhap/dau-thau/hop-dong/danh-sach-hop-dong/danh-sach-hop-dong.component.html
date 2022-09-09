@@ -31,7 +31,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH HỢP ĐỒNG MUA </h3>
+      <h3> DANH SÁCH HỢP ĐỒNG MUA</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
@@ -99,8 +99,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiVthh"
-                  (input)="filterInTable('loaiVthh',filterTable.loaiVthh)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
+                  (input)="filterInTable('tenVthh',filterTable.tenVthh)" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -108,8 +108,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chungLoaiVthh"
-                  (input)="filterInTable('chungLoaiVthh',filterTable.chungLoaiVthh)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -117,8 +117,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chuDauTu"
-                  (input)="filterInTable('chuDauTu',filterTable.chuDauTu)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                  (input)="filterInTable('tenDvi',filterTable.tenDvi)" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -126,8 +126,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaCungCap"
-                  (input)="filterInTable('nhaCungCap',filterTable.nhaCungCap)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNthau"
+                  (input)="filterInTable('tenNthau',filterTable.tenNthau)" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -142,7 +142,15 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th></th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                       (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
             <th></th>
           </tr>
         </thead>

@@ -79,7 +79,6 @@ export class DanhSachHopDongComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(this.dataTable)
   }
 
   updateAllChecked(): void {
@@ -354,15 +353,12 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value) {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (
-            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
-            -1
-          ) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !== -1) {
             temp.push(item);
           }
         });
