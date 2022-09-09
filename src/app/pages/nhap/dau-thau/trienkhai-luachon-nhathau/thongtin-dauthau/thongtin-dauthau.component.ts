@@ -60,7 +60,7 @@ export class ThongtinDauthauComponent implements OnInit {
     tenVthh: '',
     tenCloaiVthh: '',
     thanhGiaGoiThau: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
 
   dataTableAll: any[] = [];
@@ -138,7 +138,7 @@ export class ThongtinDauthauComponent implements OnInit {
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.statusConvert = this.statusGoiThau(item.trangThai);
+          // item.statusConvert = this.statusGoiThau(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable)
@@ -336,7 +336,7 @@ export class ThongtinDauthauComponent implements OnInit {
       tenVthh: '',
       tenCloaiVthh: '',
       thanhGiaGoiThau: '',
-      statusConvert: '',
+      tenTrangThai: '',
     }
   }
 }
