@@ -339,7 +339,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {onlyLuongThuc:true},
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {

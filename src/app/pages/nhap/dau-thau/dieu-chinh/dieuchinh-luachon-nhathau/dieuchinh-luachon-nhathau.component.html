@@ -9,7 +9,7 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="5">
-          <label class="search__label">Số quyết định điều chỉnh KH LCNT </label>
+          <label class="search__label">Số quyết định điều chỉnh KH LCNT</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
         <div nz-col nzSpan="12">
@@ -169,7 +169,7 @@
               <a (click)="redirectToChiTiet(data.id,false)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && userService.isTongCuc()"
+              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU) && userService.isTongCuc()"
                 (click)="redirectToChiTiet(data.id,true)">
                 <i class="fa fa-pencil"></i>
               </a>
