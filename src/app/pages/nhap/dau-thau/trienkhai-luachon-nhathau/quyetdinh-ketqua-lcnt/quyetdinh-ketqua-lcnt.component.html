@@ -180,14 +180,14 @@
             <td>{{ data.soGoiThau }}</td>
             <td>{{ data.namKhoach }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td class="text-center">
+            <td class="text-left">
               <a (click)="redirectToChiTiet(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="redirectToChiTiet(data.id)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="redirectToChiTiet(data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -365,10 +365,10 @@
               <a (click)="redirectToChiTiet(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="redirectToChiTiet(data.id)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="redirectToChiTiet(data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

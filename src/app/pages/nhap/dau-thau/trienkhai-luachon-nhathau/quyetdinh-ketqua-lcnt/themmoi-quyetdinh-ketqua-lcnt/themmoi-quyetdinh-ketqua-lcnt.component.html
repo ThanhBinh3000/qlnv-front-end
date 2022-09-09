@@ -154,11 +154,14 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số Quyết định duyệt KHLCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
-              <nz-select [nzDisabled]="formData.value.trangThai !== '00'" nzAllowClear formControlName="soQdPdKhlcnt"
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdKhlcnt()">
+                <input nz-input [readonly]="true" formControlName="soQdPdKhlcnt" />
+              </nz-input-group>
+              <!-- <nz-select [nzDisabled]="formData.value.trangThai !== '00'" nzAllowClear formControlName="soQdPdKhlcnt"
                 (ngModelChange)="onChangeSoQdKh($event)">
                 <nz-option *ngFor="let p of listQdPdKhlcnt" [nzValue]="p.soQd" [nzLabel]="p.soQd">
                 </nz-option>
-              </nz-select>
+              </nz-select> -->
               <ng-template #canCuErr let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
                 </ng-container>
@@ -215,9 +218,9 @@
             <td>{{ data.tenGthau }}</td>
             <td>
               <nz-select [(ngModel)]="data.trungThau" [ngModelOptions]="{standalone: true}">
-                <nz-option nzValue=1 nzLabel="Trúng thầu">
+                <nz-option [nzValue]=1 nzLabel="Trúng thầu">
                 </nz-option>
-                <nz-option nzValue=0 nzLabel="Hủy thầu">
+                <nz-option [nzValue]=0 nzLabel="Hủy thầu">
                 </nz-option>
               </nz-select>
             </td>
@@ -228,7 +231,8 @@
             </td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.thanhGiaGoiThau }}</td>
+            <td>{{ ( data.donGiaTrcVat + data.donGiaTrcVat * data.vat / 100 ) * data.soLuong | number : '1.0-1' :
+              'vi_VN' }}</td>
             <td>{{ data.tgianThienHd }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td class="text-center">
