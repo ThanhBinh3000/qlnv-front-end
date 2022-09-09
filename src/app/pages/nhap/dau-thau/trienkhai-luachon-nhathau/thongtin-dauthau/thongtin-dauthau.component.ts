@@ -254,9 +254,9 @@ export class ThongtinDauthauComponent implements OnInit {
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
+          maDvi: this.userInfo.MA_DVI,
           soQd: this.searchFilter.soQd,
-          maDvi: this.searchFilter.maDvi
-        };
+        }
         this.dauThauService
           .export(body)
           .subscribe((blob) =>
