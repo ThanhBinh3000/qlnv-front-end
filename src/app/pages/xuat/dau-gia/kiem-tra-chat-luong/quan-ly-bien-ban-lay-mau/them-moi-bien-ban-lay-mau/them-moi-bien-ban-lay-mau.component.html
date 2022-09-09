@@ -76,7 +76,10 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
-            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="loaiHang" readonly>
+            </nz-input-group>
+            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)" *ngIf="!id">
               <nz-option *ngFor="let item of dsLoaiHangHoa " nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
               </nz-option>
             </nz-select>
@@ -85,7 +88,10 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Chủng loại hàng hóa</nz-form-label>
-            <nz-select formControlName="chungLoaiHang">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="chungLoaiHang" readonly />
+            </nz-input-group>
+            <nz-select formControlName="chungLoaiHang" *ngIf="!id">
               <nz-option *ngFor="let item of dsChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
               </nz-option>
             </nz-select>
@@ -96,7 +102,10 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Điểm kho
             </nz-form-label>
-            <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="maDiemKho" readonly>
+            </nz-input-group>
+            <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)" *ngIf="!id">
               <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -107,7 +116,10 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Nhà kho
             </nz-form-label>
-            <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="maNhaKho" readonly />
+            </nz-input-group>
+            <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)" *ngIf="!id">
               <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -118,7 +130,10 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Ngăn kho
             </nz-form-label>
-            <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="maNganKho" readonly />
+            </nz-input-group>
+            <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)" *ngIf="!id">
               <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -129,7 +144,10 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Lô kho
             </nz-form-label>
-            <nz-select formControlName="maLoKho">
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="maLoKho" readonly />
+            </nz-input-group>
+            <nz-select formControlName="maLoKho" *ngIf="!id">
               <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -206,45 +224,48 @@
           </nz-form-label>
         </nz-form-item>
       </div>
-</div>
-<form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="them-bien-ban-lay-mau">
-  <div class="search__body" nz-row [nzGutter]="[18, 6]">
+    </div>
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="them-bien-ban-lay-mau">
+      <div class="search__body" nz-row [nzGutter]="[18, 6]">
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label nzRequired="" [nzNoColon]="true">
               Số lượng mẫu hàng kiểm tra
             </nz-form-label>
             <input nz-input [disabled]="!isAction()" formControlName="sLMauHangKiemTra" />
-            </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-              <nz-form-item>
-                <nz-form-label nzRequired="" [nzNoColon]="true">
-                  Phương pháp lấy mẫu
-                </nz-form-label>
-            <nz-select formControlName="ppLayMau">
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzRequired="" [nzNoColon]="true">
+              Phương pháp lấy mẫu
+            </nz-form-label>
+            <nz-input-group *ngIf="id">
+              <input nz-input formControlName="ppLayMau" readonly>
+            </nz-input-group>
+            <nz-select formControlName="ppLayMau" *ngIf="!id">
               <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.id" [nzLabel]="item.giaTri">
               </nz-option>
             </nz-select>
-            </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-              <nz-form-item>
-                <nz-form-label nzRequired="" [nzNoColon]="true">
-                  Các chỉ tiêu cần kiểm tra
-                </nz-form-label>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzRequired="" [nzNoColon]="true">
+              Các chỉ tiêu cần kiểm tra
+            </nz-form-label>
             <input nz-input formControlName="chiTieuKT" />
-            </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-              <nz-form-item>
-                <nz-form-label nzRequired="" [nzNoColon]="true">
-                  Kết quả niêm phong mẫu
-                </nz-form-label>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzRequired="" [nzNoColon]="true">
+              Kết quả niêm phong mẫu
+            </nz-form-label>
             <input nz-input formControlName="kQNiemPhongMau" />
-            </nz-form-item>
-            </div>
-            </div>
+          </nz-form-item>
+        </div>
+      </div>
     </form>
   </nz-card>
 

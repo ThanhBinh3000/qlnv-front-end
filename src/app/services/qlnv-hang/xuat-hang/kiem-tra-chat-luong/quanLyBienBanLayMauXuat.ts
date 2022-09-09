@@ -5,18 +5,17 @@ import { BaseService } from 'src/app/services/base.service';
 import { Observable } from 'rxjs';
 import { OldResponseData } from 'src/app/interfaces/response';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuanLyBienBanLayMauXuatService extends BaseService {
   GATEWAY = '/qlnv-hang';
-
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuanLyBienBanLayMau', '');
   }
 
   search(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/search?`
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/search?`;
     if (body.soBienBan)
       url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
     if (body.capDvis)
@@ -32,17 +31,28 @@ export class QuanLyBienBanLayMauXuatService extends BaseService {
     if (body.maNganLo)
       url_ += 'maNganLo=' + encodeURIComponent('' + body.maNganLo) + '&';
     if (body.ngayLayMauDenNgay)
-      url_ += 'ngayLayMauDenNgay=' + encodeURIComponent('' + body.ngayLayMauDenNgay) + '&';
+      url_ +=
+        'ngayLayMauDenNgay=' +
+        encodeURIComponent('' + body.ngayLayMauDenNgay) +
+        '&';
     if (body.ngayLayMauTuNgay)
-      url_ += 'ngayLayMauTuNgay=' + encodeURIComponent('' + body.ngayLayMauTuNgay) + '&';
+      url_ +=
+        'ngayLayMauTuNgay=' +
+        encodeURIComponent('' + body.ngayLayMauTuNgay) +
+        '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
-      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+      url_ +=
+        'paggingReq.page=' +
+        encodeURIComponent('' + (body.pageNumber - 1)) +
+        '&';
     if (body.pageSize)
-      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ +=
+        'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
 
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
+
   searchDetail(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
