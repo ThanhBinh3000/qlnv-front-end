@@ -97,7 +97,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     private ttinDauThauService: DauThauService,
 
   ) {
-
     this.formData = this.fb.group(
       {
         id: [],
@@ -175,7 +174,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  async save() {
+  async save(isBanHanh?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -196,12 +195,17 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.quayLai();
+      if (isBanHanh) {
+        this.idInput = res.data.id;
+        this.pheDuyet();
       } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.quayLai();
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.quayLai();
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.quayLai();
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -257,7 +261,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
         trangThai = STATUS.BAN_HANH;
-        msg = 'Bạn có muốn gửi duyệt ?'
+        msg = 'Bạn có muốn ban hành ?'
         break;
       }
     }
