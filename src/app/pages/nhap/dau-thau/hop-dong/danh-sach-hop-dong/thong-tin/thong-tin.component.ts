@@ -24,6 +24,7 @@ import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import {STATUS} from "../../../../../../constants/status";
 
 interface DonviLienQuanModel {
   id: number;
@@ -121,6 +122,7 @@ export class ThongTinComponent implements OnInit {
         soNgayThien: [null],
         tgianNkho: [null],
         tenVthh: [null],
+        moTaHangHoa: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
         tenCloaiVthh: [null],
@@ -204,6 +206,7 @@ export class ThongTinComponent implements OnInit {
             tenVthh: this.detail.tenVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
+            moTaHangHoa: this.detail.moTaHangHoa ?? null,
             tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
             tgianNkho: this.detail.tgianNkho ?? null,
             soLuong: this.detail.soLuong ?? null,
@@ -226,7 +229,7 @@ export class ThongTinComponent implements OnInit {
             })
           }
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
-          await this.getListGoiThau(this.detail.id);
+          await this.getListGoiThau(this.detail.canCuId);
         }
       }
     }
@@ -286,15 +289,14 @@ export class ThongTinComponent implements OnInit {
     this.detailChuDauTu.ma = this.detail.maDvi;
   }
 
-  async save(isOther: boolean) {
+  async save(isKy?) {
     let body = this.formDetailHopDong.value;
-    console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
+    // console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
     this.spinner.show();
     try {
       if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
         this.errorGhiChu = true;
-      }
-      else {
+      } else {
         let body = this.formDetailHopDong.value;
         body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
         body.fileDinhKems = this.fileDinhKem,
@@ -309,29 +311,34 @@ export class ThongTinComponent implements OnInit {
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
         if (this.id > 0) {
           body.id = this.id;
-          let res = await this.thongTinHopDong.update(
-            body,
-          );
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
+            let res = await this.thongTinHopDong.update(
+              body,
+            );
+            if (res.msg == MESSAGE.SUCCESS) {
+              if(isKy){
+                this.approve(this.id);
+              }else{
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.UPDATE_SUCCESS,
+                );
+              }
               this.back();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
             }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
         } else {
           let res = await this.thongTinHopDong.create(
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            if (!isOther) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            console.log(res.data);
+            if(isKy){
+              this.approve(res.data.id);
+              }else{
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              }
               this.back();
-            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -416,6 +423,7 @@ export class ThongTinComponent implements OnInit {
           soLuong: null,
           donGiaVat: null,
         })
+        this.diaDiemNhapListCuc = [];
         await this.getListGoiThau(data.id);
       }
     });
@@ -507,7 +515,7 @@ export class ThongTinComponent implements OnInit {
     }
   }
 
-  approve() {
+  approve(id?) {
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -518,15 +526,15 @@ export class ThongTinComponent implements OnInit {
       nzWidth: 365,
       nzOnOk: async () => {
         const body = {
-          id: this.detail.id,
-          trangThai: '02',
+          id: id ? id : this.detail.id,
+          trangThai: STATUS.DA_KY,
         }
         let res = await this.thongTinHopDong.approve(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
           this.isView = true;
-          this.detail.trangThai = "02";
+          this.detail.trangThai = STATUS.DA_KY;
           this.setTitle();
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {

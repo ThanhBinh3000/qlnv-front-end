@@ -33,7 +33,7 @@
       </div>
       <div class="cangiua group-button-search">
         <button nz-button class="search__button--clear" (click)="clearFilter()">
-          <i class="icon  htvbdh_nhap-lai1" ria-hidden="true"></i>
+          <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
         <button nz-button class="search__button--search" (click)="search()">
@@ -43,7 +43,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3>Thông tin tổng hợp kế hoạch lựa chọn nhà thầu </h3>
+      <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
@@ -175,7 +175,15 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-            <th></th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                       (input)="filterInTable('tenTrangThai',filterTable.trangThai)" size="=small"/>
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
             <th></th>
           </tr>
         </thead>
@@ -196,15 +204,16 @@
             <td>{{ data.tenPthucLcnt }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td>{{ data.tenNguonVon }}</td>
-            <td>{{ convertTrangThai(data.trangThai) }}</td>
+<!--            <td>{{ convertTrangThai(data.trangThai) }}</td>-->
+            <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(true, data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai=='00' || data.trangThai=='03')" (click)="redirectToChiTiet(false, data.id)">
+              <a *ngIf="(data.trangThai=='26' || data.trangThai=='27')" (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai=='26' || data.trangThai=='27'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

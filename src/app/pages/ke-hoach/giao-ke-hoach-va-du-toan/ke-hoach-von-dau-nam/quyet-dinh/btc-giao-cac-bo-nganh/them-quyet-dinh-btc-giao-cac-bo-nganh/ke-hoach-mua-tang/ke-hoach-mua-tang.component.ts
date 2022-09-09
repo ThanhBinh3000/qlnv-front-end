@@ -16,7 +16,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   dataTable = [];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
-
+  @Input('isView') isView: boolean;
   rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};

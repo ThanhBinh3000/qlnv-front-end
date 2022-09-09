@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyetdinh-ketqua-lcnt',
@@ -34,7 +35,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   ) {
 
   }
-
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -44,8 +44,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     namKhoach: dayjs().get('year'),
     ngayTongHop: '',
     loaiVthh: '',
-    trichYeu: ''
+    trichYeu: '',
+    soGoiThau: ''
   };
+
   filterTable: any = {
     soQd: '',
     ngayTongHop: '',
@@ -59,18 +61,22 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     tgianThienHd: '',
     statusConvert: '',
   };
+
   dataTableAll: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  allChecked = false;
+  indeterminate = false;
+  getCount = new EventEmitter<any>();
   listVthh: any[] = [];
   lastBreadcrumb: string;
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  STATUS = STATUS;
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -116,12 +122,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
+
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
-      trichYeu: this.searchFilter.trichYeu
+      trichYeu: this.searchFilter.trichYeu,
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -142,30 +150,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
@@ -264,6 +248,109 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhPheDuyetKetQuaLCNTService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

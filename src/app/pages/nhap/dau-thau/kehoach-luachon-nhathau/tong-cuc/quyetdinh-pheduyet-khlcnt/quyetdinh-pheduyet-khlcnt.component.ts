@@ -241,6 +241,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.searchFilter.ngayQd = null;
     this.searchFilter.soGthau = null;
     this.searchFilter.tongTien = null;
+    this.search();
 
   }
 

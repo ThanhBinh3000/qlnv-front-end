@@ -17,6 +17,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'them-moi-phieu-kiem-tra-chat-luong-hang',
@@ -402,6 +403,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   pheDuyet() {
+    let trangThai = ''
+    switch (this.detail.trangThai) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
+      case STATUS.TU_CHOI_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -416,7 +432,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
+            trangThai: trangThai
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
@@ -455,7 +471,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: STATUS.TU_CHOI_LDCC,
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(

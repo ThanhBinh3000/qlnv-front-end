@@ -82,6 +82,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log(this.globals.prop.NHAP_DU_THAO)
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

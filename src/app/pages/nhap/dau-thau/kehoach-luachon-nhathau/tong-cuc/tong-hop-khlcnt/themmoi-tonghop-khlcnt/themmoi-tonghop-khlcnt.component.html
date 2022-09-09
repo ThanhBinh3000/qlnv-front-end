@@ -4,17 +4,16 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub" (click)="taoQdinh()">
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button" class="btn btn-sub" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == '' && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="((formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || formData.value.trangThai == globals.prop.NHAP_DA_DU_THAO_QD)  && isTongHop)" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
-
 <div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
@@ -28,7 +27,20 @@
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhError">
+              <nz-select formControlName="namKhoach">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+              <ng-template #namKhError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
@@ -50,42 +62,29 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhError">
-              <nz-select formControlName="namKhoach">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-              <ng-template #namKhError let-control>
-                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="3">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Hình thức đấu thầu </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="hthucLcntError">
-              <nz-select formControlName="hthucLcnt" nzPlaceHolder="">
-                <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
-              <ng-template #hthucLcntError let-control>
-                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Phương thức đấu thầu </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà thầu </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="pthucDauThauError">
               <nz-select formControlName="pthucLcnt" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
               <ng-template #pthucDauThauError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Hình thức lựa chọn nhà thầu </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="hthucLcntError">
+              <nz-select formControlName="hthucLcnt" nzPlaceHolder="">
+                <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+              <ng-template #hthucLcntError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
               </ng-template>
             </nz-form-control>
@@ -107,7 +106,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Nguồn vốn </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Nguồn vốn </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="nguonVonError">
               <nz-select formControlName="nguonVon" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -118,7 +117,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
           <div class="tong-hop-button group-button-search">
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
@@ -130,8 +129,7 @@
       </div>
     </form>
   </nz-card>
-
-  <div class="tab-padding-10">
+  <div class="tab-padding-10" *ngIf="isTongHop">
     <nz-tabset nzType="card">
       <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" (nzClick)="tabSelected = 'thongTinChung'">
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">
@@ -291,6 +289,7 @@
                 <th>Số gói thầu</th>
                 <th>Số lượng (Tấn)</th>
                 <th>Tổng tiền đã bao gồm thuế (đồng)</th>
+                <th>Giá trị đảm bảo dự thầu (%)</th>
                 <th [width]="30">Hành động</th>
               </tr>
             </thead>
@@ -305,6 +304,7 @@
                 <td>{{ data.soGthau }}</td>
                 <td>{{ data.soLuong | number: '1.0-1' }}</td>
                 <td>{{ data.tongTien | number: '1.0-1' }}</td>
+                <td>{{ data.gtriDthau }}</td>
                 <td class="text-left">
                   <a (click)="displayDialogPhuLuc(data)">
                     <i class="fa fa-eye"></i>

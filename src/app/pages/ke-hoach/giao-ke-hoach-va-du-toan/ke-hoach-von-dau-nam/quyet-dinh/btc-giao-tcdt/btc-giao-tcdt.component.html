@@ -5,9 +5,9 @@
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="nam-qd">Năm QĐ</nz-form-label>
+              <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="namQd" id="nam-qd">
+                <nz-select formControlName="namQd" id="nam-qd" nzAllowClear>
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                   </nz-option>
                 </nz-select>
@@ -16,7 +16,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="so-qd">Số QĐ</nz-form-label>
+              <nz-form-label nzFor="so-qd">Số quyết định</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="so-qd">
                   <input type="text" nz-input formControlName="soQd" />
@@ -24,17 +24,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item class="form-item">
-              <nz-form-label nzFor="ngay-qd">Ngày QĐ</nz-form-label>
-              <nz-form-control>
-                <nz-form-control>
-                  <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
-                  </nz-range-picker>
-                </nz-form-control>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
+
           <div nz-col [nzSpan]="11">
             <nz-form-item class="form-item">
               <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
@@ -42,6 +32,17 @@
                 <nz-input-group id="trich-yeu">
                   <input type="text" nz-input formControlName="trichYeu" />
                 </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="ngay-qd">Ngày ký</nz-form-label>
+              <nz-form-control>
+                <nz-form-control>
+                  <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+                  </nz-range-picker>
+                </nz-form-control>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -178,7 +179,7 @@
               <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

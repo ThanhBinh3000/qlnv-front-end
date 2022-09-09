@@ -4,7 +4,7 @@
             <i class="icon htvbdh_trinh"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button class="btn btn-sub" (click)="pheDuyet()">
+        <button class="btn btn-sub" (click)="pheDuyet()" *ngIf="formGoiThau.value.trangThai == ''">
             <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
         </button>
