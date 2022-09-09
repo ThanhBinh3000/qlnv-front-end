@@ -36,11 +36,11 @@ export class TtcpComponent implements OnInit {
   };
   filterTable: any = {
     soQd: '',
-    nam: '',
+    namQd: '',
     ngayQd: '',
     trichYeu: '',
     taiLieuDinhKem: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
   idSelected: number = 0;
   isViewDetail: boolean = false;
@@ -60,7 +60,7 @@ export class TtcpComponent implements OnInit {
     private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      namQd: [dayjs().get('year')],
+      namQd: [],
       soQd: [],
       ngayQd: [[]],
       trichYeu: [null],
@@ -83,8 +83,8 @@ export class TtcpComponent implements OnInit {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
       this.dsNam.push({
-        value: thisYear - i,
-        text: thisYear - i,
+        value: thisYear + i,
+        text: thisYear + i,
       });
     }
   }
@@ -325,11 +325,11 @@ export class TtcpComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
-      nam: '',
+      namQd: '',
       ngayQd: '',
       trichYeu: '',
       taiLieuDinhKem: '',
-      trangThai: '',
+      tenTrangThai: '',
     }
   }
 
