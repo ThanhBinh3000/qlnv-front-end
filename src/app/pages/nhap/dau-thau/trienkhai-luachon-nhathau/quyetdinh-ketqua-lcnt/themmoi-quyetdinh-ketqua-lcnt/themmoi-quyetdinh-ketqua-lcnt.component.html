@@ -215,9 +215,9 @@
             <td>{{ data.tenGthau }}</td>
             <td>
               <nz-select [(ngModel)]="data.trungThau" [ngModelOptions]="{standalone: true}">
-                <nz-option nzValue=1 nzLabel="Trúng thầu">
+                <nz-option [nzValue]=1 nzLabel="Trúng thầu">
                 </nz-option>
-                <nz-option nzValue=0 nzLabel="Hủy thầu">
+                <nz-option [nzValue]=0 nzLabel="Hủy thầu">
                 </nz-option>
               </nz-select>
             </td>
@@ -228,7 +228,7 @@
             </td>
             <td>{{ data.tenVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.thanhGiaGoiThau }}</td>
+            <td>{{ (data.donGiaTrcVat + data.donGiaTrcVat * data.vat/100) * data.soLuong }}</td>
             <td>{{ data.tgianThienHd }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td class="text-center">
