@@ -97,13 +97,13 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayTao: this.searchFilter.ngayQd
+      tuNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      denNgayTao: this.searchFilter.ngayQd
+      denNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      soQd: this.searchFilter.soQd,
+      soQdinh: this.searchFilter.soQd,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKh,
       soGoiThau: this.searchFilter.soGoiThau,
