@@ -78,7 +78,8 @@
             <nz-form-label [nzNoColon]="true">Tên hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group>
-                <input class="search__input" nz-input formControlName="moTaHangHoa" />
+                <input class="search__input"  nz-input formControlName="moTaHangHoa"
+                       />
               </nz-input-group>
               <ng-template #loaiVthhError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
@@ -105,7 +106,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày QĐ duyệt KQLCNT
             </nz-form-label>
@@ -123,7 +124,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực
             </nz-form-label>
@@ -215,9 +216,9 @@
             <td>{{ data.tenGthau }}</td>
             <td>
               <nz-select [(ngModel)]="data.trungThau" [ngModelOptions]="{standalone: true}">
-                <nz-option [nzValue]=1 nzLabel="Trúng thầu">
+                <nz-option nzValue=1 nzLabel="Trúng thầu">
                 </nz-option>
-                <nz-option [nzValue]=0 nzLabel="Hủy thầu">
+                <nz-option nzValue=0 nzLabel="Hủy thầu">
                 </nz-option>
               </nz-select>
             </td>
@@ -228,7 +229,7 @@
             </td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ (data.donGiaTrcVat + data.donGiaTrcVat * data.vat/100) * data.soLuong }}</td>
+            <td>{{ data.thanhGiaGoiThau }}</td>
             <td>{{ data.tgianThienHd }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td class="text-center">
