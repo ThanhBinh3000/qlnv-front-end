@@ -27,6 +27,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
 import { STATUS } from "../../../../../../constants/status";
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 
 
 interface ItemData {
@@ -187,9 +188,10 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         soQd: [, [Validators.required]],
         soDxuat: [null, [Validators.required]],
         trichYeu: [null],
-        ghiChu: [null, [Validators.required]],
+        ghiChu: [null,],
         namKhoach: [, [Validators.required]],
         loaiVthh: [this.loaiVthh, [Validators.required]],
+        tenVthh: ['', [Validators.required]],
         ngayKy: [null, [Validators.required]],
         trangThai: [],
         maDvi: [],
@@ -214,7 +216,6 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.userInfo);
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -242,7 +243,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
         namKhoach: dataDetail ? dataDetail.namKhoach : dayjs().get('year'),
         loaiVthh: dataDetail ? dataDetail.loaiVthh : this.loaiVthh,
-        // tenVthh: dataDetail ? dataDetail.tenVthh : null,
+        tenVthh: dataDetail ? dataDetail.tenVthh : null,
         ngayKy: dataDetail ? dataDetail.ngayKy : null,
         trangThai: dataDetail ? dataDetail.trangThai : STATUS.DU_THAO,
         maDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
@@ -891,6 +892,30 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     } else {
       this.indeterminate = true;
     }
+  }
+
+  selectHangHoa() {
+    // let data = this.loaiVthhInput;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        isCaseSpecial: true,
+        onlyVatTu: true
+      },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          loaiVthh: data.ma,
+          tenVthh: data.ten
+        })
+      }
+    });
   }
 
 }

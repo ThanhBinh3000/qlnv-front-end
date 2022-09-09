@@ -77,7 +77,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+      this.dsNam.push((thisYear + i).toString());
     }
   }
 
@@ -316,8 +316,8 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
-      namQd: '',
       ngayQd: '',
+      tenBoNganh: '',
       trichYeu: '',
       tenTrangThai: '',
     }

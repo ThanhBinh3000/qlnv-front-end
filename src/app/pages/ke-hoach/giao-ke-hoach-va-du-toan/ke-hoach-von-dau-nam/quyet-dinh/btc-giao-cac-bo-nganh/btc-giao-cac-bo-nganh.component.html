@@ -7,7 +7,7 @@
             <nz-form-item class="form-item">
               <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="namQd" id="nam-qd">
+                <nz-select formControlName="namQd" id="nam-qd" nzAllowClear>
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
                   </nz-option>
                 </nz-select>
@@ -142,7 +142,7 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBoNganh"
-                       (input)="filterInTable('namQd',filterTable.tenBoNganh)" size="small" />
+                  (input)="filterInTable('tenBoNganh',filterTable.tenBoNganh)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>

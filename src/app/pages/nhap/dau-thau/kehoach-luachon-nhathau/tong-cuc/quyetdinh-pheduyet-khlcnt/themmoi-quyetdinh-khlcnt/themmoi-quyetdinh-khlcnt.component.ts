@@ -522,6 +522,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
+        this.idInput = res.data.id;
         this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
@@ -640,65 +641,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
-  getTenDviTable(maDvi: string) {
-    let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi && donVi.length > 0 ? donVi[0].tenDvi : null
-  }
-
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    // Vật tư
-    if (this.formData.get('loaiVthh').value.startsWith("02")) {
-      switch (trangThai) {
-        case '00': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-          this.titleButtonDuyet = 'Gửi duyệt';
-          this.titleStatus = 'Dự thảo';
-
-          break;
-        }
-        case '03': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-          this.titleButtonDuyet = 'Gửi duyệt';
-          break;
-        }
-        case '01': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Duyệt';
-          this.titleStatus = 'Lãnh đạo duyệt';
-          break
-        }
-        case '02': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Ban hành';
-          this.titleStatus = 'Đã duyệt';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-        case '11': {
-          this.titleStatus = 'Ban hành';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-      }
-    } else {
-      switch (trangThai) {
-        case '00': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Ban hành';
-          break;
-        }
-        case '11': {
-          this.titleStatus = 'Ban hành';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-      }
-    }
-
-  }
-
-
   collapse(array: VatTu[], data: VatTu, $event: boolean): void {
     if (!$event) {
       if (data.child) {
@@ -712,6 +654,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     }
   }
+
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
@@ -764,7 +707,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         ]
       }
     };
-    // this.setTitle();
   }
 
   taiLieuDinhKem(type?: string) {
@@ -835,8 +777,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.formData.patchValue({
         loaiVthh: data.ma,
         tenVthh: data.ten,
-        cloaiVthh: data.ma,
-        tenCloaiVthh: data.ten,
+        cloaiVthh: null,
+        tenCloaiVthh: null,
       })
       this.isVatTu = true;
     }
