@@ -52,4 +52,9 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/thong-tin`;
     return this._httpClient.post<any>(url, null).toPromise();
   }
+
+  getMangLuoiKhoByMa(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/mang-luoi-kho`;
+    return this._httpClient.post<any>(url, body).toPromise();
+  }
 }

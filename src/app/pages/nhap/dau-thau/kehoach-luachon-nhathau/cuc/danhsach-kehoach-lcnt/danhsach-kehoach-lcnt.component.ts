@@ -10,13 +10,14 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UserService } from 'src/app/services/user.service';
 import { saveAs } from 'file-saver';
-
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-danhsach-kehoach-lcnt',
   templateUrl: './danhsach-kehoach-lcnt.component.html',
   styleUrls: ['./danhsach-kehoach-lcnt.component.scss']
 })
+
 export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
@@ -31,10 +32,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
+
   searchFilter = {
     soDx: '',
     namKh: dayjs().get('year'),
@@ -42,6 +43,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     loaiVthh: '',
     trichYeu: ''
   };
+
+  STATUS = STATUS
+
   filterTable: any = {
     soDxuat: '',
     ngayKy: '',
@@ -51,20 +55,18 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     tenVthh: '',
     tenCloaiVthh: '',
     soGoiThau: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
+
   dataTableAll: any[] = [];
   listVthh: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   userInfo: UserLogin;
   selectedId: number = 0;
-
   isVatTu: boolean = false;
-
   allChecked = false;
   indeterminate = false;
 
@@ -87,6 +89,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+
   }
 
   updateAllChecked(): void {
@@ -133,11 +136,15 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
+      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
+    if (this.userService.isCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
+    }
     let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -145,7 +152,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.statusConvert = this.convertTrangThai(item.trangThai);
+          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -156,6 +163,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+    console.log(this.dataTable)
   }
 
   async changePageIndex(event) {
@@ -218,8 +226,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
+    this.searchFilter.loaiVthh = null;
     this.search();
-    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
@@ -259,31 +267,31 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     });
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Dự thảo'
-      }
-      case '03': {
-        return 'Từ chối - TP'
-      }
-      case '12': {
-        return 'Từ chối - LĐ Cục'
-      }
-      case '01': {
-        return 'Chờ duyệt - TP'
-      }
-      case '09': {
-        return 'Chờ duyệt - LĐ Cục'
-      }
-      case '02': {
-        return 'Đã duyệt'
-      }
-      case '05': {
-        return 'Tổng hợp'
-      }
-    }
-  }
+  // convertTrangThai(status: string) {
+  //   switch (status) {
+  //     case '00': {
+  //       return 'Dự thảo'
+  //     }
+  //     case '03': {
+  //       return 'Từ chối - TP'
+  //     }
+  //     case '12': {
+  //       return 'Từ chối - LĐ Cục'
+  //     }
+  //     case '01': {
+  //       return 'Chờ duyệt - TP'
+  //     }
+  //     case '09': {
+  //       return 'Chờ duyệt - LĐ Cục'
+  //     }
+  //     case '02': {
+  //       return 'Đã duyệt'
+  //     }
+  //     case '05': {
+  //       return 'Tổng hợp'
+  //     }
+  //   }
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -338,13 +346,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.danhSachDauThauService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -360,12 +368,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+          console.log(item[key])
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
@@ -387,7 +396,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       tenVthh: '',
       tenCloaiVthh: '',
       soGoiThau: '',
-      statusConvert: '',
+      tenTrangThai: '',
     }
   }
 }

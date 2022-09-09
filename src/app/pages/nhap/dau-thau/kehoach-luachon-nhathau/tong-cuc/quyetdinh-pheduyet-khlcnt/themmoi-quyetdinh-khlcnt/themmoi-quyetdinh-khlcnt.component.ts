@@ -33,6 +33,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, convertVthhToId } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
+import { STATUS } from "../../../../../../../constants/status";
 
 
 @Component({
@@ -96,6 +97,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   isVatTu: boolean = false;
   dataNguonVon: any = {};
 
+  STATUS = STATUS
+
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -129,13 +132,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianDthau: [''],
       tgianMthau: [''],
       tgianNhang: [''],
-      ghiChu: ['', [Validators.required]],
+      ghiChu: [''],
       loaiVthh: ['', [Validators.required]],
       tenVthh: ['', [Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      trangThai: [''],
-      tchuanCluong: ['']
+      trangThai: [STATUS.DU_THAO],
+      tchuanCluong: [''],
+      tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: ['']
     })
     this.formThongTinDX = this.fb.group({
       hthucLcnt: [''],
@@ -362,7 +367,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async danhSachTongHopGetAll() {
     this.spinner.show();
     let body = {
-      trangThai: "00",
+      trangThai: STATUS.CHUA_TAO_QD,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value
@@ -371,7 +376,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (body.loaiVthh.startsWith("02")) {
       let bodySearchVt = {
         loaiVthh: body.loaiVthh,
-        trangThai: "02"
+        trangThai: STATUS.DA_DUYET_LDV,
+        trangThaiTh: STATUS.CHUA_TAO_QD
       }
       res = await this.dauThauService.search(bodySearchVt);
     } else {
@@ -516,6 +522,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
+        this.idInput = res.data.id;
         this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
@@ -548,7 +555,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: '03',
+            trangThai: STATUS.TU_CHOI_LDV,
           };
           const res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -577,27 +584,26 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     // Vật tư
     if (this.formData.get('loaiVthh').value.startsWith('02')) {
       switch (this.formData.get('trangThai').value) {
-        case '00':
-        case '03': {
-          trangThai = '01';
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_LDV;
           mesg = 'Bạn có muốn gửi duyệt ?'
           break;
         }
-        case '01': {
-          trangThai = '02';
+        case STATUS.CHO_DUYET_LDV: {
+          trangThai = STATUS.DA_DUYET_LDV;
           mesg = 'Văn bản sẵn sàng duyệt ?'
           break;
         }
-        case '02': {
-          trangThai = '11';
+        case STATUS.DA_DUYET_LDV: {
+          trangThai = STATUS.BAN_HANH;
           mesg = 'Văn bản sẵn sàng ban hành ?'
           break;
         }
       }
     } else {
       switch (this.formData.get('trangThai').value) {
-        case '00': {
-          trangThai = '11';
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.BAN_HANH;
           mesg = 'Văn bản sẵn sàng ban hành ?'
           break;
         }
@@ -635,65 +641,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
-  getTenDviTable(maDvi: string) {
-    let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi && donVi.length > 0 ? donVi[0].tenDvi : null
-  }
-
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    // Vật tư
-    if (this.formData.get('loaiVthh').value.startsWith("02")) {
-      switch (trangThai) {
-        case '00': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-          this.titleButtonDuyet = 'Gửi duyệt';
-          this.titleStatus = 'Dự thảo';
-
-          break;
-        }
-        case '03': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-          this.titleButtonDuyet = 'Gửi duyệt';
-          break;
-        }
-        case '01': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Duyệt';
-          this.titleStatus = 'Lãnh đạo duyệt';
-          break
-        }
-        case '02': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Ban hành';
-          this.titleStatus = 'Đã duyệt';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-        case '11': {
-          this.titleStatus = 'Ban hành';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-      }
-    } else {
-      switch (trangThai) {
-        case '00': {
-          this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-          this.titleButtonDuyet = 'Ban hành';
-          break;
-        }
-        case '11': {
-          this.titleStatus = 'Ban hành';
-          this.styleStatus = 'da-ban-hanh'
-          break
-        }
-      }
-    }
-
-  }
-
-
   collapse(array: VatTu[], data: VatTu, $event: boolean): void {
     if (!$event) {
       if (data.child) {
@@ -707,6 +654,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     }
   }
+
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
@@ -736,7 +684,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         namKhoach: data.namKhoach,
         ghiChu: data.ghiChu,
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
+        trichYeu: data.trichYeu,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.ldoTuchoi
       })
       if (this.isVatTu) {
         this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
@@ -757,7 +707,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         ]
       }
     };
-    this.setTitle();
   }
 
   taiLieuDinhKem(type?: string) {
@@ -828,8 +777,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.formData.patchValue({
         loaiVthh: data.ma,
         tenVthh: data.ten,
-        cloaiVthh: data.ma,
-        tenCloaiVthh: data.ten,
+        cloaiVthh: null,
+        tenCloaiVthh: null,
       })
       this.isVatTu = true;
     }

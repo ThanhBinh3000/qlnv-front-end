@@ -48,7 +48,7 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
+            <nz-input-number [nzSize]="'small'" nz-input
               [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
@@ -56,7 +56,7 @@
         <td>
           <nz-input-group>
             <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-              [nzDisabled]="true" [(ngModel)]="rowItem.tongTien" [nzMin]="0">
+              [nzDisabled]="true" [(ngModel)]="rowItem.soLuong * rowItem.donGia" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>

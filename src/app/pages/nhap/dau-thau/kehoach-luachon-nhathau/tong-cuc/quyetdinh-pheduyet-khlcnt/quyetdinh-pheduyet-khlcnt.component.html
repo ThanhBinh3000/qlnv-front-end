@@ -32,9 +32,8 @@
         </button>
       </div>
     </nz-card>
-
     <div class="group-button">
-      <h3>Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu </h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isTongCuc() && tabSelected != 'chua-phe-duyet'">
@@ -52,7 +51,6 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
         [nzShowPagination]="false">
@@ -183,7 +181,7 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.tongTien}}</td>
-            <td *ngIf="userService.isTongCuc()">{{ convertTrangThaiTable(data.trangThai) }}</td>
+            <td *ngIf="userService.isTongCuc()  ">{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="detail(data)">
                 <i class="fa fa-eye"></i>

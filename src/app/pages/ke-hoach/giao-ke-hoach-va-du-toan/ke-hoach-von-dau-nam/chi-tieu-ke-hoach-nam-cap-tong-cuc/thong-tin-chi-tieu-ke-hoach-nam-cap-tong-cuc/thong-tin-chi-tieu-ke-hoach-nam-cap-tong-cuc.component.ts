@@ -1196,27 +1196,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
-    // const modalGuiDuyet = this.modal.create({
-    //   nzTitle: '',
-    //   nzContent: DialogGuiDuyetComponent,
-    //   nzMaskClosable: false,
-    //   nzClosable: false,
-    //   nzWidth: '428px',
-    //   nzFooter: null,
-    //   nzClassName: 'open-dialog-gui-duyet',
-    //   nzComponentParams: {},
-    // });
-    // modalGuiDuyet.afterClose.subscribe(async (text) => {
-    //   this.spinner.show();
-    //   try {
-    //     this.save(true);
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // });
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1240,28 +1219,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   pheDuyet() {
-    // const modalPheDuyet = this.modal.create({
-    //   nzTitle: '',
-    //   nzContent: DialogVanBanSanSangBanHanhComponent,
-    //   nzMaskClosable: false,
-    //   nzClosable: false,
-    //   nzWidth: '428px',
-    //   nzFooter: null,
-    //   nzClassName: 'open-dialog-gui-duyet',
-    //   nzComponentParams: {},
-    // });
-
-    // modalPheDuyet.afterClose.subscribe(async (text) => {
-    //   this.spinner.show();
-    //   try {
-    //     this.save(true);
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // });
 
     this.modal.confirm({
       nzClosable: false,

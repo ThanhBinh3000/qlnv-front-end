@@ -17,6 +17,7 @@ import { DonviService } from 'src/app/services/donvi.service';
   styleUrls: ['./dialog-them-moi-goi-thau.component.scss'],
 })
 export class DialogThemMoiGoiThauComponent implements OnInit {
+  dviTinh: any
   formGoiThau: FormGroup;
   data?: any;
   listVatTu?= [];
@@ -48,7 +49,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       loaiVthh: [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
-      dviTinh: [null],
+      dviTinh: [this.dviTinh],
       soLuong: [null],
       donGia: [null, [Validators.required]],
       thanhTien: [null],
@@ -72,17 +73,24 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     });
     this.formGoiThau.controls['hthucLcnt'].valueChanges.subscribe(value => {
       let data = this.listHinhThucDauThau.filter(item => item.ma === value)
-      this.formGoiThau.get('tenHthucLcnt').setValue(data[0].giaTri);
+      if ( data && data[0] && data[0].giaTri) {
+        this.formGoiThau.get('tenHthucLcnt').setValue(data[0].giaTri);
+      }
     });
     this.formGoiThau.controls['pthucLcnt'].valueChanges.subscribe(value => {
       let data = this.listPhuongThucDauThau.filter(item => item.ma === value)
-      this.formGoiThau.get('tenPthucLcnt').setValue(data[0].giaTri);
+      if (data && data[0] && data[0].giaTri ) {
+        this.formGoiThau.get('tenPthucLcnt').setValue(data[0].giaTri);
+      }
     });
     this.formGoiThau.controls['loaiHdong'].valueChanges.subscribe(value => {
       let data = this.listLoaiHopDong.filter(item => item.ma === value)
-      this.formGoiThau.get('tenLoaiHdong').setValue(data[0].giaTri);
+      if (data && data[0] && data[0].giaTri) {
+        this.formGoiThau.get('tenLoaiHdong').setValue(data[0].giaTri);
+      }
     });
   }
+
 
   async ngOnInit() {
     await Promise.all([
@@ -96,12 +104,12 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.listChungLoai = res.data.child;
       this.formGoiThau.patchValue({
         loaiVthh: res.data.ma,
-        tenVthh: res.data.ten
+        tenVthh: res.data.ten,
+        dviTinh: res.data.maDviTinh
       });
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.loaiVthh, this.data);
 
     this.initForm(this.data)
   }
@@ -169,6 +177,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   handleOk() {
     this.helperService.markFormGroupTouched(this.formGoiThau);
     if (this.formGoiThau.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       return;
     }
     if (this.dataTable.length == 0) {
@@ -222,5 +231,4 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   clearDiemKho() {
 
   }
-
 }

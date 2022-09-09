@@ -4,8 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO && idInput > 0 && !isView" type="button"
-      class="btn btn-sub" (click)="pheDuyet()">
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO && !isView" type="button"
+      class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
@@ -33,7 +33,7 @@
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
@@ -47,7 +47,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
                 <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -62,7 +62,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày QĐ</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
