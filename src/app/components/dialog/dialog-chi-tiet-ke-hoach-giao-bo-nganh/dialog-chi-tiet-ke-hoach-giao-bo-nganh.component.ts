@@ -39,6 +39,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     xuatBanList: [],
     luanPhienList: [],
   };
+  dataTable: any[] = [];
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
@@ -90,9 +91,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
   luu() {
     this.keHoachLuongThucComponent.onChangeInput();
-    console.log(this.keHoach);
     if (this.validateData()) {
-      this._modalRef.close(this.keHoach);
+      this._modalRef.close(this.dataTable);
     }
   }
 

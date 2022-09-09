@@ -242,15 +242,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        console.log(data);
-        if (index >= 0) {
-          this.dataTable[index] = data;
-        } else {
-          this.dataTable.push(data);
+          this.dataTable= data;
         }
-      }
-    });
-  }
+      })
+    };
 
   xoaKeHoach(index: number) {
     this.modal.confirm({

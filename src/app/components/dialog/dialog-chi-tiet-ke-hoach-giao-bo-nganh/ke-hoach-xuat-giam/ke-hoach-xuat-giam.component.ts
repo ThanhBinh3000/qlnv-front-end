@@ -55,12 +55,11 @@ export class KeHoachXuatGiamComponent implements OnInit {
     this.dataTableChange.emit(this.dataTable)
   }
 
-  editItem(id: number): void {
-    this.dataEdit[id].edit = true;
+  editItem(index: number): void {
+    this.dataEdit[index].edit = true;
   }
 
   xoaItem(index: number) {
-    console.log(index, this.dataTable);
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -72,6 +71,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
+          this.updateEditCache()
         } catch (e) {
           console.log('error', e);
         }
@@ -88,7 +88,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
     this.emitDataTable()
-    console.log(this.dataTable)
   }
 
   clearData() {
@@ -96,47 +95,68 @@ export class KeHoachXuatGiamComponent implements OnInit {
   }
 
   huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    this.dataEdit[id] = {
+    const index = this.dataTable.findIndex((item , index) => item.id === id);
+    this.dataEdit[index] = {
       data: { ...this.dataTable[index] },
       edit: false,
     };
   }
 
-  luuEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    Object.assign(this.dataTable[index], this.dataEdit[id].data);
-    this.dataEdit[id].edit = false;
+  luuEdit(index: number): void {
+    Object.assign(this.dataTable[index], this.dataEdit[index].data);
+    this.dataEdit[index].edit = false;
   }
 
   updateEditCache(): void {
     if (this.dataTable) {
-      this.dataTable.forEach((item) => {
-        this.dataEdit[item.id] = {
+      this.dataTable.forEach((item, index) => {
+        console.log(index)
+          this.dataEdit[index] = {
           edit: false,
           data: { ...item },
         };
+        console.log(this.dataEdit[index]
+        )
       });
     }
     console.log(this.dataEdit);
 
   }
 
-  onChangeLoaiVthh(event) {
-    this.dsChungLoaiHangHoa = [];
-    this.rowItem.dviTinh = null;
-    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    if (loaiVthh.length > 0) {
-      this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-      this.rowItem.tenVthh = loaiVthh[0].ten;
-      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+  onChangeLoaiVthh(event, typeData?: ThongTinQuyetDinh) {
+    if (typeData) {
+      this.dsChungLoaiHangHoa = [];
+      typeData.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        typeData.cloaiVthh = null;
+        typeData.dviTinh = loaiVthh[0].maDviTinh;
+        typeData.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      }
+    } else  {
+      this.dsChungLoaiHangHoa = [];
+      this.rowItem.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+        this.rowItem.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      }
     }
   }
 
-  onChangeCloaiVthh(event) {
-    const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-    if (cloaiVthh.length > 0) {
-      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+  onChangeCloaiVthh(event, typeData?: ThongTinQuyetDinh ) {
+    if (typeData) {
+      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+      if (cloaiVthh.length > 0) {
+        typeData.tenCloaiVthh = cloaiVthh[0].ten;
+      }
+    } else  {
+      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+      if (cloaiVthh.length > 0) {
+        this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+      }
     }
   }
 
