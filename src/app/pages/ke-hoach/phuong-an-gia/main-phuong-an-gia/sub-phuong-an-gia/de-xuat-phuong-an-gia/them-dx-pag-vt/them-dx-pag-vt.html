@@ -238,9 +238,9 @@
             </td>
           </tr>
           <tr *ngFor="let data of pagTtChungs; let idx = index">
-            <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+            <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
               <td>{{ idx + 1 }}</td>
-              <td>{{ data.cloaiVthh }}</td>
+              <td>{{ data.tenCloaiVthh }}</td>
               <td>{{ data.tchuanCluong }}</td>
               <td>{{ data.soLuong }}</td>
               <td>{{ data.donViTinh }}</td>
@@ -248,7 +248,7 @@
               <td>{{ data.giaDnVat }}</td>
               <td style="text-align: center;">
                 <a *ngIf="!isView">
-                  <i class=" fa fa-pencil" (click)="startEdit(data.id, 'ttc')"></i>
+                  <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>
                 </a>
                 <a *ngIf="!isView" (click)="deleteItem(idx, 'ttc')">
                   <i class="fa fa-trash-o do"></i>
@@ -258,7 +258,7 @@
             <ng-template #editTemplate>
               <td></td>
               <td>
-                <nz-select (ngModelChange)="onChangecloaiVthh123($event, data.id)" [(ngModel)]="dataEdit[data.id].data.cloaiVthh" name="cloaiVthh"
+                <nz-select (ngModelChange)="onChangecloaiVthh123($event, idx)" [(ngModel)]="dataEdit[idx].data.cloaiVthh" name="cloaiVthh"
                            [nzDisabled]="isView" nzAllowClear="true">
                   <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                   </nz-option>
@@ -266,38 +266,38 @@
               </td>
               <td>
                 <nz-input-group>
-                  <input type="text" name="tchuanCluong" [(ngModel)]="dataEdit[data.id].data.tchuanCluong" readonly nz-input />
+                  <input type="text" name="tchuanCluong" [(ngModel)]="dataEdit[idx].data.tchuanCluong" readonly nz-input />
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
-                  <input type="text" name="soLuong" [(ngModel)]="dataEdit[data.id].data.soLuong" nz-input/>
+                  <input type="text" name="soLuong" [(ngModel)]="dataEdit[idx].data.soLuong" nz-input/>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
-                  <input nz-input type="text" name="donViTinh" [(ngModel)]="dataEdit[data.id].data.donViTinh" readonly>
+                  <input nz-input type="text" name="donViTinh" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
-                  <nz-input-number name="giaDn" [(ngModel)]="dataEdit[data.id].data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0">
+                  <nz-input-number name="giaDn" [(ngModel)]="dataEdit[idx].data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0">
                   </nz-input-number>
                 </nz-input-group>
               </td>
               <td>
                 <nz-input-group>
-                  <nz-input-number name="giaDnVat" [(ngModel)]="dataEdit[data.id].data.giaDnVat" [nzSize]="'small'" nz-input
+                  <nz-input-number name="giaDnVat" [(ngModel)]="dataEdit[idx].data.giaDnVat" [nzSize]="'small'" nz-input
                                    [nzMin]="0">
                   </nz-input-number>
                 </nz-input-group>
               </td>
               <td style="text-align: center;">
                 <a *ngIf="!isView">
-                  <i class="fa fa-save" (click)="luuEdit(data.id, 'ttc')"></i>
+                  <i class="fa fa-save" (click)="luuEdit(idx, 'ttc')"></i>
                 </a>
                 <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                  <i  class="fa fa-times do" (click)="huyEdit(data.id)"></i>
+                  <i  class="fa fa-times do" (click)="huyEdit(idx)"></i>
                 </a>
               </td>
             </ng-template>
@@ -491,7 +491,7 @@
             <tr *ngFor="let data of pagPpXacDinhGias; let idx = index">
               <ng-container *ngIf="!dataEditPp[data.id].edit; else editTemplate1">
                 <td>{{ idx + 1 }}</td>
-                <td>{{data.cloaiVthh}}</td>
+                <td>{{data.tenCloaiVthh}}</td>
                 <td>{{ data.giaVonNk }}</td>
                 <td>{{ data.chiPhiChung }}</td>
                 <td *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">{{ data.chiPhiPhanBo }}</td>
