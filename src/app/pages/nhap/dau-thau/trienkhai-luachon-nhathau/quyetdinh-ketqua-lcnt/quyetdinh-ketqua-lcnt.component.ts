@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyetdinh-ketqua-lcnt',
@@ -75,7 +76,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-
+  STATUS = STATUS;
   async ngOnInit() {
     this.spinner.show();
     try {

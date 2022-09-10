@@ -60,7 +60,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       tenVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      dViTinh: [''],
+      dviTinh: [''],
       soLuong: [''],
       donGia: [''],
       tongTien: [''],

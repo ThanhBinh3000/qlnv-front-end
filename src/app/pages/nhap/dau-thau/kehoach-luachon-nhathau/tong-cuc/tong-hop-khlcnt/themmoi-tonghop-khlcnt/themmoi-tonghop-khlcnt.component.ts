@@ -25,6 +25,7 @@ import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -63,7 +64,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   selectedId: number = 0;
   errorInputRequired: string = null;
   isQuyetDinh: boolean = false;
-
+  STATUS = STATUS;
   userInfo: UserLogin;
   dataDeXuat: any[] = [];
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
