@@ -211,7 +211,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   async search() {
     this.spinner.show();
-    console.log(this.formData.value);
     let body = {
       "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
       "capDvis": this.detail.capDvi,
@@ -405,8 +404,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
-    console.log(value);
-
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>
         item[key]
