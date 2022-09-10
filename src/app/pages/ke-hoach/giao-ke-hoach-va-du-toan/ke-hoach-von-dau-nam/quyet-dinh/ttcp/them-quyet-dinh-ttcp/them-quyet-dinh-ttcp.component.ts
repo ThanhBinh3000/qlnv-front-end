@@ -221,7 +221,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-    console.log(this.dataTable)
   }
 
   exportData() {
@@ -242,10 +241,15 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-          this.dataTable= data;
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          this.dataTable.push(data);
         }
-      })
-    };
+      }
+    });
+
+  };
 
   xoaKeHoach(index: number) {
     this.modal.confirm({

@@ -55,11 +55,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       this.getListBoNganh(),
       this.loadDanhMucHang()
     ]);
+    console.log(this.dataTable)
   }
 
   bindingData(dataEdit) {
     if (dataEdit) {
-      console.log(dataEdit);
       this.keHoach = dataEdit;
     }
   }
@@ -92,7 +92,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   luu() {
     this.keHoachLuongThucComponent.onChangeInput();
     if (this.validateData()) {
-      this._modalRef.close(this.dataTable);
+      this._modalRef.close(this.keHoach);
     }
   }
 

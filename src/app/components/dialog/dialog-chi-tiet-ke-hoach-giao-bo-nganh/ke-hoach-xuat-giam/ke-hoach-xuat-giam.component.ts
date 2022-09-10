@@ -83,7 +83,6 @@ export class KeHoachXuatGiamComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    console.log(this.rowItem);
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
@@ -94,10 +93,9 @@ export class KeHoachXuatGiamComponent implements OnInit {
 
   }
 
-  huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item , index) => item.id === id);
-    this.dataEdit[index] = {
-      data: { ...this.dataTable[index] },
+  huyEdit(idx: number): void {
+    this.dataEdit[idx] = {
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
   }
@@ -105,25 +103,21 @@ export class KeHoachXuatGiamComponent implements OnInit {
   luuEdit(index: number): void {
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
+    this.emitDataTable();
   }
 
   updateEditCache(): void {
     if (this.dataTable) {
       this.dataTable.forEach((item, index) => {
-        console.log(index)
           this.dataEdit[index] = {
           edit: false,
           data: { ...item },
-        };
-        console.log(this.dataEdit[index]
-        )
+        }
       });
     }
-    console.log(this.dataEdit);
-
   }
 
-  onChangeLoaiVthh(event, typeData?: ThongTinQuyetDinh) {
+  onChangeLoaiVthh(event, typeData?: any) {
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
       typeData.dviTinh = null;
@@ -146,7 +140,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
     }
   }
 
-  onChangeCloaiVthh(event, typeData?: ThongTinQuyetDinh ) {
+  onChangeCloaiVthh(event, typeData?: any ) {
     if (typeData) {
       const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
       if (cloaiVthh.length > 0) {
