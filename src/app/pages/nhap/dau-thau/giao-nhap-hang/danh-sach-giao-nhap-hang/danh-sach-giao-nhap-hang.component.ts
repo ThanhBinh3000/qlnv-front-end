@@ -1,17 +1,17 @@
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import {Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
+import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import dayjs from 'dayjs';
 import { Globals } from 'src/app/shared/globals';
 
@@ -20,6 +20,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './danh-sach-giao-nhap-hang.component.html',
   styleUrls: ['./danh-sach-giao-nhap-hang.component.scss']
 })
+
 export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   @Input()
   typeVthh: string;
@@ -28,42 +29,39 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
-
   startValue: Date | null = null;
-
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
-
   loaiVTHH: string = null;
   soQD: string = null;
   canCu: string = null;
   loaiQd: string = null;
   soHd: string = null;
-
   selectedCanCu: any = null;
+
   searchFilter = {
     soQd: '',
     ngayQuyetDinh: null,
     namNhap: null,
-    trichYeu: ''
+    trichYeu: '',
+    loaiVthh: ''
   };
+
   listNam: any[] = [];
   routerUrl: string;
   yearNow: number;
   ngayQuyetDinhDefault: any[] = [];
-
   maVthh: string;
   routerVthh: string;
   loaiVthh: string = '';
   isDetail: boolean = false;
   selectedId: number = 0;
+
   filterTable: any = {
     soQd: '',
     soBban: '',
@@ -73,14 +71,16 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
     tenLo: '',
     tenNgan: '',
   };
+
   dataTableAll: any[] = [];
   allChecked = false;
   indeterminate = false;
   isViewDetail: boolean;
+  listVthh: any[] = [];
 
   constructor(
+    private router: Router,
     private spinner: NgxSpinnerService,
-    private donViService: DonviService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -91,6 +91,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     console.log(this.typeVthh)
+    this.listVthh = LIST_VAT_TU_HANG_HOA;
     this.spinner.show();
     try {
       this.yearNow = dayjs().get('year');
@@ -124,6 +125,11 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
     }
   }
 
+  getTitleVthh() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
+  }
+
   redirectToThongTin(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
@@ -141,7 +147,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       soQd: '',
       ngayQuyetDinh: null,
       namNhap: null,
-      trichYeu: ''
+      trichYeu: '',
+      loaiVthh: ''
     }
     this.search();
   }
@@ -371,6 +378,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       tenNgan: '',
     }
   }
+
   updateSingleChecked(): void {
     if (this.dataTable.every(item => !item.checked)) {
       this.allChecked = false;
@@ -382,6 +390,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       this.indeterminate = true;
     }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -400,6 +409,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       }
     }
   }
+
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -443,6 +453,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.typeVthh);
     this.ngOnInit();

@@ -18,6 +18,7 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhP
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
@@ -59,7 +60,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       tenVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      dViTinh: [''],
+      dviTinh: [''],
       soLuong: [''],
       donGia: [''],
       tongTien: [''],
@@ -85,6 +86,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     });
   }
 
+  STATUS = STATUS
   itemRow: any = {};
   // timeDefaultValue = setHours(new Date(), 0);
   tabSelected: string = 'phuong-an-tong-hop';
@@ -153,7 +155,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       const dataDetail = res.data;
       const isVatTu = dataDetail.cloaiVthh ? dataDetail.cloaiVthh.startsWith('02') : false;
       // Trang thái đã cập nhập thông tin gói thầu hoặc hoàn thành cập nhập tt gt
-      if (dataDetail.trangThai == "00") {
+      if (dataDetail.trangThai == STATUS.CHUA_CAP_NHAT) {
         this.formGoiThau.patchValue({
           idGoiThau: dataDetail.id,
           tenGthau: dataDetail.goiThau,
@@ -360,10 +362,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   pipe = new DatePipe('en-US');
 
   async save(trangThaiLuu) {
-    if (trangThaiLuu == '02') {
+    if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
       this.helperService.markFormGroupTouched(this.formGoiThau);
       if (this.formGoiThau.invalid) {
-        console.log(this.formGoiThau.value)
         return;
       }
     }

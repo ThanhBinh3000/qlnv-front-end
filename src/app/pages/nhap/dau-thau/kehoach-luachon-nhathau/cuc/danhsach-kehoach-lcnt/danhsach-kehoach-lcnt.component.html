@@ -101,12 +101,12 @@
               </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
                   (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+              <ng-template #suffixTemplateInfo123>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
@@ -165,8 +165,8 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.statusConvert"
-                  (input)="filterInTable('statusConvert',filterTable.statusConvert)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
@@ -192,12 +192,14 @@
             <td>{{ data.tenVthh }}</td>
             <td *ngIf="userService.isCuc()">{{ data.tenCloaiVthh }}</td>
             <td>{{data.soGoiThau}}</td>
-            <td>{{ data.statusConvert }}</td>
+            <td>{{ ( userService.isTongCuc() && data.loaiVthh.startsWith("02")) || userService.isCuc() ?
+              data.tenTrangThai :
+              data.tenTrangThaiTh }}</td>
             <td class="text-left">
               <a (click)="detail(data)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai=='00' || data.trangThai=='03' || data.trangThai=='12')" (click)="detail(data)">
+              <a *ngIf="(data.trangThai=='00' || data.trangThai=='02' || data.trangThai=='04')" (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">

@@ -25,6 +25,7 @@ import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -43,9 +44,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   isDetailDxCuc: boolean = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
-
   isTongHop: boolean = false;
-
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   i = 0;
@@ -54,21 +53,18 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
   listNam: any[] = [];
   yearNow: number = 0;
-
   idDeXuat: number = 0;
-
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
-
   idPA: number = 0;
   tabSelected: string = 'thongTinChung';
   selectedId: number = 0;
   errorInputRequired: string = null;
   isQuyetDinh: boolean = false;
-
+  STATUS = STATUS;
   userInfo: UserLogin;
   dataDeXuat: any[] = [];
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
@@ -259,6 +255,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
+        this.isTongHop = false;
       }
       this.spinner.hide();
     } catch (e) {
@@ -297,12 +294,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
 
   quayLai() {
     this.showListEvent.emit();
-  }
-
-
-  chiTietDxCuc(data?) {
-    this.isDetailDxCuc = true;
-    this.idDeXuat = data;
   }
 
   showList() {

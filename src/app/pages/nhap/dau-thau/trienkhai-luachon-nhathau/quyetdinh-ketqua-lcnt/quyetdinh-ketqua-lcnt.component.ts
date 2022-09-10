@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyetdinh-ketqua-lcnt',
@@ -75,7 +76,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-
+  STATUS = STATUS;
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -121,12 +122,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
+
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
-      trichYeu: this.searchFilter.trichYeu
+      trichYeu: this.searchFilter.trichYeu,
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -147,17 +150,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
@@ -323,10 +315,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every((item) => !item.checked)) {
+    if (this.dataTable.every(item => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every((item) => item.checked)) {
+    } else if (this.dataTable.every(item => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -334,10 +326,26 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
   async changePageSize(event) {
     this.spinner.show();
     try {
       this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

@@ -89,18 +89,21 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(
+      this.dataTable
+    )
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayTao: this.searchFilter.ngayQd
+      tuNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      denNgayTao: this.searchFilter.ngayQd
+      denNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      soQd: this.searchFilter.soQd,
+      soQdinh: this.searchFilter.soQd,
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKh,
       soGoiThau: this.searchFilter.soGoiThau,
@@ -109,6 +112,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
