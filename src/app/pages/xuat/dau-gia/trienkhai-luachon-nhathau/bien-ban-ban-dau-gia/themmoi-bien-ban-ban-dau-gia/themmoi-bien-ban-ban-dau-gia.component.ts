@@ -1,3 +1,4 @@
+import { ThongBaoDauGiaTaiSanService } from './../../../../../../services/thongBaoDauGiaTaiSan.service';
 import { BienBanBanDauGia } from './../../../../../../models/BienBanBanDauGia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -47,7 +48,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     listDanhMucHang: any[] = [];
     listSoQuyetDinh: any[] = [];
     listVthh: any[] = [];
-
+    listThongBaoDauGiaTaiSan: Array<any> = [];
     listNam: any[] = [];
     yearNow: number = 0;
 
@@ -105,6 +106,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         private uploadFileService: UploadFileService,
         private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
         private fb: FormBuilder,
+        private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     ) { }
 
     async ngOnInit() {
@@ -120,14 +122,15 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 });
             };
 
+            this.initForm();
             await Promise.all([
                 this.loadDiemKho(),
-                this.loadPhieuKiemTraChatLuong(),
                 this.loadDanhMucHang(),
                 this.loadSoQuyetDinh(),
                 this.getListVthh(),
+                this.loadThongBaoDauGiaTaiSan()
             ]);
-            this.initForm();
+
             if (this.id > 0) {
                 await this.loadChiTiet(this.id);
             }
@@ -194,21 +197,21 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             donViThongBao: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.donViThongBao : null,
-                    disabled: this.isView ? true : false,
+                    disabled: true,
                 },
                 [],
             ],
             ngayToChuc: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.ngayToChuc : null,
-                    disabled: this.isView ? true : false,
+                    disabled: true,
                 },
                 [],
             ],
             diaDiem: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.diaDiem : null,
-                    disabled: this.isView ? true : false,
+                    disabled: true,
                 },
                 [],
             ],
@@ -260,47 +263,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         }
     }
 
-    changePhieuKiemTra() {
-        let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.detail.phieuKtClId);
-        if (phieuKt && phieuKt.length > 0) {
-            this.detail.maDiemKho = phieuKt[0].maDiemKho;
-            this.detail.maNhaKho = phieuKt[0].maNhaKho;
-            this.detail.maNganKho = phieuKt[0].maNganKho;
-            this.detail.maNganLo = phieuKt[0].maNganLo;
-            this.changeDiemKho(true);
-        }
-    }
 
-    async loadPhieuKiemTraChatLuong() {
-        let body = {
-            "capDvis": ['3'],
-            "maDonVi": this.userInfo.MA_DVI,
-            "maHangHoa": this.typeVthh,
-            "maNganKho": null,
-            "ngayKiemTraDenNgay": null,
-            "ngayKiemTraTuNgay": null,
-            "ngayLapPhieu": null,
-            "orderBy": null,
-            "orderDirection": null,
-            "paggingReq": {
-                "limit": 1000,
-                "orderBy": null,
-                "orderType": null,
-                "page": 0
-            },
-            "soPhieu": null,
-            "str": null,
-            "tenNguoiGiao": null,
-            "trangThai": "02",
-        };
-        let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-            let data = res.data;
-            this.listPhieuKiemTraChatLuong = data.content;
-        } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-    }
 
     async loadDanhMucHang() {
         let body = {
@@ -311,6 +274,17 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             if (res.data) {
                 this.listDanhMucHang = res.data;
             }
+        } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+    }
+
+    async loadThongBaoDauGiaTaiSan() {
+        let body = {
+        };
+        let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.listThongBaoDauGiaTaiSan = res.data.content;
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -332,7 +306,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
                 if (res.data) {
                     this.detail = res.data;
-                    this.changeDiemKho(true);
                     if (this.detail.hangHoaRes) {
                         this.detail.hangHoaList = this.detail.hangHoaRes;
                     }
@@ -342,115 +315,10 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         else {
             this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
         }
-        this.updateEditCache();
-    }
-
-    caculatorSoLuongTN() {
-        if (this.detail && this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
-            let sum = this.detail?.hangHoaList.map(item => item.soLuongThuc).reduce((prev, next) => prev + next);
-            return sum ?? 0;
-        }
-        return 0;
-    }
-
-    caculatorDonGia() {
-        if (this.detail && this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
-            let sum = this.detail?.hangHoaList.map(item => item.donGia).reduce((prev, next) => prev + next);
-            return sum ?? 0;
-        }
-        return 0;
-    }
-
-    caculatorThanhTien() {
-        if (this.detail && this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
-            let sum = this.detail?.hangHoaList.map(item => item.thanhTien).reduce((prev, next) => prev + next);
-            return sum ?? 0;
-        }
-        return 0;
     }
 
     convertTien(tien: number): string {
         return convertTienTobangChu(tien);
-    }
-
-    deleteRow(data: any) {
-        this.detail.hangHoaList = this.detail?.hangHoaList.filter(x => x.stt != data.stt);
-        this.sortTableId();
-        this.updateEditCache();
-    }
-
-    editRow(stt: number) {
-        this.editDataCache[stt].edit = true;
-    }
-
-    sortTableId() {
-        this.detail?.hangHoaList.forEach((lt, i) => {
-            lt.stt = i + 1;
-        });
-    }
-
-    addRow() {
-        if (!this.detail?.hangHoaList) {
-            this.detail.hangHoaList = [];
-        }
-        this.sortTableId();
-        let item = cloneDeep(this.create);
-        item.stt = this.detail?.hangHoaList.length + 1;
-        this.checkDataExist(item);
-        this.clearItemRow();
-    }
-
-    checkDataExist(data) {
-        if (this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
-            let index = this.detail?.hangHoaList.findIndex(x => x.maVatTu == data.maVatTu);
-            if (index != -1) {
-                this.detail.hangHoaList.splice(index, 1);
-            }
-        }
-        else {
-            this.detail.hangHoaList = [];
-        }
-        this.detail.hangHoaList = [
-            ...this.detail.hangHoaList,
-            data,
-        ];
-        this.updateEditCache();
-    }
-
-    clearItemRow() {
-        this.create = {};
-        this.create.donViTinh = "Tấn";
-    }
-
-    cancelEdit(stt: number): void {
-        const index = this.detail?.hangHoaList.findIndex(item => item.stt === stt);
-        this.editDataCache[stt] = {
-            data: { ...this.detail?.detail[index] },
-            edit: false
-        };
-    }
-
-    saveEdit(stt: number): void {
-        const index = this.detail?.hangHoaList.findIndex(item => item.stt === stt);
-        Object.assign(this.detail?.hangHoaList[index], this.editDataCache[stt].data);
-        this.editDataCache[stt].edit = false;
-    }
-
-    updateEditCache(): void {
-        if (this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
-            this.detail?.hangHoaList.forEach((item) => {
-                this.editDataCache[item.stt] = {
-                    edit: false,
-                    data: { ...item },
-                };
-            });
-        }
-    }
-
-    caculatorSoLuong(item: any) {
-        if (item) {
-            item.thanhTien = (item?.soLuongThuc ?? 0) * (item?.donGia ?? 0);
-        }
     }
 
     async loadDiemKho() {
@@ -472,36 +340,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             }
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-    }
-
-    changeDiemKho(fromChiTiet: boolean) {
-        let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
-        if (!fromChiTiet) {
-            this.detail.maNhaKho = null;
-        }
-        if (diemKho && diemKho.length > 0) {
-            this.listNhaKho = diemKho[0].children;
-            if (fromChiTiet) {
-                this.changeNhaKho(fromChiTiet);
-            }
-        }
-    }
-
-    changeNhaKho(fromChiTiet: boolean) {
-        let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
-        if (nhaKho && nhaKho.length > 0) {
-            this.listNganKho = nhaKho[0].children;
-            if (fromChiTiet) {
-                this.changeNganKho();
-            }
-        }
-    }
-
-    changeNganKho() {
-        let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
-        if (nganKho && nganKho.length > 0) {
-            this.listNganLo = nganKho[0].children;
         }
     }
 
@@ -676,106 +514,91 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     }
 
     async save(isOther: boolean) {
-        this.spinner.show();
-        console.log("this.formData.value: ", this.formData.value);
+        // this.spinner.show();
 
-        // try {
-        //     let body = {
+        try {
+            let body = {
+                "ct1s": [
+                    // {
+                    //     "bbBanDauGiaId": 0,
+                    //     "donGiaCaoNhat": 0,
+                    //     "id": 0,
+                    //     "soLanTraGia": 0,
+                    //     "thanhTien": 0,
+                    //     "traGiaCaoNhat": "string"
+                    // }
+                ],
+                "cts": [
+                    // {
+                    //     "bbBanDauGiaId": 0,
+                    //     "chucVu": "string",
+                    //     "hoTen": "string",
+                    //     "id": 0,
+                    //     "loaiTptg": "string",
+                    //     "noiCongTac": "string",
+                    //     "stt": 0
+                    // }
+                ],
+                "diaDiem": this.formData.get('diaDiem').value,
+                "donViThongBao": this.formData.get('donViThongBao').value,
+                "id": this.bienBanBanDauGia.id,
+                "loaiVthh": this.formData.get('loaiVthh').value,
+                "maVatTuCha": null,
+                "nam": this.formData.get('na').value,
+                "ngayKy": this.formData.get('ngayKy').value ? dayjs(this.formData.get('ngayKy').value).format(
+                    'YYYY-MM-DD',
+                )
+                    : null,
+                "ngayToChuc": this.formData.get('ngayToChuc').value ? dayjs(this.formData.get('ngayToChuc').value).format(
+                    'YYYY-MM-DD',
+                )
+                    : null,
+                "soBienBan": this.formData.get('soBienBan').value,
+                "thongBaoBdgId": this.formData.get('thongBaoBdgId').value,
+                "trichYeu": this.formData.get('trichYeu').value
+            };
+            console.log("body: ", body);
 
-        //     };
-        //     if (this.id > 0) {
-        //         let res = await this.quanLyBienBanBanDauGiaService.sua(
-        //             body,
-        //         );
-        //         if (res.msg == MESSAGE.SUCCESS) {
-        //             if (!isOther) {
-        //                 this.notification.success(
-        //                     MESSAGE.SUCCESS,
-        //                     MESSAGE.UPDATE_SUCCESS,
-        //                 );
-        //                 this.back();
-        //             }
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res.msg);
-        //         }
-        //     } else {
-        //         let res = await this.quanLyBienBanBanDauGiaService.them(
-        //             body,
-        //         );
-        //         if (res.msg == MESSAGE.SUCCESS) {
-        //             if (!isOther) {
-        //                 this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        //                 this.back();
-        //             }
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res.msg);
-        //         }
-        //     }
-        //     this.spinner.hide();
-        // } catch (e) {
-        //     console.log('error: ', e);
-        //     this.spinner.hide();
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        // }
+            // if (this.id > 0) {
+            //     let res = await this.quanLyBienBanBanDauGiaService.sua(
+            //         body,
+            //     );
+            //     if (res.msg == MESSAGE.SUCCESS) {
+            //         if (!isOther) {
+            //             this.notification.success(
+            //                 MESSAGE.SUCCESS,
+            //                 MESSAGE.UPDATE_SUCCESS,
+            //             );
+            //             this.back();
+            //         }
+            //     } else {
+            //         this.notification.error(MESSAGE.ERROR, res.msg);
+            //     }
+            // } else {
+            //     let res = await this.quanLyBienBanBanDauGiaService.them(
+            //         body,
+            //     );
+            //     if (res.msg == MESSAGE.SUCCESS) {
+            //         if (!isOther) {
+            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            //             this.back();
+            //         }
+            //     } else {
+            //         this.notification.error(MESSAGE.ERROR, res.msg);
+            //     }
+            // }
+            this.spinner.hide();
+        } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
     }
 
     print() {
 
     }
 
-    deleteTaiLieuDinhKemTag(data: any) {
-        if (!this.isView) {
-            this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
-                (x) => x.id !== data.id,
-            );
-            this.detail.fileDinhKems = this.detail.fileDinhKems.filter((x) => x.idVirtual !== data.id);
-        }
-    }
-
-    openFile(event) {
-        if (!this.isView) {
-            let item = {
-                id: new Date().getTime(),
-                text: event.name,
-            };
-            if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-                this.uploadFileService
-                    .uploadFile(event.file, event.name)
-                    .then((resUpload) => {
-                        if (!this.detail.fileDinhKems) {
-                            this.detail.fileDinhKems = [];
-                        }
-                        const fileDinhKem = new FileDinhKem();
-                        fileDinhKem.fileName = resUpload.filename;
-                        fileDinhKem.fileSize = resUpload.size;
-                        fileDinhKem.fileUrl = resUpload.url;
-                        fileDinhKem.idVirtual = item.id;
-                        this.detail.fileDinhKems.push(fileDinhKem);
-                        this.taiLieuDinhKemList.push(item);
-                    });
-            }
-        }
-    }
-
-    downloadFileKeHoach(event) {
-        let body = {
-            "dataType": "",
-            "dataId": 0
-        }
-        switch (event) {
-            case 'tai-lieu-dinh-kem':
-                body.dataType = this.detail.fileDinhKems[0].dataType;
-                body.dataId = this.detail.fileDinhKems[0].dataId;
-                if (this.taiLieuDinhKemList.length > 0) {
-                    this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-                        saveAs(blob, this.detail.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.detail.fileDinhKems[0].fileName);
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-    }
     thongTinTrangThai(trangThai: string): string {
         if (
             trangThai === '00' ||
@@ -787,5 +610,25 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         } else if (trangThai === '02') {
             return 'da-ban-hanh';
         }
+    }
+
+    async changeMaThongBao(id: number) {
+        this.spinner.show();
+        let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.bienBanBanDauGia.donViThongBao = res.data.tenDvi;
+            this.bienBanBanDauGia.diaDiem = res.data.diaDiemToChucDauGia;
+            this.bienBanBanDauGia.ngayToChuc = [res.data.thoiGianToChucDauGiaTuNgay, res.data.thoiGianToChucDauGiaDenNgay];
+
+            this.formData.patchValue({
+                ngayToChuc: this.bienBanBanDauGia.ngayToChuc,
+                donViThongBao: this.bienBanBanDauGia.donViThongBao,
+                diaDiem: this.bienBanBanDauGia.diaDiem
+            })
+
+        } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        this.spinner.hide();
     }
 }
