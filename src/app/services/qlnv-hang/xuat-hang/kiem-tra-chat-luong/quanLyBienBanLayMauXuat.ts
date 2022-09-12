@@ -74,7 +74,7 @@ export class QuanLyBienBanLayMauXuatService extends BaseService {
     return this.httpClient.post(url, body).toPromise();
   }
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/bien-ban-lay-mau/trang-thai?id=${body.id}&trangThaiId=${body.trangThaiId}`;
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/phe-duyet?id=${body.id}&trangThai=${body.trangThai}&lyDo=${body.lyDo}`;
     return this.httpClient.put<any>(url, null).toPromise();
   }
   exportList(body: any): Observable<Blob> {

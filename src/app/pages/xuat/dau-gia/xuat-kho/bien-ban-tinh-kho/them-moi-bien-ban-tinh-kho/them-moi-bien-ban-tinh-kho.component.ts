@@ -107,7 +107,7 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         const donVi = this.donVi.filter(item => item.tenDvi === this.formData.value.donVi);
         this.detail.maDonViById = donVi[0].maDvi;
         console.log(this.detail.maDonViById);
-        this.formData.patchValue({ maQHNS: donVi[0].maQhns })
+        this.formData.patchValue({ maQHNS: donVi[0].maDvi })
         const chiCuc = donVi[0];
         if (chiCuc) {
           const result = {
@@ -285,40 +285,16 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
               }
             })
           }
-          if (this.listDiemKho.length > 0) {
-            this.listDiemKho.forEach((diemkho: any) => {
-              if (diemkho.title === res.data.diemKho) {
-                this.detail.maDiemKho = diemkho.maDvi;
-                this.formData.patchValue({ maDiemKho: this.detail.maDiemKho, });
-                this.changeDiemKho(false);
-                this.listNhaKho.forEach((nhakho: any) => {
-                  if (nhakho.title === res.data.nhaKho) {
-                    this.detail.maNhaKho = nhakho.maDvi;
-                    this.formData.patchValue({ maNhaKho: this.detail.maNhaKho, });
-                    this.changeNhaKho(false);
-                    this.listNganKho.forEach((ngankho: any) => {
-                      if (ngankho.title === res.data.nganKho) {
-                        this.detail.maNganKho = ngankho.maDvi;
-                        this.formData.patchValue({ maNganKho: this.detail.maNganKho, });
-                        this.changeNganKho();
-                        this.listNganLo.forEach((nganlo: any) => {
-                          if (nganlo.title === res.data.loKho) {
-                            this.detail.maNganLo = nganlo.maDvi;
-                            this.formData.patchValue({ maLoKho: this.detail.maNganLo, });
-                          }
-                        })
-                      }
-                    })
-                  }
-                })
-              }
-            })
-          }
 
           this.formData.patchValue({
             soQDId: idQD,
             soQuyetDinh: res.data.soQd,
             donVi: res.data.tenDvi,
+            maQHNS: res.data.maDvi,
+            maDiemKho: this.detail.maDiemKho,
+            maNhaKho: this.detail.maNhaKho,
+            maNganKho: this.detail.maNganKho,
+            maLoKho: this.detail.maNganLo,
             soBienBanTinhKho: res.data.soBienBan,
             soLuongNhap: res.data.soLuongNhap,
             soLuongXuat: res.data.soLuongXuat,
@@ -330,6 +306,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
             kienNghi: res.data.kienNghi,
             ngayLapPhieu: res.data.ngayLapPhieu,
           });
+
+          this.changeDiemKho(true);
         }
       }
     }
@@ -348,14 +326,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         this.spinner.show();
         try {
           await this.save(true);
-          let trangThai = this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN;
-          if (this.detail.trangThai === this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN) {
-            trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
-          }
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: trangThai,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN,
           };
           let res =
             await this.quanLyBienBanTinhKhoService.updateStatus(
@@ -389,10 +363,14 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
+          if (this.detail.trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+            trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyBienBanTinhKhoService.updateStatus(
@@ -428,10 +406,14 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       if (text) {
         this.spinner.show();
         try {
+          let trangThai = this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN;
+          if (this.detail.trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
+            trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC;
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: trangThai,
           };
           let res =
             await this.quanLyBienBanTinhKhoService.updateStatus(
@@ -461,17 +443,15 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "capDvi": this.formData.value.donVi,
-        "maQhns": this.formData.value.maQHNS,
-        "chungLoaiHangHoa": this.id ? this.detail.chungLoaiHangHoa : this.formData.value.maChungLoaiHangHoa,
+        "chungLoaiHangHoa": this.formData.value.maChungLoaiHangHoa,
         "ds": this.listDaiDien,
         "kienNghi": this.formData.value.kienNghi,
-        "loaiHangHoa": this.id ? this.detail.loaiHangHoa : this.formData.value.maLoaiHangHoa,
-        "maDiemkho": this.id ? this.detail.maDiemKho : this.formData.value.maDiemKho,
-        "maDvi": this.id ? this.detail.maDonViById : this.userInfo.MA_DVI,
-        "maNgankho": this.id ? this.detail.maNganKho : this.formData.value.maNganKho,
-        "maNganlo": this.id ? this.detail.maNganLo : this.formData.value.maLoKho,
-        "maNhakho": this.id ? this.detail.maNhaKho : this.formData.value.maNhaKho,
+        "loaiHangHoa": this.formData.value.maLoaiHangHoa,
+        "maDiemkho": this.formData.value.maDiemKho,
+        "maDvi": this.userInfo.MA_DVI,
+        "maNgankho": this.formData.value.maNganKho,
+        "maNganlo": this.formData.value.maLoKho,
+        "maNhakho": this.formData.value.maNhaKho,
         "nguyenNhan": this.formData.value.nguyenNhan,
         "qdId": this.formData.value.soQDId,
         "soLuongThucTeConLai": this.formData.value.soLuongThucTeConLai,
