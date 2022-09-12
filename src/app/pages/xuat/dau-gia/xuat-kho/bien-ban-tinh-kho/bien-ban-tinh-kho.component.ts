@@ -125,7 +125,7 @@ export class BienBanTinhKhoComponent implements OnInit {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
       this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh.map(
-        (item) => item.soQd,
+        (item) => item.soQuyetDinh,
       );
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -245,6 +245,7 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
 
   async search() {
+
     let body = {
       "pageNumber": this.page,
       "pageSize": this.pageSize,
@@ -255,9 +256,11 @@ export class BienBanTinhKhoComponent implements OnInit {
       "orderBy": null,
       "orderType": null,
     };
+
     let res = await this.quanLyBienBanTinhKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
@@ -272,13 +275,13 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
   onChangeSoQuyetDinhAutoComplete(value: any) {
     if (value) {
-      this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh
-        .filter((item) => item?.soQd?.toLowerCase()?.includes(value.toString().toLowerCase()),)
-        .map((item) => item.soQd);
-      this.quyetDinhId = this.listSoQuyetDinh.filter(item => item.soQd === this.searchFilter.soQuyetDinh)[0]?.id?.toString()
+      this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh]
+        .filter((item) => item?.soQuyetDinh?.toLowerCase()?.includes(value.toString().toLowerCase()),)
+        .map((item) => item.soQuyetDinh);
+      this.quyetDinhId = [...this.listSoQuyetDinh].filter(item => item.soQuyetDinh === this.searchFilter.soQuyetDinh)[0]?.id?.toString()
     } else {
-      this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh.map(
-        (item) => item.soQd,
+      this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh].map(
+        (item) => item.soQuyetDinh,
       );
 
     }

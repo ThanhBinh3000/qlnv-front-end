@@ -130,6 +130,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       "soBangKe": this.searchFilter.soBangKe,
       "tuNgay": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
     }
+
     let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
