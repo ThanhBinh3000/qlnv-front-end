@@ -104,7 +104,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,

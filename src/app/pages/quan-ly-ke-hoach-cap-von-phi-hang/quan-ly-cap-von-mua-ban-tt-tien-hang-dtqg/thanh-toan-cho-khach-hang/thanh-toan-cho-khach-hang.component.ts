@@ -79,7 +79,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     fileDetail: NzUploadFile;
     //beforeUpload: any;
     listIdFilesDelete: string[] = [];                        // id file luc call chi tiet
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {

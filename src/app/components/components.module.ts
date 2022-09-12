@@ -148,10 +148,12 @@ import { DialogCanCuQdPheDuyetKqdgComponent } from './dialog/dialog-can-cu-qd-ph
 import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
 import { TemplateErrorComponent } from './template-error/template-error.component';
 import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/dialog-table-selection.component';
+import { FmInputNumberComponent } from './fm-input-number.component';
 @NgModule({
   declarations: [
     //components
     UploadComponent,
+    FmInputNumberComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
     DialogQuyetDinhGiaoChiTieuComponent,
@@ -309,6 +311,7 @@ import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/d
   ],
   exports: [
     FormsModule,
+    FmInputNumberComponent,
     ReactiveFormsModule,
     NgxSpinnerModule,
 

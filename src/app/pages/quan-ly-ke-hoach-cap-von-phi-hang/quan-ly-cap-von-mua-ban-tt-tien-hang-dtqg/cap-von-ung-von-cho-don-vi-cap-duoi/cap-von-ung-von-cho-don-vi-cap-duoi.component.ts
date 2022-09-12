@@ -108,7 +108,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     allChecked = false;                         // check all checkbox
     indeterminate = true;                       // properties allCheckBox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
