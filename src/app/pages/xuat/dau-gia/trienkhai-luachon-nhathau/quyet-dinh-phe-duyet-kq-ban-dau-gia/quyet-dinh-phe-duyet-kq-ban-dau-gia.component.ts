@@ -47,17 +47,19 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soQuyetDinh: '',
+    ngayKy: '',
     trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    ngayToChuc: '',
+    soQdPheDuyetKhBdg: '',
+    maThongBaoBdg: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    tenVatTuCha: '',
+    nam: '',
+    thongBaoBdgKtId: '',
+    soBienBanBdg: '',
+    trangThaiDuyet: '',
   };
 
   dataTableAll: any[] = [];
@@ -360,17 +362,19 @@ export class QuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soQuyetDinh: '',
+      ngayKy: '',
       trichYeu: '',
-      tenGthau: '',
-      statusGT: '',
-      tenNhaThau: '',
-      lyDoHuy: '',
-      donGiaTrcVat: '',
-      tenHdong: '',
-      tgianThienHd: '',
-      statusConvert: '',
+      ngayToChuc: '',
+      soQdPheDuyetKhBdg: '',
+      maThongBaoBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenVatTuCha: '',
+      nam: '',
+      thongBaoBdgKtId: '',
+      soBienBanBdg: '',
+      trangThaiDuyet: '',
     }
   }
 }

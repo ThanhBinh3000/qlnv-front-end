@@ -17,7 +17,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhap
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'them-moi-bien-ban-ban-giao-mau',
@@ -513,8 +513,11 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    trangThai = this.globals.prop.BAN_HANH
-    if (
+    console.log(this.bienBanLayMau.trangThai);
+    console.log(this.bienBanLayMau.tenTrangThai)
+    console.log(trangThai)
+    /* trangThai = this.globals.prop.BAN_HANH */
+    /* if (
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.LANH_DAO_DUYET ||
       trangThai === this.globals.prop.TU_CHOI ||
@@ -523,6 +526,20 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
+  } */
+    if (
+
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      trangThai === this.globals.prop.NHAP_TU_CHOI_TP ||
+      trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CUC
+      || !trangThai
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.NHAP_DU_THAO) {
       return 'da-ban-hanh';
     }
   }
