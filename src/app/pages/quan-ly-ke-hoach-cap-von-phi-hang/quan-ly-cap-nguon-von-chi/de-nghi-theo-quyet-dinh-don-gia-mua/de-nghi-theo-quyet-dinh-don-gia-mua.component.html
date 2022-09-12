@@ -217,20 +217,18 @@
 												{{editCache[data.id].data.maDviTinh}}
 											</td>
 											<td>
-												<nz-input-number class="search__input"
+												<fm-input-number class="search__input"
 													[class]="(editCache[data.id].data.soLuong || editCache[data.id].data.soLuong === 0) && editCache[data.id].data.soLuong >= 0?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.soLuong"
-													[nzFormatter]="formatter" [nzPrecision]="0"
+													[(ngModel)]="editCache[data.id].data.soLuong"
 													(ngModelChange)="changeModel(data.id)">
-												</nz-input-number>
+												</fm-input-number>
 											</td>
 											<td>
-												<nz-input-number class="search__input"
+												<fm-input-number class="search__input"
 													[class]="(editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua === 0) && editCache[data.id].data.donGiaMua >= 0 ?'' : 'input-error-validate' "
-													nzSize="small" [(ngModel)]="editCache[data.id].data.donGiaMua"
-													[nzFormatter]="formatter" [nzPrecision]="0"
+													[(ngModel)]="editCache[data.id].data.donGiaMua"
 													(ngModelChange)="changeModel(data.id)">
-												</nz-input-number>
+												</fm-input-number>
 											</td>
 											<td>
 												{{displayValue(editCache[data.id].data.thanhTien)}}
@@ -273,11 +271,9 @@
 													{{displayValue(kphiDaCap)}}
 												</ng-container>
 												<ng-template #edit>
-													<nz-input-number class="search__input" nzSize="small"
-														[(ngModel)]="kphiDaCap" [nzFormatter]="formatter"
-														[nzPrecision]="0"
+													<fm-input-number class="search__input" [(ngModel)]="kphiDaCap"
 														[class]="(kphiDaCap || kphiDaCap === 0) && (kphiDaCap <= tongTien) && (kphiDaCap > 0)?'' : 'input-error-validate' ">
-													</nz-input-number>
+													</fm-input-number>
 												</ng-template>
 											</td>
 											<td>
