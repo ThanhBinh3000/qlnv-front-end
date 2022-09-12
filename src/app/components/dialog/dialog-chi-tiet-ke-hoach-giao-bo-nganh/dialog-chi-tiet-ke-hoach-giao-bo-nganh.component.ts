@@ -55,7 +55,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       this.getListBoNganh(),
       this.loadDanhMucHang()
     ]);
-    console.log(this.dataTable)
   }
 
   bindingData(dataEdit) {
@@ -84,7 +83,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
         this.dsHangHoa = dataVatTu[0].child;
-        console.log(this.dsHangHoa);
       }
     })
   }
