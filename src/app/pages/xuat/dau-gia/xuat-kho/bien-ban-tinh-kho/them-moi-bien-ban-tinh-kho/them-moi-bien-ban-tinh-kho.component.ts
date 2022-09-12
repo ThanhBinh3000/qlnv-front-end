@@ -105,10 +105,13 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       this.donVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
       if (!isEmpty(this.donVi)) {
         const donVi = this.donVi.filter(item => item.tenDvi === this.formData.value.donVi);
-        this.detail.maDonViById = donVi[0].maDvi;
-        console.log(this.detail.maDonViById);
-        this.formData.patchValue({ maQHNS: donVi[0].maQhns })
+
+        if (donVi.length > 0) {
+          this.detail.maDonViById = donVi[0].maDvi;
+          this.formData.patchValue({ maQHNS: donVi[0].maQhns })
+        }
         const chiCuc = donVi[0];
+
         if (chiCuc) {
           const result = {
             ...this.donViService.layDsPhanTuCon(this.dsTong, chiCuc),
@@ -274,7 +277,6 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
                 this.detail.loaiHangHoa = loaihanghoa.ma;
                 this.formData.patchValue({ maLoaiHangHoa: this.detail.loaiHangHoa, });
                 this.changeLoaiHangHoa();
-                console.log(this.listChungLoaiHangHoa);
                 this.listChungLoaiHangHoa.forEach((chungloaihanghoa: any) => {
                   if (chungloaihanghoa.ten === res.data.chungLoaiHH) {
                     this.detail.chungLoaiHangHoa = chungloaihanghoa.ma;
@@ -461,7 +463,6 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "capDvi": this.formData.value.donVi,
         "maQhns": this.formData.value.maQHNS,
         "chungLoaiHangHoa": this.id ? this.detail.chungLoaiHangHoa : this.formData.value.maChungLoaiHangHoa,
         "ds": this.listDaiDien,
