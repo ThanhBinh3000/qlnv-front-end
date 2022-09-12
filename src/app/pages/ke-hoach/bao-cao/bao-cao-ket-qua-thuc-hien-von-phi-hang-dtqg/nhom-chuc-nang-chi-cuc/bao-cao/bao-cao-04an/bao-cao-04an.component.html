@@ -156,9 +156,8 @@
 					<ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
 						<ng-container *ngIf="kv.loaiMatHang == 0">
 							<td>
-								<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [(ngModel)]="kv.sl"
-									[nzFormatter]="formatter" [nzPrecision]="0" type="number"
-									(ngModelChange)="tinhTong(item.id)"></nz-input-number>
+								<fm-input-number class="search__input" [(ngModel)]="kv.sl"
+									(ngModelChange)="tinhTong(item.id)"></fm-input-number>
 							</td>
 						</ng-container>
 					</ng-container>

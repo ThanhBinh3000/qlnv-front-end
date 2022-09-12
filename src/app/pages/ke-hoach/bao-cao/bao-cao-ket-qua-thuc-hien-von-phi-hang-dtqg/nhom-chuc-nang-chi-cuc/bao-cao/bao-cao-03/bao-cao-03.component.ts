@@ -102,7 +102,6 @@ export class BaoCao03Component implements OnInit {
     ttGiaBanTteXk = null;
     ttClechGiaTteVaGiaHtoanXk = null;
 
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
