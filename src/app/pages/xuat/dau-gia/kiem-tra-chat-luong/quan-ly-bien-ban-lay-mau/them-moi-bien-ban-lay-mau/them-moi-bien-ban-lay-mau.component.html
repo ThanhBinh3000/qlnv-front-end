@@ -21,7 +21,7 @@
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh" (click)="save()" *ngIf="isAction()">
+    <button class="btn btn-sub xanh" (click)="save()" *ngIf="isAction()" [disabled]="!formData.valid">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -45,10 +45,7 @@
             <nz-form-label [nzNoColon]="true">
               Số quyết định xuất
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="soQDXuat" placeholder="Tự động sinh" readonly />
-            </nz-input-group>
-            <nz-select formControlName="soQDXuat" (ngModelChange)="changeSoQuyetDinh()" *ngIf="!id">
+            <nz-select formControlName="soQDXuat" (ngModelChange)="changeSoQuyetDinh()">
               <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQuyetDinh">
               </nz-option>
             </nz-select>
@@ -90,11 +87,8 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="loaiHang" readonly>
-            </nz-input-group>
-            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)" *ngIf="!id">
-              <nz-option *ngFor="let item of dsLoaiHangHoa " nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)">
+              <nz-option *ngFor="let item of dsLoaiHangHoa " [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
           </nz-form-item>
@@ -102,11 +96,8 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Chủng loại hàng hóa</nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="chungLoaiHang" readonly />
-            </nz-input-group>
-            <nz-select formControlName="chungLoaiHang" *ngIf="!id">
-              <nz-option *ngFor="let item of dsChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+            <nz-select formControlName="chungLoaiHang">
+              <nz-option *ngFor="let item of dsChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
           </nz-form-item>
@@ -116,10 +107,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Điểm kho
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="maDiemKho" readonly>
-            </nz-input-group>
-            <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)" *ngIf="!id">
+            <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
               <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -130,10 +118,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Nhà kho
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="maNhaKho" readonly />
-            </nz-input-group>
-            <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)" *ngIf="!id">
+            <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
               <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -144,10 +129,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Ngăn kho
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="maNganKho" readonly />
-            </nz-input-group>
-            <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)" *ngIf="!id">
+            <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
               <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
@@ -158,10 +140,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Lô kho
             </nz-form-label>
-            <nz-input-group *ngIf="id">
-              <input nz-input formControlName="maLoKho" readonly />
-            </nz-input-group>
-            <nz-select formControlName="maLoKho" *ngIf="!id">
+            <nz-select formControlName="maLoKho">
               <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
               </nz-option>
             </nz-select>
