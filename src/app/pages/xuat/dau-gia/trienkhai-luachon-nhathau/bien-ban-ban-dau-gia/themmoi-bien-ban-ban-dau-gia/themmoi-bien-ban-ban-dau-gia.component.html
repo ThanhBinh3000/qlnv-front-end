@@ -10,14 +10,13 @@
                         <i class="fa fa-arrow-left"></i>
                         <span>Quay lại</span>
                     </a>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
                         *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
                         (click)="guiDuyet()">
                         <i class="icon htvbdh_checkfile2"></i>
                         <span>Hoàn thành cập nhật</span>
-                    </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light"
-                        *ngIf="(detail.trangThai == '00' || detail.trangThai == '03' || id == 0) && !isView"
+                    </button> -->
+                    <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="!isDisableField() && !isView"
                         (click)="save(false)">
                         <i class="icon  htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
@@ -152,11 +151,11 @@
                                 <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
                                 <th rowSpan="2" class="text-center">Chức vụ </th>
                                 <th rowSpan="2" class="text-center">Nơi công tác</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
+                                <th colSpan="2" class="text-center" *ngIf="!isView">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngIf="!isView">
                                 <td></td>
                                 <td>
                                     <input nz-input [(ngModel)]="chiTietCtsKhachMoiCreate.hoTen" />
@@ -183,7 +182,7 @@
                                         <td>{{data.hoTen}}</td>
                                         <td>{{data.chucVu}}</td>
                                         <td>{{data.noiCongTac}}</td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="startEdit(i)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
@@ -203,7 +202,7 @@
                                         <td>
                                             <input nz-input [(ngModel)]="dsChiTietCtsClone[i].noiCongTac" />
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="saveEdit(i)">
                                                 <i class="icon htvbdh_dau-cong"></i>
                                             </a>
@@ -231,11 +230,11 @@
                                 <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
                                 <th rowSpan="2" class="text-center">Chức vụ </th>
                                 <th rowSpan="2" class="text-center">Nơi công tác</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
+                                <th colSpan="2" class="text-center" *ngIf="!isView">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngIf="!isView">
                                 <td></td>
                                 <td>
                                     <input nz-input [(ngModel)]="chiTietCtsDauGiaVienCreate.hoTen" />
@@ -262,7 +261,7 @@
                                         <td>{{data.hoTen}}</td>
                                         <td>{{data.chucVu}}</td>
                                         <td>{{data.noiCongTac}}</td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="startEdit(i)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
@@ -282,7 +281,7 @@
                                         <td>
                                             <input nz-input [(ngModel)]="dsChiTietCtsClone[i].noiCongTac" />
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="saveEdit(i)">
                                                 <i class="icon htvbdh_dau-cong"></i>
                                             </a>
@@ -310,11 +309,11 @@
                                 <th rowSpan="2" width="500px" class="text-center"> Họ và tên/Tên tổ chức </th>
                                 <th rowSpan="2" class="text-center"> Mã số thuế/CMTND/CCCD/Hộ chiếu </th>
                                 <th rowSpan="2" class="text-center">Địa chỉ</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
+                                <th colSpan="2" class="text-center" *ngIf="!isView">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngIf="!isView">
                                 <td></td>
                                 <td>
                                     <input nz-input [(ngModel)]="chiTietCtsToChucThamGiaDgCreate.hoTen" />
@@ -341,7 +340,7 @@
                                         <td>{{data.hoTen}}</td>
                                         <td>{{data.mstCmtndCccdHoChieu}}</td>
                                         <td>{{data.diaChi}}</td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="startEdit(i)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
@@ -361,7 +360,7 @@
                                         <td>
                                             <input nz-input [(ngModel)]="dsChiTietCtsClone[i].diaChi" />
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="!isView">
                                             <a (click)="saveEdit(i)">
                                                 <i class="icon htvbdh_dau-cong"></i>
                                             </a>

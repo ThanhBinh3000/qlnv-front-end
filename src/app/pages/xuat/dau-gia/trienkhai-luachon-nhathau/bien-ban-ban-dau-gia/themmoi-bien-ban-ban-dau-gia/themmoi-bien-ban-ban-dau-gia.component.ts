@@ -709,4 +709,9 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             },
         });
     }
+    isDisableField() {
+        if (this.bienBanBanDauGia && (this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+            return true;
+        }
+    }
 }

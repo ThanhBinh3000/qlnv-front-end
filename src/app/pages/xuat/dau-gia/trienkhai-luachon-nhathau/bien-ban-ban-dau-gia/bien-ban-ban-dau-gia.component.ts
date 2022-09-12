@@ -11,12 +11,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import {
   convertTrangThai,
-  convertTrangThaiGt,
+  convertTrangThaiGt
 } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 @Component({
@@ -38,7 +36,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
 
   listNam: any[] = [];
   yearNow: number = 0;
-
+  isView: boolean = false;
   searchFilter = {
     nam: dayjs().get('year'),
     loaiVthh: '',
@@ -215,7 +213,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isView = isView;
   }
 
   async showList() {
@@ -243,6 +241,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
                   MESSAGE.SUCCESS,
                   MESSAGE.DELETE_SUCCESS,
                 );
+                this.allChecked = false;
                 this.search();
               } else {
                 this.notification.error(MESSAGE.ERROR, res.msg);

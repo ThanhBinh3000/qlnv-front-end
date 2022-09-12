@@ -14,6 +14,7 @@ export class BienBanBanDauGia {
     soBienBan: string;
     thongBaoBdgId: number;
     trichYeu: string;
+    trangThai: string;
     constructor(cts: Array<Cts> = [], ct1s: Array<Ct1s> = []) {
         this.cts = cts;
         this.ct1s = ct1s;
