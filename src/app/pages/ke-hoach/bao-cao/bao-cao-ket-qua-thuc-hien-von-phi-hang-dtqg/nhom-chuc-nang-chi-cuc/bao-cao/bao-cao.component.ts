@@ -318,12 +318,14 @@ export class BaoCaoComponent implements OnInit {
 	data: any;
 	listColTemp: any[] = [];
 	selectedIndex = 1;
+
 	async ngOnInit() {
 		this.cols = 3;
 		this.id = this.router.snapshot.paramMap.get('id');
 		const lbc = this.router.snapshot.paramMap.get('baoCao');
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+		console.log(this.userService.getUserLogin());
 		this.getListUser();
 		if (this.idDialog) {
 			this.id = this.idDialog;

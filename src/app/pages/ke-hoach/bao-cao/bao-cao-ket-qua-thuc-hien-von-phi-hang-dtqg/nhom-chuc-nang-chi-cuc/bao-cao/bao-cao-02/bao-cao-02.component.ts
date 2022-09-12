@@ -76,8 +76,6 @@ export class BaoCao02Component implements OnInit {
     tongCucMua = new ItemData();
     tongDvTc = 0;
 
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
-
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
