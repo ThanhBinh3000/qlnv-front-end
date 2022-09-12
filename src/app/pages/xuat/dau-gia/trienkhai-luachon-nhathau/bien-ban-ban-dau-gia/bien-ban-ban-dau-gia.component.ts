@@ -34,7 +34,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
     private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   listNam: any[] = [];
   yearNow: number = 0;
@@ -48,17 +48,17 @@ export class BienBanBanDauGiaComponent implements OnInit {
     ngayToChucBdg: '',
   };
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soBienBan: '',
+    ngayToChucTu: '',
     trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    soQdPdKhBdg: '',
+    maThongBaoBdg: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    tenVatTuCha: '',
+    nam: '',
+    soQdPdKqBdg: '',
+    tenTrangThai: '',
   };
   dataTableAll: any[] = [];
   dataTable: any[] = [];
@@ -236,7 +236,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
         this.spinner.show();
         try {
           this.quanLyBienBanBanDauGiaService
-            .deleteData(item.id)
+            .deleteData(item)
             .then(async (res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
@@ -375,17 +375,17 @@ export class BienBanBanDauGiaComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soBienBan: '',
+      ngayToChucTu: '',
       trichYeu: '',
-      tenGthau: '',
-      statusGT: '',
-      tenNhaThau: '',
-      lyDoHuy: '',
-      donGiaTrcVat: '',
-      tenHdong: '',
-      tgianThienHd: '',
-      statusConvert: '',
+      soQdPdKhBdg: '',
+      maThongBaoBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenVatTuCha: '',
+      nam: '',
+      soQdPdKqBdg: '',
+      tenTrangThai: '',
     };
   }
 }
