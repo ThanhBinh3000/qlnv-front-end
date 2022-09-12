@@ -72,6 +72,7 @@ export class BaoCao02Component implements OnInit {
     allChecked = false;
     editMoneyUnit = false;
 
+    total: ItemData[] = [new ItemData(), new ItemData()];
     dviMua = new ItemData();
     tongCucMua = new ItemData();
     tongDvTc = 0;
@@ -87,6 +88,7 @@ export class BaoCao02Component implements OnInit {
     }
 
     async ngOnInit() {
+        this.spinner.show();
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -124,9 +126,9 @@ export class BaoCao02Component implements OnInit {
                 }
             })
             this.sortAppendix(id);
+            this.changeModel(id);
             this.updateEditCache(id);
         })
-        this.changeModel();
         this.spinner.hide();
     }
 
@@ -261,23 +263,14 @@ export class BaoCao02Component implements OnInit {
         modalIn.afterClose.subscribe((res) => {
             if (res) {
                 const item = {
+                    ...new ItemData(),
                     bcaoCtietId: this.id,
                     id: uuid.v4() + 'FE',
                     header: idAppendix == 0 ? '21' : '22',
-                    stt: null,
                     checked: false,
-                    level: null,
                     maVtu: res[0].id,
                     maVtuCha: index == -1 ? 0 : (res[0].id != data?.maVtu ? 0 : this.lstCtietBcao[idAppendix].data[index].maVtuCha + 1),
                     maDviTinh: res[0].maDviTinh,
-                    soQd: null,
-                    ghiChu: null,
-                    khSoLuong: 0,
-                    khGiaMuaTd: 0,
-                    khTtien: 0,
-                    thSoLuong: 0,
-                    thGiaMuaTd: 0,
-                    thTtien: 0,
                 }
                 this.lstCtietBcao[idAppendix].data.splice(index + 1, 0, item);
                 this.editCache[item.id] = {
@@ -297,7 +290,9 @@ export class BaoCao02Component implements OnInit {
             this.lstCtietBcao[idAppendix].lstVtu.push(this.lstVatTuFull.find(e => e.id == data.maVtu));
         } else {
             this.lstCtietBcao[idAppendix].data = this.lstCtietBcao[idAppendix].data.filter(e => e.id != id);
+            this.setAverageValue(data.maVtu, idAppendix);
         }
+        this.changeModel(idAppendix);
         this.updateEditCache(idAppendix);
     }
 
@@ -323,23 +318,24 @@ export class BaoCao02Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         //tinh toan lai trung binh cho vat tu muc cao nhat
         const maVtu = this.lstCtietBcao[idAppendix].data[index].maVtu;
-        if (this.lstCtietBcao[idAppendix].data[index].maVtuCha != 0) {
-            let sl = 0;
-            let donGia = 0;
-            let count = 0;
-            this.lstCtietBcao[idAppendix].data.forEach(item => {
-                if (item.maVtuCha != 0 && item.maVtu == maVtu) {
-                    sl = sumNumber([sl, item.thSoLuong]);
-                    donGia = sumNumber([donGia, item.thGiaMuaTd]);
-                    count += 1;
-                }
-            })
-            const ind = this.lstCtietBcao[idAppendix].data.findIndex(e => e.maVtu == maVtu && e.maVtuCha == 0);
-            this.lstCtietBcao[idAppendix].data[ind].thSoLuong = sl;
-            this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = divNumber(donGia, count);
-            this.lstCtietBcao[idAppendix].data[ind].thTtien = mulNumber(sl, this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd);
-        }
-        this.changeModel();
+        this.setAverageValue(maVtu, idAppendix);
+        this.changeModel(idAppendix);
+    }
+
+    //tinh toan trung binh cho vat tu co muc cao nhat
+    setAverageValue(maVtu: number, idAppendix: number) {
+        let sl = 0;
+        let thanhTien = 0;
+        this.lstCtietBcao[idAppendix].data.forEach(item => {
+            if (item.maVtuCha != 0 && item.maVtu == maVtu) {
+                sl = sumNumber([sl, item.thSoLuong]);
+                thanhTien = sumNumber([thanhTien, item.thTtien]);
+            }
+        })
+        const ind = this.lstCtietBcao[idAppendix].data.findIndex(e => e.maVtu == maVtu && e.maVtuCha == 0);
+        this.lstCtietBcao[idAppendix].data[ind].thSoLuong = sl;
+        this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = Math.round(divNumber(thanhTien, sl));
+        this.lstCtietBcao[idAppendix].data[ind].thTtien = thanhTien;
     }
 
     updateChecked(id: string, idAppendix: number) {
@@ -363,8 +359,14 @@ export class BaoCao02Component implements OnInit {
     }
 
     deleteAllChecked() {
-        this.idPhuLuc.forEach(phuLuc => {
-            this.lstCtietBcao[phuLuc].data = this.lstCtietBcao[phuLuc].data.filter(e => e.checked == false);
+        this.idPhuLuc.forEach(id => {
+            this.lstCtietBcao[id].data = this.lstCtietBcao[id].data.filter(e => e.checked == false);
+            this.lstCtietBcao[id].data.forEach(item => {
+                if (item.maVtuCha == 0) {
+                    this.setAverageValue(item.maVtu, id);
+                }
+            })
+            this.changeModel(id);
         });
     }
 
@@ -518,20 +520,14 @@ export class BaoCao02Component implements OnInit {
     }
 
     // tinh len tren nhung hang fix cung I,II
-    async changeModel() {
-        this.dviMua = new ItemData();
-        this.tongCucMua = new ItemData();
-        this.lstCtietBcao[0].data.forEach(item => {
+    async changeModel(idAppendix: number) {
+        this.total[idAppendix] = new ItemData();
+        this.lstCtietBcao[idAppendix].data.forEach(item => {
             if (item.maVtuCha == 0) {
-                this.dviMua.thTtien = sumNumber([this.dviMua.thTtien, item.thTtien]);
+                this.total[idAppendix].thTtien = sumNumber([this.total[idAppendix].thTtien, item.thTtien]);
             }
         })
-        this.lstCtietBcao[1].data.forEach(item => {
-            if (item.maVtuCha == 0) {
-                this.tongCucMua.thTtien = sumNumber([this.tongCucMua.thTtien, item.thTtien]);
-            }
-        });
-        this.tongDvTc = sumNumber([this.dviMua.thTtien, this.tongCucMua.thTtien]);
+        this.tongDvTc = sumNumber([this.total[0].thTtien, this.total[1].thTtien]);
     }
 
     export() {
