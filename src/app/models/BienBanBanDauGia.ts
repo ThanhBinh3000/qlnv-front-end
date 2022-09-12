@@ -8,7 +8,9 @@ export class BienBanBanDauGia {
     maVatTuCha: string;
     nam: number;
     ngayKy: string;
-    ngayToChuc: string;
+    ngayToChuc: Array<string>;
+    ngayToChucTu: string;
+    ngayToChucDen: string;
     soBienBan: string;
     thongBaoBdgId: number;
     trichYeu: string;
@@ -25,6 +27,8 @@ export class cts {
     id: number;
     loaiTptg: string;
     noiCongTac: string;
+    mstCmtndCccdHoChieu: string;
+    diaChi: string;
     stt: number;
 }
 

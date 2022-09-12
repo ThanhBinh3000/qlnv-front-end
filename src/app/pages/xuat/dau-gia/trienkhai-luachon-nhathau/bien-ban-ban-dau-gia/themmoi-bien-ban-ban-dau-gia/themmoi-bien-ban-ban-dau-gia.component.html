@@ -26,6 +26,7 @@
             </div>
         </div>
     </nz-affix>
+
     <div class="contentBor bien-ban-ban-dau-gia__body">
         <div class="contentDetail">
             <div class="main-content">
@@ -36,8 +37,8 @@
                     <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
                     <span class="title-form">BIÊN BẢN BÁN ĐẦU GIÁ</span>
                 </div>
-                <nz-card nzTitle="" class="flex-card p-lr16">
-                    <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
+                <form nzLayout="vertical" nz-form [formGroup]="formData" class="pd-10">
+                    <nz-card nzTitle="" class="flex-card p-lr16">
                         <div class="search__body" nz-row [nzGutter]="[18, 6]">
                             <div nz-col nzSpan="2">
                                 <nz-form-item>
@@ -81,7 +82,7 @@
                                     <nz-form-label [nzNoColon]="true">
                                         Loại hàng
                                     </nz-form-label>
-                                    <nz-select nzPlaceHolder="Chọn hàng hóa" nzAllowClear formControlName="loaiVthh">
+                                    <nz-select nzAllowClear formControlName="loaiVthh">
                                         <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                         </nz-option>
                                     </nz-select>
@@ -92,7 +93,12 @@
                                     <nz-form-label [nzNoColon]="true">
                                         Mã thông báo bán đấu giá
                                     </nz-form-label>
-                                    <input nz-input formControlName="thongBaoBdgId" />
+                                    <nz-select nzAllowClear formControlName="thongBaoBdgId"
+                                        (ngModelChange)="changeMaThongBao($event)">
+                                        <nz-option *ngFor="let p of listThongBaoDauGiaTaiSan" [nzValue]="p.id"
+                                            [nzLabel]="p.maThongBao">
+                                        </nz-option>
+                                    </nz-select>
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="6">
@@ -108,13 +114,11 @@
                                     <nz-form-label [nzNoColon]="true">
                                         Ngày tổ chức bán đấu giá
                                     </nz-form-label>
-                                    <nz-date-picker class="search__input" [nzDisabledDate]="" nzShowTime
-                                        formControlName="ngayToChuc" nzFormat="yyyy-MM-dd HH:mm:ss"
-                                        nzPlaceHolder="Nhập theo giờ">
-                                    </nz-date-picker>
+                                    <nz-range-picker class="search__input" formControlName="ngayToChuc">
+                                    </nz-range-picker>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="6">
+                            <div nz-col nzSpan="4">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true">
                                         Địa điểm đấu giá
@@ -123,212 +127,212 @@
                                 </nz-form-item>
                             </div>
                         </div>
-                    </form>
-                </nz-card>
-                <div class="flex-card p-lr16 pd-10">
-                    <div nz-col nzSpan="24">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
-                                THÀNH PHẦN THAM DỰ
-                            </nz-form-label>
-                        </nz-form-item>
-                    </div>
-                    <div nz-col nzSpan="24">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
-                                Khách mời chứng kiến
-                            </nz-form-label>
-                        </nz-form-item>
-                    </div>
-                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
-                        [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
-                        <thead>
-                            <tr>
-                                <th rowSpan="2" width="60px" class="text-center">STT</th>
-                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
-                                <th rowSpan="2" class="text-center">Chức vụ </th>
-                                <th rowSpan="2" class="text-center">Nơi công tác</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td class="text-center">
-                                    <a>
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a>
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                    <div nz-col nzSpan="24">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
-                                Đấu giá viên
-                            </nz-form-label>
-                        </nz-form-item>
-                    </div>
-                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
-                        [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
-                        <thead>
-                            <tr>
-                                <th rowSpan="2" width="60px" class="text-center">STT</th>
-                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
-                                <th rowSpan="2" class="text-center">Chức vụ </th>
-                                <th rowSpan="2" class="text-center">Nơi công tác</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td class="text-center">
-                                    <a>
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a>
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                    <div nz-col nzSpan="24">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
-                                Người/Tổ chức tham gia đấu giá
-                            </nz-form-label>
-                        </nz-form-item>
-                    </div>
-                    <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
-                        [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
-                        <thead>
-                            <tr>
-                                <th rowSpan="2" width="60px" class="text-center">STT</th>
-                                <th rowSpan="2" width="500px" class="text-center"> Họ và tên/Tên tổ chức </th>
-                                <th rowSpan="2" class="text-center"> Mã số thuế/CMTND/CCCD/Hộ chiếu </th>
-                                <th rowSpan="2" class="text-center">Địa chỉ</th>
-                                <th colSpan="2" class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td>
-                                    <input nz-input />
-                                </td>
-                                <td class="text-center">
-                                    <a>
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a>
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                    <div nz-col nzSpan="24">
-                        <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
-                                Thông tin biên bản bán đấu giá
-                            </nz-form-label>
-                        </nz-form-item>
-                    </div>
-                    <nz-table #nzTable [nzData]="listOfData" class="mt-16">
-                        <thead>
-                            <tr>
-                                <th nzWidth="60px">STT</th>
-                                <th>Chi cục</th>
-                                <th>Điểm kho</th>
-                                <th>Ngăn kho</th>
-                                <th>Lô kho</th>
-                                <th>Chủng loại hàng hóa</th>
-                                <th>Mã đơn vị tài sản</th>
-                                <th>Số lượng</th>
-                                <th>Đơn vị tính</th>
-                                <th>Đơn giá chưa VAT(đồng)</th>
-                                <th>Giá khởi điểm (đồng)</th>
-                                <th>Số tiền đặt trước (đồng)</th>
-                                <th>Số lần trả giá</th>
-                                <th>Đơn giá cao nhất (đồng)</th>
-                                <th>Thành tiền (đồng)</th>
-                                <th>Tổ chức/người trả giá cao nhất</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ng-container *ngFor="let data of nzTable.data">
+                    </nz-card>
+                    <div class="flex-card p-lr16 pd-10">
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true" class="title-form-chi-tiet">
+                                    THÀNH PHẦN THAM DỰ
+                                </nz-form-label>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Khách mời chứng kiến
+                                </nz-form-label>
+                            </nz-form-item>
+                        </div>
+                        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
+                            [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                            <thead>
                                 <tr>
-                                    <td [nzExpand]="expandSet.has(data.id)"
-                                        (nzExpandChange)="onExpandChange(data.id, $event)"></td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.address }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.age }}</td>
-                                    <td>{{ data.address }}</td>
+                                    <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
+                                    <th rowSpan="2" class="text-center">Chức vụ </th>
+                                    <th rowSpan="2" class="text-center">Nơi công tác</th>
+                                    <th colSpan="2" class="text-center">Hành động</th>
                                 </tr>
-                                <ng-container>
-                                    <tr *ngIf="expandSet.has(data.id)">
-                                        <td nzWidtd="60px">STT</td>
-                                        <td>Chi cục</td>
-                                        <td>Điểm kho</td>
-                                        <td>Ngăn kho</td>
-                                        <td>Lô kho</td>
-                                        <td>Chủng loại hàng hóa</td>
-                                        <td>Mã đơn vị tài sản</td>
-                                        <td>Số lượng</td>
-                                        <td>Đơn vị tính</td>
-                                        <td>Đơn giá chưa VAT(đồng)</td>
-                                        <td>Giá khởi điểm (đồng)</td>
-                                        <td>Số tiền đặt trước (đồng)</td>
-                                        <td>Số lượng</td>
-                                        <td>Đơn vị tính</td>
-                                        <td>Đơn giá chưa VAT(đồng)</td>
-                                        <td>Giá khởi điểm (đồng)</td>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td class="text-center">
+                                        <a>
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a>
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Đấu giá viên
+                                </nz-form-label>
+                            </nz-form-item>
+                        </div>
+                        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
+                            [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                            <thead>
+                                <tr>
+                                    <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên </th>
+                                    <th rowSpan="2" class="text-center">Chức vụ </th>
+                                    <th rowSpan="2" class="text-center">Nơi công tác</th>
+                                    <th colSpan="2" class="text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td class="text-center">
+                                        <a>
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a>
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Người/Tổ chức tham gia đấu giá
+                                </nz-form-label>
+                            </nz-form-item>
+                        </div>
+                        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false"
+                            [nzShowPagination]="false" [nzData]="detail?.hangHoaList">
+                            <thead>
+                                <tr>
+                                    <th rowSpan="2" width="60px" class="text-center">STT</th>
+                                    <th rowSpan="2" width="500px" class="text-center"> Họ và tên/Tên tổ chức </th>
+                                    <th rowSpan="2" class="text-center"> Mã số thuế/CMTND/CCCD/Hộ chiếu </th>
+                                    <th rowSpan="2" class="text-center">Địa chỉ</th>
+                                    <th colSpan="2" class="text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td>
+                                        <input nz-input />
+                                    </td>
+                                    <td class="text-center">
+                                        <a>
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a>
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Thông tin biên bản bán đấu giá
+                                </nz-form-label>
+                            </nz-form-item>
+                        </div>
+                        <nz-table #nzTable [nzData]="listOfData" class="mt-16">
+                            <thead>
+                                <tr>
+                                    <th nzWidth="60px">STT</th>
+                                    <th>Chi cục</th>
+                                    <th>Điểm kho</th>
+                                    <th>Ngăn kho</th>
+                                    <th>Lô kho</th>
+                                    <th>Chủng loại hàng hóa</th>
+                                    <th>Mã đơn vị tài sản</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn vị tính</th>
+                                    <th>Đơn giá chưa VAT(đồng)</th>
+                                    <th>Giá khởi điểm (đồng)</th>
+                                    <th>Số tiền đặt trước (đồng)</th>
+                                    <th>Số lần trả giá</th>
+                                    <th>Đơn giá cao nhất (đồng)</th>
+                                    <th>Thành tiền (đồng)</th>
+                                    <th>Tổ chức/người trả giá cao nhất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of nzTable.data">
+                                    <tr>
+                                        <td [nzExpand]="expandSet.has(data.id)"
+                                            (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.address }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.address }}</td>
                                     </tr>
+                                    <ng-container>
+                                        <tr *ngIf="expandSet.has(data.id)">
+                                            <td nzWidtd="60px">STT</td>
+                                            <td>Chi cục</td>
+                                            <td>Điểm kho</td>
+                                            <td>Ngăn kho</td>
+                                            <td>Lô kho</td>
+                                            <td>Chủng loại hàng hóa</td>
+                                            <td>Mã đơn vị tài sản</td>
+                                            <td>Số lượng</td>
+                                            <td>Đơn vị tính</td>
+                                            <td>Đơn giá chưa VAT(đồng)</td>
+                                            <td>Giá khởi điểm (đồng)</td>
+                                            <td>Số tiền đặt trước (đồng)</td>
+                                            <td>Số lượng</td>
+                                            <td>Đơn vị tính</td>
+                                            <td>Đơn giá chưa VAT(đồng)</td>
+                                            <td>Giá khởi điểm (đồng)</td>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
-                            </ng-container>
-                        </tbody>
-                    </nz-table>
-                </div>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -1,23 +1,17 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import * as dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { Subject } from 'rxjs';
+import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyPhieuXuatKhoService } from 'src/app/services/quanLyPhieuXuatKho.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -67,12 +61,9 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private donViService: DonviService,
     private quanLyPhieuXuatKhoService: QuanLyPhieuXuatKhoService,
     private notification: NzNotificationService,
-    private router: Router,
     public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private modal: NzModalService,
     private fb: FormBuilder,
     public globals: Globals,
@@ -229,7 +220,7 @@ export class QuanLyPhieuXuatKhoComponent implements OnInit {
       },
       "soPhieu": this.formData.value.soPhieuXuat,
       "soQuyetDinh": this.formData.value.soQuyetDinhXuat,
-      "soHd": this.formData.value.soQuyetDinhXuat,
+      "soHd": this.formData.value.soHopDong,
       "tuNgay": this.formData.value.ngayXuatKho && this.formData.value.ngayXuatKho.length > 0 ? dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
     };
     let res = await this.quanLyPhieuXuatKhoService.timKiem(body);
