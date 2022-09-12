@@ -64,7 +64,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     trangThaiBanGhi = '1';
     newDate = new Date();
     maDviTien: string;
-    moneyUnit: string;
     thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
@@ -88,6 +87,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     statusGiaoToanBo = true;
     statusBtnBtc: boolean;
     allChecked = false;
+    editMoneyUnit = false;
     //khac
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
     maGiao: string;
@@ -101,7 +101,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     fileDetail: NzUploadFile;
     //beforeUpload: any;
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -193,7 +193,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             if (!this.maPa) {
                 this.location.back;
             }
-            this.moneyUnit = this.maDviTien;
         }
         //lay danh sach bao cao duoc tong hop tu
         if (this.maBaoCao) {
@@ -354,12 +353,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     this.maDviTien = data.data.maDviTien;
                     this.sortByIndex();
                     this.maDviTien = data.data.maDviTien;
-                    this.lstCtietBcao.forEach(item => {
-                        item.tongSo = divMoney(item.tongSo, this.maDviTien);
-                        item.listCtietDvi.forEach(e => {
-                            e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-                        })
-                    })
                     this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
                     this.lstTtCtiet = data.data.listTtCtiet;
@@ -442,10 +435,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     // luu
     async save() {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         this.lstCtietBcao.filter(item => {
             if (this.editCache[item.id].edit == true) {
                 checkSaveEdit = false;
@@ -460,7 +449,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSo, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSo > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -468,12 +457,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             item.listCtietDvi.forEach(e => {
                 data.push({
                     ...e,
-                    soTranChi: mulMoney(e.soTranChi, this.maDviTien),
                 })
             })
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSo: mulMoney(item.tongSo, this.maDviTien),
                 listCtietDvi: data,
             })
         })
@@ -1261,7 +1248,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             listTtCtiet: lstTtCtietTemp,
             idSoTranChi: this.idSoTranChi,
             maDvi: this.maDonViTao,
-            maDviTien: this.maDviTien,
+            maDviTien: '1',
             maPa: maPaNew,
             namPa: this.namPa,
             maPaBtc: this.maPaBtc,
@@ -1310,21 +1297,26 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.tongSo = exchangeMoney(item.tongSo, this.maDviTien, this.moneyUnit);
-            item.listCtietDvi.forEach(e => {
-                e.soTranChi = exchangeMoney(e.soTranChi, this.maDviTien, this.moneyUnit);
-            })
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.tongSo = exchangeMoney(item.tongSo, this.maDviTien, this.moneyUnit);
+    //         item.listCtietDvi.forEach(e => {
+    //             e.soTranChi = exchangeMoney(e.soTranChi, this.maDviTien, this.moneyUnit);
+    //         })
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 }

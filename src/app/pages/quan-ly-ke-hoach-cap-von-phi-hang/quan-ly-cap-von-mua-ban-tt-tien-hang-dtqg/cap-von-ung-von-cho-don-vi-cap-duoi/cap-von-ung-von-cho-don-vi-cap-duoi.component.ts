@@ -13,12 +13,12 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 export class ItemData {
@@ -61,7 +61,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     ngayPheDuyet: string;
     trangThai: string;
     maDviTien: string;
-    moneyUnit: string;
     maDviTao: string;
     thuyetMinh: string;
     newDate = new Date();
@@ -81,6 +80,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD = true;                        // trang thai an/hien nut lanh dao
     statusBtnCopy = true;                      // trang thai copy
+    editMoneyUnit = false;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -108,7 +108,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     allChecked = false;                         // check all checkbox
     indeterminate = true;                       // properties allCheckBox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -152,8 +152,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         } else {
             this.trangThai = '1';
             this.maDviTao = this.userInfo?.dvql;
-            this.maDviTien = '3';
-            this.moneyUnit = this.maDviTien;
+            this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
                 this.maCvUvTren = obj?.maCvUv;
@@ -305,9 +304,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.lstCtietBcao.forEach(item => {
                         item.ngayLapTemp = this.datePipe.transform(item.ngayLap, Utils.FORMAT_DATE_STR);
                         item.ngayNhanTemp = this.datePipe.transform(item.ngayNhan, Utils.FORMAT_DATE_STR);
-                        item.tongSoTien = divMoney(item.tongSoTien, this.maDviTien);
-                        item.nopThue = divMoney(item.nopThue, this.maDviTien);
-                        item.ttChoDviHuong = divMoney(item.ttChoDviHuong, this.maDviTien);
                     })
                     this.maCvUvDuoi = data.data.maCapUngVonChoCapDuoi;
                     this.maCvUvTren = data.data.maCapUngVonTuCapTren;
@@ -389,10 +385,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         let checkMoneyRange = true;
         let checkSave = true;
 
@@ -424,15 +416,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSoTien > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSoTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
             })
         })
 
@@ -569,10 +558,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         return this.trangThais.find(e => e.id == id)?.tenDm;
     }
 
-    getMaDviTien() {
-        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
-    }
-
     close() {
         if (!this.loai) {
             this.loai = "0";
@@ -599,9 +584,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 noiDung: item.noiDung,
                 maNguonNs: item.maNguonNs,
                 nienDoNs: item.nienDoNs,
-                soTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
+                soTien: item.tongSoTien,
+                nopThue: item.nopThue,
+                ttChoDviHuong: item.ttChoDviHuong,
                 soTienBangChu: item.soTienBangChu,
                 tkNhan: null,
                 trangThai: "1",
@@ -685,10 +670,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             },
         );
 
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         let checkMoneyRange = true;
         let checkSave = true;
 
@@ -705,15 +686,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSoTien > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSoTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
                 id: null,
             })
         })
@@ -764,21 +742,26 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.tongSoTien = exchangeMoney(item.tongSoTien, this.maDviTien, this.moneyUnit);
-            item.nopThue = exchangeMoney(item.nopThue, this.maDviTien, this.moneyUnit);
-            item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.tongSoTien = exchangeMoney(item.tongSoTien, this.maDviTien, this.moneyUnit);
+    //         item.nopThue = exchangeMoney(item.nopThue, this.maDviTien, this.moneyUnit);
+    //         item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

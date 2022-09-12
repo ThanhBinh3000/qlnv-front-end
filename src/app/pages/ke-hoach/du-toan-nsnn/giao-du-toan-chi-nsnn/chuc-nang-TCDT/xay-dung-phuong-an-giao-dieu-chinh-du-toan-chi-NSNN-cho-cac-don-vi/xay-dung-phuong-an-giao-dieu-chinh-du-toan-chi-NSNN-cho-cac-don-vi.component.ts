@@ -1527,6 +1527,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   // thêm nhiều cột
   addAllCol() {
+    const obj = {
+      danhSachDonVi: this.lstDviChon,
+      multi: true,
+    }
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách đơn vị',
       nzContent: DialogLuaChonThemDonViComponent,
@@ -1535,7 +1539,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       nzWidth: '65%',
       nzFooter: null,
       nzComponentParams: {
-        danhSachDonVi: this.lstDviChon
+        obj: obj
       },
     });
     modalIn.afterClose.subscribe((res) => {

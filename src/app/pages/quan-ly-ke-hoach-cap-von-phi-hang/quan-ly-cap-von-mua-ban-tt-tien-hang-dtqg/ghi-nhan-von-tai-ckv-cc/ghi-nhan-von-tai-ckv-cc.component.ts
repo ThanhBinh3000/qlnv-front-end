@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, LOAI_VON, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_VON, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -78,6 +78,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     statusBtnLD: boolean;
     statusBtnCopy: boolean;
     allChecked = false;
+    editMoneyUnit = false;
     //khac
     lstFiles: any[] = []; //show file ra man hinh
     //file
@@ -85,7 +86,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     //beforeUpload: any;
     listIdFilesDelete: string[] = [];                        // id file luc call chi tiet
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -265,9 +266,9 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
                     this.ttGui.noiDung = data.data.noiDung;
                     this.ttGui.maNguonNs = data.data.maNguonNs;
                     this.ttGui.nienDoNs = data.data.nienDoNs;
-                    this.ttGui.soTien = divMoney(data.data.soTien, this.maDviTien);
-                    this.ttGui.nopThue = divMoney(data.data.nopThue, this.maDviTien);
-                    this.ttGui.ttChoDviHuong = divMoney(data.data.ttChoDviHuong, this.maDviTien);
+                    this.ttGui.soTien = data.data.soTien;
+                    this.ttGui.nopThue = data.data.nopThue;
+                    this.ttGui.ttChoDviHuong = data.data.ttChoDviHuong;
                     this.ttGui.soTienBangChu = data.data.soTienBangChu;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
                     this.thuyetMinh = data.data.thuyetMinh;
@@ -339,7 +340,7 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien || !this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+        if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -373,9 +374,9 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
             nienDoNs: this.ttGui.nienDoNs,
-            soTien: mulMoney(this.ttGui.soTien, this.maDviTien),
-            nopThue: mulMoney(this.ttGui.nopThue, this.maDviTien),
-            ttChoDviHuong: mulMoney(this.ttGui.ttChoDviHuong, this.maDviTien),
+            soTien: this.ttGui.soTien,
+            nopThue: this.ttGui.nopThue,
+            ttChoDviHuong: this.ttGui.ttChoDviHuong,
             soTienBangChu: this.ttGui.soTienBangChu,
             tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: this.trangThaiBanGhi,
@@ -418,16 +419,17 @@ export class GhiNhanVonTaiCkvCcComponent implements OnInit {
         ]);
     }
 
-    getMaDviTien() {
-        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
-    }
-
     modelChange() {
         this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
+    }
+
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 
 }

@@ -20,31 +20,27 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './danh-sach-hop-dong.component.html',
   styleUrls: ['./danh-sach-hop-dong.component.scss'],
 })
+
 export class DanhSachHopDongComponent implements OnInit {
   @Input()
   typeVthh: string;
-
   ngayKy: string;
   soHd: string;
   userInfo: UserLogin;
   tenHd: string;
   nhaCungCap: string;
-
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
   selectedDonVi: any = {};
-
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-
   allChecked = false;
   indeterminate = false;
 
@@ -69,7 +65,7 @@ export class DanhSachHopDongComponent implements OnInit {
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -227,6 +223,7 @@ export class DanhSachHopDongComponent implements OnInit {
     this.soHd = null;
     this.tenHd = null;
     this.nhaCungCap = null;
+    this.search();
   }
 
   async changePageIndex(event) {
@@ -356,15 +353,12 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value) {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (
-            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
-            -1
-          ) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !== -1) {
             temp.push(item);
           }
         });

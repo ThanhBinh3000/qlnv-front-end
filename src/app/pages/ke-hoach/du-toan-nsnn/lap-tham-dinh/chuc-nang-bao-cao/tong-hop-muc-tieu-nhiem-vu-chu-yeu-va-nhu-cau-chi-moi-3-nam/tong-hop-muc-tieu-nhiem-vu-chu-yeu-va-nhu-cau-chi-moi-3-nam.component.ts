@@ -94,17 +94,17 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     thuyetMinh: string;
     lyDoTuChoi: string;
     maDviTien: string;
-    moneyUnit: string;
     listIdDelete = "";
     trangThaiPhuLuc: string;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    editMoneyUnit = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -125,22 +125,9 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        if (!this.maDviTien) {
-            this.maDviTien = '3';
-        }
-        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                ncauChiTongSo: divMoney(item.ncauChiTongSo, this.maDviTien),
-                ncauChiTrongDoChiCs: divMoney(item.ncauChiTrongDoChiCs, this.maDviTien),
-                ncauChiTrongDoChiMoi: divMoney(item.ncauChiTrongDoChiMoi, this.maDviTien),
-                ncauChiChiaRaDtuPtrien: divMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien),
-                ncauChiChiaRaChiCs1: divMoney(item.ncauChiChiaRaChiCs1, this.maDviTien),
-                ncauChiChiaRaChiMoi1: divMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien),
-                ncauChiChiaRaChiTx: divMoney(item.ncauChiChiaRaChiTx, this.maDviTien),
-                ncauChiChiaRaChiCs2: divMoney(item.ncauChiChiaRaChiCs2, this.maDviTien),
-                ncauChiChiaRaChiMoi2: divMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien),
                 checked: false,
             })
         })
@@ -181,10 +168,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
         this.lstCtietBcao.forEach(element => {
@@ -200,39 +183,23 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            const ncauChiTongSo = mulMoney(item.ncauChiTongSo, this.maDviTien);
-            const ncauChiTrongDoChiCs = mulMoney(item.ncauChiTrongDoChiCs, this.maDviTien);
-            const ncauChiTrongDoChiMoi = mulMoney(item.ncauChiTrongDoChiMoi, this.maDviTien);
-            const ncauChiChiaRaDtuPtrien = mulMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien);
-            const ncauChiChiaRaChiCs1 = mulMoney(item.ncauChiChiaRaChiCs1, this.maDviTien);
-            const ncauChiChiaRaChiMoi1 = mulMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien);
-            const ncauChiChiaRaChiTx = mulMoney(item.ncauChiChiaRaChiTx, this.maDviTien);
-            const ncauChiChiaRaChiCs2 = mulMoney(item.ncauChiChiaRaChiCs2, this.maDviTien);
-            const ncauChiChiaRaChiMoi2 = mulMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien);
-            if (ncauChiTongSo > MONEY_LIMIT || ncauChiTrongDoChiCs > MONEY_LIMIT || ncauChiTrongDoChiMoi > MONEY_LIMIT ||
-                ncauChiChiaRaDtuPtrien > MONEY_LIMIT || ncauChiChiaRaChiCs1 > MONEY_LIMIT || ncauChiChiaRaChiMoi1 > MONEY_LIMIT ||
-                ncauChiChiaRaChiTx > MONEY_LIMIT || ncauChiChiaRaChiCs2 > MONEY_LIMIT || ncauChiChiaRaChiMoi2 > MONEY_LIMIT) {
+            if (item.ncauChiTongSo > MONEY_LIMIT || item.ncauChiTrongDoChiCs > MONEY_LIMIT || item.ncauChiTrongDoChiMoi > MONEY_LIMIT ||
+                item.ncauChiChiaRaDtuPtrien > MONEY_LIMIT || item.ncauChiChiaRaChiCs1 > MONEY_LIMIT || item.ncauChiChiaRaChiMoi1 > MONEY_LIMIT ||
+                item.ncauChiChiaRaChiTx > MONEY_LIMIT || item.ncauChiChiaRaChiCs2 > MONEY_LIMIT || item.ncauChiChiaRaChiMoi2 > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                ncauChiTongSo: ncauChiTongSo,
-                ncauChiTrongDoChiCs: ncauChiTrongDoChiCs,
-                ncauChiTrongDoChiMoi: ncauChiTrongDoChiMoi,
-                ncauChiChiaRaDtuPtrien: ncauChiChiaRaDtuPtrien,
-                ncauChiChiaRaChiCs1: ncauChiChiaRaChiCs1,
-                ncauChiChiaRaChiMoi1: ncauChiChiaRaChiMoi1,
-                ncauChiChiaRaChiTx: ncauChiChiaRaChiTx,
-                ncauChiChiaRaChiCs2: ncauChiChiaRaChiCs2,
-                ncauChiChiaRaChiMoi2: ncauChiChiaRaChiMoi2,
             })
         })
 
-        if (!checkMoneyRange == true) {
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
+
+
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
@@ -826,27 +793,32 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.ncauChiTongSo = exchangeMoney(item.ncauChiTongSo, this.maDviTien, this.moneyUnit);
-            item.ncauChiTrongDoChiCs = exchangeMoney(item.ncauChiTrongDoChiCs, this.maDviTien, this.moneyUnit);
-            item.ncauChiTrongDoChiMoi = exchangeMoney(item.ncauChiTrongDoChiMoi, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaDtuPtrien = exchangeMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiCs1 = exchangeMoney(item.ncauChiChiaRaChiCs1, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiMoi1 = exchangeMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiTx = exchangeMoney(item.ncauChiChiaRaChiTx, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiCs2 = exchangeMoney(item.ncauChiChiaRaChiCs2, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.ncauChiTongSo = exchangeMoney(item.ncauChiTongSo, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiTrongDoChiCs = exchangeMoney(item.ncauChiTrongDoChiCs, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiTrongDoChiMoi = exchangeMoney(item.ncauChiTrongDoChiMoi, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaDtuPtrien = exchangeMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiCs1 = exchangeMoney(item.ncauChiChiaRaChiCs1, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiMoi1 = exchangeMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiTx = exchangeMoney(item.ncauChiChiaRaChiTx, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiCs2 = exchangeMoney(item.ncauChiChiaRaChiCs2, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

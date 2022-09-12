@@ -1073,6 +1073,13 @@ export function sumNumber(num: any): number {
   return tong;
 }
 
+export function mulNumber(num1: number, num2: number) {
+  if ((!num1 && num1 !== 0) || (!num2 && num2 !== 0)) {
+    return null;
+  }
+  return num1 * num2;
+}
+
 export function divNumber(num1, num2): number {
   if ((!num1 && num1 !== 0) &&
     (!num2 && num2 !== 0)) {
@@ -1461,7 +1468,7 @@ export function displayNumber(num: number): string {
   if (!imaginary) {
     displayValue = dau + separateNumber(real);
   } else {
-    displayValue = dau + separateNumber(real) + '.' + separateNumber(imaginary);
+    displayValue = dau + separateNumber(real) + ',' + separateNumber(imaginary);
   }
   return displayValue;
 }
@@ -1471,16 +1478,16 @@ export function separateNumber(str: string): string {
     return str;
   }
   let displayValue!: string;
-  let index = str.indexOf(',');
+  let index = str.indexOf('.');
   if (index == -1) {
-    displayValue = str.slice(0, -3) + ',' + str.slice(-3);
+    displayValue = str.slice(0, -3) + '.' + str.slice(-3);
     str = displayValue;
-    index = str.indexOf(',');
+    index = str.indexOf('.');
   }
   while (index - 3 > 0) {
-    displayValue = str.slice(0, index - 3) + ',' + str.slice(index - 3);
+    displayValue = str.slice(0, index - 3) + '.' + str.slice(index - 3);
     str = displayValue;
-    index = str.indexOf(',');
+    index = str.indexOf('.');
   }
   return displayValue;
 }

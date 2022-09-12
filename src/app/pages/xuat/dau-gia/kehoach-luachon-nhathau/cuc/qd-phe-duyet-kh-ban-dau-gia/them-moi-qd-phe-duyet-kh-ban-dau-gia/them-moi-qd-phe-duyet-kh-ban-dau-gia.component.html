@@ -4,11 +4,11 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="guiDuyet()">
+    <button type="button" class="btn btn-main" (click)="guiDuyet()" *ngIf="!isView">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()">
+    <button type="button" class="btn btn-main" (click)="save()" *ngIf="!isView">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>

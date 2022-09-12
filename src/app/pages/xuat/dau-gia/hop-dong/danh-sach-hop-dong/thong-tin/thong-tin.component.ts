@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,6 +18,11 @@ import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
+import {
+  DialogCanCuQdPheDuyetKqdgComponent
+} from "../../../../../../components/dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component";
+import {QuyetDinhPheDuyetKQBanDauGiaService} from "../../../../../../services/quyetDinhPheDuyetKQBanDauGia.service";
+import {HelperService} from "../../../../../../services/helper.service";
 
 interface DonviLienQuanModel {
   id: number;
@@ -94,21 +99,23 @@ export class ThongTinComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private quyetDinhPheDuyetKQBanDauGiaService: QuyetDinhPheDuyetKQBanDauGiaService,
     private _modalService: NzModalService,
-    private hopDongXuatHangService: HopDongXuatHangService
+    private hopDongXuatHangService: HopDongXuatHangService,
+    private helperService: HelperService,
   ) {
     this.formData = this.fb.group(
       {
         canCu: [null],
         idGoiThau: [null],
-        maHdong: [null],
+        maHdong: [null,[Validators.required]],
         tenHd: [null],
         ngayKy: [null],
         namKh: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
         tgianNkho: [null],
-        tenVthh: [null],
+        tenLoaiVthh: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
         tenCloaiVthh: [null],
@@ -147,13 +154,18 @@ export class ThongTinComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.listOfMapData.forEach((item) => {
+      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    });
     const yearNow = new Date().getUTCFullYear();
     this.maHopDongSuffix = `/${yearNow}/HĐMB`;
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
     this.userInfo = this.userService.getUserLogin();
+
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
-      tenDvi: this.userInfo.TEN_DVI ?? null
+      tenDvi: this.userInfo.TEN_DVI ?? null,
+
     })
     await Promise.all([
       this.loaiDonviLienquanAll()
@@ -187,7 +199,7 @@ export class ThongTinComponent implements OnInit {
             namKh: this.detail.namKh ?? null,
             ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
             soNgayThien: this.detail.soNgayThien ?? null,
-            tenVthh: this.detail.tenVthh ?? null,
+            tenLoaiVthh: this.detail.tenLoaiVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
             tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
@@ -229,6 +241,11 @@ export class ThongTinComponent implements OnInit {
   }
 
   async save(isOther: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
 
@@ -247,7 +264,7 @@ export class ThongTinComponent implements OnInit {
           delete body.ngayHieuLuc;
         delete body.maHdong;
         delete body.tenCloaiVthh;
-        delete body.tenVthh;
+        delete body.tenLoaiVthh;
 
         body.idNthau = `${this.dvLQuan.id}`;
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
@@ -333,11 +350,11 @@ export class ThongTinComponent implements OnInit {
     });
   }
 
-  openDialogKQLCNT() {
+  openDialogCanCu() {
     // if (this.id == 0) {
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin Kết quả lựa chọn nhà thầu',
-      nzContent: DialogCanCuKQLCNTComponent,
+      nzContent: DialogCanCuQdPheDuyetKqdgComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -349,12 +366,12 @@ export class ThongTinComponent implements OnInit {
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          canCu: data.soQd ?? null,
+          canCu: data.soQuyetDinh ?? null,
           namKh: +data.namKhoach ?? null,
           idGoiThau: null,
           soNgayThien: null,
-          tenVthh: null,
-          loaiVthh: null,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: null,
           tenCloaiVthh: null,
           soLuong: null,
@@ -374,7 +391,7 @@ export class ThongTinComponent implements OnInit {
         console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formData.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
-          tenVthh: data.tenVthh ?? null,
+          tenLoaiVthh: data.tenLoaiVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
@@ -439,7 +456,8 @@ export class ThongTinComponent implements OnInit {
   }
 
   async getListGoiThau(idCanCu) {
-    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(idCanCu);
+    // let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(idCanCu);
+    let res = await this.quyetDinhPheDuyetKQBanDauGiaService.chiTiet(idCanCu);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.listGoiThau = data.hhQdPduyetKqlcntDtlList;
@@ -474,5 +492,89 @@ export class ThongTinComponent implements OnInit {
       },
     });
   }
+////////////////////
+  listOfMapData: TreeNodeInterface[] = [
+    {
+      key: `1`,
+      name: 'Nhà kho A1',
+      age: '0102010101',
+      address: '',
+      children: [
+        {
+          key: `2`,
+          name: 'Ngăn kho A1/1',
+          age: '010201010101',
+          address: '',
+        },
+        {
+          key: `3`,
+          name: 'Ngăn kho A1/2',
+          age: '010201010101',
+          address: '',
+          children: [
+            {
+              key: `4`,
+              name: 'Lô số 1 Ngăn kho A1/1',
+              age: '0102010101010101',
+              address: '',
+            },
+          ],
+        }
+      ],
+    },
+  ];
+  mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+  collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.key === d.key)!;
+          target.expand = false;
+          this.collapse(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
 
+  convertTreeToList(root: TreeNodeInterface): TreeNodeInterface[] {
+    const stack: TreeNodeInterface[] = [];
+    const array: TreeNodeInterface[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+
+    while (stack.length !== 0) {
+      const node = stack.pop()!;
+      this.visitNode(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+        }
+      }
+    }
+
+    return array;
+  }
+
+  visitNode(node: TreeNodeInterface, hashMap: { [key: string]: boolean }, array: TreeNodeInterface[]): void {
+    if (!hashMap[node.key]) {
+      hashMap[node.key] = true;
+      array.push(node);
+    }
+  }
+  ////////////////////
+
+}
+export interface TreeNodeInterface {
+  key: string;
+  name: string;
+  age?: string;
+  level?: number;
+  expand?: boolean;
+  address?: string;
+  maDiemKho?: string;
+  tenDiemKho?: string;
+  children?: TreeNodeInterface[];
+  parent?: TreeNodeInterface;
 }

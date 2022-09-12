@@ -1,19 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NumberOnlyDirective } from 'src/app/directives/number-only.directive';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import * as fileSaver from 'file-saver';
 
 export class ItemData {
     bcaoCtietId: string;
@@ -64,7 +62,6 @@ export class BaoCao04anComponent implements OnInit {
     id: string;
     thuyetMinh: string;
     maDviTien: string;
-    moneyUnit: string;
     tuNgay: any;
     denNgay: any;
     namBcao: number;
@@ -78,8 +75,9 @@ export class BaoCao04anComponent implements OnInit {
     statusBtnOk: boolean;
     statusBtnExport: boolean;
     allChecked = false;
+    editMoneyUnit = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
+    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -94,8 +92,7 @@ export class BaoCao04anComponent implements OnInit {
         this.spinner.show();
         //lay thong tin chung cho bao cao 04an
         this.id = this.data?.id;
-        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '3';
-        this.moneyUnit = this.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -104,14 +101,7 @@ export class BaoCao04anComponent implements OnInit {
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
-        //tinh toan lai du liwu trong bang theo don vi tien 
-        this.lstCtietBcao.forEach(item => {
-            item.trongDotTcong = divMoney(item.trongDotTcong, this.maDviTien);
-            item.luyKeTcong = divMoney(item.luyKeTcong, this.maDviTien);
-            item.listCtiet.forEach(e => {
-                e.sl = divMoney(e.sl, this.maDviTien);
-            })
-        })
+
         //lay danh muc noi dung chi
         await this.danhMucService.dMNoiDungChi04a().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -351,16 +341,10 @@ export class BaoCao04anComponent implements OnInit {
         //tinh lai tien va check do lon cua tien
         let checkMoneyRange = true;
         baoCaoChiTietTemp.lstCtietBcaos.forEach(item => {
-            item.trongDotTcong = mulMoney(item.trongDotTcong, this.maDviTien);
-            item.luyKeTcong = mulMoney(item.luyKeTcong, this.maDviTien);
             if (item.trongDotTcong > MONEY_LIMIT || item.luyKeTcong > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
-            item.listCtiet.forEach(e => {
-                e.sl = mulMoney(e.sl, this.maDviTien);
-            })
-
         })
         if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -522,7 +506,7 @@ export class BaoCao04anComponent implements OnInit {
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
-            let data: vatTu[] = [];
+            const data: vatTu[] = [];
             item.listCtiet.forEach(e => {
                 data.push({ ...e });
             })
@@ -654,11 +638,11 @@ export class BaoCao04anComponent implements OnInit {
         const soLuongThucHienNamNay = this.lstCtietBcao.find(item => item.stt == '0.1.4');
         if (soLuongThucHienGop) {
             soLuongThucHienGop?.listCtiet?.forEach(item => {
-                item.sl = soLuongThucHienNamTruoc?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl
-                    + soLuongThucHienNamNay?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
+                item.sl = sumNumber([soLuongThucHienNamTruoc?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl,
+                soLuongThucHienNamNay?.listCtiet?.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl]);
             })
-            soLuongThucHienGop.trongDotTcong = soLuongThucHienNamTruoc.trongDotTcong + soLuongThucHienNamNay.trongDotTcong;
-            soLuongThucHienGop.luyKeTcong = soLuongThucHienNamTruoc.luyKeTcong + soLuongThucHienNamNay.luyKeTcong;
+            soLuongThucHienGop.trongDotTcong = sumNumber([soLuongThucHienNamTruoc.trongDotTcong, soLuongThucHienNamNay.trongDotTcong]);
+            soLuongThucHienGop.luyKeTcong = sumNumber([soLuongThucHienNamTruoc.luyKeTcong, soLuongThucHienNamNay.luyKeTcong]);
         }
         //tinh toan hieu cua muc B
         let index1: number;
@@ -927,8 +911,8 @@ export class BaoCao04anComponent implements OnInit {
                 if (e.loaiMatHang == 0) {
                     tonglstChitietVtuTrongDot += e.sl;
                     //set luy ke tuong ung = luy ke default + chi tiet theo dot
-                    const sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == '1')?.sl : 0;
-                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1).sl = sl + e.sl;
+                    const sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl : 0;
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1).sl = sumNumber([sl, e.sl]);
                 }
             })
         }
@@ -936,7 +920,7 @@ export class BaoCao04anComponent implements OnInit {
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == 1) {
-                    tonglstChitietVtuLuyke += e.sl;
+                    tonglstChitietVtuLuyke = sumNumber([tonglstChitietVtuLuyke, e.sl]);
                 }
             })
         }
@@ -946,6 +930,10 @@ export class BaoCao04anComponent implements OnInit {
 
     addAllCol() {
         const lstDviChon = this.lstVatTuFull.filter(item => this.listColTemp?.findIndex(data => data.maVtu == item.id) == -1);
+        const obj = {
+            danhSachDonVi: lstDviChon,
+            multi: true,
+        }
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách vật tư',
             nzContent: DialogLuaChonThemDonViComponent,
@@ -954,7 +942,7 @@ export class BaoCao04anComponent implements OnInit {
             nzWidth: '65%',
             nzFooter: null,
             nzComponentParams: {
-                danhSachDonVi: lstDviChon
+                obj: obj
             },
         });
         modalIn.afterClose.subscribe((res) => {
@@ -1136,23 +1124,28 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.trongDotTcong = exchangeMoney(item.trongDotTcong, this.maDviTien, this.moneyUnit);
-            item.luyKeTcong = exchangeMoney(item.luyKeTcong, this.maDviTien, this.moneyUnit);
-            item.listCtiet.forEach(e => {
-                e.sl = exchangeMoney(e.sl, this.maDviTien, this.moneyUnit);
-            })
-        })
-        this.maDviTien = this.moneyUnit;
-        this.updateEditCache();
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.trongDotTcong = exchangeMoney(item.trongDotTcong, this.maDviTien, this.moneyUnit);
+    //         item.luyKeTcong = exchangeMoney(item.luyKeTcong, this.maDviTien, this.moneyUnit);
+    //         item.listCtiet.forEach(e => {
+    //             e.sl = exchangeMoney(e.sl, this.maDviTien, this.moneyUnit);
+    //         })
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

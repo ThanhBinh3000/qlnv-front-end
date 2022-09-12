@@ -15,15 +15,15 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
   templateUrl: './tong-hop-khlcnt.component.html',
   styleUrls: ['./tong-hop-khlcnt.component.scss']
 })
-export class TongHopKhlcntComponent implements OnInit {
-  @Input() loaiVthh: string;
 
+export class TongHopKhlcntComponent implements OnInit {
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -37,11 +37,12 @@ export class TongHopKhlcntComponent implements OnInit {
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
-
+  @Input() loaiVthh: string;
   tabSelected: string = 'phuong-an-tong-hop';
   listNam: any[] = [];
   yearNow: number = 0;
   danhMucDonVi: any;
+
   searchFilter = {
     namKh: dayjs().get('year'),
     ngayTongHop: '',
@@ -301,6 +302,7 @@ export class TongHopKhlcntComponent implements OnInit {
     this.searchFilter.noiDung = null;
     this.searchFilter.ngayTongHop = null;
     this.search();
+    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
@@ -345,10 +347,10 @@ export class TongHopKhlcntComponent implements OnInit {
       case '00': {
         return 'Chưa tạo QĐ'
       }
-      case '01': {
+      case '24': {
         return 'Đã dự thảo QĐ'
       }
-      case '02': {
+      case '25': {
         return 'Đã ban hành QĐ'
       }
     }
@@ -359,17 +361,16 @@ export class TongHopKhlcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          // "denNgayTao": this.endValue
-          //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-          //   : null,
-          // "loaiVthh": this.searchFilter.loaiVthh,
-          // "namKhoach": this.searchFilter.namKh,
-          // "paggingReq": null,
-          // "str": "",
-          // "trangThai": "",
-          // "tuNgayTao": this.startValue
-          //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-          //   : null,
+          tuNgayThop: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayThop: this.searchFilter.ngayTongHop
+            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          cloaiVthh: this.searchFilter.cloaiVthh,
+          namKhoach: this.searchFilter.namKh,
+          noiDung: this.searchFilter.noiDung
         };
         this.tongHopDeXuatKHLCNTService
           .exportList(body)
