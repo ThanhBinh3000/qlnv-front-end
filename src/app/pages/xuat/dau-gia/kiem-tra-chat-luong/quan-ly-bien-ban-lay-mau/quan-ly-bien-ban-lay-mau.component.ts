@@ -213,8 +213,10 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.spinner.show();
     let body = {
       "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
-      "capDvis": this.detail.capDvi,
-      "maDvis": this.detail.maDvi,
+      // "capDvis": this.detail.capDvi,
+      "capDvis": null,
+      // "maDvis": this.detail.maDvi,
+      "maDvis": null,
       "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
       "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
       "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,

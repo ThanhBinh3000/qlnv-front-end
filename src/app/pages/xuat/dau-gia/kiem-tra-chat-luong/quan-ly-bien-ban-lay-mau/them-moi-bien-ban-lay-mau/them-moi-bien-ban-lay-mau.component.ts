@@ -28,7 +28,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { isEmpty } from 'lodash';
 import { QuanLyBienBanLayMauXuatService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/quanLyBienBanLayMauXuat';
@@ -132,18 +132,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenDonVi: [null],
       maQHNS: [null],
       donViKN: [null],
-      loaiHang: [null],
-      chungLoaiHang: [null],
-      maDiemKho: [null],
-      maNhaKho: [null],
-      maNganKho: [null],
-      maLoKho: [null],
+      loaiHang: [null, [Validators.required]],
+      chungLoaiHang: [null, [Validators.required]],
+      maDiemKho: [null, [Validators.required]],
+      maNhaKho: [null, [Validators.required]],
+      maNganKho: [null, [Validators.required]],
+      maLoKho: [null, [Validators.required]],
       ngayLayMau: [null],
       diaDiemLayMau: [null],
-      sLMauHangKiemTra: [null],
-      ppLayMau: [null],
-      chiTieuKT: [null],
-      kQNiemPhongMau: [null],
+      sLMauHangKiemTra: [null, [Validators.required]],
+      ppLayMau: [null, [Validators.required]],
+      chiTieuKT: [null, [Validators.required]],
+      kQNiemPhongMau: [null, [Validators.required]],
     });
   }
   async initData() {
@@ -554,18 +554,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data);
       this.listDaiDien = res.data.chiTietList
-      let soQD = this.listSoQuyetDinh.find((x) => x.id == res.data.qdgnvxId)
       this.formData.patchValue({
-        soQDXuat: soQD.soQuyetDinh,
+        soQDXuat: res.data.qdgnvxId,
         soBienBan: res.data.soBienBan,
         donViKN: res.data.tenDonViKiemNghiem,
-        loaiHang: res.data.tenVatTu,
-        chungLoaiHang: res.data.tenVatTuCha,
-        maDiemKho: res.data.tenDiemKho,
-        maNhaKho: res.data.tenNhaKho,
-        maNganKho: res.data.tenNganKho,
-        maLoKho: res.data.tenLoKho,
+        loaiHang: res.data.maVatTuCha,
+        chungLoaiHang: res.data.maVatTu,
+        maDiemKho: res.data.maDiemKho,
+        maNhaKho: res.data.maNhaKho,
+        maNganKho: res.data.maNganKho,
+        maLoKho: res.data.maNganLo,
         ngayLayMau: res.data.ngayLayMau,
         diaDiemLayMau: res.data.diaDiemLayMau,
         sLMauHangKiemTra: res.data.soLuongMau,
