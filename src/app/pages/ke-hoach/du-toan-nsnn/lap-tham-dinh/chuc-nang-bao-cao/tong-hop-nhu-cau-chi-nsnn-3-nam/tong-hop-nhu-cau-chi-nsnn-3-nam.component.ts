@@ -80,7 +80,6 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     allChecked = false;                         // check all checkbox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -793,6 +792,10 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
+    onChange(num: number): void {
+        console.log(num);
     }
 
     // changeMoney() {

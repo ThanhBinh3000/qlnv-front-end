@@ -95,7 +95,6 @@ export class VonBanHangComponent implements OnInit {
     statusBtnParent: boolean;
     allChecked = false;
     editMoneyUnit = false;
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {

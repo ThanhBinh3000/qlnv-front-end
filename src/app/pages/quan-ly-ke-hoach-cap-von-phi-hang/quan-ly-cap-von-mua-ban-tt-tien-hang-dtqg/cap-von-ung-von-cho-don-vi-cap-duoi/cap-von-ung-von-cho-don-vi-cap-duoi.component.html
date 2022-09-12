@@ -224,20 +224,18 @@
 											{{displayValue(editCache[data.id].data.tongSoTien)}}
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[nzFormatter]="formatter" [nzPrecision]="0"
+											<fm-input-number class="search__input"
 												[class]="editCache[data.id].data.nopThue >= 0?'' : 'input-error-validate' "
 												[(ngModel)]="editCache[data.id].data.nopThue"
 												(ngModelChange)="changeModel(data.id)">
-											</nz-input-number>
+											</fm-input-number>
 										</td>
 										<td>
-											<nz-input-number class="search__input" [nzFormatter]="formatter"
-												[nzPrecision]="0"
+											<fm-input-number class="search__input"
 												[class]="(editCache[data.id].data.ttChoDviHuong || editCache[data.id].data.ttChoDviHuong === 0) && editCache[data.id].data.ttChoDviHuong >= 0 ?'' : 'input-error-validate' "
-												nzSize="small" [(ngModel)]="editCache[data.id].data.ttChoDviHuong"
+												[(ngModel)]="editCache[data.id].data.ttChoDviHuong"
 												(ngModelChange)="changeModel(data.id)">
-											</nz-input-number>
+											</fm-input-number>
 										</td>
 										<td>
 											<input nz-input class="search__input"

@@ -91,7 +91,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: any = [];
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
