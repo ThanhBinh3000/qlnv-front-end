@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { tr_TR } from 'ng-zorro-antd/i18n';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -120,6 +121,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       await Promise.all([
         this.loadBanGiaoMau(),
         this.loadSoQuyetDinh(),
+
       ]);
       await this.loadChiTiet(this.id);
       this.loadDaiDien();
@@ -218,6 +220,8 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     let res = await this.quanLyBienBanBanGiaoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
+
       this.listBanGiaoMau = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -225,8 +229,11 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   }
 
   changeBanGiaoMau() {
+    console.log(this.detail);
     let banGiao = this.listBanGiaoMau.filter(x => x.id == this.detail.bienBanGiaoMauId);
+    console.log(banGiao);
     if (banGiao && banGiao.length > 0) {
+
       // this.detailGiaoNhap = banGiao[0];
     }
   }
@@ -282,7 +289,9 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       let res = await this.hoSoKyThuatService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+
           this.detail = res.data;
+
           if (this.detail.children) {
             this.detail.detail = this.detail.children;
           }
@@ -299,6 +308,8 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           if (this.detail.fileDinhKems) {
             this.listFileDinhKem = this.detail.fileDinhKems;
           }
+          console.log(this.listCanCu, this.listFileDinhKem);
+
         }
       }
     }
@@ -540,19 +551,14 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
-      return 'da-ban-hanh';
+    if (trangThai === "02") {
+      return 'da-ban-hanh'
     }
+    return 'du-thao-va-lanh-dao-duyet'
   }
 
   print() {
 
   }
 }
+

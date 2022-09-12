@@ -33,7 +33,10 @@
   <div class="header">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+<span *ngIf="!id" class="du-thao-va-lanh-dao-duyet">
+  Dự Thảo
+</span>
+<span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
         <span class="title-form"> Bảng kê xuất vật tư</span>
       </div>
     </div>
@@ -130,41 +133,70 @@
         </nz-form-item>
       </div>
       <div nz-col nzSpan="24" class="flex-card p-lr16 pd-10">
-        <nz-table>
+        <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
+          [nzData]="detail?.chiTiets">
           <thead>
             <tr>
               <th width="32px">STT</th>
               <th width="863px">Số lượng</th>
               <th width="863px">Số serial/mã sản phẩm</th>
-              <th width="82px">Hành động</th>
-            </tr>
+              <th width="140px" class="text-center" *ngIf="!(isDisableField() || isView)">
+                HÀNH ĐỘNG
+              </th>
+              </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr *ngIf="!(isDisableField() || isView)">
               <td></td>
               <td>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm">
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
+                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuong" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
               </td>
               <td>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm">
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
+                <input type="text" nz-input [(ngModel)]="create.soSerial" />
               </td>
-              <td><a>
+              <td>
+                <a (click)="addRow()">
                   <i class="fa fa-plus"></i>
                 </a>
-                <a>
-                  <i class="icon htvbdh_nhap-lai1"></i>
+                <a (click)="clearItemRow()">
+                  <i class="fa fa-trash-o do"></i>
                 </a>
-              </td>
+                </td>
+                </tr>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                  <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>{{data.soLuong ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.soSerial}}</td>
+                    <td *ngIf="!(isDisableField() || isView)">
+                      <a (click)="editRow(data.stt)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteRow(data)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <ng-template #editTemplate>
+                    <td></td>
+                    <td>
+                      <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="editDataCache[data.stt]?.data.soLuong"
+                        [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <input type="text" nz-input [(ngModel)]="editDataCache[data.stt]?.data.soSerial" />
+                    </td>
+                    <td>
+                      <a (click)="saveEdit(data.stt)" class="save">
+                        <i class="fa fa-save"></i>
+                      </a>
+                      <a (click)="cancelEdit(data.stt)">
+                        <i class="fa fa-times do"></i>
+                      </a>
+                    </td>
+              </ng-template>
             </tr>
           </tbody>
         </nz-table>
