@@ -160,7 +160,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.loadDonVi();
     this.initForm();
     this.formData.patchValue({
-      namKeHoach: (this.yearNow = dayjs().get('year')),
+      namKeHoach: dayjs().get('year')
     });
     if (this.id > 0) {
       this.loadThongTinChiTieuKeHoachNam(this.id);
@@ -2431,22 +2431,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
   openFileCanCu(event) {
-    // let item = {
-    //   id: new Date().getTime(),
-    //   text: event.name,
-    // };
-    // if (!this.canCuList.find((x) => x.text === item.text)) {
-    //   this.uploadFileService
-    //     .uploadFile(event.file, event.name)
-    //     .then((resUpload) => {
-    //       const fileDinhKem = new FileDinhKem();
-    //       fileDinhKem.fileName = resUpload.filename;
-    //       fileDinhKem.fileSize = resUpload.size;
-    //       fileDinhKem.fileUrl = resUpload.url;
-    //       this.thongTinChiTieuKeHoachNam.canCus.push(fileDinhKem);
-    //       this.canCuList.push(item);
-    //     });
-    // }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách QĐ phân bổ vốn và giao dự toán của BTC cho TCDTNN',
       nzContent: DanhSachQuyetDinhPhanBoComponent,
@@ -2458,6 +2442,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
+        let item = {
+          id: data.id,
+          text: data.soQuyetDinh,
+        };
+        this.yearNow = data.namKeHoach;
+        this.formData.patchValue({ namKeHoach: this.yearNow });
+        if (!this.canCuList.find((x) => x.text === item.text)) {
+          // this.thongTinChiTieuKeHoachNam.canCus.push(item);
+          this.canCuList = [];
+          this.canCuList.push(item);
+        }
       }
     });
   }

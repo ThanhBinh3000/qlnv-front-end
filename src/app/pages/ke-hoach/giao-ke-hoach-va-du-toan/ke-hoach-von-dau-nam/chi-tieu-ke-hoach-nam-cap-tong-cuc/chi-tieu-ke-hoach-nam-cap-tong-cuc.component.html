@@ -10,43 +10,17 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ</label>
+            <label class="search__label">Số quyết định</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" placeholder="Số QĐ" />
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="12">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" placeholder="Trích yếu" />
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="6">
             <label class="search__label">Ngày ký</label>
-            <!-- <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày"></nz-date-picker> -->
             <nz-range-picker nzFormat="dd/MM/yyyy" [(ngModel)]="startValue">
             </nz-range-picker>
-          </div>
-          <!-- <div nz-col nzSpan="5">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
-              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
-          </div> -->
-          <div nz-col nzSpan="8">
-            <label class="search__label">Đơn vị</label>
-            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                [nzAutocomplete]="auto" />
-            </nz-input-group>
-            <ng-template #suffixIcon>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-            <nz-autocomplete #auto>
-              <ng-container>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
-                  (click)="selectDonVi(option)">
-                  {{
-                  option.labelDonVi }}
-                </nz-auto-option>
-              </ng-container>
-            </nz-autocomplete>
           </div>
         </div>
         <div class="cangiua group-button-search">
