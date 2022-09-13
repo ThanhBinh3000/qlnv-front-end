@@ -48,6 +48,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  muaTangList: any[] = [];
   constructor(private readonly fb: FormBuilder,
     private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
     private spinner: NgxSpinnerService,
@@ -353,6 +354,24 @@ export class BtcGiaoTcdtComponent implements OnInit {
       this.indeterminate = false;
     } else {
       this.indeterminate = true;
+    }
+  }
+
+
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.quyetDinhBtcTcdtService.getDetail(id);
+      console.log(res);
+      this.muaTangList = res.data.muaTangList;
+    }
+  }
+  calcTong() {
+    if (this.muaTangList) {
+      const sum = this.muaTangList.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 

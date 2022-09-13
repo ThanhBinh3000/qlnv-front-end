@@ -1,19 +1,19 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {
   DialogChiTietKeHoachGiaoBoNganhComponent
 } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Globals} from 'src/app/shared/globals';
-import {MESSAGE} from 'src/app/constants/message';
-import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {UserService} from 'src/app/services/user.service';
-import {UserLogin} from 'src/app/models/userlogin';
-import {HelperService} from 'src/app/services/helper.service';
-import {STATUS} from "../../../../../../../constants/status";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { HelperService } from 'src/app/services/helper.service';
+import { STATUS } from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -51,10 +51,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       namQd: [dayjs().get('year'), [Validators.required]],
       trichYeu: [null],
       trangThai: ['00'],
-      muaTangList: [],
-      xuatGiamList: [],
-      xuatBanList: [],
-      luanPhienList: [],
     });
   }
 
@@ -90,7 +86,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   loadDsNam() {
     for (let i = 0; i < 20; i++) {
       this.dsNam.push({
-        value: dayjs().get('year')+ i,
+        value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
       });
     }
