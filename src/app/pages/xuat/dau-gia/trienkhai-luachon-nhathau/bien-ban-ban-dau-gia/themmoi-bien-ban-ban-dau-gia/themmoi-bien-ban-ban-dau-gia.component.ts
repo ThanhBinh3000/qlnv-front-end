@@ -1,5 +1,5 @@
 import { ThongBaoDauGiaTaiSanService } from './../../../../../../services/thongBaoDauGiaTaiSan.service';
-import { BienBanBanDauGia } from './../../../../../../models/BienBanBanDauGia';
+import { BienBanBanDauGia, Cts } from './../../../../../../models/BienBanBanDauGia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -59,6 +59,10 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     expandSet = new Set<number>();
     formData: FormGroup;
     bienBanBanDauGia: BienBanBanDauGia = new BienBanBanDauGia();
+    chiTietCtsKhachMoiCreate: Cts = new Cts();
+    chiTietCtsDauGiaVienCreate: Cts = new Cts();
+    chiTietCtsToChucThamGiaDgCreate: Cts = new Cts();
+    dsChiTietCtsClone: Array<Cts> = [];
     onExpandChange(id: number, checked: boolean): void {
         if (checked) {
             this.expandSet.add(id);
@@ -124,9 +128,9 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
             this.initForm();
             await Promise.all([
-                this.loadDiemKho(),
-                this.loadDanhMucHang(),
-                this.loadSoQuyetDinh(),
+                // this.loadDiemKho(),
+                // this.loadDanhMucHang(),
+                // this.loadSoQuyetDinh(),
                 this.getListVthh(),
                 this.loadThongBaoDauGiaTaiSan()
             ]);
@@ -305,10 +309,9 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             let res = await this.quanLyBienBanBanDauGiaService.loadChiTiet(id);
             if (res.msg == MESSAGE.SUCCESS) {
                 if (res.data) {
-                    this.detail = res.data;
-                    if (this.detail.hangHoaRes) {
-                        this.detail.hangHoaList = this.detail.hangHoaRes;
-                    }
+                    this.bienBanBanDauGia = res.data;
+                    this.dsChiTietCtsClone = this.bienBanBanDauGia.cts;
+                    this.initForm();
                 }
             }
         }
@@ -514,8 +517,10 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     }
 
     async save(isOther: boolean) {
-        // this.spinner.show();
-
+        this.spinner.show();
+        this.bienBanBanDauGia.cts.forEach(bb => {
+            delete bb.idVirtual;
+        })
         try {
             let body = {
                 "ct1s": [
@@ -528,28 +533,22 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     //     "traGiaCaoNhat": "string"
                     // }
                 ],
-                "cts": [
-                    // {
-                    //     "bbBanDauGiaId": 0,
-                    //     "chucVu": "string",
-                    //     "hoTen": "string",
-                    //     "id": 0,
-                    //     "loaiTptg": "string",
-                    //     "noiCongTac": "string",
-                    //     "stt": 0
-                    // }
-                ],
+                "cts": this.bienBanBanDauGia.cts,
                 "diaDiem": this.formData.get('diaDiem').value,
                 "donViThongBao": this.formData.get('donViThongBao').value,
                 "id": this.bienBanBanDauGia.id,
                 "loaiVthh": this.formData.get('loaiVthh').value,
-                "maVatTuCha": null,
-                "nam": this.formData.get('na').value,
+                "maVatTuCha": this.formData.get('loaiVthh').value,
+                "nam": this.formData.get('namKeHoach').value,
                 "ngayKy": this.formData.get('ngayKy').value ? dayjs(this.formData.get('ngayKy').value).format(
                     'YYYY-MM-DD',
                 )
                     : null,
-                "ngayToChuc": this.formData.get('ngayToChuc').value ? dayjs(this.formData.get('ngayToChuc').value).format(
+                "ngayToChucDen": this.formData.get('ngayToChuc').value ? dayjs(this.formData.get('ngayToChuc').value[1]).format(
+                    'YYYY-MM-DD',
+                )
+                    : null,
+                "ngayToChucTu": this.formData.get('ngayToChuc').value ? dayjs(this.formData.get('ngayToChuc').value[0]).format(
                     'YYYY-MM-DD',
                 )
                     : null,
@@ -559,34 +558,34 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             };
             console.log("body: ", body);
 
-            // if (this.id > 0) {
-            //     let res = await this.quanLyBienBanBanDauGiaService.sua(
-            //         body,
-            //     );
-            //     if (res.msg == MESSAGE.SUCCESS) {
-            //         if (!isOther) {
-            //             this.notification.success(
-            //                 MESSAGE.SUCCESS,
-            //                 MESSAGE.UPDATE_SUCCESS,
-            //             );
-            //             this.back();
-            //         }
-            //     } else {
-            //         this.notification.error(MESSAGE.ERROR, res.msg);
-            //     }
-            // } else {
-            //     let res = await this.quanLyBienBanBanDauGiaService.them(
-            //         body,
-            //     );
-            //     if (res.msg == MESSAGE.SUCCESS) {
-            //         if (!isOther) {
-            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            //             this.back();
-            //         }
-            //     } else {
-            //         this.notification.error(MESSAGE.ERROR, res.msg);
-            //     }
-            // }
+            if (this.id > 0) {
+                let res = await this.quanLyBienBanBanDauGiaService.sua(
+                    body,
+                );
+                if (res.msg == MESSAGE.SUCCESS) {
+                    if (!isOther) {
+                        this.notification.success(
+                            MESSAGE.SUCCESS,
+                            MESSAGE.UPDATE_SUCCESS,
+                        );
+                        this.back();
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+            } else {
+                let res = await this.quanLyBienBanBanDauGiaService.them(
+                    body,
+                );
+                if (res.msg == MESSAGE.SUCCESS) {
+                    if (!isOther) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                        this.back();
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+            }
             this.spinner.hide();
         } catch (e) {
             console.log('error: ', e);
@@ -630,5 +629,89 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
         this.spinner.hide();
+    }
+    newObjectKhachMoi() {
+        this.chiTietCtsKhachMoiCreate = new Cts();
+    }
+    newObjectDauGiaVien() {
+        this.chiTietCtsDauGiaVienCreate = new Cts();
+    }
+    newObjectToChucThamGia() {
+        this.chiTietCtsToChucThamGiaDgCreate = new Cts();
+    }
+
+    addKhachMoi(type: string) {
+        if ((type === '00' && !this.chiTietCtsKhachMoiCreate.hoTen) ||
+            (type === '01' && !this.chiTietCtsDauGiaVienCreate.hoTen) ||
+            (type === '02' && !this.chiTietCtsToChucThamGiaDgCreate.hoTen)) {
+            return;
+        }
+        switch (type) {
+            case "00":
+                this.chiTietCtsKhachMoiCreate.idVirtual = new Date().getTime();
+                this.chiTietCtsKhachMoiCreate.loaiTptg = type;
+                this.bienBanBanDauGia.cts = [...this.bienBanBanDauGia.cts, this.chiTietCtsKhachMoiCreate];
+                this.chiTietCtsKhachMoiCreate.stt = this.bienBanBanDauGia.cts?.filter(bb => bb.loaiTptg === '00').length;
+                this.newObjectKhachMoi();
+                break;
+            case "01":
+                this.chiTietCtsDauGiaVienCreate.idVirtual = new Date().getTime();
+                this.chiTietCtsDauGiaVienCreate.loaiTptg = type;
+                this.bienBanBanDauGia.cts = [...this.bienBanBanDauGia.cts, this.chiTietCtsDauGiaVienCreate];
+                this.chiTietCtsDauGiaVienCreate.stt = this.bienBanBanDauGia.cts?.filter(bb => bb.loaiTptg === '01').length;
+                this.newObjectDauGiaVien();
+                break;
+            case "02":
+                this.chiTietCtsToChucThamGiaDgCreate.idVirtual = new Date().getTime();
+                this.chiTietCtsToChucThamGiaDgCreate.loaiTptg = type;
+                this.bienBanBanDauGia.cts = [...this.bienBanBanDauGia.cts, this.chiTietCtsToChucThamGiaDgCreate];
+                this.chiTietCtsToChucThamGiaDgCreate.stt = this.bienBanBanDauGia.cts?.filter(bb => bb.loaiTptg === '02').length;
+                this.newObjectToChucThamGia();
+                break;
+            default:
+                break;
+        }
+        this.dsChiTietCtsClone = cloneDeep(this.bienBanBanDauGia.cts);
+        console.log("this.dsChiTietCtsClone: ", this.dsChiTietCtsClone);
+
+    }
+    saveEdit(i: number) {
+        this.dsChiTietCtsClone[i].isEdit = false;
+        Object.assign(
+            this.bienBanBanDauGia.cts[i],
+            this.dsChiTietCtsClone[i],
+        );
+    }
+    cancelEdit(index: number) {
+        this.dsChiTietCtsClone = cloneDeep(this.bienBanBanDauGia.cts);
+        this.dsChiTietCtsClone[index].isEdit = false;
+    }
+    startEdit(index: number) {
+        this.dsChiTietCtsClone[index].isEdit = true;
+    }
+    deleteData(id: number) {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: () => {
+                this.bienBanBanDauGia.cts =
+                    this.bienBanBanDauGia.cts.filter(
+                        (ddNhapKho) => ddNhapKho.idVirtual !== id,
+                    );
+                this.dsChiTietCtsClone = cloneDeep(
+                    this.bienBanBanDauGia.cts,
+                );
+            },
+        });
+    }
+    isDisableField() {
+        if (this.bienBanBanDauGia && (this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.bienBanBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+            return true;
+        }
     }
 }

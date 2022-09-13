@@ -28,7 +28,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { isEmpty } from 'lodash';
 import { QuanLyBienBanLayMauXuatService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/quanLyBienBanLayMauXuat';
@@ -132,18 +132,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenDonVi: [null],
       maQHNS: [null],
       donViKN: [null],
-      loaiHang: [null],
-      chungLoaiHang: [null],
-      maDiemKho: [null],
-      maNhaKho: [null],
-      maNganKho: [null],
-      maLoKho: [null],
+      loaiHang: [null, [Validators.required]],
+      chungLoaiHang: [null, [Validators.required]],
+      maDiemKho: [null, [Validators.required]],
+      maNhaKho: [null, [Validators.required]],
+      maNganKho: [null, [Validators.required]],
+      maLoKho: [null, [Validators.required]],
       ngayLayMau: [null],
       diaDiemLayMau: [null],
-      sLMauHangKiemTra: [null],
-      ppLayMau: [null],
-      chiTieuKT: [null],
-      kQNiemPhongMau: [null],
+      sLMauHangKiemTra: [null, [Validators.required]],
+      ppLayMau: [null, [Validators.required]],
+      chiTieuKT: [null, [Validators.required]],
+      kQNiemPhongMau: [null, [Validators.required]],
     });
   }
   async initData() {
@@ -312,7 +312,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       maDiemKho: this.formData.value.maDiemKho,
       maDvi: this.detail.maDvi,
       maNganKho: this.formData.value.maNganKho,
-      maNganLo: this.formData.value.maNganLo,
+      maNganLo: this.formData.value.maLoKho,
       maNhaKho: this.formData.value.maNhaKho,
       maVatTu: this.formData.value.chungLoaiHang,
       maVatTuCha: this.formData.value.loaiHang,
@@ -337,7 +337,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -376,7 +376,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.LANH_DAO_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -444,40 +444,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
-          };
-          const res = await this.bienBanLayMauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.redirectBienBanLayMau();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-  banHanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -513,7 +480,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -554,18 +521,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data);
       this.listDaiDien = res.data.chiTietList
-      let soQD = this.listSoQuyetDinh.find((x) => x.id == res.data.qdgnvxId)
       this.formData.patchValue({
-        soQDXuat: soQD.soQuyetDinh,
+        soQDXuat: res.data.qdgnvxId,
         soBienBan: res.data.soBienBan,
-        donViKN: res.data.tenDonViKiemNghiem,
-        loaiHang: res.data.tenVatTu,
-        chungLoaiHang: res.data.tenVatTuCha,
-        maDiemKho: res.data.tenDiemKho,
-        maNhaKho: res.data.tenNhaKho,
-        maNganKho: res.data.tenNganKho,
-        maLoKho: res.data.tenLoKho,
+        donViKN: res.data.donViKiemNghiem,
+        loaiHang: res.data.maVatTuCha,
+        chungLoaiHang: res.data.maVatTu,
+        maDiemKho: res.data.maDiemKho,
+        maNhaKho: res.data.maNhaKho,
+        maNganKho: res.data.maNganKho,
+        maLoKho: res.data.maNganLo,
         ngayLayMau: res.data.ngayLayMau,
         diaDiemLayMau: res.data.diaDiemLayMau,
         sLMauHangKiemTra: res.data.soLuongMau,
