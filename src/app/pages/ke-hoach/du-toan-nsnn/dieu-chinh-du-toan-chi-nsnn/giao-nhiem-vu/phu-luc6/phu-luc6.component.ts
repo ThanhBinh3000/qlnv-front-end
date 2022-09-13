@@ -454,7 +454,6 @@ export class PhuLuc6Component implements OnInit {
     const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
     const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
     // tim cac vi tri can thay doi lai stt
-    debugger
     const lstIndex: number[] = [];
     for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
       if (this.getHead(this.lstCtietBcao[i].stt) == head) {
