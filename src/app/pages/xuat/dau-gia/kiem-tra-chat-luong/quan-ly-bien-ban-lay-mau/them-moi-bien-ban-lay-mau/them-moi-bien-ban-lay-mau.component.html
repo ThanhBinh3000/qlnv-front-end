@@ -4,21 +4,23 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub" *ngIf="isAction() && userService.isChiCuc()" (click)="guiDuyet()"
-      [disabled]="!formData.valid">
+    <button class="btn btn-sub" *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || id == 0) && !isView"
+      (click)="guiDuyet()" [disabled]="!formData.valid">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và Gửi duyệt</span>
     </button>
-    <button class="btn btn-sub" (click)="pheDuyet()" *ngIf="userService.isCuc()">
+    <button class="btn btn-sub" (click)="pheDuyet()"
+      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC)">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button class="btn btn-sub" (click)="tuChoi()" *ngIf="userService.isCuc()">
+    <button class="btn btn-sub" (click)="tuChoi()"
+      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh" (click)="save()" *ngIf="isAction() && userService.isChiCuc()"
-      [disabled]="!formData.valid">
+    <button class="btn btn-sub xanh" (click)="save()"
+      *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || id == 0) && !isView" [disabled]="!formData.valid">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -43,7 +45,8 @@
               Số quyết định xuất
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="soQDXuat" (ngModelChange)="changeSoQuyetDinh()">
+              <nz-select formControlName="soQDXuat" (ngModelChange)="changeSoQuyetDinh()"
+                [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of listSoQuyetDinh" [nzValue]="item.id" [nzLabel]="item.soQuyetDinh">
                 </nz-option>
               </nz-select>
@@ -59,7 +62,7 @@
               <nz-input-group>
                 <input nz-input nzDisabled formControlName="soBienBan" readonly />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -71,7 +74,7 @@
               <nz-input-group>
                 <input nz-input nzDisabled formControlName="tenDonVi" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -83,7 +86,7 @@
               <nz-input-group>
                 <input nz-input nzDisabled formControlName="maQHNS" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -93,16 +96,17 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="donViKN" />
+                <input nz-input formControlName="donViKN" [readonly]="isDisableField() || isView" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Loại hàng hóa
             </nz-form-label>
-            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)">
+            <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)"
+              [nzDisabled]="isDisableField() || isView">
               <nz-option *ngFor="let item of dsLoaiHangHoa " [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
@@ -112,7 +116,7 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired="" [nzNoColon]="true">Chủng loại hàng hóa</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="chungLoaiHang">
+              <nz-select formControlName="chungLoaiHang" [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of dsChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
                 </nz-option>
               </nz-select>
@@ -125,7 +129,8 @@
               Điểm kho
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
+              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)"
+                [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -138,7 +143,8 @@
               Nhà kho
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
+              <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)"
+                [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -151,7 +157,8 @@
               Ngăn kho
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
+              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)"
+                [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -164,7 +171,7 @@
               Lô kho
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maLoKho">
+              <nz-select formControlName="maLoKho" [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -177,7 +184,8 @@
               Ngày lấy mẫu
             </nz-form-label>
             <nz-form-control>
-              <nz-date-picker #endDatePicker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau" readonly>
+              <nz-date-picker #endDatePicker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau"
+                [nzDisabled]="isDisableField() || isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -189,9 +197,10 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input placeholder="Nhập địa điểm lấy mẫu" nz-input formControlName="diaDiemLayMau" />
+                <input placeholder="Nhập địa điểm lấy mẫu" nz-input formControlName="diaDiemLayMau"
+                  [readonly]="isDisableField() || isView" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="8">
@@ -258,9 +267,9 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input [disabled]="!isAction()||userService.isCuc()" formControlName="sLMauHangKiemTra" />
+                <input nz-input [readonly]="isDisableField() || isView" formControlName="sLMauHangKiemTra" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -269,7 +278,7 @@
               Phương pháp lấy mẫu
             </nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="ppLayMau">
+              <nz-select formControlName="ppLayMau" [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.id" [nzLabel]="item.giaTri">
                 </nz-option>
               </nz-select>
@@ -283,9 +292,9 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="chiTieuKT" />
+                <input nz-input formControlName="chiTieuKT" [readonly]="isDisableField() || isView" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -295,9 +304,9 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="kQNiemPhongMau" />
+                <input nz-input formControlName="kQNiemPhongMau" [readonly]="isDisableField() || isView" />
               </nz-input-group>
-              </nz-form-control>
+            </nz-form-control>
           </nz-form-item>
         </div>
       </div>

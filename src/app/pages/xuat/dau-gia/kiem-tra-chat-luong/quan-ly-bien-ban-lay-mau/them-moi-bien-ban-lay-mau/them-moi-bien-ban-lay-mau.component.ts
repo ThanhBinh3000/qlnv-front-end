@@ -105,7 +105,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private donViService: DonviService,
     private fb: FormBuilder,
     private quanLyBienBanLayMauXuatService: QuanLyBienBanLayMauXuatService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.initForm();
@@ -121,6 +121,12 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       await this.loadChitiet();
     } else {
       this.loadDaiDien();
+    }
+  }
+
+  isDisableField() {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+      return true;
     }
   }
 

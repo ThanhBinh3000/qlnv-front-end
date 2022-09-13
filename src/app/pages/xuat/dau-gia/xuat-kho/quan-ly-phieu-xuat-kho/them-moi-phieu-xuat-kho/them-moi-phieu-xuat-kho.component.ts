@@ -14,6 +14,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { QuanLyPhieuXuatKhoService } from 'src/app/services/quanLyPhieuXuatKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
@@ -70,6 +71,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
+    private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private fb: FormBuilder,
   ) { }
 
@@ -182,45 +184,32 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
 
   // change Số phiểu kiểm nghiệm chất lượng /HSKT
   changePhieuKiemTra() {
-    let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.detail.phieuKtClId);
+    let phieuKt = this.listPhieuKiemTraChatLuong.filter(x => x.id == this.formData.value.pknclId);
     if (phieuKt && phieuKt.length > 0) {
-      this.detail.maDiemkho = phieuKt[0].maDiemKho;
-      this.detail.maNhakho = phieuKt[0].maNhaKho;
-      this.detail.maNgankho = phieuKt[0].maNganKho;
-      this.detail.maNganlo = phieuKt[0].maNganLo;
+      this.formData.patchValue({
+        maDiemkho: phieuKt[0].maDiemKho,
+        maNhakho: phieuKt[0].maNhaKho,
+        maNgankho: phieuKt[0].maNganKho,
+        maNganlo: phieuKt[0].maNganLo,
+      });
       this.changeDiemKho(true);
     }
   }
 
   async loadPhieuKiemTraChatLuong() {
-    // let body = {
-    //   "capDvis": ['3'],
-    //   "maDonVi": this.userInfo.MA_DVI,
-    //   "maHangHoa": this.typeVthh,
-    //   "maNganKho": null,
-    //   "ngayKiemTraDenNgay": null,
-    //   "ngayKiemTraTuNgay": null,
-    //   "ngayLapPhieu": null,
-    //   "orderBy": null,
-    //   "orderDirection": null,
-    //   "paggingReq": {
-    //     "limit": 1000,
-    //     "orderBy": null,
-    //     "orderType": null,
-    //     "page": 0
-    //   },
-    //   "soPhieu": null,
-    //   "str": null,
-    //   "tenNguoiGiao": null,
-    //   "trangThai": null
-    // };
-    // let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.listPhieuKiemTraChatLuong = data.content;
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+    let body = {
+      "maDonVi": this.detail.maDvi,
+      "pageSize": 1000,
+      "pageNumber": 1,
+      "trangThai": null,
+    };
+    let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
+
+    if (res.msg == MESSAGE.SUCCESS && res.data.content.length > 0) {
+      this.listPhieuKiemTraChatLuong = res.data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async loadDanhMucHang() {

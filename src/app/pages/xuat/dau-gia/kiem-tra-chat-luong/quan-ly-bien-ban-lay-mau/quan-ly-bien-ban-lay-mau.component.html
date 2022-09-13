@@ -6,40 +6,40 @@
         <nz-card class="flex-card p-lr16">
           <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="bien-ban-lay-mau">
             <div class="search__body" nz-row [nzGutter]="[0, 6]">
-                <nz-form-item nz-col nzSpan="4" class="form-item" nz-col nzSpan="4">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Số biên bản
-                  </nz-form-label>
+              <nz-form-item nz-col nzSpan="4" class="form-item" nz-col nzSpan="4">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Số biên bản
+                </nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
                     <input type="text" nz-input formControlName="soBienBan" />
                   </nz-input-group>
                 </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-col nzSpan="4" class="form-item">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Ngày lấy mẫu
-                  </nz-form-label>
-                  <nz-form-control>
-                    <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
-                    </nz-range-picker>
-                  </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-col nzSpan="4" class="form-item">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Điểm kho
-                  </nz-form-label>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Ngày lấy mẫu
+                </nz-form-label>
+                <nz-form-control>
+                  <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
+                  </nz-range-picker>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Điểm kho
+                </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
                     <nz-option *ngFor="let item of dsDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-col nzSpan="4" class="form-item">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Nhà kho
-                  </nz-form-label>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Nhà kho
+                </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
                     <nz-option *ngFor="let item of dsNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
@@ -47,30 +47,30 @@
                   </nz-select>
                 </nz-form-control>
 
-                </nz-form-item>
-                <nz-form-item nz-col nzSpan="4" class="form-item">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Ngăn kho
-                  </nz-form-label>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Ngăn kho
+                </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
                     <nz-option *ngFor="let item of dsNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-col nzSpan="4" class="form-item">
-                  <nz-form-label class="search__label" [nzNoColon]="true">
-                    Lô Kho
-                  </nz-form-label>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Lô Kho
+                </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNganLo">
                     <nz-option *ngFor="let item of dsLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
-                </nz-form-item>
-              </div>
+              </nz-form-item>
+            </div>
           </form>
 
           <div class="cangiua group-button-search">
@@ -160,7 +160,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != '00'"></label>
+                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{data.soBienBan}}</td>
@@ -174,11 +174,12 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThaiId=='00' || data.trangThaiId=='03') && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThaiId=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isChiCuc()"
+                        (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

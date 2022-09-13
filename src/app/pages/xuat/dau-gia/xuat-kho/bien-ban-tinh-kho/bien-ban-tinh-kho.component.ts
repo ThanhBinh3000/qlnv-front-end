@@ -17,6 +17,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyBienBanTinhKhoService } from 'src/app/services/quanLyBienBanTinhKho.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from "src/app/services/quyetDinhGiaoNhiemVuXuatHang.service"
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-bien-ban-tinh-kho',
   templateUrl: './bien-ban-tinh-kho.component.html',
@@ -69,7 +70,8 @@ export class BienBanTinhKhoComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService
+    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
