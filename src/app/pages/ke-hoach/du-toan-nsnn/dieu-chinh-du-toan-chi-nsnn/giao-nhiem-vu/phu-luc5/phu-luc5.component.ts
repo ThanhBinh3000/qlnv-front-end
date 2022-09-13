@@ -83,7 +83,7 @@ export class PhuLuc5Component implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBieuMau + '/' + this.namHienHanh);
+    upfile.append('folder', "phuluc5-dieu-chinh/file");
     const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         const objfile = {
@@ -113,7 +113,8 @@ export class PhuLuc5Component implements OnInit {
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);
       if (fileAttach) {
-        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+        `phuluc5-dieu-chinh/${this.namHienHanh}/${fileAttach.fileName}`
+        await this.quanLyVonPhiService.downloadFile(`phuluc5-dieu-chinh/file/${fileAttach.fileName}`).toPromise().then(
           (data) => {
             fileSaver.saveAs(data, fileAttach.fileName);
           },
