@@ -13,7 +13,7 @@ import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -32,10 +32,11 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
+  dsBoNganhTtcp: any[] = [];
+
 
   userInfo: UserLogin;
   maQd: string;
-
   muaTangList: any[] = []
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
@@ -63,7 +64,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
-        idTtcpBoNganh: [, [Validators.required]]
+        idTtcpBoNganh: [, [Validators.required]],
       }
     );
   }
@@ -76,7 +77,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       this.getListBoNganh(),
       this.maQd = '/QĐ-BTC',
       this.getDataDetail(this.idInput),
-      // this.onChangeNamQd(this.formData.get('namQd').value),
+      this.onChangeNamQd(this.formData.get('namQd').value),
     ])
     this.spinner.hide();
   }
@@ -92,7 +93,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
-        idTtcpBoNganh: data.idTtcpBoNganh
+        idTtcpBoNganh: data.idTtcpBoNganh,
       })
       this.taiLieuDinhKemList = data.fileDinhkems;
       this.muaTangList = data.muaTangList ? data.muaTangList : [];
@@ -102,23 +103,27 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
   }
 
-  // async onChangeNamQd(namQd) {
-  //   let body = {
-  //     namQd: namQd,
-  //     trangThai: STATUS.BAN_HANH
-  //   }
-  //   let res = await this.quyetDinhTtcpService.search(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     const data = res.data.content;
-  //     if (data && data.size > 0) {
-  //       let detail = await this.quyetDinhTtcpService.getDetail(data[0].id);
-  //       if (detail.msg == MESSAGE.SUCCESS) {
-  //         this.dsBoNganh = detail.data.listBoNganh;
-  //       }
-  //     }
-  //   }
-  // }
-  //
+  async onChangeNamQd(namQd) {
+    let body = {
+      namQd: namQd,
+      trangThai: STATUS.BAN_HANH
+    }
+    let res = await this.quyetDinhTtcpService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data.content;
+      console.log(data);
+      if (data.length > 0) {
+        let dataTtcp = await this.quyetDinhTtcpService.getDetail(data[0].id);
+        if (dataTtcp.msg == MESSAGE.SUCCESS) {
+          this.dsBoNganhTtcp = dataTtcp.data.listBoNganh;
+        }
+      } else {
+        this.dsBoNganhTtcp = [];
+      }
+    }
+    console.log(this.dsBoNganhTtcp);
+  }
+
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
@@ -259,6 +264,16 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   xoaKeHoach() { }
 
   themKeHoach() { }
+
+  tongGiaTri: number = 0;
+  onChangeBoNganh($event) {
+    let data = this.dsBoNganhTtcp.filter(item => item.maBoNganh == $event);
+    if (data.length > 0) {
+      this.tongGiaTri = data[0].tongTien;
+    } else {
+      this.tongGiaTri = 0;
+    }
+  }
 }
 
 
