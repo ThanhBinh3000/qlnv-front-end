@@ -144,6 +144,8 @@ export class KeHoachMuaXuat {
   idNoiDung: number;
   noiDung: string;
   sluongDtoan: number;
+  loaiChi: string;
+  tenLoaiChi: string;
 }
 
 
