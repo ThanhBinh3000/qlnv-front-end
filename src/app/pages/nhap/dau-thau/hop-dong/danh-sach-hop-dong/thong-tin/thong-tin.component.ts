@@ -322,34 +322,55 @@ export class ThongTinComponent implements OnInit {
 
         body.idNthau = `${this.dvLQuan.id}`;
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
-        if (this.id > 0) {
+        //sua+ky
+        if (this.id > 0 && isKy) {
+          this.formDetailHopDong.controls['ngayKy'].setValidators(Validators.required);
+          this.helperService.markFormGroupTouched(this.formDetailHopDong);
+          if (this.formDetailHopDong.valid) {
+            body.id = this.id;
+            await this.thongTinHopDong.update(body,)
+              .then((res) => {
+                if (res.msg == MESSAGE.SUCCESS) {
+                  this.approve(this.id);
+                } else {
+                  this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+              });
+          }
+        }
+        //sua
+        else if (this.id > 0 && !isKy) {
           body.id = this.id;
           let res = await this.thongTinHopDong.update(
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            if (isKy) {
-              this.approve(this.id);
-            } else {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
-            }
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS,);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-        } else {
-          let res = await this.thongTinHopDong.create(
-            body,
-          );
+
+        }
+        //them+ky
+        else if (!(this.id > 0) && isKy) {
+          this.formDetailHopDong.controls['ngayKy'].setValidators(Validators.required);
+          this.helperService.markFormGroupTouched(this.formDetailHopDong);
+          if (this.formDetailHopDong.valid) {
+            await this.thongTinHopDong.create(body,)
+              .then((res) => {
+                if (res.msg == MESSAGE.SUCCESS) {
+                  this.approve(res.data.id);
+                } else {
+                  this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+              });
+          }
+        }
+        //them
+        else if (!(this.id > 0) && !isKy) {
+          let res = await this.thongTinHopDong.create(body,);
           if (res.msg == MESSAGE.SUCCESS) {
-            console.log(res.data);
-            if (isKy) {
-              this.approve(res.data.id);
-            } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            }
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS,);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -528,8 +549,6 @@ export class ThongTinComponent implements OnInit {
   }
 
   approve(id?) {
-    this.formDetailHopDong.controls['ngayKy'].setValidators(Validators.required);
-    this.helperService.markFormGroupTouched(this.formDetailHopDong);
     if (this.formDetailHopDong.valid) {
       this._modalService.confirm({
         nzClosable: false,
