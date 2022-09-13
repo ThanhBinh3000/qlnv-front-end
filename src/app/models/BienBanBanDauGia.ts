@@ -1,6 +1,6 @@
 export class BienBanBanDauGia {
-    ct1s: Array<ct1s>;
-    cts: Array<cts>;
+    ct1s: Array<Ct1s>;
+    cts: Array<Cts>;
     diaDiem: string;
     donViThongBao: string;
     id: number;
@@ -8,27 +8,34 @@ export class BienBanBanDauGia {
     maVatTuCha: string;
     nam: number;
     ngayKy: string;
-    ngayToChuc: string;
+    ngayToChuc: Array<string>;
+    ngayToChucTu: string;
+    ngayToChucDen: string;
     soBienBan: string;
     thongBaoBdgId: number;
     trichYeu: string;
-    constructor(cts: Array<cts> = [], ct1s: Array<ct1s> = []) {
+    trangThai: string;
+    constructor(cts: Array<Cts> = [], ct1s: Array<Ct1s> = []) {
         this.cts = cts;
         this.ct1s = ct1s;
     }
 }
 
-export class cts {
+export class Cts {
     bbBanDauGiaId: number;
     chucVu: string;
     hoTen: string;
     id: number;
     loaiTptg: string;
     noiCongTac: string;
+    mstCmtndCccdHoChieu: string;
+    diaChi: string;
     stt: number;
+    idVirtual: number;
+    isEdit: boolean;
 }
 
-export class ct1s {
+export class Ct1s {
     bbBanDauGiaId: number;
     donGiaCaoNhat: number;
     id: number;

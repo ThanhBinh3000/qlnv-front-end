@@ -181,7 +181,7 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.tongTien}}</td>
-            <td *ngIf="userService.isTongCuc()">{{ convertTrangThaiTable(data.trangThai) }}</td>
+            <td *ngIf="userService.isTongCuc()  ">{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="detail(data)">
                 <i class="fa fa-eye"></i>

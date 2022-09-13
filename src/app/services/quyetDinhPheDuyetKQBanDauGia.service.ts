@@ -81,4 +81,9 @@ export class QuyetDinhPheDuyetKQBanDauGiaService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-kqbdg/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
+
+  listData(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/qd-phe-duyet-kqbdg/listData`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }

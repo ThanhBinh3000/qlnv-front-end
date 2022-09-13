@@ -9,7 +9,7 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="5">
-          <label class="search__label">Số quyết định điều chỉnh KH LCNT </label>
+          <label class="search__label">Số quyết định điều chỉnh KH LCNT</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
         <div nz-col nzSpan="12">
@@ -35,7 +35,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
@@ -45,7 +45,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)"
+          *ngIf="userService.isTongCuc()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -164,12 +165,12 @@
             <td>{{data.namKhoach}}</td>
             <td>{{data.tenVthh}}</td>
             <td>{{data.soGoiThau}}</td>
-            <td>{{ data.trangThai }}</td>
+            <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(data.id,false)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && userService.isTongCuc()"
+              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU) && userService.isTongCuc()"
                 (click)="redirectToChiTiet(data.id,true)">
                 <i class="fa fa-pencil"></i>
               </a>

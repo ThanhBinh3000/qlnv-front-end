@@ -80,7 +80,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+      this.dsNam.push((thisYear + i).toString());
     }
   }
 
