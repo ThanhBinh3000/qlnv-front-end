@@ -535,6 +535,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
+    console.log(res.data);
+
     if (res.msg == MESSAGE.SUCCESS) {
       this.detail = res.data;
       this.listDaiDien = res.data.chiTietList;
