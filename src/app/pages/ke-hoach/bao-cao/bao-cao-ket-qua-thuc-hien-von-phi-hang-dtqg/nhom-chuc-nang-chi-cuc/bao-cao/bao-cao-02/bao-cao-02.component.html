@@ -95,7 +95,7 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td>{{displayValue(dviMua.thTtien)}}</td>
+				<td>{{displayValue(total[0].thTtien)}}</td>
 				<td></td>
 				<td [hidden]="status"></td>
 				<td [hidden]="status"></td>
@@ -165,16 +165,14 @@
 					</td>
 					<ng-container *ngIf="item.maVtuCha == 0; else A21">
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.khSoLuong"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
 							{{displayValue(editCache[item.id].data.khTtien)}}
@@ -194,16 +192,14 @@
 						<td> </td>
 						<td> </td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.thSoLuong"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.thSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
 							{{displayValue(editCache[item.id].data.thTtien)}}
@@ -238,7 +234,7 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td>{{displayValue(tongCucMua.thTtien)}}</td>
+				<td>{{displayValue(total[1].thTtien)}}</td>
 				<td></td>
 				<td [hidden]="status"></td>
 				<td [hidden]="status"></td>
@@ -308,16 +304,14 @@
 					</td>
 					<ng-container *ngIf="item.maVtuCha == 0; else A22">
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.khSoLuong"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
 							{{displayValue(editCache[item.id].data.khTtien)}}
@@ -337,16 +331,14 @@
 						<td> </td>
 						<td> </td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.thSoLuong"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.thSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
-							<nz-input-number [nzMin]="0" class="search__input" nzSize="small" [nzFormatter]="formatter"
-								[nzPrecision]="0" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
+							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
 								(ngModelChange)="changeModel02(item.id)">
-							</nz-input-number>
+							</fm-input-number>
 						</td>
 						<td>
 							{{displayValue(editCache[item.id].data.thTtien)}}

@@ -77,7 +77,6 @@ export class BaoCao04axComponent implements OnInit {
     allChecked = false;
     editMoneyUnit = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
