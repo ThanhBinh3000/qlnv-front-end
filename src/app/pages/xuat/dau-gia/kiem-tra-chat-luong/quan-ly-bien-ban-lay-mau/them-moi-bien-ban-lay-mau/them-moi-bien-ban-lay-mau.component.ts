@@ -312,7 +312,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       maDiemKho: this.formData.value.maDiemKho,
       maDvi: this.detail.maDvi,
       maNganKho: this.formData.value.maNganKho,
-      maNganLo: this.formData.value.maNganLo,
+      maNganLo: this.formData.value.maLoKho,
       maNhaKho: this.formData.value.maNhaKho,
       maVatTu: this.formData.value.chungLoaiHang,
       maVatTuCha: this.formData.value.loaiHang,
@@ -337,7 +337,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -376,7 +376,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.LANH_DAO_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -444,40 +444,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
-          };
-          const res = await this.bienBanLayMauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.redirectBienBanLayMau();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-  banHanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.BAN_HANH,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -513,7 +480,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -559,7 +526,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.formData.patchValue({
         soQDXuat: res.data.qdgnvxId,
         soBienBan: res.data.soBienBan,
-        donViKN: res.data.tenDonViKiemNghiem,
+        donViKN: res.data.donViKiemNghiem,
         loaiHang: res.data.maVatTuCha,
         chungLoaiHang: res.data.maVatTu,
         maDiemKho: res.data.maDiemKho,

@@ -146,6 +146,7 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   async search() {
+    this.spinner.show();
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
@@ -192,6 +193,7 @@ export class DanhSachHopDongComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   xoaItem(item: any) {
@@ -330,12 +332,12 @@ export class DanhSachHopDongComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ids: dataDelete});
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.thongTinHopDong.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

@@ -17,21 +17,21 @@ export class QuanLyBienBanTinhKhoService extends BaseService {
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho?`;
     if (body.ngayXuatDen)
-      url_ += 'ngayXuatDen=' + encodeURIComponent('' + body.denNgayNhapKho) + '&';
+      url_ += 'ngayXuatDen=' + encodeURIComponent('' + body.ngayXuatDen) + '&';
     if (body.ngayXuatTu)
-      url_ += 'ngayXuatTu=' + encodeURIComponent('' + body.tuNgayNhapKho) + '&';
+      url_ += 'ngayXuatTu=' + encodeURIComponent('' + body.ngayXuatTu) + '&';
     if (body.pageSize)
       url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
     if (body.orderBy)
-      url_ += 'paggingReq.orderBy=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'paggingReq.orderBy=' + encodeURIComponent('' + body.orderBy) + '&';
     if (body.orderType)
-      url_ += 'paggingReq.orderType=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'paggingReq.orderType=' + encodeURIComponent('' + body.orderType) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.quyetDinhId)
-      url_ += 'quyetDinhId=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'quyetDinhId=' + encodeURIComponent('' + body.quyetDinhId) + '&';
     if (body.soBienBan)
-      url_ += 'soBienBan=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }

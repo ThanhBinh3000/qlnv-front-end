@@ -182,8 +182,7 @@ export class ThongTinComponent implements OnInit {
   validateGhiChu() {
     if (this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu != '') {
       this.errorGhiChu = false;
-    }
-    else {
+    } else {
       this.errorGhiChu = true;
     }
   }
@@ -296,7 +295,8 @@ export class ThongTinComponent implements OnInit {
     try {
       if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
         this.errorGhiChu = true;
-      } else {
+      }
+      else {
         let body = this.formDetailHopDong.value;
         body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
         body.fileDinhKems = this.fileDinhKem,

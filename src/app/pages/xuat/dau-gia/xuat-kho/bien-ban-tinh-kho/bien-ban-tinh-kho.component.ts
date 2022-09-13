@@ -88,44 +88,13 @@ export class BienBanTinhKhoComponent implements OnInit {
     }
   }
   async loadSoQuyetDinh() {
-    let body = {
-      "ngayKyDen": null,
-      "loaiQd": "",
-      "capDvis": [],
-      "maDvis": [],
-      "loaiVthh": this.typeVthh,
-      "namXuat": null,
-      "ngayQd": "",
-      "orderBy": "",
-      "orderDirection": "",
-      "pageable": {
-        "offset": 1000,
-        "pageNumber": "",
-        "pageSize": "",
-        "paged": 0,
-        "sort": {
-          "sorted": false,
-          "unsorted": true
-        }
-      },
-      "paggingReg": {
-        "limit": "",
-        "orderBy": "",
-        "orderType": "",
-        "page": "",
-      },
-      "soQuyetDinh": "",
-      "str": "",
-      "trangThai": "",
-      "trangThais": [],
-      "trichyeu": ""
-    }
+    let body = {}
     let res = await this.quyetDinhGiaoNhiemVuXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
       this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh.map(
-        (item) => item.soQd,
+        (item) => item.soQuyetDinh,
       );
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -245,6 +214,7 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
 
   async search() {
+
     let body = {
       "pageNumber": this.page,
       "pageSize": this.pageSize,
@@ -255,9 +225,11 @@ export class BienBanTinhKhoComponent implements OnInit {
       "orderBy": null,
       "orderType": null,
     };
+
     let res = await this.quanLyBienBanTinhKhoService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
@@ -272,13 +244,13 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
   onChangeSoQuyetDinhAutoComplete(value: any) {
     if (value) {
-      this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh
-        .filter((item) => item?.soQd?.toLowerCase()?.includes(value.toString().toLowerCase()),)
-        .map((item) => item.soQd);
-      this.quyetDinhId = this.listSoQuyetDinh.filter(item => item.soQd === this.searchFilter.soQuyetDinh)[0]?.id?.toString()
+      this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh]
+        .filter((item) => item?.soQuyetDinh?.toLowerCase()?.includes(value.toString().toLowerCase()),)
+        .map((item) => item.soQuyetDinh);
+      this.quyetDinhId = [...this.listSoQuyetDinh].filter(item => item.soQuyetDinh === this.searchFilter.soQuyetDinh)[0]?.id?.toString()
     } else {
-      this.dsSoQuyetDinhDataSource = this.listSoQuyetDinh.map(
-        (item) => item.soQd,
+      this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh].map(
+        (item) => item.soQuyetDinh,
       );
 
     }
@@ -291,12 +263,6 @@ export class BienBanTinhKhoComponent implements OnInit {
         {
           "ngayXuatDen": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1 ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD') : null,
           "ngayXuatTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0 ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD') : null,
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": null,
-            "orderType": null,
-            "page": 0
-          },
           "quyetDinhId": this.quyetDinhId,
           "soBienBan": this.searchFilter.soBienBan
         }
