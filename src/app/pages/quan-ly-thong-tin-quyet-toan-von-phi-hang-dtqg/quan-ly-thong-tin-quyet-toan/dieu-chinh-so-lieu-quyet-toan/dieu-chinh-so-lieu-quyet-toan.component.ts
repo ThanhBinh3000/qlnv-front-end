@@ -1,5 +1,3 @@
-import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
-import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -18,10 +16,12 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
+import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
 import { Utils } from './../../../../Utility/utils';
 import { NOI_DUNG } from './dieu-chinh-so-lieu-quyet-toan.constant';
-import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
     id: "1",
@@ -151,6 +151,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   statusBtnFinish: boolean;
   statusBtnUser: boolean;
   statusBtnNhap: boolean;
+  editMoneyUnit = false;
   //file
   lstFiles: any[] = []; //show file ra man hinh
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -335,10 +336,10 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
           this.lstCtietBcao = data.data.lstCtiet;
           this.maDviTien = data.data.maDviTien;
           this.sortByIndex();
-          this.lstCtietBcao.forEach(item => {
-            item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
-            item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
+          //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
+          // })
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
           this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
           this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -378,10 +379,10 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
           this.lstCtietBcao = data.data.lstCtiet;
           this.maDviTien = data.data.maDviTien;
           this.sortByIndex();
-          this.lstCtietBcao.forEach(item => {
-            item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
-            item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
+          //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
+          // })
           this.maDchinh = data.data.maBcao;
           this.thuyetMinh = data.data.thuyetMinh;
           this.congVan = data.data.congVan;
@@ -434,16 +435,12 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const donGiaMua = mulMoney(item.donGiaMua, this.maDviTien);
-      const thanhTien = mulMoney(item.thanhTien, this.maDviTien);
-      if (donGiaMua > MONEY_LIMIT || thanhTien > MONEY_LIMIT) {
+      if (item.donGiaMua > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        donGiaMua: donGiaMua,
-        thanhTien: thanhTien,
       })
     })
 
@@ -1226,8 +1223,6 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     this.lstCtietBcao.forEach(data => {
       lstCtietBcaoTemps.push({
         ...data,
-        donGiaMua: mulMoney(data.donGiaMua, this.maDviTien),
-        thanhTien: mulMoney(data.thanhTien, this.maDviTien),
         id: null,
       })
     })
@@ -1271,5 +1266,13 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+  };
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }

@@ -7,20 +7,20 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
-import { NOI_DUNG } from './nhap-quyet-dinh-giao-du-toan-chi-NSNN.constant';
-import { DataService } from 'src/app/services/data.service';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
+import { NOI_DUNG } from './nhap-quyet-dinh-giao-du-toan-chi-NSNN.constant';
 
 export class ItemData {
   id!: any;
@@ -114,7 +114,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   fileDetail: NzUploadFile;
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
-
+  editMoneyUnit = false;
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -351,11 +351,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.lstCtietBcao = data.data.lstCtiets[0];
           this.maDviTien = data.data.maDviTien;
           this.sortByIndex();
-          this.lstCtietBcao.forEach(item => {
-            item.tongCong = divMoney(item.tongCong, this.maDviTien);
-            item.nguonNsnn = divMoney(item.nguonNsnn, this.maDviTien);
-            item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
+          //   item.nguonNsnn = divMoney(item.nguonNsnn, this.maDviTien);
+          //   item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
+          // })
           this.namPa = data.data.namPa;
           this.trangThaiBanGhi = data.data.trangThai;
           this.maPa = data.data.maPa;
@@ -472,15 +472,12 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     let checkMoneyRange = true;
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+      if (item.tongCong > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        tongCong: mulMoney(item.tongCong, this.maDviTien),
-        nguonNsnn: mulMoney(item.nguonNsnn, this.maDviTien),
-        nguonKhac: mulMoney(item.nguonKhac, this.maDviTien),
         listCtietDvi: [],
       })
     })
@@ -1197,9 +1194,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.lstCtietBcao.forEach(data => {
       lstCtietBcaoTemps.push({
         ...data,
-        tongCong: mulMoney(data.tongCong, this.maDviTien),
-        nguonNsnn: mulMoney(data.nguonNsnn, this.maDviTien),
-        nguonKhac: mulMoney(data.nguonKhac, this.maDviTien),
         id: null,
         listCtietDvi: [],
       })
@@ -1261,6 +1255,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     WindowPrt.focus();
     WindowPrt.print();
     WindowPrt.close();
+  };
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 
 }

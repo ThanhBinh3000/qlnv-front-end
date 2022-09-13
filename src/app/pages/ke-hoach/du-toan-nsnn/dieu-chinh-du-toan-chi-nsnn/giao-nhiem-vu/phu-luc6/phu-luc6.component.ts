@@ -10,11 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc6.constant';
 
 export class ItemData {
@@ -115,7 +115,7 @@ export class PhuLuc6Component implements OnInit {
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+  editMoneyUnit = false;
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -145,18 +145,6 @@ export class PhuLuc6Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        kphiDmuc: divMoney(item.kphiDmuc, this.maDviTien),
-        kphiTtien: divMoney(item.kphiTtien, this.maDviTien),
-        cphiTcong: divMoney(item.cphiTcong, this.maDviTien),
-        cphiNtruoc: divMoney(item.cphiNtruoc, this.maDviTien),
-        cphiNnay: divMoney(item.cphiNnay, this.maDviTien),
-        chenhLech: divMoney(item.chenhLech, this.maDviTien),
-        kphiQtoan: divMoney(item.kphiQtoan, this.maDviTien),
-        kphiChuaQtoanCong: divMoney(item.kphiChuaQtoanCong, this.maDviTien),
-        kphiChuaQtoanKpTchi: divMoney(item.kphiChuaQtoanKpTchi, this.maDviTien),
-        kphiChuaQtoanKpTkiem: divMoney(item.kphiChuaQtoanKpTkiem, this.maDviTien),
-        soChuaQtoan: divMoney(item.soChuaQtoan, this.maDviTien),
-        dtoan2021ThanhQtoan2020: divMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {
@@ -244,49 +232,25 @@ export class PhuLuc6Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const kphiDmuc = mulMoney(item.kphiDmuc, this.maDviTien);
-      const kphiTtien = mulMoney(item.kphiTtien, this.maDviTien);
-      const cphiTcong = mulMoney(item.cphiTcong, this.maDviTien);
-      const cphiNtruoc = mulMoney(item.cphiNtruoc, this.maDviTien);
-      const cphiNnay = mulMoney(item.cphiNnay, this.maDviTien);
-      const chenhLech = mulMoney(item.chenhLech, this.maDviTien);
-      const kphiQtoan = mulMoney(item.kphiQtoan, this.maDviTien);
-      const kphiChuaQtoanCong = mulMoney(item.kphiChuaQtoanCong, this.maDviTien);
-      const kphiChuaQtoanKpTchi = mulMoney(item.kphiChuaQtoanKpTchi, this.maDviTien);
-      const kphiChuaQtoanKpTkiem = mulMoney(item.kphiChuaQtoanKpTkiem, this.maDviTien);
-      const soChuaQtoan = mulMoney(item.soChuaQtoan, this.maDviTien);
-      const dtoan2021ThanhQtoan2020 = mulMoney(item.dtoan2021ThanhQtoan2020, this.maDviTien);
       if (
-        kphiDmuc > MONEY_LIMIT ||
-        kphiTtien > MONEY_LIMIT ||
-        cphiTcong > MONEY_LIMIT ||
-        cphiNtruoc > MONEY_LIMIT ||
-        cphiNnay > MONEY_LIMIT ||
-        chenhLech > MONEY_LIMIT ||
-        kphiQtoan > MONEY_LIMIT ||
-        kphiChuaQtoanCong > MONEY_LIMIT ||
-        kphiChuaQtoanKpTchi > MONEY_LIMIT ||
-        kphiChuaQtoanKpTkiem > MONEY_LIMIT ||
-        soChuaQtoan > MONEY_LIMIT ||
-        dtoan2021ThanhQtoan2020 > MONEY_LIMIT
+        item.kphiDmuc > MONEY_LIMIT ||
+        item.kphiTtien > MONEY_LIMIT ||
+        item.cphiTcong > MONEY_LIMIT ||
+        item.cphiNtruoc > MONEY_LIMIT ||
+        item.cphiNnay > MONEY_LIMIT ||
+        item.chenhLech > MONEY_LIMIT ||
+        item.kphiQtoan > MONEY_LIMIT ||
+        item.kphiChuaQtoanCong > MONEY_LIMIT ||
+        item.kphiChuaQtoanKpTchi > MONEY_LIMIT ||
+        item.kphiChuaQtoanKpTkiem > MONEY_LIMIT ||
+        item.soChuaQtoan > MONEY_LIMIT ||
+        item.dtoan2021ThanhQtoan2020 > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        kphiDmuc: kphiDmuc,
-        kphiTtien: kphiTtien,
-        cphiTcong: cphiTcong,
-        cphiNtruoc: cphiNtruoc,
-        cphiNnay: cphiNnay,
-        chenhLech: chenhLech,
-        kphiQtoan: kphiQtoan,
-        kphiChuaQtoanCong: kphiChuaQtoanCong,
-        kphiChuaQtoanKpTchi: kphiChuaQtoanKpTchi,
-        kphiChuaQtoanKpTkiem: kphiChuaQtoanKpTkiem,
-        soChuaQtoan: soChuaQtoan,
-        dtoan2021ThanhQtoan2020: dtoan2021ThanhQtoan2020,
       })
     })
 
@@ -1006,5 +970,13 @@ export class PhuLuc6Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+  };
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }

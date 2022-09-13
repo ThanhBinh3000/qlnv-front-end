@@ -107,28 +107,24 @@
       <div class="tab__container" id="tablePrint">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Xây dựng phương án giao, điều chỉnh dự toán chi NSNN cho các đơn vị'">
-            <ng-container *ngIf="status;else templateName">
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  Đơn vị:
-                  <div *ngFor="let item of donViTiens">
-                    <div *ngIf="item.id == maDviTien">
-                      {{item.tenDm}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <ng-template #templateName>
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                    [class]="maDviTien ?'' : 'input-error-validate' ">
-                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
-                </div>
-              </div>
-            </ng-template>
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+							<div nz-col [nzSpan]="1">
+								Đơn vị:
+							</div>
+							<div nz-col [nzSpan]="2">
+								<ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+									<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+								</ng-container>
+								<ng-template #editMoney>
+									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+										(ngModelChange)="editMoneyUnit=false">
+										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+											[nzLabel]="item.tenDm">
+										</nz-option>
+									</nz-select>
+								</ng-template>
+							</div>
+						</div>
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -161,11 +157,11 @@
                         </div>
                       </div>
                     </td>
-                    <td>{{data.tongCong}}</td>
+                    <td>{{displayValue(data.tongCong)}}</td>
                     <td *ngFor="let item of lstDvi">
                       <div *ngFor="let e of data.lstCtietDvis;">
                         <div *ngIf="e.maDviNhan == item.maDvi">
-                          {{e.soTranChi}}
+                          {{displayValue(e.soTranChi)}}
                         </div>
                       </div>
                     </td>
@@ -197,14 +193,14 @@
                       </div>
                     </td>
                     <td>
-                      {{data.tongCong}}
+                      {{displayValue(data.tongCong)}}
                     </td>
                     <td *ngFor="let item of lstDvi">
                       <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
                         <div *ngIf="e.maDviNhan == item.maDvi">
-                          <nz-input-number class="search__input" nzSize="small" [(ngModel)]="e.soTranChi"
+                          <fm-input-number class="search__input" [(ngModel)]="e.soTranChi"
                             [class]="e.soTranChi >= 0?'' : 'input-error-validate'">
-                          </nz-input-number>
+                          </fm-input-number>
                         </div>
                       </div>
                     </td>
