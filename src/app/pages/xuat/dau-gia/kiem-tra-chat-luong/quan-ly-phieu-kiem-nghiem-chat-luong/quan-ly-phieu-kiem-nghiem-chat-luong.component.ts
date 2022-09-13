@@ -24,7 +24,7 @@ import { Globals } from 'src/app/shared/globals';
 export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   @Input() typeVthh: string;
 
-  formSearch: FormGroup;
+  formData: FormGroup;
 
   isView = false;
   dataTable: any[] = [];
@@ -45,6 +45,8 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   isTatCa: boolean = false;
 
   userInfo: UserLogin;
+  detail: any = {};
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -73,6 +75,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();
+      this.initForm()
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -82,11 +85,17 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     }
   }
   initForm(): void {
-    this.formSearch = this.fb.group({
+    this.formData = this.fb.group({
       soPhieuKN: [null],
       ngayKN: [null],
       soBienBanLayMau: [null],
     })
+  }
+  initData(): void {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    this.detail.capDvi = this.userInfo.CAP_DVI;
   }
   updateAllChecked(): void {
     this.indeterminate = false;
@@ -122,9 +131,9 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "capDvis": null,
+      "capDvis": this.detail.capDvi,
       "kqDanhGia": null,
-      "maDonVi": null,
+      "maDonVi": this.detail.maDvi,
       "maVatTuCha": null,
       "maNganKho": null,
       "ngayKiemTraDenNgay": null,
@@ -133,20 +142,18 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       "orderBy": null,
       "orderDirection": null,
       "paggingReq": {
-        "limit": null,
+        "limit": this.pageSize,
         "orderBy": null,
         "orderType": null,
-        "page": null,
+        "page": this.page,
       },
-      "soPhieu": null,
+      "soPhieu": this.formData.value.soPhieuKN ? this.formData.value.soPhieuKN : null,
       "soQd": null,
       "str": null,
       "tenNguoiGiao": null,
       "trangThai": null,
     };
     let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
-
-    console.log(res.data.content);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -193,7 +200,19 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   }
 
   clearFilter() {
+    this.formData.reset()
     this.search();
+    this.filterTable = {
+      soPhieu: '',
+      ngayKnghiem: '',
+      soPhieuNhapKho: '',
+      ngayLayMau: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganKho: '',
+      tenLoKho: '',
+      tenTrangThai: '',
+    };
   }
 
   xoaItem(id) {
@@ -303,12 +322,34 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
-
-        // const blob = await this.phieuKiemNghiemChatLuongHangService.exportList(
-        //   body,
-        // );
-        // saveAs(blob, 'danh-sach-phieu-kiem-nghiem-chat-luong.xlsx');
-        // this.spinner.hide();
+        let body = {
+          "capDvis": null,
+          "kqDanhGia": null,
+          "maDonVi": null,
+          "maVatTuCha": null,
+          "maNganKho": null,
+          "ngayKiemTraDenNgay": null,
+          "ngayKiemTraTuNgay": null,
+          "ngayLapPhieu": null,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "orderBy": null,
+            "orderType": null,
+            "page": this.page,
+          },
+          "soPhieu": this.formData.value.soPhieuKN ? this.formData.value.soPhieuKN : null,
+          "soQd": null,
+          "str": null,
+          "tenNguoiGiao": null,
+          "trangThai": null,
+        };
+        const blob = await this.phieuKiemNghiemChatLuongHangService.exportList(
+          body,
+        );
+        saveAs(blob, 'danh-sach-phieu-kiem-nghiem-chat-luong-xuat.xlsx');
+        this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
         this.spinner.hide();
