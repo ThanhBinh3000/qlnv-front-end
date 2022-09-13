@@ -1195,6 +1195,56 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
   }
 
+  pheDuyet() {
+
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let trangThai;
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: trangThai,
+          };
+          switch (this.formData.value.trangThai) {
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.DA_DUYET_LDV;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+          }
+          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   banHanh() {
     this.modal.confirm({
       nzClosable: false,
@@ -1360,7 +1410,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              let body;
               let trangThai;
               if (this.userService.isTongCuc()) {
                 switch (this.formData.value.trangThai) {
@@ -1373,11 +1422,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     break;
                   }
                 }
-                 body = {
-                  id: res.data.id,
-                  lyDoTuChoi: null,
-                  trangThai: trangThai
-                };
               }
               if (this.userService.isCuc()) {
                 switch (this.formData.value.trangThai) {
@@ -1394,12 +1438,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     break;
                   }
                 }
-                body = {
-                  id: res.data.id,
-                  lyDoTuChoi: null,
-                  trangThai: trangThai
-                };
               }
+              let body = {
+                id: res.data.id,
+                trangThai: trangThai
+              };
               this.chiTieuKeHoachNamService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
