@@ -10,17 +10,18 @@ import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Subject } from 'rxjs';
-import { QuyetDinhGiaoNhapHangService } from "src/app/services/quyetDinhGiaoNhapHang.service"
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyBienBanTinhKhoService } from 'src/app/services/quanLyBienBanTinhKho.service';
-import { QuyetDinhGiaoNhiemVuXuatHangService } from "src/app/services/quyetDinhGiaoNhiemVuXuatHang.service"
+import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-bien-ban-tinh-kho',
   templateUrl: './bien-ban-tinh-kho.component.html',
-  styleUrls: ['./bien-ban-tinh-kho.component.scss']
+  styleUrls: ['./bien-ban-tinh-kho.component.scss'],
 })
 export class BienBanTinhKhoComponent implements OnInit {
   @Input() typeVthh: string;
@@ -36,7 +37,7 @@ export class BienBanTinhKhoComponent implements OnInit {
   listNganLo: any[] = [];
   listSoQuyetDinh: any[] = [];
   userInfo: UserLogin;
-  quyetDinhId: string = ""
+  quyetDinhId: string = '';
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -58,7 +59,7 @@ export class BienBanTinhKhoComponent implements OnInit {
     nhaKho: '',
     nganKho: '',
     loKho: '',
-    trangThaiDuyet: ''
+    trangThaiDuyet: '',
   };
 
   constructor(
@@ -69,17 +70,15 @@ export class BienBanTinhKhoComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService
-  ) { }
+    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
+    public globals: Globals,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await Promise.all([
-        this.search(),
-        this.loadSoQuyetDinh(),
-      ]);
+      await Promise.all([this.search(), this.loadSoQuyetDinh()]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -88,7 +87,7 @@ export class BienBanTinhKhoComponent implements OnInit {
     }
   }
   async loadSoQuyetDinh() {
-    let body = {}
+    let body = {};
     let res = await this.quyetDinhGiaoNhiemVuXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -120,10 +119,10 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -166,15 +165,15 @@ export class BienBanTinhKhoComponent implements OnInit {
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.searchFilter = {
       soBienBan: '',
       ngayBienBan: '',
       soQuyetDinh: '',
     };
-    this.search();
+    this.quyetDinhId = ''
+    await this.search();
   }
-
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);
@@ -214,16 +213,23 @@ export class BienBanTinhKhoComponent implements OnInit {
   }
 
   async search() {
-
     let body = {
-      "pageNumber": this.page,
-      "pageSize": this.pageSize,
-      "soBienBan": this.searchFilter.soBienBan,
-      "quyetDinhId": this.quyetDinhId,
-      "ngayXuatDen": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1 ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD') : null,
-      "ngayXuatTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0 ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD') : null,
-      "orderBy": null,
-      "orderType": null,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
+      soBienBan: this.searchFilter.soBienBan,
+      quyetDinhId: this.quyetDinhId,
+      ngayXuatDen:
+        this.searchFilter.ngayBienBan &&
+        this.searchFilter.ngayBienBan.length > 1
+          ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
+          : null,
+      ngayXuatTu:
+        this.searchFilter.ngayBienBan &&
+        this.searchFilter.ngayBienBan.length > 0
+          ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
+          : null,
+      orderBy: null,
+      orderType: null,
     };
 
     let res = await this.quanLyBienBanTinhKhoService.timKiem(body);
@@ -245,27 +251,39 @@ export class BienBanTinhKhoComponent implements OnInit {
   onChangeSoQuyetDinhAutoComplete(value: any) {
     if (value) {
       this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh]
-        .filter((item) => item?.soQuyetDinh?.toLowerCase()?.includes(value.toString().toLowerCase()),)
+        .filter((item) =>
+          item?.soQuyetDinh
+            ?.toLowerCase()
+            ?.includes(value.toString().toLowerCase()),
+        )
         .map((item) => item.soQuyetDinh);
-      this.quyetDinhId = [...this.listSoQuyetDinh].filter(item => item.soQuyetDinh === this.searchFilter.soQuyetDinh)[0]?.id?.toString()
+      this.quyetDinhId = [...this.listSoQuyetDinh]
+        .filter((item) => item.soQuyetDinh === this.searchFilter.soQuyetDinh)[0]
+        ?.id?.toString();
     } else {
       this.dsSoQuyetDinhDataSource = [...this.listSoQuyetDinh].map(
         (item) => item.soQuyetDinh,
       );
-
     }
   }
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body =
-        {
-          "ngayXuatDen": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1 ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD') : null,
-          "ngayXuatTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0 ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD') : null,
-          "quyetDinhId": this.quyetDinhId,
-          "soBienBan": this.searchFilter.soBienBan
-        }
+        let body = {
+          ngayXuatDen:
+            this.searchFilter.ngayBienBan &&
+            this.searchFilter.ngayBienBan.length > 1
+              ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
+              : null,
+          ngayXuatTu:
+            this.searchFilter.ngayBienBan &&
+            this.searchFilter.ngayBienBan.length > 0
+              ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
+              : null,
+          quyetDinhId: this.quyetDinhId,
+          soBienBan: this.searchFilter.soBienBan,
+        };
 
         this.quanLyBienBanTinhKhoService
           .exportList(body)
@@ -304,9 +322,14 @@ export class BienBanTinhKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBienBanTinhKhoService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBienBanTinhKhoService.deleteMultiple({
+              ids: dataDelete,
+            });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -319,9 +342,11 @@ export class BienBanTinhKhoComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -332,19 +357,29 @@ export class BienBanTinhKhoComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         if (date) {
           this.dataTableAll.forEach((item) => {
-            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
-              temp.push(item)
+            if (
+              item[key] &&
+              item[key].toString().toLowerCase() ===
+                dayjs(value).format('YYYY-MM-DD')
+            ) {
+              temp.push(item);
             }
           });
         } else {
           this.dataTableAll.forEach((item) => {
-            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-              temp.push(item)
+            if (
+              item[key] &&
+              item[key]
+                .toString()
+                .toLowerCase()
+                .indexOf(value.toString().toLowerCase()) != -1
+            ) {
+              temp.push(item);
             }
           });
         }
       }
-      this.dataTable = [...this.dataTable, ...temp]
+      this.dataTable = [...this.dataTable, ...temp];
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
@@ -359,11 +394,9 @@ export class BienBanTinhKhoComponent implements OnInit {
       nhaKho: '',
       nganKho: '',
       loKho: '',
-      trangThaiDuyet: ''
-    }
+      trangThaiDuyet: '',
+    };
   }
 
-  print() {
-
-  }
+  print() {}
 }
