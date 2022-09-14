@@ -10,11 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc4.constant';
 
 export class ItemData {
@@ -114,18 +114,13 @@ export class PhuLuc4Component implements OnInit {
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+  editMoneyUnit = false;
 
-  constructor(private router: Router,
-    private routerActive: ActivatedRoute,
+  constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private datePipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private userService: UserService,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
-    private location: Location,
-    private fb: FormBuilder,
     private modal: NzModalService,
   ) {
   }
@@ -143,14 +138,6 @@ export class PhuLuc4Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        dinhMuc: divMoney(item.dinhMuc, this.maDviTien),
-        thanhTien: divMoney(item.thanhTien, this.maDviTien),
-        dtoanThieuNTruoc: divMoney(item.dtoanThieuNTruoc, this.maDviTien),
-        tongNcauKphi: divMoney(item.tongNcauKphi, this.maDviTien),
-        kphiTcong: divMoney(item.kphiTcong, this.maDviTien),
-        kphiQtoanNtruoc: divMoney(item.kphiQtoanNtruoc, this.maDviTien),
-        kphiDtoanGiaoTnam: divMoney(item.kphiDtoanGiaoTnam, this.maDviTien),
-        dtoanDchinh: divMoney(item.dtoanDchinh, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {
@@ -224,32 +211,16 @@ export class PhuLuc4Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const dinhMuc = mulMoney(item.dinhMuc, this.maDviTien);
-      const thanhTien = mulMoney(item.thanhTien, this.maDviTien);
-      const dtoanThieuNTruoc = mulMoney(item.dtoanThieuNTruoc, this.maDviTien);
-      const tongNcauKphi = mulMoney(item.tongNcauKphi, this.maDviTien);
-      const kphiTcong = mulMoney(item.kphiTcong, this.maDviTien);
-      const kphiQtoanNtruoc = mulMoney(item.kphiQtoanNtruoc, this.maDviTien);
-      const kphiDtoanGiaoTnam = mulMoney(item.kphiDtoanGiaoTnam, this.maDviTien);
-      const dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien);
-      if (dinhMuc > MONEY_LIMIT || thanhTien > MONEY_LIMIT ||
-        dtoanThieuNTruoc > MONEY_LIMIT || tongNcauKphi > MONEY_LIMIT ||
-        kphiTcong > MONEY_LIMIT || kphiQtoanNtruoc > MONEY_LIMIT ||
-        kphiDtoanGiaoTnam > MONEY_LIMIT || dtoanDchinh > MONEY_LIMIT
+      if (item.dinhMuc > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT ||
+        item.dtoanThieuNTruoc > MONEY_LIMIT || item.tongNcauKphi > MONEY_LIMIT ||
+        item.kphiTcong > MONEY_LIMIT || item.kphiQtoanNtruoc > MONEY_LIMIT ||
+        item.kphiDtoanGiaoTnam > MONEY_LIMIT || item.dtoanDchinh > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        dinhMuc: dinhMuc,
-        thanhTien: thanhTien,
-        dtoanThieuNTruoc: dtoanThieuNTruoc,
-        tongNcauKphi: tongNcauKphi,
-        kphiTcong: kphiTcong,
-        kphiQtoanNtruoc: kphiQtoanNtruoc,
-        kphiDtoanGiaoTnam: kphiDtoanGiaoTnam,
-        dtoanDchinh: dtoanDchinh,
       })
     })
 
@@ -354,24 +325,9 @@ export class PhuLuc4Component implements OnInit {
     let xau = "";
     const chiSo: any = str.split('.');
     const n: number = chiSo.length - 1;
-    const k: number = parseInt(chiSo[n], 10);
-    // if (n == 0) {
-    //   for (var i = 0; i < this.soLaMa.length; i++) {
-    //     while (k >= this.soLaMa[i].gTri) {
-    //       xau += this.soLaMa[i].kyTu;
-    //       k -= this.soLaMa[i].gTri;
-    //     }
-    //   }
-    // };
     if (n == 0) {
       xau = chiSo[n];
     }
-    // if (n == 2) {
-    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    // };
-    // if (n == 3) {
-    //   xau = String.fromCharCode(k + 96);
-    // }
     if (n == 1) {
       xau = "-";
     }
@@ -974,5 +930,14 @@ export class PhuLuc4Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+  };
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }
