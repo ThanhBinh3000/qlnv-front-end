@@ -104,7 +104,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private donViService: DonviService,
     private fb: FormBuilder,
     private quanLyBienBanLayMauXuatService: QuanLyBienBanLayMauXuatService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.initForm();
@@ -122,7 +122,11 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+    if (
+      this.detail &&
+      (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC ||
+        this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)
+    ) {
       return true;
     }
   }
@@ -169,8 +173,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       if (!isEmpty(this.donVi)) {
         this.formData.patchValue({
           tenDonVi: this.donVi[0].tenDvi,
-          maQHNS: this.donVi[0].maQhns
-        })
+          maQHNS: this.donVi[0].maQhns,
+        });
         const chiCuc = this.donVi[0];
         if (chiCuc) {
           const result = {
@@ -241,6 +245,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     }
   }
   async changeLoaiHangHoa(id: any) {
+    this.formData.get('chungLoaiHang').setValue(null);
     if (id && id > 0) {
       let loaiHangHoa = this.listLoaiHangHoa.filter((item) => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
@@ -289,8 +294,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   async changeSoQuyetDinh() {
     if (this.listSoQuyetDinh.length > 0 && this.formData.value.soQDXuat) {
       // trong data , list hợp đồng đang rỗng , chưa biết xử lý => để tạm
-      this.listSoHopDong = this.listSoQuyetDinh
-
+      this.listSoHopDong = this.listSoQuyetDinh;
     }
   }
   isAction() {
@@ -541,7 +545,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
-// cần số hợp đồng
+    // cần số hợp đồng
     if (res.msg == MESSAGE.SUCCESS) {
       this.detail = res.data;
       this.listDaiDien = res.data.chiTietList;
