@@ -77,7 +77,6 @@
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
         [nzShowPagination]="false">
@@ -100,43 +99,45 @@
                   <h3 class="second">Dự toán (Triệu đồng) </h3>
                 </div>
                 <div class="content">
-                  <div class="content-item" *ngIf="keHoachNhapXuat.muaLuongThuc > 0">
+                  <div class="content-item" *ngIf="dataDetailSelected.muaLuongThuc > 0">
                     <div class="first">Vốn chỉ mua lương thực</div>
-                    <div class="second">{{keHoachNhapXuat.muaLuongThuc | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.muaLuongThuc | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
                 <div class="content">
-                  <div class="content-item" *ngIf="keHoachNhapXuat.nguonVonCo > 0">
+                  <div class="content-item" *ngIf="dataDetailSelected.nguonVonCo > 0">
                     <div class="first">Nguồn vốn có</div>
-                    <div class="second">{{keHoachNhapXuat.nguonVonCo | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.nguonVonCo | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="content" *ngFor="let data of muaTangList">
-                  <div class="content-item" *ngIf="muaTangList.length > 0">
+                <div class="content">
+                  <div class="content-item" *ngIf="dataDetailSelected.muaTang > 0">
                     <div class="first">Mua tăng</div>
-                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.muaTang | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="content" *ngFor="let data of xuatGiamList">
-                  <div class="content-item" *ngIf="xuatGiamList.length > 0">
+                <div class="content">
+                  <div class="content-item" *ngIf="dataDetailSelected.xuatGiam > 0">
                     <div class="first">Xuất giảm</div>
-                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.xuatGiam | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="content" *ngFor="let data of xuatBanList">
-                  <div class="content-item" *ngIf="xuatBanList.length > 0">
+                <div class="content">
+                  <div class="content-item" *ngIf="dataDetailSelected.xuatBan > 0">
                     <div class="first">Xuất bán</div>
-                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.xuatBan | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="content" *ngFor="let data of luanPhienList">
-                  <div class="content-item" *ngIf="luanPhienList.length > 0">
+                <div class="content">
+                  <div class="content-item" *ngIf="dataDetailSelected.xuatPlDh > 0">
                     <div class="first">Xuất luân phiên đổi hàng</div>
-                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                    <div class="second">{{dataDetailSelected.xuatPlDh | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-
-
+                <div class="footer" *ngIf="dataDetailSelected.tongTien > 0">
+                  <div class="first">Tổng</div>
+                  <div class="second">{{ dataDetailSelected.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                </div>
               </div>
             </td>
           </tr>
@@ -152,7 +153,6 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
-
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
@@ -213,7 +213,6 @@
       <div class="tab-content tab-menu" id="myTabContent">
         <div class="tab-pane fade show active justify-content-between">
           <div class="trai">
-
           </div>
           <div class="canphai">
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
@@ -229,7 +228,6 @@
     </nz-card>
   </div>
 </ng-container>
-
 <ng-template #templateThemmoi>
   <app-them-quyet-dinh-btc-giao-tcdt [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
   </app-them-quyet-dinh-btc-giao-tcdt>
