@@ -259,7 +259,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.trangThai = null
   }
 
-  taoMoi() {
+  async taoMoi() {
     this.statusBtnValidate = false;
     if (!this.searchFilter.namQtoan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
@@ -268,9 +268,25 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
       return;
     } else {
-      this.router.navigate([
-        MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan-/' + this.searchFilter.namQtoan,
-      ])
+      const req = {
+        maPhanBcao: this.searchFilter.maPhanBcao,
+        namQtoan: this.searchFilter.namQtoan
+      }
+      await this.quanLyVonPhiService.checkNamTaoMoiQuyetToan(req).toPromise().then(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.router.navigate([
+              MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan-/' + this.searchFilter.namQtoan,
+            ])
+          } else if (data.statusCode == 1) {
+            this.notification.warning(MESSAGE.WARNING, data?.msg)
+            return
+          } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+          }
+        }
+      )
+
     }
   }
 

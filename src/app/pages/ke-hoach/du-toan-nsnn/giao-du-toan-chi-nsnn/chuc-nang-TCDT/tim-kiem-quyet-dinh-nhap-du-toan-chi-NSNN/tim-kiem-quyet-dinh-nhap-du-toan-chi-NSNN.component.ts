@@ -179,7 +179,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.onSubmit()
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.WARNING, data?.msg);
         }
       },
       (err) => {
