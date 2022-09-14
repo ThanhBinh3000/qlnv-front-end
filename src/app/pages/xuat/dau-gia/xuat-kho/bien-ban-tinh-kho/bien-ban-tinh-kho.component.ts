@@ -165,13 +165,14 @@ export class BienBanTinhKhoComponent implements OnInit {
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.searchFilter = {
       soBienBan: '',
       ngayBienBan: '',
       soQuyetDinh: '',
     };
-    this.search();
+    this.quyetDinhId = ''
+    await this.search();
   }
 
   convertTrangThai(status: string) {

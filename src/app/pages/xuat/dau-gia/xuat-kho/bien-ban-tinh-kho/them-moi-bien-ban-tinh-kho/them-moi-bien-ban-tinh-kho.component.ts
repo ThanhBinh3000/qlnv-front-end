@@ -496,7 +496,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN ||
       trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC ||
-      trangThai === this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC
+      trangThai === this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC ||
+      trangThai === this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC) {
@@ -516,7 +517,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         this.detail.tenTrangThai = 'CHỜ DUYỆT - LĐ CHI CỤC';
         break;
       case this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC:
-        this.detail.tenTrangThai = 'TỪ CHỐI';
+        this.detail.tenTrangThai = 'TỪ CHỐI - LĐ CHI CỤC';
+        break;
+      case this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN:
+        this.detail.tenTrangThai = 'TỪ CHỐI - KTV';
         break;
       case this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC:
         this.detail.tenTrangThai = 'ĐÃ DUYỆT';
