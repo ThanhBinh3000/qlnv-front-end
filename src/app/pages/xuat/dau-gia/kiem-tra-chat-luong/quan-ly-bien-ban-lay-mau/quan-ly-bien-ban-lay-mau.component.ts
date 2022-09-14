@@ -36,13 +36,13 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   detail: any = {};
   dsDonVi: any = [];
 
-  dsTong;
-  dsCuc = [];
-  dsChiCuc = [];
-  dsDiemKho = [];
-  dsNhaKho = [];
-  dsNganKho = [];
-  dsLoKho = [];
+  listTong;
+  listCuc = [];
+  listChiCuc = [];
+  listDiemKho = [];
+  listNhaKho = [];
+  listNganKho = [];
+  listLoKho = [];
 
   formData: FormGroup;
 
@@ -119,7 +119,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     };
     const dsTong = await this.donviService.layDonViTheoCapDo(body);
     if (!isEmpty(dsTong)) {
-      this.dsTong = dsTong;
+      this.listTong = dsTong;
       if (this.userInfo.CAP_DVI === this.globals.prop.CUC) {
         this.dsDonVi = dsTong[DANH_MUC_LEVEL.CUC];
       }
@@ -129,51 +129,51 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       const chiCuc = this.dsDonVi[0]
       if (chiCuc) {
         const result = {
-          ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
+          ...this.donviService.layDsPhanTuCon(this.listTong, chiCuc),
         };
-        this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
+        this.listDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
       } else {
-        this.dsDiemKho = [];
+        this.listDiemKho = [];
       }
     }
   }
 
   onChangeDiemKho(id) {
-    const dsDiemKho = this.dsDiemKho.find((item) => item.maDvi === id);
+    const dsDiemKho = this.listDiemKho.find((item) => item.maDvi === id);
     this.formData.get('maNhaKho').setValue(null);
     this.formData.get('maNganKho').setValue(null);
     this.formData.get('maNganLo').setValue(null);
     if (dsDiemKho) {
       const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, dsDiemKho),
+        ...this.donviService.layDsPhanTuCon(this.listTong, dsDiemKho),
       };
-      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
+      this.listNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
     } else {
-      this.dsNhaKho = [];
+      this.listNhaKho = [];
     }
   }
   onChangeNhaKho(id) {
-    const nhaKho = this.dsNhaKho.find((item) => item.maDvi === id);
+    const nhaKho = this.listNhaKho.find((item) => item.maDvi === id);
     this.formData.get('maNganKho').setValue(null);
     this.formData.get('maNganLo').setValue(null);
     if (nhaKho) {
-      const result = { ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho), };
-      this.dsNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
+      const result = { ...this.donviService.layDsPhanTuCon(this.listTong, nhaKho), };
+      this.listNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
     } else {
-      this.dsNganKho = [];
+      this.listNganKho = [];
     }
   }
 
   onChangeNganKho(id) {
-    const nganKho = this.dsNganKho.find((item) => item.maDvi === id);
+    const nganKho = this.listNganKho.find((item) => item.maDvi === id);
     this.formData.get('maNganLo').setValue(null);
     if (nganKho) {
       const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, nganKho),
+        ...this.donviService.layDsPhanTuCon(this.listTong, nganKho),
       };
-      this.dsLoKho = result[DANH_MUC_LEVEL.NGAN_LO];
+      this.listLoKho = result[DANH_MUC_LEVEL.NGAN_LO];
     } else {
-      this.dsLoKho = [];
+      this.listLoKho = [];
     }
   }
 
@@ -223,6 +223,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       "pageNumber": this.page,
       "pageSize": this.pageSize,
     };
+
     try {
       let res = await this.bienBanLayMauXuatService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {

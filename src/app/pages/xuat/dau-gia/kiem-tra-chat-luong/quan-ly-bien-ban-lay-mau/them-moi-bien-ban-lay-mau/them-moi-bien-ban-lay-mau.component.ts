@@ -108,8 +108,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async ngOnInit() {
     this.initForm();
-    console.log(this.isView);
-
     await Promise.all([
       this.initData(),
       this.loadPhuongPhapLayMau(),
@@ -169,10 +167,10 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.listTong = dsTong;
       this.donVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
       if (!isEmpty(this.donVi)) {
-        this.formData.get('tenDonVi').setValue(this.donVi[0].tenDvi);
-        this.formData.controls['tenDonVi'].disable();
-        this.formData.get('maQHNS').setValue(this.donVi[0].maQhns);
-        this.formData.controls['maQHNS'].disable();
+        this.formData.patchValue({
+          tenDonVi: this.donVi[0].tenDvi,
+          maQHNS: this.donVi[0].maQhns
+        })
         const chiCuc = this.donVi[0];
         if (chiCuc) {
           const result = {
@@ -305,6 +303,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     if (!isEmpty(this.listDaiDien)) {
       this.listDaiDien = this.listDaiDien.filter((item) => item.idTemp != 1);
     }
+
     // cần số hợp đồng
     let body = {
       id: this.id,
@@ -429,7 +428,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
             id: this.id,
             trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
-          console.log(body);
           const res = await this.quanLyBienBanLayMauXuatService.updateStatus(
             body,
           );
@@ -543,7 +541,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
-    console.log(res.data);
 // cần số hợp đồng
     if (res.msg == MESSAGE.SUCCESS) {
       this.detail = res.data;
