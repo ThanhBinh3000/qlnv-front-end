@@ -11,7 +11,7 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhGiaoNhapHang', '');
+    super(httpClient, 'dx-kh/nhap-xuat', '/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {

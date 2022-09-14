@@ -1,19 +1,19 @@
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import { LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import dayjs from 'dayjs';
 import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -21,9 +21,12 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./danh-sach-giao-nhap-hang.component.scss']
 })
 
-export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
+export class DanhSachGiaoNhapHangComponent implements OnInit {
   @Input()
   typeVthh: string;
+  @Input()
+  listVthh: any[] = [];
+
   @Output()
   getCount = new EventEmitter<any>();
   inputDonVi: string = '';
@@ -34,10 +37,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-  loaiVTHH: string = null;
+
   soQD: string = null;
   canCu: string = null;
   loaiQd: string = null;
@@ -53,8 +53,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   };
 
   listNam: any[] = [];
-  routerUrl: string;
-  yearNow: number;
   ngayQuyetDinhDefault: any[] = [];
   maVthh: string;
   routerVthh: string;
@@ -76,8 +74,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
   allChecked = false;
   indeterminate = false;
   isViewDetail: boolean;
-  listVthh: any[] = [];
-
+  STATUS = STATUS;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -86,25 +83,19 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    private danhMucService: DanhMucService
   ) {
   }
 
   async ngOnInit() {
-    console.log(this.typeVthh)
-    this.listVthh = LIST_VAT_TU_HANG_HOA;
     this.spinner.show();
     try {
-      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
+          value: dayjs().get('year') + i,
+          text: dayjs().get('year') + i,
         });
       }
-      this.searchFilter.namNhap = this.yearNow;
-      this.ngayQuyetDinhDefault = [];
-      this.ngayQuyetDinhDefault.push(dayjs().subtract(30, 'day').toDate());
-      this.ngayQuyetDinhDefault.push(dayjs().toDate());
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -123,11 +114,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
-  }
-
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   redirectToThongTin(id: number, isView?: boolean) {
@@ -159,31 +145,19 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       "denNgayQd": this.searchFilter.ngayQuyetDinh
         ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
         : null,
-      "loaiQd": null,
-      "maDvi": null,
-      "maVthh": null,
       "loaiVthh": this.typeVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
-      "ngayQd": null,
-      "orderBy": null,
-      "orderDirection": null,
       "paggingReq": {
         "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
         "page": this.page - 1
       },
-      "soHd": null,
       "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-      "str": null,
-      "trangThai": null,
       "tuNgayQd": this.searchFilter.ngayQuyetDinh
         ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
         : null,
       "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-      "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -242,14 +216,13 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaoNhapHangService.xoa({ id: item.id }).then((res) => {
+          this.quyetDinhGiaoNhapHangService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
                 MESSAGE.DELETE_SUCCESS,
               );
               this.search();
-              this.getCount.emit();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -275,17 +248,11 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
           "loaiQd": null,
           "maDvi": null,
           "maVthh": null,
-          "loaiVthh": this.typeVthh ?? null,
+          "loaiVthh": this.typeVthh,
           "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
           "ngayQd": null,
           "orderBy": null,
           "orderDirection": null,
-          "paggingReq": {
-            "limit": this.pageSize,
-            "orderBy": null,
-            "orderType": null,
-            "page": this.page - 1
-          },
           "soHd": null,
           "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
           "str": null,
@@ -435,7 +402,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
-              this.getCount.emit();
               this.allChecked = false;
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -454,8 +420,4 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.typeVthh);
-    this.ngOnInit();
-  }
 }
