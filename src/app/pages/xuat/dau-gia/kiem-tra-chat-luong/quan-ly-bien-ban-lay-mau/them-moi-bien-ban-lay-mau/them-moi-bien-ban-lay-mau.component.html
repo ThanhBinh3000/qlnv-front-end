@@ -39,7 +39,7 @@
   <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="them-bien-ban-lay-mau">
       <div class="search__body" nz-row [nzGutter]="[18, 12]">
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">Đơn vị</nz-form-label>
           <nz-form-control>
             <nz-input-group>
@@ -47,7 +47,7 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">Số biên bản lấy mẫu</nz-form-label>
           <nz-form-control>
             <nz-input-group>
@@ -55,7 +55,7 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">Mã QHNS (Mã quan hệ ngân sách )</nz-form-label>
           <nz-form-control>
             <nz-input-group>
@@ -63,7 +63,7 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">Số QĐ giao nhiệm vụ xuất hàng</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="soQDXuat" (ngModelChange)="changeSoQuyetDinh()"
@@ -73,16 +73,17 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label [nzNoColon]="true" nzRequired>Số hợp đồng </nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="soHopDong" [nzDisabled]="isDisableField() || isView">
-              <nz-option *ngFor="let item of listSoHopDong" [nzValue]="item.id" [nzLabel]="item.soQuyetDinh">
+            <nz-select formControlName="soHopDong" [nzDisabled]="isDisableField() || isView"
+              (ngModelChange)="changeHopDong()">
+              <nz-option *ngFor="let item of listSoHopDong" [nzValue]="item.id" [nzLabel]="item.soHd">
               </nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">Ngày ký hợp đồng </nz-form-label>
           <nz-form-control>
             <nz-date-picker #endDatePicker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau"
@@ -90,7 +91,7 @@
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label nzRequired [nzNoColon]="true">
             Ngày lấy mẫu
           </nz-form-label>
@@ -100,7 +101,7 @@
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label [nzNoColon]="true">
             Đơn vị kiểm nghiệm
           </nz-form-label>
@@ -111,7 +112,7 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="12" class="form-item">
+        <nz-form-item nz-col nzSpan="9" class="form-item">
           <nz-form-label [nzNoColon]="true">
             Địa điểm lấy mẫu
           </nz-form-label>
@@ -122,7 +123,7 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label nzRequired="" [nzNoColon]="true">Loại hàng hóa
           </nz-form-label>
           <nz-select formControlName="loaiHang" (ngModelChange)="changeLoaiHangHoa($event)"
@@ -131,7 +132,7 @@
             </nz-option>
           </nz-select>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="5" class="form-item">
           <nz-form-label nzRequired="" [nzNoColon]="true">Chủng loại hàng hóa</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="chungLoaiHang" [nzDisabled]="isDisableField() || isView">
@@ -140,7 +141,7 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzRequired [nzNoColon]="true">
             Điểm kho
           </nz-form-label>
@@ -152,7 +153,7 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzRequired [nzNoColon]="true">
             Nhà kho
           </nz-form-label>
@@ -164,7 +165,7 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzRequired [nzNoColon]="true">
             Ngăn kho
           </nz-form-label>
@@ -176,7 +177,7 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col nzSpan="6" class="form-item">
+        <nz-form-item nz-col nzSpan="3" class="form-item">
           <nz-form-label nzRequired [nzNoColon]="true">
             Lô kho
           </nz-form-label>

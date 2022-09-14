@@ -3,36 +3,28 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output,
-  ViewChild,
+  Output
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { isEmpty } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Globals } from 'src/app/shared/globals';
-import { UserLogin } from 'src/app/models/userlogin';
-import dayjs from 'dayjs';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
-import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { UserLogin } from 'src/app/models/userlogin';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
-import { isEmpty } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import { QuanLyBienBanLayMauXuatService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/quanLyBienBanLayMauXuat';
-import { X } from '@angular/cdk/keycodes';
+import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -104,7 +96,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private donViService: DonviService,
     private fb: FormBuilder,
     private quanLyBienBanLayMauXuatService: QuanLyBienBanLayMauXuatService,
-  ) {}
+    private hopDongXuatHang: HopDongXuatHangService
+  ) { }
 
   async ngOnInit() {
     this.initForm();
@@ -113,11 +106,41 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.loadPhuongPhapLayMau(),
       this.loadSoQuyetDinh(),
       this.loaiVTHHGetAll(),
+      this.loadSoHopDong(),
     ]);
     if (this.id > 0) {
       await this.loadChitiet();
     } else {
       this.loadDaiDien();
+    }
+  }
+
+  async loadSoHopDong() {
+    let body = {
+      "loaiVthh": this.typeVthh ?? '',
+      "paggingReq": {
+        limit: 1000,
+        page: 0,
+      }
+    };
+    let res = await this.hopDongXuatHang.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoHopDong = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeHopDong() {
+    if (this.formData.value.soHopDong) {
+      let res = await this.hopDongXuatHang.getDetail(this.formData.value.soHopDong);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -137,7 +160,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       soBienBan: [null],
       maQHNS: [null],
       soQDXuat: [null],
-      soHopDong: [null],
+      soHopDong: [null, [Validators.required]],
       ngayKyHD: [null],
       ngayLayMau: [null, [Validators.required]],
       donViKN: [null],
@@ -292,9 +315,24 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     }
   }
   async changeSoQuyetDinh() {
-    if (this.listSoQuyetDinh.length > 0 && this.formData.value.soQDXuat) {
-      // trong data , list hợp đồng đang rỗng , chưa biết xử lý => để tạm
-      this.listSoHopDong = this.listSoQuyetDinh;
+    this.listSoHopDong = [];
+    this.formData.get('soHopDong').setValue(null);
+    if (this.formData.value.soQDXuat) {
+      let res = await this.quyetDinhGiaoNhiemVuXuatHangService.loadChiTiet(this.formData.value.soQDXuat);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data.hopDongs && res.data.hopDongs.length > 0) {
+          res.data.hopDongs.forEach(element => {
+            this.listSoHopDong.push(
+              {
+                id: element.id,
+                soHd: element.name
+              }
+            )
+          });
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
   isAction() {
@@ -325,6 +363,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       chiTietList: [...this.listDaiDien],
       soLuongMau: 0,
       ppLayMau: this.formData.value.ppLayMau,
+      hopDongId: this.formData.value.soHopDong,
       chiTieuKiemTra: this.formData.value.chiTieuKT,
       ketQuaNiemPhong: this.formData.value.kQNiemPhongMau,
       nam: 2022,
@@ -550,7 +589,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.listFileDinhKem = res.data.fileDinhKems;
       this.formData.patchValue({
         soQDXuat: res.data.qdgnvxId,
-        soHopDong: res.data.qdgnvxId,
+        soHopDong: res.data.hopDongId,
         soBienBan: res.data.soBienBan,
         donViKN: res.data.donViKiemNghiem,
         loaiHang: res.data.maVatTuCha,
