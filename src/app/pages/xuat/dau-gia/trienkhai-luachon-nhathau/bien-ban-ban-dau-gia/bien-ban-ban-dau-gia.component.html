@@ -193,14 +193,16 @@
                     <td>{{ data.nam }}</td>
                     <td>{{ data.soQdPdKqBdg }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td>
                       <a (click)="redirectToChiTiet(data.id, true)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a (click)="redirectToChiTiet(data.id)" *ngIf="userService.isCuc()">
+                      <a (click)="redirectToChiTiet(data.id)"
+                        *ngIf="userService.isCuc() && data.trangThai !== globals.prop.NHAP_BAN_HANH">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a (click)="xoaItem(data.id)" *ngIf="userService.isCuc()">
+                      <a (click)="xoaItem(data.id)"
+                        *ngIf="userService.isCuc() && data.trangThai !== globals.prop.NHAP_BAN_HANH">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
