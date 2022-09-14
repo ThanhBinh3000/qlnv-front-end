@@ -75,16 +75,16 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   listDaiDienChiCuc: any[] = [];
   listDaiDien: any[] = [
     {
-      bbLayMauId: null,
-      daiDien: null,
-      id: null,
+      bbLayMauId: '',
+      daiDien: '',
+      id: '',
       idTemp: 1,
       loaiDaiDien: '01',
     },
     {
-      bbLayMauId: null,
-      daiDien: null,
-      id: null,
+      bbLayMauId: '',
+      daiDien: '',
+      id: '',
       idTemp: 1,
       loaiDaiDien: '02',
     },
@@ -300,10 +300,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
-    if (!isEmpty(this.listDaiDien)) {
-      this.listDaiDien = this.listDaiDien.filter((item) => item.idTemp != 1);
-    }
-
+    // console.log(this.listFileDinhKem)
+    // this.listDaiDien = this.listDaiDien.filter((item) => item.idTemp != 1);
     // cần số hợp đồng
     let body = {
       id: this.id,
@@ -541,10 +539,11 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
-// cần số hợp đồng
+    // cần số hợp đồng
     if (res.msg == MESSAGE.SUCCESS) {
       this.detail = res.data;
       this.listDaiDien = res.data.chiTietList;
+      this.listFileDinhKem = res.data.fileDinhKems;
       this.formData.patchValue({
         soQDXuat: res.data.qdgnvxId,
         soHopDong: res.data.qdgnvxId,
@@ -559,7 +558,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         ngayLayMau: res.data.ngayLayMau,
         diaDiemLayMau: res.data.diaDiemLayMau,
         sLMauHangKiemTra: res.data.soLuongMau,
-        ppLayMau: res.data.ppLayMau,
+        ppLayMau: Number(res.data.ppLayMau),
         chiTieuKT: res.data.chiTieuKiemTra,
         kQNiemPhongMau: res.data.ketQuaNiemPhong,
       });

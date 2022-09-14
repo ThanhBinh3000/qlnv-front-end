@@ -226,6 +226,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
     try {
       let res = await this.bienBanLayMauXuatService.search(body);
+      console.log(res.data.content);
+
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
