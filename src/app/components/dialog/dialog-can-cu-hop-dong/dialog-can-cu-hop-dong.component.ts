@@ -6,7 +6,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service';
-import {STATUS} from "../../../constants/status";
+import { STATUS } from "../../../constants/status";
 
 @Component({
   selector: 'dialog-can-cu-hop-dong',
