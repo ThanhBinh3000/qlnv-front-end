@@ -213,19 +213,15 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.spinner.show();
     let body = {
       "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
-      "capDvis": this.detail.capDvi,
-      "maDvis": this.detail.maDvi,
+      "maDvis": null,
       "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
       "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
       "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,
       "maNganLo": this.formData.value.maNganLo ? this.formData.value.maNganLo : null,
       "ngayLayMauDenNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY') : null,
       "ngayLayMauTuNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY') : null,
-      "paggingReq": {
-        "pageNumber": this.page,
-        "pageSize": this.pageSize,
-      }
-
+      "pageNumber": this.page,
+      "pageSize": this.pageSize,
     };
     try {
       let res = await this.bienBanLayMauXuatService.search(body);

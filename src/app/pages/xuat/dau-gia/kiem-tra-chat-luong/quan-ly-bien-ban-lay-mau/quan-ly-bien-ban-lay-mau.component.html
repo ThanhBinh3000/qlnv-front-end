@@ -6,71 +6,70 @@
         <nz-card class="flex-card p-lr16">
           <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="bien-ban-lay-mau">
             <div class="search__body" nz-row [nzGutter]="[0, 6]">
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Số biên bản
-                  </nz-form-label>
+              <nz-form-item nz-col nzSpan="4" class="form-item" nz-col nzSpan="4">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Số biên bản
+                </nz-form-label>
+                <nz-form-control>
                   <nz-input-group>
                     <input type="text" nz-input formControlName="soBienBan" />
                   </nz-input-group>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Ngày lấy mẫu
-                  </nz-form-label>
-                  <nz-input-group>
-                    <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
-                    </nz-range-picker>
-                  </nz-input-group>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Điểm kho
-                  </nz-form-label>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Ngày lấy mẫu
+                </nz-form-label>
+                <nz-form-control>
+                  <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy">
+                  </nz-range-picker>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Điểm kho
+                </nz-form-label>
+                <nz-form-control>
                   <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
                     <nz-option *ngFor="let item of dsDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Nhà kho
-                  </nz-form-label>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Nhà kho
+                </nz-form-label>
+                <nz-form-control>
                   <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
                     <nz-option *ngFor="let item of dsNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Ngăn kho
-                  </nz-form-label>
+                </nz-form-control>
+
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Ngăn kho
+                </nz-form-label>
+                <nz-form-control>
                   <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
                     <nz-option *ngFor="let item of dsNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="4">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true">
-                    Lô Kho
-                  </nz-form-label>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item nz-col nzSpan="4" class="form-item">
+                <nz-form-label class="search__label" [nzNoColon]="true">
+                  Lô Kho
+                </nz-form-label>
+                <nz-form-control>
                   <nz-select formControlName="maNganLo">
                     <nz-option *ngFor="let item of dsLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
-                </nz-form-item>
-              </div>
+                </nz-form-control>
+              </nz-form-item>
             </div>
           </form>
 
@@ -116,9 +115,6 @@
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
                           (ngModelChange)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td>
                       <nz-date-picker class="filter-in-table" nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayLayMau"
@@ -130,52 +126,41 @@
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
                           (ngModelChange)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
                           (ngModelChange)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganKho"
                           (ngModelChange)="filterInTable('tenNganKho',filterTable.tenNganKho)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
                           (ngModelChange)="filterInTable('tenNganLo',filterTable.tenLoKho)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
+
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="suffixTemplateInfo">
                         <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                           (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                       </nz-input-group>
-                      <ng-template #suffixTemplateInfo>
-                        <i nz-icon nzType="search"></i>
-                      </ng-template>
                     </td>
                     <td></td>
+                    <ng-template #suffixTemplateInfo>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
                   </tr>
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != '00'"></label>
+                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{data.soBienBan}}</td>
@@ -189,11 +174,12 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThaiId=='00' || data.trangThaiId=='03') && userService.isChiCuc()"
+                      <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isChiCuc()"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThaiId=='00' && userService.isChiCuc()" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isChiCuc()"
+                        (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

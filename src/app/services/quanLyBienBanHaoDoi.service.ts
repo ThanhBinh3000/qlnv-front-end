@@ -7,19 +7,19 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class QuanLyBienBanTinhKhoService extends BaseService {
+export class QuanLyBienBanHaoDoiService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyBienBanTinhKho', '');
+    super(httpClient, 'QuanLyBienBanHaoDoi', '');
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho?`;
-    if (body.ngayXuatDen)
-      url_ += 'ngayXuatDen=' + encodeURIComponent('' + body.ngayXuatDen) + '&';
-    if (body.ngayXuatTu)
-      url_ += 'ngayXuatTu=' + encodeURIComponent('' + body.ngayXuatTu) + '&';
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi?`;
+    if (body.ngayBienBanDen)
+      url_ += 'ngayBienBanDen=' + encodeURIComponent('' + body.ngayBienBanDen) + '&';
+    if (body.ngayBienBanTu)
+      url_ += 'ngayBienBanTu=' + encodeURIComponent('' + body.ngayBienBanTu) + '&';
     if (body.pageSize)
       url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
     if (body.orderBy)
@@ -37,37 +37,37 @@ export class QuanLyBienBanTinhKhoService extends BaseService {
   }
 
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi`;
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
   deleteData(id: number): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi/${id}`;
     return this.httpClient.delete<any>(url).toPromise();
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho/delete/multiple`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-tinh-kho/export/list`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/xh-bb-hao-doi/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

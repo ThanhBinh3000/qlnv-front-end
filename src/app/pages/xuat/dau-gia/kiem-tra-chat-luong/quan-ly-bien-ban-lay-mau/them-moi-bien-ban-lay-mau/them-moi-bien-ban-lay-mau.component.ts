@@ -28,7 +28,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { isEmpty } from 'lodash';
 import { QuanLyBienBanLayMauXuatService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/quanLyBienBanLayMauXuat';
@@ -97,7 +97,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public globals: Globals,
-    private userService: UserService,
+    public userService: UserService,
     private thongTinHopDongService: ThongTinHopDongService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
     private danhMucService: DanhMucService,
@@ -119,9 +119,14 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     ]);
     if (this.id > 0) {
       await this.loadChitiet();
-
     } else {
       this.loadDaiDien();
+    }
+  }
+
+  isDisableField() {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+      return true;
     }
   }
 
@@ -132,18 +137,18 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenDonVi: [null],
       maQHNS: [null],
       donViKN: [null],
-      loaiHang: [null],
-      chungLoaiHang: [null],
-      maDiemKho: [null],
-      maNhaKho: [null],
-      maNganKho: [null],
-      maLoKho: [null],
+      loaiHang: [null, [Validators.required]],
+      chungLoaiHang: [null, [Validators.required]],
+      maDiemKho: [null, [Validators.required]],
+      maNhaKho: [null, [Validators.required]],
+      maNganKho: [null, [Validators.required]],
+      maLoKho: [null, [Validators.required]],
       ngayLayMau: [null],
       diaDiemLayMau: [null],
-      sLMauHangKiemTra: [null],
-      ppLayMau: [null],
-      chiTieuKT: [null],
-      kQNiemPhongMau: [null],
+      sLMauHangKiemTra: [null, [Validators.required]],
+      ppLayMau: [null, [Validators.required]],
+      chiTieuKT: [null, [Validators.required]],
+      kQNiemPhongMau: [null, [Validators.required]],
     });
   }
   async initData() {
@@ -273,7 +278,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.loadDaiDien();
   }
   async loadSoQuyetDinh() {
-    let body = {}
+    let body = {};
     let res = await this.quyetDinhGiaoNhiemVuXuatHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -284,7 +289,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   }
   async changeSoQuyetDinh() {
     if (this.listSoQuyetDinh.length > 0 && this.formData.value.soQDId) {
-      this.listSoQuyetDinh.forEach(item => {
+      this.listSoQuyetDinh.forEach((item) => {
         if (item.id == this.formData.value.soQDId) {
           this.formData.patchValue({ soQuyetDinh: item.soQuyetDinh });
         }
@@ -312,7 +317,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       maDiemKho: this.formData.value.maDiemKho,
       maDvi: this.detail.maDvi,
       maNganKho: this.formData.value.maNganKho,
-      maNganLo: this.formData.value.maNganLo,
+      maNganLo: this.formData.value.maLoKho,
       maNhaKho: this.formData.value.maNhaKho,
       maVatTu: this.formData.value.chungLoaiHang,
       maVatTuCha: this.formData.value.loaiHang,
@@ -337,7 +342,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -376,7 +381,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDo: null,
-                trangThai: this.globals.prop.LANH_DAO_DUYET,
+                trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
               };
               this.quanLyBienBanLayMauXuatService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -418,6 +423,20 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let body = {
+            id: this.id,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
+          };
+          console.log(body);
+          const res = await this.quanLyBienBanLayMauXuatService.updateStatus(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.redirectBienBanLayMau();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
           this.save(true);
           this.spinner.hide();
         } catch (e) {
@@ -443,43 +462,11 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         try {
           let body = {
             id: this.id,
-            lyDo: null,
-            trangThai: this.globals.prop.LANH_DAO_DUYET,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
           };
-          const res = await this.bienBanLayMauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.redirectBienBanLayMau();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-  banHanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ban hành?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.BAN_HANH,
-          };
-          const res = await this.bienBanLayMauService.updateStatus(body);
+          const res = await this.quanLyBienBanLayMauXuatService.updateStatus(
+            body,
+          );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
             this.redirectBienBanLayMau();
@@ -513,9 +500,11 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: this.globals.prop.TU_CHOI,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
-          const res = await this.bienBanLayMauService.updateStatus(body);
+          const res = await this.quanLyBienBanLayMauXuatService.updateStatus(
+            body,
+          );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectBienBanLayMau();
@@ -550,22 +539,23 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-
   async loadChitiet() {
     let res = await this.quanLyBienBanLayMauXuatService.searchDetail(this.id);
+    console.log(res.data);
+
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDaiDien = res.data.chiTietList
-      let soQD = this.listSoQuyetDinh.find((x) => x.id == res.data.qdgnvxId)
+      this.detail = res.data;
+      this.listDaiDien = res.data.chiTietList;
       this.formData.patchValue({
-        soQDXuat: soQD.soQuyetDinh,
+        soQDXuat: res.data.qdgnvxId,
         soBienBan: res.data.soBienBan,
-        donViKN: res.data.tenDonViKiemNghiem,
-        loaiHang: res.data.tenVatTu,
-        chungLoaiHang: res.data.tenVatTuCha,
-        maDiemKho: res.data.tenDiemKho,
-        maNhaKho: res.data.tenNhaKho,
-        maNganKho: res.data.tenNganKho,
-        maLoKho: res.data.tenLoKho,
+        donViKN: res.data.donViKiemNghiem,
+        loaiHang: res.data.maVatTuCha,
+        chungLoaiHang: res.data.maVatTu,
+        maDiemKho: res.data.maDiemKho,
+        maNhaKho: res.data.maNhaKho,
+        maNganKho: res.data.maNganKho,
+        maLoKho: res.data.maNganLo,
         ngayLayMau: res.data.ngayLayMau,
         diaDiemLayMau: res.data.diaDiemLayMau,
         sLMauHangKiemTra: res.data.soLuongMau,
@@ -573,10 +563,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         chiTieuKT: res.data.chiTieuKiemTra,
         kQNiemPhongMau: res.data.ketQuaNiemPhong,
       });
-      this.loadDaiDien()
+      this.loadDaiDien();
     }
-
-
   }
   loadPhuongPhapLayMau() {
     this.danhMucService
@@ -600,10 +588,15 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       trangThai === this.globals.prop.TU_CHOI ||
       trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
       trangThai === this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN ||
+      trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC ||
+      trangThai === this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC ||
       !trangThai
     ) {
       return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === this.globals.prop.BAN_HANH) {
+    } else if (
+      trangThai === this.globals.prop.BAN_HANH ||
+      trangThai === this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC
+    ) {
       return 'da-ban-hanh';
     }
   }
