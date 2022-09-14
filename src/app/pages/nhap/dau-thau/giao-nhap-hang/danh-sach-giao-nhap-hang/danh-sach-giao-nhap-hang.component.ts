@@ -275,17 +275,11 @@ export class DanhSachGiaoNhapHangComponent implements OnInit, OnChanges {
           "loaiQd": null,
           "maDvi": null,
           "maVthh": null,
-          "loaiVthh": this.typeVthh ?? null,
+          "loaiVthh": this.typeVthh,
           "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
           "ngayQd": null,
           "orderBy": null,
           "orderDirection": null,
-          "paggingReq": {
-            "limit": this.pageSize,
-            "orderBy": null,
-            "orderType": null,
-            "page": this.page - 1
-          },
           "soHd": null,
           "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
           "str": null,
