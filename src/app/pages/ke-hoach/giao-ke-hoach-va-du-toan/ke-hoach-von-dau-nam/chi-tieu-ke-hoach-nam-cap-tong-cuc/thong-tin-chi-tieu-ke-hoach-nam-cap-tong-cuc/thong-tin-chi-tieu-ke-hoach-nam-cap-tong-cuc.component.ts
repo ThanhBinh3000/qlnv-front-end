@@ -51,18 +51,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listThoc: any[] = [];
-  listMuoi: any[] = [];
-  listVatTu = [];
+  maQd: string
   options: any[] = [];
   optionsDonVi: any[] = [];
-  modals = {
-    luaChonIn: false,
-    thongTinLuongThuc: false,
-    thongTinVatTuTrongNam: false,
-  };
-  xuongCaoTocCacLoais = new Array(4);
-  // id: number;
   tabSelected: string = TAB_SELECTED.luongThuc;
   detail = {
     soQD: null,
@@ -136,6 +127,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
+    this.maQd = '/QĐ-BTC'
     if (this.userInfo) {
       this.qdTCDT = this.userInfo.MA_QD;
     }
@@ -167,6 +159,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+
   async findCanCuByYear() {
 
     if (this.userService.isCuc()) {
@@ -175,7 +168,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         let data = res.data
         if (data) {
           this.formData.patchValue({
-            canCu: data.soQd
+            canCu: data.canCu
           })
         }
       } else {
@@ -350,14 +343,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      namKeHoach: [this.yearNow],
-      soQD: [
+      soQd: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.soQuyetDinh
           : null,
         [],
       ],
-      trangThai: [STATUS.DU_THAO],
       ngayKy: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.ngayKy
@@ -370,6 +361,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           : null,
         [],
       ],
+      namKeHoach: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.namKeHoach
+          : null,
+        [Validators.required],
+      ],
       trichYeu: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.trichYeu
@@ -379,21 +376,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       canCu: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.canCu
-          : null
+          : null,
+        [Validators.required]
       ],
     });
+    this.formData.markAsPristine();
+  }
 
-    // this.formData.get('soQD').setValidators(this.setRequired());
-    // this.formData.get('ngayKy').setValidators(this.setRequired());
-    // this.formData.get('ngayHieuLuc').setValidators(this.setRequired());
-  }
-  setRequired() {
-    if (this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.LANH_DAO_DUYET) {
-      return [Validators.required];
-    } else {
-      return [];
-    }
-  }
   themMoi(data?: any) {
     if (this.tabSelected == TAB_SELECTED.luongThuc) {
       const modalLuongThuc = this.modal.create({
@@ -750,14 +739,27 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachVatTuShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khVatTu,
           );
-          // this.thongTinChiTieuKeHoachNam.khVatTu = this.updateDataListVatTu(
-          //   this.thongTinChiTieuKeHoachNam.khVatTu,
-          // );
           this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
-          this.initForm();
+          if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
+           this.formData.controls['ngayKy'].setValidators([Validators.required])
+           this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
+           this.formData.controls['soQd'].setValidators([Validators.required])
+          } else {
+            this.formData.controls['ngayKy'].setValidators([])
+            this.formData.controls['ngayHieuLuc'].setValidators([])
+            this.formData.controls['soQd'].setValidators([])
+          }
+          this.formData.patchValue({
+            namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
+            canCu: this.thongTinChiTieuKeHoachNam.canCu,
+            trichYeu: this.thongTinChiTieuKeHoachNam.namKeHoach,
+            soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+            ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
+            ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc
+          })
           this.loadData();
           this.formData.patchValue({
-            soQD: this.formData.get('soQD').value?.split('/')[0],
+            soQD: this.formData.get('soQd').value?.split('/')[0],
           });
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1185,6 +1187,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
           }
           this.save(true);
+          this.redirectChiTieuKeHoachNam()
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1196,7 +1199,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   pheDuyet() {
-
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1209,12 +1211,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let trangThai;
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: trangThai,
-          };
-          switch (this.formData.value.trangThai) {
+          switch (this.thongTinChiTieuKeHoachNam.trangThai) {
             case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.DA_DUYET_LDV;
               break;
@@ -1228,6 +1225,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               break;
             }
           }
+          let body = {
+            id: this.id,
+            trangThai: trangThai,
+          };
           const res = await this.chiTieuKeHoachNamService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -1246,6 +1247,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   banHanh() {
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    console.log(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide()
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1255,7 +1264,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.spinner.show();
         try {
           let body = {
             id: this.id,
@@ -1270,6 +1278,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
+          console.log("Hide sprinerrrrrrrrrrrrrrrr");
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1278,6 +1287,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       },
     });
+    this.spinner.hide();
   }
 
   tuChoi() {
@@ -1295,7 +1305,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let trangThai;
-          switch (this.formData.value.trangThai) {
+          switch (this.thongTinChiTieuKeHoachNam.trangThai) {
             case STATUS.CHO_DUYET_TP:{
               trangThai = STATUS.TU_CHOI_TP
               break;
@@ -1346,11 +1356,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save(isGuiDuyet?: boolean) {
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
+        this.spinner.hide()
         this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
         return;
       }
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQD').value ? `${this.formData.get('soQD').value
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
       }/${this.qdTCDT}` : null;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
@@ -1412,7 +1425,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (isGuiDuyet) {
               let trangThai;
               if (this.userService.isTongCuc()) {
-                switch (this.formData.value.trangThai) {
+                switch (this.thongTinChiTieuKeHoachNam.trangThai) {
                   case STATUS.DU_THAO : {
                     trangThai = STATUS.CHO_DUYET_LDV
                     break;
@@ -1424,7 +1437,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 }
               }
               if (this.userService.isCuc()) {
-                switch (this.formData.value.trangThai) {
+                switch (this.thongTinChiTieuKeHoachNam.trangThai) {
                   case STATUS.DU_THAO : {
                     trangThai = STATUS.CHO_DUYET_TP
                     break;
@@ -1515,6 +1528,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .finally(() => {
           this.spinner.hide();
         });
+      this.redirectChiTieuKeHoachNam();
     }
   }
 

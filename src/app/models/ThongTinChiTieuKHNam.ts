@@ -9,7 +9,7 @@ export class ThongTinChiTieuKeHoachNam {
   ngayKy: string;
   soQuyetDinh: string;
   tenTrangThai: string;
-  trangThai: string;
+  trangThai: string = '00';
   trichYeu: string;
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
