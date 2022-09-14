@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dxnc')">
+      Đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('thnc')">
+      Tổng hợp phương án đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('qdpd')">
+      Quyết định phê duyệt kế hoạch đầu tư xây dựng kho tàng DTQG hàng năm
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'dxnc'">
+  <app-de-xuat-ke-hoach></app-de-xuat-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'thnc'">
+  <app-tong-hop-de-xuat-ke-hoach></app-tong-hop-de-xuat-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdpd'">
+  <app-tong-hop-de-xuat-ke-hoach></app-tong-hop-de-xuat-ke-hoach>
+</ng-container>

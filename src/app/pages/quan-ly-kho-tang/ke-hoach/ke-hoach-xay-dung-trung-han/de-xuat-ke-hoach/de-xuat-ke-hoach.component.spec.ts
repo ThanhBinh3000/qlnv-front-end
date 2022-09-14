@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KeHoachComponent } from './ke-hoach.component';
+import { DeXuatKeHoachComponent } from './de-xuat-ke-hoach.component';
 
-describe('KeHoachComponent', () => {
-  let component: KeHoachComponent;
-  let fixture: ComponentFixture<KeHoachComponent>;
+describe('DeXuatKeHoachComponent', () => {
+  let component: DeXuatKeHoachComponent;
+  let fixture: ComponentFixture<DeXuatKeHoachComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ KeHoachComponent ]
+      declarations: [ DeXuatKeHoachComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KeHoachComponent);
+    fixture = TestBed.createComponent(DeXuatKeHoachComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

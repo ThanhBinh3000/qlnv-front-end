@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dxkh')">
+      Đề xuất kế hoạch đầu tư trung hạn (5 năm)
+    </li>
+    <li nz-menu-item (click)="selectTab('thkh')">
+      Tổng hợp phương án đề xuất kế hoạch đầu tư xây dựng trung hạn (5 năm)
+    </li>
+    <li nz-menu-item (click)="selectTab('qdpdkh')">
+      Quyết định phê duyệt kế hoạch đầu tư xây dựng trung hạn (5 năm)
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'dxkh'">
+  <app-de-xuat-ke-hoach></app-de-xuat-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'thkh'">
+ <app-tong-hop-de-xuat-ke-hoach></app-tong-hop-de-xuat-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdpdkh'">
+  <app-tong-hop-de-xuat-ke-hoach></app-tong-hop-de-xuat-ke-hoach>
+</ng-container>
