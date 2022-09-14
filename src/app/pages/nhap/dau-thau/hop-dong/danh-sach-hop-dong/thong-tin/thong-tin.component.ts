@@ -32,6 +32,7 @@ import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {QuyetDinhPheDuyetKetQuaLCNTService} from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import {STATUS} from "../../../../../../constants/status";
 import {HelperService} from "../../../../../../services/helper.service";
+import {ThongTinPhuLucHopDongService} from "../../../../../../services/thongTinPhuLucHopDong.service";
 
 interface DonviLienQuanModel {
   id: number;
@@ -117,6 +118,7 @@ export class ThongTinComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
     private helperService: HelperService,
     private _modalService: NzModalService
   ) {
@@ -130,7 +132,7 @@ export class ThongTinComponent implements OnInit {
         namKh: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
-        tgianNkho: [null],
+        tgianNkho: [null, [Validators.required]],
         tenVthh: [null],
         moTaHangHoa: [null],
         loaiVthh: [null],
@@ -345,6 +347,7 @@ export class ThongTinComponent implements OnInit {
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
+            this.back();
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS,);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -370,6 +373,7 @@ export class ThongTinComponent implements OnInit {
         else if (!(this.id > 0) && !isKy) {
           let res = await this.thongTinHopDong.create(body,);
           if (res.msg == MESSAGE.SUCCESS) {
+            this.back();
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS,);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -387,11 +391,11 @@ export class ThongTinComponent implements OnInit {
   async setTitle() {
     let trangThai = this.detail.trangThai ?? '00'
     switch (trangThai) {
-      case '00': {
+      case STATUS.DU_THAO: {
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '02': {
+      case STATUS.DA_KY: {
         this.titleStatus = 'Đã ký';
         this.styleStatus = 'da-ban-hanh'
         break
@@ -480,7 +484,9 @@ export class ThongTinComponent implements OnInit {
         })
         this.onChangeDvlq(data.idNhaThau);
         this.diaDiemNhapListCuc = data.diaDiemNhapList;
+        this.tongSlHang = 0;
         this.diaDiemNhapListCuc.forEach(element => {
+          this.tongSlHang += element.soLuong;
           delete element.id
         });
         if (this.userService.isTongCuc()) {
@@ -579,5 +585,28 @@ export class ThongTinComponent implements OnInit {
       });
     }
   }
-
+  xoaPhuLuc(id: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.thongTinPhuLucHopDongService.delete({id:id})
+            .then(async () => {
+              await this.loadChiTiet(this.id);
+            });
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+        this.spinner.hide();
+      },
+    });
+  }
 }

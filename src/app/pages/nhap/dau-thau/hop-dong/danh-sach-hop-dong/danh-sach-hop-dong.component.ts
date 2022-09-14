@@ -334,6 +334,7 @@ export class DanhSachHopDongComponent implements OnInit {
           try {
             let res = await this.thongTinHopDong.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
+              this.search();
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -382,8 +383,5 @@ export class DanhSachHopDongComponent implements OnInit {
       nhaCungCap: '',
       gtriHdSauVat: '',
     };
-  }
-  getData1(){
-    console.log("BIBIBI")
   }
 }
