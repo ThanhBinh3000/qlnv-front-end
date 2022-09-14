@@ -480,9 +480,8 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
   async save(isOther: boolean) {
     this.spinner.show();
     try {
-      debugger
       let body = {
-        "donViThongBao": this.detail.maDonVi,
+        "donViThongBao": this.detail.maDvi,
         "fileDinhKemReqs": [
           // {
           //   "dataId": 0,
