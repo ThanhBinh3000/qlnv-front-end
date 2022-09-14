@@ -80,13 +80,10 @@
             <th></th>
             <th></th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -94,44 +91,32 @@
                   (input)="filterInTable('ngayQdinh',filterTable.ngayQdinh)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namNhap"
                   (input)="filterInTable('namNhap',filterTable.namNhap)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
                   (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th></th>
           </tr>

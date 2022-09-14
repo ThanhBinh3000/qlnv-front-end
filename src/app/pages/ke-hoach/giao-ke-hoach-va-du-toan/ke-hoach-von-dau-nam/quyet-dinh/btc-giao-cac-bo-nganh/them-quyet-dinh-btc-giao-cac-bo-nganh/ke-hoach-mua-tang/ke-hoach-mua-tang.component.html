@@ -56,8 +56,9 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.idDanhMuc">
-                <nz-option [nzValue]="item.id" [nzLabel]="item.noiDung" *ngFor="let item of dsNoiDung">
+              <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.loaiChi" (ngModelChange)="onChangeNoiDung($event, dataEdit[idx].data )"
+                         nzAllowClear>
+                <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
                 </nz-option>
               </nz-select>
             </nz-input-group>
