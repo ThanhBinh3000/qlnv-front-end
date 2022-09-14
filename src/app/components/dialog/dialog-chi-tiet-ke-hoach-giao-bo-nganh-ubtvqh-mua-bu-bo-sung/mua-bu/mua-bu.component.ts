@@ -19,7 +19,6 @@ export class MuaBuComponent implements OnInit {
   isView: boolean = false;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
-
   @Input()
   tongGtri: number
 
@@ -28,7 +27,7 @@ export class MuaBuComponent implements OnInit {
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
-  dsChungLoaiHangHoa = [];
+  dsChungLoaiHangHoa : any[] = [];
   constructor(
     private readonly modal: NzModalService,
   ) {
@@ -51,8 +50,8 @@ export class MuaBuComponent implements OnInit {
     this.dataTableChange.emit(this.dataTable)
   }
 
-  editItem(id: number): void {
-    this.dataEdit[id].edit = true;
+  editItem(idx: number): void {
+    this.dataEdit[idx].edit = true;
   }
 
   xoaItem(index: number) {
@@ -74,68 +73,72 @@ export class MuaBuComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    // this.dataTable.push(this.rowItem);
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
     this.emitDataTable()
-    console.log(this.dataTable)
   }
 
   clearData() {
 
   }
 
-  huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+  huyEdit(idx: number): void {
+    this.dataEdit[idx] = {
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
 
-  luuEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    Object.assign(this.dataTable[index], this.dataEdit[id].data);
-    this.dataEdit[id].edit = false;
+  luuEdit(idx: number): void {
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
   }
 
   updateEditCache(): void {
     if (this.dataTable) {
-      this.dataTable.forEach((item) => {
-        this.dataEdit[item.id] = {
+      this.dataTable.forEach((item, index) => {
+        this.dataEdit[index] = {
           edit: false,
           data: {...item},
         };
       });
     }
   }
-
-  onChangeLoaiVthh(event) {
-    this.dsChungLoaiHangHoa = [];
-    this.rowItem.dviTinh = null;
-    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    if (loaiVthh.length > 0) {
-      this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-      this.rowItem.tenVthh = loaiVthh[0].ten;
-      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+  onChangeLoaiVthh(event, typeData?: any) {
+    if (typeData) {
+      this.dsChungLoaiHangHoa = [];
+      typeData.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        typeData.cloaiVthh = null;
+        typeData.dviTinh = loaiVthh[0].maDviTinh;
+        typeData.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      }
+    } else  {
+      this.dsChungLoaiHangHoa = [];
+      this.rowItem.dviTinh = null;
+      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+      if (loaiVthh.length > 0) {
+        this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+        this.rowItem.tenVthh = loaiVthh[0].ten;
+        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      }
     }
   }
 
-  onChangeCloaiVthh(event) {
-    const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-    if (cloaiVthh.length > 0) {
-      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
-    }
-  }
-  onChangeLoaiVthh123(event, id) {
-    this.dsChungLoaiHangHoa = [];
-    this.dataEdit[id].data.dviTinh = null;
-    const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    if (loaiVthh.length > 0) {
-      this.dataEdit[id].data.dviTinh = loaiVthh[0].maDviTinh;
-      this.dataEdit[id].data.tenVthh = loaiVthh[0].ten;
-      this.dsChungLoaiHangHoa = loaiVthh[0].child;
+  onChangeCloaiVthh(event, typeData?: any ) {
+    if (typeData) {
+      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+      if (cloaiVthh.length > 0) {
+        typeData.tenCloaiVthh = cloaiVthh[0].ten;
+      }
+    } else  {
+      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
+      if (cloaiVthh.length > 0) {
+        this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+      }
     }
   }
 

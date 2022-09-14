@@ -10,19 +10,20 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button class="btn btn-sub"
-      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) && isView"
+      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC)"
       (click)="pheDuyet()">
       <i class="icon htvbdh_dakyduyet"></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub"
-      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) && isView"
+      *ngIf="(detail.trangThai === globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || detail.trangThai === globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC)"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
     <button class="btn btn-main btn-sub xanh" (click)="save(false)"
-      *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO  || id == 0) && !isView" [disabled]="!formData.valid">
+      *ngIf="(detail.trangThai === globals.prop.NHAP_DU_THAO || detail.trangThai === globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || id == 0) && !isView"
+      [disabled]="!formData.valid">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -296,9 +297,6 @@
             </div>
             <div nz-col nzSpan="12" class="col-chuc-vu">
               {{item.chucVu}}
-              <!-- <div nz-col nzSpan="1" class="icon-xoa" (click)="xoaDaiDien(item.stt)" *ngIf="!isView">
-                <i class="fa fa-trash-o do "></i>
-              </div> -->
               <button type="button" class="btn btn-do" (click)="xoaDaiDien(item.stt)" *ngIf="!isView">
                 <i class="fa fa-trash-o do"></i>
               </button>

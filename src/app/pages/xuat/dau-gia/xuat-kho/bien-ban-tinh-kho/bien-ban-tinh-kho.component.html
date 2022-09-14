@@ -140,7 +140,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <td width="30px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != '00'"></label>
+                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
                     </td>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{ data.soBienBan }}</td>
@@ -155,11 +155,11 @@
                       <a (click)="redirectToChiTiet(true, data.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="(data.trangThai=='00' || data.trangThai=='03')"
+                      <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO)"
                         (click)="redirectToChiTiet(false, data.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai=='00'" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO" (click)="xoaItem(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

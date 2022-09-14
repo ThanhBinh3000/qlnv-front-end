@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -11,11 +10,8 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu, convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import VNnum2words from 'vn-num2words';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuanLyBienBanTinhKhoService } from "src/app/services/quanLyBienBanTinhKho.service";
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
@@ -105,9 +101,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       this.donVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
       if (!isEmpty(this.donVi)) {
         const donVi = this.donVi.filter(item => item.tenDvi === this.formData.value.donVi);
-        this.detail.maDonViById = donVi[0].maDvi;
-        console.log(this.detail.maDonViById);
-        this.formData.patchValue({ maQHNS: donVi[0].maDvi })
+        if (donVi.length > 0) {
+          this.detail.maDonViById = donVi[0].maDvi;
+          this.formData.patchValue({ maQHNS: donVi[0].maQhns })
+        }
         const chiCuc = donVi[0];
         if (chiCuc) {
           const result = {
@@ -266,6 +263,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
           this.detail.trangThai = res.data.trangThai;
           this.convertTrangThai(res.data.trangThai);
           this.tenDonViChiCuc = res.data.tenDvi;
+          this.detail.maDiemKho = res.data.maDiemKho;
+          this.detail.maNhaKho = res.data.maNhaKho;
+          this.detail.maNganKho = res.data.maNganKho;
+          this.detail.maNganLo = res.data.maLoKho;
           this.listDaiDien = res.data.ds;
 
           if (this.listLoaiHangHoa.length > 0) {
@@ -274,14 +275,12 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
                 this.detail.loaiHangHoa = loaihanghoa.ma;
                 this.formData.patchValue({ maLoaiHangHoa: this.detail.loaiHangHoa, });
                 this.changeLoaiHangHoa();
-                console.log(this.listChungLoaiHangHoa);
                 this.listChungLoaiHangHoa.forEach((chungloaihanghoa: any) => {
                   if (chungloaihanghoa.ten === res.data.chungLoaiHH) {
                     this.detail.chungLoaiHangHoa = chungloaihanghoa.ma;
                     this.formData.patchValue({ maChungLoaiHangHoa: this.detail.chungLoaiHangHoa, });
                   }
                 })
-
               }
             })
           }
@@ -306,6 +305,7 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
             kienNghi: res.data.kienNghi,
             ngayLapPhieu: res.data.ngayLapPhieu,
           });
+          await this.loadDonVi();
 
           this.changeDiemKho(true);
         }
@@ -443,7 +443,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "chungLoaiHangHoa": this.formData.value.maChungLoaiHangHoa,
+        "maQhns": this.formData.value.maQHNS,
+        "chungLoaiHangHoa": this.id ? this.detail.chungLoaiHangHoa : this.formData.value.maChungLoaiHangHoa,
         "ds": this.listDaiDien,
         "kienNghi": this.formData.value.kienNghi,
         "loaiHangHoa": this.formData.value.maLoaiHangHoa,
@@ -495,7 +496,8 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
       trangThai === this.globals.prop.DU_THAO ||
       trangThai === this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN ||
       trangThai === this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC ||
-      trangThai === this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC
+      trangThai === this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC ||
+      trangThai === this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC) {
@@ -515,7 +517,10 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         this.detail.tenTrangThai = 'CHỜ DUYỆT - LĐ CHI CỤC';
         break;
       case this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC:
-        this.detail.tenTrangThai = 'TỪ CHỐI';
+        this.detail.tenTrangThai = 'TỪ CHỐI - LĐ CHI CỤC';
+        break;
+      case this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN:
+        this.detail.tenTrangThai = 'TỪ CHỐI - KTV';
         break;
       case this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC:
         this.detail.tenTrangThai = 'ĐÃ DUYỆT';
@@ -532,10 +537,7 @@ export class ThemMoiBienBanTinhKhoComponent implements OnInit {
         chucVu: this.formData.value.chucVu,
       }
       this.listDaiDien.push(item);
-
-
       this.formData.patchValue({ daiDienChiCucDTNN: null, chucVu: null })
-
     }
   }
 

@@ -52,14 +52,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
-            <a *ngIf="!isView" (click)="editItem(data.id)">
+            <a *ngIf="!isView" (click)="editItem(idx)">
               <i class="table-icon fa fa-pencil"></i>
             </a>
             <a *ngIf="!isView" (click)="xoaItem(idx)">
@@ -71,8 +71,8 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
-                (ngModelChange)="onChangeLoaiVthh123($event, data.id)">
+              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
+                (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
                 </nz-option>
@@ -81,9 +81,9 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[data.id].data.cloaiVthh" [nzShowArrow]="false">
+              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false" (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -91,22 +91,22 @@
           <td>
             <nz-input-group>
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[data.id].data.dviTinh" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
               </nz-input-group>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[data.id].data.soLuong" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" />
               </nz-input-group>
             </nz-input-group>
           </td>
           <td>
-            <a (click)="luuEdit(data.id)" class="save">
+            <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(data.id)">
+            <a (click)="huyEdit(idx)">
               <i class="fa fa-times do"></i>
             </a>
           </td>
