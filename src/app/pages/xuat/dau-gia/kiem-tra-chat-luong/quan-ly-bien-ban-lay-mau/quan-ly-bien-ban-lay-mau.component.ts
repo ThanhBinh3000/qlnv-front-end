@@ -73,8 +73,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private fb: FormBuilder,
     private donviService: DonviService,
     public globals: Globals,
-
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -83,8 +82,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
       }
-      await this.initData()
-      Promise.all([, this.search()])
+      await this.initData();
+      Promise.all([, this.search()]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -101,7 +100,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       maNhaKho: [null],
       maNganKho: [null],
       maNganLo: [null],
-    })
+    });
   }
 
   async initData() {
@@ -109,8 +108,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
     this.detail.capDvi = this.userInfo.CAP_DVI;
-    await this.loadDsTong()
-
+    await this.loadDsTong();
   }
   async loadDsTong() {
     const body = {
@@ -126,7 +124,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
         this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
       }
-      const chiCuc = this.dsDonVi[0]
+      const chiCuc = this.dsDonVi[0];
       if (chiCuc) {
         const result = {
           ...this.donviService.layDsPhanTuCon(this.listTong, chiCuc),
@@ -157,7 +155,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.formData.get('maNganKho').setValue(null);
     this.formData.get('maNganLo').setValue(null);
     if (nhaKho) {
-      const result = { ...this.donviService.layDsPhanTuCon(this.listTong, nhaKho), };
+      const result = {
+        ...this.donviService.layDsPhanTuCon(this.listTong, nhaKho),
+      };
       this.listNganKho = result[DANH_MUC_LEVEL.NGAN_KHO];
     } else {
       this.listNganKho = [];
@@ -177,13 +177,12 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     }
   }
 
-
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThaiId == '00') {
             item.checked = true;
           }
         });
@@ -198,10 +197,10 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
+    if (this.dataTable.every((item) => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
+    } else if (this.dataTable.every((item) => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -212,16 +211,30 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
-      "maDvis": null,
-      "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
-      "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
-      "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,
-      "maNganLo": this.formData.value.maNganLo ? this.formData.value.maNganLo : null,
-      "ngayLayMauDenNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY') : null,
-      "ngayLayMauTuNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY') : null,
-      "pageNumber": this.page,
-      "pageSize": this.pageSize,
+      soBienBan: this.formData.value.soBienBan
+        ? this.formData.value.soBienBan
+        : null,
+      maDvis: null,
+      maDiemKho: this.formData.value.maDiemKho
+        ? this.formData.value.maDiemKho
+        : null,
+      maNhaKho: this.formData.value.maNhaKho
+        ? this.formData.value.maNhaKho
+        : null,
+      maNganKho: this.formData.value.maNganKho
+        ? this.formData.value.maNganKho
+        : null,
+      maNganLo: this.formData.value.maNganLo
+        ? this.formData.value.maNganLo
+        : null,
+      ngayLayMauDenNgay: this.formData.value.ngayLayMau
+        ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY')
+        : null,
+      ngayLayMauTuNgay: this.formData.value.ngayLayMau
+        ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY')
+        : null,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
 
     try {
@@ -246,7 +259,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     } finally {
       this.spinner.hide();
     }
-
   }
 
   async changePageIndex(event) {
@@ -278,8 +290,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
 
   clearFilter() {
-
-    this.formData.reset()
+    this.formData.reset();
     this.filterTable = {
       soBienBan: '',
       ngayLayMau: '',
@@ -325,21 +336,34 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     });
   }
 
-
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
-          "capDvis": [this.detail.capDvi],
-          "maDvis": [this.detail.maDvi],
-          "maDiemKho": this.formData.value.maDiemKho ? this.formData.value.maDiemKho : null,
-          "maNhaKho": this.formData.value.maNhaKho ? this.formData.value.maNhaKho : null,
-          "maNganKho": this.formData.value.maNganKho ? this.formData.value.maNganKho : null,
-          "maNganLo": this.formData.value.maNganLo ? this.formData.value.maNganLo : null,
-          "ngayLayMauDenNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY') : null,
-          "ngayLayMauTuNgay": this.formData.value.ngayLayMau ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY') : null,
+          soBienBan: this.formData.value.soBienBan
+            ? this.formData.value.soBienBan
+            : null,
+          capDvis: [this.detail.capDvi],
+          maDvis: [this.detail.maDvi],
+          maDiemKho: this.formData.value.maDiemKho
+            ? this.formData.value.maDiemKho
+            : null,
+          maNhaKho: this.formData.value.maNhaKho
+            ? this.formData.value.maNhaKho
+            : null,
+          maNganKho: this.formData.value.maNganKho
+            ? this.formData.value.maNganKho
+            : null,
+          maNganLo: this.formData.value.maNganLo
+            ? this.formData.value.maNganLo
+            : null,
+          ngayLayMauDenNgay: this.formData.value.ngayLayMau
+            ? dayjs(this.formData.value.ngayLayMau[0]).format('DD/MM/YYYY')
+            : null,
+          ngayLayMauTuNgay: this.formData.value.ngayLayMau
+            ? dayjs(this.formData.value.ngayLayMau[1]).format('DD/MM/YYYY')
+            : null,
         };
         this.bienBanLayMauXuatService
           .exportList(body)
@@ -378,9 +402,14 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanLayMauXuatService.deleteMultiple({ ids: dataDelete });
+            let res = await this.bienBanLayMauXuatService.deleteMultiple({
+              ids: dataDelete,
+            });
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -393,9 +422,11 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Không có dữ liệu phù hợp để xóa.',
+      );
     }
   }
 
@@ -423,6 +454,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 }
