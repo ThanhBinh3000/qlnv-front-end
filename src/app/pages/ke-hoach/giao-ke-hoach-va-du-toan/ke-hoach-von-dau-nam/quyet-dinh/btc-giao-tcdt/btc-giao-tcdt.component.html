@@ -96,19 +96,47 @@
             <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">
-                  <h3 class="first">Bộ</h3>
+                  <h3 class="first">BỘ</h3>
                   <h3 class="second">Dự toán (Triệu đồng) </h3>
                 </div>
+                <div class="content">
+                  <div class="content-item" *ngIf="keHoachNhapXuat.muaLuongThuc > 0">
+                    <div class="first">Vốn chỉ mua lương thực</div>
+                    <div class="second">{{keHoachNhapXuat.muaLuongThuc | number : '1.0-1' : 'vi_VN'}}</div>
+                  </div>
+                </div>
+                <div class="content">
+                  <div class="content-item" *ngIf="keHoachNhapXuat.nguonVonCo > 0">
+                    <div class="first">Nguồn vốn có</div>
+                    <div class="second">{{keHoachNhapXuat.nguonVonCo | number : '1.0-1' : 'vi_VN'}}</div>
+                  </div>
+                </div>
                 <div class="content" *ngFor="let data of muaTangList">
-                  <div class="content-item">
-                    <div class="first">{{data.tenBoNganh}}</div>
+                  <div class="content-item" *ngIf="muaTangList.length > 0">
+                    <div class="first">Mua tăng</div>
                     <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="footer">
-                  <div class="first">Tổng</div>
-                  <div class="second">{{ calcTong() | number : '1.0-1' : 'vi_VN'}}</div>
+                <div class="content" *ngFor="let data of xuatGiamList">
+                  <div class="content-item" *ngIf="xuatGiamList.length > 0">
+                    <div class="first">Xuất giảm</div>
+                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                  </div>
                 </div>
+                <div class="content" *ngFor="let data of xuatBanList">
+                  <div class="content-item" *ngIf="xuatBanList.length > 0">
+                    <div class="first">Xuất bán</div>
+                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                  </div>
+                </div>
+                <div class="content" *ngFor="let data of luanPhienList">
+                  <div class="content-item" *ngIf="luanPhienList.length > 0">
+                    <div class="first">Xuất luân phiên đổi hàng</div>
+                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                  </div>
+                </div>
+
+
               </div>
             </td>
           </tr>
