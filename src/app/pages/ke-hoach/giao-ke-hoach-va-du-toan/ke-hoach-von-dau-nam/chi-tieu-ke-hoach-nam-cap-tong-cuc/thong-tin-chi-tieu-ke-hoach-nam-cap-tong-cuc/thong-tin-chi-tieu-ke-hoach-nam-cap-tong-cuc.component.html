@@ -9,7 +9,7 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_DU_THAO || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU) && !isViewDetail" >
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_DU_THAO || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC ) && !isViewDetail" >
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
@@ -370,12 +370,11 @@
             </th>
             <th class="text-right">{{data.tkcnTongGao | number: '1.0-1'}}
             </th>
-            <!-- <td>{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-            <th *ngIf="!this.isViewDetail" class="text-right" nzRight>
+            <th *ngIf="!this.isViewDetail" class="text-right mr-1" nzRight >
               <a (click)="startEdit(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteKeHoachLuongThuc(data.stt)">
+              <a (click)="deleteKeHoachLuongThuc(data.stt)" style="margin-right: 10px">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </th>

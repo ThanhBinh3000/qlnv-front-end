@@ -126,7 +126,7 @@
                       <i class=" icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai === globals.prop.NHAP_TU_CHOI_LDV) && !userService.isCuc() && !userService.isChiCuc()">
+                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai === globals.prop.NHAP_TU_CHOI_LD_VU) && !userService.isCuc() && !userService.isChiCuc()">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
