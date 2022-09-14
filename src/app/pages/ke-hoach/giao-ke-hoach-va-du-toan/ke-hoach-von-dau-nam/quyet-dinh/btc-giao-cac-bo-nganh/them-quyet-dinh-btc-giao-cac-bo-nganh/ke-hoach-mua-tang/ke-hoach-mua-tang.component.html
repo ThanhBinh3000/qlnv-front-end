@@ -36,6 +36,8 @@
           </a>
         </td>
       </tr>
+    </tbody>
+    <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>

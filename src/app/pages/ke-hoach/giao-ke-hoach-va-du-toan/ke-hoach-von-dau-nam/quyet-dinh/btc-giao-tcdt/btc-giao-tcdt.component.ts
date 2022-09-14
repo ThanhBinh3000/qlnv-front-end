@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
@@ -48,7 +48,16 @@ export class BtcGiaoTcdtComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+
   muaTangList: any[] = [];
+  xuatGiamList: any[] = [];
+  xuatBanList: any[] = [];
+  luanPhienList: any[] = [];
+  keHoachNhapXuat: any = {
+    muaLuongThuc: 0,
+    nguonVonCo: 0
+  }
+
   constructor(private readonly fb: FormBuilder,
     private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
     private spinner: NgxSpinnerService,
@@ -361,20 +370,28 @@ export class BtcGiaoTcdtComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhBtcTcdtService.getDetail(id);
-      console.log(res);
-      this.muaTangList = res.data.muaTangList;
+      if (res.data?.muaTangList) {
+        this.muaTangList = res.data.muaTangList;
+      } if (res.data?.xuatGiamList) {
+        this.xuatGiamList = res.data.xuatGiamList;
+      } if (res.data?.xuatBanList) {
+        this.xuatBanList = res.data.xuatBanList;
+      } if (res.data?.luanPhienList) {
+        this.luanPhienList = res.data.luanPhienList;
+      } if (res.data?.keHoachNhapXuat) {
+        let kh = res.data.keHoachNhapXuat;
+        this.keHoachNhapXuat.muaLuongThuc = (kh.soLuongMuaThoc * kh.donGiaMuaThoc) +
+          (kh.soLuongMuaGaoLpdh * kh.donGiaMuaGaoLqdh) +
+          (kh.soLuongMuaGaoXcht * kh.donGiaMuaGaoXcht);
+        this.keHoachNhapXuat.nguonVonCo =
+          (kh.soLuongBanThoc * kh.donGiaBanThoc) +
+          (kh.soLuongBanGao * kh.donGiaBanGao) +
+          (kh.soLuongGaoCtro * kh.donGiaGaoCtro) +
+          kh.tongTienVonNsnn + kh.tongTienVonTx;
+      }
     }
-  }
-  calcTong() {
-    if (this.muaTangList) {
-      const sum = this.muaTangList.reduce((prev, cur) => {
-        prev += cur.tongTien;
-        return prev;
-      }, 0);
-      return sum;
-    }
-  }
 
+
+  }
 }
-
 
