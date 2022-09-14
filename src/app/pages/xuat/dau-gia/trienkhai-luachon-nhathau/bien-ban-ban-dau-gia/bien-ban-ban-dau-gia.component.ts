@@ -147,6 +147,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
       trichYeu: '',
       ngayToChucBdg: '',
     };
+    this.search();
   }
 
   async search() {
