@@ -161,7 +161,7 @@ export class DanhSachHopDongComponent implements OnInit {
       }
     }
     let body = {
-      loaiVthh: '',
+      loaiVthh: this.typeVthh ?? '',
       maDvi: maDonVi,
       nhaCcap: this.nhaCungCap ?? '',
       tenHd: this.tenHd ?? '',
@@ -382,5 +382,8 @@ export class DanhSachHopDongComponent implements OnInit {
       nhaCungCap: '',
       gtriHdSauVat: '',
     };
+  }
+  getData1(){
+    console.log("BIBIBI")
   }
 }

@@ -50,7 +50,9 @@ export class TtcpComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
+  boTaiChinh: number = 100
+  listBoNganh: any[] = [];
+  namDataSelect: number;
   constructor(
     private readonly fb: FormBuilder,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
@@ -270,6 +272,10 @@ export class TtcpComponent implements OnInit {
     this.isAddNew = true;
   }
 
+  nzClickNodeTree(event: any): void {
+
+  }
+
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -361,6 +367,25 @@ export class TtcpComponent implements OnInit {
       this.indeterminate = false;
     } else {
       this.indeterminate = true;
+    }
+  }
+
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.quyetDinhTtcpService.getDetail(id);
+      console.log(res);
+      this.listBoNganh = res.data.listBoNganh;
+      this.namDataSelect = res.data.namQd
+    }
+  }
+
+  calcTong() {
+    if (this.listBoNganh) {
+      const sum = this.listBoNganh.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 }

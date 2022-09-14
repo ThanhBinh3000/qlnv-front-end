@@ -124,11 +124,12 @@ export class BanKeCanHangComponent implements OnInit {
       "soBangKe": this.formSearch.value.soBangKe,
       "tuNgay": this.formSearch.value.ngayXuatKho && this.formSearch.value.ngayXuatKho.length > 0 ? dayjs(this.formSearch.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
     }
-    let res = await this.quanLyBangKeCanHangService.timKiem(body);
-    console.log(res.data.content);
 
+    let res = await this.quanLyBangKeCanHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
+
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {

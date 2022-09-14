@@ -122,11 +122,13 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
 
   calcTong() {
-    const sum = this.dataTable.reduce((prev, cur) => {
-      prev += cur.duToan;
-      return prev;
-    }, 0);
-    return sum;
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
   onChangeLoaiVthh(event, typeChange, index?) {

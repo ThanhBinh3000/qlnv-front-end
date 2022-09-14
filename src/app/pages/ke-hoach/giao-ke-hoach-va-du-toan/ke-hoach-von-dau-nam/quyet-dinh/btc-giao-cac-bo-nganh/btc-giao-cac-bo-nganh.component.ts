@@ -10,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 @Component({
   selector: 'app-btc-giao-cac-bo-nganh',
   templateUrl: './btc-giao-cac-bo-nganh.component.html',
@@ -23,7 +24,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   toDay = new Date();
   allChecked = false;
   indeterminate = false;
-
+  muaTangList: any[] = [];
   dsNam: string[] = [];
   searchInTable = {
     soQd: '',
@@ -353,6 +354,26 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       this.indeterminate = true;
     }
   }
+
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.quyetDinhBtcNganhService.getDetail(id);
+      console.log(res);
+      this.muaTangList = res.data.muaTangList;
+    }
+  }
+
+  calcTong() {
+    if (this.muaTangList) {
+      const sum = this.muaTangList.reduce((prev, cur) => {
+        prev += cur.sluongDtoan;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+
+
 
 }
 

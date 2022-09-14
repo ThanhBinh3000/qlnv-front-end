@@ -92,28 +92,23 @@
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 10%;">Bộ ngành</th>
             <th class="text-center">Trích yếu</th>
-            <!-- <th style="width: 10%;">Tài liệu đính kèm</th> -->
             <th class="text-center" style="width: 10%;">Trạng thái</th>
             <th class="text-center" width="width: 5%;">Hành động</th>
             <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">
-                  <h3 class="first">Bộ</h3>
-                  <h3 class="second">Dự toán</h3>
+                  <h3 class="first">DANH SÁCH NỘI DUNG TỰ TOÁN</h3>
+                  <h3 class="second">Dự toán (Triệu đồng)</h3>
                 </div>
-                <div class="content">
+                <div class="content" *ngFor="let data of muaTangList">
                   <div class="content-item">
-                    <div class="first">Chi dự trữ quốc gia</div>
-                    <div class="second">1000 (triệu đồng)</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Chi bảo quản hàng dự trữ quốc gia</div>
-                    <div class="second">1000 (triệu đồng)</div>
+                    <div class="first">{{ data.tenLoaiChi }}</div>
+                    <div class="second">{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</div>
                   </div>
                 </div>
-                <div class="footer">
+                <div class="footer" *ngIf="muaTangList.length > 0">
                   <div class="first">Tổng</div>
-                  <div class="second">320.000</div>
+                  <div class="second">{{ calcTong() | number : '1.0-1' : 'vi_VN'}}</div>
                 </div>
               </div>
             </td>
@@ -172,7 +167,7 @@
               <i nz-icon nzType="search"></i>
             </ng-template>
           </tr>
-          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
             <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != '00'"></label>
