@@ -61,7 +61,7 @@ export class PhuLuc4Component implements OnInit {
   namBcao: number;
   maBieuMau: string;
   thuyetMinh: string;
-  maDviTien = '1';
+  maDviTien: string;
   listIdDelete = "";
   trangThaiPhuLuc = '1';
   initItem: ItemData = {
@@ -129,7 +129,7 @@ export class PhuLuc4Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
+    this.maDviTien = "1";
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.namBcao = this.data?.namHienHanh;

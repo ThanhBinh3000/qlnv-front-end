@@ -467,7 +467,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -489,7 +489,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1191,7 +1191,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       maPhanBcao: this.maPhanBcao,
     };
 
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

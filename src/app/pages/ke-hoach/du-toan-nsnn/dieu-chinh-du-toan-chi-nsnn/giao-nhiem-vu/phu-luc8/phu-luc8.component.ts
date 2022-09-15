@@ -67,7 +67,7 @@ export class PhuLuc8Component implements OnInit {
 
   namBcao: number;
   thuyetMinh: string;
-  maDviTien: any;
+  maDviTien: string;
   listIdDelete = "";
   //trang thai cac nut
   status = false;
@@ -96,7 +96,7 @@ export class PhuLuc8Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
+    this.maDviTien = "1";
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
