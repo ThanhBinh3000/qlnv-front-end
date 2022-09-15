@@ -118,6 +118,7 @@ export class TtcpComponent implements OnInit {
           item.checked = false;
           // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
+        this.getDetailRow(this.dataTable[0].id)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 
