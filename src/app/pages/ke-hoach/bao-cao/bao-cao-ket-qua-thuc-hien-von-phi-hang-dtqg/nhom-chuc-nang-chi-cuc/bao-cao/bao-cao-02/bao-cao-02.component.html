@@ -159,11 +159,12 @@
 					<td>
 						{{item.maDviTinh}}
 					</td>
-					<td>
-						<input nz-input class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.soQd" />
-					</td>
+
 					<ng-container *ngIf="item.maVtuCha == 0; else A21">
+						<td>
+							<input nz-input class="search__input" nzSize="small"
+								[(ngModel)]="editCache[item.id].data.soQd" />
+						</td>
 						<td>
 							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
@@ -188,6 +189,7 @@
 						</td>
 					</ng-container>
 					<ng-template #A21>
+						<td> </td>
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -298,11 +300,12 @@
 					<td>
 						{{item.maDviTinh}}
 					</td>
-					<td>
-						<input nz-input class="search__input" nzSize="small"
-							[(ngModel)]="editCache[item.id].data.soQd" />
-					</td>
+
 					<ng-container *ngIf="item.maVtuCha == 0; else A22">
+						<td>
+							<input nz-input class="search__input" nzSize="small"
+								[(ngModel)]="editCache[item.id].data.soQd" />
+						</td>
 						<td>
 							<fm-input-number class="search__input" [(ngModel)]="editCache[item.id].data.khSoLuong"
 								(ngModelChange)="changeModel02(item.id)">
@@ -327,6 +330,7 @@
 						</td>
 					</ng-container>
 					<ng-template #A22>
+						<td> </td>
 						<td> </td>
 						<td> </td>
 						<td> </td>

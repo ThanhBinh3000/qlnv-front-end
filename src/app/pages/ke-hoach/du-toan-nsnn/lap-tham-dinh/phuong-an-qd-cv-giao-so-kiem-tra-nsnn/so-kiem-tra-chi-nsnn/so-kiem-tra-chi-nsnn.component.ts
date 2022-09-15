@@ -1,7 +1,5 @@
-import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,10 +7,10 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, mulMoney, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-import { DataService } from 'src/app/services/data.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 export class ItemData {
@@ -38,6 +36,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     //thong tin dang nhap
     id!: string;
     userInfo: any;
+    roles: string[] = [];
     //thong tin chung bao cao
     ngayNhap: string;
     maBaoCao: string;
@@ -65,7 +64,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     statusBtnNew: boolean;
     statusBtnEx: boolean;
     editMoneyUnit = false;
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(
         private userService: UserService,
@@ -73,7 +71,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datepipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private notification: NzNotificationService,
         private location: Location,
@@ -84,8 +81,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.id = this.routerActive.snapshot.paramMap.get('id');
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
 
         //lay danh sach danh muc
         this.danhMucService.dMDonVi().toPromise().then(
@@ -144,23 +141,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
             this.statusBtnEx = true;
         }
 
-    }
-
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
     }
 
     //download file về máy tính
@@ -372,8 +352,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         }
         let check = false;
         const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-        const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-        if (capDvi == Utils.TONG_CUC) {
+        if (this.userService.isTongCuc()) {
             trangThais.push(Utils.TT_BC_7);
         }
         const requestReport = {

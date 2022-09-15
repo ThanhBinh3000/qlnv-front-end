@@ -13,12 +13,12 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 
 export class ItemData {
     id: string;
@@ -47,6 +47,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
+    roles: string[] = [];
     loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
@@ -104,7 +105,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -158,26 +158,14 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        //lay danh sach danh muc
-        // await this.danhMuc.dMDonVi().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             this.donVis = res.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //     },
-        // );
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
+
         if (this.id) {
             await this.getDetailReport();
         } else {
             this.trangThai = '1';
-            this.maDviTao = this.userInfo?.dvql;
+            this.maDviTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1';
             await this.dataSource.currentData.subscribe(obj => {
                 this.qdChiTieu = obj?.qdChiTieu;
@@ -242,46 +230,26 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThai) && this.roles.includes(CVNC.EDIT_DN_MLT)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkChirld = false;
-        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (this.maDviTao == this.userInfo.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVNC.EDIT_DN_MLT, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_DN_MLT, checkChirld);
         if (this.trangThai == Utils.TT_BC_2) {
-            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, userRole);
+            this.statusBtnLD = !(this.roles.includes(CVNC.PHE_DUYET_DN_MLT) && checkChirld);
         } else {
-            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
+            this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVNC.PHE_DUYET_DN_MLT, checkChirld);
         }
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
+        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, CVNC.COPY_DN_MLT, checkChirld);
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThai) && this.roles.includes(role) && check);
     }
 
     //upload file

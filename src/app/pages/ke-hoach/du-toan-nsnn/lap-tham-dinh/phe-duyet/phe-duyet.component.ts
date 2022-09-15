@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DataService } from 'src/app/services/data.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LTD, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../lap-tham-dinh.constant';
@@ -36,6 +36,7 @@ export class PheDuyetComponent implements OnInit {
 	newDate = new Date();
 	//danh muc
 	danhSachBaoCao: any = [];
+	roles: string[] = [];
 	trangThais: any[] = [];
 	donVis: any[] = [];
 	//phan trang
@@ -54,25 +55,24 @@ export class PheDuyetComponent implements OnInit {
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
-		private location: Location,
 		private dataSource: DataService,
 	) {
 	}
 
 	async ngOnInit() {
-		this.maDviTao = this.userInfo?.dvql;
 		this.searchFilter.denNgay = new Date();
 		this.newDate.setMonth(this.newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = this.newDate;
 
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo?.roles;
+		this.maDviTao = this.userInfo.MA_DVI;
+
 		//lay danh sach danh muc
 		this.spinner.show();
-		await this.danhMuc.dMDonVi().toPromise().then(
+		await this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
@@ -85,7 +85,7 @@ export class PheDuyetComponent implements OnInit {
 			}
 		);
 
-		if (ROLE_CAN_BO.includes(this.userRole)) {
+		if (this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
@@ -100,7 +100,7 @@ export class PheDuyetComponent implements OnInit {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+			if (this.roles.includes(LTD.DUYET_REPORT)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else {
@@ -113,24 +113,6 @@ export class PheDuyetComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data;
-					this.userRole = this.userInfo?.roles[0].code;
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
-	}
-
 	//search list bao cao theo tieu chi
 	async onSubmit() {
 		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
@@ -139,7 +121,7 @@ export class PheDuyetComponent implements OnInit {
 				return;
 			}
 		}
-		if (!ROLE_CAN_BO.includes(this.userRole)) {
+		if (!this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
 			this.searchFilter.loaiTimKiem = "0";
 		} else {
 			if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao) {
@@ -150,9 +132,9 @@ export class PheDuyetComponent implements OnInit {
 		}
 		let lstTrangThai = [];
 		if (!this.searchFilter.trangThai) {
-			if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+			if (this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
-			} else if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
+			} else if (this.roles.includes(LTD.DUYET_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_2];
 			} else {
 				lstTrangThai = [Utils.TT_BC_4];

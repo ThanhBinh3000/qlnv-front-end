@@ -30,7 +30,7 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDn"/>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDn" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Trạng thái</label>
@@ -155,19 +155,23 @@
 							</td>
 							<td>
 								<ng-container *ngIf="!status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item); else xem">
-										<button type="button" class="btn btn-main" (click)="xemChiTiet(item)">
+									<ng-container *ngIf="checkEditReport(item.trangThai); else xem">
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Nhập/Sửa dữ liệu</span>
 										</button>
+									</ng-container>
+									<ng-template #xem>
+										<ng-container *ngIf="checkViewReport()">
+											<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+												<span>Xem</span>
+											</button>
+										</ng-container>
+									</ng-template>
+									<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 										<button type="button" class="btn btn-main" (click)="xoaDeNghi(item.id)">
 											<span>Xóa</span>
 										</button>
 									</ng-container>
-									<ng-template #xem>
-										<button type="button" class="btn btn-main" (click)="xemChiTiet(item)">
-											<span>Xem</span>
-										</button>
-									</ng-template>
 								</ng-container>
 								<ng-template #pheDuyet>
 									<button type="button" class="btn btn-main" (click)="xemChiTiet(item)">
@@ -176,9 +180,9 @@
 								</ng-template>
 							</td>
 							<td [hidden]="status">
-								<ng-container *ngIf="checkDeleteReport(item)">
+								<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>

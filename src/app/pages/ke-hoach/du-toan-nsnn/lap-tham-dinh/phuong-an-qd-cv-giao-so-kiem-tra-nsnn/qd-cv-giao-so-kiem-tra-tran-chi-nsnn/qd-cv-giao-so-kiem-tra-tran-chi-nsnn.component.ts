@@ -31,6 +31,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
     id!: string;
     userInfo: any;
+    roles: string[] = [];
     //thong tin chung bao cao
     ngayTao: string;
     maDviTao: string;
@@ -84,12 +85,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         private router: Router,
         private routerActive: ActivatedRoute,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
     ) {
         // this.namgiao = this.currentYear.getFullYear();
@@ -98,9 +95,9 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     async ngOnInit() {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        this.maDviTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
+        this.maDviTao = this.userInfo?.MA_DVI;
 
         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
         this.namGiao = this.newDate.getFullYear();
