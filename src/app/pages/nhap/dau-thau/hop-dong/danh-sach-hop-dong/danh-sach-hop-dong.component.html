@@ -174,12 +174,12 @@
           <td class="text-left">
             <div nz-row>
               <div nz-col nzSpan="8">
-                <a (click)="redirectToChiTiet(true, data.id)">
+                <a (click)="redirectToChiTiet(true, data)">
                   <i class="fa fa-eye"></i>
                 </a>
               </div>
               <div nz-col nzSpan="8">
-                <a (click)="redirectToChiTiet(false, data.id)"
+                <a (click)="redirectToChiTiet(false, data)"
                    *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -218,6 +218,6 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-thong-tin [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
+  <app-thong-tin [id]="selectedId" [idGoiThau]="idGoiThau" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
   </app-thong-tin>
 </ng-container>
