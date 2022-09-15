@@ -320,8 +320,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                             this.dsToChuc = [...this.dsToChuc, cts];
                         }
                     })
-                    console.log("this.dsToChuc: ", this.dsToChuc);
-
                     const phanLoTaiSans = res.data.ct1s;
                     if (phanLoTaiSans && phanLoTaiSans.length > 0) {
                         for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
@@ -361,7 +359,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                             }
                         }
                     }
-                    console.log("this.bangPhanBoList: ", this.bangPhanBoList);
                     this.initForm();
                 }
             }
@@ -401,7 +398,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+            nzContent: 'Bạn có chắc chắn muốn ban hành?',
             nzOkText: 'Đồng ý',
             nzCancelText: 'Không',
             nzOkDanger: true,
@@ -412,8 +409,8 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     await this.save(true);
                     let body = {
                         id: this.id,
-                        lyDoTuChoi: null,
-                        trangThai: '01',
+                        lyDo: null,
+                        trangThai: this.globals.prop.NHAP_BAN_HANH,
                     };
                     let res =
                         await this.quanLyBienBanBanDauGiaService.updateStatus(
@@ -609,7 +606,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 "thongBaoBdgId": this.formData.get('thongBaoBdgId').value,
                 "trichYeu": this.formData.get('trichYeu').value
             };
-            console.log("body: ", body);
 
             if (this.id > 0) {
                 let res = await this.quanLyBienBanBanDauGiaService.sua(
@@ -659,7 +655,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai === '03'
         ) {
             return 'du-thao-va-lanh-dao-duyet';
-        } else if (trangThai === '02') {
+        } else if (trangThai === this.globals.prop.NHAP_BAN_HANH) {
             return 'da-ban-hanh';
         }
     }
@@ -709,7 +705,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     }
                 }
             }
-            console.log("this.bangPhanBoList: ", this.bangPhanBoList);
 
             this.formData.patchValue({
                 ngayToChuc: this.bienBanBanDauGia.ngayToChuc,
@@ -766,7 +761,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 break;
         }
         this.dsChiTietCtsClone = cloneDeep(this.bienBanBanDauGia.cts);
-        console.log("this.dsChiTietCtsClone: ", this.dsChiTietCtsClone);
 
     }
     saveEdit(i: number) {
