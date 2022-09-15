@@ -1,9 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, OnChanges, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -24,9 +21,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
 
+  lastIndex = 0;
   constructor(
     private modal: NzModalService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -86,6 +85,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.rowItem = new KeHoachMuaXuat();
     this.updateEditCache();
     this.emitDataTable();
+    // Validate tổng dự toán
+    if ((this.dataEdit[this.lastIndex - 1].data?.sluongDtoan + this.calcTong()) > this.tongGiaTri) {
+      this.dataTable.splice(this.lastIndex - 1, 1);
+      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+    }
   }
 
   clearData() { }
@@ -117,6 +121,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
           data: { ...item },
         };
         i++
+        // Validate tổng dự toán
+        this.lastIndex = i;
       });
     }
   }
