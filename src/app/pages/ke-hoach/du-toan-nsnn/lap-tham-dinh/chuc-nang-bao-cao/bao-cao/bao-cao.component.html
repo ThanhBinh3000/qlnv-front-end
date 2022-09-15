@@ -14,7 +14,7 @@
 					<span>Lưu</span>
 				</button>
 				<button class="btn btn-main" (click)="onSubmit('2',null)"
-					[hidden]="statusBtnApprove || userInfo?.username != nguoiNhap">
+					[hidden]="statusBtnApprove || userInfo?.sub != nguoiNhap">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
@@ -66,7 +66,7 @@
 					<thead>
 						<tr>
 							<ng-container *ngIf="giaoSoTranChiId">
-								<ng-container *ngIf="capDvi == '1'; else tranChi">
+								<ng-container *ngIf="userInfo?.CAP_DVI == '1'; else tranChi">
 									<th>Phương án <br /> giao từ BTC</th>
 								</ng-container>
 								<ng-template #tranChi>
@@ -214,8 +214,7 @@
 
 									<td>
 										<ng-container *ngIf="data?.id?.length != 38">
-											<ng-container
-												*ngIf="data.nguoiBcao == userInfo?.username && !status; else xem">
+											<ng-container *ngIf="data.nguoiBcao == userInfo?.sub && !status; else xem">
 												<button type="button" class="btn btn-main"
 													(click)="newTab(data.maBieuMau)">
 													<span>Nhập dữ liệu</span>

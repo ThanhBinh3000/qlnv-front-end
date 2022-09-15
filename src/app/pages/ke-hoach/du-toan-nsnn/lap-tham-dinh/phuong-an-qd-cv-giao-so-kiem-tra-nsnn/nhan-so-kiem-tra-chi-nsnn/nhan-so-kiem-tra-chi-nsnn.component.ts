@@ -1,6 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -21,6 +20,7 @@ import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../la
 export class NhanSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
     userInfo: any;
+    roles: string[] = [];
     //thong tin tim kiem
     searchFilter = {
         namGiao: null,
@@ -51,10 +51,8 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         private router: Router,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private location: Location,
         private dataSource: DataService,
     ) {
     }
@@ -66,23 +64,23 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         this.searchFilter.tuNgay = this.newDate;
 
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
-        this.searchFilter.maDviNhan = this.userInfo?.dvql;
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
+        this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
+        // //lay danh sach danh muc
+        // this.danhMuc.dMDonVi().toPromise().then(
+        //     data => {
+        //         if (data.statusCode == 0) {
+        //             this.donVis = data.data;
+        //             this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        //         }
+        //     },
+        //     err => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     }
+        // );
         this.spinner.hide();
 
         this.onSubmit();
@@ -186,9 +184,9 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    getUnitName(maDvi: string) {
-        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-    }
+    // getUnitName(maDvi: string) {
+    //     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    // }
 
     close() {
         const obj = {

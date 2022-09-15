@@ -1,16 +1,14 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
-import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { DataService } from 'src/app/services/data.service';
+import { UserService } from 'src/app/services/user.service';
+import { LTD, Utils } from 'src/app/Utility/utils';
+import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../lap-tham-dinh.constant';
 
 @Component({
@@ -21,7 +19,6 @@ import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../lap-t
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: string;
 	//thong tin tim kiem
 	searchFilter = {
 		nam: null,
@@ -33,6 +30,7 @@ export class TimKiemComponent implements OnInit {
 	};
 	newDate = new Date();
 	listIdDelete: string[] = [];
+	roles: string[] = [];
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -81,14 +79,11 @@ export class TimKiemComponent implements OnInit {
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
-		private danhMuc: DanhMucHDVService,
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
-		private location: Location,
 		private dataSource: DataService,
 	) {
 	}
@@ -99,33 +94,15 @@ export class TimKiemComponent implements OnInit {
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo.roles;
 
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+		if (this.roles.includes(LTD.ADD_REPORT)) {
 			this.statusTaoMoi = false;
 		}
 
-		this.searchFilter.donViTao = this.userInfo?.dvql;
+		this.searchFilter.donViTao = this.userInfo?.MA_DVI;
 		this.onSubmit();
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data;
-					this.userRole = this.userInfo?.roles[0]?.code;
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
 	}
 
 	redirectThongTinTimKiem() {
@@ -279,15 +256,16 @@ export class TimKiemComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			this.userInfo?.username == item.nguoiTao) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
+	checkViewReport() {
+		return this.roles.includes(LTD.VIEW_REPORT);
+	}
+
+	checkEditReport(trangThai: string) {
+		return Utils.statusSave.includes(trangThai) && this.roles.includes(LTD.EDIT_REPORT);
+	}
+
+	checkDeleteReport(trangThai: string) {
+		return Utils.statusDelete.includes(trangThai) && this.roles.includes(LTD.DELETE_REPORT);
 	}
 
 	changeListIdDelete(id: string) {
@@ -310,8 +288,7 @@ export class TimKiemComponent implements OnInit {
 
 	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-				&& ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.checkDeleteReport(item.trangThai)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

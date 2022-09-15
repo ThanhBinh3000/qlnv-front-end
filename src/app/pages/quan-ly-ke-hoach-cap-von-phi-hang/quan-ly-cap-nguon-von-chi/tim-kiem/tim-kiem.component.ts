@@ -1,18 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, Utils } from 'src/app/Utility/utils';
-import { utils } from 'xlsx';
-import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { CAP_VON_MUA_BAN, CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { DataService } from 'src/app/services/data.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, ROLE_CAN_BO, ROLE_LANH_DAO, Utils } from 'src/app/Utility/utils';
+import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
 @Component({
 	selector: 'app-tim-kiem',
@@ -22,6 +19,7 @@ import { DataService } from 'src/app/services/data.service';
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
+	roles: string[] = [];
 	userRole: string;
 	loai: string;
 	//thong tin tim kiem
@@ -76,12 +74,10 @@ export class TimKiemComponent implements OnInit {
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
-		private danhMuc: DanhMucHDVService,
 		private routerActive: ActivatedRoute,
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
 		private dataSource: DataService,
@@ -90,33 +86,18 @@ export class TimKiemComponent implements OnInit {
 
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo?.roles;
 		this.spinner.show();
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-		this.capDvi = this.userService.getUserLogin().CAP_DVI;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
-		this.searchFilter.maDviTao = this.userInfo?.dvql;
-
-		// await this.danhMuc.dMDonVi().toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0) {
-		// 			this.donVis = data.data;
-		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// );
+		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
 		if (this.loai == "0") {
-			if (ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.roles.includes(CVNC.ADD_DN_MLT) || this.roles.includes(CVNC.ADD_DN_MVT)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -125,7 +106,7 @@ export class TimKiemComponent implements OnInit {
 			this.searchFilter.trangThai = Utils.TT_BC_2;
 		}
 
-		if (this.capDvi == Utils.TONG_CUC && (this.loai == "0" || ROLE_LANH_DAO.includes(this.userRole))) {
+		if (this.userService.isTongCuc() && (this.loai == "0" || this.roles.includes(CVNC.PHE_DUYET_DN_MVT))) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
 			this.searchFilter.loaiDn = Utils.MUA_VTU;
 			this.disable = true;
@@ -134,7 +115,7 @@ export class TimKiemComponent implements OnInit {
 			this.disable = false;
 		}
 		this.spinner.hide();
-		this.searchFilter.maDviTao = this.userInfo?.dvql;
+		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 		this.onSubmit();
 	}
 
@@ -348,15 +329,18 @@ export class TimKiemComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-			&& ROLE_CAN_BO.includes(this.userRole)) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
+	checkViewReport() {
+		return (this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.VIEW_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.VIEW_DN_MVT));
+	}
+
+	checkEditReport(trangThai: string) {
+		return Utils.statusSave.includes(trangThai) &&
+			((this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.EDIT_DN_MVT)));
+	}
+
+	checkDeleteReport(trangThai: string) {
+		return Utils.statusDelete.includes(trangThai) &&
+			((this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.DELETE_DN_MVT)));
 	}
 
 	changeListIdDelete(id: string) {
@@ -379,8 +363,7 @@ export class TimKiemComponent implements OnInit {
 
 	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-				&& ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.checkDeleteReport(item.trangThai)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -13,11 +12,11 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 
@@ -53,6 +52,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     id: string;
     idSoTranChi: string;
     userInfo: any;
+    roles: string[] = [];
     //thong tin chung bao cao
     maBaoCao: string;
     ngayTao: string;
@@ -76,14 +76,14 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     lstTtCtiet: any[] = [];
     //trang thai cac nut
     status = false;
-    statusBtnDel: boolean;
-    statusBtnSave: boolean;
-    statusBtnApprove: boolean;
-    statusBtnTBP: boolean;
-    statusBtnLD: boolean;
-    statusBtnCopy: boolean;
-    statusBtnPrint: boolean;
-    statusBtnGiao: boolean;
+    statusBtnDel = true;
+    statusBtnSave = true;
+    statusBtnApprove = true;
+    statusBtnTBP = true;
+    statusBtnLD = true;
+    statusBtnCopy = true;
+    statusBtnPrint = true;
+    statusBtnGiao = true;
     statusGiaoToanBo = true;
     statusBtnBtc: boolean;
     allChecked = false;
@@ -124,7 +124,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -139,12 +138,12 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.maBaoCao = this.routerActive.snapshot.paramMap.get('maBaoCao');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        this.maDonViTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
+        this.maDonViTao = this.userInfo?.MA_DVI;
 
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
@@ -160,21 +159,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
-            this.maDonViTao = this.userInfo?.dvql;
+            this.maDonViTao = this.userInfo?.MA_DVI;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            // this.quanLyVonPhiService.maPhuongAn().toPromise().then(
-            //     (res) => {
-            //         if (res.statusCode == 0) {
-            //             this.maPa = res.data;
-            //         } else {
-            //             this.notification.error(MESSAGE.ERROR, res?.msg);
-            //         }
-            //     },
-            //     (err) => {
-            //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            //     },
-            // );
-
             this.namPa = this.newDate.getFullYear();
 
             await this.dataSource.currentData.subscribe(obj => {
@@ -219,57 +205,36 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.EDIT_PA_GIAO_SKT)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-        if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
-        if (ROLE_CAN_BO.includes(userRole) && this.soQdCv) {
+        const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+        this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, LTD.DELETE_PA_GIAO_SKT, checkChirld);
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, LTD.EDIT_PA_GIAO_SKT, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, LTD.APPROVE_PA_GIAO_SKT, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, LTD.DUYET_PA_GIAO_SKT, checkChirld);
+        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, LTD.PHE_DUYET_PA_GIAO_SKT, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, LTD.COPY_PA_GIAO_SKT, checkChirld);
+        this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, LTD.PRINT_PA_GIAO_SKT, checkChirld);
+        if (this.roles.includes(LTD.GIAO_SKT) && this.soQdCv) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-        const capDvi: string = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-        if (capDvi == Utils.TONG_CUC) {
+        if (this.userService.isTongCuc()) {
             this.statusBtnBtc = false;
         } else {
             this.statusBtnBtc = true;
         }
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
     }
 
     //upload file
@@ -1285,9 +1250,8 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         if (!this.idSoTranChi) {
             return;
         }
-        const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
         let url: string;
-        if (capDvi == Utils.TONG_CUC) {
+        if (this.userService.isTongCuc()) {
             url = MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-tran-chi-tu-btc/' + this.idSoTranChi;
         } else {
             url = MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-chi-nsnn/' + this.idSoTranChi;

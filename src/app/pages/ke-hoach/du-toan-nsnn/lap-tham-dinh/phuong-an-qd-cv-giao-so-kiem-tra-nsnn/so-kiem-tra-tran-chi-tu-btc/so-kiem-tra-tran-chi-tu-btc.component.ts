@@ -14,7 +14,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
@@ -47,6 +47,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
+    roles: string[] = [];
     //thong tin chung bao cao
     maBaoCao: string;
     ngayTao: string;
@@ -135,9 +136,9 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.spinner.show();
         //lay thong tin user
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        this.maDonViTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
+        this.maDonViTao = this.userInfo?.MA_DVI;
 
         //lay danh sach danh muc
         await this.danhMuc.dMDonVi().toPromise().then(
@@ -156,7 +157,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
-            this.maDonViTao = this.userInfo?.dvql;
+            this.maDonViTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
@@ -227,20 +228,14 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if (this.id && !ROLE_CAN_BO.includes(userRole)) {
+        if (this.id && this.roles.includes(LTD.ADD_SKT_BTC)) {
             this.status = true;
         } else {
             this.status = false;
         }
 
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-        if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
+        const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.EDIT_SKT_BTC) && checkChirld);
         if (this.id) {
             this.statusBtnSave = true;
         }
@@ -256,14 +251,17 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                 this.statusBtnEdit = false;
             }
         }
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
-        if (!ROLE_CAN_BO.includes(userRole)) {
+        this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.COPY_PA_GIAO_SKT) && checkChirld);
+        this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.PRINT_PA_GIAO_SKT) && checkChirld);
+
+        if (!this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT)) {
             this.statusBtnEdit = true;
-            this.statusBtnNew = true;
             this.statusChinhXac = true;
         } else {
             this.statusChinhXac = false;
+        }
+        if (!this.roles.includes(LTD.ADD_PA_GIAO_SKT)) {
+            this.statusBtnNew = true;
         }
     }
 

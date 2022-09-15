@@ -1,17 +1,16 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { LTD, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../lap-tham-dinh.constant';
 
 
@@ -29,6 +28,7 @@ export class TongHopComponent implements OnInit {
 	maDviTao: string;
 	//danh muc
 	danhSachBaoCao: any[] = [];
+	roles: string[] = [];
 	trangThais: any[] = [
 		{
 			id: '9',
@@ -62,19 +62,18 @@ export class TongHopComponent implements OnInit {
 		private datePipe: DatePipe,
 		private userService: UserService,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
 		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
-		const userName = this.userService.getUserName();
 		this.spinner.show();
-		await this.getUserInfo(userName); //get user info
-		this.maDviTao = this.userInfo?.dvql;
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo?.roles;
+		this.maDviTao = this.userInfo?.MA_DVI;
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
@@ -88,28 +87,11 @@ export class TongHopComponent implements OnInit {
 		);
 		this.spinner.hide();
 
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+		if (this.roles.includes(LTD.SYNTHETIC_REPORT)) {
 			this.statusTaoMoi = false;
 		}
 
 		this.onSubmit();
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		);
 	}
 
 	//search list bao cao theo tieu chi
