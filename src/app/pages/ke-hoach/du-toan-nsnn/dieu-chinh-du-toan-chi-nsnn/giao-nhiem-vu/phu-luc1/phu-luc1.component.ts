@@ -10,11 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc1.constant';
 
 export class ItemData {
@@ -57,7 +57,7 @@ export class PhuLuc1Component implements OnInit {
   namBcao: number;
   maBieuMau: string;
   thuyetMinh: string;
-  maDviTien: '1';
+  maDviTien: string;
   listIdDelete: "";
   trangThaiPhuLuc = '1';
   initItem: ItemData = {
@@ -95,6 +95,7 @@ export class PhuLuc1Component implements OnInit {
   status: false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  editMoneyUnit = false;
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -118,23 +119,16 @@ export class PhuLuc1Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.namBcao = this.data?.namBcao;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.maDviTao = this.data?.maDviTao
+    this.maDviTao = this.data?.maDviTao;
+    this.maDviTien = "1";
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        tongNcauDtoanKphi: divMoney(item.tongNcauDtoanKphi, this.maDviTien),
-        dtoanKphiNtruoc: divMoney(item.dtoanKphiNtruoc, this.maDviTien),
-        dtoanKphiDaGiao: divMoney(item.dtoanKphiDaGiao, this.maDviTien),
-        dtoanKphiCong: divMoney(item.dtoanKphiCong, this.maDviTien),
-        kphiUocThien: divMoney(item.kphiUocThien, this.maDviTien),
-        kphiDchinhTang: divMoney(item.kphiDchinhTang, this.maDviTien),
-        kphiDchinhGiam: divMoney(item.kphiDchinhGiam, this.maDviTien),
       })
     })
     if (this.lstCtietBcao.length > 0) {
@@ -254,31 +248,16 @@ export class PhuLuc1Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-
-      const tongNcauDtoanKphi = mulMoney(item.tongNcauDtoanKphi, this.maDviTien);
-      const dtoanKphiNtruoc = mulMoney(item.dtoanKphiNtruoc, this.maDviTien);
-      const dtoanKphiDaGiao = mulMoney(item.dtoanKphiDaGiao, this.maDviTien);
-      const dtoanKphiCong = mulMoney(item.dtoanKphiCong, this.maDviTien);
-      const kphiUocThien = mulMoney(item.kphiUocThien, this.maDviTien);
-      const kphiDchinhTang = mulMoney(item.kphiDchinhTang, this.maDviTien);
-      const kphiDchinhGiam = mulMoney(item.kphiDchinhGiam, this.maDviTien);
-      if (tongNcauDtoanKphi > MONEY_LIMIT || dtoanKphiNtruoc > MONEY_LIMIT ||
-        dtoanKphiDaGiao > MONEY_LIMIT || dtoanKphiCong > MONEY_LIMIT ||
-        kphiUocThien > MONEY_LIMIT || kphiDchinhTang > MONEY_LIMIT ||
-        kphiDchinhGiam > MONEY_LIMIT
+      if (item.tongNcauDtoanKphi > MONEY_LIMIT || item.dtoanKphiNtruoc > MONEY_LIMIT ||
+        item.dtoanKphiDaGiao > MONEY_LIMIT || item.dtoanKphiCong > MONEY_LIMIT ||
+        item.kphiUocThien > MONEY_LIMIT || item.kphiDchinhTang > MONEY_LIMIT ||
+        item.kphiDchinhGiam > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        tongNcauDtoanKphi: tongNcauDtoanKphi,
-        dtoanKphiNtruoc: dtoanKphiNtruoc,
-        dtoanKphiDaGiao: dtoanKphiDaGiao,
-        dtoanKphiCong: dtoanKphiCong,
-        kphiUocThien: kphiUocThien,
-        kphiDchinhTang: kphiDchinhTang,
-        kphiDchinhGiam: kphiDchinhGiam,
       })
     })
 
@@ -908,11 +887,14 @@ export class PhuLuc1Component implements OnInit {
   // gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
     this.editCache[id].data.dtoanKphiCong = this.editCache[id].data.dtoanKphiNtruoc + this.editCache[id].data.dtoanKphiDaGiao;
-    // this.editCache[id].data.thanhTien = this.editCache[id].data.slBquanTcong * this.editCache[id].data.dinhMuc;
-    // this.editCache[id].data.tongNcauKphi = this.editCache[id].data.thanhTien + this.editCache[id].data.dtoanThieuNTruoc;
-    // this.editCache[id].data.kphiTcong = this.editCache[id].data.kphiQtoanNtruoc + this.editCache[id].data.kphiDtoanGiaoTnam + this.editCache[id].data.kphiPvcTcDchuyen;
-    // this.editCache[id].data.dtoanDchinh = this.editCache[id].data.tongNcauKphi - this.editCache[id].data.kphiTcong;
+  }
 
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 
 }

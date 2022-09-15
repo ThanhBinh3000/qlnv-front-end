@@ -957,7 +957,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tim kiem giao danh sách nội dung khoản mục
   xoaBanGhiGiaoBTC1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.105:8094/giao_du_toan/xoa',
+      'http://192.168.1.101:8094/giao_du_toan/xoa',
       request
     )
   }
@@ -1339,5 +1339,12 @@ export class QuanLyVonPhiService extends BaseService {
 
   getDinhMucBaoQuan(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-dmuc-phi/danh-sach', request);
+  }
+
+  checkNamTaoMoiQuyetToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/validate',
+      request
+    );
   }
 }

@@ -18,7 +18,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
@@ -114,7 +114,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   soLaMa: any[] = LA_MA; // danh sách ký tự la mã
 
   // khác
-
+  editMoneyUnit = false;
   // phục vụ nút edit
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   newDate = new Date();
@@ -210,7 +210,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.maDonViTao = this.userInfo?.dvql;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-
+      this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
       await this.dataSource.currentData.subscribe(obj => {
         if (obj) {
@@ -300,15 +300,15 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
               this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
             })
           }
-          this.lstCtietBcao.forEach(item => {
-            item.tongCong = divMoney(item.tongCong, this.maDviTien);
-            if (item.lstCtietDvis) {
-              item.lstCtietDvis.forEach(e => {
-                // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
-                e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-              })
-            }
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
+          //   if (item.lstCtietDvis) {
+          //     item.lstCtietDvis.forEach(e => {
+          //       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
+          //       e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
+          //     })
+          //   }
+          // })
           this.sortByIndex();
           this.updateEditCache();
           this.getStatusButton();
@@ -379,7 +379,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     const lstCtietBcaoTemp: any[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+      if (item.tongCong > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -387,13 +387,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
-          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
           id: null,
         })
       })
       lstCtietBcaoTemp.push({
         ...item,
-        tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
         id: null,
       })
@@ -497,7 +495,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+      if (item.tongCong > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -505,13 +503,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
-          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
         })
         tongTranChi += e.soTranChi
       })
       lstCtietBcaoTemp.push({
         ...item,
-        tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
       })
     })
@@ -1636,5 +1632,14 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       })
     })
   };
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
 }
 

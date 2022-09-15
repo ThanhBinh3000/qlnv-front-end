@@ -1,5 +1,3 @@
-import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
-import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -18,11 +16,13 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../Utility/utils";
-import { Utils, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "../../../../Utility/utils";
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
+import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
+import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from './../../../../Utility/utils';
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
-import { NOI_DUNG } from './them-moi-bao-cao-quyet-toan.constant';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
+import { NOI_DUNG } from './them-moi-bao-cao-quyet-toan.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
     id: "1",
@@ -120,7 +120,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   userInfo: any;
   trangThaiPhuLuc: string;
   thuyetMinh: string;
-  maDviTien: any;
+  maDviTien: string;
   listIdDelete = "";
   maPhanBcao = "1";
   namQtoan!: number;
@@ -163,7 +163,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
   statusTrinhDuyet = false;
-
+  editMoneyUnit = false;
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -237,6 +237,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao = "1";
       this.nguoiNhap = this.userInfo?.username;
       this.maDviTao = this.userInfo?.dvql;
+      this.maDviTien = '1'
     }
 
     //lay danh sach danh muc don vi
@@ -336,10 +337,10 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
           this.lstCtietBcao = data.data.lstCtiet;
           this.maDviTien = data.data.maDviTien;
           this.sortByIndex();
-          this.lstCtietBcao.forEach(item => {
-            item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
-            item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
+          //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
+          // })
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
           this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
           this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -395,16 +396,12 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const donGiaMua = mulMoney(item.donGiaMua, this.maDviTien);
-      const thanhTien = mulMoney(item.thanhTien, this.maDviTien);
-      if (donGiaMua > MONEY_LIMIT || thanhTien > MONEY_LIMIT) {
+      if (item.donGiaMua > MONEY_LIMIT || item.thanhTien > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        donGiaMua: donGiaMua,
-        thanhTien: thanhTien,
       })
     })
 
@@ -470,7 +467,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -492,7 +489,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1176,8 +1173,6 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     this.lstCtietBcao.forEach(data => {
       lstCtietBcaoTemps.push({
         ...data,
-        donGiaMua: mulMoney(data.donGiaMua, this.maDviTien),
-        thanhTien: mulMoney(data.thanhTien, this.maDviTien),
         id: null,
       })
     })
@@ -1196,7 +1191,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       maPhanBcao: this.maPhanBcao,
     };
 
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
@@ -1219,5 +1214,14 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+  };
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }

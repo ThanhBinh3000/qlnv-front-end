@@ -11,7 +11,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
@@ -82,6 +82,8 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   // khac
   statusBtnNew: boolean;
   userRole: string;
+  editMoneyUnit = false;
+
   constructor(
     private userService: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -407,5 +409,13 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
         return
       }
     }
+  };
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }
