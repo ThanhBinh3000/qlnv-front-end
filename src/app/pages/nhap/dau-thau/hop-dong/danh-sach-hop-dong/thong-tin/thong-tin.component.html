@@ -65,7 +65,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
                     <nz-input-number [nzSize]="'small'" [nzDisabled]="isView" nz-input placeholder="Số hợp đồng"
-                                     formControlName="maHdong">
+                                     formControlName="maHdong" [nzMin]="1" [nzMax]="globals.prop.MAX_INTERGER">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -83,7 +83,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày ký</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="yyyy-MM-dd"
+                  <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy"
                                   nzPlaceHolder="Ngày ký" formControlName="ngayKy">
                   </nz-date-picker>
                 </nz-form-control>
@@ -97,7 +97,15 @@
     <nz-card>
       <form nz-form [formGroup]="formDetailHopDong" [nzLayout]="'vertical'">
         <div class="tab__luong-thuc">
-          <nz-tabset nzType="card" class="tab-level-3">
+          <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="themPhuLuc">
+            <ng-template #themPhuLuc>
+              <div class="action" *ngIf="tabSelected == 'phu-luc'">
+                <button type="button" class="btn btn-main" (click)="redirectPhuLuc(0)">
+                  <i class="icon htvbdh_dau-cong"></i>
+                  <span>Thêm</span>
+                </button>
+              </div>
+            </ng-template>
             <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container"
                     (nzClick)="tabSelected = 'thong-tin-chung'">
               <div nz-row [nzGutter]="[16, 6]">
@@ -121,9 +129,11 @@
                 <div nz-col [nzSpan]="6">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Thời hạn nhập kho trước ngày</nz-form-label>
-                    <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="yyyy-MM-dd"
-                                    nzPlaceHolder="Thời hạn nhập kho trước ngày" formControlName="tgianNkho">
-                    </nz-date-picker>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy"
+                                      nzPlaceHolder="Thời hạn nhập kho trước ngày" formControlName="tgianNkho">
+                      </nz-date-picker>
+                    </nz-form-control>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="3">
@@ -404,15 +414,15 @@
                     <tr *ngFor="let data of editRowTable.data; let i = index" class="editable-row">
                       <td>{{ i + 1 }}</td>
                       <td>{{data.soPluc}}</td>
-                      <td>{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
-                      <td>{{data.ngayHluc | date: 'dd/MM/YYYY'}}</td>
+                      <td>{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
                       <td>{{data.veViec}}</td>
-                      <td>{{data.trangThai}}</td>
+                      <td>{{data.tenTrangThai}}</td>
                       <td>
-                        <a (click)="redirectPhuLuc(data.id)">
+                        <a (click)="redirectPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a>
+                        <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -423,12 +433,6 @@
               </nz-tab>
             </ng-container>
           </nz-tabset>
-          <div class="action" *ngIf="tabSelected == 'phu-luc'">
-            <button type="button" class="btn btn-main" (click)="redirectPhuLuc(0)">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
-            </button>
-          </div>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Ghi chú

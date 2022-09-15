@@ -25,16 +25,11 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
-
   formData: FormGroup;
-
-
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
   dsBoNganhTtcp: any[] = [];
-
-
   userInfo: UserLogin;
   maQd: string;
   muaTangList: any[] = []
@@ -111,7 +106,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     let res = await this.quyetDinhTtcpService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
-      console.log(data);
       if (data.length > 0) {
         let dataTtcp = await this.quyetDinhTtcpService.getDetail(data[0].id);
         if (dataTtcp.msg == MESSAGE.SUCCESS) {
@@ -121,7 +115,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         this.dsBoNganhTtcp = [];
       }
     }
-    console.log(this.dsBoNganhTtcp);
   }
 
   async getListBoNganh() {
@@ -139,32 +132,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-  }
-
-
-  openFile(event) {
-    // if (!this.isView) {
-    //   let item = {
-    //     id: new Date().getTime(),
-    //     text: event.name,
-    //   };
-    //   if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-    //     this.uploadFileService
-    //       .uploadFile(event.file, event.name)
-    //       .then((resUpload) => {
-    //         if (!this.deXuatDieuChinh.fileDinhKemReqs) {
-    //           this.deXuatDieuChinh.fileDinhKemReqs = [];
-    //         }
-    //         const fileDinhKem = new FileDinhKem();
-    //         fileDinhKem.fileName = resUpload.filename;
-    //         fileDinhKem.fileSize = resUpload.size;
-    //         fileDinhKem.fileUrl = resUpload.url;
-    //         fileDinhKem.idVirtual = item.id;
-    //         this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
-    //         this.taiLieuDinhKemList.push(item);
-    //       });
-    //   }
-    // }
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
@@ -192,6 +159,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       nzWidth: 310,
       nzOnOk: async () => {
         this.spinner.show();
+        if (this.muaTangList.length == 0) {
+          this.notification.error(
+            MESSAGE.ERROR,
+            'Chưa nhập nội dung dự toán',
+          );
+          this.spinner.hide();
+          return;
+        }
         try {
           let body = {
             id: this.formData.get('id').value,
@@ -223,7 +198,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-      console.log(this.formData.controls)
       this.spinner.hide();
       return;
     }
