@@ -89,7 +89,7 @@
                     <nz-select [nzDisabled]="isView" [(ngModel)]="detail.tenVatTuCha" id="loai-hang-hoa"
                         (ngModelChange)="onChangeLoaiHH($event)">
                         <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                        <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
+                        <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
                         </nz-option>
                     </nz-select>
                 </nz-form-item>

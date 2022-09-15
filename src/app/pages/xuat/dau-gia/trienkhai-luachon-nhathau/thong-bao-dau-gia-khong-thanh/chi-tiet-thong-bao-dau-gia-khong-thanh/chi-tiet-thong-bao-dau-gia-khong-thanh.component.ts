@@ -145,6 +145,9 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
     let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
     if (res.msg == MESSAGE.SUCCESS) {
       this.bienBanResult = res.data;
+      this.detail.maThongBaoBdg = res.data.id;
+      this.detail.tenVatTuCha = this.dsLoaiHangHoa.find(e => e.ma == res.data.maVatTuCha) ? (this.dsLoaiHangHoa.find(e => e.ma == res.data.maVatTuCha).id).toString() : null;
+      this.listFileDinhKem = res.data.fileDinhKems;
       this.bienBanBanDauGia.donViThongBao = res.data.tenDvi;
       this.bienBanBanDauGia.diaDiem = res.data.diaDiemToChucDauGia;
       this.bienBanBanDauGia.ngayToChuc = [res.data.thoiGianToChucDauGiaTuNgay, res.data.thoiGianToChucDauGiaDenNgay];
@@ -204,6 +207,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma !== '01') {
               this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
+              console.log(this.dsLoaiHangHoa)
             }
             else {
               if (item.child && item.child.length > 0) {
@@ -223,6 +227,8 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
+      console.log(this.detail.tenVatTuCha)
+      debugger
       // let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
       // if (loaiHangHoa && loaiHangHoa.length > 0) {
       //   this.dsChungLoaiHangHoa = loaiHangHoa[0].child
@@ -587,7 +593,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           // }
         ],
         "id": this.detail.id ? this.detail.id : null,
-        "loaiVthh": this.dsLoaiHangHoa.find(e => e.ma == this.detail.tenVatTuCha).ma,
+        "loaiVthh": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma,
         "maThongBao": this.bienBanResult.maThongBao,
         "maVatTuCha": this.detail.tenVatTuCha,
         "nam": this.detail.nam,
