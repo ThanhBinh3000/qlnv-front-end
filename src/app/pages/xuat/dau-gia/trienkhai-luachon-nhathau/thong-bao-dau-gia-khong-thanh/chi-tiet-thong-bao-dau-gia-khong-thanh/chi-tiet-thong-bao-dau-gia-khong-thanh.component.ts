@@ -593,9 +593,9 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           // }
         ],
         "id": this.detail.id ? this.detail.id : null,
-        "loaiVthh": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma,
+        "loaiVthh": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha) ? this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma : null,
         "maThongBao": this.bienBanResult.maThongBao,
-        "maVatTuCha": this.detail.tenVatTuCha,
+        "maVatTuCha": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha) ? this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma : null,
         "nam": this.detail.nam,
         "ngayKy": this.detail.ngayKy,
         "ngayToChuc": this.detail.ngayToChuc,
