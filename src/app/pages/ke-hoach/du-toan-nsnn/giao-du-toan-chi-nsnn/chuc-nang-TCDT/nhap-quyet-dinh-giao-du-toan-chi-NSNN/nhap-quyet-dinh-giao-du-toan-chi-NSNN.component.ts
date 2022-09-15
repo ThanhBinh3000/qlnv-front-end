@@ -185,7 +185,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-
+      this.maDviTien = '1';
       this.spinner.show();
       await this.dataSource.currentData.subscribe(obj => {
         this.namPa = obj?.namPa;

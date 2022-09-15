@@ -211,7 +211,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.maDonViTao = this.userInfo?.dvql;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-
+      this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
       await this.dataSource.currentData.subscribe(obj => {
         if (obj) {
