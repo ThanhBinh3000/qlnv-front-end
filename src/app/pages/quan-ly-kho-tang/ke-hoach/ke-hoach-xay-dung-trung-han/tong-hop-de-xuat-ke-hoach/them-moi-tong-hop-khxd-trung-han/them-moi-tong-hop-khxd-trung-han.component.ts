@@ -1,3 +1,4 @@
+
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -11,12 +12,11 @@ import {HelperService} from "../../../../../../services/helper.service";
 import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
-  selector: 'app-them-moi-qd-dc',
-  templateUrl: './them-moi-qd-dc.component.html',
-  styleUrls: ['./them-moi-qd-dc.component.scss']
+  selector: 'app-them-moi-tong-hop-khxd-trung-han',
+  templateUrl: './them-moi-tong-hop-khxd-trung-han.component.html',
+  styleUrls: ['./them-moi-tong-hop-khxd-trung-han.component.scss']
 })
-export class ThemMoiQdDcComponent implements OnInit {
-
+export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Input() isViewDetail: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
@@ -29,6 +29,8 @@ export class ThemMoiQdDcComponent implements OnInit {
   dsChiCuc: any[] = [];
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
+  isTongHop: boolean = false;
+  listNam: any[] = [];
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -48,6 +50,7 @@ export class ThemMoiQdDcComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isTongHop = false;
     this.maQd = '/QĐ-BTC'
   }
 
@@ -123,4 +126,9 @@ export class ThemMoiQdDcComponent implements OnInit {
       });
     }
   }
+
+  tongHop() {
+    this.isTongHop = true;
+  }
 }
+

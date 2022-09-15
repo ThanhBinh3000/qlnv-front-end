@@ -40,7 +40,9 @@ export class ThemMoiQdComponent implements OnInit {
     private helperService: HelperService
   ) {
     this.formData = this.fb.group({
-      id: [null]
+      id: [null],
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
     });
   }
 

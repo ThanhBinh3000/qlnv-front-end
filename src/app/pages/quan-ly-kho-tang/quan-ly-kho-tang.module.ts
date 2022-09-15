@@ -23,29 +23,38 @@ import {ThemMoiQdComponent} from "./ke-hoach/quy-hoach-kho/quyet-dinh-quy-hoach/
 import {
     ThemMoiQdDcComponent
 } from "./ke-hoach/quy-hoach-kho/quyet-dinh-dieu-chinh-quy-hoach/them-moi-qd-dc/them-moi-qd-dc.component";
+import {
+  ThemMoiDxkhTrungHanComponent
+} from "./ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/them-moi-dxkh-trung-han.component";
+import {
+  ThemMoiTongHopKhxdTrungHanComponent
+} from "./ke-hoach/ke-hoach-xay-dung-trung-han/tong-hop-de-xuat-ke-hoach/them-moi-tong-hop-khxd-trung-han/them-moi-tong-hop-khxd-trung-han.component";
 
 
 @NgModule({
-    declarations: [
-        QuanLyKhoTangComponent,
-        MangLuoiKhoComponent,
-        KeHoachComponent,
-        QuyHoachKhoComponent,
-        KeHoachXayDungTrungHanComponent,
-        KeHoachXayDungHangNamComponent,
-        KeHoachSuaChuaLonComponent,
-        KeHoachSuaChuaHangNamComponent,
-        QuyetDinhQuyHoachComponent,
-        QuyetDinhDieuChinhQuyHoachComponent,
-        DeXuatKeHoachComponent,
-        TongHopDeXuatKeHoachComponent,
-        QuyetDinhPheDuyetKeHoachComponent,
-        DeXuatNhuCauComponent,
-        TongHopDxNhuCauComponent,
-        QuyetDinhPheDuyetKhxdComponent,
-        ThemMoiQdComponent,
-        ThemMoiQdDcComponent,
-    ],
+  declarations: [
+    QuanLyKhoTangComponent,
+    MangLuoiKhoComponent,
+    KeHoachComponent,
+    QuyHoachKhoComponent,
+    KeHoachXayDungTrungHanComponent,
+    KeHoachXayDungHangNamComponent,
+    KeHoachSuaChuaLonComponent,
+    KeHoachSuaChuaHangNamComponent,
+    QuyetDinhQuyHoachComponent,
+    QuyetDinhDieuChinhQuyHoachComponent,
+    DeXuatKeHoachComponent,
+    TongHopDeXuatKeHoachComponent,
+    QuyetDinhPheDuyetKeHoachComponent,
+    DeXuatNhuCauComponent,
+    TongHopDxNhuCauComponent,
+    QuyetDinhPheDuyetKhxdComponent,
+    ThemMoiQdComponent,
+    ThemMoiQdDcComponent,
+    ThemMoiDxkhTrungHanComponent,
+    ThemMoiTongHopKhxdTrungHanComponent,
+  ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
-export class QuanLyKhoTangModule { }
+export class QuanLyKhoTangModule {
+}

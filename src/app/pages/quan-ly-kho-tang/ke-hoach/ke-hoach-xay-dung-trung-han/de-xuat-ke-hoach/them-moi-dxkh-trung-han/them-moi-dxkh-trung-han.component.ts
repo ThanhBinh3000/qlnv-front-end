@@ -1,21 +1,21 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {UserService} from "../../../../../../services/user.service";
 import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
-  selector: 'app-them-moi-qd-dc',
-  templateUrl: './them-moi-qd-dc.component.html',
-  styleUrls: ['./them-moi-qd-dc.component.scss']
+  selector: 'app-them-moi-dxkh-trung-han',
+  templateUrl: './them-moi-dxkh-trung-han.component.html',
+  styleUrls: ['./them-moi-dxkh-trung-han.component.scss']
 })
-export class ThemMoiQdDcComponent implements OnInit {
+export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   @Input() isViewDetail: boolean;
   @Input() typeHangHoa: string;
@@ -48,7 +48,7 @@ export class ThemMoiQdDcComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.maQd = '/QĐ-BTC'
+    this.maQd = '/CDTVP-TCKT'
   }
 
   quayLai() {
