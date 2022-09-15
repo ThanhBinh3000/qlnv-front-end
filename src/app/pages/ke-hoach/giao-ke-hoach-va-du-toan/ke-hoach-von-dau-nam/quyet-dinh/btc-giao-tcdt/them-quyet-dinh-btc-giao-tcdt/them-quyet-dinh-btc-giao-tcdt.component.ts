@@ -13,7 +13,7 @@ import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.servi
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KeHoachNhapXuatLtComponent } from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -109,7 +109,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhBtcTcdtService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -188,7 +187,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id:  this.formData.get('id').value,
+            id: this.formData.get('id').value,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };

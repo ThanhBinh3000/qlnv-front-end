@@ -372,7 +372,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           : null,
         [Validators.required],
       ],
-      trangThai: ['00'],
       canCu: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.canCu
@@ -1172,6 +1171,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide()
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1183,10 +1188,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          if (this.formData.invalid) {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-          }
-          await this.save(true);
+          this.save(true);
+          // this.redirectChiTieuKeHoachNam()
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1354,7 +1357,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
   }
 
-  async  save(isGuiDuyet?: boolean) {
+  save(isGuiDuyet?: boolean) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -1416,7 +1419,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         delete thietbi.tongNhap;
       });
     });
-    if (this.id > 0) {
+    if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
