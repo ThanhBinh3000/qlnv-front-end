@@ -21,7 +21,6 @@
     <div class="body-file" *ngFor="let item of data;let i = index">
         <ng-container *ngIf="!item.isEdit">
             <div class="content-text d-flex align-items-center">
-                <div class="stt-file">{{i + 1}}</div>
                 <div class="nd-text">{{item.noiDung}}</div>
             </div>
             <div class="name-file d-flex align-items-center justify-content-between">
@@ -33,7 +32,7 @@
             <div class="icon-edit" (click)="!disabled ? item.isEdit = true : item.isEdit = false" *ngIf="!isViewDetail">
                 <i class="fa fa-pencil "></i>
             </div>
-            <div class="icon-xoa" (click)="deleteFile(item)" *ngIf="!isViewDetail">
+            <div class="icon-xoa" (click)="deleteFile(i)" *ngIf="!isViewDetail">
                 <i class="fa fa-trash-o do "></i>
             </div>
         </ng-container>
