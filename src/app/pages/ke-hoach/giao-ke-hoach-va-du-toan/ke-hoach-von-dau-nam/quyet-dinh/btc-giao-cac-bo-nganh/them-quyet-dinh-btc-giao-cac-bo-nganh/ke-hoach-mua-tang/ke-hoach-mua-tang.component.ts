@@ -134,7 +134,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     const dataNd = this.dsNoiDung.filter(d => d.ma == loaiChi)
     if (dataNd.length > 0) {
       this.rowItem.tenLoaiChi = dataNd[0].giaTri;
-      console.log(this.rowItem);
     }
   }
 

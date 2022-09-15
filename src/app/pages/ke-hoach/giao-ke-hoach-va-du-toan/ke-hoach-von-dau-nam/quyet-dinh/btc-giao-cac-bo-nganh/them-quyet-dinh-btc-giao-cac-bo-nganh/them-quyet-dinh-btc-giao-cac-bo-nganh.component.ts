@@ -106,7 +106,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     let res = await this.quyetDinhTtcpService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
-      console.log(data);
       if (data.length > 0) {
         let dataTtcp = await this.quyetDinhTtcpService.getDetail(data[0].id);
         if (dataTtcp.msg == MESSAGE.SUCCESS) {
@@ -116,7 +115,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         this.dsBoNganhTtcp = [];
       }
     }
-    console.log(this.dsBoNganhTtcp);
   }
 
   async getListBoNganh() {
@@ -200,7 +198,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-      console.log(this.formData.controls)
       this.spinner.hide();
       return;
     }

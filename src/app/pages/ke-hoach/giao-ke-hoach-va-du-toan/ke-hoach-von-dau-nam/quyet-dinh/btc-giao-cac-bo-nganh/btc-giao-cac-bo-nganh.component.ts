@@ -85,7 +85,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
@@ -359,7 +358,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhBtcNganhService.getDetail(id);
-      console.log(res);
       this.muaTangList = res.data.muaTangList;
     }
   }

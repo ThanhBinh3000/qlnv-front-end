@@ -99,7 +99,6 @@ export class TtcpComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = this.formData.value;
-    console.log(body);
     if (body.ngayQd != null) {
       body.ngayQdTu = body.ngayQd[0];
       body.ngayQdDen = body.ngayQd[1];
@@ -374,7 +373,6 @@ export class TtcpComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      console.log(res);
       this.listBoNganh = res.data.listBoNganh;
       this.namDataSelect = res.data.namQd
     }
