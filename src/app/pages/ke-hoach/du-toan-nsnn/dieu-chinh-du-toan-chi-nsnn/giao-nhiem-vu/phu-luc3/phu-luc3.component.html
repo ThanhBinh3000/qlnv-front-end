@@ -80,11 +80,7 @@
         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
           <td> {{i + 1}}</td>
           <td>
-            <div *ngFor="let item of maCucDtnnKvucs">
-              <div *ngIf="item.id == data.maDvi">
-                {{item.tenDvi}}
-              </div>
-            </div>
+            {{data.maDvi}}
           </td>
           <td>{{data.khoachQdGiaoNvu}}</td>
           <td>{{data.khoachLuong}}</td>
@@ -116,12 +112,8 @@
         <ng-template #editTemplate>
           <td>{{i + 1}}</td>
           <td>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-              [(ngModel)]="editCache[data.id].data.maDvi"
-              [class]="editCache[data.id].data.maDvi?'' : 'input-error-validate'">
-              <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.id" [nzLabel]="item.tenDvi">
-              </nz-option>
-            </nz-select>
+            <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.maDvi"
+              [class]="editCache[data.id].data.maDvi?'' : 'input-error-validate'" />
           </td>
           <td>
             <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu"
