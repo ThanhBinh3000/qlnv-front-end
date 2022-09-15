@@ -120,7 +120,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   userInfo: any;
   trangThaiPhuLuc: string;
   thuyetMinh: string;
-  maDviTien: any;
+  maDviTien: string;
   listIdDelete = "";
   maPhanBcao = "1";
   namQtoan!: number;
@@ -237,6 +237,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       this.trangThaiBaoCao = "1";
       this.nguoiNhap = this.userInfo?.username;
       this.maDviTao = this.userInfo?.dvql;
+      this.maDviTien = '1'
     }
 
     //lay danh sach danh muc don vi
@@ -1214,6 +1215,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       },
     );
   };
+
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
