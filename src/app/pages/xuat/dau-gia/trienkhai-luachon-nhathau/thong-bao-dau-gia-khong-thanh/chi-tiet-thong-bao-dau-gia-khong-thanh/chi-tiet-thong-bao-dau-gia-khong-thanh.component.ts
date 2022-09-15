@@ -433,6 +433,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           console.log(res.data)
           this.detail = res.data;
           this.changeDiemKho(true);
+          this.listFileDinhKem = this.detail.fileDinhKems;
           const tbBDG = this.listThongBaoDauGiaTaiSan.find(e => e.maThongBao == this.detail.maThongBao);
           if (tbBDG) {
             this.changeMaThongBao(tbBDG.id)
@@ -582,16 +583,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
     try {
       let body = {
         "donViThongBao": this.detail.maDvi,
-        "fileDinhKemReqs": [
-          // {
-          //   "dataId": 0,
-          //   "fileName": "string",
-          //   "fileSize": "string",
-          //   "fileUrl": "string",
-          //   "id": 0,
-          //   "noiDung": "string"
-          // }
-        ],
+        "fileDinhKemReqs": this.listFileDinhKem,
         "id": this.detail.id ? this.detail.id : null,
         "loaiVthh": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha) ? this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma : null,
         "maThongBao": this.bienBanResult.maThongBao,
@@ -692,7 +684,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res =
             await this.thongBaoDauGiaKhongThanhCongService.updateStatus(
