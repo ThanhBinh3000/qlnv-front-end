@@ -1,29 +1,33 @@
 <nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
     <div class="btn-group">
         <button class="btn btn-sub" (click)="back()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+        </button>
         <button class="btn btn-sub" (click)="print()">
-      <i class="icon htvbdh_tcdt_print"></i>
-      <span>In</span>
-    </button>
-        <button class="btn btn-sub" *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView" (click)="guiDuyet()">
-      <i class="icon htvbdh_trinh"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+        </button>
+        <button class="btn btn-sub"
+            *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView"
+            (click)="guiDuyet()">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
         <button class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC" (click)="pheDuyet()">
-      <i class="icon htvbdh_dakyduyet"></i>
-      <span>Duyệt</span>
-    </button>
+            <i class="icon htvbdh_dakyduyet"></i>
+            <span>Duyệt</span>
+        </button>
         <button class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Từ chối</span>
-    </button>
-        <button class="btn btn-main btn-sub xanh" *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView" (click)="save(false)">
-      <i class="icon  htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+        </button>
+        <button class="btn btn-main btn-sub xanh"
+            *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || id == 0) && !isView"
+            (click)="save(false)">
+            <i class="icon  htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+        </button>
     </div>
 
 
@@ -71,7 +75,9 @@
                     <nz-form-label nzRequired [nzNoColon]="true">
                         Ngày ký
                     </nz-form-label>
-                    <nz-date-picker [nzDisabled]="isView" class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy" [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
+                    <nz-date-picker [nzDisabled]="isView" class="search__input" [nzDisabledDate]=""
+                        nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy"
+                        [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
                     </nz-date-picker>
                 </nz-form-item>
             </div>
@@ -80,7 +86,8 @@
                     <nz-form-label [nzNoColon]="true">
                         Loại hàng hoá
                     </nz-form-label>
-                    <nz-select [nzDisabled]="isView" [(ngModel)]="detail.tenVatTuCha" id="loai-hang-hoa" (ngModelChange)="onChangeLoaiHH($event)">
+                    <nz-select [nzDisabled]="isView" [(ngModel)]="detail.tenVatTuCha" id="loai-hang-hoa"
+                        (ngModelChange)="onChangeLoaiHH($event)">
                         <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                         <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
                         </nz-option>
@@ -92,7 +99,8 @@
                     <nz-form-label nzRequired [nzNoColon]="true">
                         Mã thông báo bán đấu giá
                     </nz-form-label>
-                    <nz-select [nzDisabled]="isView" nzAllowClear [(ngModel)]="detail.maThongBaoBdg" (ngModelChange)="changeMaThongBao($event)">
+                    <nz-select [nzDisabled]="isView" nzAllowClear [(ngModel)]="detail.maThongBaoBdg"
+                        (ngModelChange)="changeMaThongBao($event)">
                         <nz-option *ngFor="let p of listThongBaoDauGiaTaiSan" [nzValue]="p.id" [nzLabel]="p.maThongBao">
                         </nz-option>
                     </nz-select>
@@ -111,7 +119,9 @@
                     <nz-form-label [nzNoColon]="true">
                         Ngày tổ chức BĐG
                     </nz-form-label>
-                    <nz-date-picker [nzDisabled]="isView" class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày tổ chức BĐG" [(ngModel)]="detail.ngayToChuc" [disabled]="detail.ngayToChuc == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
+                    <nz-date-picker [nzDisabled]="isView" class="search__input" [nzDisabledDate]=""
+                        nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày tổ chức BĐG" [(ngModel)]="detail.ngayToChuc"
+                        [disabled]="detail.ngayToChuc == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
                     </nz-date-picker>
                 </nz-form-item>
             </div>
@@ -135,16 +145,13 @@
                     <th>Đơn giá chưa VAT(đồng)</th>
                     <th>Giá khởi điểm (đồng)</th>
                     <th>Số tiền đặt trước (đồng)</th>
-                    <th>Số lần trả giá</th>
-                    <th>Đơn giá cao nhất (đồng)</th>
-                    <th>Thành tiền (đồng)</th>
-                    <th>Tổ chức/người trả giá cao nhất</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let data of bangPhanBoList, let i = index">
                     <tr>
-                        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)" style="width: 35px">
+                        <td [nzExpand]="expandSet.has(data.idVirtual)"
+                            (nzExpandChange)="onExpandChange(data.idVirtual, $event)" style="width: 35px">
                         </td>
                         <td colspan="6">{{ data.tenDonVi }}</td>
                         <td></td>
@@ -153,10 +160,6 @@
                         <td></td>
                         <td>{{data.tongGiaKhoiDiem}}</td>
                         <td>{{data.tongKhoanTienDatTruoc}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(data.idVirtual)">
                         <tr *ngFor="let chiTiet of data.chiTietDiaDiems">
@@ -173,30 +176,6 @@
                             <td>{{ chiTiet.donGiaChuaVAT }}</td>
                             <td>{{ chiTiet.giaKhoiDiem }}</td>
                             <td>{{ chiTiet.soTienDatTruoc }}</td>
-                            <td>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="chiTiet.soLanTraGia" *ngIf="!isView">
-                                </nz-input-number>
-                                <ng-container *ngIf="isView">
-                                    {{chiTiet.soLanTraGia}}
-                                </ng-container>
-                            </td>
-                            <td>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="chiTiet.donGiaCaoNhat" *ngIf="!isView">
-                                </nz-input-number>
-                                <ng-container *ngIf="isView">
-                                    {{chiTiet.donGiaCaoNhat}}
-                                </ng-container>
-                            </td>
-                            <td></td>
-                            <td>
-                                <nz-select [(ngModel)]="chiTiet.hoTen" class="w-150" *ngIf="!isView">
-                                    <nz-option *ngFor="let item of dsToChuc" [nzValue]="item.hoTen" [nzLabel]="item.hoTen">
-                                    </nz-option>
-                                </nz-select>
-                                <ng-container *ngIf="isView">
-                                    {{chiTiet.hoTen}}
-                                </ng-container>
-                            </td>
                         </tr>
                     </ng-container>
                 </ng-container>
@@ -219,7 +198,8 @@
                         File đính kèm
                     </nz-form-label>
                     <div class="list-file">
-                        <file-list [data]="listFileDinhKem" [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
+                        <file-list [data]="listFileDinhKem"
+                            [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
                         </file-list>
                     </div>
                 </nz-form-item>

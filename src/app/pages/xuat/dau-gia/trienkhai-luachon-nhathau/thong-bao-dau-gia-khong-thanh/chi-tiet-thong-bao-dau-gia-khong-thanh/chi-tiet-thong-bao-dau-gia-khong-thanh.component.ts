@@ -109,7 +109,6 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
       await Promise.all([
         this.loadDiemKho(),
         this.loadTieuChuan(),
-        this.loadSoQuyetDinh(),
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
         this.loadDonViTinh(),

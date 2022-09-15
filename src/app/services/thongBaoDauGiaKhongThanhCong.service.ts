@@ -53,12 +53,8 @@ export class ThongBaoDauGiaKhongThanhCongService extends BaseService {
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia-khong-thanh`;
-    const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      body: body
-    }
-    return this.httpClient.delete(url, httpOptions).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia-khong-thanh/delete/multiple`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
