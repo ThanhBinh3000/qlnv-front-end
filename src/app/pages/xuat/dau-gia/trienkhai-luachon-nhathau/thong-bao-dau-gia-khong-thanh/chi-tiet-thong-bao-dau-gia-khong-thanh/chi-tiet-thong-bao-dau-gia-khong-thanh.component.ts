@@ -145,12 +145,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
     let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
     if (res.msg == MESSAGE.SUCCESS) {
       this.bienBanResult = res.data;
-      this.detail.maThongBaoBdg = res.data.id;
       this.detail.tenVatTuCha = this.dsLoaiHangHoa.find(e => e.ma == res.data.maVatTuCha) ? (this.dsLoaiHangHoa.find(e => e.ma == res.data.maVatTuCha).id).toString() : null;
-      this.listFileDinhKem = res.data.fileDinhKems;
-      this.bienBanBanDauGia.donViThongBao = res.data.tenDvi;
-      this.bienBanBanDauGia.diaDiem = res.data.diaDiemToChucDauGia;
-      this.bienBanBanDauGia.ngayToChuc = [res.data.thoiGianToChucDauGiaTuNgay, res.data.thoiGianToChucDauGiaDenNgay];
       const phanLoTaiSans = res.data.taiSanBdgList;
       if (phanLoTaiSans && phanLoTaiSans.length > 0) {
         for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
@@ -186,14 +181,6 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           }
         }
       }
-      console.log("this.bangPhanBoList: ", this.bangPhanBoList);
-
-      // this.formData.patchValue({
-      //     ngayToChuc: this.bienBanBanDauGia.ngayToChuc,
-      //     donViThongBao: this.bienBanBanDauGia.donViThongBao,
-      //     diaDiem: this.bienBanBanDauGia.diaDiem
-      // })
-
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -227,12 +214,6 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
-      console.log(this.detail.tenVatTuCha)
-      debugger
-      // let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
-      // if (loaiHangHoa && loaiHangHoa.length > 0) {
-      //   this.dsChungLoaiHangHoa = loaiHangHoa[0].child
-      // }
     }
   }
 
@@ -434,7 +415,7 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
           this.detail = res.data;
           this.changeDiemKho(true);
           this.listFileDinhKem = this.detail.fileDinhKems;
-          const tbBDG = this.listThongBaoDauGiaTaiSan.find(e => e.maThongBao == this.detail.maThongBao);
+          const tbBDG = this.listThongBaoDauGiaTaiSan.find(e => e.id == this.detail.thongBaoBdgId);
           if (tbBDG) {
             this.changeMaThongBao(tbBDG.id)
           }
@@ -586,13 +567,13 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
         "fileDinhKemReqs": this.listFileDinhKem,
         "id": this.detail.id ? this.detail.id : null,
         "loaiVthh": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha) ? this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma : null,
-        "maThongBao": this.bienBanResult.maThongBao,
+        "maThongBao": null,
         "maVatTuCha": this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha) ? this.dsLoaiHangHoa.find(e => e.id == this.detail.tenVatTuCha).ma : null,
         "nam": this.detail.nam,
         "ngayKy": this.detail.ngayKy,
         "ngayToChuc": this.detail.ngayToChuc,
         "noiDung": this.detail.noiDung,
-        "thongBaoBdgId": this.bienBanResult.thongBaoBdgId,
+        "thongBaoBdgId": this.detail.thongBaoBdgId,
         "trichYeu": this.detail.trichYeu
       }
       if (this.id > 0) {
@@ -766,15 +747,10 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    if (trangThai === this.globals.prop.NHAP_BAN_HANH) {
       return 'da-ban-hanh';
+    } else {
+      return 'du-thao-va-lanh-dao-duyet';
     }
   }
 

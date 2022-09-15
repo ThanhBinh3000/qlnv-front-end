@@ -22,7 +22,11 @@
     <div class="header">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span class="title-form">Thông báo bán đấu giá</span>
+                <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+                    Dự Thảo
+                </span>
+                <span *ngIf="id > 0" [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+                <span class="title-form">Thông báo bán đấu giá không thành</span>
             </div>
         </div>
     </div>
@@ -85,7 +89,7 @@
                     <nz-form-label nzRequired [nzNoColon]="true">
                         Mã thông báo bán đấu giá
                     </nz-form-label>
-                    <nz-select [nzDisabled]="isView" nzAllowClear [(ngModel)]="detail.maThongBaoBdg"
+                    <nz-select [nzDisabled]="isView" nzAllowClear [(ngModel)]="detail.thongBaoBdgId"
                         (ngModelChange)="changeMaThongBao($event)">
                         <nz-option *ngFor="let p of listThongBaoDauGiaTaiSan" [nzValue]="p.id" [nzLabel]="p.maThongBao">
                         </nz-option>
