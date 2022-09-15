@@ -194,6 +194,6 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
-    <app-them-moi-tong-hop-khxd-trung-han></app-them-moi-tong-hop-khxd-trung-han>
+    <app-them-moi-tong-hop-khxd-trung-han [idInput]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"></app-them-moi-tong-hop-khxd-trung-han>
   </div>
 </ng-template>

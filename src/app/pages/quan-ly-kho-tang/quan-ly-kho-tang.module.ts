@@ -29,31 +29,35 @@ import {
 import {
   ThemMoiTongHopKhxdTrungHanComponent
 } from "./ke-hoach/ke-hoach-xay-dung-trung-han/tong-hop-de-xuat-ke-hoach/them-moi-tong-hop-khxd-trung-han/them-moi-tong-hop-khxd-trung-han.component";
+import {
+    ThemMoiQdPheDuyetComponent
+} from "./ke-hoach/ke-hoach-xay-dung-trung-han/quyet-dinh-phe-duyet-ke-hoach/them-moi-qd-phe-duyet/them-moi-qd-phe-duyet.component";
 
 
 @NgModule({
-  declarations: [
-    QuanLyKhoTangComponent,
-    MangLuoiKhoComponent,
-    KeHoachComponent,
-    QuyHoachKhoComponent,
-    KeHoachXayDungTrungHanComponent,
-    KeHoachXayDungHangNamComponent,
-    KeHoachSuaChuaLonComponent,
-    KeHoachSuaChuaHangNamComponent,
-    QuyetDinhQuyHoachComponent,
-    QuyetDinhDieuChinhQuyHoachComponent,
-    DeXuatKeHoachComponent,
-    TongHopDeXuatKeHoachComponent,
-    QuyetDinhPheDuyetKeHoachComponent,
-    DeXuatNhuCauComponent,
-    TongHopDxNhuCauComponent,
-    QuyetDinhPheDuyetKhxdComponent,
-    ThemMoiQdComponent,
-    ThemMoiQdDcComponent,
-    ThemMoiDxkhTrungHanComponent,
-    ThemMoiTongHopKhxdTrungHanComponent,
-  ],
+    declarations: [
+        QuanLyKhoTangComponent,
+        MangLuoiKhoComponent,
+        KeHoachComponent,
+        QuyHoachKhoComponent,
+        KeHoachXayDungTrungHanComponent,
+        KeHoachXayDungHangNamComponent,
+        KeHoachSuaChuaLonComponent,
+        KeHoachSuaChuaHangNamComponent,
+        QuyetDinhQuyHoachComponent,
+        QuyetDinhDieuChinhQuyHoachComponent,
+        DeXuatKeHoachComponent,
+        TongHopDeXuatKeHoachComponent,
+        QuyetDinhPheDuyetKeHoachComponent,
+        DeXuatNhuCauComponent,
+        TongHopDxNhuCauComponent,
+        QuyetDinhPheDuyetKhxdComponent,
+        ThemMoiQdComponent,
+        ThemMoiQdDcComponent,
+        ThemMoiDxkhTrungHanComponent,
+        ThemMoiTongHopKhxdTrungHanComponent,
+        ThemMoiQdPheDuyetComponent,
+    ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
 export class QuanLyKhoTangModule {
