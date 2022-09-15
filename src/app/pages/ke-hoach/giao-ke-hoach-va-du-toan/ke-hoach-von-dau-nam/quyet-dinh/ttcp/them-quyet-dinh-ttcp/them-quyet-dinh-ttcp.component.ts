@@ -69,7 +69,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -176,7 +175,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       this.spinner.hide();
       return;
     }
