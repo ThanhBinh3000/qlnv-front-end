@@ -153,12 +153,12 @@ export class KeHoachMuaXuat {
 export class DanhMucMucPhi {
   id:number
   cloaiVthh: string
-  tenCloaiVthh:string
+  tencLoaiVthh:string
   hinhThucBq: string
   loaiDinhMuc:string
   loaiHinhBq:string
   loaiVthh: string
-  tenVthh: string
+  tenLoaiVthh: string
   maDinhMuc: string
   tenDinhMuc: string
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,10 +15,9 @@ import {
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {UserLogin} from "../../../models/userlogin";
 import { cloneDeep } from 'lodash';
-import dayjs from "dayjs";
 import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
-import {isElementScrolledOutsideView} from "@angular/cdk/overlay/position/scroll-clip";
-import {DanhMucMucPhi, ThongTinQuyetDinh} from "../../../models/DeXuatKeHoachuaChonNhaThau";
+import {DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
+import {Globals} from "../../../shared/globals";
 
 
 
@@ -29,6 +28,7 @@ import {DanhMucMucPhi, ThongTinQuyetDinh} from "../../../models/DeXuatKeHoachuaC
 })
 export class DanhMucDinhMucPhiComponent implements OnInit {
   formData: FormGroup;
+  formDataChinhSua: FormGroup;
   listVthh: any[] = [];
   listDinhMuc: any[] = [];
   listLhbq: any[] = [];
@@ -41,7 +41,6 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
-  id: number
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucMucPhi } } = {};
   searchFilter = {
     cloaiVthh: '',
@@ -67,28 +66,41 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    private globals : Globals
   ) {
     this.formData = this.fb.group({
       id: [null],
       cloaiVthh: [null, [Validators.required]],
-      tenCloaiVthh: [null, [Validators.required]],
+      tenCloaiVthh: [null],
       hinhThucBq: [null, [Validators.required]],
       loaiDinhMuc: [null, [Validators.required]],
       loaiHinhBq: [null, [Validators.required]],
       loaiVthh: [null, [Validators.required]],
-      tenVthh: [null, [Validators.required]],
+      tenVthh: [null],
+      maDinhMuc: [null, [Validators.required]],
+      tenDinhMuc: [null, [Validators.required]],
+    })
+    this.formDataChinhSua = this.fb.group({
+      id: [null],
+      cloaiVthh: [null, [Validators.required]],
+      tenCloaiVthh: [null],
+      hinhThucBq: [null, [Validators.required]],
+      loaiDinhMuc: [null, [Validators.required]],
+      loaiHinhBq: [null, [Validators.required]],
+      loaiVthh: [null, [Validators.required]],
+      tenVthh: [null],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
     })
   }
 
-  async ngOnInit() {
-    await this.search();
-    await this.loadDsVthh();
-    await this.getListDinhMuc();
-    await this.getListLhbq();
-    await this.getListHtbq();
+   ngOnInit() {
+     this.search();
+     this.loadDsVthh();
+     this.getListDinhMuc();
+     this.getListLhbq();
+     this.getListHtbq();
   }
   async loadDsVthh() {
     this.listVthh = [];
@@ -127,11 +139,13 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
           edit: false,
           data: { ...item },
         }
+        this.dataEdit[index].data.tenLoaiVthh = item.tenLoaiVthh
+        this.dataEdit[index].data.tencLoaiVthh = item.tencLoaiVthh
       });
     }
   }
 
-  selectHangHoa(type) {
+  selectHangHoa(type, i?) {
     const modal = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -145,7 +159,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataHangHoa(data, type);
+        this.bindingDataHangHoa(data, type , i);
       }
     });
   }
@@ -181,23 +195,44 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.updateEditCache()
     this.spinner.hide();
   }
 
-  async themmoi() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      return;
+  async themmoi(data?, idInput?) {
+    if (idInput && data) {
+      this.formDataChinhSua.patchValue({
+        id: idInput,
+        cloaiVthh: data.cloaiVthh ,
+        tenCloaiVthh: data.tencLoaiVthh,
+        hinhThucBq: data.hinhThucBq,
+        loaiDinhMuc: data.loaiDinhMuc,
+        loaiHinhBq:data.loaiHinhBq,
+        loaiVthh: data.loaiVthh,
+        tenVthh: data.tenLoaiVthh,
+        maDinhMuc:data.maDinhMuc,
+        tenDinhMuc:data.tenDinhMuc,
+      })
+      this.helperService.markFormGroupTouched(this.formDataChinhSua);
+      if (this.formDataChinhSua.invalid) {
+        return;
+      }
+    } else  {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
     }
+
     let body = this.formData.value
     let res
-    if (this.id > 0) {
-      body.id = this.id
+    if (idInput) {
+      let body = this.formDataChinhSua.value
       res = await this.danhMucDinhMucService.update(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-       await this.search()
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         this.formData.reset()
+        await this.search()
         this.updateEditCache()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -206,8 +241,8 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       res = await this.danhMucDinhMucService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.search()
         this.formData.reset()
+        await this.search()
         this.updateEditCache()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -228,6 +263,17 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       tenVthh:  ""
     };
     this.search();
+  }
+
+  huyEdit(idx: number): void {
+    this.dataEdit[idx] = {
+      data: { ...this.dataTable[idx] },
+      edit: false,
+    };
+  }
+
+  luuEdit(index: number): void {
+
   }
 
   export() {
@@ -374,7 +420,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
 
-  async bindingDataHangHoa(data, type) {
+  async bindingDataHangHoa(data, type , i?) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
       if (type == "save") {
         this.formData.patchValue({
@@ -389,6 +435,12 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         this.searchFilter.tenCloaiVthh = data.ten;
         this.searchFilter.loaiVthh = data.parent.ma;
         this.searchFilter.tenVthh = data.parent.ten;
+      }
+      if (type == "edit") {
+        this.dataEdit[i].data.cloaiVthh = data.ma;
+        this.dataEdit[i].data.tencLoaiVthh = data.ten;
+        this.dataEdit[i].data.loaiVthh = data.parent.ma;
+        this.dataEdit[i].data.tenLoaiVthh = data.parent.ten;
       }
     }
     if (data.loaiHang == "VT") {
@@ -453,5 +505,6 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
 
   startEdit(i: number) {
     this.dataEdit[i].edit = true;
+    console.log(this.dataEdit[i].data)
   }
 }
