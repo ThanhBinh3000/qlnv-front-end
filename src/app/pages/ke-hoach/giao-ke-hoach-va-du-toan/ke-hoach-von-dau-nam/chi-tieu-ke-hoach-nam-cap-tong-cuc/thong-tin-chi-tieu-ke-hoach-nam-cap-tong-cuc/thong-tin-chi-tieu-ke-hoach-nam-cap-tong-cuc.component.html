@@ -103,7 +103,7 @@
           <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày ký
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayKyError1">
-            <nz-date-picker [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_VU && thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_CUC" class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+            <nz-date-picker [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_VU && thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_CUC" class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="dd-MM-yyyy"
                             formControlName="ngayKy" nzPlaceHolder="Ngày ký"
             >
             </nz-date-picker>
@@ -117,7 +117,7 @@
           <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày hiệu lực
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
-            <nz-date-picker [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_VU && thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_CUC" nzFormat="yyyy-MM-dd"
+            <nz-date-picker [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_VU && thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_CUC" nzFormat="dd-MM-yyyy"
                             formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
             >
             </nz-date-picker>
@@ -170,7 +170,7 @@
             ( 31/12/{{yearNow}})
           </th>
           <!-- <th rowspan="4">Trạng thái</th> -->
-          <th rowspan="4" *ngIf="!this.isViewDetail" class="text-right" width="90px" nzRight>Hành động</th>
+          <th rowspan="4" *ngIf="!this.isViewDetail" class="text-center" width="90px" nzRight>Hành động</th>
         </tr>
         <tr>
           <th rowspan="3" class="text-center">
@@ -302,11 +302,11 @@
           <td class="text-right">{{calculatortkcnTongThocCreate()}}</td>
           <td class="text-right">{{calculatortkcnTongGaoCreate()}}</td>
           <!-- <td class="background-last-row"></td> -->
-          <td class="text-right" *ngIf="!this.isViewDetail" nzRight>
-            <a class="save" (click)="themMoiKHLT()"  [ngClass]="{'isDisabled': !isAddLuongThuc}" style="margin-right: 30px;">
+          <td class="text-center" *ngIf="!this.isViewDetail" nzRight>
+            <a class="save" (click)="themMoiKHLT()"  [ngClass]="{'isDisabled': !isAddLuongThuc}"  >
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="clearKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}" style="margin-right: 10px;">
+            <a (click)="clearKHLT()" class="ml-3" [ngClass]="{'isDisabled': !isAddLuongThuc}"  >
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -371,11 +371,11 @@
             <th class="text-right">{{data.tkcnTongGao | number: '1.0-1'}}
             </th>
             <!-- <td>{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-            <th *ngIf="!this.isViewDetail" class="text-right" nzRight>
+            <th *ngIf="!this.isViewDetail" class="text-center" nzRight>
               <a (click)="startEdit(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteKeHoachLuongThuc(data.stt)">
+              <a (click)="deleteKeHoachLuongThuc(data.stt)" class="ml-3">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </th>
@@ -461,11 +461,11 @@
               {{calculatortkcnTongGao(i)}}
             </th>
             <!-- <td></td> -->
-            <th class="text-right" nzRight *ngIf="!this.isViewDetail">
+            <th class="text-center" nzRight *ngIf="!this.isViewDetail">
               <a (click)="saveEdit(i)" class="save">
                 <i class="fa fa-save"></i>
               </a>
-              <a (click)="cancelEdit(i)">
+              <a (click)="cancelEdit(i)" class="ml-3">
                 <i class="fa fa-times do"></i>
               </a>
             </th>

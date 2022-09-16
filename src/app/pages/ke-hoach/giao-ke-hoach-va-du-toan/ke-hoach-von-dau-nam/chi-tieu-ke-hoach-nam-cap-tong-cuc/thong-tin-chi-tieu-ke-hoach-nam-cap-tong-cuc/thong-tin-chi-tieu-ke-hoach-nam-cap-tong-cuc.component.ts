@@ -752,7 +752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
             canCu: this.thongTinChiTieuKeHoachNam.canCu,
-            trichYeu: this.thongTinChiTieuKeHoachNam.namKeHoach,
+            trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
             soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc
