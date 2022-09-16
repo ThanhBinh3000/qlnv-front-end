@@ -32,32 +32,44 @@ import {
 import {
     ThemMoiQdPheDuyetComponent
 } from "./ke-hoach/ke-hoach-xay-dung-trung-han/quyet-dinh-phe-duyet-ke-hoach/them-moi-qd-phe-duyet/them-moi-qd-phe-duyet.component";
+import {
+    ThemMoiDxNhuCauComponent
+} from "./ke-hoach/ke-hoach-xay-dung-hang-nam/de-xuat-nhu-cau/them-moi-dx-nhu-cau/them-moi-dx-nhu-cau.component";
+import {
+  ThemMoiQdPdDxNhuCauComponent
+} from "./ke-hoach/ke-hoach-xay-dung-hang-nam/quyet-dinh-phe-duyet-khxd/them-moi-qd-pd-dx-nhu-cau/them-moi-qd-pd-dx-nhu-cau.component";
+import {
+  ThemMoiTongHopDxNhuCauComponent
+} from "./ke-hoach/ke-hoach-xay-dung-hang-nam/tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau.component";
 
 
 @NgModule({
-    declarations: [
-        QuanLyKhoTangComponent,
-        MangLuoiKhoComponent,
-        KeHoachComponent,
-        QuyHoachKhoComponent,
-        KeHoachXayDungTrungHanComponent,
-        KeHoachXayDungHangNamComponent,
-        KeHoachSuaChuaLonComponent,
-        KeHoachSuaChuaHangNamComponent,
-        QuyetDinhQuyHoachComponent,
-        QuyetDinhDieuChinhQuyHoachComponent,
-        DeXuatKeHoachComponent,
-        TongHopDeXuatKeHoachComponent,
-        QuyetDinhPheDuyetKeHoachComponent,
-        DeXuatNhuCauComponent,
-        TongHopDxNhuCauComponent,
-        QuyetDinhPheDuyetKhxdComponent,
-        ThemMoiQdComponent,
-        ThemMoiQdDcComponent,
-        ThemMoiDxkhTrungHanComponent,
-        ThemMoiTongHopKhxdTrungHanComponent,
-        ThemMoiQdPheDuyetComponent,
-    ],
+  declarations: [
+    QuanLyKhoTangComponent,
+    MangLuoiKhoComponent,
+    KeHoachComponent,
+    QuyHoachKhoComponent,
+    KeHoachXayDungTrungHanComponent,
+    KeHoachXayDungHangNamComponent,
+    KeHoachSuaChuaLonComponent,
+    KeHoachSuaChuaHangNamComponent,
+    QuyetDinhQuyHoachComponent,
+    QuyetDinhDieuChinhQuyHoachComponent,
+    DeXuatKeHoachComponent,
+    TongHopDeXuatKeHoachComponent,
+    QuyetDinhPheDuyetKeHoachComponent,
+    DeXuatNhuCauComponent,
+    TongHopDxNhuCauComponent,
+    QuyetDinhPheDuyetKhxdComponent,
+    ThemMoiQdComponent,
+    ThemMoiQdDcComponent,
+    ThemMoiDxkhTrungHanComponent,
+    ThemMoiTongHopKhxdTrungHanComponent,
+    ThemMoiQdPheDuyetComponent,
+    ThemMoiDxNhuCauComponent,
+    ThemMoiQdPdDxNhuCauComponent,
+    ThemMoiTongHopDxNhuCauComponent,
+  ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
 export class QuanLyKhoTangModule {
