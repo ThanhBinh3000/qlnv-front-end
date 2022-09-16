@@ -276,10 +276,8 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQuyetDinh: this.searchFilter.soQd,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      },
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.qdPheDuyetKhBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -302,9 +300,8 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
