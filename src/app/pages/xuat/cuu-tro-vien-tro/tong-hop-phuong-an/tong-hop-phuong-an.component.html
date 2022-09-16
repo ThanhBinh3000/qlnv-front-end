@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach">
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -216,7 +216,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <!-- <app-thong-tin-bien-ban-chuan-bi-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [typeVthh]="typeVthh">
-  </app-thong-tin-bien-ban-chuan-bi-kho> -->
+  <app-thong-tin-tong-hop-phuong-an [id]="selectedId" (showListEvent)="showList()" [isView]="isView">
+  </app-thong-tin-tong-hop-phuong-an>
 </div>
