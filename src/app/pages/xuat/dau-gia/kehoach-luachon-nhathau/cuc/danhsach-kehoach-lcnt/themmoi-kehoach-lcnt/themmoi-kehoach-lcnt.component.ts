@@ -25,6 +25,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
@@ -95,6 +96,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private cdr: ChangeDetectorRef,
+    private helperService: HelperService,
   ) {
   }
   async ngOnInit() {
@@ -161,7 +163,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       loaiHangHoa: [
         {
@@ -215,28 +217,28 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       thoiGianDuKien: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.thoiGianDuKien : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       thongBaoKhBdg: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.thongBaoKhBdg : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       thoiGianKyHd: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.thoiGianKyHd : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       thoiGianKyHdGhiChu: [
         {
@@ -254,7 +256,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       thoiHanThanhToan: [
         {
@@ -262,7 +264,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       thoiHanThanhToanGhiChu: [
         {
@@ -280,7 +282,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       thoiHanGiaoNhan: [
         {
@@ -288,7 +290,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       thoiHanGiaoNhanGhiChu: [
         {
@@ -306,7 +308,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           disabled: this.isView ? true : false,
         },
 
-        [],
+        [Validators.required],
       ],
       ghiChu: [
         {
@@ -384,6 +386,12 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   themMoiBangPhanLoTaiSan(item?: any) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
+      return;
+    }
     if (
       !this.formData.get('loaiHangHoa').value ||
       !this.formData.get('qdGiaoChiTieuNam').value ||
@@ -457,7 +465,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.bangPhanBoList = [...this.bangPhanBoList, data];
   }
   async save(isOther?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
+      return;
+    }
     this.spinner.show();
+
     try {
       this.bangPhanBoList.forEach((phanBo) => {
         const phanLoTaiSan = new PhanLoTaiSan();

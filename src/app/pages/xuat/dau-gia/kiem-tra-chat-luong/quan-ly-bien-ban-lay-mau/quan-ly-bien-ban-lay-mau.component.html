@@ -31,7 +31,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)">
-                    <nz-option *ngFor="let item of dsDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    <nz-option *ngFor="let item of listDiemKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -42,11 +42,10 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNhaKho" (ngModelChange)="onChangeNhaKho($event)">
-                    <nz-option *ngFor="let item of dsNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    <nz-option *ngFor="let item of listNhaKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
-
               </nz-form-item>
               <nz-form-item nz-col nzSpan="4" class="form-item">
                 <nz-form-label class="search__label" [nzNoColon]="true">
@@ -54,7 +53,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)">
-                    <nz-option *ngFor="let item of dsNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    <nz-option *ngFor="let item of listNganKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -65,7 +64,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-select formControlName="maNganLo">
-                    <nz-option *ngFor="let item of dsLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
+                    <nz-option *ngFor="let item of listLoKho" nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -160,7 +159,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                        [nzDisabled]="data.trangThaiId != globals.prop.NHAP_DU_THAO"></label>
                     </th>
                     <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                     <td>{{data.soBienBan}}</td>

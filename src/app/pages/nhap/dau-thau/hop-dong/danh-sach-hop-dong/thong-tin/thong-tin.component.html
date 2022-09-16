@@ -37,6 +37,16 @@
         </ng-template>
         <div class="flex-card p-lr16">
           <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired> Năm hợp đồng</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="namHd">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ</nz-form-label>
@@ -47,7 +57,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="18">
+            <div nz-col [nzSpan]="15">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Gói thầu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -330,6 +340,7 @@
                       <th>Tên chi cục</th>
                       <th>Số lượng nhập</th>
                       <th>Đơn vị tính</th>
+                      <th>Trạng thái</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -339,6 +350,7 @@
                       <td>{{ data.tenDiemKho }}</td>
                       <td>{{ data.soLuong }}</td>
                       <td>{{ data.dviTinh }}</td>
+                      <td>{{ data.tenTrangThai }}</td>
                     </tr>
                     </tbody>
                     <tfoot>
@@ -364,6 +376,7 @@
                       <th width="175px">Số lượng (kg)</th>
                       <th width="175px">Đơn giá</th>
                       <th width="175px">Giá sau thuế</th>
+                      <th width="175px">Trạng thái</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -374,6 +387,7 @@
                       <td>{{ data.diaDiemNhap }}</td>
                       <td>{{ data.soLuong | number: '1.0-3' }}</td>
                       <td>{{ donGiaCore | number: '1.0-3' }}</td>
+                      <td>{{ data.tenTrangthai }}</td>
                       <td>{{ calculateGiaSauThue(data.soLuong, donGiaCore) | number: '1.0-3' }}</td>
                     </tr>
                     </tbody>

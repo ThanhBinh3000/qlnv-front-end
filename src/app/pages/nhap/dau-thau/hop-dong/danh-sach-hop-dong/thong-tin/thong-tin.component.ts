@@ -56,6 +56,7 @@ export class ThongTinComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean = true;
   @Input() typeVthh: string;
+  @Input() idGoiThau: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -101,6 +102,8 @@ export class ThongTinComponent implements OnInit {
   diaDiemNhapListCuc = [];
   donGiaCore: number = 0;
   tongSlHang: number = 0;
+  //namKhoach: number = 0;
+  listNam: any[] = [];
 
   constructor(
     private router: Router,
@@ -129,7 +132,7 @@ export class ThongTinComponent implements OnInit {
         maHdong: [null, [Validators.required]],
         tenHd: [null, [Validators.required]],
         ngayKy: [null],
-        namKh: [null],
+        namHd: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
         tgianNkho: [null, [Validators.required]],
@@ -182,6 +185,13 @@ export class ThongTinComponent implements OnInit {
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null
     })
+    let dayNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayNow - i,
+        text: dayNow - i,
+      });
+    }
     await Promise.all([
       this.loadDonVi(),
       this.loaiHopDongGetAll(),
@@ -212,7 +222,7 @@ export class ThongTinComponent implements OnInit {
             maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
             tenHd: this.detail.tenHd ?? null,
             ngayKy: this.detail.ngayKy ?? null,
-            namKh: this.detail.namKh ?? null,
+            namHd: +this.detail.namHd ?? null,
             ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
             soNgayThien: this.detail.soNgayThien ?? null,
             tenVthh: this.detail.tenVthh ?? null,
@@ -242,6 +252,7 @@ export class ThongTinComponent implements OnInit {
           }
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
           await this.getListGoiThau(this.detail.canCuId);
+          this.diaDiemNhapListCuc = this.detail.hhDdiemNhapKhoList;
         }
       }
     }
@@ -442,7 +453,8 @@ export class ThongTinComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        namKhoach: this.formDetailHopDong.get('namHd').value
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -450,7 +462,7 @@ export class ThongTinComponent implements OnInit {
         this.formDetailHopDong.patchValue({
           canCu: data.soQd ?? null,
           canCuId: data.id,
-          namKh: +data.namKhoach ?? null,
+          namHd: +data.namKhoach ?? null,
           idGoiThau: null,
           soNgayThien: null,
           tenVthh: null,
@@ -468,7 +480,7 @@ export class ThongTinComponent implements OnInit {
   }
 
   async onChangeGoiThau(event) {
-    if (event) {
+    if (event && this.idGoiThau !== event) {
       let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -585,6 +597,7 @@ export class ThongTinComponent implements OnInit {
       });
     }
   }
+
   xoaPhuLuc(id: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -597,7 +610,7 @@ export class ThongTinComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongTinPhuLucHopDongService.delete({id:id})
+          this.thongTinPhuLucHopDongService.delete({id: id})
             .then(async () => {
               await this.loadChiTiet(this.id);
             });

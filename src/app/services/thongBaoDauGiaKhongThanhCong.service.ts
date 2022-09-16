@@ -53,12 +53,8 @@ export class ThongBaoDauGiaKhongThanhCongService extends BaseService {
   }
 
   deleteMultiple(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia-khong-thanh`;
-    const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      body: body
-    }
-    return this.httpClient.delete(url, httpOptions).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia-khong-thanh/delete/multiple`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
@@ -76,12 +72,8 @@ export class ThongBaoDauGiaKhongThanhCongService extends BaseService {
     return this.httpClient.put<any>(url, body).toPromise();
   }
 
-
-
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/trang-thai?id=${body.id}&trangThaiId=${body.trangThai}`;
-    return this.httpClient.put(url, null).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia-khong-thanh/status`;
+    return this.httpClient.put<any>(url, body).toPromise();
   }
-
-
 }

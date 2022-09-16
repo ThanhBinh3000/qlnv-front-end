@@ -1,0 +1,73 @@
+<div class="bg-trang">
+  <h3>Danh sách danh mục định mức phí</h3>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+<!--        <div nz-col [nzSpan]="2">-->
+<!--          <nz-form-item class="form-item">-->
+<!--            <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>-->
+<!--            <nz-form-control>-->
+<!--              <nz-select formControlName="namKeHoach" id="nam-kh">-->
+<!--                <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">-->
+<!--                </nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+
+
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzFor="ma-dm">Mã định mức</nz-form-label>
+            <nz-form-control>
+              <nz-input-group id="ma-dm">
+                <input type="text" nz-input formControlName="maDinhMuc" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzFor="ten-dm">Tên định mức</nz-form-label>
+            <nz-form-control>
+              <nz-input-group id="ten-dm">
+                <input type="text" nz-input formControlName="tenDinhMuc" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+                <div nz-col [nzSpan]="4" >
+                  <nz-form-item class="form-item">
+                    <nz-form-label nzFor="loai-hh">Loại hàng hóa</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                        <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh"
+                               readonly="true" />
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+        <div nz-col [nzSpan]="11">
+          <nz-form-item class="form-item">
+            <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
+            <nz-form-control>
+              <nz-input-group id="trich-yeu">
+                <input type="text" nz-input formControlName="trichYeu" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" >
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="search__button--search"  >
+        <i nz-icon nzType="search"></i>
+        Tìm kiếm
+      </button>
+    </div>
+  </nz-card>
+</div>
