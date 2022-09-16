@@ -1,3 +1,5 @@
+import {Validators} from "@angular/forms";
+
 export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
   ldoTuchoi: string;
@@ -146,6 +148,19 @@ export class KeHoachMuaXuat {
   sluongDtoan: number;
   loaiChi: string;
   tenLoaiChi: string;
+}
+
+export class DanhMucMucPhi {
+  id:number
+  cloaiVthh: string
+  tenCloaiVthh:string
+  hinhThucBq: string
+  loaiDinhMuc:string
+  loaiHinhBq:string
+  loaiVthh: string
+  tenVthh: string
+  maDinhMuc: string
+  tenDinhMuc: string
 }
 
 
