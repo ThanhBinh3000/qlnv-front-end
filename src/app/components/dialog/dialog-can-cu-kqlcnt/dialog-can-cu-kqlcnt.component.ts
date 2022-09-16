@@ -20,6 +20,7 @@ export class DialogCanCuKQLCNTComponent implements OnInit {
   dataTable: any[] = [];
   text: string;
   loaiVthh: string;
+  namKhoach: number;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -55,7 +56,7 @@ export class DialogCanCuKQLCNTComponent implements OnInit {
       "denNgayQd": null,
       "loaiVthh": this.loaiVthh,
       "maDvi": null,
-      "namKhoach": null,
+      "namKhoach": this.namKhoach,
       "orderBy": null,
       "orderDirection": null,
       "paggingReq": {
