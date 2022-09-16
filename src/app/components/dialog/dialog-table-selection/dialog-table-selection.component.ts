@@ -12,6 +12,7 @@ import { MESSAGE } from 'src/app/constants/message';
 })
 export class DialogTableSelectionComponent implements OnInit {
   dataHeader: any[] = [];
+  dataColumn: any[] = []
   dataTable: any[] = [];
   code: string;
   constructor(

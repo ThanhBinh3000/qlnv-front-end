@@ -1,19 +1,19 @@
-import { cloneDeep } from 'lodash';
-import { convertTenVthh } from 'src/app/shared/commonFunction';
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import {cloneDeep} from 'lodash';
+import {convertTenVthh} from 'src/app/shared/commonFunction';
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {UserService} from 'src/app/services/user.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DonviService} from 'src/app/services/donvi.service';
+import {ThongTinHopDongService} from 'src/app/services/thongTinHopDong.service';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
+import {Globals} from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -43,6 +43,7 @@ export class DanhSachHopDongComponent implements OnInit {
   isView: boolean = false;
   allChecked = false;
   indeterminate = false;
+  idGoiThau: number = 0;
 
   filterTable: any = {
     soHd: '',
@@ -65,7 +66,8 @@ export class DanhSachHopDongComponent implements OnInit {
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -254,10 +256,11 @@ export class DanhSachHopDongComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
+  redirectToChiTiet(isView: boolean, data: any) {
+    this.selectedId = data.id;
     this.isDetail = true;
     this.isView = isView;
+    this.idGoiThau = data.idGoiThau;
   }
 
   async showList() {
@@ -334,6 +337,7 @@ export class DanhSachHopDongComponent implements OnInit {
           try {
             let res = await this.thongTinHopDong.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
+              this.search();
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -382,8 +386,5 @@ export class DanhSachHopDongComponent implements OnInit {
       nhaCungCap: '',
       gtriHdSauVat: '',
     };
-  }
-  getData1(){
-    console.log("BIBIBI")
   }
 }

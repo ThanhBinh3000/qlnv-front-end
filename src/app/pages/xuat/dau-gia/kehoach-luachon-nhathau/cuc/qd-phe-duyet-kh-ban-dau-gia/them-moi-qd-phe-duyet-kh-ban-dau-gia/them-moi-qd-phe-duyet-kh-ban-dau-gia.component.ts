@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
@@ -31,7 +31,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-dau-gia',
@@ -180,7 +180,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       ngayKy: [
         {
@@ -189,7 +189,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       ngayHieuLuc: [
         {
@@ -198,7 +198,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       tongHopDeXuatKhbdgId: [
         {
@@ -216,7 +216,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       maVatTu: [
         {
@@ -225,7 +225,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       loaiVthh: [
         {
@@ -234,7 +234,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       thoiHanTcBdg: [
         {
@@ -243,7 +243,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       trichYeu: [
         {
@@ -566,6 +566,12 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async save(isOther?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
+      return;
+    }
     this.spinner.show();
     try {
       const arr = [];

@@ -752,7 +752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
             canCu: this.thongTinChiTieuKeHoachNam.canCu,
-            trichYeu: this.thongTinChiTieuKeHoachNam.namKeHoach,
+            trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
             soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc
@@ -1172,6 +1172,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide()
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1183,11 +1189,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          if (this.formData.invalid) {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-          }
           this.save(true);
-          this.redirectChiTieuKeHoachNam()
+          // this.redirectChiTieuKeHoachNam()
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1485,35 +1488,20 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
+      if (isGuiDuyet) {
+        if (this.userService.isTongCuc()) {
+          this.thongTinChiTieuKeHoachNamInput.trangThai = STATUS.CHO_DUYET_LDV;
+        }
+        if (this.userService.isCuc()) {
+          this.thongTinChiTieuKeHoachNamInput.trangThai = STATUS.CHO_DUYET_TP;
+        }
+      }
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (isGuiDuyet) {
-              let body;
-              if (this.userService.isTongCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_LDV,
-                };
-              }
-              if (this.userService.isCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_TP,
-                };
-              }
-              this.chiTieuKeHoachNamService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                this.redirectChiTieuKeHoachNam();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam();
-            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -1528,7 +1516,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .finally(() => {
           this.spinner.hide();
         });
-      this.redirectChiTieuKeHoachNam();
+      // this.redirectChiTieuKeHoachNam();
     }
   }
 
