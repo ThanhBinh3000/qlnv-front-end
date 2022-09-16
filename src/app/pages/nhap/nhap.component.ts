@@ -5,13 +5,8 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {Router} from '@angular/router';
-import {NHAP_ROUTE_LIST} from './nhap.constant';
-import {UserService} from "../../services/user.service";
-import {MESSAGE} from "../../constants/message";
-import {ChiTietMenu1} from "../../models/ChiTietMenu";
-import {OldResponseData} from "../../interfaces/response";
-
+import { Router } from '@angular/router';
+import { NHAP_ROUTE_LIST } from './nhap.constant';
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -19,36 +14,12 @@ import {OldResponseData} from "../../interfaces/response";
 })
 export class NhapComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  routes = [];
+  routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
 
   constructor(
     private router: Router,
-    private userService: UserService,
   ) {
-    this.userService.getUserPermission().then(res => {
-      let menu: ChiTietMenu1[] = []
-      if (res.msg == MESSAGE.SUCCESS) {
-        console.log(res.data)
-        res.data = res.data.filter(s => (s.id >= 268 && s.id <= 272))
-        console.log(res.data)
-        res.data.forEach(s => {
-          let chiTietMenu1 = new ChiTietMenu1();
-          chiTietMenu1.title = s.name;
-          chiTietMenu1.code = s.code;
-          chiTietMenu1.url = s.url;
-          chiTietMenu1.icon = s.icon;
-          chiTietMenu1.hasTab = true;
-          chiTietMenu1.dropdown = 'dau-thau';
-          chiTietMenu1.idHover = 'dau-thau';
-
-          menu.push(chiTietMenu1);
-        })
-        console.log(menu, 2222);
-        this.routes = menu;
-      }
-    });
-    //console.log(userPermission);
 
   }
 
