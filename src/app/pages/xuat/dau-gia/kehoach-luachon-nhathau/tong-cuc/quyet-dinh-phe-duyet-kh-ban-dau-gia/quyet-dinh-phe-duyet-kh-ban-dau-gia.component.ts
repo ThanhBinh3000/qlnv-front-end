@@ -302,8 +302,9 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -313,7 +314,9 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
-      await this.search();
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -466,7 +469,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
             item.checked = true;
           }
         });
@@ -479,6 +482,7 @@ export class QuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       }
     }
   }
+
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
