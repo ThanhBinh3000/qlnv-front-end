@@ -61,7 +61,7 @@
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
             <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
-                       [nzDisabled]="true" nzAllowClear>
+                       [nzDisabled]="false" nzAllowClear>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
             <ng-template #namKeHoachError let-control>
@@ -118,8 +118,7 @@
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
             <nz-date-picker [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_VU && thongTinChiTieuKeHoachNam.trangThai !== globals.prop.NHAP_DA_DUYET_LD_CUC" nzFormat="dd-MM-yyyy"
-                            formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
-            >
+                            formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực">
             </nz-date-picker>
             <ng-template #ngayHieuLucError let-control>
               <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
