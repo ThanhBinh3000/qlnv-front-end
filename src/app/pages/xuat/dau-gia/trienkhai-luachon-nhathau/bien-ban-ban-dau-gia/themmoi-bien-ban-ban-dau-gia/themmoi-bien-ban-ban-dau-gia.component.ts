@@ -1,5 +1,6 @@
+import { DiaDiemNhapKho, ChiTietDiaDiemNhapKho } from './../../../../../../components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
 import { ThongBaoDauGiaTaiSanService } from './../../../../../../services/thongBaoDauGiaTaiSan.service';
-import { BienBanBanDauGia, Cts } from './../../../../../../models/BienBanBanDauGia';
+import { BienBanBanDauGia, Cts, Ct1s } from './../../../../../../models/BienBanBanDauGia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -63,6 +64,9 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     chiTietCtsDauGiaVienCreate: Cts = new Cts();
     chiTietCtsToChucThamGiaDgCreate: Cts = new Cts();
     dsChiTietCtsClone: Array<Cts> = [];
+    bangPhanBoList: Array<any> = [];
+    dsToChuc: Array<any> = [];
+    ct1sList: Array<Ct1s> = [];
     onExpandChange(id: number, checked: boolean): void {
         if (checked) {
             this.expandSet.add(id);
@@ -311,6 +315,50 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 if (res.data) {
                     this.bienBanBanDauGia = res.data;
                     this.dsChiTietCtsClone = this.bienBanBanDauGia.cts;
+                    this.dsChiTietCtsClone.forEach(cts => {
+                        if (cts.loaiTptg === '02') {
+                            this.dsToChuc = [...this.dsToChuc, cts];
+                        }
+                    })
+                    const phanLoTaiSans = res.data.ct1s;
+                    if (phanLoTaiSans && phanLoTaiSans.length > 0) {
+                        for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
+                            for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
+                                if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc) {
+                                    const diaDiemNhapKho = new DiaDiemNhapKho();
+                                    diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
+                                    diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
+                                    diaDiemNhapKho.slDaLenKHBan = phanLoTaiSans[i].slDaLenKHBan;
+                                    diaDiemNhapKho.soLuong = phanLoTaiSans[i].soLuong;
+                                    const chiTietDiaDiem = new ChiTietDiaDiemNhapKho();
+                                    chiTietDiaDiem.tonKho = phanLoTaiSans[i].tonKho;
+                                    chiTietDiaDiem.giaKhoiDiem = phanLoTaiSans[i].giaKhoiDiem;
+                                    chiTietDiaDiem.soTienDatTruoc = phanLoTaiSans[i].soTienDatTruoc;
+                                    chiTietDiaDiem.maDiemKho = phanLoTaiSans[i].maDiemKho;
+                                    chiTietDiaDiem.tenDiemKho = phanLoTaiSans[i].tenDiemKho;
+                                    chiTietDiaDiem.maNhaKho = phanLoTaiSans[i].maNhaKho;
+                                    chiTietDiaDiem.tenNhaKho = phanLoTaiSans[i].tenNhaKho;
+                                    chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
+                                    chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
+                                    chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
+                                    chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
+                                    chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                                    chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
+                                    chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].tenChungLoaiHh;
+                                    chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
+                                    chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
+                                    chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
+                                    chiTietDiaDiem.idVirtual = phanLoTaiSans[i].id;
+                                    chiTietDiaDiem.soLanTraGia = phanLoTaiSans[i].soLanTraGia;
+                                    chiTietDiaDiem.donGiaCaoNhat = phanLoTaiSans[i].donGiaCaoNhat;
+                                    chiTietDiaDiem.hoTen = phanLoTaiSans[i].traGiaCaoNhat;
+                                    chiTietDiaDiem.thanhTien = phanLoTaiSans[i].thanhTien;
+                                    diaDiemNhapKho.chiTietDiaDiems.push(chiTietDiaDiem);
+                                    this.bangPhanBoList.push(diaDiemNhapKho);
+                                }
+                            }
+                        }
+                    }
                     this.initForm();
                 }
             }
@@ -350,7 +398,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+            nzContent: 'Bạn có chắc chắn muốn ban hành?',
             nzOkText: 'Đồng ý',
             nzCancelText: 'Không',
             nzOkDanger: true,
@@ -361,8 +409,8 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     await this.save(true);
                     let body = {
                         id: this.id,
-                        lyDoTuChoi: null,
-                        trangThai: '01',
+                        lyDo: null,
+                        trangThai: this.globals.prop.NHAP_BAN_HANH,
                     };
                     let res =
                         await this.quanLyBienBanBanDauGiaService.updateStatus(
@@ -521,18 +569,20 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         this.bienBanBanDauGia.cts.forEach(bb => {
             delete bb.idVirtual;
         })
+
+        this.bangPhanBoList?.forEach(phanLo => {
+            phanLo.chiTietDiaDiems?.forEach(chiTiet => {
+                const ct1sTemp = new Ct1s();
+                ct1sTemp.donGiaCaoNhat = chiTiet.donGiaCaoNhat;
+                ct1sTemp.soLanTraGia = chiTiet.soLanTraGia;
+                ct1sTemp.traGiaCaoNhat = chiTiet.hoTen;
+                ct1sTemp.id = chiTiet.idVirtual;
+                this.ct1sList = [...this.ct1sList, ct1sTemp];
+            });
+        })
         try {
             let body = {
-                "ct1s": [
-                    // {
-                    //     "bbBanDauGiaId": 0,
-                    //     "donGiaCaoNhat": 0,
-                    //     "id": 0,
-                    //     "soLanTraGia": 0,
-                    //     "thanhTien": 0,
-                    //     "traGiaCaoNhat": "string"
-                    // }
-                ],
+                "ct1s": this.ct1sList,
                 "cts": this.bienBanBanDauGia.cts,
                 "diaDiem": this.formData.get('diaDiem').value,
                 "donViThongBao": this.formData.get('donViThongBao').value,
@@ -556,7 +606,6 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 "thongBaoBdgId": this.formData.get('thongBaoBdgId').value,
                 "trichYeu": this.formData.get('trichYeu').value
             };
-            console.log("body: ", body);
 
             if (this.id > 0) {
                 let res = await this.quanLyBienBanBanDauGiaService.sua(
@@ -606,18 +655,56 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             trangThai === '03'
         ) {
             return 'du-thao-va-lanh-dao-duyet';
-        } else if (trangThai === '02') {
+        } else if (trangThai === this.globals.prop.NHAP_BAN_HANH) {
             return 'da-ban-hanh';
         }
     }
 
     async changeMaThongBao(id: number) {
+        if (!id) {
+            return;
+        }
         this.spinner.show();
         let res = await this.thongBanDauGiaTaiSanService.loadChiTiet(id);
         if (res.msg == MESSAGE.SUCCESS) {
             this.bienBanBanDauGia.donViThongBao = res.data.tenDvi;
             this.bienBanBanDauGia.diaDiem = res.data.diaDiemToChucDauGia;
             this.bienBanBanDauGia.ngayToChuc = [res.data.thoiGianToChucDauGiaTuNgay, res.data.thoiGianToChucDauGiaDenNgay];
+            const phanLoTaiSans = res.data.taiSanBdgList;
+            if (phanLoTaiSans && phanLoTaiSans.length > 0) {
+                for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
+                    for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
+                        if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].chiCuc === phanLoTaiSans[j].chiCuc) {
+                            const diaDiemNhapKho = new DiaDiemNhapKho();
+                            diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
+                            diaDiemNhapKho.tenDonVi = phanLoTaiSans[i].tenChiCuc;
+                            diaDiemNhapKho.slDaLenKHBan = phanLoTaiSans[i].slDaLenKHBan;
+                            diaDiemNhapKho.soLuong = phanLoTaiSans[i].soLuong;
+                            const chiTietDiaDiem = new ChiTietDiaDiemNhapKho();
+                            chiTietDiaDiem.tonKho = phanLoTaiSans[i].tonKho;
+                            chiTietDiaDiem.giaKhoiDiem = phanLoTaiSans[i].giaKhoiDiem;
+                            chiTietDiaDiem.soTienDatTruoc = phanLoTaiSans[i].soTienDatTruoc;
+                            chiTietDiaDiem.maDiemKho = phanLoTaiSans[i].maDiemKho;
+                            chiTietDiaDiem.tenDiemKho = phanLoTaiSans[i].tenDiemKho;
+                            chiTietDiaDiem.maNhaKho = phanLoTaiSans[i].maNhaKho;
+                            chiTietDiaDiem.tenNhaKho = phanLoTaiSans[i].tenNhaKho;
+                            chiTietDiaDiem.maNganKho = phanLoTaiSans[i].maNganKho;
+                            chiTietDiaDiem.tenNganKho = phanLoTaiSans[i].tenNganKho;
+                            chiTietDiaDiem.maNganLo = phanLoTaiSans[i].maLoKho;
+                            chiTietDiaDiem.tenLoKho = phanLoTaiSans[i].tenLoKho;
+                            chiTietDiaDiem.chungLoaiHh = phanLoTaiSans[i].chungLoaiHh;
+                            chiTietDiaDiem.donViTinh = phanLoTaiSans[i].donViTinh;
+                            chiTietDiaDiem.tenChungLoaiHh = phanLoTaiSans[i].tenChungLoaiHh;
+                            chiTietDiaDiem.maDonViTaiSan = phanLoTaiSans[i].maDvTaiSan;
+                            chiTietDiaDiem.soLuong = phanLoTaiSans[i].soLuong;
+                            chiTietDiaDiem.donGiaChuaVAT = phanLoTaiSans[i].donGia;
+                            chiTietDiaDiem.idVirtual = phanLoTaiSans[i].id;
+                            diaDiemNhapKho.chiTietDiaDiems.push(chiTietDiaDiem);
+                            this.bangPhanBoList.push(diaDiemNhapKho);
+                        }
+                    }
+                }
+            }
 
             this.formData.patchValue({
                 ngayToChuc: this.bienBanBanDauGia.ngayToChuc,
@@ -664,15 +751,16 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             case "02":
                 this.chiTietCtsToChucThamGiaDgCreate.idVirtual = new Date().getTime();
                 this.chiTietCtsToChucThamGiaDgCreate.loaiTptg = type;
+                this.dsToChuc = [...this.dsToChuc, this.chiTietCtsToChucThamGiaDgCreate];
                 this.bienBanBanDauGia.cts = [...this.bienBanBanDauGia.cts, this.chiTietCtsToChucThamGiaDgCreate];
                 this.chiTietCtsToChucThamGiaDgCreate.stt = this.bienBanBanDauGia.cts?.filter(bb => bb.loaiTptg === '02').length;
+
                 this.newObjectToChucThamGia();
                 break;
             default:
                 break;
         }
         this.dsChiTietCtsClone = cloneDeep(this.bienBanBanDauGia.cts);
-        console.log("this.dsChiTietCtsClone: ", this.dsChiTietCtsClone);
 
     }
     saveEdit(i: number) {

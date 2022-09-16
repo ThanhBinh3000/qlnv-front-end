@@ -56,11 +56,17 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
-    soBienBan: '',
+    maThongBao: '',
+    ngayToChuc: '',
+    trichYeu: '',
+    soQdPdKhBdg: '',
+    maThongBaoBdg: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    tenVatTuCha: '',
+    nam: '',
+    soQdPdKqBdg: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -381,11 +387,17 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
-      soBienBan: '',
+      maThongBao: '',
+      ngayToChuc: '',
+      trichYeu: '',
+      soQdPdKhBdg: '',
+      maThongBaoBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenVatTuCha: '',
+      nam: '',
+      soQdPdKqBdg: '',
+      tenTrangThai: '',
     };
   }
 
