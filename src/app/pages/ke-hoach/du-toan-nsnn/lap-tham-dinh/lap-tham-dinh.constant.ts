@@ -102,7 +102,6 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
             LTD.ADD_SKT_BTC,
             LTD.EDIT_SKT_BTC,
             LTD.DELETE_SKT_BTC,
-            LTD.ADD_PA_GIAO_SKT,
         ],
         isDisabled: false,
     },
