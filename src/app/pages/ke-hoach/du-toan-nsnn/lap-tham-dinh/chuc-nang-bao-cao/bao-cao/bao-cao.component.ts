@@ -200,7 +200,7 @@ export class BaoCaoComponent implements OnInit {
 				this.close();
 			}
 			this.trangThaiBaoCao = "1";
-			this.nguoiNhap = this.userInfo?.username;
+			this.nguoiNhap = this.userInfo?.sub;
 			await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {

@@ -156,16 +156,14 @@
 							<td>
 								<ng-container *ngIf="!status; else pheDuyet">
 									<ng-container *ngIf="checkEditReport(item.trangThai); else xem">
-										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item)">
 											<span>Nhập/Sửa dữ liệu</span>
 										</button>
 									</ng-container>
 									<ng-template #xem>
-										<ng-container *ngIf="checkViewReport()">
-											<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-												<span>Xem</span>
-											</button>
-										</ng-container>
+										<button type="button" class="btn btn-main" (click)="xemChiTiet(item)">
+											<span>Xem</span>
+										</button>
 									</ng-template>
 									<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 										<button type="button" class="btn btn-main" (click)="xoaDeNghi(item.id)">
