@@ -106,7 +106,6 @@ export class BaoCao02Component implements OnInit {
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
@@ -129,7 +128,16 @@ export class BaoCao02Component implements OnInit {
             this.changeModel(id);
             this.updateEditCache(id);
         })
+        this.getStatusButton();
         this.spinner.hide();
+    }
+
+    getStatusButton() {
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
     }
 
     addListVatTu(listVattu) {
@@ -406,6 +414,7 @@ export class BaoCao02Component implements OnInit {
             await this.quanLyVonPhiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = trangThai;
+                    this.getStatusButton();
                     this.dataChange.emit(data.data);
                     if (trangThai == '0') {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

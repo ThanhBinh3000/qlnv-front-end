@@ -95,7 +95,6 @@ export class BaoCao04anComponent implements OnInit {
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
@@ -179,7 +178,16 @@ export class BaoCao04anComponent implements OnInit {
         }
 
         this.updateEditCache();
+        this.getStatusButton();
         this.spinner.hide();
+    }
+
+    getStatusButton() {
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
     }
 
     addListNoiDungChi(noiDungChiTemp) {
@@ -239,14 +247,6 @@ export class BaoCao04anComponent implements OnInit {
         })
     }
 
-    getStatusButton() {
-        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
-            this.statusBtnOk = false;
-        } else {
-            this.statusBtnOk = true;
-        }
-    }
-
     //show popup tu choi dùng cho nut ok - not ok
     async pheDuyetChiTiet(mcn: string) {
         this.spinner.show();
@@ -283,6 +283,7 @@ export class BaoCao04anComponent implements OnInit {
             await this.quanLyVonPhiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = trangThai;
+                    this.getStatusButton();
                     this.dataChange.emit(data.data);
                     if (trangThai == '0') {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

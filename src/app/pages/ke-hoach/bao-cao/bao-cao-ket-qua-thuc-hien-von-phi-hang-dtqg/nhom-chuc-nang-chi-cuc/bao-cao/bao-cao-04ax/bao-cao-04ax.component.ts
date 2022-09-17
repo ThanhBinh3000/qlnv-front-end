@@ -95,7 +95,6 @@ export class BaoCao04axComponent implements OnInit {
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
@@ -178,6 +177,7 @@ export class BaoCao04axComponent implements OnInit {
         }
 
         this.updateEditCache();
+        this.getStatusButton();
         this.spinner.hide();
     }
 
@@ -282,6 +282,7 @@ export class BaoCao04axComponent implements OnInit {
             await this.quanLyVonPhiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = trangThai;
+                    this.getStatusButton();
                     this.dataChange.emit(data.data);
                     if (trangThai == '0') {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

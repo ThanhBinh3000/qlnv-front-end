@@ -73,6 +73,8 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
             LTD.DUYET_REPORT,
             LTD.PHE_DUYET_REPORT,
             LTD.TIEP_NHAN_REPORT,
+            LTD.DUYET_SYNTHETIC_REPORT,
+            LTD.PHE_DUYET_SYNTHETIC_REPORT,
         ],
         isDisabled: false,
     },
@@ -84,7 +86,7 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         Role: [
             // NHAN_VIEN_CKV,
             // NHAN_VIEN_TC,
-            LTD.SYNTHETIC_REPORT,
+            LTD.VIEW_SYNTHETIC_REPORT
         ],
         isDisabled: false,
     },
@@ -116,12 +118,7 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
             // NHAN_VIEN_TC,
             // TRUONG_BP_TC,
             // LANH_DAO_TC,
-            LTD.GIAO_SKT,
-            LTD.EDIT_PA_GIAO_SKT,
-            LTD.DELETE_PA_GIAO_SKT,
-            LTD.APPROVE_PA_GIAO_SKT,
-            LTD.DUYET_PA_GIAO_SKT,
-            LTD.PHE_DUYET_PA_GIAO_SKT
+            LTD.VIEW_PA_GIAO_SKT
         ],
         isDisabled: false,
     },

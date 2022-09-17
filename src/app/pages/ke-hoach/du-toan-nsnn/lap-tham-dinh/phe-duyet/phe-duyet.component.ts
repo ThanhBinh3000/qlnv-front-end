@@ -134,7 +134,7 @@ export class PheDuyetComponent implements OnInit {
 		if (!this.searchFilter.trangThai) {
 			if (this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
-			} else if (this.roles.includes(LTD.DUYET_REPORT)) {
+			} else if (this.roles.includes(LTD.DUYET_REPORT) || this.roles.includes(LTD.DUYET_SYNTHETIC_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_2];
 			} else {
 				lstTrangThai = [Utils.TT_BC_4];

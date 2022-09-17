@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 export class ItemData {
@@ -120,26 +120,28 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     }
 
     getStatusButtom() {
-        if (this.maDviNhan == this.userInfo?.dvql) {
+        if (this.maDviNhan == this.userInfo?.MA_DVI) {
             this.statusBtnEx = false;
-            if (this.lstBcao.length == 0) {
-                this.statusBtnEdit = false;
-                this.statusBtnNew = true;
-            } else {
-                this.statusBtnEdit = true;
-                this.statusBtnNew = false;
-            }
+            this.statusBtnNew = !this.roles.includes(LTD.ADD_PA_GIAO_SKT);
+            this.statusBtnEdit = !this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
+            // if (this.lstBcao.length == 0) {
+            //     this.statusBtnEdit = false;
+            //     this.statusBtnNew = true;
+            // } else {
+            //     this.statusBtnEdit = true;
+            //     this.statusBtnNew = false;
+            // }
         } else {
             this.statusBtnEx = true;
             this.statusBtnEdit = true;
             this.statusBtnNew = true;
         }
 
-        if (!ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
-            this.statusBtnEdit = true;
-            this.statusBtnNew = true;
-            this.statusBtnEx = true;
-        }
+        // if (!ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+        //     this.statusBtnEdit = true;
+        //     this.statusBtnNew = true;
+        //     this.statusBtnEx = true;
+        // }
 
     }
 

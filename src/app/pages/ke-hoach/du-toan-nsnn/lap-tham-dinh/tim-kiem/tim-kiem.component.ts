@@ -260,12 +260,16 @@ export class TimKiemComponent implements OnInit {
 		return this.roles.includes(LTD.VIEW_REPORT);
 	}
 
-	checkEditReport(trangThai: string) {
-		return Utils.statusSave.includes(trangThai) && this.roles.includes(LTD.EDIT_REPORT);
+	checkEditReport(item: any) {
+		const isSynthetic = item.tongHopTu.length != 0;
+		return Utils.statusSave.includes(item.trangThai) &&
+			(isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT));
 	}
 
-	checkDeleteReport(trangThai: string) {
-		return Utils.statusDelete.includes(trangThai) && this.roles.includes(LTD.DELETE_REPORT);
+	checkDeleteReport(item: any) {
+		const isSynthetic = item.tongHopTu.length != 0;
+		return Utils.statusDelete.includes(item.trangThai) &&
+			(isSynthetic ? this.roles.includes(LTD.DELETE_SYNTHETIC_REPORT) : this.roles.includes(LTD.DELETE_REPORT));
 	}
 
 	changeListIdDelete(id: string) {
@@ -288,7 +292,7 @@ export class TimKiemComponent implements OnInit {
 
 	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
-			if (this.checkDeleteReport(item.trangThai)) {
+			if (this.checkDeleteReport(item)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

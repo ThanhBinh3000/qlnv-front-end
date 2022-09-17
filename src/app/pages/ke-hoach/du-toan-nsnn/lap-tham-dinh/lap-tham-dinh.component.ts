@@ -35,7 +35,7 @@ export class LapThamDinhComponent implements OnInit {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
         this.roles = this.userInfo?.roles;
-        console.log(this.roles);
+        console.log(this.roles.filter(e => e.startsWith('KHVDTNSNN_DTNSNN_LAPTD')));
 
         this.QuanLyLapThamDinhDuToanNSNNList.forEach(data => {
             let check = false;
