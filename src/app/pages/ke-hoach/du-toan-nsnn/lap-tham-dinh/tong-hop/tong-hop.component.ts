@@ -170,8 +170,9 @@ export class TongHopComponent implements OnInit {
 						if (!item.id) {
 							item.id = uuid.v4() + 'FE';
 						}
-						item.nguoiBcao = this.userInfo?.username;
+						item.nguoiBcao = this.userInfo?.sub;
 						item.maDviTien = '1';
+						item.trangThai = '3';
 					})
 					request.lstDviTrucThuoc.forEach(item => {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
