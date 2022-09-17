@@ -30,7 +30,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	) { }
 
 	async ngOnInit(): Promise<void> {
-		this.spinner.show();
+		// this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.user = this.userService.getUserLogin();
