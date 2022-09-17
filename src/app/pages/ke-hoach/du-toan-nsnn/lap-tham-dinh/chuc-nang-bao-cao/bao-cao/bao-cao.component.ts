@@ -281,7 +281,7 @@ export class BaoCaoComponent implements OnInit {
 		this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld);
 		this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld);
 
-		if (Utils.statusOK.includes(this.trangThaiBaoCao) && (checkTiepNhan || checkDuyet || checkPheDuyet)) {
+		if (!this.statusBtnTBP || !this.statusBtnLD || !this.statusBtnDVCT) {
 			this.statusBtnOk = true;
 		} else {
 			this.statusBtnOk = false;
