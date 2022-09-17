@@ -8,8 +8,7 @@
 				</a>
 			</div>
 			<div class="canphai phai">
-				<button class="btn btn-main" (click)="save()"
-					[hidden]="statusBtnSave || userInfo?.username != nguoiNhap">
+				<button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave || userInfo?.sub != nguoiNhap">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
@@ -194,7 +193,7 @@
 									</td>
 									<td>
 										<ng-container
-											*ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+											*ngIf="userInfo?.sub == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
 												[(ngModel)]="data.nguoiBcao"
 												[class]="data.nguoiBcao ?'' : 'input-error-validate'">
