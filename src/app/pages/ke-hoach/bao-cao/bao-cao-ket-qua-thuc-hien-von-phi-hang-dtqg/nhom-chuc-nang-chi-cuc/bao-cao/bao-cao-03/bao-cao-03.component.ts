@@ -143,7 +143,6 @@ export class BaoCao03Component implements OnInit {
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.statusBtnOk = this.data?.statusBtnOk;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCTietBaoCaoTemp = this.data?.lstCtietBcaos;
         this.tuNgay = this.data?.tuNgay;
@@ -177,7 +176,16 @@ export class BaoCao03Component implements OnInit {
         idPhuLuc.forEach(phuLuc => {
             this.updateEditCache(phuLuc);
         })
+        this.getStatusButton();
         this.spinner.hide();
+    }
+
+    getStatusButton() {
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
     }
 
     async addListVatTu(listVattu, idCha) {
@@ -796,6 +804,7 @@ export class BaoCao03Component implements OnInit {
             await this.quanLyVonPhiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = trangThai;
+                    this.getStatusButton();
                     this.dataChange.emit(data.data);
                     if (trangThai == '0') {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

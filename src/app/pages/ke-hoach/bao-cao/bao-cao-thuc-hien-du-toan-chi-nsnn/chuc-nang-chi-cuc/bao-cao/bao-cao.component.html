@@ -9,12 +9,12 @@
 			</div>
 			<div class="canphai phai">
 				<button class="btn btn-main" (click)="save()"
-					[hidden]="statusBtnSave || userInfo?.username != baoCao?.nguoiTao">
+					[hidden]="statusBtnSave || userInfo?.sub != baoCao?.nguoiTao">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
 				<button class="btn btn-main" (click)="onSubmit('2',null)"
-					[hidden]="statusBtnApprove || userInfo?.username != baoCao?.nguoiTao">
+					[hidden]="statusBtnApprove || userInfo?.sub != baoCao?.nguoiTao">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
 				</button>
@@ -116,12 +116,12 @@
 							<div nz-col class="gutter-row canphai phai" [nzSpan]="24"
 								style="display:flex; justify-content: end;">
 								<button type="button" class="btn btn-main" (click)="addPhuLuc()"
-									[hidden]="status || userInfo?.username != baoCao?.nguoiTao">
+									[hidden]="status || userInfo?.sub != baoCao?.nguoiTao">
 									<i class="icon htvbdh_dau-cong"></i>
 									<span>Thêm</span>
 								</button>
 								<button type="button" class="btn btn-sub" (click)="deletePhuLucList()"
-									[hidden]="status || userInfo?.username != baoCao?.nguoiTao">
+									[hidden]="status || userInfo?.sub != baoCao?.nguoiTao">
 									<i class="icon htvbdh_tcdt_delete"></i>
 									<span>Xóa</span>
 								</button>
@@ -137,7 +137,7 @@
 									<th>Giao cho</th>
 									<th>Hành động</th>
 									<th class="th" [hidden]="status">
-										<label [hidden]="userInfo?.username != baoCao?.nguoiTao" nz-checkbox
+										<label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
 											[(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
 										</label>
 									</th>
@@ -156,7 +156,7 @@
 									</td>
 									<td>
 										<ng-container
-											*ngIf="userInfo?.username == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
+											*ngIf="userInfo?.sub == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện"
 												[(ngModel)]="item.nguoiBcao"
 												[class]="item.nguoiBcao ?'' : 'input-error-validate' ">
@@ -175,7 +175,7 @@
 									</td>
 									<td>
 										<button type="button" class="btn btn-main" (click)="newTab(item.maLoai)"
-											[hidden]="status || userInfo?.username != item.nguoiBcao || !baoCao.id">
+											[hidden]="status || userInfo?.sub != item.nguoiBcao || !baoCao.id">
 											<span>Nhập dữ liệu</span>
 										</button>
 										<button type="button" class="btn btn-main" (click)="newTab(item.maLoai)"
@@ -188,7 +188,7 @@
                           </button> -->
 									</td>
 									<td [hidden]="status">
-										<label [hidden]="userInfo?.username != baoCao?.nguoiTao" nz-checkbox
+										<label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
 											[nzValue]="item.id" [(ngModel)]="item.checked"
 											(ngModelChange)="updateSingleChecked()"></label>
 									</td>
