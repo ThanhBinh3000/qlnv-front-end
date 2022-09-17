@@ -87,11 +87,22 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.loaiVthh === "02") {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT")) {
+          window.location.href = '/error/401'
+        }
+      }
+      else {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT")) {
+          window.location.href = '/error/401'
+        }
+      }
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -127,16 +138,63 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   insert() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
+        window.location.href = '/error/401'
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
+        window.location.href = '/error/401'
+      }
+    }
     this.isDetail = true;
     this.selectedId = null;
   }
 
-  detail(data) {
+  detail(data, isDetail?) {
     this.isDetail = true;
+    if (isDetail != null) {
+      this.isDetail = isDetail;
+    }
     this.selectedId = data.id;
+    if (this.isDetail) {
+      if (this.loaiVthh === "02") {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
+      else {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
+    }
+    else {
+      if (this.loaiVthh === "02") {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
+          window.location.href = '/error/401'
+        }
+      }
+      else {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
+          window.location.href = '/error/401'
+        }
+      }
+    }
   }
 
   delete(data?) {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
+        window.location.href = '/error/401'
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
+        window.location.href = '/error/401'
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -335,6 +393,16 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   exportData() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP")) {
+        window.location.href = '/error/401'
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP")) {
+        window.location.href = '/error/401'
+      }
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -370,6 +438,16 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   deleteSelect() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
+        window.location.href = '/error/401'
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
+        window.location.href = '/error/401'
+      }
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

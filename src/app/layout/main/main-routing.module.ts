@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from 'src/app/pages/index/index.component';
 import { MAIN_ROUTES } from './main-routing.constant';
 import { MainComponent } from './main.component';
+import { ErrorComponent } from './error/error.component';
+import { NotAuthenComponent } from './error/not-authen/not-authen.component';
 
 const routes: Routes = [
   {
@@ -89,6 +91,16 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    children: [
+      {
+        path: '401',
+        component: NotAuthenComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({
