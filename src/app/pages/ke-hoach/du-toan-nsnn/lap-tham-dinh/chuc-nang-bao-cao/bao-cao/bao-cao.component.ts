@@ -17,7 +17,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { LTD, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
+import { LTD, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../../lap-tham-dinh.constant';
 
 
@@ -252,6 +252,7 @@ export class BaoCaoComponent implements OnInit {
 
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
+		debugger
 		const isSynthetic = this.lstDviTrucThuoc.length != 0;
 		const checkSave = isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT);
 		const checkAppove = isSynthetic ? this.roles.includes(LTD.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(LTD.APPROVE_REPORT);
