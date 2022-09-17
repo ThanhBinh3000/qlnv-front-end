@@ -84,9 +84,7 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         description: 'Tổng hợp số liệu dự toán NSNN hàng năm và KHTC 03 năm',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${LAP_THAM_DINH}/tong-hop`,
         Role: [
-            // NHAN_VIEN_CKV,
-            // NHAN_VIEN_TC,
-            LTD.VIEW_SYNTHETIC_REPORT
+            LTD.SYNTHETIC_REPORT,
         ],
         isDisabled: false,
     },
@@ -96,9 +94,6 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         description: 'Danh sách số kiểm tra trần chi nhận từ Bộ tài chính',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${LAP_THAM_DINH}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/0`,
         Role: [
-            // NHAN_VIEN_TC,
-            // TRUONG_BP_TC,
-            // LANH_DAO_TC,
             LTD.ADD_SKT_BTC,
             LTD.EDIT_SKT_BTC,
             LTD.DELETE_SKT_BTC,
@@ -111,12 +106,6 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         description: 'Danh sách phương án/QĐ/CV giao số kiểm tra NSNN các đơn vị',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${LAP_THAM_DINH}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1`,
         Role: [
-            // NHAN_VIEN_CKV,
-            // TRUONG_BP_CKV,
-            // LANH_DAO_CKV,
-            // NHAN_VIEN_TC,
-            // TRUONG_BP_TC,
-            // LANH_DAO_TC,
             LTD.VIEW_PA_GIAO_SKT
         ],
         isDisabled: false,
@@ -127,13 +116,7 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         description: 'Danh sách số kiểm tra chi NSNN cho các đơn vị cấp dưới',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${LAP_THAM_DINH}/tim-kiem-so-kiem-tra-chi-nsnn`,
         Role: [
-            // NHAN_VIEN_CKV,
-            // TRUONG_BP_CKV,
-            // LANH_DAO_CKV,
-            // NHAN_VIEN_TC,
-            // TRUONG_BP_TC,
-            // LANH_DAO_TC,
-            LTD.GIAO_SKT,
+            LTD.VIEW_PA_GIAO_SKT,
         ],
         isDisabled: false,
     },
@@ -143,12 +126,6 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
         description: 'Danh sách nhận số kiểm tra chi NSNN nhận từ đơn vị cấp trên',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${LAP_THAM_DINH}/nhan-so-kiem-tra-chi-nsnn`,
         Role: [
-            // NHAN_VIEN_CC,
-            // TRUONG_BP_CC,
-            // LANH_DAO_CC,
-            // NHAN_VIEN_CKV,
-            // TRUONG_BP_CKV,
-            // LANH_DAO_CKV,
             LTD.NHAN_SKT,
         ],
         isDisabled: false,
