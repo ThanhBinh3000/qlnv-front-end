@@ -62,7 +62,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    donVis: any[] = [];
     noiDungs: any[] = KHOAN_MUC;
     donViTiens: any[] = DON_VI_TIEN;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
@@ -118,11 +117,9 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -140,19 +137,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.roles = this.userInfo?.roles;
         this.maDonViTao = this.userInfo?.MA_DVI;
 
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {
@@ -209,31 +193,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.id && this.roles.includes(LTD.ADD_SKT_BTC)) {
+        if (!this.roles.includes(LTD.EDIT_SKT_BTC)) {
             this.status = true;
         } else {
             this.status = false;
         }
-
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
         this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.EDIT_SKT_BTC) && checkChirld);
         if (this.id) {
@@ -243,23 +209,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.statusBtnNew = true;
             this.statusBtnEdit = true;
         } else {
-            if (this.lstBcao.length > 0) {
-                this.statusBtnNew = false;
-                this.statusBtnEdit = true;
-            } else {
-                this.statusBtnNew = true;
-                this.statusBtnEdit = false;
-            }
+            const edit = this.lstBcao.length == 0;
+            this.statusBtnEdit = !(edit && this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
+            this.statusChinhXac = !(!edit && checkChirld);
         }
-        this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.COPY_PA_GIAO_SKT) && checkChirld);
+        this.statusBtnCopy = !(this.id && checkChirld);
         this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.PRINT_PA_GIAO_SKT) && checkChirld);
 
-        if (!this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT)) {
-            this.statusBtnEdit = true;
-            this.statusChinhXac = true;
-        } else {
-            this.statusChinhXac = false;
-        }
         if (!this.roles.includes(LTD.ADD_PA_GIAO_SKT)) {
             this.statusBtnNew = true;
         }
@@ -524,11 +480,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             );
         }
         this.spinner.hide();
-    }
-
-    //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDonViTao)?.tenDvi;
     }
 
     getStatusName() {
@@ -1004,8 +955,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         }
         let check = false;
         const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-        const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
-        if (capDvi == Utils.TONG_CUC) {
+        if (this.userInfo?.CAP_DVI == Utils.TONG_CUC) {
             trangThais.push(Utils.TT_BC_7);
         }
         const requestReport = {

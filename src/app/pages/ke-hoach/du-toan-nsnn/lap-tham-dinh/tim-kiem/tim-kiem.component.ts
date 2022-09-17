@@ -261,13 +261,13 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	checkEditReport(item: any) {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusSave.includes(item.trangThai) &&
 			(isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any) {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusDelete.includes(item.trangThai) &&
 			(isSynthetic ? this.roles.includes(LTD.DELETE_SYNTHETIC_REPORT) : this.roles.includes(LTD.DELETE_REPORT));
 	}

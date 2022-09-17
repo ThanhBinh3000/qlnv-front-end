@@ -292,19 +292,19 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	}
 
 	checkEditReport(item: any) {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusSave &&
 			(isSynthetic ? this.roles.includes(BCVP.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCVP.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any): boolean {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusDelete &&
 			(isSynthetic ? this.roles.includes(BCVP.DELETE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.DELETE_REPORT));
 	}
 
 	checkApproveReport(item: any): boolean {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusApprove &&
 			(isSynthetic ? this.roles.includes(BCVP.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.APPROVE_REPORT));
 	}

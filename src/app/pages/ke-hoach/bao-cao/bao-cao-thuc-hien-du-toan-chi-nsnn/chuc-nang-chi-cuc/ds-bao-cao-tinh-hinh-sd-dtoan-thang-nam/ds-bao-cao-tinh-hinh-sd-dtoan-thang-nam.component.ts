@@ -295,19 +295,19 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	}
 
 	checkEditReport(item: any) {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusSave &&
 			(isSynthetic ? this.roles.includes(BCDTC.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any): boolean {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusDelete &&
 			(isSynthetic ? this.roles.includes(BCDTC.DELETE_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.DELETE_REPORT));
 	}
 
 	checkApproveReport(item: any): boolean {
-		const isSynthetic = item.tongHopTu.length != 0;
+		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusApprove &&
 			(isSynthetic ? this.roles.includes(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.APPROVE_REPORT));
 	}
