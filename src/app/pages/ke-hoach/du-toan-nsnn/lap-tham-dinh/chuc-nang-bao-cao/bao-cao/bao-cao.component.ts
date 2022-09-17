@@ -252,7 +252,6 @@ export class BaoCaoComponent implements OnInit {
 
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
-		debugger
 		const isSynthetic = this.lstDviTrucThuoc.length != 0;
 		const checkSave = isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT);
 		const checkAppove = isSynthetic ? this.roles.includes(LTD.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(LTD.APPROVE_REPORT);
