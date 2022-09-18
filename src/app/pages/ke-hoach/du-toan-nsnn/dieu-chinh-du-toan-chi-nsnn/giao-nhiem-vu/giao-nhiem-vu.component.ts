@@ -315,6 +315,8 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.quanLyVonPhiService.getListUser().toPromise().then(res => {
       if (res.statusCode == 0) {
         this.canBos = res.data;
+        console.log(this.canBos);
+
       }
     }, (err) => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -323,22 +325,15 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    console.log(this.roles);
-
     if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(DCDT.EDIT_REPORT)) {
       this.status = false;
     } else {
       this.status = true;
     }
-    let checkParent = false;
-    let checkChirld = false;
-    const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-    if (dVi && dVi.maDvi == this.userInfo.MA_DVI) {
-      checkChirld = true;
-    }
-    if (dVi && dVi.maDviCha == this.userInfo.MA_DVI) {
-      checkParent = true;
-    }
+    this.checkParent = false;
+    const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+    this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
+
     if (this.checkParent) {
       const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
       this.trangThaiBaoCaos[index].tenDm = "Mới";
@@ -360,12 +355,6 @@ export class GiaoNhiemVuComponent implements OnInit {
     } else {
       this.statusBtnOk = false;
     }
-    // if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
-    //   && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
-    //   this.statusBtnFinish = false;
-    // } else {
-    //   this.statusBtnFinish = true;
-    // }
     if (Utils.statusSave.includes(this.trangThaiBaoCao)
       && this.roles.includes(DCDT.EDIT_REPORT) && checkChirld) {
       this.statusBtnFinish = false;
@@ -717,7 +706,7 @@ export class GiaoNhiemVuComponent implements OnInit {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
             }
-            item.giaoCho = this.userInfo?.username;
+            item.giaoCho = this.userInfo?.sub;
             item.maDviTien = '1';
           })
           this.lstDviTrucThuoc.forEach(item => {

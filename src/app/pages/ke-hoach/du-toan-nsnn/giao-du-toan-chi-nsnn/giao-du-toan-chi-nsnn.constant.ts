@@ -60,10 +60,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
-      GDT.VIEW_REPORT_PA_PBDT,
-      GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
-      GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT,
-      GDT.DELETE_REPORT_CV_QD_GIAO_PA_PBDT,
+      // GDT.VIEW_REPORT_PA_PBDT,
+      GDT.EDIT_REPORT_BTC,
     ],
     isDisabled: false,
   },
@@ -128,7 +126,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/duyet-phuong-an-tai-don-vi`,
     Role: [
-      GDT.PHE_DUYET_REPORT_PA_PBDT
+      GDT.PHE_DUYET_REPORT_PA_PBDT,
+      GDT.DUYET_REPORT_PA_PBDT
     ],
     isDisabled: false,
   },

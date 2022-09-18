@@ -240,5 +240,9 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     this.router.navigate([
       MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
     ]);
+  };
+
+  checkViewReport() {
+    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
   }
 }
