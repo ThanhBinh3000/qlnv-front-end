@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -16,7 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -39,6 +38,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     id: string;
     loai: string;
     userInfo: any;
+    roles: string[] = [];
     //thong tin chung bao cao
     maThanhToan: string;
     maCvUv: string;
@@ -102,7 +102,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -117,28 +116,15 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
+        this.userInfo = this.userService.getUserLogin();
+        this.roles = this.userInfo?.roles;
 
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
             this.maDviTien = '1';
-            this.maDviTao = this.userInfo?.dvql;
+            this.maDviTao = this.userInfo?.MA_DVI;
             this.dataSource.currentData.subscribe(obj => {
                 this.maCvUv = obj?.maCvUv;
                 this.khachHang = obj?.khachHang;
@@ -172,44 +158,24 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(CVMB.EDIT_REPORT_TTKH)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, CVMB.DELETE_REPORT_TTKH, checkChirld);
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_TTKH, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_TTKH, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_TTKH, checkChirld);
+        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_TTKH, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_TTKH, checkChirld);
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
     }
 
     //upload file
@@ -457,12 +423,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
         this.changeDate();
-    }
-
-
-    //lay ten don vi tạo
-    getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
     }
 
     getStatusName() {

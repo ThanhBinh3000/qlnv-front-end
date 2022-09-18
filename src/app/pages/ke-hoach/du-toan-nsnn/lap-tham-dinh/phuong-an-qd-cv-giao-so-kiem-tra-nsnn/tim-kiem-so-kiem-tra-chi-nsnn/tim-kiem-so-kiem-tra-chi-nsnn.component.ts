@@ -117,7 +117,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, data.msg);
                 }
             },
             (err) => {

@@ -17,7 +17,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { LTD, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
+import { LTD, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../../lap-tham-dinh.constant';
 
 
@@ -200,7 +200,7 @@ export class BaoCaoComponent implements OnInit {
 				this.close();
 			}
 			this.trangThaiBaoCao = "1";
-			this.nguoiNhap = this.userInfo?.username;
+			this.nguoiNhap = this.userInfo?.sub;
 			await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
@@ -252,44 +252,42 @@ export class BaoCaoComponent implements OnInit {
 
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
-		if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(LTD.EDIT_REPORT)) {
+		const isSynthetic = this.lstDviTrucThuoc.length != 0;
+		const checkSave = isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT);
+		const checkAppove = isSynthetic ? this.roles.includes(LTD.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(LTD.APPROVE_REPORT);
+		const checkDuyet = isSynthetic ? this.roles.includes(LTD.DUYET_SYNTHETIC_REPORT) : this.roles.includes(LTD.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.roles.includes(LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.roles.includes(LTD.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.roles.includes(LTD.TIEP_NHAN_REPORT);
+		const checkCopy = isSynthetic ? this.roles.includes(LTD.COPY_SYNTHETIC_REPORT) : this.roles.includes(LTD.COPY_REPORT);
+		const checkPrint = isSynthetic ? this.roles.includes(LTD.PRINT_SYNTHETIC_REPORT) : this.roles.includes(LTD.PRINT_REPORT);
+		if (checkSave && Utils.statusSave.includes(this.trangThaiBaoCao)) {
 			this.status = false;
 		} else {
 			this.status = true;
 		}
 		this.checkParent = false;
-		let checkChirld = false;
-		if (this.maDviTao == this.userInfo?.MA_DVI) {
-			checkChirld = true;
-		} else {
-			if (this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1) {
-				this.checkParent = true;
-			}
-		}
+		const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+		this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
 
 		if (this.checkParent) {
 			const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
 			this.trangThaiBaoCaos[index].tenDm = "Mới";
 		}
-		this.statusBtnSave = this.getBtnStatus(Utils.statusSave, LTD.EDIT_REPORT, checkChirld);
-		this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, LTD.APPROVE_REPORT, checkChirld);
-		this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, LTD.DUYET_REPORT, checkChirld);
-		this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, LTD.PHE_DUYET_REPORT, checkChirld);
-		this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, LTD.TIEP_NHAN_REPORT, this.checkParent);
-		this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, LTD.COPY_REPORT, checkChirld);
-		this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, LTD.EDIT_REPORT, checkChirld)
+		this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && checkChirld);
+		this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThaiBaoCao) && checkAppove && checkChirld);
+		this.statusBtnTBP = !(Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkDuyet && checkChirld);
+		this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkPheDuyet && checkChirld);
+		this.statusBtnDVCT = !(Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkTiepNhan && this.checkParent);
+		this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld);
+		this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld);
 
-		if (Utils.statusOK.includes(this.trangThaiBaoCao) && (
-			(this.roles.includes(LTD.TIEP_NHAN_REPORT) && this.checkParent) ||
-			(this.roles.includes(LTD.DUYET_REPORT) && checkChirld) ||
-			(this.roles.includes(LTD.PHE_DUYET_REPORT) && checkChirld)
-		)) {
+		if (!this.statusBtnTBP || !this.statusBtnLD || !this.statusBtnDVCT) {
 			this.statusBtnOk = true;
 		} else {
 			this.statusBtnOk = false;
 		}
 		if (Utils.statusSave.includes(this.trangThaiBaoCao)
-			&& this.roles.includes(LTD.EDIT_REPORT) && checkChirld) {
+			&& checkSave && checkChirld) {
 			this.statusBtnFinish = false;
 		} else {
 			this.statusBtnFinish = true;

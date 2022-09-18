@@ -30,10 +30,11 @@
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã cấp ứng vốn nhận từ đơn vị cấp trên</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn" 
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn"
 							[(ngModel)]="searchFilter.maCvUv"
 							[class]="statusNew || searchFilter.maCvUv ?'' : 'input-error-validate' ">
-							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonTuCapTren" [nzLabel]="item.maCapUngVonTuCapTren">
+							<nz-option *ngFor="let item of danhSachCapVon" [nzValue]="item.maCapUngVonTuCapTren"
+								[nzLabel]="item.maCapUngVonTuCapTren">
 							</nz-option>
 						</nz-select>
 					</div>
@@ -55,19 +56,18 @@
 						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
-                    <div nz-col nzSpan="6">
+					<div nz-col nzSpan="6">
 						<label class="search__label">Mã thanh toán cho khách hàng</label>
 						<input class="search__input" nz-input [(ngModel)]="searchFilter.maThanhToan" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Khách hàng</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.khachHang" 
-						[class]="statusNew || searchFilter.khachHang ?'' : 'input-error-validate' "/>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.khachHang"
+							[class]="statusNew || searchFilter.khachHang ?'' : 'input-error-validate' " />
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="Danh sách thanh toán cho khách hàng" [nzExtra]="tableCard1"
-				class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="Danh sách thanh toán cho khách hàng" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
 						<label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
@@ -78,7 +78,7 @@
 						<tr>
 							<th>STT</th>
 							<th>Mã thanh toán cho khách hàng</th>
-                            <th>Mã cấp ứng vốn nhận từ đơn vị cấp trên</th>
+							<th>Mã cấp ứng vốn nhận từ đơn vị cấp trên</th>
 							<th>Ngày thanh toán</th>
 							<th>Khách hàng</th>
 							<th>Ngày tạo</th>
@@ -109,12 +109,12 @@
 									{{ item.maThanhToan}}
 								</a>
 							</td>
-                            <td>
-                                {{item.maCapUngVonTuCapTren}}
-                            </td>
-                            <td>
-                                {{item.ngayThanhToan}}
-                            </td>
+							<td>
+								{{item.maCapUngVonTuCapTren}}
+							</td>
+							<td>
+								{{item.ngayThanhToan}}
+							</td>
 							<td>
 								{{item.khachHang}}
 							</td>
@@ -132,18 +132,16 @@
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+								<ng-container
+									*ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
 							<td>
 								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item); else xem">
+									<ng-container *ngIf="checkEditReport(item.trangThai); else xem">
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Nhập/Sửa dữ liệu</span>
-										</button>
-										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)">
-											<span>Xóa</span>
 										</button>
 									</ng-container>
 									<ng-template #xem>
@@ -151,6 +149,11 @@
 											<span>Xem</span>
 										</button>
 									</ng-template>
+									<ng-container *ngIf="checkDeleteReport(item.trangThai)">
+										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)">
+											<span>Xóa</span>
+										</button>
+									</ng-container>
 								</ng-container>
 								<ng-template #pheDuyet>
 									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
@@ -159,9 +162,9 @@
 								</ng-template>
 							</td>
 							<td [hidden]="!status">
-								<ng-container *ngIf="checkDeleteReport(item)">
+								<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>

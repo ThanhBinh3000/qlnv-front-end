@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST } from './quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -16,7 +15,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	@ViewChild('nzTreeComponent', { static: false })
 	//thong tin chung
 	userInfo: any;
-	user: any;
+	roles: string[] = [];
 	capDvi: string;
 	donVis: any[] = [];
 	danhSach: any[] = [];
@@ -26,55 +25,26 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 		private userService: UserService,
 		private spinner: NgxSpinnerService,
 		private notification: NzNotificationService,
-		private danhMuc: DanhMucHDVService,
 	) { }
 
 	async ngOnInit(): Promise<void> {
 		this.spinner.show();
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-		this.user = this.userService.getUserLogin();
-		//lay danh sach danh muc
-		// await this.danhMuc.dMDonVi().toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0) {
-		// 			this.donVis = data.data;
-		// 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// );
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo?.roles;
 
 		QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST.forEach(data => {
+			let check = false;
 			data.Role.forEach(item => {
-				if (item.role.includes(this.userInfo?.roles[0]?.code) && this.user.CAP_DVI == item.unit) {
-					this.danhSach.push(data);
+				if (this.roles.includes(item)) {
+					check = true;
 					return;
 				}
 			})
+			if (check && (!data.isDisabled || (data.isDisabled && data.isDisabled == this.userService.isTongCuc()))) {
+				this.danhSach.push(data);
+			}
 		})
 		this.spinner.hide();
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
 	}
 
 	redirectThongTinChiTieuKeHoachNam() {

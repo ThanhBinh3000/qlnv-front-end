@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCVP, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 @Component({
 	selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
@@ -46,6 +46,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	donViTaos: any = [];
 	userInfo: any;
+	roles: string[] = [];
 	roleUser: string;
 
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
@@ -58,7 +59,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private location: Location,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
 		private dataSource: DataService,
@@ -66,16 +66,17 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
-		if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+		this.userInfo = this.userService.getUserLogin();
+		this.roles = this.userInfo.roles;
+
+		if (this.roles.includes(BCVP.ADD_REPORT)) {
 			this.trangThai = '1';
 			this.roleUser = 'canbo';
 			this.statusThemMoi = false;
-		} else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+		} else if (this.roles.includes(BCVP.DUYET_REPORT) || this.roles.includes(BCVP.DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '2';
 			this.roleUser = 'truongBoPhan';
-		} else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+		} else if (this.roles.includes(BCVP.PHE_DUYET_REPORT) || this.roles.includes(BCVP.PHE_DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '4';
 			this.roleUser = 'lanhDao';
 		}
@@ -88,7 +89,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		this.searchFilter.maLoaiBcao = '1';
 		this.onSubmit();
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donViTaos = data.data;
@@ -100,24 +101,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		const userInfo = await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		);
-		return userInfo;
 	}
 
 	// lay ten don vi tao
@@ -200,9 +183,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		}
 		await this.quanLyVonPhiService.timBaoCao(request).toPromise().then(res => {
 			if (res.statusCode == 0) {
-				// if (res.data.content?.length > 0){
-				// 	check = true;
-				// }
 				check = !res.data?.empty;
 			} else {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -298,8 +278,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	updateAllCheck() {
 		this.listBcaoKqua.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-				&& ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
+			if (this.checkDeleteReport(item)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}
@@ -312,28 +291,26 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 		return utils.getStatusName(id);
 	}
 
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			ROLE_CAN_BO.includes(this.userInfo?.roles[0].code)) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
+	checkEditReport(item: any) {
+		const isSynthetic = item.tongHopTu != "[]";
+		return Utils.statusSave &&
+			(isSynthetic ? this.roles.includes(BCVP.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCVP.EDIT_REPORT));
 	}
 
-	checkApprove(item: any): boolean {
-		let check = false;
-		if ((this.trangThai == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0].code)) ||
-			(this.trangThai == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(this.userInfo?.roles[0].code))) {
-			check = true;
-		}
-		const DviCha = this.donViTaos.find(e => e.maDvi == item.maDvi)?.maDviCha;
-		if (this.trangThai == Utils.TT_BC_7 && ROLE_CAN_BO.includes(this.userInfo?.roles[0].code) && DviCha == this.userInfo?.dvql) {
-			check = true;
-		}
-		return check;
+	checkDeleteReport(item: any): boolean {
+		const isSynthetic = item.tongHopTu != "[]";
+		return Utils.statusDelete &&
+			(isSynthetic ? this.roles.includes(BCVP.DELETE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.DELETE_REPORT));
+	}
+
+	checkApproveReport(item: any): boolean {
+		const isSynthetic = item.tongHopTu != "[]";
+		return Utils.statusApprove &&
+			(isSynthetic ? this.roles.includes(BCVP.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.APPROVE_REPORT));
+	}
+
+	checkViewReport(item: any): boolean {
+		return !this.checkEditReport(item) && !this.checkApproveReport(item);
 	}
 
 }

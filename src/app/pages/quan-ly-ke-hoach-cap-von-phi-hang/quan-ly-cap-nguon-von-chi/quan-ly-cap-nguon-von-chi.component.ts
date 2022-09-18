@@ -30,6 +30,7 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		this.userInfo = this.userService.getUserLogin();
 		this.roles = this.userInfo?.roles;
+		console.log(this.roles.filter(e => e.startsWith('VONPHIHANG_VONCHIDTQG')))
 		this.spinner.show();
 		this.QuanLyCapVonNguonChiNsnnList.forEach(data => {
 			let check = false;

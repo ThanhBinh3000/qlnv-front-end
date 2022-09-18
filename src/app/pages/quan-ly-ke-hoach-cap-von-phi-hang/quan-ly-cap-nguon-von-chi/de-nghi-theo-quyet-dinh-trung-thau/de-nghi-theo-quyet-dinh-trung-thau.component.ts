@@ -226,9 +226,9 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
         const checkSave = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.EDIT_DN_MVT) : this.roles.includes(CVNC.EDIT_DN_MLT);
-        this.statusBtnSave = !(Utils.statusSave && checkSave && checkChirld);
+        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThai) && checkSave && checkChirld);
         const checkApprove = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.APPROVE_DN_MVT) : this.roles.includes(CVNC.APPROVE_DN_MLT);
-        this.statusBtnApprove = !(Utils.statusApprove && checkApprove && checkChirld);
+        this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThai) && checkApprove && checkChirld);
         const checkPheDuyet = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.PHE_DUYET_DN_MVT) : this.roles.includes(CVNC.PHE_DUYET_DN_MLT);
         if (this.trangThai == Utils.TT_BC_2) {
             this.statusBtnLD = !(checkPheDuyet && checkChirld);
