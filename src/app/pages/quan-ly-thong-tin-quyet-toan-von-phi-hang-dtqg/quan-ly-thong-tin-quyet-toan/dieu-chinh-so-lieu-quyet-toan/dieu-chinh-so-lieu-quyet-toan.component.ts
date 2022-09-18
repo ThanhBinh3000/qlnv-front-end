@@ -16,7 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN } from "../../../../Utility/utils";
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
@@ -163,7 +163,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   // khac
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
+  roles: string[] = [];
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -213,8 +213,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     const namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
     this.namQtoan = Number(namQtoan)
 
     if (this.id) {
@@ -235,8 +235,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         }
       );
       this.trangThaiBaoCao = "1";
-      this.nguoiNhap = this.userInfo?.username;
-      this.maDviTao = this.userInfo?.dvql;
+      this.nguoiNhap = this.userInfo?.sub;
+      this.maDviTao = this.userInfo?.MA_DVI;
     }
 
     //lay danh sach danh muc don vi
@@ -245,7 +245,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.donVis.forEach(e => {
-            if (e.maDvi == this.userInfo?.dvql) {
+            if (e.maDvi == this.userInfo?.MA_DVI) {
               this.capDvi = e.capDvi;
             }
           })
@@ -276,54 +276,32 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-      this.trangThaiBaoCao == Utils.TT_BC_3 ||
-      this.trangThaiBaoCao == Utils.TT_BC_5 ||
-      this.trangThaiBaoCao == Utils.TT_BC_8 ||
-      this.trangThaiBaoCao == Utils.TT_BC_10
-    ) {
-      if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
-        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
+    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(QTVP.EDIT_REPORT)) {
+      this.status = false;
     } else {
       this.status = true;
     }
     let checkParent = false;
     let checkChirld = false;
     const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-    if (dVi && dVi.maDvi == this.userInfo.dvql) {
+    if (dVi && dVi.maDvi == this.userInfo?.MA_DVI) {
       checkChirld = true;
     }
-    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
-      checkParent = true;
+    if (checkParent) {
+      const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
+      this.trangThaiBaoCaos[index].tenDm = "Mới";
     }
-    const roleNguoiTao = this.userInfo?.roles[0]?.code;
-    const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    if ((this.trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld)) {
-      this.statusBtnOk = true;
-    } else {
-      this.statusBtnOk = false;
-    }
-    if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
-      && roleNguoiTao == '3' && checkChirld) {
-      this.statusBtnFinish = false;
-    } else {
-      this.statusBtnFinish = true;
-    }
+    this.statusBtnSave = this.getBtnStatus(Utils.statusSave, QTVP.ADD_REPORT, checkChirld);
+    this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, QTVP.APPROVE_REPORT, checkChirld);
+    this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
+    this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
+    this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, QTVP.EDIT_DIEU_CHINH_REPORT, checkParent);
+    this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, QTVP.COPY_REPORT, checkChirld);
+    this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, QTVP.PRINT_REPORT, checkChirld);
+  }
 
+  getBtnStatus(status: string[], role: string, check: boolean) {
+    return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
   }
 
 

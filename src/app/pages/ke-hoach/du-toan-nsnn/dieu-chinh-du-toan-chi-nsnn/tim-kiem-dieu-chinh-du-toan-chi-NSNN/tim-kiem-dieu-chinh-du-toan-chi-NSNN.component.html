@@ -9,7 +9,6 @@
         <button nz-button class="search__button--search" (click)="close()">
           <i nz-icon nzType="stop"></i>
           Đóng
-
         </button>
         <button nz-button type="submit" class="search__button--search"
           (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
@@ -99,20 +98,11 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachDieuChinh; let i = index">
-              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
-              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
+              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">{{ item.maBcao}}</a></td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
               <td>{{item.dotBcao}}</td>
-              <!-- <td class="text-center">{{getStatusName(item.trangThai)}}</td> -->
-              <!-- <td [hidden]="status"><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Nhập dữ liệu/Sửa</a></td>
-              <td [hidden]="status">
-                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa bản ghi này?"
-                      (nzOnConfirm)="xoaDuToanDieuChinh(item.id)" class="xoa">
-                      Xóa
-                  </a>
-              </td> -->
               <td>
                 {{item.ngayTrinh}}
               </td>
@@ -130,27 +120,26 @@
                   {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <ng-container
-                  *ngIf="item.trangThai == '1' || item.trangThai == '2' || item.trangThai == '4' || item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'">
+                <ng-template #xem>
+                  <ng-container *ngIf="checkViewReport()">
+                    <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                      <span>Xem</span>
+                    </button>
+                  </ng-container>
+                </ng-template>
+                <ng-container *ngIf="checkEditReport(item.trangThai); else xem">
                   <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                    <span>Xem</span>
-                  </button>
-                </ng-container>
-                <ng-container
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)" [hidden]="!status">
                     <span>Nhập/Sửa dữ liệu</span>
                   </button>
                 </ng-container>
-                <ng-container
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-                  <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)" [hidden]="!status">
+                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
+                  <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)">
                     <span>Xóa</span>
                   </button>
                 </ng-container>
               </td>
-              <td [hidden]="!status">
-                <ng-container *ngIf="checkDeleteReport(item)">
+              <td>
+                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (ngModelChange)="changeListIdDelete(item.id)"></label>
                 </ng-container>
@@ -178,7 +167,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="!status">
+        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="statusTaoMoi">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

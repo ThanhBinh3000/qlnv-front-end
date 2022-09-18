@@ -128,6 +128,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   listIdDelete: any[] = [];
   userRole: string;
   statusCreate = true;
+  roles: string[] = [];
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -143,10 +144,10 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
 
   async ngOnInit() {
-    const userName = this.userService.getUserName();
     this.spinner.show()
-    await this.getUserInfo(userName); //get user info
-    this.searchFilter.donViTao = this.userInfo?.dvql;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo.roles;
+    this.searchFilter.donViTao = this.userInfo?.MA_DVI;
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);

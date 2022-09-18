@@ -1317,6 +1317,10 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/chung/can-bo');
   }
 
+  getListUser1(): Observable<any> {
+    return this.httpClient.get('http://192.168.1.109:30101/chung/can-bo');
+  }
+
   //lay thong tin luy ke
   getLuyKe(request: any): Observable<any> {
     return this.httpClient.post(

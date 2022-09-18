@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { GDT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 export const TRANG_THAI_GIAO_DU_TOAN = [
   {
@@ -76,6 +76,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   }
   date: any = new Date()
   roleUser: string;
+  roles: string[] = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -90,22 +91,15 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.searchFilter.maDviNhan = this.userInfo?.dvql;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
+    this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namGiao = new Date().getFullYear()
-    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+    if (this.roles.includes(GDT.NHAN_PA_PBDT)) {
       this.trangThai = '1';
-      this.roleUser = 'canbo';
-    } else if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
-      this.trangThai = '1';
-      this.roleUser = 'truongBoPhan';
-    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
-      this.trangThai = '1';
-      this.roleUser = 'lanhDao';
     }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
