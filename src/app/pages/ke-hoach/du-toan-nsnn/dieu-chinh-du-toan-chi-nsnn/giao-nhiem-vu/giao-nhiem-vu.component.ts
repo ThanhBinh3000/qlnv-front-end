@@ -15,11 +15,11 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { DCDT, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { DataService } from 'src/app/services/data.service';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../dieu-chinh-du-toan-chi-nsnn.constant';
 
 // export class ItemData {
@@ -79,6 +79,7 @@ export class GiaoNhiemVuComponent implements OnInit {
   loaiTongHop!: string;
   maDviUser!: string;
   dotBcao: number;
+  roles: string[] = [];
   //danh muc
   dotBcaos: any[] = [
     {
@@ -205,13 +206,17 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
     this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
+
     const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+
     await this.getListUser();
     if (this.id) {
       await this.getDetailReport();
     } else {
+
+
       await this.dataSource.currentData.subscribe(obj => {
         this.dotBcao = obj?.dotBcao;
         this.loaiMH = obj?.loaiMH;
@@ -221,7 +226,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         this.namHienHanh = parseInt(nam, 10);
         await this.tongHop();
         this.trangThaiBaoCao = "1";
-        this.nguoiNhap = this.userInfo?.username;
+        this.nguoiNhap = this.userInfo?.sub;
         this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
           (data) => {
             if (data.statusCode == 0) {
@@ -252,8 +257,8 @@ export class GiaoNhiemVuComponent implements OnInit {
         })
         // this.dotBcao = 1
         this.trangThaiBaoCao = "1";
-        this.nguoiNhap = this.userInfo?.username;
-        this.maDviTao = this.userInfo?.dvql;
+        this.nguoiNhap = this.userInfo?.sub;
+        this.maDviTao = this.userInfo?.MA_DVI;
         this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
           (data) => {
             if (data.statusCode == 0) {
@@ -302,6 +307,9 @@ export class GiaoNhiemVuComponent implements OnInit {
     const item1 = this.phuLucs.find(item => item.id == "1")
     item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao + "/năm " + this.namHienHanh
   }
+  getBtnStatus(status: string[], role: string, check: boolean) {
+    return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
+  }
 
   getListUser() {
     this.quanLyVonPhiService.getListUser().toPromise().then(res => {
@@ -315,46 +323,51 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-      this.trangThaiBaoCao == Utils.TT_BC_3 ||
-      this.trangThaiBaoCao == Utils.TT_BC_5 ||
-      this.trangThaiBaoCao == Utils.TT_BC_8 ||
-      this.trangThaiBaoCao == Utils.TT_BC_10) {
+    console.log(this.roles);
+
+    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(DCDT.EDIT_REPORT)) {
       this.status = false;
     } else {
-      this.status = true;
-    }
-    const roleNguoiTao = this.userInfo?.roles[0]?.code;
-    if (ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) || ROLE_LANH_DAO.includes(roleNguoiTao)) {
       this.status = true;
     }
     let checkParent = false;
     let checkChirld = false;
     const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-    if (dVi && dVi.maDvi == this.userInfo.dvql) {
+    if (dVi && dVi.maDvi == this.userInfo.MA_DVI) {
       checkChirld = true;
     }
-    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
+    if (dVi && dVi.maDviCha == this.userInfo.MA_DVI) {
       checkParent = true;
     }
-    const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+    if (this.checkParent) {
+      const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
+      this.trangThaiBaoCaos[index].tenDm = "Mới";
+    }
+    this.statusBtnSave = this.getBtnStatus(Utils.statusSave, DCDT.EDIT_REPORT, checkChirld);
+    this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, DCDT.APPROVE_REPORT, checkChirld);
+    this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, DCDT.DUYET_REPORT, checkChirld);
+    this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, DCDT.PHE_DUYET_REPORT, checkChirld);
+    this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, DCDT.TIEP_NHAN_REPORT, this.checkParent);
+    this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, DCDT.COPY_REPORT, checkChirld);
+    this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, DCDT.EDIT_REPORT, checkChirld);
     // this.statusBtnPrint = false
-    if ((this.trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld)) {
+    if (Utils.statusOK.includes(this.trangThaiBaoCao) && (
+      (this.roles.includes(DCDT.TIEP_NHAN_REPORT) && this.checkParent) ||
+      (this.roles.includes(DCDT.DUYET_REPORT) && checkChirld) ||
+      (this.roles.includes(DCDT.PHE_DUYET_REPORT) && checkChirld)
+    )) {
       this.statusBtnOk = true;
     } else {
       this.statusBtnOk = false;
     }
-    if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
-      && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
+    // if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
+    //   && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
+    //   this.statusBtnFinish = false;
+    // } else {
+    //   this.statusBtnFinish = true;
+    // }
+    if (Utils.statusSave.includes(this.trangThaiBaoCao)
+      && this.roles.includes(DCDT.EDIT_REPORT) && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;

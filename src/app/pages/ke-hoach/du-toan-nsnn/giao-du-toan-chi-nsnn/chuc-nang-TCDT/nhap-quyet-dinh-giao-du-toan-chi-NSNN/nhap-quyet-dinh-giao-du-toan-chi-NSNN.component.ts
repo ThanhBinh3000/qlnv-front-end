@@ -17,7 +17,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './nhap-quyet-dinh-giao-du-toan-chi-NSNN.constant';
@@ -115,6 +115,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
   editMoneyUnit = false;
+  roles: string[] = [];
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -162,9 +163,8 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     //lay id cua ban ghi
     this.id = this.routerActive.snapshot.paramMap.get('id');
     //lay thong tin user
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName);
-    this.userRole = this.userInfo?.roles[0].code;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo.roles;
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -182,7 +182,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = '1';
-      this.maDonViTao = this.userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.MA_DVI;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.maDviTien = '1';
@@ -241,13 +241,16 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   }
   //check role cho các nut trinh duyet
   getStatusButton() {
-    let checkChirld = false;
-    const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-    if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-      checkChirld = true;
+    if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+      this.status = true;
+    } else {
+      this.status = false;
     }
+
     const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    // this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_PA_PBDT) && checkChirld);
     if (this.id) {
       this.statusBtnSave = false;
     }
@@ -263,13 +266,21 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         this.statusBtnEdit = false;
       }
     }
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-    if (ROLE_LANH_DAO.includes(this.userRole) || ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+    // this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+
+    this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
+    this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
+
+    if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
       this.statusBtnSave = true;
       this.statusBtnNew = true;
       this.statusBtnCopy = true;
       this.statusBtnPrint = true;
       this.status = true;
+    }
+
+    if (!this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+      this.statusBtnNew = true;
     }
   }
 
@@ -367,7 +378,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
-          if (ROLE_LANH_DAO.includes(this.userRole) || ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+          if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
             this.statusBtnSave = true;
             this.statusBtnNew = true;
             this.statusBtnCopy = true;

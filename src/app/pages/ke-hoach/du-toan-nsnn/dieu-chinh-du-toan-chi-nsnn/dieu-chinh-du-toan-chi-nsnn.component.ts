@@ -20,7 +20,7 @@ export class DieuChinhDuToanChiNSNNComponent implements OnInit {
   user: any;
   donVis: any[] = [];
   capDvi: string;
-
+  roles: string[] = [];
 
   DieuChinhDuToanChiNSNNList = DIEU_CHINH_DU_TOAN_NSNN_LIST;
   danhSach: any[] = [];
@@ -35,16 +35,19 @@ export class DieuChinhDuToanChiNSNNComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.user = this.userService.getUserLogin();
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
     this.DieuChinhDuToanChiNSNNList.forEach(data => {
-      data.Role.forEach(item => {
-        if (item?.role.includes(this.userInfo?.roles[0]?.code) && this.user.CAP_DVI == item.unit) {
-          this.danhSach.push(data);
+      let check = false;
+      this.roles.forEach(item => {
+        if (data.Role.includes(item)) {
+          check = true;
           return;
         }
       })
+      if (check) {
+        this.danhSach.push(data);
+      }
     })
     this.spinner.hide();
   }

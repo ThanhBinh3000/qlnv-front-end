@@ -72,6 +72,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
   noiDungs: any[] = NOI_DUNG;
   soLaMa: any[] = LA_MA;
+  roles: string[] = [];
   //file
   fileDetail: NzUploadFile;
   editMoneyUnit = false;
@@ -93,8 +94,8 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo.roles;
     //lay danh sach danh muc
     this.danhMucService.dMDonVi().toPromise().then(
       data => {

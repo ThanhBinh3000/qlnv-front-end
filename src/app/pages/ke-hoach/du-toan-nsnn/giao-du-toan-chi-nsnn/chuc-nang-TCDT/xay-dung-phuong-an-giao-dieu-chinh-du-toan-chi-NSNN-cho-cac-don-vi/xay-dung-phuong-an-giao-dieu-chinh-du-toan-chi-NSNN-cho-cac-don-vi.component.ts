@@ -18,7 +18,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.constant';
@@ -112,7 +112,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   listFile: File[] = []; // list file chua ten va id de hien tai o input
   lstDviChon: any[] = []; //danh sach don vi chua duoc chon
   soLaMa: any[] = LA_MA; // danh sách ký tự la mã
-
+  roles: string[] = [];
   // khác
 
   // phục vụ nút edit
@@ -164,14 +164,15 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.id = this.routerActive.snapshot.paramMap.get('id');
 
     // lấy thông tin tài khoản
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName);
+    // const userName = this.userService.getUserName();
+    // await this.getUserInfo(userName);
 
     // lấy mã đơn vị tạo PA
-    this.maDonViTao = this.userInfo?.dvql;
+    this.maDonViTao = this.userInfo?.MA_DVI;
 
     // lấy role người dùng
-    this.userRole = this.userInfo?.roles[0].code;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo.roles;
 
     // set năm tạo PA
     this.namPa = this.newDate.getFullYear();
@@ -181,7 +182,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       (data) => {
         if (data.statusCode === 0) {
           this.donVis = data?.data;
-          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
         }
@@ -208,7 +209,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     } else {
       // khi không có id thì thực hiện tạo mới
       this.trangThaiBanGhi = '1';
-      this.maDonViTao = this.userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.MA_DVI;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.maDviTien = '1'
@@ -768,9 +769,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   //check role cho các nut trinh duyet
   getStatusButton() {
-    const userRole = this.userInfo?.roles[0]?.code;
-    if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
-      && (ROLE_CAN_BO.includes(userRole))) {
+    if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
       this.status = false;
     } else {
       this.status = true;
@@ -781,8 +780,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.trangThaiBanGhi == Utils.TT_BC_5 ||
       this.trangThaiBanGhi == Utils.TT_BC_8
     ) {
-      if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
-        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+      if (this.id && this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
         this.status = true;
       } else {
         this.status = false;
@@ -799,34 +797,39 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.statusGiaoToanBo = true;
     }
 
-
-    let checkChirld = false;
     const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-    if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-      checkChirld = true;
-    }
 
     let checkParent = false;
     if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
       checkParent = true;
     }
     const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, userRole);
+    const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+    // this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, GDT.DELETE_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, GDT.DUYET_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, GDT.COPY_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
 
-    if (ROLE_CAN_BO.includes(userRole) && this.soQd) {
+
+    // this.statusBtnSave = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnApprove = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnTBP = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnLD = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnCopy = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnPrint = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
+    // this.statusBtnDVCT = this.getBtnStatus(this.trangThaiBanGhi, checkParent, userRole);
+
+    if (this.roles.includes(GDT.GIAO_PA_PBDT) && this.soQd) {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
       this.statusGiaoToanBo = true;
     }
 
-    if (userRole == 'C_KH_VP_NV_TVQT' && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
@@ -834,6 +837,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.statusGiaoToanBo = true;
     }
 
+  }
+
+  getBtnStatus(status: string[], role: string, check: boolean) {
+    return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
   }
 
   // submit các nút chức năng check role

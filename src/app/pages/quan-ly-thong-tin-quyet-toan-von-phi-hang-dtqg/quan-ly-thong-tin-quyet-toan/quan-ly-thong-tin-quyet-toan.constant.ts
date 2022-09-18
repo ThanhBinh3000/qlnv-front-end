@@ -1,7 +1,7 @@
 import { MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN, MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG } from '../../../constants/routerUrl';
 import { MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.constant';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from './../../../Utility/utils';
+import { QTVP, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from './../../../Utility/utils';
 import { QuanLyThongTinQuyetToan } from './quan-ly-thong-tin-quyet-toan.type';
 
 export const NHAN_VIEN_CC = {
@@ -56,9 +56,7 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     description: 'Danh sách báo cáo quyết toán vốn, phí hàng DTQG.',
     url: `/${MAIN_ROUTE_QUYET_TOAN}/${QUAN_LY_QUYET_TOAN}/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG`,
     Role: [
-      NHAN_VIEN_TC,
-      TRUONG_BP_TC,
-      LANH_DAO_TC
+      QTVP.VIEW_REPORT
     ],
     isDisabled: false,
   },
@@ -68,9 +66,7 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     description: 'Danh sách điều chỉnh số liệu sau quyết toán',
     url: `/${MAIN_ROUTE_QUYET_TOAN}/${QUAN_LY_QUYET_TOAN}/danh-sach-bao-cao-dieu-chinh-quyet-toan-von-phi-hang-DTQG`,
     Role: [
-      NHAN_VIEN_TC,
-      TRUONG_BP_TC,
-      LANH_DAO_TC
+      QTVP.VIEW_REPORT
     ],
     isDisabled: false,
   },
@@ -80,8 +76,8 @@ export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
     description: 'Duyệt và phê duyệt báo cáo quyết toán ',
     url: `/${MAIN_ROUTE_QUYET_TOAN}/${QUAN_LY_QUYET_TOAN}/duyet-phe-duyet-bao-cao`,
     Role: [
-      TRUONG_BP_TC,
-      LANH_DAO_TC
+      QTVP.DUYET_QUYET_TOAN_REPORT,
+      QTVP.PHE_DUYET_QUYET_TOAN_REPORT,
     ],
     isDisabled: false,
   },

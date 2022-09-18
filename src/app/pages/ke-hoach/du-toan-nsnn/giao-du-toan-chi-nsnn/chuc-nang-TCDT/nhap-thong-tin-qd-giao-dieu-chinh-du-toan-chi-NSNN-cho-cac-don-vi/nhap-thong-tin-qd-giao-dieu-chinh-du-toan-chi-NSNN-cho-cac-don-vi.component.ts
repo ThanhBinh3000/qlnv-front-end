@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { GDT, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 
 
@@ -52,6 +52,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
   fileList: NzUploadFile[] = [];
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
+  roles: string[] = [];
   // before uploaf file
   beforeUploadCV = (file: NzUploadFile): boolean => {
     this.fileDetail = file;
@@ -96,9 +97,9 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
   async ngOnInit() {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = this.userService.getUserName();
-    await this.getUserInfo(userName);
-    this.maDviTao = this.userInfo?.dvql;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo.roles;
+    this.maDviTao = this.userInfo?.MA_DVI;
 
     this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
     this.namGiao = this.newDate.getFullYear();
@@ -275,7 +276,9 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
     }
 
   }
-
+  checkViewReport() {
+    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+  }
   //xem thong tin PA
   xemphuongan() {
     let CtietPA = this.lstMa.filter((a: any) => a.maPa == this.maPa)
