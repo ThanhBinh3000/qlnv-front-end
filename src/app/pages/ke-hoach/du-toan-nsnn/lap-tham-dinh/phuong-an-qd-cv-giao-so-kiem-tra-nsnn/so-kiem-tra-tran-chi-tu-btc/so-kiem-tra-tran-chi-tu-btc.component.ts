@@ -211,7 +211,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         } else {
             const edit = this.lstBcao.length == 0;
             this.statusBtnEdit = !(edit && this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
-            this.statusChinhXac = !(!edit && checkChirld);
+            this.statusChinhXac = !(!edit && this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
         }
         this.statusBtnCopy = !(this.id && checkChirld);
         this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.PRINT_PA_GIAO_SKT) && checkChirld);

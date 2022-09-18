@@ -451,6 +451,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             thuyetMinh: this.thuyetMinh,
         }));
         //get file cong van url
+        debugger
         const file: any = this.fileDetail;
         if (file) {
             if (file.size > Utils.FILE_SIZE) {
