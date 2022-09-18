@@ -36,6 +36,7 @@ export class BaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
         this.roles = this.userInfo?.roles;
+        console.log(this.roles.filter(e => e.startsWith('KHVDTNSNN_BAOCAO_DTOANCHI')))
         this.BaoCaoThucHienChiNSNNList.forEach(data => {
             let check = false;
             data.Role.forEach(item => {
