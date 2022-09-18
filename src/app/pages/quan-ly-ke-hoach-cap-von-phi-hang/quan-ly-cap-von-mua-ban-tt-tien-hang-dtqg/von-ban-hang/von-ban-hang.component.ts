@@ -219,7 +219,7 @@ export class VonBanHangComponent implements OnInit {
         } else {
             this.statusGui = true;
         }
-        if (Utils.statusSave.includes(this.trangThaiCha) && this.roles.includes(CVMB.EDIT_REPORT_GNV_TH) && !this.statusBtnParent) {
+        if (Utils.statusSave.includes(this.trangThaiCha) && this.roles.includes(CVMB.EDIT_REPORT_GNV_BH) && !this.statusBtnParent) {
             this.statusNhan = false;
         } else {
             this.statusNhan = true;

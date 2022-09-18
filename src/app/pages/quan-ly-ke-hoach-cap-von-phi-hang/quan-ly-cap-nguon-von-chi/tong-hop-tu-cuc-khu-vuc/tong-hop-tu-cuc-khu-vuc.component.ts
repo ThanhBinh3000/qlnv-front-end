@@ -151,8 +151,6 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
 
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
-
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -601,7 +599,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     //lay ten don vi tạo
     getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+        return this.cucKhuVucs.find((item) => item.maDvi == maDvi)?.tenDvi;
     }
 
     getStatusName() {

@@ -14,10 +14,10 @@ import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { MESSAGE } from '../../../../../../constants/message';
-import { MESSAGEVALIDATE } from '../../../../../../constants/messageValidate';
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { LTD, TRANG_THAI_PHU_LUC, Utils } from "../../../../../../Utility/utils";
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { LTD, TRANG_THAI_PHU_LUC, Utils } from "src/app/Utility/utils";
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../../lap-tham-dinh.constant';
 
 
@@ -748,6 +748,7 @@ export class BaoCaoComponent implements OnInit {
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
+				statusBtnPrint: this.statusBtnPrint,
 				status: this.status,
 			}
 			this.tabs = [];

@@ -4,5 +4,5 @@ export type QuanLyCapVonMuaBanTtTienHangDtqg = {
   description: string;
   url: string;
   Role?: any[];
-  isDisabled?: boolean;
+  isDisabled?: any;
 };

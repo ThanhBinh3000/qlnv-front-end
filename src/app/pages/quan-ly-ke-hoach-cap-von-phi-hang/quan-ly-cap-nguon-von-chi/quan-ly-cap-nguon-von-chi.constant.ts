@@ -99,9 +99,6 @@ export const QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST: QuanLyCapNguonVonChiNSNN[] = [
 		url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_NGUON_CHI}/danh-sach-de-nghi-tu-cuc-khu-cuc`,
 		Role: [
 			CVNC.ADD_SYNTHETIC_CKV,
-			CVNC.DUYET_SYNTHETIC_TC,
-			CVNC.PHE_DUYET_SYNTHETIC_CKV,
-			CVNC.PHE_DUYET_SYNTHETIC_TC,
 		],
 		isDisabled: false,
 	},
