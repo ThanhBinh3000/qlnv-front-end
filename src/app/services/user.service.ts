@@ -90,6 +90,21 @@ export class UserService {
     return false;
   }
 
+  isAccessUrlPermisson(url) {
+    let listPermission = [];
+    var jsonPermission = this.storageService.get(STORAGE_KEY.PERMISSION);
+    if (jsonPermission && jsonPermission.length > 0) {
+      listPermission = JSON.parse(jsonPermission);
+    }
+    if (listPermission && listPermission.length > 0) {
+      let checkPermission = listPermission.filter(x => x.url === url);
+      if (checkPermission && checkPermission.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   //get user info
   getUserInfo(username: string) {
     return this.httpClient.post<any>(environment.SERVICE_API + '/qlnv-system/user/userInfo',
