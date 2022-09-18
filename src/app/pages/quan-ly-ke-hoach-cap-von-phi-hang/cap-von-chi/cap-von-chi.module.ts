@@ -1,3 +1,4 @@
+import { ThongTinTriDuyetYDuToanModule } from './thong-tri-duyet-y-du-toan/thong-tri-duyet-y-du-toan.module';
 import { DeNghiCapVonBoNganhModule } from './de-nghi-cap-von-bo-nganh/de-nghi-cap-von-bo-nganh.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -16,7 +17,8 @@ import { TongHopModule } from './tong-hop/tong-hop.module';
     ComponentsModule,
     DirectivesModule,
     DeNghiCapVonBoNganhModule,
-    TongHopModule
+    TongHopModule,
+    ThongTinTriDuyetYDuToanModule
   ],
 })
 export class CapVonChiModule { }
