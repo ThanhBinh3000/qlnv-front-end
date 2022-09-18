@@ -233,6 +233,20 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     this.spinner.hide();
   }
 
+  isDetailPermission() {
+    if (this.loaiVthh === "02") {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
+        return true;
+      }
+    }
+    else {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   initForm(dataDetail?) {
     this.formData.patchValue(
       {
@@ -279,6 +293,9 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    if (!this.isDetailPermission()) {
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       console.log("Invalid");

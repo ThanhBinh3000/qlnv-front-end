@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from 'src/app/guard/auth.guard';
 import { KeHoachComponent } from './ke-hoach.component';
 
 const routes: Routes = [
   {
     path: '',
     component: KeHoachComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -18,6 +20,7 @@ const routes: Routes = [
           import(
             '../ke-hoach/giao-ke-hoach-va-du-toan/giao-ke-hoach-va-du-toan.module'
           ).then((m) => m.GiaoKeHoachVaDuToanModule),
+        canActivate: [AuthGuard],
       },
       {
         path: 'bao-cao',
@@ -25,6 +28,7 @@ const routes: Routes = [
           import(
             '../ke-hoach/bao-cao/bao-cao.module'
           ).then((m) => m.BaoCaoModule),
+        canActivate: [AuthGuard],
       },
       {
         path: 'du-toan-nsnn',
@@ -32,6 +36,7 @@ const routes: Routes = [
           import(
             '../ke-hoach/du-toan-nsnn/du-toan-nsnn.module'
           ).then((m) => m.DuToanNsnnModule),
+        canActivate: [AuthGuard],
       },
       {
         path: '',
@@ -44,6 +49,7 @@ const routes: Routes = [
           import(
             '../ke-hoach/phuong-an-gia/phuong-an-gia.module'
           ).then((m) => m.PhuongAnGiaModule),
+        canActivate: [AuthGuard],
       },
     ],
   },
