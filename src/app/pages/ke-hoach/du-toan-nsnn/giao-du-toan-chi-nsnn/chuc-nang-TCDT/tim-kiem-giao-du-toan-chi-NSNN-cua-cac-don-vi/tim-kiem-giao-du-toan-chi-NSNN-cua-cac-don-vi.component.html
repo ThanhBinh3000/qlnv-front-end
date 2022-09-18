@@ -110,9 +110,11 @@
                 {{item.dViNhan}}
               </td>
               <td>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  Xem
-                </button>
+                <ng-container *ngIf="checkViewReport()">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    Xem
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

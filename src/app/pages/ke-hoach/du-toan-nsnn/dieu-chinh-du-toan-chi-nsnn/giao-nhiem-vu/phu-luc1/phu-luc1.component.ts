@@ -141,19 +141,19 @@ export class PhuLuc1Component implements OnInit {
     this.getTotal();
     this.updateEditCache();
 
-    //lay danh sach danh muc don vi
-    await this.danhMucService.dMDonVi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
+    // //lay danh sach danh muc don vi
+    // await this.danhMucService.dMDonVi().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.donVis = data.data;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
 
     //lấy danh sách nội dung chi
     await this.danhMucService.dMNoiDungKinhPhiPL1DieuChinh().toPromise().then(res => {
@@ -893,6 +893,7 @@ export class PhuLuc1Component implements OnInit {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
   }
+
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }

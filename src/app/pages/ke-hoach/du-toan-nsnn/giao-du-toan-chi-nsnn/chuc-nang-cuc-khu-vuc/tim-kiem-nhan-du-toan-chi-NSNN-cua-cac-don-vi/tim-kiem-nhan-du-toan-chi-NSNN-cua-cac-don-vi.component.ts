@@ -45,7 +45,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     maDviTao: "",
     loaiDuAn: null,
     maDviNhan: "",
-    maPa: "",
+    maPa: null,
     trangThais: [],
     paggingReq: {
       limit: 10,
@@ -117,24 +117,6 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     this.onSubmit()
   }
 
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-  }
-
   redirectThongTinTimKiem() {
     this.router.navigate([
       '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -167,7 +149,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
     this.spinner.show();
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
