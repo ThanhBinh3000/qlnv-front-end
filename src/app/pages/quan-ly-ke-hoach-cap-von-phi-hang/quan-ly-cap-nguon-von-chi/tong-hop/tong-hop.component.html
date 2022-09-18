@@ -138,7 +138,7 @@
 										</ng-container>
 									</ng-template>
 									<ng-container *ngIf="checkDeleteReport(item.trangThai, item.loaiDnghi)">
-										<button type="button" class="btn btn-main" (click)="xoaDeNghi(item)">
+										<button type="button" class="btn btn-main" (click)="xoaDeNghi(item.id)">
 											<span>Xóa</span>
 										</button>
 									</ng-container>

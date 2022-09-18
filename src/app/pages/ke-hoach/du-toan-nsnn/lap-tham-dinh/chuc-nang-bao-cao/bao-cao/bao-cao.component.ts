@@ -748,6 +748,7 @@ export class BaoCaoComponent implements OnInit {
 				trangThaiBaoCao: this.trangThaiBaoCao,
 				statusBtnOk: this.statusBtnOk,
 				statusBtnFinish: this.statusBtnFinish,
+				statusBtnPrint: this.statusBtnPrint,
 				status: this.status,
 			}
 			this.tabs = [];

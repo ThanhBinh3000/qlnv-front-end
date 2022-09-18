@@ -1066,7 +1066,7 @@ export class QuanLyVonPhiService extends BaseService {
   xoaDeNghiThop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa',
-      // 'http://192.168.1.104:8094/thop-cap-von/xoa',
+      // 'http://192.168.1.109:30101/thop-cap-von/xoa',
       request,
     );
   }

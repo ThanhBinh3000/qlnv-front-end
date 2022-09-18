@@ -464,11 +464,6 @@ export class BaoCao02Component implements OnInit {
         baoCaoChiTietTemp.tuNgay = typeof this.tuNgay == 'string' ? new Date(this.tuNgay) : this.tuNgay;
         baoCaoChiTietTemp.denNgay = typeof this.denNgay == 'string' ? new Date(this.denNgay) : this.denNgay;
 
-        if (!baoCaoChiTietTemp.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
-
         if (this.datePipe.transform(baoCaoChiTietTemp.tuNgay, Utils.FORMAT_DATE_STR) > this.datePipe.transform(baoCaoChiTietTemp.denNgay, Utils.FORMAT_DATE_STR)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_DAY);
             return;
