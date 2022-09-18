@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc1.constant';
 
@@ -812,13 +812,13 @@ export class PhuLuc1Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].tongNcauDtoanKphi += item.tongNcauDtoanKphi;
-          this.lstCtietBcao[index].dtoanKphiNtruoc += item.dtoanKphiNtruoc;
-          this.lstCtietBcao[index].dtoanKphiDaGiao += item.dtoanKphiDaGiao;
-          this.lstCtietBcao[index].dtoanKphiCong += item.dtoanKphiCong;
-          this.lstCtietBcao[index].kphiUocThien += item.kphiUocThien;
-          this.lstCtietBcao[index].kphiDchinhTang += item.kphiDchinhTang;
-          this.lstCtietBcao[index].kphiDchinhGiam += item.kphiDchinhGiam;
+          this.lstCtietBcao[index].tongNcauDtoanKphi = sumNumber([this.lstCtietBcao[index].tongNcauDtoanKphi, item.tongNcauDtoanKphi]);
+          this.lstCtietBcao[index].dtoanKphiNtruoc = sumNumber([this.lstCtietBcao[index].dtoanKphiNtruoc, item.dtoanKphiNtruoc]);
+          this.lstCtietBcao[index].dtoanKphiDaGiao = sumNumber([this.lstCtietBcao[index].dtoanKphiDaGiao, item.dtoanKphiDaGiao]);
+          this.lstCtietBcao[index].dtoanKphiCong = sumNumber([this.lstCtietBcao[index].dtoanKphiCong, item.dtoanKphiCong]);
+          this.lstCtietBcao[index].kphiUocThien = sumNumber([this.lstCtietBcao[index].kphiUocThien, item.kphiUocThien]);
+          this.lstCtietBcao[index].kphiDchinhTang = sumNumber([this.lstCtietBcao[index].kphiDchinhTang, item.kphiDchinhTang]);
+          this.lstCtietBcao[index].kphiDchinhGiam = sumNumber([this.lstCtietBcao[index].kphiDchinhGiam, item.kphiDchinhGiam]);
         }
       })
       stt = this.getHead(stt);
@@ -837,13 +837,13 @@ export class PhuLuc1Component implements OnInit {
     this.total.kphiDchinhGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (!item.level) {
-        this.total.tongNcauDtoanKphi += item.tongNcauDtoanKphi;
-        this.total.dtoanKphiNtruoc += item.dtoanKphiNtruoc;
-        this.total.dtoanKphiDaGiao += item.dtoanKphiDaGiao;
-        this.total.dtoanKphiCong += item.dtoanKphiCong;
-        this.total.kphiUocThien += item.kphiUocThien;
-        this.total.kphiDchinhTang += item.kphiDchinhTang;
-        this.total.kphiDchinhGiam += item.kphiDchinhGiam;
+        this.total.tongNcauDtoanKphi = sumNumber([this.total.tongNcauDtoanKphi, item.tongNcauDtoanKphi]);
+        this.total.dtoanKphiNtruoc = sumNumber([this.total.dtoanKphiNtruoc, item.dtoanKphiNtruoc]);
+        this.total.dtoanKphiDaGiao = sumNumber([this.total.dtoanKphiDaGiao, item.dtoanKphiDaGiao]);
+        this.total.dtoanKphiCong = sumNumber([this.total.dtoanKphiCong, item.dtoanKphiCong]);
+        this.total.kphiUocThien = sumNumber([this.total.kphiUocThien, item.kphiUocThien]);
+        this.total.kphiDchinhTang = sumNumber([this.total.kphiDchinhTang, item.kphiDchinhTang]);
+        this.total.kphiDchinhGiam = sumNumber([this.total.kphiDchinhGiam, item.kphiDchinhGiam]);
       }
     })
     if (this.total.tongNcauDtoanKphi == 0 ||
@@ -886,7 +886,7 @@ export class PhuLuc1Component implements OnInit {
 
   // gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
-    this.editCache[id].data.dtoanKphiCong = this.editCache[id].data.dtoanKphiNtruoc + this.editCache[id].data.dtoanKphiDaGiao;
+    this.editCache[id].data.dtoanKphiCong = sumNumber([this.editCache[id].data.dtoanKphiNtruoc, this.editCache[id].data.dtoanKphiDaGiao]);
   }
 
   displayValue(num: number): string {

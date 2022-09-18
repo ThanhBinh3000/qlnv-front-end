@@ -1,4 +1,4 @@
-import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO } from './../../../../Utility/utils';
+import { ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO, QTVP } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -94,6 +94,8 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   maDviTao: string;
   listIdDelete: string[] = [];
   statusBtnValidate = true;
+  roles: string[] = [];
+  statusTaoMoi = true;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -107,31 +109,30 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show()
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
     this.searchFilter.namQtoan = new Date().getFullYear() - 1
     this.searchFilter.ngayTaoDen = new Date();
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
-    this.donViTao = this.userInfo?.dvql;
-    this.userRole = this.userInfo?.roles[0].code;
+    this.donViTao = this.userInfo?.MA_DVI;
+    if (this.roles.includes(QTVP.ADD_REPORT)) {
+      this.statusTaoMoi = false;
+    }
     //  check va lay gia tri role trong list role
-    const roleUserCB = ROLE_CAN_BO.filter(e => e == this.userInfo?.roles[0].code)
-    const roleUserTPB = ROLE_TRUONG_BO_PHAN.filter(e => e == this.userInfo?.roles[0].code)
-    const roleUserLD = ROLE_LANH_DAO.filter(e => e == this.userInfo?.roles[0].code)
     this.statusBtnXoaDk = false;
-    if (this.userRole == roleUserCB[0]) {
+    if (this.roles.includes(QTVP.EDIT_REPORT)) {
       this.status = false;
       this.trangThai = Utils.TT_BC_1;
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
       this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
     }
     else {
-      if (this.userRole == roleUserTPB[0]) {
+      if (this.roles.includes(QTVP.DUYET_QUYET_TOAN_REPORT)) {
         this.status = true;
         this.trangThai = Utils.TT_BC_2;
         this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
-      } else if (this.userRole == roleUserLD[0]) {
+      } else if (this.roles.includes(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
         this.status = true;
         this.trangThai = Utils.TT_BC_4;
         this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
@@ -142,23 +143,6 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     }
     this.onSubmit();
     this.spinner.hide()
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   redirectThongTinTimKiem() {
@@ -357,25 +341,19 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     })
     return check;
   }
-
+  checkViewReport() {
+    return this.roles.includes(QTVP.VIEW_REPORT)
+  }
   updateAllCheck() {
     this.danhSachBaoCao.forEach(item => {
-      if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-        && ROLE_CAN_BO.includes(this.userRole)) {
+      if (this.checkDeleteReport(item.trangThai)) {
         item.checked = true;
         this.listIdDelete.push(item.id);
       }
     })
   }
 
-  checkDeleteReport(item: any): boolean {
-    let check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      ROLE_CAN_BO.includes(this.userRole)) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
+  checkDeleteReport(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) && this.roles.includes(QTVP.DELETE_REPORT)
   }
 }

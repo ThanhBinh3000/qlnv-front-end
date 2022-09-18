@@ -11,7 +11,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
@@ -77,6 +77,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
   noiDungs: any[] = NOI_DUNG;
   soLaMa: any[] = LA_MA;
+  roles: string[] = [];
   //file
   fileDetail: NzUploadFile;
   // khac
@@ -101,9 +102,9 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.userRole = this.userInfo?.roles[0].code;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
+    this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     await this.danhMucService.dMDonVi().toPromise().then(
       data => {
@@ -291,7 +292,9 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
   }
 
-
+  checkAddReport() {
+    return this.roles.includes(GDT.GIAO_PA_PBDT);
+  }
 
   // luu
   async save() {

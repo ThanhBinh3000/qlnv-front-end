@@ -80,8 +80,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachQuyetDinh; let i = index">
-              <!-- <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td> -->
-              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
+              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td>
                 {{ item.maPa}}
               </td>
@@ -92,20 +91,19 @@
                 {{item.namPa}}
               </td>
               <td>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <!-- <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
-                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span> -->
-                  Xem
-                </button>
-                <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"
-                  [hidden]="status">
-                  <span>Xóa</span>
-                </button>
+                <ng-container *ngIf="checkViewReport()">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    Xem
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
+                  <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)">
+                    <span>Xóa</span>
+                  </button>
+                </ng-container>
               </td>
-              <td [hidden]="status">
-                <ng-container *ngIf="checkDeleteReport(item)">
+              <td>
+                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (ngModelChange)="changeListIdDelete(item.id)"></label>
                 </ng-container>
@@ -133,7 +131,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="status">
+        <button type="button" class="btn btn-main" (click)="taoMoi()" [hidden]="statusTaoMoi">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

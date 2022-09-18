@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { DCDT, Utils } from 'src/app/Utility/utils';
 import { DataService } from 'src/app/services/data.service';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../dieu-chinh-du-toan-chi-nsnn.constant';
 // loai trang thai kiem tra
@@ -44,6 +44,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
   dotBcao: number;
   //danh muc
   danhSachDieuChinh: any[] = [];
+  roles: string[] = [];
   trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
   donVis: any[] = [];
   //phan trang
@@ -55,6 +56,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
     page: 1,
   }
   statusBtnValidate = true;
+  statusTaoMoi = true;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -71,9 +73,9 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.maDviTao = this.userInfo?.dvql;
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
+    this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -87,8 +89,12 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    this.onSubmit();
     this.spinner.hide();
+
+    if (this.roles.includes(DCDT.SYNTHETIC_REPORT)) {
+      this.statusTaoMoi = false;
+    }
+    this.onSubmit();
   }
 
   //get user info

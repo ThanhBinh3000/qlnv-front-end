@@ -24,6 +24,7 @@ export class GiaoDuToanChiNSNNComponent implements OnInit {
 
   GiaoDuToanChiNSNNList = GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST;
   danhSach: any[] = [];
+  roles: string[] = [];
 
   constructor(
     private router: Router,
@@ -35,49 +36,22 @@ export class GiaoDuToanChiNSNNComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-    this.user = this.userService.getUserLogin();
-    //lay danh sach danh muc
-    // await this.danhMuc.dMDonVi().toPromise().then(
-    // 	data => {
-    // 		if (data.statusCode == 0) {
-    // 			this.donVis = data.data;
-    // 			this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-    // 		} else {
-    // 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    // 		}
-    // 	},
-    // 	err => {
-    // 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // 	}
-    // );
+    this.userInfo = this.userService.getUserLogin();
+    this.roles = this.userInfo?.roles;
+    console.log(this.roles);
     this.GiaoDuToanChiNSNNList.forEach(data => {
-      data.Role.forEach(item => {
-        if (item?.role.includes(this.userInfo?.roles[0]?.code) && this.user.CAP_DVI == item.unit) {
-          this.danhSach.push(data);
+      let check = false;
+      this.roles.forEach(item => {
+        if (data.Role.includes(item)) {
+          check = true;
           return;
         }
       })
+      if (check) {
+        this.danhSach.push(data);
+      }
     })
     this.spinner.hide();
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   redirectThongTinChiTieuKeHoachNam() {
