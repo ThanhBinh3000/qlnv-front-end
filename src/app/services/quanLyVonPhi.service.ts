@@ -739,7 +739,7 @@ export class QuanLyVonPhiService extends BaseService {
   themMoiQdCv(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/pa-giao-so/nhap-qd-cv'
-      // 'http://192.168.1.104:8094/pa-giao-so/nhap-qd-cv'
+      // 'http://192.168.1.109:30101/pa-giao-so/nhap-qd-cv'
       , request);
   }
 
