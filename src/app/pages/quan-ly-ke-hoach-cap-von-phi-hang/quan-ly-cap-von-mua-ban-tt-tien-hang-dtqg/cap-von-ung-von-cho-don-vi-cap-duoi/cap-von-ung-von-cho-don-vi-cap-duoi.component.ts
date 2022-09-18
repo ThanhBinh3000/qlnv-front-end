@@ -529,7 +529,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //lay ten don vi tạo
     getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+        return this.unitChilds.find((item) => item.maDvi == maDvi)?.tenDvi;
     }
 
     getStatusName(id: string) {
