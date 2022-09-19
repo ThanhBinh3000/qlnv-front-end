@@ -162,9 +162,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
 
         [Validators.required],
       ],
-      loaiHangHoa: [
+      loaiVthh: [
         {
-          value: this.khBanDauGia ? this.khBanDauGia.loaiHangHoa : null,
+          value: this.khBanDauGia ? this.khBanDauGia.loaiVthh : null,
           disabled: this.isView ? true : false,
         },
         [Validators.required],

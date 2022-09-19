@@ -205,7 +205,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       pageNumber: this.page,
       pageSize: 1000,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
     console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {

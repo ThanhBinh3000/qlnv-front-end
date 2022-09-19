@@ -58,17 +58,17 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiVatTuHangHoa">
-                <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="cloaiVthh">
+                <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="11">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+            <nz-form-label nzRequired  [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName="moTaHangHoa" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -85,7 +85,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-number formControlName="namKeHoach" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                 [nzSize]="'small'">
@@ -368,7 +368,7 @@
         </div>
 
         <div nz-row [nzGutter]="24" class="flex-row-reverse action-chi-tiet">
-          <button type="button" class="btn btn-main" (click)="themMoiBangPhanLoTaiSan()"
+          <button type="button" class="btn btn-main mr-3" (click)="themMoiBangPhanLoTaiSan()"
             *ngIf="(khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO || khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || !khBanDauGia.trangThai) && userService.isCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
