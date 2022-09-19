@@ -6,9 +6,9 @@ export class KeHoachBanDauGia {
     fileDinhKems: Array<FileDinhKem>;
     id: number;
     khoanTienDatTruoc: number;
-    loaiHangHoa: string;
+    loaiVthh: string;
     loaiHopDong: string;
-    loaiVatTuHangHoa: string;
+    cloaiVthh: string;
     maDv: string;
     namKeHoach: number;
     ngayKy: string;

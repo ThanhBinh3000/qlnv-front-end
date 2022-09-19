@@ -58,8 +58,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiVatTuHangHoa">
-                <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="cloaiVthh">
+                <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
