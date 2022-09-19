@@ -15,7 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -344,13 +344,13 @@ export class TongHopKhlcntComponent implements OnInit {
 
   convertTrangThai(status: string) {
     switch (status) {
-      case '00': {
+      case '26': {
         return 'Chưa tạo QĐ'
       }
-      case '24': {
+      case '27': {
         return 'Đã dự thảo QĐ'
       }
-      case '25': {
+      case '28': {
         return 'Đã ban hành QĐ'
       }
     }
@@ -413,13 +413,13 @@ export class TongHopKhlcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.tongHopDeXuatKHLCNTService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -473,7 +473,7 @@ export class TongHopKhlcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == '26' || item.trangThai == '27') {
             item.checked = true;
           }
         });
