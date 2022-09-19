@@ -5,11 +5,12 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button *ngIf="userRole !== ( 'CC_KH_VP_TBP' || 'CC_KH_VP_LD')" nz-button type="button" class="btn btn-main"
-          (click)="save()" [hidden]="!statusBtnNew">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Tiếp nhận</span>
-        </button>
+        <ng-container *ngIf="checkTiepNhan()">
+          <button nz-button type="button" class="btn btn-main" (click)="save()" [hidden]="!statusBtnNew">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Tiếp nhận</span>
+          </button>
+        </ng-container>
         <ng-template #contentTemplate>
           <div class="contentTemplate_chonpa">
             <!-- <a (click)="linkToPaPbo()" style="color: #1890ff;">1. Phương án phân bổ giao dự toán chi</a>

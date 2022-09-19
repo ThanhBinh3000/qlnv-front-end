@@ -219,7 +219,7 @@
                   </fm-input-number>
                 </td>
                 <td>
-                  {{displayValue(data.thanhTien)}}
+                  {{displayValue(editCache[data.id].data.thanhTien)}}
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

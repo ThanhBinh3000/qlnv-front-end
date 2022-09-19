@@ -116,6 +116,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
+    console.log(this.roles);
     if (this.roles.includes(QTVP.ADD_REPORT)) {
       this.statusTaoMoi = false;
     }

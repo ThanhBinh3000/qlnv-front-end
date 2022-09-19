@@ -30,8 +30,6 @@ export class GiaoDuToanChiNSNNComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private danhMuc: DanhMucHDVService,
   ) { }
 
   async ngOnInit() {

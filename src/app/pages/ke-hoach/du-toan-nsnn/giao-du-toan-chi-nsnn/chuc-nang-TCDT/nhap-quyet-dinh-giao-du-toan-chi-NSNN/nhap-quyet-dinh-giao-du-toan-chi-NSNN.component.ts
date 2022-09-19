@@ -165,6 +165,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     //lay thong tin user
     this.userInfo = this.userService.getUserLogin();
     this.roles = this.userInfo.roles;
+    this.maDonViTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -208,14 +209,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       this.spinner.hide()
     }
     this.getStatusButton();
-    const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-    if (capDvi != Utils.TONG_CUC) {
-      this.statusBtnSave = true;
-      this.statusBtnNew = true;
-      this.statusBtnCopy = true;
-      this.statusBtnPrint = true;
-      this.status = true;
-    }
+    // const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+    // if (capDvi != Utils.TONG_CUC) {
+    //   this.statusBtnSave = true;
+    //   this.statusBtnNew = true;
+    //   this.statusBtnCopy = true;
+    //   this.statusBtnPrint = true;
+    //   this.status = true;
+    // }
     this.spinner.hide();
   }
 
@@ -223,22 +224,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.location.back()
   }
 
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
-  }
   //check role cho các nut trinh duyet
   getStatusButton() {
     if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
@@ -246,13 +231,12 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     } else {
       this.status = false;
     }
-
-    const utils = new Utils();
-    // this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
     const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_PA_PBDT) && checkChirld);
+
+    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_BTC) && checkChirld);
+
     if (this.id) {
-      this.statusBtnSave = false;
+      this.statusBtnSave = true;
     }
     if (!this.id) {
       this.statusBtnNew = true;
@@ -271,15 +255,15 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
     this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
-    if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
-      this.statusBtnSave = true;
-      this.statusBtnNew = true;
-      this.statusBtnCopy = true;
-      this.statusBtnPrint = true;
-      this.status = true;
-    }
+    // if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+    //   this.statusBtnSave = true;
+    //   this.statusBtnNew = true;
+    //   this.statusBtnCopy = true;
+    //   this.statusBtnPrint = true;
+    //   this.status = true;
+    // }
 
-    if (!this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    if (!this.roles.includes(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.statusBtnNew = true;
     }
   }
@@ -406,7 +390,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao1(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();

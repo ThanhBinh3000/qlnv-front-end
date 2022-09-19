@@ -17,11 +17,11 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP } from "../../../../Utility/utils";
-import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
-import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from './../../../../Utility/utils';
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
+import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './../../../../components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
+import { DialogCopyComponent } from './../../../../components/dialog/dialog-copy/dialog-copy.component';
+import { Utils } from './../../../../Utility/utils';
 import { NOI_DUNG } from './them-moi-bao-cao-quyet-toan.constant';
 export const TRANG_THAI_TIM_KIEM = [
   {
@@ -348,6 +348,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // luu
   async save() {
+    this.spinner.show();
     let checkSaveEdit;
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -443,9 +444,9 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     }
 
     //call service them moi
-    this.spinner.show();
+
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -467,7 +468,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

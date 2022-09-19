@@ -113,13 +113,13 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   lstDviChon: any[] = []; //danh sach don vi chua duoc chon
   soLaMa: any[] = LA_MA; // danh sách ký tự la mã
   roles: string[] = [];
-  // khác
 
+  // khác
+  editMoneyUnit = false;
   // phục vụ nút edit
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   newDate = new Date();
   fileDetail: NzUploadFile;
-  editMoneyUnit = false;
 
   // trước khi upload
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -162,10 +162,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.spinner.show();
     // lấy id bản ghi từ router
     this.id = this.routerActive.snapshot.paramMap.get('id');
-
-    // lấy thông tin tài khoản
-    // const userName = this.userService.getUserName();
-    // await this.getUserInfo(userName);
 
     // lấy mã đơn vị tạo PA
     this.maDonViTao = this.userInfo?.MA_DVI;
@@ -293,7 +289,8 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             this.lstDviTrucThuoc = data.data?.lstGiaoDtoanTrucThuocs;
           }
           this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true) {
+          const dViUser = this.userInfo?.MA_DVI
+          if (this.checkSumUp == true && dViUser == this.maDonViTao) {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
@@ -302,6 +299,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             })
           }
           // this.lstCtietBcao.forEach(item => {
+          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
           //   if (item.lstCtietDvis) {
           //     item.lstCtietDvis.forEach(e => {
           //       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
@@ -617,7 +615,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-            debugger
             if (this.trangThaiBanGhi == '1') {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             } else {
@@ -739,10 +736,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          // this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
-          // this.router.navigate([
-          //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
-          // ])
           const modalCopy = this.modal.create({
             nzTitle: MESSAGE.ALERT,
             nzContent: DialogTongHopGiaoComponent,
@@ -769,58 +762,55 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   //check role cho các nut trinh duyet
   getStatusButton() {
-    if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    // if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    //   this.status = false;
+    // } else {
+    //   this.status = true;
+    // }
+    // if (
+    //   this.trangThaiBanGhi == Utils.TT_BC_1 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_3 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_5 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_8
+    // ) {
+    //   if (this.id && this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+    //     this.status = true;
+    //   } else {
+    //     this.status = false;
+    //   }
+    // } else {
+    //   this.status = true;
+    // }
+    if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_PA_PBDT)) {
       this.status = false;
     } else {
       this.status = true;
     }
-    if (
-      this.trangThaiBanGhi == Utils.TT_BC_1 ||
-      this.trangThaiBanGhi == Utils.TT_BC_3 ||
-      this.trangThaiBanGhi == Utils.TT_BC_5 ||
-      this.trangThaiBanGhi == Utils.TT_BC_8
-    ) {
-      if (this.id && this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
-    } else {
-      this.status = true;
-    }
-    // if (this.soQd && this.trangThaiBanGhi == "6") {
-    //   this.statusBtnTongHop = false;
-    // }
     if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2") {
       this.statusGiaoToanBo = false;
     } else {
       this.statusGiaoToanBo = true;
     }
 
+
+
     const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
 
+
     let checkParent = false;
-    if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
+    if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
       checkParent = true;
     }
     const utils = new Utils();
     const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-    // this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, GDT.DELETE_REPORT_PA_PBDT, checkChirld);
+
     this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);
     this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
     this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, GDT.DUYET_REPORT_PA_PBDT, checkChirld);
     this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
     this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, GDT.COPY_REPORT_PA_PBDT, checkChirld);
     this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
-
-
-    // this.statusBtnSave = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnApprove = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnTBP = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnLD = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnCopy = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnPrint = this.getBtnStatus(this.trangThaiBanGhi, checkChirld, userRole);
-    // this.statusBtnDVCT = this.getBtnStatus(this.trangThaiBanGhi, checkParent, userRole);
+    this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
     if (this.roles.includes(GDT.GIAO_PA_PBDT) && this.soQd) {
       this.statusBtnGiao = false;
@@ -829,7 +819,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.statusGiaoToanBo = true;
     }
 
-    if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    // if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    //   this.statusBtnGuiDVCT = false;
+    // }
+    if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT)  && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
@@ -896,25 +889,25 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   };
 
   // xem chi tiết PA cha
-  xemCtietPaBTC() {
-    if (!this.idPaBTC) {
-      return;
-    }
-    const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-    let url: string;
-    if (capDviUser == Utils.TONG_CUC) {
-      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    } else if (this.maPaCha.includes('BTC')) {
-      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    } else {
-      if (capDviUser == Utils.CUC_KHU_VUC) {
-        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-      } else {
-        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-      }
-    }
-    window.open(url, '_blank');
-  };
+  // xemCtietPaBTC() {
+  //   if (!this.idPaBTC) {
+  //     return;
+  //   }
+  //   const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+  //   let url: string;
+  //   if (capDviUser == Utils.TONG_CUC) {
+  //     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+  //   } else if (this.maPaCha.includes('BTC')) {
+  //     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+  //   } else {
+  //     if (capDviUser == Utils.CUC_KHU_VUC) {
+  //       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+  //     } else {
+  //       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+  //     }
+  //   }
+  //   window.open(url, '_blank');
+  // };
 
   // lấy tên đơn vị
   getUnitName() {

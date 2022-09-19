@@ -89,7 +89,7 @@ export class QuanLyVonPhiService extends BaseService {
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
-      'http://192.168.1.101:8094/giao_du_toan/danh-sach',
+      'http://192.168.1.101:30101/giao_du_toan/danh-sach',
       request,
     );
   }
@@ -181,7 +181,7 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet1(id: any, maLoai: string): Observable<any> {
     return this.httpClient.get(
-      'http://192.168.1.101:8094/giao_du_toan/chi-tiet/' + id + '?maLoai=' + maLoai,
+      'http://192.168.1.101:30101/giao_du_toan/chi-tiet/' + id + '?maLoai=' + maLoai,
     );
   }
 
@@ -422,7 +422,7 @@ export class QuanLyVonPhiService extends BaseService {
   tongHopDieuChinhDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/tong-hop',
-      'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/tong-hop',
+      'http://192.168.1.101:30101/dieu-chinh-du-toan-chi/tong-hop',
       request,
     );
   }
@@ -456,7 +456,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tong hop giao du toan
   tongHopGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.101:8094/giao_du_toan/tong-hop',
+      'http://192.168.1.101:30101/giao_du_toan/tong-hop',
       request,
     );
   }
@@ -626,7 +626,7 @@ export class QuanLyVonPhiService extends BaseService {
   //giao so tran chi trong Giao du toan NSNN
   giaoSoTranChiGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.101:8094/giao_du_toan/giao-so'
+      'http://192.168.1.101:30101/giao_du_toan/giao-so'
       , request);
   }
 
@@ -1022,7 +1022,7 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet phuong an giao phan bo du toan NSNN
   trinhDuyetPhuongAnGiao1(request: any): Observable<any> {
     return this.httpClient.put(
-      'http://192.168.1.101:8094/giao_du_toan/trang-thai',
+      'http://192.168.1.101:30101/giao_du_toan/trang-thai',
       request);
   }
 

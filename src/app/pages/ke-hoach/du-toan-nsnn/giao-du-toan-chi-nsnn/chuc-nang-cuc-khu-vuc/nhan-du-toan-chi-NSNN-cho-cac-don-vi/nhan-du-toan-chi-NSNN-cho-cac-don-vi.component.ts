@@ -82,7 +82,6 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   fileDetail: NzUploadFile;
   // khac
   statusBtnNew: boolean;
-  userRole: string;
   editMoneyUnit = false;
 
   constructor(
@@ -105,6 +104,8 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.roles = this.userInfo?.roles;
     this.maDviTao = this.userInfo?.MA_DVI;
+    console.log(this.roles);
+
     //lay danh sach danh muc
     await this.danhMucService.dMDonVi().toPromise().then(
       data => {
@@ -293,9 +294,11 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   }
 
   checkAddReport() {
-    return this.roles.includes(GDT.GIAO_PA_PBDT);
+    return this.roles.includes(GDT.ADD_REPORT_PA_PBDT);
   }
-
+  checkTiepNhan(){
+    return this.roles.includes(GDT.NHAN_PA_PBDT)
+  }
   // luu
   async save() {
     const request = {

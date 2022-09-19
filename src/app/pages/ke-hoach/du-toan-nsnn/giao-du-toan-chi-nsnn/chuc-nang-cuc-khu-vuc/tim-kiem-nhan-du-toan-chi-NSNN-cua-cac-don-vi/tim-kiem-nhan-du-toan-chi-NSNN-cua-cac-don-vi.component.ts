@@ -45,7 +45,7 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     maDviTao: "",
     loaiDuAn: null,
     maDviNhan: "",
-    maPa: "",
+    maPa: null,
     trangThais: [],
     paggingReq: {
       limit: 10,
@@ -115,24 +115,6 @@ export class TimKiemNhanDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       }
     );
     this.onSubmit()
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   redirectThongTinTimKiem() {

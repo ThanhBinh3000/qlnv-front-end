@@ -31,7 +31,7 @@
           <div nz-col nzSpan="12">
             <label class="search__label">Năm báo cáo</label>
             <nz-input-number [nzSize]="'small'"
-              [class]="statusBtnValidate || (searchFilter.nam && searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999)?'' : 'input-error-validate' "
+              [class]="statusBtnValidateNam || (searchFilter.nam && searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999)?'' : 'input-error-validate' "
               [(ngModel)]="searchFilter.nam"></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
@@ -51,11 +51,11 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Đợt báo cáo</label>
             <nz-input-number [nzSize]="'small'" [(ngModel)]="searchFilter.dotBcao"
-              [class]="statusBtnValidate || searchFilter.dotBcao?'' : 'input-error-validate' "></nz-input-number>
+              [class]="statusBtnValidateDot || searchFilter.dotBcao?'' : 'input-error-validate' "></nz-input-number>
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
@@ -81,8 +81,8 @@
               <th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
               <th nzWidth="150px">Ngày cấp trên trả kết quả</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
-              <th nzWidth="200px" colspan="2" [hidden]="status">Hành động</th>
-              <th [hidden]="!status">
+              <th nzWidth="200px" colspan="2">Hành động</th>
+              <th>
                 <ng-container *ngIf="checkAll(); else xoa">
                   <button type="button" class="btn btn-main" (click)="updateAllCheck()">
                     <span>Tất cả</span>
