@@ -114,8 +114,10 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
-    this.userRole = this.userInfo?.roles[0].code;
     //  check va lay gia tri role trong list role
+    if(this.roles.includes(QTVP.DIEU_CHINH_REPORT)){
+      this.statusTaoMoi = false;
+    }
     if (this.roles.includes(QTVP.EDIT_DIEU_CHINH_REPORT)) {
       this.status = false;
       this.trangThai = Utils.TT_BC_1;

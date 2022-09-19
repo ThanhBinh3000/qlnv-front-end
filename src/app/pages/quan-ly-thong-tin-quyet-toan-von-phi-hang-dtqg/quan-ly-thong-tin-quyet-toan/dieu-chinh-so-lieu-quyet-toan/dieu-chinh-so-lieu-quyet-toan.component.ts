@@ -159,7 +159,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   fileDetail: NzUploadFile;
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
-
+  statusTrinhDuyet = false;
   // khac
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
@@ -535,6 +535,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
         item.id = uuid.v4() + 'FE';
       }
     });
+    this.statusTrinhDuyet = true;
     this.spinner.hide();
   }
 
@@ -562,10 +563,8 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (this.trangThaiBaoCao == Utils.TT_BC_1 && this.congVan) {
-      this.save();
-    } else {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT)
+    if (this.statusTrinhDuyet != true && mcn < '2') {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
       return;
     }
     if (this.id) {
