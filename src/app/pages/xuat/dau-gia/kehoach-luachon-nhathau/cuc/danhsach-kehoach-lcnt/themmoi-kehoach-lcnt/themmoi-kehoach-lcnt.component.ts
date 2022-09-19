@@ -151,6 +151,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         },
         [],
       ],
+      moTaHangHoa: [
+        {
+          value: this.khBanDauGia ? this.khBanDauGia.moTaHangHoa : null,
+          disabled: this.isView ? true : false,
+        },
+        [],
+      ],
       ngayLapKeHoach: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.ngayLapKeHoach : null,
@@ -540,6 +547,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         tieuChuanChatLuong: this.formData.get('tieuChuanChatLuong').value,
         trangThai: '00',
         trichYeu: this.formData.get('trichYeu').value,
+        moTaHangHoa: this.formData.get('moTaHangHoa').value,
         ghiChu: this.formData.get('ghiChu').value,
       }
       if (this.idInput > 0) {

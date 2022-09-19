@@ -33,6 +33,7 @@ export class KeHoachBanDauGia {
     tieuChuanChatLuong: string;
     trangThai: string;
     trichYeu: string;
+    moTaHangHoa: string;
     tenQdGiaoChiTieu: string;
     thoiGianDuKien: string;
     ghiChu: string;
