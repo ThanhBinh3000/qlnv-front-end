@@ -103,10 +103,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   luuEdit(index: number): void {
-    let dataSaved = this.dataEdit[index].data;
-    const dataNd = this.dsNoiDung.filter(d => d.id == dataSaved.idDanhMuc);
-    dataSaved.noiDung = dataNd[0].noiDung;
-    Object.assign(this.dataTable[index], dataSaved);
+    Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
     this.emitDataTable();
   }
@@ -130,8 +127,13 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeNoiDung(loaiChi) {
+  onChangeNoiDung(loaiChi, typeData?) {
     const dataNd = this.dsNoiDung.filter(d => d.ma == loaiChi)
+    if (typeData) {
+      if (dataNd.length > 0) {
+        typeData.tenLoaiChi= dataNd[0].giaTri;
+      }
+    }
     if (dataNd.length > 0) {
       this.rowItem.tenLoaiChi = dataNd[0].giaTri;
     }

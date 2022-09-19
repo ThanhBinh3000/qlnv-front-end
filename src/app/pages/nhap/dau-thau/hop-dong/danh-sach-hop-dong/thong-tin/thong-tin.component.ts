@@ -1,14 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCanCuKQLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DialogThongTinPhuLucBangGiaHopDongComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
+import {
+  DialogCanCuKQLCNTComponent
+} from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
+import {
+  DialogDanhSachHangHoaComponent
+} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {
+  DialogThongTinPhuLucBangGiaHopDongComponent
+} from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -24,7 +30,9 @@ import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
+import { ThongTinPhuLucHopDongService } from "../../../../../../services/thongTinPhuLucHopDong.service";
 
 interface DonviLienQuanModel {
   id: number;
@@ -48,6 +56,7 @@ export class ThongTinComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean = true;
   @Input() typeVthh: string;
+  @Input() idGoiThau: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -92,6 +101,10 @@ export class ThongTinComponent implements OnInit {
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
   diaDiemNhapListCuc = [];
   donGiaCore: number = 0;
+  tongSlHang: number = 0;
+  //namKhoach: number = 0;
+  listNam: any[] = [];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -108,20 +121,22 @@ export class ThongTinComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
+    private helperService: HelperService,
     private _modalService: NzModalService
   ) {
     this.formDetailHopDong = this.fb.group(
       {
-        canCu: [null],
-        idGoiThau: [null],
-        maHdong: [null],
-        tenHd: [null],
+        canCu: [null, [Validators.required]],
+        idGoiThau: [null, [Validators.required]],
+        maHdong: [null, [Validators.required]],
+        tenHd: [null, [Validators.required]],
         ngayKy: [null],
-        namKh: [null],
+        namHd: [null],
         ngayHieuLuc: [null],
         soNgayThien: [null],
-        tgianNkho: [null],
-        tenVthh: [null],
+        tgianNkho: [null, [Validators.required]],
+        tenLoaiVthh: [null],
         moTaHangHoa: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
@@ -140,7 +155,8 @@ export class ThongTinComponent implements OnInit {
         tenNguoiDdien: [null],
         chucVu: [null],
         idNthau: [null],
-        ghiChu: [null]
+        ghiChu: [null],
+        canCuId: [null]
       }
     );
     this.formDetailHopDong.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -169,6 +185,13 @@ export class ThongTinComponent implements OnInit {
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null
     })
+    let dayNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayNow - i,
+        text: dayNow - i,
+      });
+    }
     await Promise.all([
       this.loadDonVi(),
       this.loaiHopDongGetAll(),
@@ -182,8 +205,7 @@ export class ThongTinComponent implements OnInit {
   validateGhiChu() {
     if (this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu != '') {
       this.errorGhiChu = false;
-    }
-    else {
+    } else {
       this.errorGhiChu = true;
     }
   }
@@ -200,10 +222,10 @@ export class ThongTinComponent implements OnInit {
             maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
             tenHd: this.detail.tenHd ?? null,
             ngayKy: this.detail.ngayKy ?? null,
-            namKh: this.detail.namKh ?? null,
+            namHd: +this.detail.namHd ?? null,
             ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
             soNgayThien: this.detail.soNgayThien ?? null,
-            tenVthh: this.detail.tenVthh ?? null,
+            tenLoaiVthh: this.detail.tenLoaiVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
             moTaHangHoa: this.detail.moTaHangHoa ?? null,
@@ -230,6 +252,7 @@ export class ThongTinComponent implements OnInit {
           }
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
           await this.getListGoiThau(this.detail.canCuId);
+          this.diaDiemNhapListCuc = this.detail.hhDdiemNhapKhoList;
         }
       }
     }
@@ -294,8 +317,11 @@ export class ThongTinComponent implements OnInit {
     // console.log("🚀 ~ file: thong-tin.component.ts ~ line 288 ~ ThongTinComponent ~ save ~ body", body)
     this.spinner.show();
     try {
-      if (!this.formDetailHopDong.value.ghiChu && this.formDetailHopDong.value.ghiChu == '') {
-        this.errorGhiChu = true;
+      this.formDetailHopDong.controls['ngayKy'].setValidators(null);
+      this.helperService.markFormGroupTouched(this.formDetailHopDong);
+      if (this.formDetailHopDong.invalid) {
+        this.spinner.hide();
+        return;
       } else {
         let body = this.formDetailHopDong.value;
         body.soHd = `${this.formDetailHopDong.value.maHdong}${this.maHopDongSuffix}`;
@@ -305,40 +331,61 @@ export class ThongTinComponent implements OnInit {
           delete body.ngayHieuLuc;
         delete body.maHdong;
         delete body.tenCloaiVthh;
-        delete body.tenVthh;
+        delete body.tenLoaiVthh;
 
         body.idNthau = `${this.dvLQuan.id}`;
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
-        if (this.id > 0) {
+        //sua+ky
+        if (this.id > 0 && isKy) {
+          this.formDetailHopDong.controls['ngayKy'].setValidators(Validators.required);
+          this.helperService.markFormGroupTouched(this.formDetailHopDong);
+          if (this.formDetailHopDong.valid) {
+            body.id = this.id;
+            await this.thongTinHopDong.update(body,)
+              .then((res) => {
+                if (res.msg == MESSAGE.SUCCESS) {
+                  this.approve(this.id);
+                } else {
+                  this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+              });
+          }
+        }
+        //sua
+        else if (this.id > 0 && !isKy) {
           body.id = this.id;
-            let res = await this.thongTinHopDong.update(
-              body,
-            );
-            if (res.msg == MESSAGE.SUCCESS) {
-              if(isKy){
-                this.approve(this.id);
-              }else{
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.UPDATE_SUCCESS,
-                );
-              }
-              this.back();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-        } else {
-          let res = await this.thongTinHopDong.create(
+          let res = await this.thongTinHopDong.update(
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            console.log(res.data);
-            if(isKy){
-              this.approve(res.data.id);
-              }else{
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              }
-              this.back();
+            this.back();
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS,);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+
+        }
+        //them+ky
+        else if (!(this.id > 0) && isKy) {
+          this.formDetailHopDong.controls['ngayKy'].setValidators(Validators.required);
+          this.helperService.markFormGroupTouched(this.formDetailHopDong);
+          if (this.formDetailHopDong.valid) {
+            await this.thongTinHopDong.create(body,)
+              .then((res) => {
+                if (res.msg == MESSAGE.SUCCESS) {
+                  this.approve(res.data.id);
+                } else {
+                  this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+              });
+          }
+        }
+        //them
+        else if (!(this.id > 0) && !isKy) {
+          let res = await this.thongTinHopDong.create(body,);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.back();
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS,);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -355,11 +402,11 @@ export class ThongTinComponent implements OnInit {
   async setTitle() {
     let trangThai = this.detail.trangThai ?? '00'
     switch (trangThai) {
-      case '00': {
+      case STATUS.DU_THAO: {
         this.titleStatus = 'Dự thảo';
         break;
       }
-      case '02': {
+      case STATUS.DA_KY: {
         this.titleStatus = 'Đã ký';
         this.styleStatus = 'da-ban-hanh'
         break
@@ -406,17 +453,19 @@ export class ThongTinComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        namKhoach: this.formDetailHopDong.get('namHd').value
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formDetailHopDong.patchValue({
           canCu: data.soQd ?? null,
-          namKh: +data.namKhoach ?? null,
+          canCuId: data.id,
+          namHd: +data.namKhoach ?? null,
           idGoiThau: null,
           soNgayThien: null,
-          tenVthh: null,
+          tenLoaiVthh: null,
           loaiVthh: null,
           cloaiVthh: null,
           tenCloaiVthh: null,
@@ -431,14 +480,14 @@ export class ThongTinComponent implements OnInit {
   }
 
   async onChangeGoiThau(event) {
-    if (event) {
+    if (event && this.idGoiThau !== event) {
       let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
-          tenVthh: data.tenVthh ?? null,
+          tenLoaiVthh: data.tenLoaiVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
@@ -447,7 +496,9 @@ export class ThongTinComponent implements OnInit {
         })
         this.onChangeDvlq(data.idNhaThau);
         this.diaDiemNhapListCuc = data.diaDiemNhapList;
+        this.tongSlHang = 0;
         this.diaDiemNhapListCuc.forEach(element => {
+          this.tongSlHang += element.soLuong;
           delete element.id
         });
         if (this.userService.isTongCuc()) {
@@ -516,32 +567,59 @@ export class ThongTinComponent implements OnInit {
   }
 
   approve(id?) {
-    this._modalService.confirm({
+    if (this.formDetailHopDong.valid) {
+      this._modalService.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: `Bạn có chắc chắn muốn ký hợp đồng này không?`,
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 365,
+        nzOnOk: async () => {
+          const body = {
+            id: id ? id : this.detail.id,
+            trangThai: STATUS.DA_KY,
+          }
+          let res = await this.thongTinHopDong.approve(
+            body,
+          );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.isView = true;
+            this.detail.trangThai = STATUS.DA_KY;
+            this.setTitle();
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.back();
+        },
+      });
+    }
+  }
+
+  xoaPhuLuc(id: any) {
+    this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: `Bạn có chắc chắn muốn ký hợp đồng này không?`,
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 365,
-      nzOnOk: async () => {
-        const body = {
-          id: id ? id : this.detail.id,
-          trangThai: STATUS.DA_KY,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.thongTinPhuLucHopDongService.delete({ id: id })
+            .then(async () => {
+              await this.loadChiTiet(this.id);
+            });
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-        let res = await this.thongTinHopDong.approve(
-          body,
-        );
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.isView = true;
-          this.detail.trangThai = STATUS.DA_KY;
-          this.setTitle();
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
+        this.spinner.hide();
       },
     });
   }
-
 }

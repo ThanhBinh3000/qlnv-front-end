@@ -243,7 +243,8 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         }
       }
     });
-  }
+
+  };
 
   xoaKeHoach(index: number) {
     this.modal.confirm({

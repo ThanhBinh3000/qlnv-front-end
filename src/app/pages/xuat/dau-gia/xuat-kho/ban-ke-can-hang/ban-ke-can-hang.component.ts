@@ -1,7 +1,6 @@
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -10,8 +9,10 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Globals } from 'src/app/shared/globals';
+// cần sửa lại kiểu định dạng ngày .
 
 @Component({
   selector: 'app-ban-ke-can-hang',
@@ -21,17 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 export class BanKeCanHangComponent implements OnInit {
   @Input() typeVthh: string;
 
-  searchFilter = {
-    soQuyetDinh: '',
-    soBangKe: '',
-    ngayNhapXuat: '',
-    soHopDong: '',
-  };
-
-  listDiemKho: any[] = [];
-  listNhaKho: any[] = [];
-  listNganLo: any[] = [];
-
+  formSearch: FormGroup;
   userInfo: UserLogin;
 
   dataTable: any[] = [];
@@ -48,33 +39,31 @@ export class BanKeCanHangComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinhNhap: '',
-    soPhieuNhapKho: '',
+    soBangKe: '',
+    soQuyetDinhXuat: '',
+    soPhieuXuat: '',
     ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
-    tenNganLo: '',
+    tenNganKho: '',
+    tenLoKho: '',
+    tenTrangThai: '',
   };
-
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private notification: NzNotificationService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
     private modal: NzModalService,
     public userService: UserService,
+    private fb: FormBuilder,
+    public globals: Globals
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNganLo(),
-        this.search(),
-      ]);
+      await Promise.all([this.initForm(), this.search()]);
       this.spinner.hide();
     }
     catch (e) {
@@ -82,6 +71,13 @@ export class BanKeCanHangComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+  initForm(): void {
+    this.formSearch = this.fb.group({
+      soQuyetDinhXuat: [null],
+      soBangKe: [null],
+      ngayXuatKho: [null],
+    })
   }
 
   updateAllChecked(): void {
@@ -116,20 +112,24 @@ export class BanKeCanHangComponent implements OnInit {
   }
 
   async search() {
-    let param = {
+
+    let body = {
       "capDvis": '3',
-      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
-      "soQdNhap": this.searchFilter.soQuyetDinh,
+      "denNgay": this.formSearch.value.ngayXuatKho && this.formSearch.value.ngayXuatKho.length > 1 ? dayjs(this.formSearch.value.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
+      "soQdNhap": this.formSearch.value.soQuyetDinhXuat,
       "maDonVi": this.userInfo.MA_DVI,
       "maHang": this.typeVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
-      "soBangKe": this.searchFilter.soBangKe,
-      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+      "soBangKe": this.formSearch.value.soBangKe,
+      "tuNgay": this.formSearch.value.ngayXuatKho && this.formSearch.value.ngayXuatKho.length > 0 ? dayjs(this.formSearch.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
     }
-    let res = await this.quanLyBangKeCanHangService.timKiem(param);
+
+    let res = await this.quanLyBangKeCanHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
+
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
@@ -145,14 +145,7 @@ export class BanKeCanHangComponent implements OnInit {
     }
   }
 
-  clearFilter() {
-    this.searchFilter = {
-      soQuyetDinh: '',
-      soBangKe: '',
-      ngayNhapXuat: '',
-      soHopDong: '',
-    };
-  }
+
 
   xoaItem(item: any) {
     this.modal.confirm({
@@ -215,70 +208,10 @@ export class BanKeCanHangComponent implements OnInit {
     }
   }
 
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
-  }
-
-  async showList() {
-    this.isDetail = false;
-    await this.search()
   }
 
   export() {
@@ -286,16 +219,16 @@ export class BanKeCanHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+          "denNgayNhap": this.formSearch.value.ngayXuatKho && this.formSearch.value.ngayXuatKho.length > 1 ? dayjs(this.formSearch.value.ngayXuatKho[1]).format('YYYY-MM-DD') : null,
           "maDvi": this.userInfo.MA_DVI,
           "orderBy": null,
           "orderDirection": null,
           "paggingReq": null,
-          "soBangKe": this.searchFilter.soBangKe,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
+          "soBangKe": this.formSearch.value.soBangKe,
+          "soQdNhap": this.formSearch.value.soQuyetDinhXuat,
           "str": null,
           "trangThai": null,
-          "tuNgayNhap": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+          "tuNgayNhap": this.formSearch.value.ngayXuatKho && this.formSearch.value.ngayXuatKho.length > 0 ? dayjs(this.formSearch.value.ngayXuatKho[0]).format('YYYY-MM-DD') : null,
         }
         this.quanLyBangKeCanHangService
           .exportList(body)
@@ -355,36 +288,47 @@ export class BanKeCanHangComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && dayjs(item[key].toString().toLowerCase()).format('dd/MM/YYYY') == dayjs(value).format('dd/MM/YYYY')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+      this.dataTable = [...this.dataTable, ...temp]
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-
-  clearFilterTable() {
+  clearFilter() {
+    this.formSearch.reset();
     this.filterTable = {
-      soQuyetDinhNhap: '',
-      soPhieuNhapKho: '',
-      ngayNhapKho: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganLo: '',
-    }
+      soBangKe: null,
+      soQuyetDinhXuat: null,
+      soPhieuXuat: null,
+      ngayNhapKho: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      tenTrangThai: null,
+    };
+    this.search()
   }
-
-  print() {
-
+  onClose() {
+    this.isDetail = false;
+    this.search();
   }
 }

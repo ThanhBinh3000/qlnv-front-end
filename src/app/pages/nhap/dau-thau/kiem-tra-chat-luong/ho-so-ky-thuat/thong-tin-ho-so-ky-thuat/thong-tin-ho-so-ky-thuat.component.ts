@@ -257,7 +257,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
       },
       "trangThai": this.globals.prop.NHAP_BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
