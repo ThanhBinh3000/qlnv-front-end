@@ -7,8 +7,7 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class DanhMucService extends BaseService {
-  // gateway: string = '/qlnv-category'
-  gateway: string = ''
+  gateway: string = '/qlnv-category'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dm-hang', '/qlnv-category');
   }
