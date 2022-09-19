@@ -65,12 +65,13 @@ export class PhuLuc5Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
-
-    if (this.data.fileData == []) {
+    if (!this.data.fileData) {
       this.lstFiles = []
     } else {
       this.lstFiles = this.data.fileData;
     }
+
+    this.listFile = [];
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.getStatusButton();
@@ -202,7 +203,7 @@ export class PhuLuc5Component implements OnInit {
       thuyetMinh: this.thuyetMinh,
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
-      fileData: this.lstFiles,
+      fileData: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
 

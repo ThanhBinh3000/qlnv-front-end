@@ -31,7 +31,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   };
   newDate = new Date();
   listIdDelete: string[] = [];
-  roles: string[] = [];
+
   //danh muc
   danhSachDieuChinh: any[] = [];
   trangThais: any[] = [
@@ -95,11 +95,11 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
-    this.searchFilter.nam = new Date().getFullYear;
+    this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
 
-    if (this.roles.includes(DCDT.ADD_REPORT)) {
+
+    if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
       this.statusTaoMoi = false;
     }
 
@@ -276,15 +276,15 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   }
 
   checkViewReport() {
-    return this.roles.includes(DCDT.VIEW_REPORT);
+    return this.userService.isAccessPermisson(DCDT.VIEW_REPORT);
   }
 
   checkEditReport(trangThai: string) {
-    return Utils.statusSave.includes(trangThai) && this.roles.includes(DCDT.EDIT_REPORT);
+    return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.roles.includes(DCDT.DELETE_REPORT);
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(DCDT.DELETE_REPORT);
   }
 
   changeListIdDelete(id: string) {

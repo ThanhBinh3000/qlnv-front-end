@@ -163,7 +163,6 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   // khac
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-  roles: string[] = [];
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -214,7 +213,6 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     const namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.namQtoan = Number(namQtoan)
 
     if (this.id) {
@@ -276,7 +274,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(QTVP.EDIT_REPORT)) {
+    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
       this.status = false;
     } else {
       this.status = true;
@@ -301,7 +299,7 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
   }
 
   getBtnStatus(status: string[], role: string, check: boolean) {
-    return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
+    return !(status.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(role) && check);
   }
 
 

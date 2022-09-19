@@ -78,7 +78,6 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   date: any = new Date()
   trangThai!: string;
   roleUser: string;
-  roles: string[] = [];
   newDate = new Date();
 
   constructor(
@@ -98,7 +97,6 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.spinner.show()
 
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.maDviTao = this.userInfo?.MA_DVI;
 
     this.searchFilter.ngayTaoDen = new Date();
@@ -120,7 +118,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       }
     );
 
-    if (this.roles.includes(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
       this.trangThai = '1';
       // this.roleUser = 'canbo';
       this.status = false;

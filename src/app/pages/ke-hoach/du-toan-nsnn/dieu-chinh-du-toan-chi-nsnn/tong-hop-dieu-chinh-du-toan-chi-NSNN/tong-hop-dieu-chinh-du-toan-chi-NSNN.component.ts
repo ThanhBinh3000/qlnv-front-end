@@ -44,7 +44,6 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
   dotBcao: number;
   //danh muc
   danhSachDieuChinh: any[] = [];
-  roles: string[] = [];
   trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
   donVis: any[] = [];
   //phan trang
@@ -74,7 +73,6 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -91,7 +89,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
     );
     this.spinner.hide();
 
-    if (this.roles.includes(DCDT.SYNTHETIC_REPORT)) {
+    if (this.userService.isAccessPermisson(DCDT.SYNTHETIC_REPORT)) {
       this.statusTaoMoi = false;
     }
     this.onSubmit();

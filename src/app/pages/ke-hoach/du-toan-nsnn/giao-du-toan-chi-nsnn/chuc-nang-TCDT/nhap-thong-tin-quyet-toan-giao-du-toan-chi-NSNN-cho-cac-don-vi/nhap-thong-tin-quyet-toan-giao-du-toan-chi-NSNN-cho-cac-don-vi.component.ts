@@ -52,7 +52,6 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
   fileList: NzUploadFile[] = [];
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
-  roles: string[] = [];
   // before uploaf file
   beforeUploadCV = (file: NzUploadFile): boolean => {
     this.fileDetail = file;
@@ -98,7 +97,6 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
     this.maDviTao = this.userInfo?.MA_DVI;
 
     this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -286,7 +284,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
     }
   }
   checkViewReport() {
-    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   //xem thong tin PA
