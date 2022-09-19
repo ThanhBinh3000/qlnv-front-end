@@ -93,7 +93,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
         window.location.href = '/error/401'
       }
       this.listVthh = LIST_VAT_TU_HANG_HOA;
