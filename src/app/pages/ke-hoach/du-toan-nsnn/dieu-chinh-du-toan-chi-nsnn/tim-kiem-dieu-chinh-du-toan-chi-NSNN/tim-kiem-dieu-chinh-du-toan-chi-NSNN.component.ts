@@ -210,6 +210,18 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
         return;
       }
     }
+    if(!this.searchFilter.dotBcao && !this.searchFilter.nam ){
+      this.notification.warning(MESSAGE.WARNING, "vui lòng nhập dữ lieju cho các trường bôi đỏ");
+      return;
+    }
+    if(!this.searchFilter.nam){
+      this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm báo cáo");
+      return;
+    }
+    if(!this.searchFilter.dotBcao){
+      this.notification.warning(MESSAGE.WARNING, "vui lòng nhập đợt báo cáo");
+      return;
+    }
     const obj = {
       namHienTai: new Date().getFullYear() + 1,
       dotBcao: this.searchFilter.dotBcao,
