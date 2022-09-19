@@ -158,11 +158,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVatTuHangHoa: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
+      maDv: this.userInfo.MA_DVI,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

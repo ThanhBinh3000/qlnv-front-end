@@ -149,7 +149,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.trichYeu : null,
           disabled: this.isView ? true : false,
         },
-        [Validators.required],
+        [],
       ],
       ngayLapKeHoach: [
         {
@@ -171,7 +171,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.loaiHangHoa : null,
           disabled: this.isView ? true : false,
         },
-        [Validators.required],
+        [],
       ],
       qdGiaoChiTieuId: [
         {
@@ -393,13 +393,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       console.log(this.formData);
       return;
     }
-    if (
-      !this.formData.get('loaiHangHoa').value ||
-      !this.formData.get('qdGiaoChiTieuNam').value ||
-      !this.formData.get('khoanTienDatTruoc').value
-    ) {
-      return;
-    }
+    // if (
+    //   !this.formData.get('loaiHangHoa').value ||
+    //   !this.formData.get('qdGiaoChiTieuNam').value ||
+    //   !this.formData.get('khoanTienDatTruoc').value
+    // ) {
+    //   return;
+    // }
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemDiaDiemNhapKhoComponent,
