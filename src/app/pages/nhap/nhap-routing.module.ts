@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from 'src/app/guard/auth.guard';
 import { NhapComponent } from './nhap.component';
 import { NHAP_THEO_KE_HOACH } from './nhap.constant';
 
@@ -7,6 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: NhapComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -19,6 +21,7 @@ const routes: Routes = [
           import('../nhap/dau-thau/dau-thau.module').then(
             (m) => m.DauThauModule,
           ),
+        canActivate: [AuthGuard],
       },
     ],
   },
@@ -28,4 +31,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NhapRoutingModule {}
+export class NhapRoutingModule { }

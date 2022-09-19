@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
@@ -48,6 +48,21 @@ export class BtcGiaoTcdtComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+
+  muaTangList: any[] = [];
+  xuatGiamList: any[] = [];
+  xuatBanList: any[] = [];
+  luanPhienList: any[] = [];
+  dataDetailSelected: any = {
+    muaLuongThuc: 0,
+    nguonVonCo: 0,
+    muaTang: 0,
+    xuatGiam: 0,
+    xuatBan: 0,
+    xuatPlDh: 0,
+    tongTien: 0,
+  }
+
   constructor(private readonly fb: FormBuilder,
     private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
     private spinner: NgxSpinnerService,
@@ -111,6 +126,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
           item.checked = false;
           // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
+        this.getDetailRow(this.dataTable[0].id)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 
@@ -356,6 +372,60 @@ export class BtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-}
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.quyetDinhBtcTcdtService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        let muaLuongThuc = 0;
+        let nguonVonCo = 0;
+        let muaTang = 0;
+        let xuatGiam = 0;
+        let xuatBan = 0;
+        let xuatPlDh = 0;
+        muaLuongThuc = (data.keHoachNhapXuat.soLuongMuaThoc * data.keHoachNhapXuat.donGiaMuaThoc) + (data.keHoachNhapXuat.soLuongMuaGaoLpdh * data.keHoachNhapXuat.donGiaMuaGaoLqdh) + (data.keHoachNhapXuat.soLuongMuaGaoXcht * data.keHoachNhapXuat.donGiaMuaGaoXcht);
+        nguonVonCo = (data.keHoachNhapXuat.soLuongBanThoc * data.keHoachNhapXuat.donGiaBanThoc) + (data.keHoachNhapXuat.soLuongBanGao * data.keHoachNhapXuat.donGiaBanGao) + (data.keHoachNhapXuat.soLuongGaoCtro * data.keHoachNhapXuat.donGiaGaoCtro) + data.keHoachNhapXuat.tongTienVonNsnn + data.keHoachNhapXuat.tongTienVonTx;
+        data.muaTangList.forEach(item => {
+          muaTang += item.tongTien;
+        })
+        data.xuatGiamList.forEach(item => {
+          xuatGiam += item.tongTien;
+        })
+        data.xuatBanList.forEach(item => {
+          xuatBan += item.tongTien;
+        })
+        data.luanPhienList.forEach(item => {
+          xuatPlDh += item.tongTien;
+        })
+        this.dataDetailSelected.muaLuongThuc = muaLuongThuc;
+        this.dataDetailSelected.nguonVonCo = nguonVonCo;
+        this.dataDetailSelected.muaTang = muaTang;
+        this.dataDetailSelected.xuatGiam = xuatGiam;
+        this.dataDetailSelected.xuatBan = xuatBan;
+        this.dataDetailSelected.xuatPlDh = xuatPlDh;
+        this.dataDetailSelected.tongTien = muaLuongThuc + nguonVonCo + muaTang + xuatGiam + xuatBan + xuatPlDh;
+      }
+      // if (res.data?.muaTangList) {
+      //   this.muaTangList = res.data.muaTangList;
+      // } if (res.data?.xuatGiamList) {
+      //   this.xuatGiamList = res.data.xuatGiamList;
+      // } if (res.data?.xuatBanList) {
+      //   this.xuatBanList = res.data.xuatBanList;
+      // } if (res.data?.luanPhienList) {
+      //   this.luanPhienList = res.data.luanPhienList;
+      // } if (res.data?.keHoachNhapXuat) {
+      //   let kh = res.data.keHoachNhapXuat;
+      //   this.keHoachNhapXuat.muaLuongThuc = (kh.soLuongMuaThoc * kh.donGiaMuaThoc) +
+      //     (kh.soLuongMuaGaoLpdh * kh.donGiaMuaGaoLqdh) +
+      //     (kh.soLuongMuaGaoXcht * kh.donGiaMuaGaoXcht);
+      //   this.keHoachNhapXuat.nguonVonCo = (kh.soLuongBanThoc * kh.donGiaBanThoc) +
+      //     (kh.soLuongBanGao * kh.donGiaBanGao) +
+      //     (kh.soLuongGaoCtro * kh.donGiaGaoCtro) +
+      //     kh.tongTienVonNsnn + kh.tongTienVonTx;
+      // }
+    }
+  }
 
+
+}
 

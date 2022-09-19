@@ -44,7 +44,7 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 				this.danhSach.push(data);
 			}
 		})
-		this.spinner.hide();
+		// this.spinner.hide();
 	}
 
 	redirectThongTinChiTieuKeHoachNam() {

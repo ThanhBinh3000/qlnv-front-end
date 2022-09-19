@@ -6,11 +6,10 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
@@ -64,6 +63,7 @@ export class HoSoKyThuatComponent implements OnInit {
     tenVatTuCha: '',
     tenVatTu: '',
     ketLuan: '',
+    tenTrangThai: ''
   };
 
   constructor(
@@ -132,8 +132,8 @@ export class HoSoKyThuatComponent implements OnInit {
       "maDvi": this.userInfo.MA_DVI,
       "maVatTu": this.searchFilter.maVatTu,
       "maVatTuCha": this.searchFilter.maVatTuCha,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+      "ngayKiemTraDen": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
+      "ngayKiemTraTu": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
       "soBienBan": this.searchFilter.soBienBan,
@@ -354,23 +354,33 @@ export class HoSoKyThuatComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
+      console.log(this.dataTableAll);
+
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+      this.dataTable = [...this.dataTable, ...temp]
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
 
   clearFilterTable() {
     this.filterTable = {
@@ -388,3 +398,4 @@ export class HoSoKyThuatComponent implements OnInit {
   }
 
 }
+
