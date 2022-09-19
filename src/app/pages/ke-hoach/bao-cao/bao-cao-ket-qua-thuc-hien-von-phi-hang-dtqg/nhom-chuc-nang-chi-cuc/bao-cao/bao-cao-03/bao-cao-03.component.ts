@@ -112,6 +112,7 @@ export class BaoCao03Component implements OnInit {
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
         this.idBaoCao = this.data?.idBaoCao;
+        this.trangThaiPhuLuc = this.data?.trangThai;
         // 03
         this.data?.lstCtietBcaos.forEach(item => {
             const id = parseInt(item.header, 10) - 31;

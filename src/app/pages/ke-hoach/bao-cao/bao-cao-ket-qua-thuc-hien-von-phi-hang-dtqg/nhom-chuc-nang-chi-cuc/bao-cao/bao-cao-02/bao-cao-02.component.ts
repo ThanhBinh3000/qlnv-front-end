@@ -109,7 +109,8 @@ export class BaoCao02Component implements OnInit {
         this.statusBtnExport = this.data?.statusBtnExport;
         this.tuNgay = this.data?.tuNgay;
         this.denNgay = this.data?.denNgay;
-        this.idBaoCao = this.data?.idBaoCao
+        this.idBaoCao = this.data?.idBaoCao;
+        this.trangThaiPhuLuc = this.data?.trangThai;
         //tinh toan theo don vi tien va dua vao bieu mau
         this.data?.lstCtietBcaos.forEach(item => {
             const id = parseInt(item.header, 10) - 21;
