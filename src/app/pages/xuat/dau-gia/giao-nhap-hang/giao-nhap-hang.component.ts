@@ -19,7 +19,7 @@ export class GiaoNhapHangComponent implements OnInit {
     private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.spinner.show();
@@ -44,27 +44,7 @@ export class GiaoNhapHangComponent implements OnInit {
     }
   }
   async getCount() {
-    try {
-      let res = await this.quyetDinhNhapXuatService.getCount();
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.count = [
-            res.data.tatCa,
-            res.data.thoc,
-            res.data.gao,
-            res.data.muoi,
-            res.data.vatTu,
-          ];
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+
   }
 
   loaiVthhSelected: string;

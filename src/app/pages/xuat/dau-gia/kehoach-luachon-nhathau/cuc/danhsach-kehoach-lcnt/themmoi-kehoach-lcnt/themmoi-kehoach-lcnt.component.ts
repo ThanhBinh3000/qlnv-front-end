@@ -61,7 +61,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
   tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
-  listHangHoa: any[] = [];
+  listLoaiHangHoa: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listPhuongThucThanhToan: any[] = [
     {
@@ -81,6 +81,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
   phanLoTaiSanList: Array<PhanLoTaiSan> = [];
+  listChungLoaiHangHoa: any[] = [];
   maKeHoach: string;
   listLoaiHopDong: any[] = [];
   constructor(
@@ -585,9 +586,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.loaiVthhInput) {
-        this.listHangHoa = res.data;
+        this.listLoaiHangHoa = res.data;
       } else {
-        this.listHangHoa = res.data?.filter((x) => x.ma == this.loaiVthhInput);
+        this.listLoaiHangHoa = res.data?.filter((x) => x.ma == this.loaiVthhInput);
       }
     }
   }
@@ -841,6 +842,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
   changeLoaiHangHoa() {
     this.loadTieuChuanChatLuong();
+
   }
 
   thongTinTrangThai(trangThai: string): string {

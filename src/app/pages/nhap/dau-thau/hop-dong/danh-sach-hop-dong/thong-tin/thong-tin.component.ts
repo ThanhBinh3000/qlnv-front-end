@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogCanCuKQLCNTComponent
 } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
@@ -15,24 +15,24 @@ import {
 import {
   DialogThongTinPhuLucBangGiaHopDongComponent
 } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {dauThauGoiThauService} from 'src/app/services/dauThauGoiThau.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {ThongTinHopDongService} from 'src/app/services/thongTinHopDong.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {saveAs} from 'file-saver';
-import {DonviLienQuanService} from 'src/app/services/donviLienquan.service';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {QuyetDinhPheDuyetKetQuaLCNTService} from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
-import {STATUS} from "../../../../../../constants/status";
-import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinPhuLucHopDongService} from "../../../../../../services/thongTinPhuLucHopDong.service";
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
+import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
+import { ThongTinPhuLucHopDongService } from "../../../../../../services/thongTinPhuLucHopDong.service";
 
 interface DonviLienQuanModel {
   id: number;
@@ -136,7 +136,7 @@ export class ThongTinComponent implements OnInit {
         ngayHieuLuc: [null],
         soNgayThien: [null],
         tgianNkho: [null, [Validators.required]],
-        tenVthh: [null],
+        tenLoaiVthh: [null],
         moTaHangHoa: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
@@ -225,7 +225,7 @@ export class ThongTinComponent implements OnInit {
             namHd: +this.detail.namHd ?? null,
             ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
             soNgayThien: this.detail.soNgayThien ?? null,
-            tenVthh: this.detail.tenVthh ?? null,
+            tenLoaiVthh: this.detail.tenLoaiVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
             moTaHangHoa: this.detail.moTaHangHoa ?? null,
@@ -331,7 +331,7 @@ export class ThongTinComponent implements OnInit {
           delete body.ngayHieuLuc;
         delete body.maHdong;
         delete body.tenCloaiVthh;
-        delete body.tenVthh;
+        delete body.tenLoaiVthh;
 
         body.idNthau = `${this.dvLQuan.id}`;
         body.diaDiemNhapKhoReq = this.diaDiemNhapListCuc;
@@ -465,7 +465,7 @@ export class ThongTinComponent implements OnInit {
           namHd: +data.namKhoach ?? null,
           idGoiThau: null,
           soNgayThien: null,
-          tenVthh: null,
+          tenLoaiVthh: null,
           loaiVthh: null,
           cloaiVthh: null,
           tenCloaiVthh: null,
@@ -487,7 +487,7 @@ export class ThongTinComponent implements OnInit {
         console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
-          tenVthh: data.tenVthh ?? null,
+          tenLoaiVthh: data.tenLoaiVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
@@ -610,7 +610,7 @@ export class ThongTinComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongTinPhuLucHopDongService.delete({id: id})
+          this.thongTinPhuLucHopDongService.delete({ id: id })
             .then(async () => {
               await this.loadChiTiet(this.id);
             });
