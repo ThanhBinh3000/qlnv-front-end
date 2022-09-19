@@ -211,7 +211,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       }
     }
     if(!this.searchFilter.dotBcao && !this.searchFilter.nam ){
-      this.notification.warning(MESSAGE.WARNING, "vui lòng nhập dữ lieju cho các trường bôi đỏ");
+      this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm và đợt báo cáo");
       return;
     }
     if(!this.searchFilter.nam){
