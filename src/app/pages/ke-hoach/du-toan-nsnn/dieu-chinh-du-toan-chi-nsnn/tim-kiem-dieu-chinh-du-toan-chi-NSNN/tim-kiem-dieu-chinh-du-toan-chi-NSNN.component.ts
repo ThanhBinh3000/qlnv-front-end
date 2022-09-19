@@ -75,7 +75,8 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     size: 10,
     page: 1,
   }
-  statusBtnValidate = true;
+  statusBtnValidateDot = true;
+  statusBtnValidateNam = true;
   statusTaoMoi = true;
   loai = '0';
   constructor(
@@ -94,7 +95,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
-
+    this.searchFilter.nam = new Date().getFullYear;
     this.userInfo = this.userService.getUserLogin();
     this.roles = this.userInfo.roles;
 
@@ -212,14 +213,18 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     }
     if(!this.searchFilter.dotBcao && !this.searchFilter.nam ){
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm và đợt báo cáo");
+      this.statusBtnValidateNam = false
+      this.statusBtnValidateDot = false
       return;
     }
     if(!this.searchFilter.nam){
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm báo cáo");
+      this.statusBtnValidateNam = false
       return;
     }
     if(!this.searchFilter.dotBcao){
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập đợt báo cáo");
+      this.statusBtnValidateDot = false
       return;
     }
     const obj = {

@@ -116,7 +116,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'KIỂM TRA TÍNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
     Role: [
-      GDT.XEM_PA_TONGHOP_PBDT
+      GDT.XEM_PA_TONGHOP_PBDT,
+      GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT,
     ],
     isDisabled: false,
   },

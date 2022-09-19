@@ -315,8 +315,6 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.quanLyVonPhiService.getListUser().toPromise().then(res => {
       if (res.statusCode == 0) {
         this.canBos = res.data;
-        console.log(this.canBos);
-
       }
     }, (err) => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -451,6 +449,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   // luu
   async save() {
+    this.spinner.show();
     // check lưu trong bảng trước khi nhấn lưu
     let checkSave = true;
     this.lstDieuChinhs.forEach(e => {
@@ -536,7 +535,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
     }
     //call service them moi
-    this.spinner.show();
+
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
         async data => {
