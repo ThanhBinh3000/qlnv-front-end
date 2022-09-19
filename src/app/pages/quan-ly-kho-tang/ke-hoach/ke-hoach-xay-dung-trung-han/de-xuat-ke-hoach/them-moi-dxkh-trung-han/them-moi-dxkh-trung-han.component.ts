@@ -9,6 +9,7 @@ import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
+import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 
 @Component({
   selector: 'app-them-moi-dxkh-trung-han',
@@ -27,8 +28,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
+  rowItem: KeHoachXayDungTrungHan = new KeHoachXayDungTrungHan();
+  dataEdit: { [key: string]: { edit: boolean; data: KeHoachXayDungTrungHan } } = {};
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -93,7 +94,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       this.dataTable = [];
     }
     this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new ThongTinQuyetDinh();
+    this.rowItem = new KeHoachXayDungTrungHan();
     this.updateEditCache()
   }
 

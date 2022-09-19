@@ -85,7 +85,10 @@
     </form>
   </nz-card>
   <br>
-  <div class="header-detail-tab">Thông tin chi tiết quy hoạch</div>
+  <div class="header-detail-tab">Thông tin chi tiết quy hoạch <button type="button" class="btn btn-sub" (click)="exportData()" style="margin-left: 1519px">
+    <i class="icon htvbdh_chuyen-xu-ly"></i>
+    <span>Xuất file</span>
+  </button></div>
   <br>
   <nz-card class="mt16 flex-card p-lr16">
     <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -108,7 +111,7 @@
         <td class="text-center" style="width: 2%;"></td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear>
+            <nz-select [(ngModel)]="rowItem.cucDtnnKv" [nzShowArrow]="false" nzAllowClear>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsCuc">
               </nz-option>
             </nz-select>
@@ -116,7 +119,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false">
+            <nz-select [(ngModel)]="rowItem.chiCuc" [nzShowArrow]="false">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
               </nz-option>
@@ -126,27 +129,27 @@
 
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
+            <input nz-input [(ngModel)]="rowItem.diemKho" [readonly]="true" />
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" />
+            <input nz-input [(ngModel)]="rowItem.diaDiem" />
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" />
+            <input nz-input [(ngModel)]="rowItem.dienTich" />
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" />
+            <input nz-input [(ngModel)]="rowItem.tongTichLuong" />
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false">
+            <nz-select [(ngModel)]="rowItem.phuongAnQuyHoach" [nzShowArrow]="false">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
               </nz-option>
@@ -155,11 +158,7 @@
         </td>
         <td style="width: 32%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
-              </nz-option>
-            </nz-select>
+            <input nz-input [(ngModel)]="rowItem.ghiChu" />
           </nz-input-group>
         </td>
         <td class="text-center">
@@ -179,6 +178,10 @@
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
             <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
@@ -189,19 +192,19 @@
           </td>
         </ng-container>
         <ng-template #editTemplate>
-          <td></td>
-          <td style="width: 45%;">
+          <td style="width: 2%;"></td>
+          <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
+              <nz-select [(ngModel)]="dataEdit[idx].data.cucDtnnKv" [nzShowArrow]="false" nzAllowClear
               >
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsCuc">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
-          <td style="width: 25%;">
+          <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false"
+              <nz-select [(ngModel)]="dataEdit[idx].data.chiCuc" [nzShowArrow]="false"
                         >
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
@@ -209,17 +212,42 @@
               </nz-select>
             </nz-input-group>
           </td>
-          <td style="width: 5%;">
+          <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
+              <input nz-input [(ngModel)]="dataEdit[idx].data.diemKho" [readonly]="true" />
             </nz-input-group>
           </td>
-          <td style="width: 10%;">
+          <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" />
+              <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem"  />
             </nz-input-group>
           </td>
-          <td class="text-center">
+          <td style="width: 8%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.dienTich" />
+            </nz-input-group>
+          </td>
+          <td style="width: 8%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.tongTichLuong"  />
+            </nz-input-group>
+          </td>
+          <td style="width: 8%;">
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[idx].data.phuongAnQuyHoach" [nzShowArrow]="false"
+              >
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td style="width: 32%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu" />
+            </nz-input-group>
+          </td>
+          <td class="text-center" style="width: 10%;">
             <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
             </a>

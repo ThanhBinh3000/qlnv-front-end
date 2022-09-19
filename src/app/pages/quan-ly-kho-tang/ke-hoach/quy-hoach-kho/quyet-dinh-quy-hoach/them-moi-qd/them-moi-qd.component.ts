@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
 import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -26,8 +27,8 @@ export class ThemMoiQdComponent implements OnInit {
   dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
+  rowItem: QuyHoachKho = new QuyHoachKho();
+  dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -92,7 +93,7 @@ export class ThemMoiQdComponent implements OnInit {
       this.dataTable = [];
     }
     this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new ThongTinQuyetDinh();
+    this.rowItem = new QuyHoachKho();
     this.updateEditCache()
   }
 
@@ -121,5 +122,9 @@ export class ThemMoiQdComponent implements OnInit {
         }
       });
     }
+  }
+
+  exportData() {
+
   }
 }

@@ -166,8 +166,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
+          console.log(data)
           this.formData.patchValue({
-            canCu: data.canCu
+            canCu: data.canCu,
+            chiTieuId: data.id
           })
         }
       } else {
@@ -357,6 +359,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       ngayHieuLuc: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.ngayHieuLuc
+          : null,
+        [],
+      ],
+      chiTieuId: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.chiTieuId
           : null,
         [],
       ],
@@ -694,27 +702,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               };
               this.taiLieuDinhKemList.push(item);
             });
-          }
-          if (this.userService.isCuc()) {
-            if (res.data.qdGocId) {
-              const item = {
-                id: res.data.qdGocId,
-                text: res.data.soQdChiTieu,
-              };
-              this.canCuList.push(item);
-            } else {
-              this.canCuList = [];
-            }
-          } else {
-            if (this.thongTinChiTieuKeHoachNam?.canCus?.length > 0) {
-              this.thongTinChiTieuKeHoachNam.canCus.forEach((file) => {
-                const item = {
-                  id: file.id,
-                  text: file.fileName,
-                };
-                this.canCuList.push(item);
-              });
-            }
           }
           this.dsKeHoachLuongThucClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khLuongThuc,
@@ -1361,7 +1348,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
-        this.spinner.hide()
+        this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
         return;
       }
@@ -1375,9 +1362,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
-    if (this.userService.isCuc()) {
-      this.thongTinChiTieuKeHoachNam.qdGocId = this.canCuList[0].id;
-    }
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
     );
@@ -2443,13 +2427,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     );
 
   }
-  deleteCanCuTag(data: any) {
-    this.canCuList = this.canCuList.filter((x) => x.id !== data.id);
-    if (this.userService.isCuc()) {
-      this.thongTinChiTieuKeHoachNam.namKeHoach = this.yearNowClone;
-      this.formData.patchValue({ namKeHoach: this.yearNowClone });
-    }
-  }
   openFile(event) {
     let item = {
       id: new Date().getTime(),
@@ -2551,34 +2528,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.globals.prop.DU_THAO_TRINH_DUYET
       || this.isViewDetail
     );
-  }
-  downloadFileKeHoach(event) {
-    let body = {
-      "dataType": "",
-      "dataId": 0
-    }
-    switch (event) {
-      case 'can-cu':
-        body.dataType = this.thongTinChiTieuKeHoachNam.canCus[0].dataType;
-        body.dataId = this.thongTinChiTieuKeHoachNam.canCus[0].dataId;
-        if (this.canCuList.length > 0) {
-          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-            saveAs(blob, this.thongTinChiTieuKeHoachNam.canCus.length > 1 ? 'Can-cu.zip' : this.thongTinChiTieuKeHoachNam.canCus[0].fileName);
-          });
-        }
-        break;
-      case 'tai-lieu-dinh-kem':
-        body.dataType = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataType;
-        body.dataId = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].dataId;
-        if (this.taiLieuDinhKemList.length > 0) {
-          this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-            saveAs(blob, this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.thongTinChiTieuKeHoachNam.fileDinhKemReqs[0].fileName);
-          });
-        }
-        break;
-      default:
-        break;
-    }
   }
   openDialogGiaoChiTieu(role) {
     const modalQD = this.modal.create({

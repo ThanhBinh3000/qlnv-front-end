@@ -10,6 +10,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
 import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-them-moi-tong-hop-khxd-trung-han',
@@ -31,6 +32,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   isTongHop: boolean = false;
   listNam: any[] = [];
+  timeNow: any;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -46,12 +48,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       id: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
+      ngayTongHop: [this.timeNow],
     });
   }
 
   async ngOnInit() {
     this.isTongHop = false;
     this.maQd = '/QĐ-BTC'
+    this.timeNow = dayjs().get('day') + '/' + dayjs().get('month') + '/' + dayjs().get('year')
   }
 
   quayLai() {

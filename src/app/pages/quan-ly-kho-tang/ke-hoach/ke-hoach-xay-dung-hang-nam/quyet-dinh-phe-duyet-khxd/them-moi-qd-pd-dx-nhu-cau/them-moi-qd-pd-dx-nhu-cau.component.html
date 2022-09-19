@@ -111,17 +111,17 @@
               [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
       <thead>
       <tr>
-        <th class="text-center" rowSpan="2" style="width: 2%;">STT</th>
-        <th class="text-center" style="width: 15%;" rowSpan="2">Danh mục dự án</th>
-        <th class="text-center" style="width: 15%;" rowSpan="2">Địa điểm xây dựng</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Loại dự án</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Thời gian KC-HT</th>
-        <th class="text-center" style="width: 8%;" rowSpan="2">Khối</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Số QĐ phê duyệt/điều chỉnh TMĐT</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">TMĐT</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">KH vốn đầu tư nguồn NSNN năm 2022</th>
+        <th class="text-center" width="32px"  rowSpan="2">STT</th>
+        <th class="text-center" width="200px"  rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="150px" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="86px"   rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="130px"  rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" width="76px"  rowSpan="2">Khối</th>
+        <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="280px"  colSpan="2">TMĐT</th>
+        <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" width="310px"  colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" width="200px"  rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm 2022</th>
       </tr>
       <tr>
         <th class="text-center"  style="width: 10%;">Tổng số</th>
@@ -134,10 +134,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit">
+        <ng-container>
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
+          <td>{{ data.dviTinh }}</td>
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td>{{ data.soLuong }}</td>
@@ -148,15 +149,6 @@
           <td>{{ data.soLuong }}</td>
           <td>{{ data.soLuong }}</td>
           <td>{{ data.soLuong }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td style="text-align: center;">
-            <a (click)="editItem(idx)">
-              <i class=" fa fa-pencil"></i>
-            </a>
-            <a (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
         </ng-container>
       </tr>
       </tbody>
@@ -168,18 +160,18 @@
               [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
       <thead>
       <tr>
-        <th class="text-center" rowSpan="2" style="width: 2%;">STT</th>
-        <th class="text-center" style="width: 15%;" rowSpan="2">Danh mục dự án</th>
-        <th class="text-center" style="width: 15%;" rowSpan="2">Địa điểm xây dựng</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Loại dự án</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Thời gian KC-HT</th>
-        <th class="text-center" style="width: 8%;" rowSpan="2">Khối</th>
-        <th class="text-center" style="width: 10%;" rowSpan="2">Số QĐ phê duyệt/điều chỉnh TMĐT</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">TMĐT</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-        <th class="text-center" style="width: 20%;" colSpan="2">KH vốn đầu tư nguồn NSNN năm 2022</th>
-        <th class="text-center" style="width: 8%;" rowSpan="2">Hành động</th>
+        <th class="text-center" width="32px"  rowSpan="2">STT</th>
+        <th class="text-center" width="183px"  rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="211px" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="128px"   rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="130px"  rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" width="76px"  rowSpan="2">Khối</th>
+        <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="280px"  colSpan="2">TMĐT</th>
+        <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" width="330px"  colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" width="209px"  rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm 2022</th>
+        <th class="text-center" width="154px"  rowSpan="2" nzRight>Hành động </th>
       </tr>
       <tr>
         <th class="text-center"  style="width: 10%;">Tổng số</th>
@@ -193,6 +185,11 @@
       <tbody>
       <tr>
         <td class="text-center" style="width: 2%;"></td>
+        <td class="text-center" style="width: 15%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong"[readonly]="true" />
+          </nz-input-group>
+        </td>
         <td class="text-center" style="width: 15%;">
           <nz-input-group>
             <input nz-input [(ngModel)]="rowItem.soLuong"[readonly]="true" />
@@ -254,12 +251,7 @@
             <input nz-input [(ngModel)]="rowItem.soLuong"   />
           </nz-input-group>
         </td>
-        <td class="text-center" style="width: 10%;">
-          <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
-          </nz-input-group>
-        </td>
-        <td  class="text-center">
+        <td  class="text-center" nzRight>
           <a (click)="themMoiItem()">
             <i class="fa fa-plus"></i>
           </a>
@@ -285,7 +277,7 @@
           <td>{{ data.soLuong }}</td>
           <td>{{ data.soLuong }}</td>
           <td>{{ data.soLuong }}</td>
-          <td style="text-align: center;">
+          <td style="text-align: center;" nzRight>
             <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
@@ -299,6 +291,11 @@
           <td style="width: 5%;">
             <nz-input-group>
               <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
             </nz-input-group>
           </td>
           <td style="width: 10%;">
@@ -356,12 +353,7 @@
               <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"/>
             </nz-input-group>
           </td>
-          <td class="text-center" style="width: 10%;">
-            <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true"  />
-            </nz-input-group>
-          </td>
-          <td class="text-center">
+          <td class="text-center" nzRight>
             <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
             </a>
