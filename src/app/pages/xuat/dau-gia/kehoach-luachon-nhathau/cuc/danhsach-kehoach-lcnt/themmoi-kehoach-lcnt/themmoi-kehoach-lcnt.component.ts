@@ -166,9 +166,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
         [Validators.required],
       ],
-      loaiHangHoa: [
+      loaiVthh: [
         {
-          value: this.khBanDauGia ? this.khBanDauGia.loaiHangHoa : null,
+          value: this.khBanDauGia ? this.khBanDauGia.loaiVthh : null,
+          disabled: this.isView ? true : false,
+        },
+        [Validators.required],
+      ],
+      cloaiVthh: [
+        {
+          value: this.khBanDauGia ? this.khBanDauGia.cloaiVthh : null,
           disabled: this.isView ? true : false,
         },
         [Validators.required],
@@ -500,9 +507,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         fileDinhKems: this.listFileDinhKem,
         id: this.formData.get('id').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
-        loaiHangHoa: this.formData.get('loaiHangHoa').value,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         loaiHopDong: this.formData.get('loaiHopDong').value,
-        loaiVatTuHangHoa: null,
         maDv: null,
         namKeHoach: this.formData.get('namKeHoach').value,
         ngayKy: this.formData.get('ngayKy').value
@@ -826,7 +833,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       },
     });
   }
-  loadTieuChuanChatLuong() {
+  async loadChungLoaiHH() {
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": this.formData.get('loaiVthh').value });
+    this.listChungLoaiHangHoa = [];
+    this.formData.get('cloaiVthh').setValue(null);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listChungLoaiHangHoa = res.data;
+      }
+    }
+  }
+  async loadTieuChuanChatLuong() {
     this.dmTieuChuanService
       .getDetailByMaHh(this.formData.get('loaiHangHoa').value)
       .then((res) => {
@@ -841,7 +858,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
   }
   changeLoaiHangHoa() {
-    this.loadTieuChuanChatLuong();
+    this.loadChungLoaiHH();
 
   }
 
