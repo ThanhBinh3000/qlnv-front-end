@@ -16,6 +16,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { STATUS } from "../../../../../../constants/status";
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -33,7 +34,8 @@ export class TongHopKhlcntComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
-    private helperService: HelperService
+    private helperService: HelperService,
+    public globals: Globals,
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
@@ -66,7 +68,7 @@ export class TongHopKhlcntComponent implements OnInit {
     tenNguonVon: '',
     trangThai: '',
   }
-
+  STATUS = STATUS;
   dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -342,19 +344,19 @@ export class TongHopKhlcntComponent implements OnInit {
     return '';
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '26': {
-        return 'Chưa tạo QĐ'
-      }
-      case '27': {
-        return 'Đã dự thảo QĐ'
-      }
-      case '28': {
-        return 'Đã ban hành QĐ'
-      }
-    }
-  }
+  // convertTrangThai(status: string) {
+  //   switch (status) {
+  //     case STATUS.CHUA_TAO_QD: {
+  //       return 'Chưa tạo QĐ'
+  //     }
+  //     case STATUS.DA_DU_THAO_QD: {
+  //       return 'Đã dự thảo QĐ'
+  //     }
+  //     case STATUS.DA_BAN_HANH_QD: {
+  //       return 'Đã ban hành QĐ'
+  //     }
+  //   }
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -473,7 +475,7 @@ export class TongHopKhlcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '26' || item.trangThai == '27') {
+          if (item.trangThai == this.globals.prop.CHUA_TAO_QD || item.trangThai == this.globals.prop.DA_DU_THAO_QD) {
             item.checked = true;
           }
         });
