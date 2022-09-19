@@ -79,7 +79,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   danhSachBaoCao: any = [];
   trangThais: any[] = [];
   donVis: any[] = [];
-  roles: string[] = [];
+
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -110,7 +110,6 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo.MA_DVI;
-    this.roles = this.userInfo?.roles;
 
     this.searchFilter.denNgay = new Date();
     this.searchFilter.tuNgay = this.date;
@@ -152,7 +151,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     //   }
     // }
 
-    if (this.roles.includes(DCDT.TIEP_NHAN_REPORT)) {
+    if (this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT)) {
       this.status = false;
       this.searchFilter.trangThai = Utils.TT_BC_7;
       this.searchFilter.loaiTimKiem = '1';
@@ -167,7 +166,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
       this.status = true;
       this.searchFilter.loaiTimKiem = '0';
       this.searchFilter.donViTao = this.maDviTao;
-      if (this.roles.includes(DCDT.DUYET_REPORT)) {
+      if (this.userService.isAccessPermisson(DCDT.DUYET_REPORT)) {
         this.searchFilter.trangThai = Utils.TT_BC_2;
         this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
       } else {
@@ -203,7 +202,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
         return;
       }
     }
-    if (!this.roles.includes(DCDT.TIEP_NHAN_REPORT)) {
+    if (!this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT)) {
       this.searchFilter.loaiTimKiem = "0";
     } else {
       if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao) {
@@ -214,10 +213,10 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     }
     let lstTrangThai = [];
     if (!this.searchFilter.trangThai) {
-      if (this.roles.includes(DCDT.TIEP_NHAN_REPORT)) {
+      if (this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT)) {
         lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
       }
-      else if (this.roles.includes(DCDT.DUYET_REPORT)) {
+      else if (this.userService.isAccessPermisson(DCDT.DUYET_REPORT)) {
         lstTrangThai = [Utils.TT_BC_2];
       } else {
         lstTrangThai = [Utils.TT_BC_4];

@@ -72,7 +72,6 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
   noiDungs: any[] = NOI_DUNG;
   soLaMa: any[] = LA_MA;
-  roles: string[] = [];
   //file
   fileDetail: NzUploadFile;
   editMoneyUnit = false;
@@ -95,7 +94,6 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
     //lay danh sach danh muc
     this.danhMucService.dMDonVi().toPromise().then(
       data => {
@@ -114,23 +112,6 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
       this.getDetailReport();
     }
 
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   //download file về máy tính

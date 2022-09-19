@@ -79,7 +79,7 @@ export class GiaoNhiemVuComponent implements OnInit {
   loaiTongHop!: string;
   maDviUser!: string;
   dotBcao: number;
-  roles: string[] = [];
+
   //danh muc
   dotBcaos: any[] = [
     {
@@ -207,7 +207,6 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
     this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
 
     const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
 
@@ -308,7 +307,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao + "/năm " + this.namHienHanh
   }
   getBtnStatus(status: string[], role: string, check: boolean) {
-    return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
+    return !(status.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(role) && check);
   }
 
   getListUser() {
@@ -323,7 +322,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(DCDT.EDIT_REPORT)) {
+    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(DCDT.EDIT_REPORT)) {
       this.status = false;
     } else {
       this.status = true;
@@ -345,38 +344,20 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, DCDT.EDIT_REPORT, checkChirld);
     // this.statusBtnPrint = false
     if (Utils.statusOK.includes(this.trangThaiBaoCao) && (
-      (this.roles.includes(DCDT.TIEP_NHAN_REPORT) && this.checkParent) ||
-      (this.roles.includes(DCDT.DUYET_REPORT) && checkChirld) ||
-      (this.roles.includes(DCDT.PHE_DUYET_REPORT) && checkChirld)
+      (this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT) && this.checkParent) ||
+      (this.userService.isAccessPermisson(DCDT.DUYET_REPORT) && checkChirld) ||
+      (this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT) && checkChirld)
     )) {
       this.statusBtnOk = true;
     } else {
       this.statusBtnOk = false;
     }
     if (Utils.statusSave.includes(this.trangThaiBaoCao)
-      && this.roles.includes(DCDT.EDIT_REPORT) && checkChirld) {
+      && this.userService.isAccessPermisson(DCDT.EDIT_REPORT) && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;
     }
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          this.maDviUser = data?.data.dvql;
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
   }
 
   //upload file

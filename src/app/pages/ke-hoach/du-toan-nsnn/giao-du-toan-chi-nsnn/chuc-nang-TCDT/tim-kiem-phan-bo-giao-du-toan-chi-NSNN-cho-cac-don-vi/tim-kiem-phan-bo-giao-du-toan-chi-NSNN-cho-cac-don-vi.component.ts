@@ -128,7 +128,6 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   listIdDelete: any[] = [];
   userRole: string;
   statusCreate = true;
-  roles: string[] = [];
   statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -146,24 +145,23 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   async ngOnInit() {
     this.spinner.show()
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
     this.searchFilter.donViTao = this.userInfo?.MA_DVI;
     this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namPa = new Date().getFullYear()
-    if (this.roles.includes(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.statusTaoMoi = false;
     }
-    if (this.roles.includes(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.status = true;
       this.trangThai = '1';
       this.roleUser = 'canbo';
-    } else if (this.roles.includes(GDT.DUYET_REPORT_PA_PBDT)) {
+    } else if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '2';
       this.roleUser = 'truongBoPhan';
-    } else if (this.roles.includes(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+    } else if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '4';
       this.roleUser = 'lanhDao';
@@ -379,11 +377,11 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
     })
   }
   checkViewReport() {
-    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.roles.includes(GDT.DELETE_REPORT_BTC);
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_BTC);
   }
 
 

@@ -94,7 +94,6 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   maDviTao: string;
   listIdDelete: string[] = [];
   statusBtnValidate = true;
-  roles: string[] = [];
   statusTaoMoi = true;
 
   constructor(
@@ -110,30 +109,28 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show()
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.searchFilter.namQtoan = new Date().getFullYear() - 1
     this.searchFilter.ngayTaoDen = new Date();
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
-    console.log(this.roles);
-    if (this.roles.includes(QTVP.ADD_REPORT)) {
+    if (this.userService.isAccessPermisson(QTVP.ADD_REPORT)) {
       this.statusTaoMoi = false;
     }
     //  check va lay gia tri role trong list role
     this.statusBtnXoaDk = false;
-    if (this.roles.includes(QTVP.EDIT_REPORT)) {
+    if (this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
       this.status = false;
       this.trangThai = Utils.TT_BC_1;
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
       this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
     }
     else {
-      if (this.roles.includes(QTVP.DUYET_QUYET_TOAN_REPORT)) {
+      if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
         this.status = true;
         this.trangThai = Utils.TT_BC_2;
         this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
-      } else if (this.roles.includes(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
+      } else if (this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
         this.status = true;
         this.trangThai = Utils.TT_BC_4;
         this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
@@ -343,7 +340,7 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
     return check;
   }
   checkViewReport() {
-    return this.roles.includes(QTVP.VIEW_REPORT)
+    return this.userService.isAccessPermisson(QTVP.VIEW_REPORT)
   }
   updateAllCheck() {
     this.danhSachBaoCao.forEach(item => {
@@ -355,6 +352,6 @@ export class DanhSachBaoCaoQuyetToanVonPhiHangDTQGComponent implements OnInit {
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.roles.includes(QTVP.DELETE_REPORT)
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(QTVP.DELETE_REPORT)
   }
 }

@@ -93,7 +93,6 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   soLaMa: any[] = LA_MA;
   trangThaiBaoCaos: any[] = TRANG_THAI_TIM_KIEM;
   donViTinhs: any = [];
-  roles: string[] = [];
   //thong tin chung bao cao
   initItem: ItemData = {
     id: null,
@@ -217,7 +216,6 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     const namQtoan = this.routerActive.snapshot.paramMap.get('namQtoan');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.namQtoan = Number(namQtoan);
 
     if (this.id) {
@@ -278,7 +276,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.roles.includes(QTVP.EDIT_REPORT)) {
+    if (Utils.statusSave.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
       this.status = false;
     } else {
       this.status = true;
@@ -303,7 +301,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
   }
 
   getBtnStatus(status: string[], role: string, check: boolean) {
-    return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
+    return !(status.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(role) && check);
   }
 
   async getDetailReport() {
@@ -446,7 +444,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
 
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -468,7 +466,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

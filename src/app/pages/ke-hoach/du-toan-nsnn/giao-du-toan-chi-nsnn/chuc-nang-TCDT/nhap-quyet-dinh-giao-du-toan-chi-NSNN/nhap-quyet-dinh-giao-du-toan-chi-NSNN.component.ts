@@ -115,7 +115,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
   editMoneyUnit = false;
-  roles: string[] = [];
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -164,7 +163,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     //lay thong tin user
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
     this.maDonViTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
@@ -226,14 +224,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
 
   //check role cho các nut trinh duyet
   getStatusButton() {
-    if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
       this.status = true;
     } else {
       this.status = false;
     }
     const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_BTC) && checkChirld);
+    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_BTC) && checkChirld);
 
     if (this.id) {
       this.statusBtnSave = true;
@@ -252,10 +250,10 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     }
     // this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
 
-    this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
-    this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
+    this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
+    this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
-    // if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+    // if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
     //   this.statusBtnSave = true;
     //   this.statusBtnNew = true;
     //   this.statusBtnCopy = true;
@@ -263,7 +261,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     //   this.status = true;
     // }
 
-    if (!this.roles.includes(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+    if (!this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.statusBtnNew = true;
     }
   }
@@ -362,7 +360,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
-          if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+          if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
             this.statusBtnSave = true;
             this.statusBtnNew = true;
             this.statusBtnCopy = true;
