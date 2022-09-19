@@ -18,7 +18,6 @@ export class LapThamDinhComponent implements OnInit {
     //thong tin dang nhap
     userInfo: any;
     donVis: any[] = [];
-    roles: string[] = [];
     capDvi: string;
 
 
@@ -34,13 +33,11 @@ export class LapThamDinhComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
-        console.log(this.roles.filter(e => e.startsWith('KHVDTNSNN_DTNSNN_LAPTD')));
 
         this.QuanLyLapThamDinhDuToanNSNNList.forEach(data => {
             let check = false;
-            this.roles.forEach(item => {
-                if (data.Role.includes(item)) {
+            data.Role.forEach(item => {
+                if (this.userService.isAccessPermisson(item)) {
                     check = true;
                     return;
                 }

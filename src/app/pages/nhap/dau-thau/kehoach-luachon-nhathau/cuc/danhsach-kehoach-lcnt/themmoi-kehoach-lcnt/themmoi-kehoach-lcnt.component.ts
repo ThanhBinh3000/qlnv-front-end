@@ -196,6 +196,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
 
+  isDetailPermission() {
+    if (this.loaiVthhInput === "02") {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
+        return true;
+      }
+    }
+    else {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
   }
@@ -502,6 +516,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    if (!this.isDetailPermission()) {
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');

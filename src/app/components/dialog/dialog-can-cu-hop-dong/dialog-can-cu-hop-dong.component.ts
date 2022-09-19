@@ -6,6 +6,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service';
+import { STATUS } from "../../../constants/status";
 
 @Component({
   selector: 'dialog-can-cu-hop-dong',
@@ -65,7 +66,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
     else {
       let body = {
         "loaiVthh": this.dataVthh ?? '',
-        "trangThai": "02",
+        "trangThai": STATUS.DA_KY,
         "paggingReq": {
           limit: 10,
           page: 0,
@@ -115,7 +116,7 @@ export class DialogCanCuHopDongComponent implements OnInit {
           "page": this.page - 1
         },
         "soHd": this.text,
-        "trangThai": "02",
+        "trangThai": STATUS.DA_KY,
       }
       res = await this.quanLyHopDongNhapXuatService.timKiem(body);
     }

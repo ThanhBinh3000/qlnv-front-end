@@ -22,7 +22,6 @@ import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von
 export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	//thong tin tim kiem
 	searchFilter = {
 		loaiTimKiem: '1',
@@ -68,10 +67,9 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 	async ngOnInit() {
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 		this.spinner.show();
 		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
-		this.statusSynthetic = !this.roles.includes(CVNC.ADD_SYNTHETIC_CKV);
+		this.statusSynthetic = !this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV);
 
 		await this.dataSource.currentData.subscribe(obj => {
 			this.searchFilter.qdChiTieu = obj?.qdChiTieu;

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
+import { UserAPIService } from 'src/app/services/user/userApi.service';
 import { QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST } from './quan-ly-cap-nguon-von-chi.constant';
 
 @Component({
@@ -13,7 +14,6 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 	@ViewChild('nzTreeComponent', { static: false })
 
 	userInfo: any;
-	roles: string[] = [];
 	user: any;
 
 	donVis: any[] = [];
@@ -25,17 +25,16 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 		private router: Router,
 		private userService: UserService,
 		private spinner: NgxSpinnerService,
+		private userApiService: UserAPIService,
 	) { }
 
 	async ngOnInit(): Promise<void> {
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
-		console.log(this.roles.filter(e => e.startsWith('VONPHIHANG_VONCHIDTQG')))
 		this.spinner.show();
 		this.QuanLyCapVonNguonChiNsnnList.forEach(data => {
 			let check = false;
 			data.Role.forEach(item => {
-				if (this.roles.includes(item)) {
+				if (this.userService.isAccessPermisson(item)) {
 					check = true;
 					return;
 				}

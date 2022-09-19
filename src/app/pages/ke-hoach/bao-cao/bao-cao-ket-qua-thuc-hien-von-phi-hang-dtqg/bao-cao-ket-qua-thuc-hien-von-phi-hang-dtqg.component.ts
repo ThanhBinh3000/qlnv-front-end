@@ -17,7 +17,6 @@ export class BaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnInit {
 
     //thong tin dang nhap
     userInfo: any;
-    roles: string[] = [];
     donVis: any[] = [];
     capDvi: string;
 
@@ -34,11 +33,10 @@ export class BaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.BaoCaoKetQuaThucHienVonPhiHangDTQGList.forEach(data => {
             let check = false;
             data.Role.forEach(item => {
-                if (this.roles.includes(item)) {
+                if (this.userService.isAccessPermisson(item)) {
                     check = true;
                     return;
                 }

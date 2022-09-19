@@ -9,7 +9,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { BAO_CAO_THUC_HIEN, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
 @Component({
 	selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
@@ -29,7 +29,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	listBcaoKqua: any[] = [];
 	// lenght: any = 0;
 	userInfo: any;
-	roles: string[] = [];
 	roleUser: string;
 	listIdDelete: string[] = [];
 
@@ -71,15 +70,14 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
-		if (this.roles.includes(BCDTC.ADD_REPORT)) {
+		if (this.userService.isAccessPermisson(BCDTC.ADD_REPORT)) {
 			this.trangThai = '1';
 			this.roleUser = 'canbo';
 			this.statusThemMoi = false;
-		} else if (this.roles.includes(BCDTC.DUYET_REPORT) || this.roles.includes(BCDTC.DUYET_SYNTHETIC_REPORT)) {
+		} else if (this.userService.isAccessPermisson(BCDTC.DUYET_REPORT) || this.userService.isAccessPermisson(BCDTC.DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '2';
 			this.roleUser = 'truongBoPhan';
-		} else if (this.roles.includes(BCDTC.PHE_DUYET_REPORT) || this.roles.includes(BCDTC.PHE_DUYET_SYNTHETIC_REPORT)) {
+		} else if (this.userService.isAccessPermisson(BCDTC.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(BCDTC.PHE_DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '4';
 			this.roleUser = 'lanhDao';
 		}
@@ -296,20 +294,20 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 	checkEditReport(item: any) {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusSave &&
-			(isSynthetic ? this.roles.includes(BCDTC.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.EDIT_REPORT));
+		return Utils.statusSave.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCDTC.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusDelete &&
-			(isSynthetic ? this.roles.includes(BCDTC.DELETE_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.DELETE_REPORT));
+		return Utils.statusDelete.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCDTC.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.DELETE_REPORT));
 	}
 
 	checkApproveReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusApprove &&
-			(isSynthetic ? this.roles.includes(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.APPROVE_REPORT));
+		return Utils.statusApprove.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.APPROVE_REPORT));
 	}
 
 	checkViewReport(item: any): boolean {

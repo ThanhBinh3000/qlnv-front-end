@@ -1,16 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from 'src/app/pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.constant';
-import { UserService } from 'src/app/services/user.service';
-import { CVMB, LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DataService } from 'src/app/services/data.service';
+import { UserService } from 'src/app/services/user.service';
+import { CVMB, LOAI_VON, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI_TIM_KIEM_CHA } from '../../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
@@ -21,7 +19,6 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../../quan-ly-cap-von-mua-ban-tt-tie
 export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -67,7 +64,6 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
 
 		this.searchFilter.maDvi = this.userInfo?.MA_DVI;
 
@@ -81,7 +77,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.roles.includes(CVMB.DUYET_REPORT_GNV)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;

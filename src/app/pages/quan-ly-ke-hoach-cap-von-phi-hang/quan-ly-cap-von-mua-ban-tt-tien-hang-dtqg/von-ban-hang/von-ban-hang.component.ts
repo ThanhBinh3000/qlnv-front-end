@@ -14,7 +14,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, sumNumber, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -56,7 +56,6 @@ export class VonBanHangComponent implements OnInit {
     id: string;
     loai: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maNopTien: string;
     ngayTao: string;
@@ -149,7 +148,6 @@ export class VonBanHangComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         //lay danh sach danh muc
         await this.danhMuc.dMDviCon().toPromise().then(
@@ -214,12 +212,12 @@ export class VonBanHangComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(CVMB.EDIT_REPORT_NTV_BH) && checkChirld) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH) && checkChirld) {
             this.statusGui = false;
         } else {
             this.statusGui = true;
         }
-        if (Utils.statusSave.includes(this.trangThaiCha) && this.roles.includes(CVMB.EDIT_REPORT_GNV_BH) && !this.statusBtnParent) {
+        if (Utils.statusSave.includes(this.trangThaiCha) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH) && !this.statusBtnParent) {
             this.statusNhan = false;
         } else {
             this.statusNhan = true;
@@ -243,11 +241,11 @@ export class VonBanHangComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
     }
 
     getBtnStatusParent(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiCha) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiCha) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

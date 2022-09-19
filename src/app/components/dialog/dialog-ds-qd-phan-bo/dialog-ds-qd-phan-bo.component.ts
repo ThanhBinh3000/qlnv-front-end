@@ -55,7 +55,6 @@ export class DanhSachQuyetDinhPhanBoComponent implements OnInit {
 
   handleCancel() {
     this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
   }
 
   onCancel() {

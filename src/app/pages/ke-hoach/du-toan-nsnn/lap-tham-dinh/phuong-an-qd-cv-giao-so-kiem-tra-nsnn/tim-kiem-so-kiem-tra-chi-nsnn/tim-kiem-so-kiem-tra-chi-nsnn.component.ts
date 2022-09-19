@@ -20,7 +20,6 @@ import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../la
 export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
     userInfo: any;
-    roles: string[] = [];
     //thong tin tim kiem
     searchFilter = {
         namGiao: null,
@@ -60,7 +59,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
         this.searchFilter.denNgay = new Date();

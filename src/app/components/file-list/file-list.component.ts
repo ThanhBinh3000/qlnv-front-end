@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
@@ -93,9 +93,10 @@ export class FileListComponent implements OnInit {
     });
   }
 
-  deleteFile(item: FileDinhKem) {
+  deleteFile(index) {
     if (!this.disabled) {
-      this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
+      this.data.splice(index, 1);
+      // this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
     }
   }
 

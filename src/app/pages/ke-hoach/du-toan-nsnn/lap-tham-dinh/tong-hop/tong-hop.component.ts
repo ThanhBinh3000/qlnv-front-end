@@ -9,7 +9,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LTD, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { LTD, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../lap-tham-dinh.constant';
 
@@ -28,7 +28,6 @@ export class TongHopComponent implements OnInit {
 	maDviTao: string;
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	roles: string[] = [];
 	trangThais: any[] = [
 		{
 			id: '9',
@@ -70,7 +69,6 @@ export class TongHopComponent implements OnInit {
 	async ngOnInit() {
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 		this.maDviTao = this.userInfo?.MA_DVI;
 		//lay danh sach danh muc
 		this.danhMuc.dMDviCon().toPromise().then(
@@ -87,7 +85,7 @@ export class TongHopComponent implements OnInit {
 		);
 		this.spinner.hide();
 
-		if (this.roles.includes(LTD.SYNTHETIC_REPORT)) {
+		if (this.userService.isAccessPermisson(LTD.SYNTHETIC_REPORT)) {
 			this.statusTaoMoi = false;
 		}
 

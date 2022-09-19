@@ -19,7 +19,6 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -63,7 +62,6 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -91,7 +89,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 			this.status = false;
 			this.disable = true;
 
-			if (this.roles.includes(CVMB.DUYET_REPORT_GNV_BH)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -197,7 +195,7 @@ export class DanhSachGhiNhanVonBanHangComponent implements OnInit {
 	}
 
 	checkEditReport(trangThai: string) {
-		return Utils.statusSave.includes(trangThai) && this.roles.includes(CVMB.EDIT_REPORT_GNV_BH);
+		return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
 	}
 
 	close() {

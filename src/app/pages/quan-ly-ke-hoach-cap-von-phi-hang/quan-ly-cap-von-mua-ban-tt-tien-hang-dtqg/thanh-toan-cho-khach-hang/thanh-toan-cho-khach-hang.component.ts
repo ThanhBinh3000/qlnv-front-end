@@ -11,11 +11,10 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -38,7 +37,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     id: string;
     loai: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maThanhToan: string;
     maCvUv: string;
@@ -98,7 +96,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
@@ -117,7 +114,6 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         if (this.id) {
             await this.getDetailReport();
@@ -160,7 +156,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(CVMB.EDIT_REPORT_TTKH)) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_TTKH)) {
             this.status = false;
         } else {
             this.status = true;
@@ -175,7 +171,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

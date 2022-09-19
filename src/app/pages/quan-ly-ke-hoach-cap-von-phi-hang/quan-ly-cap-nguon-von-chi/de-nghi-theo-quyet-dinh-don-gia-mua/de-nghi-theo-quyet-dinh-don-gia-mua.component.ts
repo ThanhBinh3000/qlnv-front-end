@@ -47,7 +47,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
-    roles: string[] = [];
     loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
@@ -159,7 +158,6 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         if (this.id) {
             await this.getDetailReport();
@@ -232,7 +230,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThai) && this.roles.includes(CVNC.EDIT_DN_MLT)) {
+        if (Utils.statusSave.includes(this.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -241,7 +239,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
         this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVNC.EDIT_DN_MLT, checkChirld);
         this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_DN_MLT, checkChirld);
         if (this.trangThai == Utils.TT_BC_2) {
-            this.statusBtnLD = !(this.roles.includes(CVNC.PHE_DUYET_DN_MLT) && checkChirld);
+            this.statusBtnLD = !(this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld);
         } else {
             this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVNC.PHE_DUYET_DN_MLT, checkChirld);
         }
@@ -249,7 +247,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThai) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThai) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

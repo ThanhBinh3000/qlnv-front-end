@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { CVMB, LOAI_VON, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -20,7 +20,6 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -66,7 +65,6 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -76,7 +74,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		this.searchFilter.maDvi = this.userInfo?.MA_DVI;
 
 		if (this.loai == "0") {
-			if (this.roles.includes(CVMB.ADD_REPORT_CV)) {
+			if (this.userService.isAccessPermisson(CVMB.ADD_REPORT_CV)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = true;
@@ -84,7 +82,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			// if (this.roles.includes(CVMB.)) {
+			// if (this.userService.isAccessPermisson(CVMB.)) {
 			// 	this.searchFilter.trangThai = Utils.TT_BC_7;
 			// 	this.trangThais = [
 			// 		{
@@ -93,7 +91,7 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 			// 		}
 			// 	]
 			// } else {
-			if (this.roles.includes(CVMB.DUYET_REPORT_CV)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_CV)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -262,15 +260,15 @@ export class DanhSachCapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 	}
 
 	checkViewReport() {
-		return this.roles.includes(CVMB.VIEW_REPORT_CV);
+		return this.userService.isAccessPermisson(CVMB.VIEW_REPORT_CV);
 	}
 
 	checkEditReport(trangThai: string) {
-		return Utils.statusSave.includes(trangThai) && this.roles.includes(CVMB.EDIT_REPORT_CV);
+		return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_CV);
 	}
 
 	checkDeleteReport(trangThai: string) {
-		return Utils.statusDelete.includes(trangThai) && this.roles.includes(CVMB.DELETE_REPORT_CV);
+		return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_CV);
 	}
 
 	changeListIdDelete(id: string) {

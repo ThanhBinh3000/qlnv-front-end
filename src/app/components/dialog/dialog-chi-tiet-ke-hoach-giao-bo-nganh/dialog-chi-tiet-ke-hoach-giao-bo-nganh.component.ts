@@ -39,6 +39,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     xuatBanList: [],
     luanPhienList: [],
   };
+  dataTable: any[] = [];
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
@@ -58,7 +59,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
   bindingData(dataEdit) {
     if (dataEdit) {
-      console.log(dataEdit);
       this.keHoach = dataEdit;
     }
   }
@@ -83,14 +83,12 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
         this.dsHangHoa = dataVatTu[0].child;
-        console.log(this.dsHangHoa);
       }
     })
   }
 
   luu() {
     this.keHoachLuongThucComponent.onChangeInput();
-    console.log(this.keHoach);
     if (this.validateData()) {
       this._modalRef.close(this.keHoach);
     }
