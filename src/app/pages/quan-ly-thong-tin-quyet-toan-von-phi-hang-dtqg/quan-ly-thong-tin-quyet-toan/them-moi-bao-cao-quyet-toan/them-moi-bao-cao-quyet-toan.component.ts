@@ -444,7 +444,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     //call service them moi
 
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -466,7 +466,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan1(request).toPromise().then(
+      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

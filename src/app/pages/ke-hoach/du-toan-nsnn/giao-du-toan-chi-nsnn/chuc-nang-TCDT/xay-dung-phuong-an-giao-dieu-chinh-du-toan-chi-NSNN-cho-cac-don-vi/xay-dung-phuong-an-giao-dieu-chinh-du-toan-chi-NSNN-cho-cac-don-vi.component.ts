@@ -906,6 +906,27 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   //   }
   //   window.open(url, '_blank');
   // };
+  // xem chi tiết PA cha
+  xemCtietPaBTC() {
+    // debugger
+    if (!this.idPaBTC) {
+      return;
+    }
+    let url: string;
+    if (this.userService.isTongCuc()) {
+
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+
+      window.open(url, '_blank')
+    }
+    else {
+
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+      window.open(url, '_blank')
+
+    }
+
+  };
 
   // lấy tên đơn vị
   getUnitName() {
