@@ -137,7 +137,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
       "tuNgayQd": null,
       "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
@@ -259,7 +259,7 @@ export class ThongTinBienBanChuanBiKhoComponent implements OnInit {
         let temp = url.split("/");
         if (temp && temp.length > 0) {
           this.detail.quyetDinhNhapId = +temp[0];
-          let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.quyetDinhNhapId);
+          let res = await this.quyetDinhGiaoNhapHangService.getDetail(this.detail.quyetDinhNhapId);
           if (res.msg == MESSAGE.SUCCESS) {
             this.detailGiaoNhap = res.data;
             await this.getHopDong(this.detailGiaoNhap.soHd);

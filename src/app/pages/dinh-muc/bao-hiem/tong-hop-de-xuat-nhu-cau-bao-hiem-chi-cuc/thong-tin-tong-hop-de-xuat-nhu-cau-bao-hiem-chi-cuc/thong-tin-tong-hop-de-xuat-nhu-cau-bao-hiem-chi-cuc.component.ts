@@ -420,7 +420,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent implements OnInit
       "tuNgayQd": null,
       "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;

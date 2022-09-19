@@ -416,8 +416,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log('Invalid');
-      console.log(this.formData.value);
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
       return;
     }
     if (this.listOfData.length == 0) {

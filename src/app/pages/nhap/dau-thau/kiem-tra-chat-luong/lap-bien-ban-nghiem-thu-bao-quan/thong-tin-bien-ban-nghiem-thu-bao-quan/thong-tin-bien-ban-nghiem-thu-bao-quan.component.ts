@@ -22,7 +22,7 @@ import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeL
 import * as dayjs from 'dayjs';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -188,7 +188,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       "tuNgayQd": null,
       "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;

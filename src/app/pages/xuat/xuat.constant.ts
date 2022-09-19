@@ -5,9 +5,9 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Xuất cứu trợ, viện trợ',
-    url: `cuu-tro-ho-tro`,
-    dropdown: '/dau-thau',
-    idHover: 'dauthau',
+    url: `/cuu-tro-vien-tro`,
+    dropdown: '/cuu-tro-vien-tro',
+    idHover: 'cuu-tro-vien-tro',
     hasTab: false,
   },
   {

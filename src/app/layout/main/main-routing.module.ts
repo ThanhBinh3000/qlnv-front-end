@@ -4,11 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from 'src/app/pages/index/index.component';
 import { MAIN_ROUTES } from './main-routing.constant';
 import { MainComponent } from './main.component';
+import { ErrorComponent } from './error/error.component';
+import { NotAuthenComponent } from './error/not-authen/not-authen.component';
+import { AuthGuard } from 'src/app/guard/auth.guard';
+import { NotFoundComponent } from './error/not-found/not-found.component';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -17,33 +22,38 @@ const routes: Routes = [
       },
       {
         path: MAIN_ROUTES.nhap,
-        loadChildren: () =>
-          import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
+        loadChildren: () => import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.xuat,
         loadChildren: () =>
           import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.dinhMucNhapXuat,
         loadChildren: () =>
           import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.luuKho,
         loadChildren: () =>
           import('../../pages/luu-kho/luu-kho.module').then((m) => m.LuuKhoModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.khknBaoQuan,
         loadChildren: () =>
           import('../../pages/khkn-bao-quan/khkn-bao-quan.module').then((m) => m.KhknBaoQuanModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.quanLyKhoTang,
         loadChildren: () =>
           import('../../pages/quan-ly-kho-tang/quan-ly-kho-tang.module').then((m) => m.QuanLyKhoTangModule),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.kehoach,
@@ -51,6 +61,7 @@ const routes: Routes = [
           import('../../pages/ke-hoach/ke-hoach.module').then(
             (m) => m.KeHoachModule,
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.danhMuc,
@@ -58,6 +69,7 @@ const routes: Routes = [
           import('../../pages/danh-muc/danh-muc.module').then(
             (m) => m.DanhMucModule,
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.quanTriHeThong,
@@ -65,6 +77,7 @@ const routes: Routes = [
           import('../../pages/quan-tri-he-thong/quan-tri-he-thong.module').then(
             (m) => m.QuanTriHeThongNewModule,
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.capVon,
@@ -72,6 +85,7 @@ const routes: Routes = [
           import('../../pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.module').then(
             (m) => m.QuanLyKeHoachVonPhiHangModule,
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.quyetToan,
@@ -79,6 +93,7 @@ const routes: Routes = [
           import('../../pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.module').then(
             (m) => m.QuanLyThongTinQuyetToanVonPhiHangDtqgModule,
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: MAIN_ROUTES.quanTriDanhMuc,
@@ -86,9 +101,25 @@ const routes: Routes = [
           import('../../pages/quan-tri-danh-muc/quantridanhmuc.module').then(
             (m) => m.QuanTriDanhMucModule,
           ),
+        canActivate: [AuthGuard],
       },
     ],
   },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    children: [
+      {
+        path: '401',
+        component: NotAuthenComponent
+      },
+      {
+        path: '404',
+        component: NotFoundComponent
+      }
+    ]
+  },
+  { path: '**', redirectTo: '/error/404' },
 ];
 
 @NgModule({

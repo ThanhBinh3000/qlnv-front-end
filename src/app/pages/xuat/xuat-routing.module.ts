@@ -17,6 +17,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./dau-gia/dau-gia.module').then((m) => m.DauGiaModule),
       },
+      {
+        path: 'cuu-tro-vien-tro',
+        loadChildren: () =>
+          import('./cuu-tro-vien-tro/cuu-tro-vien-tro.module').then((m) => m.CuuTroVienTroModule),
+      },
     ],
   },
 ];

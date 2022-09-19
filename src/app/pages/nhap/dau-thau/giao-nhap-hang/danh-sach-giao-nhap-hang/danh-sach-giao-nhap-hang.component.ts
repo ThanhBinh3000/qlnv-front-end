@@ -264,7 +264,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           "veViec": null
         }
         this.quyetDinhGiaoNhapHangService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx'),
           );
@@ -296,7 +296,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
-          let res = await this.quyetDinhGiaoNhapHangService.updateStatus(body);
+          let res = await this.quyetDinhGiaoNhapHangService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.search();
@@ -398,7 +398,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaoNhapHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quyetDinhGiaoNhapHangService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
