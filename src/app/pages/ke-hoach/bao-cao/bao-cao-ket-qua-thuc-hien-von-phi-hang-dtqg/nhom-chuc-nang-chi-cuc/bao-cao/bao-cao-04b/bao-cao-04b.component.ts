@@ -98,6 +98,7 @@ export class BaoCao04bComponent implements OnInit {
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
+        this.trangThaiPhuLuc = this.data?.trangThai;
         this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '8')?.lstCtietBcaos;
         //lay danh muc noi dung chi
         await this.danhMucService.dMNoiDungChi04b().toPromise().then(res => {
