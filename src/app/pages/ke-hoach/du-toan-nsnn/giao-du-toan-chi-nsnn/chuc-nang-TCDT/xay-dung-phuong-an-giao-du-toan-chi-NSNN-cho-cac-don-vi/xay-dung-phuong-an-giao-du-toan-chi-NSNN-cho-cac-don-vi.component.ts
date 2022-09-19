@@ -888,26 +888,28 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     });
   };
 
+
   // xem chi tiết PA cha
-  // xemCtietPaBTC() {
-  //   if (!this.idPaBTC) {
-  //     return;
-  //   }
-  //   const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-  //   let url: string;
-  //   if (capDviUser == Utils.TONG_CUC) {
-  //     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-  //   } else if (this.maPaCha.includes('BTC')) {
-  //     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-  //   } else {
-  //     if (capDviUser == Utils.CUC_KHU_VUC) {
-  //       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-  //     } else {
-  //       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-  //     }
-  //   }
-  //   window.open(url, '_blank');
-  // };
+  xemCtietPaBTC() {
+    if (!this.idPaBTC) {
+      return;
+    }
+    const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+    let url: string;
+    if (capDviUser == Utils.TONG_CUC) {
+      if (this.maPaCha.includes('BTC')) {
+        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+      }else{
+        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+      }
+    } else if (capDviUser == Utils.CUC_KHU_VUC) {
+        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+      } else {
+        url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+      }
+
+    window.open(url, '_blank');
+  };
 
   // lấy tên đơn vị
   getUnitName() {
@@ -1636,5 +1638,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
+
+
+
 }
 

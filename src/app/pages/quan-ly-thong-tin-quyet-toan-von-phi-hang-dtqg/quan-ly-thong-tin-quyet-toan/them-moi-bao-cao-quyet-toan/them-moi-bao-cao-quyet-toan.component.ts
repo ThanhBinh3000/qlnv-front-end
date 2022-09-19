@@ -348,7 +348,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
 
   // luu
   async save() {
-    this.spinner.show();
+
     let checkSaveEdit;
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -410,7 +410,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
-
+    this.spinner.show();
     const request = JSON.parse(JSON.stringify({
       id: this.id,
       fileDinhKems: this.lstFiles,

@@ -449,7 +449,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   // luu
   async save() {
-    this.spinner.show();
+
     // check lưu trong bảng trước khi nhấn lưu
     let checkSave = true;
     this.lstDieuChinhs.forEach(e => {
@@ -470,6 +470,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
       return;
     }
+    this.spinner.show();
     // replace nhung ban ghi dc them moi id thanh null
     this.lstDieuChinhs.forEach(item => {
       if (item.id?.length == 38) {
@@ -936,7 +937,6 @@ export class GiaoNhiemVuComponent implements OnInit {
         return;
       }
     );
-    debugger
     const lstDieuChinhTemps: any[] = [];
     this.lstDieuChinhs.forEach(data => {
       const lstCtietTemp: any[] = [];
@@ -977,7 +977,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       tongHopTuIds: tongHopTuIds,
     };
 
-    this.quanLyVonPhiService.trinhDuyetDieuChinhService1(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

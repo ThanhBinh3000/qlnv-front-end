@@ -166,6 +166,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDvi;
           this.maDviNhan = data.data.maDviNhan;
+          this.maDviTien = data.data.maDviTien;
           // this.trangThai = data.data.trangThai;
 
           this.tenDvi = this.donVis.find((item) => item.maDvi == data.data.maDvi)?.tenDvi;

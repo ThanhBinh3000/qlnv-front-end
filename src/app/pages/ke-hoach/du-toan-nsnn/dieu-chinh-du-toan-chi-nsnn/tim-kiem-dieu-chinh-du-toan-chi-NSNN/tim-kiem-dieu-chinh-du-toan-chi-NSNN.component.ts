@@ -95,7 +95,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
-    this.searchFilter.nam = new Date().getFullYear;
+    this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
     this.roles = this.userInfo.roles;
 

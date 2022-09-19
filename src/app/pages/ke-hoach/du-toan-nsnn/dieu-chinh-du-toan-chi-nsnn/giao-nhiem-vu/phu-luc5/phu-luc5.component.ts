@@ -32,16 +32,18 @@ export class PhuLuc5Component implements OnInit {
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
   listIdFilesDelete: any = [];// id file luc call chi tiet
-
+  idFilePhuLuc5: any;
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
+    console.log(this.fileList);
     return false;
   };
+
   // them file vao danh sach
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
-      const id = file?.lastModified.toString();
+      const id = null;
       this.lstFiles.push({ id: id, fileName: file?.name });
       this.listFile.push(file);
     });
@@ -65,12 +67,7 @@ export class PhuLuc5Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
-
-    if (this.data.fileData == []) {
-      this.lstFiles = []
-    } else {
-      this.lstFiles = this.data.fileData;
-    }
+    this.lstFiles = this.data?.fileData;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.getStatusButton();
@@ -189,11 +186,18 @@ export class PhuLuc5Component implements OnInit {
   // luu
   async save(trangThai: string) {
     this.spinner.show()
-    //get list file url
+
     const listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
+    // console.log(listFile);
+
+    // this.lstFiles.forEach(
+    //   item =>
+
+    // );
+
     const request = {
       id: this.id,
       maBieuMau: this.maBieuMau,
@@ -206,7 +210,7 @@ export class PhuLuc5Component implements OnInit {
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
 
-    await this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    await this.quanLyVonPhiService.updatePLDieuChinh1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -223,6 +227,8 @@ export class PhuLuc5Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    console.log(request);
+
     this.spinner.hide();
   }
 }
