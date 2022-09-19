@@ -105,7 +105,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.maQd = "/" + this.userInfo.MA_QD;
+      this.maQd = "/QĐ-BTC"
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get('year') - i,

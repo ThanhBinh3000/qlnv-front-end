@@ -161,7 +161,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
 
   async findCanCuByYear() {
-
     if (this.userService.isCuc()) {
       let res = await this.chiTieuKeHoachNamService.canCuCuc(dayjs().get('year'));
       if (res.msg == MESSAGE.SUCCESS) {
@@ -1434,7 +1433,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     break;
                   }
                   case STATUS.TU_CHOI_LDV : {
-                    trangThai = STATUS.DA_DUYET_LDV
+                    trangThai = STATUS.CHO_DUYET_LDV
                     break;
                   }
                 }
@@ -1459,22 +1458,23 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 id: res.data.id,
                 trangThai: trangThai
               };
-              this.chiTieuKeHoachNamService.updateStatus(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.UPDATE_SUCCESS,
-                );
-                this.redirectChiTieuKeHoachNam();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
-              this.redirectChiTieuKeHoachNam();
+              this.chiTieuKeHoachNamService.updateStatus(body)
+                .then((resp) => {
+                  if (resp.msg ==  MESSAGE.SUCCESS) {
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      this.notification.success(
+                        MESSAGE.SUCCESS,
+                        MESSAGE.UPDATE_SUCCESS,
+                      );
+                      this.redirectChiTieuKeHoachNam()
+                    } else {
+                      this.notification.error(MESSAGE.ERROR, res.msg);
+                    }
+                  }
+                  else {
+                    this.notification.error(MESSAGE.ERROR, resp.msg);
+                  }
+                })
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1488,20 +1488,42 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      if (isGuiDuyet) {
-        if (this.userService.isTongCuc()) {
-          this.thongTinChiTieuKeHoachNamInput.trangThai = STATUS.CHO_DUYET_LDV;
-        }
-        if (this.userService.isCuc()) {
-          this.thongTinChiTieuKeHoachNamInput.trangThai = STATUS.CHO_DUYET_TP;
-        }
-      }
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectChiTieuKeHoachNam();
+            if (isGuiDuyet) {
+              let body;
+              if (this.userService.isTongCuc()) {
+                body = {
+                  id: res.data.id,
+                  trangThai: STATUS.CHO_DUYET_LDV,
+                };
+              }
+              if (this.userService.isCuc()) {
+                body = {
+                  id: res.data.id,
+                  trangThai: STATUS.CHO_DUYET_TP,
+                };
+              }
+              this.chiTieuKeHoachNamService.updateStatus(body)
+                .then((resp) => {
+                  if (resp.msg ==  MESSAGE.SUCCESS) {
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      this.notification.success(
+                        MESSAGE.SUCCESS,
+                        MESSAGE.ADD_SUCCESS,
+                      );
+                      this.redirectChiTieuKeHoachNam()
+                    } else {
+                      this.notification.error(MESSAGE.ERROR, res.msg);
+                    }
+                  }
+                  else {
+                    this.notification.error(MESSAGE.ERROR, resp.msg);
+                  }
+                })
+            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -1516,7 +1538,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .finally(() => {
           this.spinner.hide();
         });
-      // this.redirectChiTieuKeHoachNam();
     }
   }
 

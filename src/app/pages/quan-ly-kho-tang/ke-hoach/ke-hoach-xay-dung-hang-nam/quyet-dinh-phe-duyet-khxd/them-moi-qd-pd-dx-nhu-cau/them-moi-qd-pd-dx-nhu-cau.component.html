@@ -1,0 +1,376 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button
+      class="btn btn-sub btn-sm waves-effect waves-light" (click)="save()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Ban hành</span>
+    </button>
+    <button
+      class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <div class="header-detail-tab">
+    <div class="title-chi-tieu">
+                    <span
+                      [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                        {{ formData.value.tenTrangThai }}
+                    </span>
+      <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
+    </div>
+  </div>
+  <br>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Số công văn
+            </nz-form-label>
+            <nz-form-control >
+              <nz-input-group nzAddOnAfter="{{maQd}}">
+                <nz-input-number  [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                  [nzSize]="'small'">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label [nzNoColon]="true" nzRequired> Phương án của Tổng cục
+          </nz-form-label>
+          <nz-form-control >
+            <nz-input-group>
+              <nz-select formControlName="namKhoach" nzAllowClear>
+                <nz-option *ngFor="let p of listPhuongAnTC" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label [nzNoColon]="true" nzRequired>Ngày trình BTC/Bộ KHĐT
+          </nz-form-label>
+          <nz-range-picker  nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-label [nzNoColon]="true" nzRequired>Ngày ký QĐ của Bộ KHĐT/Ngày thông báo của BTC
+          </nz-form-label>
+          <nz-range-picker  nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="10">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
+            </nz-form-label>
+            <input class="search__input"   nz-input  />
+          </nz-form-item>
+        </div>
+        <br>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)
+            </nz-form-label>
+            <nz-range-picker  nzMode="year" ></nz-range-picker>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="16">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm QĐ phê duyệt của Bộ KHĐT/Thông báo của BTC
+            </nz-form-label>
+            <div class="list-file">
+              <file-list></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <br>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <br>
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header-detail-tab">PHƯƠNG ÁN CỦA TỔNG CỤC DTNN</div>
+    <nz-table #editRowTable [nzData]="dataTable" nzBordered class="nowrap"
+              [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+      <thead>
+      <tr>
+        <th class="text-center" rowSpan="2" style="width: 2%;">STT</th>
+        <th class="text-center" style="width: 15%;" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" style="width: 15%;" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Loại dự án</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" style="width: 8%;" rowSpan="2">Khối</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Số QĐ phê duyệt/điều chỉnh TMĐT</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">TMĐT</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">KH vốn đầu tư nguồn NSNN năm 2022</th>
+      </tr>
+      <tr>
+        <th class="text-center"  style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center"style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of dataTable; let idx = index">
+        <ng-container *ngIf="!dataEdit[idx].edit">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.tenVthh }}</td>
+          <td>{{ data.tenCloaiVthh }}</td>
+          <td>{{ data.dviTinh }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(idx)">
+              <i class=" fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header-detail-tab">QUYẾT ĐỊNH CỦA BỘ KHĐT HẶC THÔNG BÁO BỘ TÀI CHÍNH</div>
+    <nz-table #editRowTable [nzData]="dataTable" nzBordered class="nowrap"
+              [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+      <thead>
+      <tr>
+        <th class="text-center" rowSpan="2" style="width: 2%;">STT</th>
+        <th class="text-center" style="width: 15%;" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" style="width: 15%;" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Loại dự án</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" style="width: 8%;" rowSpan="2">Khối</th>
+        <th class="text-center" style="width: 10%;" rowSpan="2">Số QĐ phê duyệt/điều chỉnh TMĐT</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">TMĐT</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" style="width: 20%;" colSpan="2">KH vốn đầu tư nguồn NSNN năm 2022</th>
+        <th class="text-center" style="width: 8%;" rowSpan="2">Hành động</th>
+      </tr>
+      <tr>
+        <th class="text-center"  style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center"style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="text-center" style="width: 2%;"></td>
+        <td class="text-center" style="width: 15%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong"[readonly]="true" />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 15%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong"[readonly]="true" />
+          </nz-input-group>
+        </td>
+
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 8%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"   />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong"   />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong"   />
+          </nz-input-group>
+        </td>
+        <td class="text-center" style="width: 10%;">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="true"  />
+          </nz-input-group>
+        </td>
+        <td  class="text-center">
+          <a (click)="themMoiItem()">
+            <i class="fa fa-plus"></i>
+          </a>
+          <a (click)="clearData()">
+            <i class="icon  htvbdh_nhap-lai1 "></i>
+          </a>
+        </td>
+      </tr>
+
+      <tr *ngFor="let data of dataTable; let idx = index">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.tenVthh }}</td>
+          <td>{{ data.tenCloaiVthh }}</td>
+          <td>{{ data.dviTinh }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(idx)">
+              <i class=" fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(idx)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td></td>
+          <td style="width: 5%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"  [readonly]="true"/>
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"  [readonly]="true"/>
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true" />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"  />
+            </nz-input-group>
+          </td>
+          <td style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"/>
+            </nz-input-group>
+          </td>
+          <td class="text-center" style="width: 10%;">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [readonly]="true"  />
+            </nz-input-group>
+          </td>
+          <td class="text-center">
+            <a (click)="luuEdit(idx)" class="save">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="huyEdit(idx)">
+              <i class="fa fa-ban do"></i> </a>
+          </td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
