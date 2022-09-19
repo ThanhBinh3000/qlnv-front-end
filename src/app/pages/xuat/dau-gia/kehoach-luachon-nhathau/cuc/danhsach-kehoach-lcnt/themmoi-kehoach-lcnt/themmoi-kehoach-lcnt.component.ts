@@ -149,14 +149,14 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.trichYeu : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       moTaHangHoa: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.moTaHangHoa : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       ngayLapKeHoach: [
         {
@@ -185,21 +185,21 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.cloaiVthh : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       qdGiaoChiTieuId: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.qdGiaoChiTieuId : null,
           disabled: this.isView ? true : false,
         },
-
         [],
       ],
       qdGiaoChiTieuNam: [
         {
-          value: this.khBanDauGia
-            ? this.khBanDauGia.soQuyetDinhGiaoChiTieu
-            : null,
+          // value: this.khBanDauGia
+          //   ? this.khBanDauGia.soQuyetDinhGiaoChiTieu
+          //   : null,
+          value :'150/QĐ-TCDT',
           disabled: this.isView ? true : false,
         },
         [Validators.required],
@@ -361,7 +361,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             qdGiaoChiTieuId: data ? data.id : null,
-            qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
+            qdGiaoChiTieuNam: data ? data.soQuyetDinh : '150/QĐ-TCDT',
           });
           this.spinner.hide();
         }
